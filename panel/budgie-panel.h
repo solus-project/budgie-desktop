@@ -29,9 +29,11 @@
 #define PANEL_CSS "\
 BudgiePanel {\
     border-width: 1px;\
-	background-image: linear-gradient(to bottom,\
-		shade (white, 0.2),\
-		shade (black, 1.0));\
+    border-top: 1px solid alpha(white, 0.2);\
+    background-color: alpha(white, 0.0);\
+    background-image: linear-gradient(to bottom,\
+		alpha(shade (white, 0.2), 0.92),\
+		alpha(shade (black, 1.0), 0.92));\
 }\
 BudgiePanel GtkButton:active {\
     color: white;\

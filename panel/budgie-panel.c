@@ -53,6 +53,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *tasklist;
         GtkWidget *layout;
         GdkScreen *screen;
+        GdkVisual *visual;
         GtkWidget *clock;
         int x, y, width, height;
         GtkSettings *settings;
@@ -97,6 +98,9 @@ static void budgie_panel_init(BudgiePanel *self)
         screen = gdk_screen_get_default();
         width = gdk_screen_get_width(screen);
         height = gdk_screen_get_height(screen);
+        visual = gdk_screen_get_rgba_visual(screen);
+        if (visual)
+                gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
         x = 0;
         y = height - PANEL_HEIGHT;
