@@ -54,6 +54,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *clock;
         int x, y, width, height;
         GtkSettings *settings;
+        GtkStyleContext *style;
 
         /* Sort ourselves out visually */
         settings = gtk_widget_get_settings(GTK_WIDGET(self));
@@ -77,6 +78,9 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Add a clock at the end */
         clock = gtk_label_new("--");
         self->clock = clock;
+        style = gtk_widget_get_style_context(clock);
+        gtk_style_context_add_class(style, "floating-bar");
+        g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
@@ -132,7 +136,7 @@ static gboolean update_clock(gpointer userdata)
         dtime = g_date_time_new_now_local();
 
         /* Format it as a string (24h) */
-        date_string = g_date_time_format(dtime, "%H:%M:%S");
+        date_string = g_date_time_format(dtime, " %H:%M:%S ");
         gtk_label_set_markup(GTK_LABEL(self->clock), date_string);
         g_free(date_string);
         g_date_time_unref(dtime);
