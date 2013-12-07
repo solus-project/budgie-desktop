@@ -49,6 +49,12 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *layout;
         GdkScreen *screen;
         int x, y, width, height;
+        GtkSettings *settings;
+
+        /* Sort ourselves out visually */
+        settings = gtk_widget_get_settings(GTK_WIDGET(self));
+        g_object_set(settings, "gtk-application-prefer-dark-theme",
+                TRUE, NULL);
 
         /* tiny bit of padding */
         gtk_container_set_border_width(GTK_CONTAINER(self), 2);
@@ -59,6 +65,8 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Add a tasklist to the panel */
         tasklist = wnck_tasklist_new();
+        wnck_tasklist_set_button_relief(WNCK_TASKLIST(tasklist),
+                GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
