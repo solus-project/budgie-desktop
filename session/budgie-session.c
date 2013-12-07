@@ -27,7 +27,7 @@
 #include <sys/wait.h>
 
 #define DESKTOP_WM "mutter"
-#define DESKTOP_PANEL "tint2"
+#define DESKTOP_PANEL "budgie-panel"
 #define DESKTOP_EXTRA "gnome-terminal"
 #define WD "/tmp"
 
