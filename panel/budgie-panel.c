@@ -22,6 +22,7 @@
  */
 
 #include <libwnck/libwnck.h>
+#include <string.h>
 
 #include "budgie-panel.h"
 
@@ -36,6 +37,7 @@ static void budgie_panel_dispose(GObject *object);
 
 /* Private methods */
 static gboolean update_clock(gpointer userdata);
+static void init_styles(BudgiePanel *self);
 
 /* Initialisation */
 static void budgie_panel_class_init(BudgiePanelClass *klass)
@@ -56,6 +58,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkSettings *settings;
         GtkStyleContext *style;
 
+        init_styles(self);
         /* Sort ourselves out visually */
         settings = gtk_widget_get_settings(GTK_WIDGET(self));
         g_object_set(settings, "gtk-application-prefer-dark-theme",
@@ -122,6 +125,19 @@ BudgiePanel* budgie_panel_new(void)
 
         self = g_object_new(BUDGIE_PANEL_TYPE, NULL);
         return self;
+}
+
+static void init_styles(BudgiePanel *self)
+{
+        GtkCssProvider *css_provider;
+        GdkScreen *screen;
+        const gchar *data = PANEL_CSS;
+
+        css_provider = gtk_css_provider_new();
+        gtk_css_provider_load_from_data(css_provider, data, (gssize)strlen(data)+1, NULL);
+        screen = gdk_screen_get_default();
+        gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(css_provider),
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 static gboolean update_clock(gpointer userdata)

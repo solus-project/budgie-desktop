@@ -26,6 +26,24 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#define PANEL_CSS "\
+BudgiePanel {\
+    border-width: 1px;\
+	background-image: linear-gradient(to bottom,\
+		shade (white, 0.2),\
+		shade (black, 1.0));\
+}\
+BudgiePanel GtkButton:active {\
+    color: white;\
+    text-shadow: 0px 1px black;\
+    transition: all 200ms ease-in\
+}\
+BudgiePanel GtkButton {\
+    color: alpha(white, 0.7);\
+    text-shadow: 0px 1px alpha(black, 0.8);\
+    transition: all 200ms ease-out \
+}"
+
 typedef struct _BudgiePanel BudgiePanel;
 typedef struct _BudgiePanelClass   BudgiePanelClass;
 
