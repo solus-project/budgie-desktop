@@ -36,6 +36,8 @@
 #include <gmodule.h>
 #include <string.h>
 
+#include "plugin.h"
+
 #define DESTROY_TIMEOUT   250
 #define MINIMIZE_TIMEOUT  250
 #define MAXIMIZE_TIMEOUT  250
@@ -44,31 +46,6 @@
 
 #define ACTOR_DATA_KEY "MCCP-Default-actor-data"
 
-#define META_TYPE_DEFAULT_PLUGIN            (meta_default_plugin_get_type ())
-#define META_DEFAULT_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), META_TYPE_DEFAULT_PLUGIN, MetaDefaultPlugin))
-#define META_DEFAULT_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  META_TYPE_DEFAULT_PLUGIN, MetaDefaultPluginClass))
-#define META_IS_DEFAULT_PLUGIN(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), META_DEFAULT_PLUGIN_TYPE))
-#define META_IS_DEFAULT_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  META_TYPE_DEFAULT_PLUGIN))
-#define META_DEFAULT_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  META_TYPE_DEFAULT_PLUGIN, MetaDefaultPluginClass))
-
-#define META_DEFAULT_PLUGIN_GET_PRIVATE(obj) \
-(G_TYPE_INSTANCE_GET_PRIVATE ((obj), META_TYPE_DEFAULT_PLUGIN, MetaDefaultPluginPrivate))
-
-typedef struct _MetaDefaultPlugin        MetaDefaultPlugin;
-typedef struct _MetaDefaultPluginClass   MetaDefaultPluginClass;
-typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
-
-struct _MetaDefaultPlugin
-{
-  MetaPlugin parent;
-
-  MetaDefaultPluginPrivate *priv;
-};
-
-struct _MetaDefaultPluginClass
-{
-  MetaPluginClass parent_class;
-};
 
 static GQuark actor_data_quark = 0;
 
@@ -105,7 +82,9 @@ static void confirm_display_change (MetaPlugin *plugin);
 
 static const MetaPluginInfo * plugin_info (MetaPlugin *plugin);
 
-META_PLUGIN_DECLARE(MetaDefaultPlugin, meta_default_plugin);
+G_DEFINE_TYPE (MetaDefaultPlugin, meta_default_plugin, META_TYPE_PLUGIN)
+
+/*META_PLUGIN_DECLARE(MetaDefaultPlugin, meta_default_plugin);*/
 
 /*
  * Plugin private data that we store in the .plugin_private member.

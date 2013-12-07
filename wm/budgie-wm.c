@@ -22,6 +22,9 @@
  */
 
 #include <meta/main.h>
+#include <meta/meta-plugin.h>
+
+#include "plugin.h"
 
 #define GAIL_OPT "NO_GAIL"
 #define AT_BRIDGE_OPT "NO_AT_BRIDGE"
@@ -34,6 +37,8 @@ int main(int argc, char **argv)
         ctx = meta_get_option_context();
         if (!g_option_context_parse(ctx, &argc, &argv, NULL))
                 return FALSE;
+
+        meta_plugin_manager_set_plugin_type(meta_default_plugin_get_type());
 
         /* Respect the fact its still Mutter.. but don't be it */
         meta_set_wm_name("Mutter(Budgie)");
