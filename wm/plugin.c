@@ -27,6 +27,7 @@
 #include <meta/util.h>
 #include <meta/meta-background-group.h>
 #include <meta/meta-background-actor.h>
+#include <meta/meta-background.h>
 
 #include <libintl.h>
 #define _(x) dgettext (GETTEXT_PACKAGE, x)
@@ -98,6 +99,7 @@ struct _MetaDefaultPluginPrivate
   ClutterActor          *desktop2;
 
   ClutterActor          *background_group;
+  GSettings             *settings;
 
   MetaPluginInfo         info;
 };
@@ -129,8 +131,8 @@ typedef struct
 static void
 meta_default_plugin_dispose (GObject *object)
 {
-  /* MetaDefaultPluginPrivate *priv = META_DEFAULT_PLUGIN (object)->priv;
-  */
+  MetaDefaultPluginPrivate *priv = META_DEFAULT_PLUGIN (object)->priv;
+  g_object_unref(priv->settings);
   G_OBJECT_CLASS (meta_default_plugin_parent_class)->dispose (object);
 }
 
@@ -200,6 +202,7 @@ meta_default_plugin_init (MetaDefaultPlugin *self)
   MetaDefaultPluginPrivate *priv;
 
   self->priv = priv = META_DEFAULT_PLUGIN_GET_PRIVATE (self);
+  priv->settings = g_settings_new(BACKGROUND_SCHEMA);
 
   priv->info.name        = "Default Effects";
   priv->info.version     = "0.1";
@@ -292,8 +295,21 @@ on_monitors_changed (MetaScreen *screen,
 {
   MetaDefaultPlugin *self = META_DEFAULT_PLUGIN (plugin);
   int i, n;
+  gchar *wallpaper = NULL;
+  GFile *wallpaper_file = NULL;
+  gchar *filename = NULL;
+  gboolean random_colour = FALSE;
 
   clutter_actor_destroy_all_children (self->priv->background_group);
+
+  wallpaper = g_settings_get_string(self->priv->settings, PICTURE_KEY);
+  if (!wallpaper)
+      random_colour = TRUE;
+  else {
+      wallpaper_file = g_file_new_for_uri(wallpaper);
+      filename = g_file_get_path(wallpaper_file);
+  }
+      
 
   n = meta_screen_get_n_monitors (screen);
   for (i = 0; i < n; i++)
@@ -304,24 +320,35 @@ on_monitors_changed (MetaScreen *screen,
 
       meta_screen_get_monitor_geometry (screen, i, &rect);
 
-      background = meta_background_actor_new ();
-
-      clutter_actor_set_position (background, rect.x, rect.y);
-      clutter_actor_set_size (background, rect.width, rect.height);
-
       /* Don't use rand() here, mesa calls srand() internally when
          parsing the driconf XML, but it's nice if the colors are
          reproducible.
       */
-      clutter_color_init (&color,
+      if (random_colour) {
+            background = meta_background_actor_new ();
+            clutter_color_init (&color,
                           g_random_int () % 255,
                           g_random_int () % 255,
                           g_random_int () % 255,
                           255);
-      clutter_actor_set_background_color (background, &color);
+            clutter_actor_set_background_color (background, &color);
+      } else {
+            background = clutter_texture_new_from_file(filename, NULL);
+            /* Set the background */
+            meta_background_load_file_async(background, filename,
+                G_DESKTOP_BACKGROUND_STYLE_WALLPAPER,
+                NULL, NULL, NULL);
+      }
+
+      clutter_actor_set_position (background, rect.x, rect.y);
+      clutter_actor_set_size (background, rect.width, rect.height);
 
       clutter_actor_add_child (self->priv->background_group, background);
     }
+    if (wallpaper_file)
+      g_object_unref(wallpaper_file);
+    g_free(wallpaper);
+    g_free(filename);
 }
 
 static void

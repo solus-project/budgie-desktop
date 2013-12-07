@@ -35,6 +35,9 @@ typedef struct _MetaDefaultPlugin        MetaDefaultPlugin;
 typedef struct _MetaDefaultPluginClass   MetaDefaultPluginClass;
 typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
 
+#define BACKGROUND_SCHEMA "org.gnome.desktop.background"
+#define PICTURE_KEY "picture-uri"
+
 struct _MetaDefaultPlugin
 {
   MetaPlugin parent;
