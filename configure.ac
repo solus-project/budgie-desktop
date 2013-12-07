@@ -15,6 +15,9 @@ PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.10.0])
 # We require Mutter
 PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 
+# Wnck required for budgie-panel
+PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
                 panel/Makefile
