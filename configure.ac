@@ -16,6 +16,8 @@ PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.10.0])
 PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_FILES(Makefile session/Makefile)
+AC_CONFIG_FILES(Makefile
+                session/Makefile
+                wm/Makefile)
 AC_OUTPUT
 

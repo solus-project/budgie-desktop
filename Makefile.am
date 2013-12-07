@@ -8,4 +8,5 @@ NULL =
 CLEANFILES =
 
 SUBDIRS = \
-	session
+	session \
+	wm
