@@ -707,7 +707,7 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
   type = meta_window_get_window_type (meta_window);
 
   if (type == META_WINDOW_NORMAL || type == META_WINDOW_DIALOG)
-    {
+  {
       ClutterAnimation *animation;
       EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
@@ -733,8 +733,31 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
 
       apriv->is_minimized = FALSE;
 
-    }
-  else
+  } else if (type == META_WINDOW_POPUP_MENU ||
+             type == META_WINDOW_DROPDOWN_MENU)
+  {
+      /* For context menus (popup/dropdown) we fade the menu in */
+      ClutterAnimation *animation;
+      EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
+      ActorPrivate *apriv = get_actor_private (window_actor);
+
+      clutter_actor_set_opacity (actor, 0);
+      clutter_actor_show (actor);
+
+      animation = clutter_actor_animate (actor,
+                                         CLUTTER_EASE_IN_SINE,
+                                         MAP_TIMEOUT,
+                                         "opacity", 255,
+                                         NULL);
+      apriv->tml_map = clutter_animation_get_timeline (animation);
+      data->actor = actor;
+      data->plugin = plugin;
+      g_signal_connect (apriv->tml_map, "completed",
+                        G_CALLBACK (on_map_effect_complete),
+                        data);
+
+      apriv->is_minimized = FALSE;
+  } else
     meta_plugin_map_completed (plugin, window_actor);
 }
 
@@ -767,7 +790,7 @@ destroy (MetaPlugin *plugin, MetaWindowActor *window_actor)
   type = meta_window_get_window_type (meta_window);
 
   if (type == META_WINDOW_NORMAL || type == META_WINDOW_DIALOG)
-    {
+  {
       ClutterAnimation *animation;
       EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
@@ -787,8 +810,7 @@ destroy (MetaPlugin *plugin, MetaWindowActor *window_actor)
       g_signal_connect (apriv->tml_destroy, "completed",
                         G_CALLBACK (on_destroy_effect_complete),
                         data);
-    }
-  else
+  } else
     meta_plugin_destroy_completed (plugin, window_actor);
 }
 
