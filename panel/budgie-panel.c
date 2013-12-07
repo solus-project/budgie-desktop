@@ -64,6 +64,10 @@ static void budgie_panel_init(BudgiePanel *self)
         g_object_set(settings, "gtk-application-prefer-dark-theme",
                 TRUE, NULL);
 
+        /* Not resizable.. */
+        gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
+        gtk_window_set_has_resize_grip(GTK_WINDOW(self), FALSE);
+
         /* tiny bit of padding */
         gtk_container_set_border_width(GTK_CONTAINER(self), 2);
 
