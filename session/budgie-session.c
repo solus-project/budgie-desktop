@@ -28,6 +28,8 @@
 
 #define DESKTOP_WM "mutter"
 #define DESKTOP_PANEL "budgie-panel"
+/* Must re-address this at some point. Have a systemd-user session for it */
+#define DESKTOP_SETTINGS "/usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon"
 #define DESKTOP_EXTRA "gnome-terminal"
 #define WD "/tmp"
 
@@ -57,6 +59,16 @@ int main(int argc, char **argv)
                 fprintf(stderr, "Unable to launch window manager: %s\n",
                         error->message);
                 fprintf(stderr, "Child exited with code %d\n", exit);
+                goto end;
+        }
+
+        /* Give the window manager a second to sort itself out */
+        sleep(1);
+
+        /* Launch the settings daemon */
+        if (!g_spawn_command_line_async(DESKTOP_SETTINGS, &error)) {
+                fprintf(stderr, "Unable to launch settings: %s\n",
+                        error->message);
                 goto end;
         }
 
