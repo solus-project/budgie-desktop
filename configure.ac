@@ -17,6 +17,7 @@ PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
+                panel/Makefile
                 session/Makefile
                 wm/Makefile)
 AC_OUTPUT
