@@ -1,0 +1,13 @@
+-include $(top_srcdir)/common.mk
+
+bin_PROGRAMS = budgie-session
+
+budgie_session_SOURCES = \
+	budgie-session.c
+
+budgie_session_CFLAGS = \
+	$(GIO_CFLAGS) \
+	$(AM_CFLAGS)
+
+budgie_session_LDADD = \
+	$(GIO_LIBS)
