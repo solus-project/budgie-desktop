@@ -25,6 +25,8 @@
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
+#define PANEL_HEIGHT 30
+
 /* Boilerplate GObject code */
 static void budgie_panel_class_init(BudgiePanelClass *klass);
 static void budgie_panel_init(BudgiePanel *self);
@@ -41,9 +43,26 @@ static void budgie_panel_class_init(BudgiePanelClass *klass)
 
 static void budgie_panel_init(BudgiePanel *self)
 {
+        GdkScreen *screen;
+        int x, y, width, height;
+
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
+        /* Set ourselves up to be the correct size and position */
+        screen = gdk_screen_get_default();
+        width = gdk_screen_get_width(screen);
+        height = gdk_screen_get_height(screen);
+
+        x = 0;
+        y = height - PANEL_HEIGHT;
+
+        gtk_widget_set_size_request(GTK_WIDGET(self), width, 30);
+        gtk_window_move(GTK_WINDOW(self), x, y);
+
+        /* We want to be a dock */
+        gtk_window_set_type_hint(GTK_WINDOW(self),
+                GDK_WINDOW_TYPE_HINT_DOCK);
         /* And now show ourselves */
         gtk_widget_show_all(GTK_WIDGET(self));
 }
