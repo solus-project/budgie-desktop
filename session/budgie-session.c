@@ -26,7 +26,7 @@
 #include <gio/gio.h>
 #include <sys/wait.h>
 
-#define DESKTOP_WM "mutter"
+#define DESKTOP_WM "budgie-wm"
 #define DESKTOP_PANEL "budgie-panel"
 /* Must re-address this at some point. Have a systemd-user session for it */
 #define DESKTOP_SETTINGS "/usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon"
