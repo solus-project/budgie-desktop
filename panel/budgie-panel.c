@@ -152,7 +152,7 @@ static gboolean update_clock(gpointer userdata)
         dtime = g_date_time_new_now_local();
 
         /* Format it as a string (24h) */
-        date_string = g_date_time_format(dtime, " %H:%M:%S ");
+        date_string = g_date_time_format(dtime, " %H:%M:%S <small>%x</small> ");
         gtk_label_set_markup(GTK_LABEL(self->clock), date_string);
         g_free(date_string);
         g_date_time_unref(dtime);
