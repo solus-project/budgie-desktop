@@ -39,6 +39,8 @@ typedef struct _BudgiePanelClass   BudgiePanelClass;
 /* BudgiePanel object */
 struct _BudgiePanel {
         GtkWindow parent;
+
+        GtkWidget *tasklist;
 };
 
 /* BudgiePanel class definition */

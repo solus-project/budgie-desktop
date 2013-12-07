@@ -8,6 +8,7 @@ budgie_panel_SOURCES = \
 	budgie-panel-main.c
 
 budgie_panel_CFLAGS = \
+	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \

@@ -21,6 +21,8 @@
  * 
  */
 
+#include <libwnck/libwnck.h>
+
 #include "budgie-panel.h"
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
@@ -43,8 +45,21 @@ static void budgie_panel_class_init(BudgiePanelClass *klass)
 
 static void budgie_panel_init(BudgiePanel *self)
 {
+        GtkWidget *tasklist;
+        GtkWidget *layout;
         GdkScreen *screen;
         int x, y, width, height;
+
+        /* tiny bit of padding */
+        gtk_container_set_border_width(GTK_CONTAINER(self), 2);
+
+        /* Our main layout is a horizontal box */
+        layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+        gtk_container_add(GTK_CONTAINER(self), layout);
+
+        /* Add a tasklist to the panel */
+        tasklist = wnck_tasklist_new();
+        gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
