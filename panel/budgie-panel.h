@@ -41,6 +41,7 @@ struct _BudgiePanel {
         GtkWindow parent;
 
         GtkWidget *tasklist;
+        GtkWidget *clock;
 };
 
 /* BudgiePanel class definition */

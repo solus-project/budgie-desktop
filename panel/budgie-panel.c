@@ -34,6 +34,9 @@ static void budgie_panel_class_init(BudgiePanelClass *klass);
 static void budgie_panel_init(BudgiePanel *self);
 static void budgie_panel_dispose(GObject *object);
 
+/* Private methods */
+static gboolean update_clock(gpointer userdata);
+
 /* Initialisation */
 static void budgie_panel_class_init(BudgiePanelClass *klass)
 {
@@ -48,6 +51,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *tasklist;
         GtkWidget *layout;
         GdkScreen *screen;
+        GtkWidget *clock;
         int x, y, width, height;
         GtkSettings *settings;
 
@@ -65,9 +69,15 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Add a tasklist to the panel */
         tasklist = wnck_tasklist_new();
+        self->tasklist = tasklist;
         wnck_tasklist_set_button_relief(WNCK_TASKLIST(tasklist),
                 GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
+
+        /* Add a clock at the end */
+        clock = gtk_label_new("--");
+        self->clock = clock;
+        gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -88,6 +98,11 @@ static void budgie_panel_init(BudgiePanel *self)
                 GDK_WINDOW_TYPE_HINT_DOCK);
         /* And now show ourselves */
         gtk_widget_show_all(GTK_WIDGET(self));
+
+        /* Don't show an empty label */
+        update_clock((gpointer)self);
+        /* Update the clock every second */
+        g_timeout_add(1000, update_clock, (gpointer)self);
 }
 
 static void budgie_panel_dispose(GObject *object)
@@ -103,4 +118,24 @@ BudgiePanel* budgie_panel_new(void)
 
         self = g_object_new(BUDGIE_PANEL_TYPE, NULL);
         return self;
+}
+
+static gboolean update_clock(gpointer userdata)
+{
+        BudgiePanel *self;;
+        gchar *date_string;
+        GDateTime *dtime;
+
+        self = BUDGIE_PANEL(userdata);
+
+        /* Get the current time */
+        dtime = g_date_time_new_now_local();
+
+        /* Format it as a string (24h) */
+        date_string = g_date_time_format(dtime, "%H:%M:%S");
+        gtk_label_set_markup(GTK_LABEL(self->clock), date_string);
+        g_free(date_string);
+        g_date_time_unref(dtime);
+
+        return TRUE;
 }
