@@ -39,6 +39,21 @@ static void budgie_panel_dispose(GObject *object);
 static gboolean update_clock(gpointer userdata);
 static void init_styles(BudgiePanel *self);
 
+static gboolean draw_shadow(GtkWidget *widget,
+                        cairo_t *cr,
+                        gpointer userdata)
+{
+        GtkStyleContext *style;
+        GtkAllocation alloc;
+
+        style = gtk_widget_get_style_context(widget);
+        gtk_widget_get_allocation(widget, &alloc);
+        gtk_render_background(style, cr, alloc.x, alloc.y,
+                alloc.width, alloc.height);
+
+        return TRUE;
+}
+
 /* Initialisation */
 static void budgie_panel_class_init(BudgiePanelClass *klass)
 {
@@ -55,6 +70,8 @@ static void budgie_panel_init(BudgiePanel *self)
         GdkScreen *screen;
         GdkVisual *visual;
         GtkWidget *clock;
+        GtkWidget *menu;
+        GtkWidget *shadow;
         int x, y, width, height;
         GtkSettings *settings;
         GtkStyleContext *style;
@@ -76,6 +93,12 @@ static void budgie_panel_init(BudgiePanel *self)
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(self), layout);
 
+        /* Add a menu button */
+        menu = gtk_button_new_with_label("Menu");
+        gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
+        g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
+        gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
+
         /* Add a tasklist to the panel */
         tasklist = wnck_tasklist_new();
         self->tasklist = tasklist;
@@ -87,7 +110,7 @@ static void budgie_panel_init(BudgiePanel *self)
         clock = gtk_label_new("--");
         self->clock = clock;
         style = gtk_widget_get_style_context(clock);
-        gtk_style_context_add_class(style, "floating-bar");
+        gtk_style_context_add_class(style, "panel-applet");
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
@@ -111,6 +134,22 @@ static void budgie_panel_init(BudgiePanel *self)
         /* We want to be a dock */
         gtk_window_set_type_hint(GTK_WINDOW(self),
                 GDK_WINDOW_TYPE_HINT_DOCK);
+
+        /* Add a shadow, idea came from wingpanel, kudos guys :) */
+        shadow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        self->shadow = shadow;
+        gtk_window_set_type_hint(GTK_WINDOW(shadow),
+                GDK_WINDOW_TYPE_HINT_DOCK);
+        gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
+        gtk_window_move(GTK_WINDOW(shadow), x, y-4);
+        style = gtk_widget_get_style_context(shadow);
+        gtk_style_context_add_class(style, "panel-shadow");
+        gtk_window_stick(GTK_WINDOW(shadow));
+        gtk_widget_set_visual(shadow, visual);
+        g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
+                (gpointer)self);
+        gtk_widget_show_all(shadow);
+
         /* And now show ourselves */
         gtk_widget_show_all(GTK_WIDGET(self));
 

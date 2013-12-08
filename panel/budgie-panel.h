@@ -29,21 +29,44 @@
 #define PANEL_CSS "\
 BudgiePanel {\
     border-width: 1px;\
-    border-top: 1px solid alpha(white, 0.2);\
-    background-color: alpha(white, 0.0);\
+    background-color: alpha(black, 0.62);\
+    /*background-color: alpha(white, 0.0);\
     background-image: linear-gradient(to bottom,\
 		alpha(shade (white, 0.2), 0.92),\
-		alpha(shade (black, 1.0), 0.92));\
+		alpha(shade (black, 1.0), 0.92));*/\
+}\
+.panel-shadow.top {\
+    background-color: @transparent;\
+    background-image: -gtk-gradient (linear,\
+                     left top, left bottom,\
+                     from (alpha (#000, 0.3)),\
+                     to (alpha (#000, 0.0)));\
+}\
+.panel-shadow {\
+    background-color: @transparent;\
+    background-image: -gtk-gradient (linear,\
+                     left bottom, left top,\
+                     from (alpha (#000, 0.3)),\
+                     to (alpha (#000, 0.0)));\
+}\
+.panel-applet {\
+    background-image: none;\
+    border-color: alpha(white, 0.12);\
+    border-radius: 6px;\
+    border: solid alpha(white, 0.1) 1px;\
 }\
 BudgiePanel GtkButton:active {\
     color: white;\
     text-shadow: 0px 1px black;\
-    transition: all 200ms ease-in\
+    transition: all 200ms ease-in;\
+    background-image: none;\
+    border: 1px solid alpha(white, 0.0);\
+    background-color: alpha(black, 0.72);\
 }\
 BudgiePanel GtkButton {\
     color: alpha(white, 0.7);\
     text-shadow: 0px 1px alpha(black, 0.8);\
-    transition: all 200ms ease-out \
+    transition: all 200ms ease-out; \
 }"
 
 typedef struct _BudgiePanel BudgiePanel;
@@ -59,6 +82,7 @@ typedef struct _BudgiePanelClass   BudgiePanelClass;
 /* BudgiePanel object */
 struct _BudgiePanel {
         GtkWindow parent;
+        GtkWidget *shadow;
 
         GtkWidget *tasklist;
         GtkWidget *clock;
