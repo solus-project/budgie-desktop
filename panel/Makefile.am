@@ -14,9 +14,11 @@ budgie_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
+	$(UPOWER_CFLAGS) \
 	$(AM_CFLAGS)
 
 budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
-	$(WNCK3_LIBS)
+	$(WNCK3_LIBS) \
+	$(UPOWER_CLIBS)

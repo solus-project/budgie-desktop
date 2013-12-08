@@ -18,6 +18,9 @@ PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
 
+# Required for power-applet
+PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.23])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
                 panel/Makefile
