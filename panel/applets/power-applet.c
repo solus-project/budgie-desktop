@@ -1,5 +1,5 @@
 /*
- * budgie-panel.c
+ * power-applet.c
  * 
  * Copyright 2013 Ikey Doherty <ikey.doherty@gmail.com>
  * 
