@@ -39,6 +39,7 @@ typedef struct _PowerAppletClass   PowerAppletClass;
 /* PowerApplet object */
 struct _PowerApplet {
         GtkBin parent;
+        GtkWidget *image;
 };
 
 /* PowerApplet class definition */
@@ -54,6 +55,6 @@ GType power_applet_get_type(void);
  * Construct a new PowerApplet
  * @return A new PowerApplet
  */
-PowerApplet* power_applet_new(void);
+GtkWidget* power_applet_new(void);
 
 #endif /* power_applet_h */

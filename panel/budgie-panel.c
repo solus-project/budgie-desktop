@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "budgie-panel.h"
+#include "applets/power-applet.h"
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
@@ -69,6 +70,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *layout;
         GdkScreen *screen;
         GdkVisual *visual;
+        GtkWidget *power;
         GtkWidget *clock;
         GtkWidget *menu;
         GtkWidget *shadow;
@@ -113,6 +115,11 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_style_context_add_class(style, "panel-applet");
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
+
+        /* Add the power applet near the end */
+        power = power_applet_new();
+        self->power = power;
+        gtk_box_pack_end(GTK_BOX(layout), power, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);

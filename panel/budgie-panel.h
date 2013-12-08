@@ -85,6 +85,7 @@ struct _BudgiePanel {
         GtkWidget *shadow;
 
         GtkWidget *tasklist;
+        GtkWidget *power;
         GtkWidget *clock;
 };
 
