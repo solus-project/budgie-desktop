@@ -68,12 +68,11 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
 {
         BudgiePanel *self;
         GdkScreen *screen;
-        int width, height, x, y;
+        int height, x, y;
         GtkAllocation alloc;
 
         self = BUDGIE_PANEL(userdata);
         screen = gtk_widget_get_screen(widget);
-        width = gdk_screen_get_width(screen);
         height = gdk_screen_get_height(screen);
 
         gtk_widget_get_allocation(widget, &alloc);
