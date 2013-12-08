@@ -143,9 +143,9 @@ static void update_ui(PowerApplet *self)
         if (state == 4)
                 image_name = "battery-full-charged";
         else if (state == 1)
-                image = g_strdup_printf("%s-charging", image_name);
+                image = g_strdup_printf("%s-charging-symbolic", image_name);
         else
-                image = g_strdup_printf("%s", image_name);
+                image = g_strdup_printf("%s-symbolic", image_name);
 
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), image,
                 GTK_ICON_SIZE_BUTTON);
