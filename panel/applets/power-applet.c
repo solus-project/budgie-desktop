@@ -100,6 +100,9 @@ static void update_ui(PowerApplet *self)
         gdouble percent;
         gchar *image_name = NULL, *image = NULL;
         guint8 state;
+        /* No .0000's */
+        gint percent2;
+        gchar *tooltip = NULL;
 
         if (!self->battery) {
                 /* Determine the battery device */
@@ -146,6 +149,12 @@ static void update_ui(PowerApplet *self)
                 image = g_strdup_printf("%s-charging-symbolic", image_name);
         else
                 image = g_strdup_printf("%s-symbolic", image_name);
+
+        /* Set a helpful tooltip */
+        percent2 = (gint)percent;
+        tooltip = g_strdup_printf("Battery remaining: %d%%", percent2);
+        gtk_widget_set_tooltip_text(GTK_WIDGET(self), tooltip);
+        g_free(tooltip);
 
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), image,
                 GTK_ICON_SIZE_BUTTON);
