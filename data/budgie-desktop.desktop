@@ -1,0 +1,8 @@
+[Desktop Entry]
+X-SuSE-translate=true
+Name=Budgie Desktop
+Comment=This session logs you into the Budgie Desktop
+Exec=/usr/bin/budgie-session
+TryExec=/usr/bin/budgie-session
+Icon=
+Type=Application

@@ -8,6 +8,7 @@ NULL =
 CLEANFILES =
 
 SUBDIRS = \
+	data \
 	panel \
 	session \
 	wm
