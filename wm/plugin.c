@@ -24,6 +24,8 @@
 
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+/* Because GCC is tripping about the bitfields */
+#pragma GCC diagnostic ignored "-Woverflow"
 
 #include <meta/meta-plugin.h>
 #include <meta/window.h>
