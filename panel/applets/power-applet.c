@@ -32,6 +32,9 @@ static void power_applet_dispose(GObject *object);
 
 /* Private methods */
 static void update_ui(PowerApplet *self);
+static void device_changed_cb(UpClient *client,
+                             UpDevice *device,
+                             gpointer userdata);
 
 /* Initialisation */
 static void power_applet_class_init(PowerAppletClass *klass)
@@ -55,6 +58,8 @@ static void power_applet_init(PowerApplet *self)
 
         /* Initialise upower */
         self->client = up_client_new();
+        g_signal_connect(self->client, "device-changed",
+                G_CALLBACK(device_changed_cb), (gpointer)self);
         self->battery = NULL;
         update_ui(self);
 }
@@ -151,4 +156,15 @@ end:
                 g_error_free(error);
         if (devices)
                 g_ptr_array_unref(devices);
+}
+
+static void device_changed_cb(UpClient *client,
+                             UpDevice *device,
+                             gpointer userdata)
+{
+        PowerApplet *self;
+
+        self = POWER_APPLET(userdata);
+        if (device == self->battery)
+                update_ui(self);
 }
