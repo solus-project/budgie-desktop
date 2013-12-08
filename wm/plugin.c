@@ -22,6 +22,9 @@
  * 02111-1307, USA.
  */
 
+#pragma GCC diagnostic ignored "-Wdeprecated"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include <meta/meta-plugin.h>
 #include <meta/window.h>
 #include <meta/util.h>
