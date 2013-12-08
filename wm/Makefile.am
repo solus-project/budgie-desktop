@@ -3,6 +3,7 @@
 bin_PROGRAMS = budgie-wm
 
 budgie_wm_SOURCES = \
+	plugin.h \
 	plugin.c \
 	budgie-wm.c
 
