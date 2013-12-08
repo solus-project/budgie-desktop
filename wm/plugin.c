@@ -32,7 +32,6 @@
 #include <meta/util.h>
 #include <meta/meta-background-group.h>
 #include <meta/meta-background-actor.h>
-#include <meta/meta-background.h>
 
 #include <libintl.h>
 #define _(x) dgettext (GETTEXT_PACKAGE, x)
@@ -338,11 +337,8 @@ on_monitors_changed (MetaScreen *screen,
                           255);
             clutter_actor_set_background_color (background, &color);
       } else {
-            background = clutter_texture_new_from_file(filename, NULL);
             /* Set the background */
-            meta_background_load_file_async(background, filename,
-                G_DESKTOP_BACKGROUND_STYLE_WALLPAPER,
-                NULL, NULL, NULL);
+            background = clutter_texture_new_from_file(filename, NULL);
       }
 
       clutter_actor_set_position (background, rect.x, rect.y);
