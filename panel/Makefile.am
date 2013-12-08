@@ -21,4 +21,4 @@ budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
-	$(UPOWER_CLIBS)
+	$(UPOWER_LIBS)
