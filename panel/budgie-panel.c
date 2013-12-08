@@ -92,6 +92,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *clock;
         GtkWidget *menu;
         GtkWidget *shadow;
+        GtkWidget *menu_popup, *menu_item;
         int width;
         GtkSettings *settings;
         GtkStyleContext *style;
@@ -114,10 +115,20 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_container_add(GTK_CONTAINER(self), layout);
 
         /* Add a menu button */
-        menu = gtk_button_new_with_label("Menu");
+        menu = gtk_menu_button_new();
+        gtk_menu_button_set_direction(GTK_MENU_BUTTON(menu),
+                GTK_ARROW_UP);
+        gtk_button_set_label(GTK_BUTTON(menu), "Menu");
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
+
+        /* Fake menu... */
+        menu_popup = gtk_menu_new();
+        menu_item = gtk_menu_item_new_with_label("Sorry.. nothing here yet");
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu_popup), menu_item);
+        gtk_widget_show_all(menu_popup);
+        gtk_menu_button_set_popup(GTK_MENU_BUTTON(menu), menu_popup);
 
         /* Add a tasklist to the panel */
         tasklist = wnck_tasklist_new();
