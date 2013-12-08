@@ -29,11 +29,10 @@
 #define PANEL_CSS "\
 BudgiePanel {\
     border-width: 1px;\
-    background-color: alpha(black, 0.62);\
-    /*background-color: alpha(white, 0.0);\
+    background-color: alpha(white, 0.0);\
     background-image: linear-gradient(to bottom,\
 		alpha(shade (white, 0.2), 0.92),\
-		alpha(shade (black, 1.0), 0.92));*/\
+		alpha(shade (black, 1.0), 0.92));\
 }\
 .panel-shadow.top {\
     background-color: @transparent;\

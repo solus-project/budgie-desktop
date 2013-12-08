@@ -29,7 +29,7 @@
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
-#define PANEL_HEIGHT 30
+#define PANEL_HEIGHT 25
 
 /* Boilerplate GObject code */
 static void budgie_panel_class_init(BudgiePanelClass *klass);
@@ -64,6 +64,25 @@ static void budgie_panel_class_init(BudgiePanelClass *klass)
         g_object_class->dispose = &budgie_panel_dispose;
 }
 
+static void realized_cb(GtkWidget *widget, gpointer userdata)
+{
+        BudgiePanel *self;
+        GdkScreen *screen;
+        int width, height, x, y;
+        GtkAllocation alloc;
+
+        self = BUDGIE_PANEL(userdata);
+        screen = gtk_widget_get_screen(widget);
+        width = gdk_screen_get_width(screen);
+        height = gdk_screen_get_height(screen);
+
+        gtk_widget_get_allocation(widget, &alloc);
+        x = 0;
+        y = height - alloc.height;
+        gtk_window_move(GTK_WINDOW(self), x, y);
+        gtk_window_move(GTK_WINDOW(self->shadow), x, y-4);
+}
+
 static void budgie_panel_init(BudgiePanel *self)
 {
         GtkWidget *tasklist;
@@ -74,7 +93,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *clock;
         GtkWidget *menu;
         GtkWidget *shadow;
-        int x, y, width, height;
+        int width;
         GtkSettings *settings;
         GtkStyleContext *style;
 
@@ -126,22 +145,20 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Set ourselves up to be the correct size and position */
         screen = gdk_screen_get_default();
-        width = gdk_screen_get_width(screen);
-        height = gdk_screen_get_height(screen);
         visual = gdk_screen_get_rgba_visual(screen);
         if (visual)
                 gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
-        x = 0;
-        y = height - PANEL_HEIGHT;
-
-        gtk_widget_set_size_request(GTK_WIDGET(self), width, 30);
-        gtk_window_move(GTK_WINDOW(self), x, y);
+        width = gdk_screen_get_width(screen);
+        gtk_widget_set_size_request(GTK_WIDGET(self), width, PANEL_HEIGHT);
 
         /* We want to be a dock */
         gtk_window_set_type_hint(GTK_WINDOW(self),
                 GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_stick(GTK_WINDOW(self));
+
+        g_signal_connect(self, "realize", G_CALLBACK(realized_cb),
+                (gpointer)self);
 
         /* Add a shadow, idea came from wingpanel, kudos guys :) */
         shadow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -149,7 +166,6 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_window_set_type_hint(GTK_WINDOW(shadow),
                 GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
-        gtk_window_move(GTK_WINDOW(shadow), x, y-4);
         style = gtk_widget_get_style_context(shadow);
         gtk_style_context_add_class(style, "panel-shadow");
         gtk_window_stick(GTK_WINDOW(shadow));
