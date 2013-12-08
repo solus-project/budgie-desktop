@@ -30,6 +30,8 @@ static void power_applet_class_init(PowerAppletClass *klass);
 static void power_applet_init(PowerApplet *self);
 static void power_applet_dispose(GObject *object);
 
+/* Private methods */
+static void update_ui(PowerApplet *self);
 
 /* Initialisation */
 static void power_applet_class_init(PowerAppletClass *klass)
@@ -44,18 +46,32 @@ static void power_applet_init(PowerApplet *self)
 {
         GtkWidget *image;
 
+        /* Display battery status using an image */
         image = gtk_image_new();
         self->image = image;
         gtk_container_add(GTK_CONTAINER(self), image);
 
-        gtk_image_set_from_icon_name(GTK_IMAGE(image),
-                "battery-good-symbolic", GTK_ICON_SIZE_BUTTON);
-
         gtk_container_set_border_width(GTK_CONTAINER(self), 5);
+
+        /* Initialise upower */
+        self->client = up_client_new();
+        self->battery = NULL;
+        update_ui(self);
 }
 
 static void power_applet_dispose(GObject *object)
 {
+        PowerApplet *self;
+
+        self = POWER_APPLET(object);
+        if (self->battery) {
+                g_object_unref(self->battery);
+                self->battery = NULL;
+        }
+        if (self->client) {
+                g_object_unref(self->client);
+                self->client = NULL;
+        }
         /* Destruct */
         G_OBJECT_CLASS (power_applet_parent_class)->dispose (object);
 }
@@ -67,4 +83,72 @@ GtkWidget* power_applet_new(void)
 
         self = g_object_new(POWER_APPLET_TYPE, NULL);
         return GTK_WIDGET(self);
+}
+
+static void update_ui(PowerApplet *self)
+{
+        GPtrArray *devices = NULL;
+        GError *error = NULL;
+        UpDeviceKind kind;
+        UpDevice *device;
+        int i;
+        gdouble percent;
+        gchar *image_name = NULL, *image = NULL;
+        guint8 state;
+
+        if (!self->battery) {
+                /* Determine the battery device */
+                up_client_enumerate_devices_sync(self->client, NULL, &error);
+                if (error) {
+                        g_warning("Unable to list devices: %s",
+                                error->message);
+                        goto end;
+                }
+                devices = up_client_get_devices(self->client);
+                for (i = 0; i < devices->len; i++) {
+                        device = (UpDevice*)devices->pdata[i];
+                        g_object_get(device, "kind", &kind, NULL);
+                        if (kind == UP_DEVICE_KIND_BATTERY) {
+                                /* Store a reference to this */
+                                self->battery = device;
+                                device = NULL;
+                                g_object_ref(self->battery);
+                                break;
+                        }
+                }
+                if (!self->battery) {
+                        g_warning("Unable to discover a battery");
+                        goto end;
+                }
+        }
+        /* Got a battery, query the percent */
+        g_object_get(self->battery, "percentage", &percent, NULL);
+        g_object_get(self->battery, "state", &state, NULL);
+
+        /* "empty" "low" "good" "full" */
+        if (percent <= 10)
+                image_name = "battery-empty";
+        else if (percent <= 35)
+                image_name = "battery-low";
+        else if (percent <= 99)
+                image_name = "battery-good";
+        else
+                image_name = "battery-full";
+        /* Fully charged OR charging */
+        if (state == 4)
+                image_name = "battery-full-charged";
+        else if (state == 1)
+                image = g_strdup_printf("%s-charging", image_name);
+        else
+                image = g_strdup_printf("%s", image_name);
+
+        gtk_image_set_from_icon_name(GTK_IMAGE(self->image), image,
+                GTK_ICON_SIZE_BUTTON);
+        g_free(image);
+
+end:
+        if (error)
+                g_error_free(error);
+        if (devices)
+                g_ptr_array_unref(devices);
 }

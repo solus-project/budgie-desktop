@@ -25,6 +25,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <upower.h>
 
 typedef struct _PowerApplet PowerApplet;
 typedef struct _PowerAppletClass   PowerAppletClass;
@@ -40,6 +41,10 @@ typedef struct _PowerAppletClass   PowerAppletClass;
 struct _PowerApplet {
         GtkBin parent;
         GtkWidget *image;
+
+        /* UPower stuff */
+        UpClient *client;
+        UpDevice *battery;
 };
 
 /* PowerApplet class definition */
