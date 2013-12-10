@@ -26,6 +26,8 @@
 
 #include "budgie-panel.h"
 #include "applets/power-applet.h"
+/* BAD BAD BAD: Replace soon! */
+#include "xutils.h"
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
@@ -70,6 +72,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         GdkScreen *screen;
         int height, x, y;
         GtkAllocation alloc;
+        GdkWindow *window;
 
         self = BUDGIE_PANEL(userdata);
         screen = gtk_widget_get_screen(widget);
@@ -80,6 +83,11 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         y = height - alloc.height;
         gtk_window_move(GTK_WINDOW(self), x, y);
         gtk_window_move(GTK_WINDOW(self->shadow), x, y-4);
+
+        /* BAD BAD BAD */
+        window = gtk_widget_get_window(GTK_WIDGET(self));
+        /* Bottom strut, allow 1 pixel padding */
+        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height+1);
 }
 
 static void budgie_panel_init(BudgiePanel *self)
