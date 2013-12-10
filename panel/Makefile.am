@@ -7,6 +7,8 @@ budgie_panel_SOURCES = \
 	applets/power-applet.h \
 	budgie-panel.c \
 	budgie-panel.h \
+	xutils.h \
+	xutils.c \
 	budgie-panel-main.c
 
 budgie_panel_CFLAGS = \
@@ -15,10 +17,12 @@ budgie_panel_CFLAGS = \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
 	$(UPOWER_CFLAGS) \
+	$(X11_CFLAGS) \
 	$(AM_CFLAGS)
 
 budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
-	$(UPOWER_LIBS)
+	$(UPOWER_LIBS) \
+	$(X11_LIBS)
