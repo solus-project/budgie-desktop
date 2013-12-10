@@ -718,6 +718,7 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
                                                     CLUTTER_GRAVITY_CENTER);
 
       clutter_actor_set_scale (actor, 0.0, 0.0);
+      clutter_actor_set_opacity (actor, 0);
       clutter_actor_show (actor);
 
       animation = clutter_actor_animate (actor,
@@ -725,6 +726,7 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
                                          MAP_TIMEOUT,
                                          "scale-x", 1.0,
                                          "scale-y", 1.0,
+                                         "opacity", 255,
                                          NULL);
       apriv->tml_map = clutter_animation_get_timeline (animation);
       data->actor = actor;
@@ -806,7 +808,8 @@ destroy (MetaPlugin *plugin, MetaWindowActor *window_actor)
                                          CLUTTER_EASE_IN_SINE,
                                          DESTROY_TIMEOUT,
                                          "scale-x", 0.0,
-                                         "scale-y", 1.0,
+                                         "scale-y", 0.0,
+                                         "opacity", 0,
                                          NULL);
       apriv->tml_destroy = clutter_animation_get_timeline (animation);
       data->plugin = plugin;
