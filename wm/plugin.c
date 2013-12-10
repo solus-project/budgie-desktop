@@ -736,7 +736,8 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
       apriv->is_minimized = FALSE;
 
   } else if (type == META_WINDOW_POPUP_MENU ||
-             type == META_WINDOW_DROPDOWN_MENU)
+             type == META_WINDOW_DROPDOWN_MENU ||
+             type == META_WINDOW_DOCK)
   {
       /* For context menus (popup/dropdown) we fade the menu in */
       ClutterAnimation *animation;
