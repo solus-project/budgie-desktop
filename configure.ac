@@ -24,6 +24,10 @@ PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.23])
 # Required for x11 hacks in the panel (will be removed soon.)
 PKG_CHECK_MODULES([X11], [x11])
 
+# Required for module loading
+PKG_CHECK_MODULES([PEAS], [libpeas-1.0 >= 1.9.0])
+PKG_CHECK_MODULES([PEASGTK], [libpeas-gtk-1.0 >= 1.9.0])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
                 data/Makefile
