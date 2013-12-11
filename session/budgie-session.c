@@ -31,7 +31,6 @@
 /* Must re-address this at some point. Have a systemd-user session for it */
 #define DESKTOP_SETTINGS "/usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon"
 #define DESKTOP_EXTRA "gnome-terminal"
-#define WD "/tmp"
 
 int main(int argc, char **argv)
 {
@@ -42,6 +41,9 @@ int main(int argc, char **argv)
         gchar **p_argv = NULL;
         int wID;
         int ret = EXIT_FAILURE;
+        const gchar *home_dir;
+
+        home_dir = g_get_home_dir();
 
         /* Need to pass an argv to g_spawn_async */
         if (!g_shell_parse_argv(DESKTOP_WM, NULL, &p_argv, &error)) {
@@ -52,7 +54,7 @@ int main(int argc, char **argv)
 
         /* Launch WM immediately async, so we can start other display
          * dependant child processes */
-        if (!g_spawn_async(WD, p_argv, NULL,
+        if (!g_spawn_async(home_dir, p_argv, NULL,
                 G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL |
                 G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_SEARCH_PATH,
                 NULL, NULL, &pid, &error)) {
