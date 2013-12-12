@@ -137,6 +137,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Load the menus */
         populate_menu(self, NULL);
+        gtk_widget_grab_focus(search_entry);
 }
 
 static void menu_window_dispose(GObject *object)

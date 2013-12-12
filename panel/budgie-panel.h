@@ -105,6 +105,8 @@ struct _BudgiePanel {
         GtkWidget *power;
         GtkWidget *clock;
         GtkWidget *menu_window;
+        GtkWidget *menu_button;
+        gulong toggle_id;
 };
 
 /* BudgiePanel class definition */
