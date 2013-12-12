@@ -86,8 +86,8 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
 
         /* BAD BAD BAD */
         window = gtk_widget_get_window(GTK_WIDGET(self));
-        /* Bottom strut, allow 1 pixel padding */
-        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height+1);
+        /* Bottom strut */
+        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
 }
 
 static void budgie_panel_init(BudgiePanel *self)
