@@ -183,7 +183,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                         case GMENU_TREE_ITEM_ENTRY:
                                 entry = gmenu_tree_iter_get_entry(iter);
                                 info = gmenu_tree_entry_get_app_info(entry);
-                                name = g_app_info_get_name(G_APP_INFO(info));
+                                name = g_app_info_get_display_name(G_APP_INFO(info));
                                 icon = g_app_info_get_icon(G_APP_INFO(info));
                                 button = new_image_button(name, icon, FALSE);
                                 g_object_set_data_full(G_OBJECT(button), "group",
