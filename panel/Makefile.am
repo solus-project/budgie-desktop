@@ -5,6 +5,8 @@ bin_PROGRAMS = budgie-panel
 budgie_panel_SOURCES = \
 	applets/power-applet.c \
 	applets/power-applet.h \
+	applets/menu-window.h \
+	applets/menu-window.c \
 	budgie-panel.c \
 	budgie-panel.h \
 	xutils.h \
