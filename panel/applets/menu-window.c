@@ -58,6 +58,8 @@ static void menu_window_init(MenuWindow *self)
 
         /* Sensible default size */
         gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
+        gtk_container_set_border_width(GTK_CONTAINER(self), 3);
+
         /* Skip, no decorations, etc */
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
@@ -92,6 +94,8 @@ static void menu_window_init(MenuWindow *self)
 
         /* Right hand side is similar, just applications */
         scroll = gtk_scrolled_window_new(NULL, NULL);
+        gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+                GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         list = gtk_list_box_new();
         self->app_box = list;
         gtk_container_add(GTK_CONTAINER(scroll), list);
