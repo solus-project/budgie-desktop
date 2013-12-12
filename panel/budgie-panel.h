@@ -69,7 +69,7 @@ BudgiePanel GtkButton {\
 }\
 MenuWindow {\
     background-image: none;\
-    background-color: @theme_bg_color;\
+    background-color: alpha(black, 0.90);\
     border-radius: 6px;\
 }\
 GtkListBox {\
