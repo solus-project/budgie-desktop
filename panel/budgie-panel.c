@@ -21,7 +21,11 @@
  * 
  */
 
+/* GtkImageMenuItem going away soon :( */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include <libwnck/libwnck.h>
+#include <gmenu-tree.h>
 #include <string.h>
 
 #include "budgie-panel.h"
@@ -41,6 +45,8 @@ static void budgie_panel_dispose(GObject *object);
 /* Private methods */
 static gboolean update_clock(gpointer userdata);
 static void init_styles(BudgiePanel *self);
+static void activate_cb(GtkWidget *widget, gpointer userdata);
+static void populate_menu(GtkWidget *menu, GMenuTreeDirectory *directory);
 
 static gboolean draw_shadow(GtkWidget *widget,
                         cairo_t *cr,
@@ -100,7 +106,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *clock;
         GtkWidget *menu;
         GtkWidget *shadow;
-        GtkWidget *menu_popup, *menu_item;
+        GtkWidget *menu_popup;;
         int width;
         GtkSettings *settings;
         GtkStyleContext *style;
@@ -131,10 +137,9 @@ static void budgie_panel_init(BudgiePanel *self)
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
 
-        /* Fake menu... */
+        /* Popup menu... */
         menu_popup = gtk_menu_new();
-        menu_item = gtk_menu_item_new_with_label("Sorry.. nothing here yet");
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu_popup), menu_item);
+        populate_menu(menu_popup, NULL);
         gtk_widget_show_all(menu_popup);
         gtk_menu_button_set_popup(GTK_MENU_BUTTON(menu), menu_popup);
 
@@ -247,4 +252,82 @@ static gboolean update_clock(gpointer userdata)
         g_date_time_unref(dtime);
 
         return TRUE;
+}
+
+static void activate_cb(GtkWidget *widget, gpointer userdata)
+{
+        __attribute__ ((unused)) GDesktopAppInfo *info;
+
+        info = g_object_get_data(G_OBJECT(widget), "info");
+
+        /* Todo: Execute */
+}
+
+static void populate_menu(GtkWidget *menu, GMenuTreeDirectory *directory)
+{
+        GMenuTree *tree = NULL;
+        GMenuTreeIter *iter;
+        GMenuTreeDirectory *dir, *nextdir;
+        GMenuTreeEntry *entry;
+        GError *error = NULL;
+        GMenuTreeItemType type;
+        const gchar *name;
+        GtkWidget *menu_item, *submenu;
+        GDesktopAppInfo *info;
+        GtkWidget *image;
+        GIcon *icon = NULL;
+
+        if (!directory) {
+                tree = gmenu_tree_new("gnome-applications.menu", GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
+
+                gmenu_tree_load_sync(tree, &error);
+                if (error) {
+                        g_warning("Failed to load menu: %s\n", error->message);
+                        g_error_free(error);
+                        return;
+                }
+                dir = gmenu_tree_get_root_directory(tree);
+        } else {
+                dir = directory;
+        }
+        iter = gmenu_tree_directory_iter(dir);
+
+        while ((type = gmenu_tree_iter_next(iter)) != GMENU_TREE_ITEM_INVALID) {
+                switch (type) {
+                        case GMENU_TREE_ITEM_DIRECTORY:
+                                nextdir = gmenu_tree_iter_get_directory(iter);
+                                name = gmenu_tree_directory_get_name(nextdir);
+                                icon = gmenu_tree_directory_get_icon(nextdir);
+                                image = gtk_image_new_from_gicon(icon, GTK_ICON_SIZE_MENU);
+                                menu_item = gtk_image_menu_item_new_with_label(name);
+                                submenu = gtk_menu_new();
+                                gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), submenu);
+                                gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+                                gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item),
+                                        image);
+                                populate_menu(submenu, nextdir);
+                                break;
+                        case GMENU_TREE_ITEM_ENTRY:
+                                entry = gmenu_tree_iter_get_entry(iter);
+                                info = gmenu_tree_entry_get_app_info(entry);
+                                name = g_app_info_get_name(G_APP_INFO(info));
+                                icon = g_app_info_get_icon(G_APP_INFO(info));
+                                image = gtk_image_new_from_gicon(icon, GTK_ICON_SIZE_MENU);
+                                menu_item = gtk_image_menu_item_new_with_label(name);
+                                g_signal_connect(menu_item, "activate",
+                                        G_CALLBACK(activate_cb), NULL);
+                                gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item),
+                                        image);
+                                gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+                                g_object_set_data(G_OBJECT(menu_item), "info", info);
+                                break;
+                        default:
+                                break;
+                }
+        }
+
+        gmenu_tree_iter_unref(iter);
+        gtk_widget_show_all(GTK_WIDGET(menu));
+        if (tree)
+                g_object_unref(tree);
 }
