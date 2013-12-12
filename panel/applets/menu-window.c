@@ -162,14 +162,15 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         GMenuTree *tree = NULL;
         GMenuTreeIter *iter;
         GMenuTreeDirectory *dir, *nextdir;
-        __attribute__ ((unused)) GMenuTreeEntry *entry;
+        GMenuTreeEntry *entry;
         GError *error = NULL;
         GMenuTreeItemType type;
         GtkWidget *button;
         const gchar *name;
         const gchar *dirname;
-        __attribute__ ((unused)) GDesktopAppInfo *info;
+        GDesktopAppInfo *info;
         GIcon *icon = NULL;
+        const gchar *desc;
 
         if (!directory) {
                 tree = gmenu_tree_new("gnome-applications.menu", GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
@@ -210,6 +211,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 name = g_app_info_get_display_name(G_APP_INFO(info));
                                 icon = g_app_info_get_icon(G_APP_INFO(info));
                                 button = new_image_button(name, icon, FALSE);
+                                desc = g_app_info_get_description(G_APP_INFO(info));
+                                gtk_widget_set_tooltip_text(button, desc);
                                 g_signal_connect(button, "clicked",
                                         G_CALLBACK(clicked_cb), (gpointer)self);
                                 g_object_set_data_full(G_OBJECT(button), "group",
