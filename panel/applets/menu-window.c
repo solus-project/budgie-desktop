@@ -115,6 +115,7 @@ static void menu_window_init(MenuWindow *self)
         gtk_label_set_use_markup(GTK_LABEL(search_label), TRUE);
         gtk_frame_set_label_widget(GTK_FRAME(frame), search_label);
         search_entry = gtk_search_entry_new();
+        self->entry = search_entry;
         g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
                 (gpointer)self);
         gtk_container_add(GTK_CONTAINER(frame), search_entry);

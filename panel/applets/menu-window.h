@@ -43,6 +43,7 @@ struct _MenuWindow {
         GtkWidget *group_box;
         GtkWidget *app_box;
         GtkWidget *all_button;
+        GtkWidget *entry;
 
         gchar *group;
         const gchar *search_term;
