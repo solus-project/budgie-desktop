@@ -81,6 +81,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Left hand side is just a scroller for categories */
         scroll = gtk_scrolled_window_new(NULL, NULL);
+        g_object_set(scroll, "margin", 4, NULL);
         box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -100,6 +101,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Right hand side is similar, just applications */
         scroll = gtk_scrolled_window_new(NULL, NULL);
+        g_object_set(scroll, "margin", 4, NULL);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         list = gtk_list_box_new();
