@@ -43,12 +43,11 @@
 
 #include "plugin.h"
 
-#define DESTROY_TIMEOUT    250
-#define MINIMIZE_TIMEOUT   250
-#define MAXIMIZE_TIMEOUT   250
-#define MAP_TIMEOUT        250
-#define BACKGROUND_TIMEOUT 250
-#define SWITCH_TIMEOUT     500
+#define DESTROY_TIMEOUT   250
+#define MINIMIZE_TIMEOUT  250
+#define MAXIMIZE_TIMEOUT  250
+#define MAP_TIMEOUT       250
+#define SWITCH_TIMEOUT    500
 
 #define ACTOR_DATA_KEY "MCCP-Default-actor-data"
 
@@ -299,7 +298,6 @@ on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin)
 {
   MetaDefaultPlugin *self = META_DEFAULT_PLUGIN (plugin);
-  __attribute__ ((unused)) ClutterAnimation *animation;
   int i, n;
   gchar *wallpaper = NULL;
   GFile *wallpaper_file = NULL;
@@ -345,17 +343,8 @@ on_monitors_changed (MetaScreen *screen,
 
       clutter_actor_set_position (background, rect.x, rect.y);
       clutter_actor_set_size (background, rect.width, rect.height);
+
       clutter_actor_add_child (self->priv->background_group, background);
-      clutter_actor_set_scale (background, 0.0, 0.0);
-      clutter_actor_show (background);
-      clutter_actor_move_anchor_point_from_gravity (background,
-                                                    CLUTTER_GRAVITY_CENTER);
-      /* Ease in the background using a scale effect */
-      animation = clutter_actor_animate (background, CLUTTER_EASE_IN_SINE,
-                                         BACKGROUND_TIMEOUT,
-                                         "scale-x", 1.0,
-                                         "scale-y", 1.0,
-                                         NULL);
     }
     if (wallpaper_file)
       g_object_unref(wallpaper_file);
