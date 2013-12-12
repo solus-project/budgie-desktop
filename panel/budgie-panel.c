@@ -114,8 +114,11 @@ static void budgie_panel_init(BudgiePanel *self)
         init_styles(self);
         /* Sort ourselves out visually */
         settings = gtk_widget_get_settings(GTK_WIDGET(self));
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                TRUE, NULL);
+        g_object_set(settings,
+                "gtk-application-prefer-dark-theme", TRUE,
+                "gtk-menu-images", TRUE,
+                "gtk-button-images", TRUE,
+                NULL);
 
         /* Not resizable.. */
         gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
