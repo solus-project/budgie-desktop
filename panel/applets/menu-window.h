@@ -40,6 +40,8 @@ typedef struct _MenuWindowClass   MenuWindowClass;
 /* MenuWindow object */
 struct _MenuWindow {
         GtkWindow parent;
+        GtkWidget *group_box;
+        GtkWidget *app_box;
 };
 
 /* MenuWindow class definition */

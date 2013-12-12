@@ -86,6 +86,7 @@ struct _BudgiePanel {
         GtkWidget *tasklist;
         GtkWidget *power;
         GtkWidget *clock;
+        GtkWidget *menu_window;
 };
 
 /* BudgiePanel class definition */

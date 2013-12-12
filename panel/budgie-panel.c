@@ -30,6 +30,8 @@
 
 #include "budgie-panel.h"
 #include "applets/power-applet.h"
+#include "applets/menu-window.h"
+
 /* BAD BAD BAD: Replace soon! */
 #include "xutils.h"
 
@@ -61,6 +63,29 @@ static gboolean draw_shadow(GtkWidget *widget,
                 alloc.width, alloc.height);
 
         return TRUE;
+}
+
+static void toggled_cb(GtkWidget *widget, gpointer userdata)
+{
+        BudgiePanel *self;
+        GtkToggleButton *button;
+        GdkScreen *screen;
+        int y;
+        GtkAllocation alloc;
+
+        self = BUDGIE_PANEL(userdata);
+        button = GTK_TOGGLE_BUTTON(widget);
+        if (!gtk_toggle_button_get_active(button)) {
+                gtk_widget_hide(self->menu_window);
+                return;
+        }
+
+        /* Place it near our menu button */
+        screen = gtk_widget_get_screen(widget);
+        gtk_widget_get_allocation(GTK_WIDGET(self), &alloc);
+        y = gdk_screen_get_height(screen) - alloc.height;
+        gtk_window_move(GTK_WINDOW(self->menu_window), 0, y);
+        gtk_widget_show_all(self->menu_window);
 }
 
 /* Initialisation */
@@ -106,7 +131,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *clock;
         GtkWidget *menu;
         GtkWidget *shadow;
-        GtkWidget *menu_popup;;
+        GtkWidget *menu_popup, *menu_window;
         int width;
         GtkSettings *settings;
         GtkStyleContext *style;
@@ -132,19 +157,23 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_container_add(GTK_CONTAINER(self), layout);
 
         /* Add a menu button */
-        menu = gtk_menu_button_new();
-        gtk_menu_button_set_direction(GTK_MENU_BUTTON(menu),
-                GTK_ARROW_UP);
+        menu = gtk_toggle_button_new();
+        g_signal_connect(menu, "toggled", G_CALLBACK(toggled_cb), (gpointer)self);
         gtk_button_set_label(GTK_BUTTON(menu), "Menu");
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
 
+        /* Pretty popup menu */
+        menu_window = menu_window_new();
+        gtk_window_set_transient_for(GTK_WINDOW(menu_window),
+                GTK_WINDOW(self));
+        self->menu_window = menu_window;
+
         /* Popup menu... */
         menu_popup = gtk_menu_new();
         populate_menu(menu_popup, NULL);
         gtk_widget_show_all(menu_popup);
-        gtk_menu_button_set_popup(GTK_MENU_BUTTON(menu), menu_popup);
 
         /* Add a tasklist to the panel */
         tasklist = wnck_tasklist_new();

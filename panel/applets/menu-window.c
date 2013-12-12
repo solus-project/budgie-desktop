@@ -44,6 +44,36 @@ static void menu_window_class_init(MenuWindowClass *klass)
 
 static void menu_window_init(MenuWindow *self)
 {
+        GtkWidget *scroll, *list, *sep;
+        GtkWidget *layout, *box;
+
+        /* Sensible default size */
+        gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
+        /* Skip, no decorations, etc */
+        gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
+        gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+
+        /* Main layout */
+        layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+
+        /* Left hand side is just a scroller for categories */
+        scroll = gtk_scrolled_window_new(NULL, NULL);
+        box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        self->group_box = box;
+        gtk_container_add(GTK_CONTAINER(scroll), box);
+        gtk_box_pack_start(GTK_BOX(layout), scroll, FALSE, FALSE, 0);
+
+        /* Visual separation */
+        sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
+        gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 0);
+
+        /* Right hand side is similar, just applications */
+        scroll = gtk_scrolled_window_new(NULL, NULL);
+        list = gtk_list_box_new();
+        self->app_box = list;
+        gtk_container_add(GTK_CONTAINER(scroll), list);
+        gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
 }
 
 static void menu_window_dispose(GObject *object)
