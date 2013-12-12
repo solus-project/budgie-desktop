@@ -39,6 +39,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory);
 static GtkWidget* new_image_button(const gchar *text,
                                    GIcon *icon,
                                    gboolean radio);
+static void toggled_cb(GtkWidget *widget, gpointer userdata);
+static gboolean filter_list(GtkListBoxRow *row, gpointer userdata);
 
 /* Initialisation */
 static void menu_window_class_init(MenuWindowClass *klass)
@@ -87,7 +89,8 @@ static void menu_window_init(MenuWindow *self)
         all_button = new_image_button("All", NULL, TRUE);
         self->all_button = all_button;
         gtk_box_pack_start(GTK_BOX(box), all_button, FALSE, FALSE, 0);
-
+        g_signal_connect(all_button, "toggled", G_CALLBACK(toggled_cb),
+                (gpointer)self);
         /* Visual separation */
         sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
         gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 0);
@@ -97,6 +100,9 @@ static void menu_window_init(MenuWindow *self)
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         list = gtk_list_box_new();
+        gtk_list_box_set_filter_func(GTK_LIST_BOX(list), filter_list,
+                (gpointer)self, NULL);
+
         self->app_box = list;
         gtk_container_add(GTK_CONTAINER(scroll), list);
         gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
@@ -130,6 +136,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         GMenuTreeItemType type;
         GtkWidget *button;
         const gchar *name;
+        const gchar *dirname;
         __attribute__ ((unused)) GDesktopAppInfo *info;
         GIcon *icon = NULL;
 
@@ -146,6 +153,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         } else {
                 dir = directory;
         }
+        dirname = gmenu_tree_directory_get_name(dir);
         iter = gmenu_tree_directory_iter(dir);
 
         while ((type = gmenu_tree_iter_next(iter)) != GMENU_TREE_ITEM_INVALID) {
@@ -159,6 +167,10 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                         FALSE, FALSE, 0);
                                 gtk_radio_button_join_group(GTK_RADIO_BUTTON(button),
                                         GTK_RADIO_BUTTON(self->all_button));
+                                g_object_set_data_full(G_OBJECT(button), "group",
+                                        g_strdup(name), &g_free);
+                                g_signal_connect(button, "toggled", G_CALLBACK(toggled_cb),
+                                        (gpointer)self);
                                 populate_menu(self, nextdir);
                                 break;
                         case GMENU_TREE_ITEM_ENTRY:
@@ -167,6 +179,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 name = g_app_info_get_name(G_APP_INFO(info));
                                 icon = g_app_info_get_icon(G_APP_INFO(info));
                                 button = new_image_button(name, icon, FALSE);
+                                g_object_set_data_full(G_OBJECT(button), "group",
+                                        g_strdup(dirname), &g_free);
                                 gtk_container_add(GTK_CONTAINER(self->app_box),
                                         button);
                                 break;
@@ -178,6 +192,39 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         gmenu_tree_iter_unref(iter);
         if (tree)
                 g_object_unref(tree);
+}
+
+static void toggled_cb(GtkWidget *widget, gpointer userdata)
+{
+        MenuWindow *self;
+        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+                return;
+
+        self = MENU_WINDOW(userdata);
+        self->group = g_object_get_data(G_OBJECT(widget), "group");
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
+}
+
+static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
+{
+        MenuWindow *self;
+        GtkWidget *child;
+        gchar *data = NULL;
+
+        /* If no group is set, don't filter */
+        self = MENU_WINDOW(userdata);
+        if (self->group == NULL)
+                return TRUE;
+
+        child = gtk_bin_get_child(GTK_BIN(row));
+        data = g_object_get_data(G_OBJECT(child), "group");
+        if (data == NULL)
+                return TRUE;
+
+        if (!g_str_equal(data, self->group))
+                return FALSE;
+
+        return TRUE;
 }
 
 static GtkWidget* new_image_button(const gchar *text,
