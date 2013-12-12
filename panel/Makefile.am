@@ -13,6 +13,7 @@ budgie_panel_SOURCES = \
 
 budgie_panel_CFLAGS = \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
+	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
@@ -20,6 +21,7 @@ budgie_panel_CFLAGS = \
 	$(X11_CFLAGS) \
 	$(PEAS_CFLAGS) \
 	$(PEASGTK_CFLAGS) \
+	$(GMENU_CFLAGS) \
 	$(AM_CFLAGS)
 
 budgie_panel_LDADD = \
@@ -29,4 +31,5 @@ budgie_panel_LDADD = \
 	$(UPOWER_LIBS) \
 	$(X11_LIBS) \
 	$(PEAS_LIBS) \
-	$(PEASGTK_LIBS)
+	$(PEASGTK_LIBS) \
+	$(GMENU_LIBS)
