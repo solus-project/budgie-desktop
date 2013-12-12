@@ -259,11 +259,11 @@ static gboolean update_clock(gpointer userdata)
 
 static void activate_cb(GtkWidget *widget, gpointer userdata)
 {
-        __attribute__ ((unused)) GDesktopAppInfo *info;
+        GDesktopAppInfo *info;
 
         info = g_object_get_data(G_OBJECT(widget), "info");
-
-        /* Todo: Execute */
+        /* TODO: Be a bit more bothered about whether it executed or not */
+        g_app_info_launch(G_APP_INFO(info), NULL, NULL, NULL);
 }
 
 static void populate_menu(GtkWidget *menu, GMenuTreeDirectory *directory)
