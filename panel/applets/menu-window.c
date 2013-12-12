@@ -41,6 +41,7 @@ static GtkWidget* new_image_button(const gchar *text,
                                    GIcon *icon,
                                    gboolean radio);
 static void toggled_cb(GtkWidget *widget, gpointer userdata);
+static void clicked_cb(GtkWidget *widget, gpointer userdata);
 static gboolean filter_list(GtkListBoxRow *row, gpointer userdata);
 static void list_header(GtkListBoxRow *before,
                         GtkListBoxRow *after,
@@ -208,6 +209,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 name = g_app_info_get_display_name(G_APP_INFO(info));
                                 icon = g_app_info_get_icon(G_APP_INFO(info));
                                 button = new_image_button(name, icon, FALSE);
+                                g_signal_connect(button, "clicked",
+                                        G_CALLBACK(clicked_cb), (gpointer)self);
                                 g_object_set_data_full(G_OBJECT(button), "group",
                                         g_strdup(dirname), &g_free);
                                 g_object_set_data(G_OBJECT(button), "info",
@@ -353,6 +356,19 @@ static GtkWidget* new_image_button(const gchar *text,
         /* No relief style :) */
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         return button;
+}
+
+static void clicked_cb(GtkWidget *widget, gpointer userdata)
+{
+        GDesktopAppInfo *info;
+        MenuWindow *self;
+
+        info = g_object_get_data(G_OBJECT(widget), "info");
+        self = MENU_WINDOW(userdata);
+        /* Ensure we're hidden again */
+        g_signal_emit_by_name(self, "focus-out-event", NULL);
+        /* Go launch it */
+        g_app_info_launch(G_APP_INFO(info), NULL, NULL, NULL);
 }
 
 static void changed_cb(GtkWidget *widget, gpointer userdata)
