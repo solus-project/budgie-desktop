@@ -66,7 +66,25 @@ BudgiePanel GtkButton {\
     color: alpha(white, 0.7);\
     text-shadow: 0px 1px alpha(black, 0.8);\
     transition: all 200ms ease-out; \
-}"
+}\
+MenuWindow {\
+    background-image: none;\
+    background-color: @theme_bg_color;\
+    border-radius: 6px;\
+}\
+GtkListBox {\
+    background-image: none;\
+    background-color: alpha(black, 0.0);\
+    border-radius: 6px;\
+}\
+GtkListBoxRow {\
+    background-image: none;\
+    background-color: alpha(black, 0.0);\
+}\
+.trough {\
+    background-color: alpha(black, 0.0);\
+}\
+"
 
 typedef struct _BudgiePanel BudgiePanel;
 typedef struct _BudgiePanelClass   BudgiePanelClass;

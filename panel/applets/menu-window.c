@@ -46,6 +46,8 @@ static void menu_window_init(MenuWindow *self)
 {
         GtkWidget *scroll, *list, *sep;
         GtkWidget *layout, *box;
+        GdkScreen *screen;
+        GdkVisual *visual;
 
         /* Sensible default size */
         gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
@@ -53,6 +55,11 @@ static void menu_window_init(MenuWindow *self)
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+
+        /* Use an RGBA visual to allow rounded windows, etc. */
+        screen = gtk_widget_get_screen(GTK_WIDGET(self));
+        visual = gdk_screen_get_rgba_visual(screen);
+        gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
         /* Main layout */
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
