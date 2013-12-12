@@ -24,6 +24,7 @@
  * 
  */
 
+#include <string.h>
 #include <gmenu-tree.h>
 
 #include "menu-window.h"
@@ -44,6 +45,7 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata);
 static void list_header(GtkListBoxRow *before,
                         GtkListBoxRow *after,
                         gpointer userdata);
+static void changed_cb(GtkWidget *widget, gpointer userdata);
 
 /* Initialisation */
 static void menu_window_class_init(MenuWindowClass *klass)
@@ -58,6 +60,8 @@ static void menu_window_init(MenuWindow *self)
 {
         GtkWidget *scroll, *list, *sep;
         GtkWidget *layout, *box, *all_button;
+        GtkWidget *left_side;
+        GtkWidget *frame, *search_entry, *search_label;
         GdkScreen *screen;
         GdkVisual *visual;
 
@@ -79,6 +83,9 @@ static void menu_window_init(MenuWindow *self)
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(self), layout);
 
+        left_side = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_box_pack_start(GTK_BOX(layout), left_side, FALSE, FALSE, 0);
+
         /* Left hand side is just a scroller for categories */
         scroll = gtk_scrolled_window_new(NULL, NULL);
         g_object_set(scroll, "margin", 4, NULL);
@@ -87,7 +94,7 @@ static void menu_window_init(MenuWindow *self)
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         self->group_box = box;
         gtk_container_add(GTK_CONTAINER(scroll), box);
-        gtk_box_pack_start(GTK_BOX(layout), scroll, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(left_side), scroll, TRUE, TRUE, 0);
 
         /* Initial category item is also used as radio group leader */
         all_button = new_image_button("All", NULL, TRUE);
@@ -98,6 +105,19 @@ static void menu_window_init(MenuWindow *self)
         /* Visual separation */
         sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
         gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 0);
+
+        /* Search field */
+        frame = gtk_frame_new(NULL);
+        gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
+        g_object_set(frame, "margin", 5, NULL);
+        search_label = gtk_label_new("<big>Search</big>");
+        gtk_label_set_use_markup(GTK_LABEL(search_label), TRUE);
+        gtk_frame_set_label_widget(GTK_FRAME(frame), search_label);
+        search_entry = gtk_search_entry_new();
+        g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
+                (gpointer)self);
+        gtk_container_add(GTK_CONTAINER(frame), search_entry);
+        gtk_box_pack_end(GTK_BOX(left_side), frame, FALSE, FALSE, 0);
 
         /* Right hand side is similar, just applications */
         scroll = gtk_scrolled_window_new(NULL, NULL);
@@ -111,6 +131,7 @@ static void menu_window_init(MenuWindow *self)
                 (gpointer)self, NULL);
 
         self->app_box = list;
+        self->search_term = "";
         gtk_container_add(GTK_CONTAINER(scroll), list);
         gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
 
@@ -171,7 +192,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 icon = gmenu_tree_directory_get_icon(nextdir);
                                 button = new_image_button(name, icon, TRUE);
                                 gtk_box_pack_start(GTK_BOX(self->group_box), button,
-                                        FALSE, FALSE, 0);
+                                        TRUE, TRUE, 0);
                                 gtk_radio_button_join_group(GTK_RADIO_BUTTON(button),
                                         GTK_RADIO_BUTTON(self->all_button));
                                 g_object_set_data_full(G_OBJECT(button), "group",
@@ -188,6 +209,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 button = new_image_button(name, icon, FALSE);
                                 g_object_set_data_full(G_OBJECT(button), "group",
                                         g_strdup(dirname), &g_free);
+                                g_object_set_data(G_OBJECT(button), "info",
+                                        info);
                                 gtk_container_add(GTK_CONTAINER(self->app_box),
                                         button);
                                 break;
@@ -218,14 +241,37 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         MenuWindow *self;
         GtkWidget *child;
         gchar *data = NULL;
+        gchar *small1, *small2, *found = NULL;
+        const gchar *app_name;
+        gboolean ret = FALSE;
+        GDesktopAppInfo *info;
 
-        /* If no group is set, don't filter */
         self = MENU_WINDOW(userdata);
+        child = gtk_bin_get_child(GTK_BIN(row));
+        data = g_object_get_data(G_OBJECT(child), "group");
+
+        /* Check if we have a search term */
+        if (strlen(self->search_term) > 0 &&
+                !g_str_equal(self->search_term, "") && data) {
+
+                gtk_widget_set_sensitive(self->group_box, FALSE);
+                info = g_object_get_data(G_OBJECT(child), "info");
+                /* Compare lower case only */
+                app_name = g_app_info_get_display_name(G_APP_INFO(info));
+                small1 = g_ascii_strdown(self->search_term, -1);
+                small2 = g_ascii_strdown(app_name, -1);
+                found = g_strrstr(small2, small1);
+                if (found)
+                        ret = TRUE;
+                g_free(small1);
+                g_free(small2);
+                return ret;
+        }
+        gtk_widget_set_sensitive(self->group_box, TRUE);
+        /* If no group is set, don't filter */
         if (self->group == NULL)
                 return TRUE;
 
-        child = gtk_bin_get_child(GTK_BIN(row));
-        data = g_object_get_data(G_OBJECT(child), "group");
         if (data == NULL)
                 return TRUE;
 
@@ -246,7 +292,8 @@ static void list_header(GtkListBoxRow *before,
 
         self = MENU_WINDOW(userdata);
         /* Hide headers when inside categories */
-        if (self->group) {
+        if (self->group && !(strlen(self->search_term) > 0 &&
+                !g_str_equal(self->search_term, ""))) {
                 if (before)
                         gtk_list_box_row_set_header(before, NULL);
                 if (after)
@@ -270,7 +317,7 @@ static void list_header(GtkListBoxRow *before,
                 gtk_label_set_use_markup(GTK_LABEL(header), TRUE);
                 gtk_list_box_row_set_header(before, header);
                 gtk_widget_set_halign(header, GTK_ALIGN_START);
-                g_object_set(header, "margin", 3, NULL);
+                g_object_set(header, "margin", 6, NULL);
         }
 }
 
@@ -305,4 +352,14 @@ static GtkWidget* new_image_button(const gchar *text,
         /* No relief style :) */
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         return button;
+}
+
+static void changed_cb(GtkWidget *widget, gpointer userdata)
+{
+        MenuWindow *self;
+
+        self = MENU_WINDOW(userdata);
+        /* Set the search term */
+        self->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
 }

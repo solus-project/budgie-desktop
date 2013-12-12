@@ -45,6 +45,7 @@ struct _MenuWindow {
         GtkWidget *all_button;
 
         gchar *group;
+        const gchar *search_term;
 };
 
 /* MenuWindow class definition */
