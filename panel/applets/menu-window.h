@@ -42,6 +42,7 @@ struct _MenuWindow {
         GtkWindow parent;
         GtkWidget *group_box;
         GtkWidget *app_box;
+        GtkWidget *all_button;
 };
 
 /* MenuWindow class definition */
