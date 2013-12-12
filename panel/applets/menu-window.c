@@ -41,6 +41,9 @@ static GtkWidget* new_image_button(const gchar *text,
                                    gboolean radio);
 static void toggled_cb(GtkWidget *widget, gpointer userdata);
 static gboolean filter_list(GtkListBoxRow *row, gpointer userdata);
+static void list_header(GtkListBoxRow *before,
+                        GtkListBoxRow *after,
+                        gpointer userdata);
 
 /* Initialisation */
 static void menu_window_class_init(MenuWindowClass *klass)
@@ -101,6 +104,8 @@ static void menu_window_init(MenuWindow *self)
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         list = gtk_list_box_new();
         gtk_list_box_set_filter_func(GTK_LIST_BOX(list), filter_list,
+                (gpointer)self, NULL);
+        gtk_list_box_set_header_func(GTK_LIST_BOX(list), list_header,
                 (gpointer)self, NULL);
 
         self->app_box = list;
@@ -203,6 +208,7 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         self = MENU_WINDOW(userdata);
         self->group = g_object_get_data(G_OBJECT(widget), "group");
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
+        gtk_list_box_invalidate_headers(GTK_LIST_BOX(self->app_box));
 }
 
 static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
@@ -225,6 +231,45 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
                 return FALSE;
 
         return TRUE;
+}
+
+static void list_header(GtkListBoxRow *before,
+                        GtkListBoxRow *after,
+                        gpointer userdata)
+{
+        MenuWindow *self;
+        GtkWidget *child, *header;
+        gchar *prev = NULL, *next = NULL;
+        gchar *displ_name;
+
+        self = MENU_WINDOW(userdata);
+        /* Hide headers when inside categories */
+        if (self->group) {
+                if (before)
+                        gtk_list_box_row_set_header(before, NULL);
+                if (after)
+                        gtk_list_box_row_set_header(after, NULL);
+                return;
+        }
+
+        if (before) {
+                child = gtk_bin_get_child(GTK_BIN(before));
+                prev = g_object_get_data(G_OBJECT(child), "group");
+        }
+        if (after) {
+                child = gtk_bin_get_child(GTK_BIN(after));
+                next = g_object_get_data(G_OBJECT(child), "group");
+        }
+        if (!before || !after || !g_str_equal(prev, next)) {
+                /* Need a header */
+                displ_name = g_markup_printf_escaped("<big>%s</big>", prev);
+                header = gtk_label_new(displ_name);
+                g_free(displ_name);
+                gtk_label_set_use_markup(GTK_LABEL(header), TRUE);
+                gtk_list_box_row_set_header(before, header);
+                gtk_widget_set_halign(header, GTK_ALIGN_START);
+                g_object_set(header, "margin", 3, NULL);
+        }
 }
 
 static GtkWidget* new_image_button(const gchar *text,
