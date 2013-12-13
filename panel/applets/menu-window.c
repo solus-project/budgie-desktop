@@ -285,7 +285,7 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         MenuWindow *self;
         GtkWidget *child;
         gchar *data = NULL;
-        const gchar *app_name;
+        const gchar *app_name, *desc;
         GDesktopAppInfo *info;
 
         self = MENU_WINDOW(userdata);
@@ -300,7 +300,9 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
                 info = g_object_get_data(G_OBJECT(child), "info");
                 /* Compare lower case only */
                 app_name = g_app_info_get_display_name(G_APP_INFO(info));
-                return string_contains(app_name, self->priv->search_term);
+                desc = g_app_info_get_description(G_APP_INFO(info));
+                return (string_contains(app_name, self->priv->search_term) ||
+                        string_contains(desc, self->priv->search_term));
         }
         gtk_widget_set_sensitive(self->priv->group_box, TRUE);
         /* If no group is set, don't filter */
@@ -418,6 +420,9 @@ static gboolean string_contains(const gchar *string, const gchar *term)
         gchar *small1, *small2;
         gboolean ret = FALSE;
         gchar *found = NULL;
+
+        if (!string || !term)
+                return FALSE;
 
         small1 = g_ascii_strdown(term, -1);
         small2 = g_ascii_strdown(string, -1);
