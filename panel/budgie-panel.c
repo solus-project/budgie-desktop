@@ -163,6 +163,7 @@ static void budgie_panel_init(BudgiePanel *self)
                 G_CALLBACK(toggled_cb), (gpointer)self);
         gtk_button_set_label(GTK_BUTTON(menu), "Menu");
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
+        gtk_widget_set_can_focus(menu, FALSE);
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
 
