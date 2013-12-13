@@ -46,6 +46,15 @@ int main(int argc, char **argv)
 
         home_dir = g_get_home_dir();
 
+        /* Launch the settings daemon */
+        if (!g_spawn_command_line_async(DESKTOP_SETTINGS, &error)) {
+                fprintf(stderr, "Unable to launch settings: %s\n",
+                        error->message);
+                goto end;
+        }
+
+        sleep(1);
+
         /* Need to pass an argv to g_spawn_async */
         if (!g_shell_parse_argv(DESKTOP_WM, NULL, &p_argv, &error)) {
                 fprintf(stderr, "g_shell_parse_argv() failed\n");
@@ -67,13 +76,6 @@ int main(int argc, char **argv)
 
         /* Give the window manager a second to sort itself out */
         sleep(1);
-
-        /* Launch the settings daemon */
-        if (!g_spawn_command_line_async(DESKTOP_SETTINGS, &error)) {
-                fprintf(stderr, "Unable to launch settings: %s\n",
-                        error->message);
-                goto end;
-        }
 
         /* Launch panel component */
         if (!g_spawn_command_line_async(DESKTOP_PANEL, &error)) {
