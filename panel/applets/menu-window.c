@@ -185,6 +185,8 @@ GtkWidget* menu_window_new(void)
 void menu_window_present(MenuWindow *self)
 {
         gtk_entry_set_text(GTK_ENTRY(self->priv->entry), "");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(self->priv->all_button),
+                TRUE);
         self->priv->search_term = "";
         self->priv->group = NULL;
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
