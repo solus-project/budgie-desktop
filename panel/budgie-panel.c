@@ -21,9 +21,6 @@
  * 
  */
 
-/* GtkImageMenuItem going away soon :( */
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 #include <libwnck/libwnck.h>
 #include <gmenu-tree.h>
 #include <string.h>
@@ -47,8 +44,10 @@ static void budgie_panel_dispose(GObject *object);
 /* Private methods */
 static gboolean update_clock(gpointer userdata);
 static void init_styles(BudgiePanel *self);
-static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event, gpointer userdata);
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event, gpointer userdata);
+static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
+                             gpointer userdata);
+static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
+                               gpointer userdata);
 
 static gboolean draw_shadow(GtkWidget *widget,
                         cairo_t *cr,
@@ -264,9 +263,11 @@ static void init_styles(BudgiePanel *self)
         const gchar *data = PANEL_CSS;
 
         css_provider = gtk_css_provider_new();
-        gtk_css_provider_load_from_data(css_provider, data, (gssize)strlen(data)+1, NULL);
+        gtk_css_provider_load_from_data(css_provider, data,
+                (gssize)strlen(data)+1, NULL);
         screen = gdk_screen_get_default();
-        gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(css_provider),
+        gtk_style_context_add_provider_for_screen(screen,
+                GTK_STYLE_PROVIDER(css_provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
@@ -282,7 +283,8 @@ static gboolean update_clock(gpointer userdata)
         dtime = g_date_time_new_now_local();
 
         /* Format it as a string (24h) */
-        date_string = g_date_time_format(dtime, " %H:%M:%S <small>%x</small> ");
+        date_string = g_date_time_format(dtime,
+                " %H:%M:%S <small>%x</small> ");
         gtk_label_set_markup(GTK_LABEL(self->clock), date_string);
         g_free(date_string);
         g_date_time_unref(dtime);
@@ -291,7 +293,8 @@ static gboolean update_clock(gpointer userdata)
 }
 
 
-static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event, gpointer userdata)
+static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
+                             gpointer userdata)
 {
         BudgiePanel *self;
 
@@ -305,7 +308,8 @@ static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event, gpointer userda
         return TRUE;
 }
 
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
+static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
+                               gpointer userdata)
 {
         if (event->keyval != GDK_KEY_Escape)
                 return FALSE;

@@ -173,11 +173,13 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         const gchar *desc;
 
         if (!directory) {
-                tree = gmenu_tree_new("gnome-applications.menu", GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
+                tree = gmenu_tree_new("gnome-applications.menu",
+                        GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
 
                 gmenu_tree_load_sync(tree, &error);
                 if (error) {
-                        g_warning("Failed to load menu: %s\n", error->message);
+                        g_warning("Failed to load menu: %s\n",
+                                error->message);
                         g_error_free(error);
                         return;
                 }
