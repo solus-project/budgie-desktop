@@ -157,6 +157,15 @@ GtkWidget* menu_window_new(void)
         return GTK_WIDGET(self);
 }
 
+void menu_window_present(MenuWindow *self)
+{
+        gtk_entry_set_text(GTK_ENTRY(self->entry), "");
+        self->search_term = "";
+        self->group = NULL;
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
+        gtk_widget_grab_focus(self->entry);
+}
+
 static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
 {
         GMenuTree *tree = NULL;

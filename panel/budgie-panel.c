@@ -71,7 +71,6 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         GdkScreen *screen;
         int y;
         GtkAllocation alloc;
-        GtkWidget *entry;
 
         self = BUDGIE_PANEL(userdata);
         button = GTK_TOGGLE_BUTTON(widget);
@@ -85,9 +84,8 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         gtk_widget_get_allocation(GTK_WIDGET(self), &alloc);
         y = gdk_screen_get_height(screen) - alloc.height;
         gtk_window_move(GTK_WINDOW(self->menu_window), 0, y);
-        entry = ((MENU_WINDOW(self->menu_window)->entry));
+        menu_window_present(MENU_WINDOW(self->menu_window));
         gtk_widget_show_all(self->menu_window);
-        gtk_widget_grab_focus(entry);
 }
 
 /* Initialisation */
