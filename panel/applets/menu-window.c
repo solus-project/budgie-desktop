@@ -32,6 +32,7 @@
 struct _MenuWindowPriv {
         GtkWidget *group_box;
         GtkWidget *app_box;
+        GtkWidget *scroll_win;
         GtkWidget *all_button;
         GtkWidget *entry;
 
@@ -139,6 +140,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Right hand side is similar, just applications */
         scroll = gtk_scrolled_window_new(NULL, NULL);
+        self->priv->scroll_win = scroll;
         g_object_set(scroll, "margin", 4, NULL);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -184,12 +186,17 @@ GtkWidget* menu_window_new(void)
 
 void menu_window_present(MenuWindow *self)
 {
+        GtkAdjustment *adj;
+
         gtk_entry_set_text(GTK_ENTRY(self->priv->entry), "");
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(self->priv->all_button),
                 TRUE);
         self->priv->search_term = "";
         self->priv->group = NULL;
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+        adj = gtk_scrolled_window_get_vadjustment(
+                GTK_SCROLLED_WINDOW(self->priv->scroll_win));
+        gtk_adjustment_set_value(adj, 0);
         gtk_widget_grab_focus(self->priv->entry);
 }
 
