@@ -340,6 +340,7 @@ static GtkWidget* new_image_button(const gchar *text,
         if (radio) {
                 button = gtk_radio_button_new(NULL);
                 g_object_set(button, "draw-indicator", FALSE, NULL);
+                gtk_widget_set_can_focus(button, FALSE);
         } else
                 button = gtk_button_new();
         box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
