@@ -25,7 +25,6 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <upower.h>
 
 typedef struct _MenuWindow MenuWindow;
 typedef struct _MenuWindowClass   MenuWindowClass;
