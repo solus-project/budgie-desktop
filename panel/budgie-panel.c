@@ -129,7 +129,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GdkVisual *visual;
         GtkWidget *power;
         GtkWidget *clock;
-        GtkWidget *menu;
+        GtkWidget *menu, *menu_label, *menu_box, *menu_image;
         GtkWidget *shadow;
         GtkWidget *menu_window;
         int width;
@@ -161,10 +161,19 @@ static void budgie_panel_init(BudgiePanel *self)
         self->menu_button = menu;
         self->toggle_id = g_signal_connect(menu, "toggled",
                 G_CALLBACK(toggled_cb), (gpointer)self);
-        gtk_button_set_label(GTK_BUTTON(menu), "Menu");
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         gtk_widget_set_can_focus(menu, FALSE);
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
+
+        /* Add content to menu button. */
+        menu_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+        gtk_container_add(GTK_CONTAINER(menu), menu_box);
+        menu_image = gtk_image_new_from_icon_name("start-here",
+                GTK_ICON_SIZE_MENU);
+        gtk_box_pack_start(GTK_BOX(menu_box), menu_image, FALSE, FALSE, 0);
+        g_object_set(menu_image, "margin-right", 8, NULL);
+        menu_label = gtk_label_new("Menu");
+        gtk_box_pack_start(GTK_BOX(menu_box), menu_label, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
 
         /* Pretty popup menu */
