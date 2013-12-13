@@ -75,6 +75,7 @@ static void menu_window_init(MenuWindow *self)
         GtkWidget *frame, *search_entry, *search_label;
         GdkScreen *screen;
         GdkVisual *visual;
+        GtkWidget *placeholder;
 
         self->priv = menu_window_get_instance_private(self);
 
@@ -149,9 +150,18 @@ static void menu_window_init(MenuWindow *self)
         gtk_container_add(GTK_CONTAINER(scroll), list);
         gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
 
+        /* Set a placeholder when filtering yields no results */
+        placeholder = gtk_label_new("<big>No results.</big>");
+        gtk_widget_set_valign(placeholder, GTK_ALIGN_START);
+        gtk_widget_set_halign(placeholder, GTK_ALIGN_START);
+        g_object_set(placeholder, "margin", 6, NULL);
+        gtk_label_set_use_markup(GTK_LABEL(placeholder), TRUE);
+        gtk_widget_show(placeholder);
+        gtk_list_box_set_placeholder(GTK_LIST_BOX(self->priv->app_box),
+                placeholder);
+
         /* Load the menus */
         populate_menu(self, NULL);
-        gtk_widget_grab_focus(search_entry);
 }
 
 static void menu_window_dispose(GObject *object)
