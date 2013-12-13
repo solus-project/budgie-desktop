@@ -58,6 +58,9 @@ static void list_header(GtkListBoxRow *before,
                         gpointer userdata);
 static void changed_cb(GtkWidget *widget, gpointer userdata);
 
+/* Consider splitting into a panel-util helper */
+static gboolean string_contains(const gchar *string, const gchar *term);
+
 /* Initialisation */
 static void menu_window_class_init(MenuWindowClass *klass)
 {
@@ -282,9 +285,7 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         MenuWindow *self;
         GtkWidget *child;
         gchar *data = NULL;
-        gchar *small1, *small2, *found = NULL;
         const gchar *app_name;
-        gboolean ret = FALSE;
         GDesktopAppInfo *info;
 
         self = MENU_WINDOW(userdata);
@@ -299,14 +300,7 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
                 info = g_object_get_data(G_OBJECT(child), "info");
                 /* Compare lower case only */
                 app_name = g_app_info_get_display_name(G_APP_INFO(info));
-                small1 = g_ascii_strdown(self->priv->search_term, -1);
-                small2 = g_ascii_strdown(app_name, -1);
-                found = g_strrstr(small2, small1);
-                if (found)
-                        ret = TRUE;
-                g_free(small1);
-                g_free(small2);
-                return ret;
+                return string_contains(app_name, self->priv->search_term);
         }
         gtk_widget_set_sensitive(self->priv->group_box, TRUE);
         /* If no group is set, don't filter */
@@ -417,4 +411,20 @@ static void changed_cb(GtkWidget *widget, gpointer userdata)
         /* Set the search term */
         self->priv->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+}
+
+static gboolean string_contains(const gchar *string, const gchar *term)
+{
+        gchar *small1, *small2;
+        gboolean ret = FALSE;
+        gchar *found = NULL;
+
+        small1 = g_ascii_strdown(term, -1);
+        small2 = g_ascii_strdown(string, -1);
+        found = g_strrstr(small2, small1);
+        if (found)
+                ret = TRUE;
+        g_free(small1);
+        g_free(small2);
+        return ret;
 }
