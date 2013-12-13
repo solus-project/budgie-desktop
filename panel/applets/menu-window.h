@@ -29,6 +29,7 @@
 
 typedef struct _MenuWindow MenuWindow;
 typedef struct _MenuWindowClass   MenuWindowClass;
+typedef struct _MenuWindowPriv MenuWindowPrivate;
 
 #define MENU_WINDOW_TYPE (menu_window_get_type())
 #define MENU_WINDOW(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), MENU_WINDOW_TYPE, MenuWindow))
@@ -40,13 +41,7 @@ typedef struct _MenuWindowClass   MenuWindowClass;
 /* MenuWindow object */
 struct _MenuWindow {
         GtkWindow parent;
-        GtkWidget *group_box;
-        GtkWidget *app_box;
-        GtkWidget *all_button;
-        GtkWidget *entry;
-
-        gchar *group;
-        const gchar *search_term;
+        MenuWindowPrivate *priv;
 };
 
 /* MenuWindow class definition */

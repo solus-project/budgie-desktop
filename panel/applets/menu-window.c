@@ -29,7 +29,17 @@
 
 #include "menu-window.h"
 
-G_DEFINE_TYPE(MenuWindow, menu_window, GTK_TYPE_WINDOW)
+struct _MenuWindowPriv {
+        GtkWidget *group_box;
+        GtkWidget *app_box;
+        GtkWidget *all_button;
+        GtkWidget *entry;
+
+        gchar *group;
+        const gchar *search_term;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE(MenuWindow, menu_window, GTK_TYPE_WINDOW)
 
 /* Boilerplate GObject code */
 static void menu_window_class_init(MenuWindowClass *klass);
@@ -66,6 +76,8 @@ static void menu_window_init(MenuWindow *self)
         GdkScreen *screen;
         GdkVisual *visual;
 
+        self->priv = menu_window_get_instance_private(self);
+
         /* Sensible default size */
         gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
         gtk_container_set_border_width(GTK_CONTAINER(self), 3);
@@ -93,13 +105,13 @@ static void menu_window_init(MenuWindow *self)
         box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-        self->group_box = box;
+        self->priv->group_box = box;
         gtk_container_add(GTK_CONTAINER(scroll), box);
         gtk_box_pack_start(GTK_BOX(left_side), scroll, TRUE, TRUE, 0);
 
         /* Initial category item is also used as radio group leader */
         all_button = new_image_button("All", NULL, TRUE);
-        self->all_button = all_button;
+        self->priv->all_button = all_button;
         gtk_box_pack_start(GTK_BOX(box), all_button, FALSE, FALSE, 0);
         g_signal_connect(all_button, "toggled", G_CALLBACK(toggled_cb),
                 (gpointer)self);
@@ -115,7 +127,7 @@ static void menu_window_init(MenuWindow *self)
         gtk_label_set_use_markup(GTK_LABEL(search_label), TRUE);
         gtk_frame_set_label_widget(GTK_FRAME(frame), search_label);
         search_entry = gtk_search_entry_new();
-        self->entry = search_entry;
+        self->priv->entry = search_entry;
         g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
                 (gpointer)self);
         gtk_container_add(GTK_CONTAINER(frame), search_entry);
@@ -132,8 +144,8 @@ static void menu_window_init(MenuWindow *self)
         gtk_list_box_set_header_func(GTK_LIST_BOX(list), list_header,
                 (gpointer)self, NULL);
 
-        self->app_box = list;
-        self->search_term = "";
+        self->priv->app_box = list;
+        self->priv->search_term = "";
         gtk_container_add(GTK_CONTAINER(scroll), list);
         gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
 
@@ -159,11 +171,11 @@ GtkWidget* menu_window_new(void)
 
 void menu_window_present(MenuWindow *self)
 {
-        gtk_entry_set_text(GTK_ENTRY(self->entry), "");
-        self->search_term = "";
-        self->group = NULL;
-        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
-        gtk_widget_grab_focus(self->entry);
+        gtk_entry_set_text(GTK_ENTRY(self->priv->entry), "");
+        self->priv->search_term = "";
+        self->priv->group = NULL;
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+        gtk_widget_grab_focus(self->priv->entry);
 }
 
 static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
@@ -206,10 +218,10 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 name = gmenu_tree_directory_get_name(nextdir);
                                 icon = gmenu_tree_directory_get_icon(nextdir);
                                 button = new_image_button(name, icon, TRUE);
-                                gtk_box_pack_start(GTK_BOX(self->group_box), button,
+                                gtk_box_pack_start(GTK_BOX(self->priv->group_box), button,
                                         TRUE, TRUE, 0);
                                 gtk_radio_button_join_group(GTK_RADIO_BUTTON(button),
-                                        GTK_RADIO_BUTTON(self->all_button));
+                                        GTK_RADIO_BUTTON(self->priv->all_button));
                                 g_object_set_data_full(G_OBJECT(button), "group",
                                         g_strdup(name), &g_free);
                                 g_signal_connect(button, "toggled", G_CALLBACK(toggled_cb),
@@ -230,7 +242,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                         g_strdup(dirname), &g_free);
                                 g_object_set_data(G_OBJECT(button), "info",
                                         info);
-                                gtk_container_add(GTK_CONTAINER(self->app_box),
+                                gtk_container_add(GTK_CONTAINER(self->priv->app_box),
                                         button);
                                 break;
                         default:
@@ -250,9 +262,9 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
                 return;
 
         self = MENU_WINDOW(userdata);
-        self->group = g_object_get_data(G_OBJECT(widget), "group");
-        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
-        gtk_list_box_invalidate_headers(GTK_LIST_BOX(self->app_box));
+        self->priv->group = g_object_get_data(G_OBJECT(widget), "group");
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+        gtk_list_box_invalidate_headers(GTK_LIST_BOX(self->priv->app_box));
 }
 
 static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
@@ -270,14 +282,14 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         data = g_object_get_data(G_OBJECT(child), "group");
 
         /* Check if we have a search term */
-        if (strlen(self->search_term) > 0 &&
-                !g_str_equal(self->search_term, "") && data) {
+        if (strlen(self->priv->search_term) > 0 &&
+                !g_str_equal(self->priv->search_term, "") && data) {
 
-                gtk_widget_set_sensitive(self->group_box, FALSE);
+                gtk_widget_set_sensitive(self->priv->group_box, FALSE);
                 info = g_object_get_data(G_OBJECT(child), "info");
                 /* Compare lower case only */
                 app_name = g_app_info_get_display_name(G_APP_INFO(info));
-                small1 = g_ascii_strdown(self->search_term, -1);
+                small1 = g_ascii_strdown(self->priv->search_term, -1);
                 small2 = g_ascii_strdown(app_name, -1);
                 found = g_strrstr(small2, small1);
                 if (found)
@@ -286,15 +298,15 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
                 g_free(small2);
                 return ret;
         }
-        gtk_widget_set_sensitive(self->group_box, TRUE);
+        gtk_widget_set_sensitive(self->priv->group_box, TRUE);
         /* If no group is set, don't filter */
-        if (self->group == NULL)
+        if (self->priv->group == NULL)
                 return TRUE;
 
         if (data == NULL)
                 return TRUE;
 
-        if (!g_str_equal(data, self->group))
+        if (!g_str_equal(data, self->priv->group))
                 return FALSE;
 
         return TRUE;
@@ -311,8 +323,8 @@ static void list_header(GtkListBoxRow *before,
 
         self = MENU_WINDOW(userdata);
         /* Hide headers when inside categories */
-        if (self->group && !(strlen(self->search_term) > 0 &&
-                !g_str_equal(self->search_term, ""))) {
+        if (self->priv->group && !(strlen(self->priv->search_term) > 0 &&
+                !g_str_equal(self->priv->search_term, ""))) {
                 if (before)
                         gtk_list_box_row_set_header(before, NULL);
                 if (after)
@@ -393,6 +405,6 @@ static void changed_cb(GtkWidget *widget, gpointer userdata)
 
         self = MENU_WINDOW(userdata);
         /* Set the search term */
-        self->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
-        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->app_box));
+        self->priv->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
+        gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
 }
