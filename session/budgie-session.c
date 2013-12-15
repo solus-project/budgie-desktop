@@ -30,7 +30,6 @@
 #define DESKTOP_PANEL "budgie-panel"
 /* Must re-address this at some point. Have a systemd-user session for it */
 #define DESKTOP_SETTINGS "/usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon"
-#define DESKTOP_EXTRA "gnome-terminal"
 #define FILE_MANAGER "nautilus -n"
 
 int main(int argc, char **argv)
@@ -80,13 +79,6 @@ int main(int argc, char **argv)
         /* Launch panel component */
         if (!g_spawn_command_line_async(DESKTOP_PANEL, &error)) {
                 fprintf(stderr, "Unable to launch panel: %s\n",
-                        error->message);
-                goto end;
-        }
-
-        /* Launch extra (currently gnome terminal) */
-        if (!g_spawn_command_line_async(DESKTOP_EXTRA, &error)) {
-                fprintf(stderr, "Unable to launch extra component: %s\n",
                         error->message);
                 goto end;
         }
