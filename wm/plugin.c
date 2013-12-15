@@ -87,6 +87,15 @@ static void confirm_display_change (MetaPlugin *plugin);
 
 static const MetaPluginInfo * plugin_info (MetaPlugin *plugin);
 
+static void
+on_monitors_changed (MetaScreen *screen,
+                     MetaPlugin *plugin);
+
+static void settings_cb (GSettings *settings,
+                         gchar *key,
+                         gpointer userdata);
+
+
 G_DEFINE_TYPE (MetaDefaultPlugin, meta_default_plugin, META_TYPE_PLUGIN)
 
 /*META_PLUGIN_DECLARE(MetaDefaultPlugin, meta_default_plugin);*/
@@ -207,12 +216,25 @@ meta_default_plugin_init (MetaDefaultPlugin *self)
 
   self->priv = priv = META_DEFAULT_PLUGIN_GET_PRIVATE (self);
   priv->settings = g_settings_new(BACKGROUND_SCHEMA);
+  g_signal_connect(priv->settings, "changed", G_CALLBACK(settings_cb),
+                   (gpointer)self);
 
   priv->info.name        = "Default Effects";
   priv->info.version     = "0.1";
   priv->info.author      = "Intel Corp.";
   priv->info.license     = "GPL";
   priv->info.description = "This is an example of a plugin implementation.";
+}
+
+static void settings_cb (GSettings *settings,
+                         gchar *key,
+                         gpointer userdata)
+{
+  MetaPlugin *plugin = META_PLUGIN (userdata);
+  MetaScreen *screen = meta_plugin_get_screen (plugin);
+
+  /* Force the wallpapers to be re-fetched */
+  on_monitors_changed (screen, plugin);
 }
 
 /*
