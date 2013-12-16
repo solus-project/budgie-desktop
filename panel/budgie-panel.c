@@ -28,6 +28,7 @@
 #include "budgie-panel.h"
 #include "applets/power-applet.h"
 #include "applets/menu-window.h"
+#include "applets/clock-applet.h"
 
 /* BAD BAD BAD: Replace soon! */
 #include "xutils.h"
@@ -42,7 +43,6 @@ static void budgie_panel_init(BudgiePanel *self);
 static void budgie_panel_dispose(GObject *object);
 
 /* Private methods */
-static gboolean update_clock(gpointer userdata);
 static void init_styles(BudgiePanel *self);
 static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
                              gpointer userdata);
@@ -194,10 +194,8 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
 
         /* Add a clock at the end */
-        clock = gtk_label_new("--");
+        clock = clock_applet_new();
         self->clock = clock;
-        style = gtk_widget_get_style_context(clock);
-        gtk_style_context_add_class(style, "panel-applet");
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
@@ -242,11 +240,6 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* And now show ourselves */
         gtk_widget_show_all(GTK_WIDGET(self));
-
-        /* Don't show an empty label */
-        update_clock((gpointer)self);
-        /* Update the clock every second */
-        g_timeout_add(1000, update_clock, (gpointer)self);
 }
 
 static void budgie_panel_dispose(GObject *object)
@@ -278,28 +271,6 @@ static void init_styles(BudgiePanel *self)
                 GTK_STYLE_PROVIDER(css_provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
-
-static gboolean update_clock(gpointer userdata)
-{
-        BudgiePanel *self;
-        gchar *date_string;
-        GDateTime *dtime;
-
-        self = BUDGIE_PANEL(userdata);
-
-        /* Get the current time */
-        dtime = g_date_time_new_now_local();
-
-        /* Format it as a string (24h) */
-        date_string = g_date_time_format(dtime,
-                " %H:%M:%S <small>%x</small> ");
-        gtk_label_set_markup(GTK_LABEL(self->clock), date_string);
-        g_free(date_string);
-        g_date_time_unref(dtime);
-
-        return TRUE;
-}
-
 
 static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
                              gpointer userdata)
