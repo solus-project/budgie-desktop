@@ -20,84 +20,59 @@
  * 
  * 
  */
-#ifndef budgie_panel_h
-#define budgie_panel_h
+#ifndef panel_toplevel_h
+#define panel_toplevel_h
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
 #define PANEL_CSS "\
-BudgiePanel {\
+PanelToplevel {\
     border-width: 1px;\
     background-color: alpha(white, 0.0);\
     background-image: linear-gradient(to bottom,\
 		alpha(shade (white, 0.2), 0.92),\
 		alpha(shade (black, 1.0), 0.92));\
 }\
-.panel-shadow.top {\
+.panel-shadow-top {\
     background-color: @transparent;\
     background-image: -gtk-gradient (linear,\
                      left top, left bottom,\
                      from (alpha (#000, 0.3)),\
                      to (alpha (#000, 0.0)));\
 }\
-.panel-shadow {\
+.panel-shadow-bottom {\
     background-color: @transparent;\
     background-image: -gtk-gradient (linear,\
                      left bottom, left top,\
                      from (alpha (#000, 0.3)),\
                      to (alpha (#000, 0.0)));\
 }\
-.panel-applet {\
-    background-image: none;\
-    border-color: alpha(white, 0.12);\
-    border-radius: 6px;\
-    border: solid alpha(white, 0.1) 1px;\
-}\
-BudgiePanel GtkButton:active {\
-    color: white;\
-    text-shadow: 0px 1px black;\
-    transition: all 200ms ease-in;\
-    background-image: none;\
-    border: 1px solid alpha(white, 0.0);\
-    background-color: alpha(black, 0.72);\
-}\
-BudgiePanel GtkButton {\
-    color: alpha(white, 0.7);\
-    text-shadow: 0px 1px alpha(black, 0.8);\
-    transition: all 200ms ease-out; \
-}\
 MenuWindow {\
-    background-image: none;\
-    background-color: alpha(black, 0.90);\
-    border-radius: 6px;\
-}\
-GtkListBox {\
-    background-image: none;\
-    background-color: alpha(black, 0.0);\
-    border-radius: 6px;\
+    border-radius: 3px;\
+    border-width: 1px;\
 }\
 GtkListBoxRow {\
     background-image: none;\
     background-color: alpha(black, 0.0);\
 }\
-.trough {\
+MenuWindow .trough {\
     background-color: alpha(black, 0.0);\
 }\
 "
 
-typedef struct _BudgiePanel BudgiePanel;
-typedef struct _BudgiePanelClass   BudgiePanelClass;
+typedef struct _PanelToplevel PanelToplevel;
+typedef struct _PanelToplevelClass   PanelToplevelClass;
 
-#define BUDGIE_PANEL_TYPE (budgie_panel_get_type())
-#define BUDGIE_PANEL(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), BUDGIE_PANEL_TYPE, BudgiePanel))
-#define IS_BUDGIE_PANEL(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), BUDGIE_PANEL_TYPE))
-#define BUDGIE_PANEL_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), BUDGIE_PANEL_TYPE, BudgiePanelClass))
-#define IS_BUDGIE_PANEL_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), BUDGIE_PANEL_TYPE))
-#define BUDGIE_PANEL_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), BUDGIE_PANEL_TYPE, BudgiePanelClass))
+#define PANEL_TOPLEVEL_TYPE (panel_toplevel_get_type())
+#define PANEL_TOPLEVEL(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANEL_TOPLEVEL_TYPE, PanelToplevel))
+#define IS_PANEL_TOPLEVEL(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANEL_TOPLEVEL_TYPE))
+#define PANEL_TOPLEVEL_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), PANEL_TOPLEVEL_TYPE, PanelToplevelClass))
+#define IS_PANEL_TOPLEVEL_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), PANEL_TOPLEVEL_TYPE))
+#define PANEL_TOPLEVEL_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), PANEL_TOPLEVEL_TYPE, PanelToplevelClass))
 
-/* BudgiePanel object */
-struct _BudgiePanel {
+/* PanelToplevel object */
+struct _PanelToplevel {
         GtkWindow parent;
         GtkWidget *shadow;
 
@@ -107,19 +82,19 @@ struct _BudgiePanel {
         GtkWidget *menu;
 };
 
-/* BudgiePanel class definition */
-struct _BudgiePanelClass {
+/* PanelToplevel class definition */
+struct _PanelToplevelClass {
         GtkWindowClass parent_class;
 };
 
-GType budgie_panel_get_type(void);
+GType panel_toplevel_get_type(void);
 
-/* BudgiePanel methods */
+/* PanelToplevel methods */
 
 /**
- * Construct a new BudgiePanel
- * @return A new BudgiePanel
+ * Construct a new PanelToplevel
+ * @return A new PanelToplevel
  */
-BudgiePanel* budgie_panel_new(void);
+PanelToplevel* panel_toplevel_new(void);
 
-#endif /* budgie_panel_h */
+#endif /* panel_toplevel_h */

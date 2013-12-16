@@ -33,17 +33,17 @@
 /* BAD BAD BAD: Replace soon! */
 #include "xutils.h"
 
-G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE(PanelToplevel, panel_toplevel, GTK_TYPE_WINDOW)
 
 #define PANEL_HEIGHT 25
 
 /* Boilerplate GObject code */
-static void budgie_panel_class_init(BudgiePanelClass *klass);
-static void budgie_panel_init(BudgiePanel *self);
-static void budgie_panel_dispose(GObject *object);
+static void panel_toplevel_class_init(PanelToplevelClass *klass);
+static void panel_toplevel_init(PanelToplevel *self);
+static void panel_toplevel_dispose(GObject *object);
 
 /* Private methods */
-static void init_styles(BudgiePanel *self);
+static void init_styles(PanelToplevel *self);
 
 static gboolean draw_shadow(GtkWidget *widget,
                         cairo_t *cr,
@@ -61,23 +61,23 @@ static gboolean draw_shadow(GtkWidget *widget,
 }
 
 /* Initialisation */
-static void budgie_panel_class_init(BudgiePanelClass *klass)
+static void panel_toplevel_class_init(PanelToplevelClass *klass)
 {
         GObjectClass *g_object_class;
 
         g_object_class = G_OBJECT_CLASS(klass);
-        g_object_class->dispose = &budgie_panel_dispose;
+        g_object_class->dispose = &panel_toplevel_dispose;
 }
 
 static void realized_cb(GtkWidget *widget, gpointer userdata)
 {
-        BudgiePanel *self;
+        PanelToplevel *self;
         GdkScreen *screen;
         int height, x, y;
         GtkAllocation alloc;
         GdkWindow *window;
 
-        self = BUDGIE_PANEL(userdata);
+        self = PANEL_TOPLEVEL(userdata);
         screen = gtk_widget_get_screen(widget);
         height = gdk_screen_get_height(screen);
 
@@ -93,7 +93,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
 }
 
-static void budgie_panel_init(BudgiePanel *self)
+static void panel_toplevel_init(PanelToplevel *self)
 {
         GtkWidget *tasklist;
         GtkWidget *layout;
@@ -104,17 +104,9 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *shadow;
         GtkWidget *menu;
         int width;
-        GtkSettings *settings;
         GtkStyleContext *style;
 
         init_styles(self);
-        /* Sort ourselves out visually */
-        settings = gtk_widget_get_settings(GTK_WIDGET(self));
-        g_object_set(settings,
-                "gtk-application-prefer-dark-theme", TRUE,
-                "gtk-menu-images", TRUE,
-                "gtk-button-images", TRUE,
-                NULL);
 
         /* Not resizable.. */
         gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
@@ -140,6 +132,7 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Add a clock at the end */
         clock = clock_applet_new();
         self->clock = clock;
+        gtk_widget_set_name(clock, "BorderedApplet");
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
@@ -175,7 +168,7 @@ static void budgie_panel_init(BudgiePanel *self)
                 GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
         style = gtk_widget_get_style_context(shadow);
-        gtk_style_context_add_class(style, "panel-shadow");
+        gtk_style_context_add_class(style, "panel-shadow-bottom");
         gtk_window_stick(GTK_WINDOW(shadow));
         gtk_widget_set_visual(shadow, visual);
         g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
@@ -186,22 +179,22 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
-static void budgie_panel_dispose(GObject *object)
+static void panel_toplevel_dispose(GObject *object)
 {
         /* Destruct */
-        G_OBJECT_CLASS (budgie_panel_parent_class)->dispose (object);
+        G_OBJECT_CLASS (panel_toplevel_parent_class)->dispose (object);
 }
 
-/* Utility; return a new BudgiePanel */
-BudgiePanel* budgie_panel_new(void)
+/* Utility; return a new PanelToplevel */
+PanelToplevel* panel_toplevel_new(void)
 {
-        BudgiePanel *self;
+        PanelToplevel *self;
 
-        self = g_object_new(BUDGIE_PANEL_TYPE, NULL);
+        self = g_object_new(PANEL_TOPLEVEL_TYPE, NULL);
         return self;
 }
 
-static void init_styles(BudgiePanel *self)
+static void init_styles(PanelToplevel *self)
 {
         GtkCssProvider *css_provider;
         GdkScreen *screen;
@@ -213,5 +206,5 @@ static void init_styles(BudgiePanel *self)
         screen = gdk_screen_get_default();
         gtk_style_context_add_provider_for_screen(screen,
                 GTK_STYLE_PROVIDER(css_provider),
-                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
 }
