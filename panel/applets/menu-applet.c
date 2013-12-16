@@ -135,7 +135,8 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         /* Place it near our menu button */
         screen = gtk_widget_get_screen(widget);
         gtk_widget_get_allocation(GTK_WIDGET(self), &alloc);
-        y = gdk_screen_get_height(screen) - alloc.height;
+        /* 4 pixels up because of shadow */
+        y = gdk_screen_get_height(screen) - alloc.height - 4;
         gtk_window_move(GTK_WINDOW(self->menu_window), 0, y);
         menu_window_present(MENU_WINDOW(self->menu_window));
         gtk_widget_show_all(self->menu_window);
