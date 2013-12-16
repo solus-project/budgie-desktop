@@ -21,7 +21,6 @@
  * 
  */
 
-#include <libwnck/libwnck.h>
 #include <gmenu-tree.h>
 #include <string.h>
 
@@ -29,6 +28,7 @@
 #include "applets/power-applet.h"
 #include "applets/menu-window.h"
 #include "applets/clock-applet.h"
+#include "applets/windowlist-applet.h"
 
 /* BAD BAD BAD: Replace soon! */
 #include "xutils.h"
@@ -187,10 +187,8 @@ static void budgie_panel_init(BudgiePanel *self)
         self->menu_window = menu_window;
 
         /* Add a tasklist to the panel */
-        tasklist = wnck_tasklist_new();
+        tasklist = windowlist_applet_new();
         self->tasklist = tasklist;
-        wnck_tasklist_set_button_relief(WNCK_TASKLIST(tasklist),
-                GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
 
         /* Add a clock at the end */

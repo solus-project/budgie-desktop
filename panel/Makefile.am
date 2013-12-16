@@ -9,6 +9,8 @@ budgie_panel_SOURCES = \
 	applets/clock-applet.c \
 	applets/power-applet.c \
 	applets/power-applet.h \
+	applets/windowlist-applet.h \
+	applets/windowlist-applet.c \
 	applets/menu-window.h \
 	applets/menu-window.c \
 	budgie-panel.c \
