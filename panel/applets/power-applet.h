@@ -27,6 +27,8 @@
 #include <gtk/gtk.h>
 #include <upower.h>
 
+#include "../panel-applet.h"
+
 typedef struct _PowerApplet PowerApplet;
 typedef struct _PowerAppletClass   PowerAppletClass;
 
@@ -39,7 +41,7 @@ typedef struct _PowerAppletClass   PowerAppletClass;
 
 /* PowerApplet object */
 struct _PowerApplet {
-        GtkBin parent;
+        PanelApplet parent;
         GtkWidget *image;
 
         /* UPower stuff */
@@ -49,7 +51,7 @@ struct _PowerApplet {
 
 /* PowerApplet class definition */
 struct _PowerAppletClass {
-        GtkBinClass parent_class;
+        PanelAppletClass parent_class;
 };
 
 GType power_applet_get_type(void);

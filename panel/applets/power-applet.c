@@ -23,7 +23,7 @@
 
 #include "power-applet.h"
 
-G_DEFINE_TYPE(PowerApplet, power_applet, GTK_TYPE_BIN)
+G_DEFINE_TYPE(PowerApplet, power_applet, PANEL_APPLET_TYPE)
 
 /* Boilerplate GObject code */
 static void power_applet_class_init(PowerAppletClass *klass);
