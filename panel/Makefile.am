@@ -7,12 +7,14 @@ budgie_panel_SOURCES = \
 	panel-applet.c \
 	applets/clock-applet.h \
 	applets/clock-applet.c \
+	applets/menu-applet.h \
+	applets/menu-applet.c \
+	applets/menu-window.h \
+	applets/menu-window.c \
 	applets/power-applet.c \
 	applets/power-applet.h \
 	applets/windowlist-applet.h \
 	applets/windowlist-applet.c \
-	applets/menu-window.h \
-	applets/menu-window.c \
 	budgie-panel.c \
 	budgie-panel.h \
 	xutils.h \

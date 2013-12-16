@@ -26,7 +26,7 @@
 
 #include "budgie-panel.h"
 #include "applets/power-applet.h"
-#include "applets/menu-window.h"
+#include "applets/menu-applet.h"
 #include "applets/clock-applet.h"
 #include "applets/windowlist-applet.h"
 
@@ -44,10 +44,6 @@ static void budgie_panel_dispose(GObject *object);
 
 /* Private methods */
 static void init_styles(BudgiePanel *self);
-static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
-                             gpointer userdata);
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
-                               gpointer userdata);
 
 static gboolean draw_shadow(GtkWidget *widget,
                         cairo_t *cr,
@@ -62,30 +58,6 @@ static gboolean draw_shadow(GtkWidget *widget,
                 alloc.width, alloc.height);
 
         return TRUE;
-}
-
-static void toggled_cb(GtkWidget *widget, gpointer userdata)
-{
-        BudgiePanel *self;
-        GtkToggleButton *button;
-        GdkScreen *screen;
-        int y;
-        GtkAllocation alloc;
-
-        self = BUDGIE_PANEL(userdata);
-        button = GTK_TOGGLE_BUTTON(widget);
-        if (!gtk_toggle_button_get_active(button)) {
-                gtk_widget_hide(self->menu_window);
-                return;
-        }
-
-        /* Place it near our menu button */
-        screen = gtk_widget_get_screen(widget);
-        gtk_widget_get_allocation(GTK_WIDGET(self), &alloc);
-        y = gdk_screen_get_height(screen) - alloc.height;
-        gtk_window_move(GTK_WINDOW(self->menu_window), 0, y);
-        menu_window_present(MENU_WINDOW(self->menu_window));
-        gtk_widget_show_all(self->menu_window);
 }
 
 /* Initialisation */
@@ -129,9 +101,8 @@ static void budgie_panel_init(BudgiePanel *self)
         GdkVisual *visual;
         GtkWidget *power;
         GtkWidget *clock;
-        GtkWidget *menu, *menu_label, *menu_box, *menu_image;
         GtkWidget *shadow;
-        GtkWidget *menu_window;
+        GtkWidget *menu;
         int width;
         GtkSettings *settings;
         GtkStyleContext *style;
@@ -157,34 +128,9 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_container_add(GTK_CONTAINER(self), layout);
 
         /* Add a menu button */
-        menu = gtk_toggle_button_new();
-        self->menu_button = menu;
-        self->toggle_id = g_signal_connect(menu, "toggled",
-                G_CALLBACK(toggled_cb), (gpointer)self);
-        gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
-        gtk_widget_set_can_focus(menu, FALSE);
-        g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
-
-        /* Add content to menu button. */
-        menu_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        gtk_container_add(GTK_CONTAINER(menu), menu_box);
-        menu_image = gtk_image_new_from_icon_name("start-here",
-                GTK_ICON_SIZE_MENU);
-        gtk_box_pack_start(GTK_BOX(menu_box), menu_image, FALSE, FALSE, 0);
-        g_object_set(menu_image, "margin-right", 8, NULL);
-        menu_label = gtk_label_new("Menu");
-        gtk_box_pack_start(GTK_BOX(menu_box), menu_label, TRUE, TRUE, 0);
+        menu = menu_applet_new();
+        self->menu = menu;
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
-
-        /* Pretty popup menu */
-        menu_window = menu_window_new();
-        gtk_window_set_transient_for(GTK_WINDOW(menu_window),
-                GTK_WINDOW(self));
-        g_signal_connect(menu_window, "focus-out-event",
-                G_CALLBACK(focus_out_cb), (gpointer)self);
-        g_signal_connect(menu_window, "key-release-event",
-                G_CALLBACK(key_release_cb), (gpointer)self);
-        self->menu_window = menu_window;
 
         /* Add a tasklist to the panel */
         tasklist = windowlist_applet_new();
@@ -268,27 +214,4 @@ static void init_styles(BudgiePanel *self)
         gtk_style_context_add_provider_for_screen(screen,
                 GTK_STYLE_PROVIDER(css_provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-}
-
-static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
-                             gpointer userdata)
-{
-        BudgiePanel *self;
-
-        self = BUDGIE_PANEL(userdata);
-        g_signal_handler_block(self->menu_button, self->toggle_id);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(self->menu_button),
-                FALSE);
-        g_signal_handler_unblock(self->menu_button, self->toggle_id);
-
-        gtk_widget_hide(self->menu_window);
-        return TRUE;
-}
-
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
-                               gpointer userdata)
-{
-        if (event->keyval != GDK_KEY_Escape)
-                return FALSE;
-        return focus_out_cb(widget, NULL, userdata);
 }

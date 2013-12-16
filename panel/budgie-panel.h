@@ -104,9 +104,7 @@ struct _BudgiePanel {
         GtkWidget *tasklist;
         GtkWidget *power;
         GtkWidget *clock;
-        GtkWidget *menu_window;
-        GtkWidget *menu_button;
-        gulong toggle_id;
+        GtkWidget *menu;
 };
 
 /* BudgiePanel class definition */
