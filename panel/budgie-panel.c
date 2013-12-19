@@ -30,7 +30,7 @@
 #include "applets/clock-applet.h"
 #include "applets/windowlist-applet.h"
 
-/* BAD BAD BAD: Replace soon! */
+/* X11 specific */
 #include "xutils.h"
 
 G_DEFINE_TYPE(PanelToplevel, panel_toplevel, GTK_TYPE_WINDOW)
@@ -85,12 +85,14 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         x = 0;
         y = height - alloc.height;
         gtk_window_move(GTK_WINDOW(self), x, y);
-        gtk_window_move(GTK_WINDOW(self->shadow), x, y-4);
 
-        /* BAD BAD BAD */
-        window = gtk_widget_get_window(GTK_WIDGET(self));
-        /* Bottom strut */
-        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
+        /* Reserve struts on X11 display and add fake shadow */
+        if (self->x11) {
+                gtk_window_move(GTK_WINDOW(self->shadow), x, y-4);
+                window = gtk_widget_get_window(GTK_WIDGET(self));
+                /* Bottom strut */
+                xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
+        }
 }
 
 static void panel_toplevel_init(PanelToplevel *self)
@@ -98,6 +100,7 @@ static void panel_toplevel_init(PanelToplevel *self)
         GtkWidget *tasklist;
         GtkWidget *layout;
         GdkScreen *screen;
+        GdkDisplay *display;
         GdkVisual *visual;
         GtkWidget *power;
         GtkWidget *clock;
@@ -115,6 +118,13 @@ static void panel_toplevel_init(PanelToplevel *self)
         /* tiny bit of padding */
         gtk_container_set_border_width(GTK_CONTAINER(self), 2);
 
+        /* Decide if we're using X11 or Wayland */
+        display = gdk_display_get_default();
+        if (GDK_IS_X11_DISPLAY(display))
+                self->x11 = TRUE;
+        else
+                self->x11 = FALSE;
+
         /* Our main layout is a horizontal box */
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(self), layout);
@@ -124,10 +134,12 @@ static void panel_toplevel_init(PanelToplevel *self)
         self->menu = menu;
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
 
-        /* Add a tasklist to the panel */
-        tasklist = windowlist_applet_new();
-        self->tasklist = tasklist;
-        gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
+        /* Add a tasklist to the panel on x11 */
+        if (self->x11) {
+                tasklist = windowlist_applet_new();
+                self->tasklist = tasklist;
+                gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
+        }
 
         /* Add a clock at the end */
         clock = clock_applet_new();
@@ -144,8 +156,9 @@ static void panel_toplevel_init(PanelToplevel *self)
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
+
         /* Set ourselves up to be the correct size and position */
-        screen = gdk_screen_get_default();
+        screen = gdk_display_get_default_screen(display);
         visual = gdk_screen_get_rgba_visual(screen);
         if (visual)
                 gtk_widget_set_visual(GTK_WIDGET(self), visual);
@@ -153,27 +166,31 @@ static void panel_toplevel_init(PanelToplevel *self)
         width = gdk_screen_get_width(screen);
         gtk_widget_set_size_request(GTK_WIDGET(self), width, PANEL_HEIGHT);
 
-        /* We want to be a dock */
-        gtk_window_set_type_hint(GTK_WINDOW(self),
-                GDK_WINDOW_TYPE_HINT_DOCK);
-        gtk_window_stick(GTK_WINDOW(self));
-
         g_signal_connect(self, "realize", G_CALLBACK(realized_cb),
                 (gpointer)self);
 
         /* Add a shadow, idea came from wingpanel, kudos guys :) */
-        shadow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        self->shadow = shadow;
-        gtk_window_set_type_hint(GTK_WINDOW(shadow),
-                GDK_WINDOW_TYPE_HINT_DOCK);
-        gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
-        style = gtk_widget_get_style_context(shadow);
-        gtk_style_context_add_class(style, "panel-shadow-bottom");
-        gtk_window_stick(GTK_WINDOW(shadow));
-        gtk_widget_set_visual(shadow, visual);
-        g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
-                (gpointer)self);
-        gtk_widget_show_all(shadow);
+        if (self->x11) {
+                shadow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+                self->shadow = shadow;
+                gtk_window_set_type_hint(GTK_WINDOW(shadow),
+                        GDK_WINDOW_TYPE_HINT_DOCK);
+                gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
+                style = gtk_widget_get_style_context(shadow);
+                gtk_style_context_add_class(style, "panel-shadow-bottom");
+                gtk_window_stick(GTK_WINDOW(shadow));
+                gtk_widget_set_visual(shadow, visual);
+                g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
+                        (gpointer)self);
+                gtk_widget_show_all(shadow);
+
+                /* We want to be a dock */
+                gtk_window_set_type_hint(GTK_WINDOW(self),
+                        GDK_WINDOW_TYPE_HINT_DOCK);
+                gtk_window_stick(GTK_WINDOW(self));
+        } else {
+                gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+        }
 
         /* And now show ourselves */
         gtk_widget_show_all(GTK_WIDGET(self));

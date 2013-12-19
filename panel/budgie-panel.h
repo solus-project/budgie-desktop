@@ -80,6 +80,8 @@ struct _PanelToplevel {
         GtkWidget *power;
         GtkWidget *clock;
         GtkWidget *menu;
+
+        gboolean x11;
 };
 
 /* PanelToplevel class definition */
