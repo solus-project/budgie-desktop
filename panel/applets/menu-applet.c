@@ -52,6 +52,7 @@ static void menu_applet_init(MenuApplet *self)
         GtkWidget *menu_window;
 
         menu = gtk_toggle_button_new();
+        gtk_widget_set_tooltip_text(menu, "Menu");
         gtk_container_add(GTK_CONTAINER(self), menu);
         self->menu_button = menu;
         self->toggle_id = g_signal_connect(menu, "toggled",
