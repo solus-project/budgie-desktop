@@ -72,15 +72,21 @@ static gboolean update_clock(gpointer userdata)
         ClockApplet *self;
         gchar *date_string;
         GDateTime *dtime;
+        /* TODO: Make configurable */
+        gboolean show_date = FALSE;
 
         self = CLOCK_APPLET(userdata);
 
         /* Get the current time */
         dtime = g_date_time_new_now_local();
 
-        /* Format it as a string (24h) */
-        date_string = g_date_time_format(dtime,
-                " %H:%M:%S <small>%x</small> ");
+        if (show_date)
+                date_string = g_date_time_format(dtime,
+                        " <big>%H:%M:%S</big> <small>%x</small> ");
+        else
+                date_string = g_date_time_format(dtime,
+                        " <big>%H:%M:%S</big> ");
+
         gtk_label_set_markup(GTK_LABEL(self->label), date_string);
         g_free(date_string);
         g_date_time_unref(dtime);
