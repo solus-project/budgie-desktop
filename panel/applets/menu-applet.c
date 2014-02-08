@@ -48,7 +48,7 @@ static void menu_applet_class_init(MenuAppletClass *klass)
 
 static void menu_applet_init(MenuApplet *self)
 {
-        GtkWidget *menu, *menu_label, *menu_box, *menu_image;
+        GtkWidget *menu, *menu_box, *menu_image;
         GtkWidget *menu_window;
 
         menu = gtk_toggle_button_new();
@@ -63,12 +63,13 @@ static void menu_applet_init(MenuApplet *self)
         /* Add content to menu button. */
         menu_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(menu), menu_box);
-        menu_image = gtk_image_new_from_icon_name("start-here",
-                GTK_ICON_SIZE_MENU);
+        menu_image = gtk_image_new_from_icon_name("view-grid-symbolic",
+                GTK_ICON_SIZE_LARGE_TOOLBAR);
         gtk_box_pack_start(GTK_BOX(menu_box), menu_image, FALSE, FALSE, 0);
         g_object_set(menu_image, "margin-right", 8, NULL);
+        /* Don't add label for now, make this customisable
         menu_label = gtk_label_new("Menu");
-        gtk_box_pack_start(GTK_BOX(menu_box), menu_label, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(menu_box), menu_label, TRUE, TRUE, 0);*/
 
         /* Pretty popup menu */
         menu_window = menu_window_new();
