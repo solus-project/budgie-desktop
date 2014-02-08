@@ -24,12 +24,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <gio/gio.h>
+#include <gio/gdesktopappinfo.h>
 #include <sys/wait.h>
 
 #define DESKTOP_WM "budgie-wm"
 #define DESKTOP_PANEL "budgie-panel"
-/* Must re-address this at some point. Have a systemd-user session for it */
-#define DESKTOP_SETTINGS "/usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon"
+#define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
 #define FILE_MANAGER "nautilus -n"
 
 int main(int argc, char **argv)
@@ -42,17 +42,21 @@ int main(int argc, char **argv)
         int wID;
         int ret = EXIT_FAILURE;
         const gchar *home_dir;
+        GDesktopAppInfo *gsd_app = NULL;
+        const gchar *gsd_exec;
 
         home_dir = g_get_home_dir();
 
-        /* Launch the settings daemon */
-        if (!g_spawn_command_line_async(DESKTOP_SETTINGS, &error)) {
-                fprintf(stderr, "Unable to launch settings: %s\n",
-                        error->message);
-                goto end;
+        gsd_app = g_desktop_app_info_new_from_filename(GSD_DESKTOP);
+        if (gsd_app) {
+                gsd_exec = g_app_info_get_executable(G_APP_INFO(gsd_app));
+                /* Launch the settings daemon */
+                if (!g_spawn_command_line_async(gsd_exec, &error)) {
+                        fprintf(stderr, "Unable to launch settings: %s\n",
+                                error->message);
+                        goto end;
+                }
         }
-
-        sleep(1);
 
         /* Need to pass an argv to g_spawn_async */
         if (!g_shell_parse_argv(DESKTOP_WM, NULL, &p_argv, &error)) {
@@ -108,6 +112,8 @@ int main(int argc, char **argv)
 child_end:
         g_spawn_close_pid(pid);
 end:
+        if (gsd_app)
+                g_object_unref(gsd_app);
         if (error)
                 g_error_free(error);
         if (p_argv)
