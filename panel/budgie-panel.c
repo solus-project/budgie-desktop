@@ -69,9 +69,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         gtk_widget_get_allocation(widget, &alloc);
         x = 0;
         y = height - alloc.height;
-        gtk_widget_hide(widget);
         gtk_window_move(GTK_WINDOW(self), x, y);
-        gtk_widget_show_all(widget);
 
         /* Reserve struts on X11 display */
         if (self->x11) {
@@ -120,9 +118,6 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_widget_set_valign(layout, GTK_ALIGN_START);
         gtk_container_add(GTK_CONTAINER(self), layout);
 
-        /* Todo: FIX WINDOW PLACEMENT AND SIZE!! */
-        g_object_set(layout, "margin-bottom", 12, NULL);
-
         /* Add a menu button */
         menu = menu_applet_new();
         self->menu = menu;
@@ -140,7 +135,7 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Now have it themed by eventbox */
         widgets_wrap = gtk_event_box_new();
         g_object_set(widgets_wrap, "margin-right", 2, NULL);
-        g_object_set(widgets, "margin", 3, NULL);
+        g_object_set(widgets, "margin", 5, NULL);
         gtk_widget_set_valign(widgets_wrap, GTK_ALIGN_CENTER);
         gtk_widget_set_name(widgets_wrap, "WidgetBox");
         gtk_container_add(GTK_CONTAINER(widgets_wrap), widgets);

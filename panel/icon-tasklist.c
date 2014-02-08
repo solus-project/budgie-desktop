@@ -77,8 +77,9 @@ static void icon_tasklist_init(IconTasklist *self)
         g_signal_connect(self->screen, "active-window-changed",
                 G_CALLBACK(active_changed), self);
 
+        wnck_screen_force_update(self->screen);
         /* Align to the center vertically */
-        gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_CENTER);
+        gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_START);
 }
 
 static void icon_tasklist_dispose(GObject *object)

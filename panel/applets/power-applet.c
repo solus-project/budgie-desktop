@@ -54,8 +54,6 @@ static void power_applet_init(PowerApplet *self)
         self->image = image;
         gtk_container_add(GTK_CONTAINER(self), image);
 
-        gtk_container_set_border_width(GTK_CONTAINER(self), 5);
-
         /* Initialise upower */
         self->client = up_client_new();
         g_signal_connect(self->client, "device-changed",
