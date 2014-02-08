@@ -69,7 +69,9 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         gtk_widget_get_allocation(widget, &alloc);
         x = 0;
         y = height - alloc.height;
+        gtk_widget_hide(widget);
         gtk_window_move(GTK_WINDOW(self), x, y);
+        gtk_widget_show_all(widget);
 
         /* Reserve struts on X11 display */
         if (self->x11) {
@@ -106,9 +108,6 @@ static void budgie_panel_init(BudgiePanel *self)
         gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
         gtk_window_set_has_resize_grip(GTK_WINDOW(self), FALSE);
 
-        /* tiny bit of padding */
-        gtk_container_set_border_width(GTK_CONTAINER(self), 2);
-
         /* Decide if we're using X11 or Wayland */
         display = gdk_display_get_default();
         if (GDK_IS_X11_DISPLAY(display))
@@ -118,9 +117,11 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Our main layout is a horizontal box */
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+        gtk_widget_set_valign(layout, GTK_ALIGN_START);
         gtk_container_add(GTK_CONTAINER(self), layout);
 
-        g_object_set(layout, "margin-bottom", 2, NULL);
+        /* Todo: FIX WINDOW PLACEMENT AND SIZE!! */
+        g_object_set(layout, "margin-bottom", 12, NULL);
 
         /* Add a menu button */
         menu = menu_applet_new();
