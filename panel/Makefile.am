@@ -5,6 +5,8 @@ bin_PROGRAMS = budgie-panel
 budgie_panel_SOURCES = \
 	panel-applet.h \
 	panel-applet.c \
+	icon-tasklist.h \
+	icon-tasklist.c \
 	applets/clock-applet.h \
 	applets/clock-applet.c \
 	applets/menu-applet.h \
