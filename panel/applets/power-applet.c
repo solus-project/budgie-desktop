@@ -157,7 +157,7 @@ static void update_ui(PowerApplet *self)
         g_free(tooltip);
 
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), image,
-                GTK_ICON_SIZE_BUTTON);
+                GTK_ICON_SIZE_MENU);
         g_free(image);
 
 end:
