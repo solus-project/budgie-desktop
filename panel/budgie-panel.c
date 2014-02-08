@@ -33,17 +33,17 @@
 /* X11 specific */
 #include "xutils.h"
 
-G_DEFINE_TYPE(PanelToplevel, panel_toplevel, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
 #define PANEL_HEIGHT 25
 
 /* Boilerplate GObject code */
-static void panel_toplevel_class_init(PanelToplevelClass *klass);
-static void panel_toplevel_init(PanelToplevel *self);
-static void panel_toplevel_dispose(GObject *object);
+static void budgie_panel_class_init(BudgiePanelClass *klass);
+static void budgie_panel_init(BudgiePanel *self);
+static void budgie_panel_dispose(GObject *object);
 
 /* Private methods */
-static void init_styles(PanelToplevel *self);
+static void init_styles(BudgiePanel *self);
 
 static gboolean draw_shadow(GtkWidget *widget,
                         cairo_t *cr,
@@ -61,23 +61,23 @@ static gboolean draw_shadow(GtkWidget *widget,
 }
 
 /* Initialisation */
-static void panel_toplevel_class_init(PanelToplevelClass *klass)
+static void budgie_panel_class_init(BudgiePanelClass *klass)
 {
         GObjectClass *g_object_class;
 
         g_object_class = G_OBJECT_CLASS(klass);
-        g_object_class->dispose = &panel_toplevel_dispose;
+        g_object_class->dispose = &budgie_panel_dispose;
 }
 
 static void realized_cb(GtkWidget *widget, gpointer userdata)
 {
-        PanelToplevel *self;
+        BudgiePanel *self;
         GdkScreen *screen;
         int height, x, y;
         GtkAllocation alloc;
         GdkWindow *window;
 
-        self = PANEL_TOPLEVEL(userdata);
+        self = BUDGIE_PANEL(userdata);
         screen = gtk_widget_get_screen(widget);
         height = gdk_screen_get_height(screen);
 
@@ -95,7 +95,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         }
 }
 
-static void panel_toplevel_init(PanelToplevel *self)
+static void budgie_panel_init(BudgiePanel *self)
 {
         GtkWidget *tasklist;
         GtkWidget *layout;
@@ -107,9 +107,17 @@ static void panel_toplevel_init(PanelToplevel *self)
         GtkWidget *shadow;
         GtkWidget *menu;
         int width;
+        GtkSettings *settings;
         GtkStyleContext *style;
 
         init_styles(self);
+        /* Sort ourselves out visually */
+        settings = gtk_widget_get_settings(GTK_WIDGET(self));
+        g_object_set(settings,
+                "gtk-application-prefer-dark-theme", TRUE,
+                "gtk-menu-images", TRUE,
+                "gtk-button-images", TRUE,
+                NULL);
 
         /* Not resizable.. */
         gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
@@ -144,7 +152,6 @@ static void panel_toplevel_init(PanelToplevel *self)
         /* Add a clock at the end */
         clock = clock_applet_new();
         self->clock = clock;
-        gtk_widget_set_name(clock, "BorderedApplet");
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
 
@@ -196,22 +203,22 @@ static void panel_toplevel_init(PanelToplevel *self)
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
-static void panel_toplevel_dispose(GObject *object)
+static void budgie_panel_dispose(GObject *object)
 {
         /* Destruct */
-        G_OBJECT_CLASS (panel_toplevel_parent_class)->dispose (object);
+        G_OBJECT_CLASS (budgie_panel_parent_class)->dispose (object);
 }
 
-/* Utility; return a new PanelToplevel */
-PanelToplevel* panel_toplevel_new(void)
+/* Utility; return a new BudgiePanel */
+BudgiePanel* budgie_panel_new(void)
 {
-        PanelToplevel *self;
+        BudgiePanel *self;
 
-        self = g_object_new(PANEL_TOPLEVEL_TYPE, NULL);
+        self = g_object_new(BUDGIE_PANEL_TYPE, NULL);
         return self;
 }
 
-static void init_styles(PanelToplevel *self)
+static void init_styles(BudgiePanel *self)
 {
         GtkCssProvider *css_provider;
         GdkScreen *screen;
@@ -223,5 +230,5 @@ static void init_styles(PanelToplevel *self)
         screen = gdk_screen_get_default();
         gtk_style_context_add_provider_for_screen(screen,
                 GTK_STYLE_PROVIDER(css_provider),
-                GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }

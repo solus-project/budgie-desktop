@@ -26,10 +26,10 @@
 
 int main(int argc, char **argv)
 {
-        __attribute__ ((unused)) PanelToplevel *panel;
+        __attribute__ ((unused)) BudgiePanel *panel;
 
         gtk_init(&argc, &argv);
-        panel = panel_toplevel_new();
+        panel = budgie_panel_new();
         gtk_main();
 
         return EXIT_SUCCESS;
