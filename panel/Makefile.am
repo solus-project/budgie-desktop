@@ -29,8 +29,6 @@ budgie_panel_CFLAGS = \
 	$(WNCK3_CFLAGS) \
 	$(UPOWER_CFLAGS) \
 	$(X11_CFLAGS) \
-	$(PEAS_CFLAGS) \
-	$(PEASGTK_CFLAGS) \
 	$(GMENU_CFLAGS) \
 	$(AM_CFLAGS)
 
@@ -40,6 +38,4 @@ budgie_panel_LDADD = \
 	$(WNCK3_LIBS) \
 	$(UPOWER_LIBS) \
 	$(X11_LIBS) \
-	$(PEAS_LIBS) \
-	$(PEASGTK_LIBS) \
 	$(GMENU_LIBS)

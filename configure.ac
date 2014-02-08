@@ -24,10 +24,6 @@ PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.21])
 # Required for x11 hacks in the panel (will be removed soon.)
 PKG_CHECK_MODULES([X11], [x11])
 
-# Required for module loading
-PKG_CHECK_MODULES([PEAS], [libpeas-1.0 >= 1.9.0])
-PKG_CHECK_MODULES([PEASGTK], [libpeas-gtk-1.0 >= 1.9.0])
-
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
