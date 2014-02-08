@@ -31,6 +31,9 @@ PKG_CHECK_MODULES([PEASGTK], [libpeas-gtk-1.0 >= 1.9.0])
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
+# Because we target Linux.
+PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.38.0])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
                 data/Makefile
