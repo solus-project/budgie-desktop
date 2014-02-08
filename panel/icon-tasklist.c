@@ -49,6 +49,9 @@ static void window_opened(WnckScreen *screen,
 static void window_closed(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata);
+static void active_changed(WnckScreen *screen,
+                           WnckWindow *prev_window,
+                           gpointer userdata);
 
 /* Initialisation */
 static void icon_tasklist_class_init(IconTasklistClass *klass)
@@ -67,6 +70,8 @@ static void icon_tasklist_init(IconTasklist *self)
                 G_CALLBACK(window_opened), self);
         g_signal_connect(self->screen, "window-closed",
                 G_CALLBACK(window_closed), self);
+        g_signal_connect(self->screen, "active-window-changed",
+                G_CALLBACK(active_changed), self);
 
         /* Align to the center vertically */
         gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_CENTER);
@@ -148,5 +153,32 @@ static void window_closed(WnckScreen *screen,
                 bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
                 if (bwindow == window)
                         gtk_widget_destroy(toggle);
+        }
+}
+
+static void active_changed(WnckScreen *screen,
+                           WnckWindow *prev_window,
+                           gpointer userdata)
+{
+        IconTasklist *self = ICON_TASKLIST(userdata);
+        GList *list, *elem;
+        GtkWidget *toggle;
+        WnckWindow *bwindow, *active;
+
+        active = wnck_screen_get_active_window(screen);
+
+        /* If a buttons window matches the closing window, destroy the button */
+        list = gtk_container_get_children(GTK_CONTAINER(self));
+        for (elem = list; elem; elem = elem->next) {
+                if (!GTK_IS_TOGGLE_BUTTON(elem->data))
+                        continue;
+                toggle = GTK_WIDGET(elem->data);
+                bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
+                /* Deselect previous window */
+                if (bwindow == prev_window)
+                        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), FALSE);
+                /* Select new active window */
+                if (bwindow == active)
+                        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), TRUE);
         }
 }
