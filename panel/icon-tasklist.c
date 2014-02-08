@@ -46,6 +46,9 @@ static void icon_tasklist_dispose(GObject *object);
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata);
+static void window_closed(WnckScreen *screen,
+                          WnckWindow *window,
+                          gpointer userdata);
 
 /* Initialisation */
 static void icon_tasklist_class_init(IconTasklistClass *klass)
@@ -62,6 +65,8 @@ static void icon_tasklist_init(IconTasklist *self)
         self->screen = wnck_screen_get_default();
         g_signal_connect(self->screen, "window-opened",
                 G_CALLBACK(window_opened), self);
+        g_signal_connect(self->screen, "window-closed",
+                G_CALLBACK(window_closed), self);
 
         /* Align to the center vertically */
         gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_CENTER);
@@ -123,4 +128,25 @@ static void window_opened(WnckScreen *screen,
 
         gtk_box_pack_start(GTK_BOX(self), button, FALSE, FALSE, 0);
         gtk_widget_show_all(button);
+}
+
+static void window_closed(WnckScreen *screen,
+                          WnckWindow *window,
+                          gpointer userdata)
+{
+        IconTasklist *self = ICON_TASKLIST(userdata);
+        GList *list, *elem;
+        GtkWidget *toggle;
+        WnckWindow *bwindow;
+
+        /* If a buttons window matches the closing window, destroy the button */
+        list = gtk_container_get_children(GTK_CONTAINER(self));
+        for (elem = list; elem; elem = elem->next) {
+                if (!GTK_IS_TOGGLE_BUTTON(elem->data))
+                        continue;
+                toggle = GTK_WIDGET(elem->data);
+                bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
+                if (bwindow == window)
+                        gtk_widget_destroy(toggle);
+        }
 }
