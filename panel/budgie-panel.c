@@ -138,6 +138,7 @@ static void budgie_panel_init(BudgiePanel *self)
         widgets = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
         /* Now have it themed by eventbox */
         widgets_wrap = gtk_event_box_new();
+        gtk_widget_set_valign(widgets_wrap, GTK_ALIGN_CENTER);
         gtk_widget_set_name(widgets_wrap, "WidgetBox");
         gtk_container_add(GTK_CONTAINER(widgets_wrap), widgets);
         gtk_box_pack_end(GTK_BOX(layout), widgets_wrap, FALSE, FALSE, 0);
