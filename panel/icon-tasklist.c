@@ -43,6 +43,10 @@ static void icon_tasklist_init(IconTasklist *self);
 static void icon_tasklist_dispose(GObject *object);
 
 /* Private functionality */
+static gboolean button_draw(GtkWidget *widget,
+                            cairo_t *cr,
+                            gpointer userdata);
+
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata);
@@ -93,6 +97,29 @@ GtkWidget *icon_tasklist_new(void)
         return GTK_WIDGET(self);
 }
 
+static gboolean button_draw(GtkWidget *widget,
+                            cairo_t *cr,
+                            gpointer userdata)
+{
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(widget, &alloc);
+
+        /* Draw children of the button (i.e image) */
+        gtk_container_propagate_draw(GTK_CONTAINER(widget),
+                gtk_bin_get_child(GTK_BIN(widget)),
+                cr);
+
+        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+                return TRUE;
+
+        /* Active window, render a partially transparent white line */
+        cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.8);
+        cairo_rectangle(cr, 0, alloc.height-2, alloc.width, 2);
+        cairo_fill(cr);
+
+        /* Render button differently */
+        return TRUE;
+}
 
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
@@ -130,6 +157,9 @@ static void window_opened(WnckScreen *screen,
 
         /* Store a reference to this window for destroy ops, etc. */
         g_object_set_data(G_OBJECT(button), "bwindow", window);
+
+        /* Override drawing of this button */
+        g_signal_connect(button, "draw", G_CALLBACK(button_draw), self);
 
         gtk_box_pack_start(GTK_BOX(self), button, FALSE, FALSE, 0);
         gtk_widget_show_all(button);
