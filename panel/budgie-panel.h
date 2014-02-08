@@ -31,20 +31,6 @@ BudgiePanel {\
     border-width: 1px;\
     background-color: alpha(white, 0.0);\
 }\
-.panel-shadow.top {\
-    background-color: @transparent;\
-    background-image: -gtk-gradient (linear,\
-                     left top, left bottom,\
-                     from (alpha (#000, 0.3)),\
-                     to (alpha (#000, 0.0)));\
-}\
-.panel-shadow {\
-    background-color: @transparent;\
-    background-image: -gtk-gradient (linear,\
-                     left bottom, left top,\
-                     from (alpha (#000, 0.3)),\
-                     to (alpha (#000, 0.0)));\
-}\
 .panel-applet {\
     background-image: none;\
     border-color: alpha(white, 0.12);\
@@ -96,7 +82,6 @@ typedef struct _BudgiePanelClass   BudgiePanelClass;
 /* BudgiePanel object */
 struct _BudgiePanel {
         GtkWindow parent;
-        GtkWidget *shadow;
 
         GtkWidget *tasklist;
         GtkWidget *power;

@@ -45,21 +45,6 @@ static void budgie_panel_dispose(GObject *object);
 /* Private methods */
 static void init_styles(BudgiePanel *self);
 
-static gboolean draw_shadow(GtkWidget *widget,
-                        cairo_t *cr,
-                        gpointer userdata)
-{
-        GtkStyleContext *style;
-        GtkAllocation alloc;
-
-        style = gtk_widget_get_style_context(widget);
-        gtk_widget_get_allocation(widget, &alloc);
-        gtk_render_background(style, cr, alloc.x, alloc.y,
-                alloc.width, alloc.height);
-
-        return TRUE;
-}
-
 /* Initialisation */
 static void budgie_panel_class_init(BudgiePanelClass *klass)
 {
@@ -86,9 +71,8 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         y = height - alloc.height;
         gtk_window_move(GTK_WINDOW(self), x, y);
 
-        /* Reserve struts on X11 display and add fake shadow */
+        /* Reserve struts on X11 display */
         if (self->x11) {
-                gtk_window_move(GTK_WINDOW(self->shadow), x, y-4);
                 window = gtk_widget_get_window(GTK_WIDGET(self));
                 /* Bottom strut */
                 xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
@@ -104,11 +88,9 @@ static void budgie_panel_init(BudgiePanel *self)
         GdkVisual *visual;
         GtkWidget *power;
         GtkWidget *clock;
-        GtkWidget *shadow;
         GtkWidget *menu;
         int width;
         GtkSettings *settings;
-        GtkStyleContext *style;
 
         init_styles(self);
         /* Sort ourselves out visually */
@@ -176,22 +158,8 @@ static void budgie_panel_init(BudgiePanel *self)
         g_signal_connect(self, "realize", G_CALLBACK(realized_cb),
                 self);
 
-        /* Add a shadow, idea came from wingpanel, kudos guys :) */
+        /* On X11 use dock hint */
         if (self->x11) {
-                shadow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-                self->shadow = shadow;
-                gtk_window_set_type_hint(GTK_WINDOW(shadow),
-                        GDK_WINDOW_TYPE_HINT_DOCK);
-                gtk_widget_set_size_request(GTK_WIDGET(shadow), width, 4);
-                style = gtk_widget_get_style_context(shadow);
-                gtk_style_context_add_class(style, "panel-shadow-bottom");
-                gtk_window_stick(GTK_WINDOW(shadow));
-                gtk_widget_set_visual(shadow, visual);
-                g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
-                        self);
-                gtk_widget_show_all(shadow);
-
-                /* We want to be a dock */
                 gtk_window_set_type_hint(GTK_WINDOW(self),
                         GDK_WINDOW_TYPE_HINT_DOCK);
                 gtk_window_stick(GTK_WINDOW(self));
