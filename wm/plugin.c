@@ -218,7 +218,7 @@ meta_default_plugin_init (MetaDefaultPlugin *self)
   self->priv = priv = META_DEFAULT_PLUGIN_GET_PRIVATE (self);
   priv->settings = g_settings_new(BACKGROUND_SCHEMA);
   g_signal_connect(priv->settings, "changed", G_CALLBACK(settings_cb),
-                   (gpointer)self);
+                   self);
 
   priv->info.name        = "Default Effects";
   priv->info.version     = "0.1";

@@ -55,7 +55,7 @@ static void menu_applet_init(MenuApplet *self)
         gtk_container_add(GTK_CONTAINER(self), menu);
         self->menu_button = menu;
         self->toggle_id = g_signal_connect(menu, "toggled",
-                G_CALLBACK(toggled_cb), (gpointer)self);
+                G_CALLBACK(toggled_cb), self);
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         gtk_widget_set_can_focus(menu, FALSE);
         g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
@@ -73,9 +73,9 @@ static void menu_applet_init(MenuApplet *self)
         /* Pretty popup menu */
         menu_window = menu_window_new();
         g_signal_connect(menu_window, "focus-out-event",
-                G_CALLBACK(focus_out_cb), (gpointer)self);
+                G_CALLBACK(focus_out_cb), self);
         g_signal_connect(menu_window, "key-release-event",
-                G_CALLBACK(key_release_cb), (gpointer)self);
+                G_CALLBACK(key_release_cb), self);
         self->menu_window = menu_window;
 }
 

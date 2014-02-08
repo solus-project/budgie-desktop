@@ -59,7 +59,7 @@ static void power_applet_init(PowerApplet *self)
         /* Initialise upower */
         self->client = up_client_new();
         g_signal_connect(self->client, "device-changed",
-                G_CALLBACK(device_changed_cb), (gpointer)self);
+                G_CALLBACK(device_changed_cb), self);
         self->battery = NULL;
         update_ui(self);
 }

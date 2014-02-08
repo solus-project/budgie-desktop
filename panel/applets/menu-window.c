@@ -119,7 +119,7 @@ static void menu_window_init(MenuWindow *self)
         self->priv->all_button = all_button;
         gtk_box_pack_start(GTK_BOX(box), all_button, FALSE, FALSE, 0);
         g_signal_connect(all_button, "toggled", G_CALLBACK(toggled_cb),
-                (gpointer)self);
+                self);
         /* Visual separation */
         sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
         gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 0);
@@ -134,7 +134,7 @@ static void menu_window_init(MenuWindow *self)
         search_entry = gtk_search_entry_new();
         self->priv->entry = search_entry;
         g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
-                (gpointer)self);
+                self);
         gtk_container_add(GTK_CONTAINER(frame), search_entry);
         gtk_box_pack_end(GTK_BOX(left_side), frame, FALSE, FALSE, 0);
 
@@ -146,9 +146,9 @@ static void menu_window_init(MenuWindow *self)
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         list = gtk_list_box_new();
         gtk_list_box_set_filter_func(GTK_LIST_BOX(list), filter_list,
-                (gpointer)self, NULL);
+                self, NULL);
         gtk_list_box_set_header_func(GTK_LIST_BOX(list), list_header,
-                (gpointer)self, NULL);
+                self, NULL);
 
         self->priv->app_box = list;
         self->priv->search_term = "";
@@ -247,7 +247,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 g_object_set_data_full(G_OBJECT(button), "group",
                                         g_strdup(name), &g_free);
                                 g_signal_connect(button, "toggled", G_CALLBACK(toggled_cb),
-                                        (gpointer)self);
+                                        self);
                                 populate_menu(self, nextdir);
                                 break;
                         case GMENU_TREE_ITEM_ENTRY:
@@ -259,7 +259,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                                 desc = g_app_info_get_description(G_APP_INFO(info));
                                 gtk_widget_set_tooltip_text(button, desc);
                                 g_signal_connect(button, "clicked",
-                                        G_CALLBACK(clicked_cb), (gpointer)self);
+                                        G_CALLBACK(clicked_cb), self);
                                 g_object_set_data_full(G_OBJECT(button), "group",
                                         g_strdup(dirname), &g_free);
                                 g_object_set_data(G_OBJECT(button), "info",

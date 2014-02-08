@@ -47,9 +47,9 @@ static void clock_applet_init(ClockApplet *self)
         gtk_container_add(GTK_CONTAINER(self), self->label);
 
         /* Don't show an empty label */
-        update_clock((gpointer)self);
+        update_clock(self);
         /* Update the clock every second */
-        g_timeout_add(1000, update_clock, (gpointer)self);
+        g_timeout_add(1000, update_clock, self);
 }
 
 static void clock_applet_dispose(GObject *object)

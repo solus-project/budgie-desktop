@@ -167,7 +167,7 @@ static void panel_toplevel_init(PanelToplevel *self)
         gtk_widget_set_size_request(GTK_WIDGET(self), width, PANEL_HEIGHT);
 
         g_signal_connect(self, "realize", G_CALLBACK(realized_cb),
-                (gpointer)self);
+                self);
 
         /* Add a shadow, idea came from wingpanel, kudos guys :) */
         if (self->x11) {
@@ -181,7 +181,7 @@ static void panel_toplevel_init(PanelToplevel *self)
                 gtk_window_stick(GTK_WINDOW(shadow));
                 gtk_widget_set_visual(shadow, visual);
                 g_signal_connect(shadow, "draw", G_CALLBACK(draw_shadow),
-                        (gpointer)self);
+                        self);
                 gtk_widget_show_all(shadow);
 
                 /* We want to be a dock */
