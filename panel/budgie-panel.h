@@ -31,6 +31,10 @@ BudgiePanel {\
     border-width: 1px;\
     background-color: alpha(white, 0.0);\
 }\
+#WidgetBox {\
+    background-color: alpha(black, 0.8);\
+    border-radius: 6px;\
+}\
 .panel-applet {\
     background-image: none;\
     border-color: alpha(white, 0.12);\

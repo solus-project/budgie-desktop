@@ -83,6 +83,7 @@ static void budgie_panel_init(BudgiePanel *self)
 {
         GtkWidget *tasklist;
         GtkWidget *layout;
+        GtkWidget *widgets, *widgets_wrap;
         GdkScreen *screen;
         GdkDisplay *display;
         GdkVisual *visual;
@@ -119,6 +120,8 @@ static void budgie_panel_init(BudgiePanel *self)
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(self), layout);
 
+        g_object_set(layout, "margin-bottom", 2, NULL);
+
         /* Add a menu button */
         menu = menu_applet_new();
         self->menu = menu;
@@ -131,16 +134,24 @@ static void budgie_panel_init(BudgiePanel *self)
                 gtk_box_pack_start(GTK_BOX(layout), tasklist, FALSE, FALSE, 0);
         }
 
+        /* Group widgets under one area */
+        widgets = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+        /* Now have it themed by eventbox */
+        widgets_wrap = gtk_event_box_new();
+        gtk_widget_set_name(widgets_wrap, "WidgetBox");
+        gtk_container_add(GTK_CONTAINER(widgets_wrap), widgets);
+        gtk_box_pack_end(GTK_BOX(layout), widgets_wrap, FALSE, FALSE, 0);
+
         /* Add a clock at the end */
         clock = clock_applet_new();
         self->clock = clock;
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
-        gtk_box_pack_end(GTK_BOX(layout), clock, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(widgets), clock, FALSE, FALSE, 0);
 
         /* Add the power applet near the end */
         power = power_applet_new();
         self->power = power;
-        gtk_box_pack_end(GTK_BOX(layout), power, FALSE, FALSE, 0);
+        gtk_box_pack_end(GTK_BOX(widgets), power, FALSE, FALSE, 0);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
