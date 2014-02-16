@@ -82,7 +82,7 @@ static void menu_window_init(MenuWindow *self)
         self->priv = menu_window_get_instance_private(self);
 
         /* Sensible default size */
-        gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
+        gtk_widget_set_size_request(GTK_WIDGET(self), 470, 510);
         gtk_container_set_border_width(GTK_CONTAINER(self), 3);
 
         /* Main layout */
@@ -153,6 +153,8 @@ static void menu_window_init(MenuWindow *self)
         gtk_list_box_set_placeholder(GTK_LIST_BOX(self->priv->app_box),
                 placeholder);
 
+        /* We don't want to be resizable */
+        gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
         /* Load the menus */
         populate_menu(self, NULL);
 }
