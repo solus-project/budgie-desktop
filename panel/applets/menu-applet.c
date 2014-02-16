@@ -59,7 +59,7 @@ static void menu_applet_init(MenuApplet *self)
                 G_CALLBACK(toggled_cb), self);
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         gtk_widget_set_can_focus(menu, FALSE);
-        g_object_set(menu, "margin-left", 3, "margin-right", 15, NULL);
+        g_object_set(menu, "margin-left", 10, "margin-right", 15, NULL);
 
         /* Add content to menu button. */
         menu_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);

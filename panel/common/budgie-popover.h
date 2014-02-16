@@ -39,6 +39,8 @@ typedef struct _BudgiePopoverClass   BudgiePopoverClass;
 /* BudgiePopover object */
 struct _BudgiePopover {
         GtkWindow parent;
+        gint widg_x;
+        gint widg_y;
 };
 
 /* BudgiePopover class definition */

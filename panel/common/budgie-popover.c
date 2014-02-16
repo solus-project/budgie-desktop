@@ -84,6 +84,7 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
                                     cairo_t *cr,
                                     gboolean draw)
 {
+        BudgiePopover *self = BUDGIE_POPOVER(widget);
         GtkStyleContext *style;
         GtkAllocation alloc;
         GtkPositionType gap_side;
@@ -115,6 +116,7 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
 
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         gap1 = (alloc.width/2)-(gap_width/2);
+        gap1 = self->widg_x;
         gap2 = gap1 + gap_width;
         gap2 -= margin;
         gap_side = GTK_POS_BOTTOM;
@@ -173,6 +175,7 @@ void budgie_popover_present(BudgiePopover *self,
         GdkWindow *parent_window;
         GtkAllocation alloc, our_alloc;
         gint x, y, tx, ty;
+        gint margin = 0;
 
         /* Get position of parent widget on screen */
         real_parent = gtk_widget_get_toplevel(parent);
@@ -188,4 +191,10 @@ void budgie_popover_present(BudgiePopover *self,
 
         gtk_window_move(GTK_WINDOW(self), tx, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
+
+        /* Store x and y for later */
+        self->widg_x = alloc.x + (alloc.width/2);
+        g_object_get(parent, "margin", &margin, NULL);
+        self->widg_x -= margin;
+        self->widg_y = alloc.y;
 }
