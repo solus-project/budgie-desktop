@@ -35,7 +35,7 @@
 
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
-#define PANEL_HEIGHT 25
+#define PANEL_HEIGHT 45
 
 /* Boilerplate GObject code */
 static void budgie_panel_class_init(BudgiePanelClass *klass);
@@ -75,8 +75,21 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         if (self->x11) {
                 window = gtk_widget_get_window(GTK_WIDGET(self));
                 /* Bottom strut */
-                xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
+                if (window)
+                        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
         }
+}
+
+
+static void resized_cb(GtkWidget *widget,
+                       GdkRectangle *rectangle,
+                       gpointer userdata)
+{
+        GtkAllocation alloc;
+
+        /* Make sure we're in the right place (screen bottom) */
+        gtk_widget_get_allocation(widget, &alloc);
+                realized_cb(widget, userdata);
 }
 
 static void budgie_panel_init(BudgiePanel *self)
@@ -155,6 +168,10 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
+
+        /* Ensure we move to the right location when anything internally
+         * changes size */
+        g_signal_connect(self, "size-allocate", G_CALLBACK(resized_cb), self);
 
         /* Set ourselves up to be the correct size and position */
         screen = gdk_display_get_default_screen(display);
