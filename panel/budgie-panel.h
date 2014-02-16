@@ -46,14 +46,16 @@ BudgiePanel GtkButton:active {\
     text-shadow: 0px 1px black;\
     transition: all 200ms ease-in;\
     background-image: none;\
+    background-color: alpha(white, 0.0);\
     border: 1px solid alpha(white, 0.0);\
-    background-color: alpha(black, 0.72);\
 }\
 BudgiePanel GtkButton {\
     color: alpha(white, 0.7);\
     text-shadow: 0px 1px alpha(black, 0.8);\
     transition: all 200ms ease-out; \
     border: 1px solid alpha(white, 0.0);\
+    background-image: none;\
+    background-color: alpha(white, 0.0);\
 }\
 BudgiePopover {\
     border-radius: 6px;\
