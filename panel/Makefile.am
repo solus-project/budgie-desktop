@@ -3,6 +3,8 @@
 bin_PROGRAMS = budgie-panel
 
 budgie_panel_SOURCES = \
+	common/budgie-popover.h \
+	common/budgie-popover.c \
 	panel-applet.h \
 	panel-applet.c \
 	icon-tasklist.h \
