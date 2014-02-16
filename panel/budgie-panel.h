@@ -53,6 +53,7 @@ BudgiePanel GtkButton {\
     color: alpha(white, 0.7);\
     text-shadow: 0px 1px alpha(black, 0.8);\
     transition: all 200ms ease-out; \
+    border: 1px solid alpha(white, 0.0);\
 }\
 BudgiePopover {\
     border-radius: 6px;\
