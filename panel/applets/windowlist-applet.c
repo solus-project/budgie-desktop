@@ -24,6 +24,7 @@
 #include <libwnck/libwnck.h>
 
 #include "windowlist-applet.h"
+#include "icon-tasklist.h"
 
 G_DEFINE_TYPE(WindowlistApplet, windowlist_applet, PANEL_APPLET_TYPE)
 
@@ -45,9 +46,10 @@ static void windowlist_applet_init(WindowlistApplet *self)
 {
         GtkWidget *tasklist;
 
-        tasklist = wnck_tasklist_new();
+        /*tasklist = wnck_tasklist_new();
         wnck_tasklist_set_button_relief(WNCK_TASKLIST(tasklist),
-                GTK_RELIEF_NONE);
+                GTK_RELIEF_NONE);*/
+        tasklist = icon_tasklist_new();
         gtk_container_add(GTK_CONTAINER(self), tasklist);
 }
 
