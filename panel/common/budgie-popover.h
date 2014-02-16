@@ -56,4 +56,12 @@ GType budgie_popover_get_type(void);
  */
 GtkWidget *budgie_popover_new(void);
 
+/**
+ * Present a BudgiePopover on screen
+ * @param self BudgiePopover instance
+ * @param parent Parent to show the popover relative to
+ */
+void budgie_popover_present(BudgiePopover *self,
+                            GtkWidget *parent);
+
 #endif /* budgie_popover_h */

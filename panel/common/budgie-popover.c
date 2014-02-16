@@ -61,6 +61,8 @@ static void budgie_popover_init(BudgiePopover *self)
         /* Skip, no decorations, etc */
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+
+        gtk_widget_realize(GTK_WIDGET(self));
 }
 
 static void budgie_popover_dispose(GObject *object)
@@ -162,4 +164,28 @@ static void budgie_tail_path(cairo_t *cr,
         cairo_move_to(cr, start_x, start_y);
         cairo_line_to(cr, tip_x, tip_y);
         cairo_line_to(cr, end_x, end_y);
+}
+
+void budgie_popover_present(BudgiePopover *self,
+                            GtkWidget *parent)
+{
+        GtkWidget *real_parent;
+        GdkWindow *parent_window;
+        GtkAllocation alloc, our_alloc;
+        gint x, y, tx, ty;
+
+        /* Get position of parent widget on screen */
+        real_parent = gtk_widget_get_toplevel(parent);
+        parent_window = gtk_widget_get_window(real_parent);
+        gdk_window_get_position(parent_window, &x, &y);
+        gtk_widget_translate_coordinates(parent, real_parent, x, y, &tx, &ty);
+
+        /* And subtract parent widget height */
+        gtk_widget_get_allocation(parent, &alloc);
+        gtk_widget_get_allocation(GTK_WIDGET(self), &our_alloc);
+        ty -= alloc.height;
+        ty -= our_alloc.height;
+
+        gtk_window_move(GTK_WINDOW(self), tx, ty);
+        gtk_widget_show_all(GTK_WIDGET(self));
 }
