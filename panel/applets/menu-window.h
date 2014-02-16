@@ -25,6 +25,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include "../common/budgie-popover.h"
 
 typedef struct _MenuWindow MenuWindow;
 typedef struct _MenuWindowClass   MenuWindowClass;
@@ -39,13 +40,13 @@ typedef struct _MenuWindowPriv MenuWindowPrivate;
 
 /* MenuWindow object */
 struct _MenuWindow {
-        GtkWindow parent;
+        BudgiePopover parent;
         MenuWindowPrivate *priv;
 };
 
 /* MenuWindow class definition */
 struct _MenuWindowClass {
-        GtkWindowClass parent_class;
+        BudgiePopoverClass parent_class;
 };
 
 GType menu_window_get_type(void);

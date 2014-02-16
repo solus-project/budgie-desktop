@@ -57,6 +57,10 @@ static void budgie_popover_init(BudgiePopover *self)
 
         empty = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
         gtk_window_set_titlebar(GTK_WINDOW(self), empty);
+
+        /* Skip, no decorations, etc */
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
+        gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
 }
 
 static void budgie_popover_dispose(GObject *object)

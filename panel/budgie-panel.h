@@ -54,9 +54,7 @@ BudgiePanel GtkButton {\
     text-shadow: 0px 1px alpha(black, 0.8);\
     transition: all 200ms ease-out; \
 }\
-MenuWindow {\
-    background-image: none;\
-    background-color: alpha(black, 0.90);\
+BudgiePopover {\
     border-radius: 6px;\
 }\
 GtkListBox {\

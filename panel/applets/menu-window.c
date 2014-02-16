@@ -40,7 +40,7 @@ struct _MenuWindowPriv {
         const gchar *search_term;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(MenuWindow, menu_window, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE(MenuWindow, menu_window, BUDGIE_POPOVER_TYPE)
 
 /* Boilerplate GObject code */
 static void menu_window_class_init(MenuWindowClass *klass);
@@ -77,8 +77,6 @@ static void menu_window_init(MenuWindow *self)
         GtkWidget *layout, *box, *all_button;
         GtkWidget *left_side;
         GtkWidget *frame, *search_entry, *search_label;
-        GdkScreen *screen;
-        GdkVisual *visual;
         GtkWidget *placeholder;
 
         self->priv = menu_window_get_instance_private(self);
@@ -86,16 +84,6 @@ static void menu_window_init(MenuWindow *self)
         /* Sensible default size */
         gtk_window_set_default_size(GTK_WINDOW(self), 470, 510);
         gtk_container_set_border_width(GTK_CONTAINER(self), 3);
-
-        /* Skip, no decorations, etc */
-        gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
-        gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
-
-        /* Use an RGBA visual to allow rounded windows, etc. */
-        screen = gtk_widget_get_screen(GTK_WIDGET(self));
-        visual = gdk_screen_get_rgba_visual(screen);
-        gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
         /* Main layout */
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
