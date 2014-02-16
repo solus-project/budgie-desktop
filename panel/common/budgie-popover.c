@@ -189,7 +189,7 @@ void budgie_popover_present(BudgiePopover *self,
         ty -= alloc.height;
         ty -= our_alloc.height;
 
-        gtk_window_move(GTK_WINDOW(self), tx, ty);
+        gtk_window_move(GTK_WINDOW(self), tx-11, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
 
         /* Store x and y for later */
