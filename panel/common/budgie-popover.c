@@ -29,6 +29,14 @@ G_DEFINE_TYPE(BudgiePopover, budgie_popover, GTK_TYPE_WINDOW)
 static void budgie_popover_class_init(BudgiePopoverClass *klass);
 static void budgie_popover_init(BudgiePopover *self);
 static void budgie_popover_dispose(GObject *object);
+static gboolean budgie_popover_draw(GtkWidget *widget,
+                                    cairo_t *cr,
+                                    gboolean userdata);
+static void budgie_tail_path(cairo_t *cr,
+                             gdouble gap1,
+                             gdouble gap_width,
+                             gdouble height,
+                             gdouble tail_height);
 
 /* Initialisation */
 static void budgie_popover_class_init(BudgiePopoverClass *klass)
@@ -42,6 +50,13 @@ static void budgie_popover_class_init(BudgiePopoverClass *klass)
 
 static void budgie_popover_init(BudgiePopover *self)
 {
+        GtkWidget *empty = NULL;
+
+        /* We don't override as we need some GtkWindow rendering */
+        g_signal_connect(self, "draw", G_CALLBACK(budgie_popover_draw), self);
+
+        empty = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+        gtk_window_set_titlebar(GTK_WINDOW(self), empty);
 }
 
 static void budgie_popover_dispose(GObject *object)
@@ -57,4 +72,90 @@ GtkWidget *budgie_popover_new(void)
 
         self = g_object_new(BUDGIE_POPOVER_TYPE, NULL);
         return GTK_WIDGET(self);
+}
+
+static gboolean budgie_popover_draw(GtkWidget *widget,
+                                    cairo_t *cr,
+                                    gboolean draw)
+{
+        GtkStyleContext *style;
+        GtkAllocation alloc;
+        GtkPositionType gap_side;
+        GdkRGBA color;
+        gdouble x, y, tail_height, gap_width;
+        gdouble margin, width, height, gap1, gap2;
+
+        x = 0;
+        y = 0;
+        tail_height = 12;
+        gap_width = 24;
+        margin = 11;
+
+        x += margin;
+        y += margin;
+
+        style = gtk_widget_get_style_context(widget);
+        gtk_style_context_add_class(style, GTK_STYLE_CLASS_FRAME);
+
+        gtk_widget_get_allocation(widget, &alloc);
+        /* Have parent class do drawing, so we gain shadows */
+        ((GtkWidgetClass*)budgie_popover_parent_class)->draw(widget, cr);
+
+        /* Remove height of tail, and margin, from our rendered size */
+        width = alloc.width;
+        height = alloc.height - tail_height;
+        height -= margin;
+        width -= margin*2;
+
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+        gap1 = (alloc.width/2)-(gap_width/2);
+        gap2 = gap1 + gap_width;
+        gap2 -= margin;
+        gap_side = GTK_POS_BOTTOM;
+
+        /* Render a gap in the bottom center for our arrow */
+        gtk_render_frame_gap(style, cr, x, y, width, height,
+                gap_side, gap1, gap2);
+        /* Fill in the background (pre-clip) */
+        gtk_render_background(style, cr, x, y, width, height);
+
+        /* Clip to the tail, fill in the arrow background */
+        cairo_save(cr);
+        budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height);
+        cairo_clip(cr);
+        gtk_render_background(style, cr, x, y, alloc.width, alloc.height);
+        cairo_restore(cr);
+
+        /* Draw in the border */
+        gtk_style_context_get_border_color(style, gtk_widget_get_state_flags(widget), &color);
+        gdk_cairo_set_source_rgba(cr, &color);
+        cairo_set_line_width(cr, 1);
+        budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height);
+        cairo_stroke(cr);
+
+        /* Draw children */
+        gtk_container_propagate_draw(GTK_CONTAINER(widget),
+                gtk_bin_get_child(GTK_BIN(widget)),
+                cr);
+
+        return TRUE;
+}
+
+static void budgie_tail_path(cairo_t *cr,
+                             gdouble gap1,
+                             gdouble gap_width,
+                             gdouble height,
+                             gdouble tail_height)
+{
+        gdouble start_x = gap1;
+        gdouble end_x = gap1 + gap_width;
+        gdouble start_y = height-1;
+        gdouble end_y = start_y;
+        gdouble tip_x = start_x + (gap_width/2);
+        gdouble tip_y = start_y + tail_height;
+
+        /* Draw a triangle, basically */
+        cairo_move_to(cr, start_x, start_y);
+        cairo_line_to(cr, tip_x, tip_y);
+        cairo_line_to(cr, end_x, end_y);
 }
