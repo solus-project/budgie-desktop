@@ -235,6 +235,11 @@ static void active_changed(WnckScreen *screen,
 
         active = wnck_screen_get_active_window(screen);
 
+        /* don't update our state for these guys (i.e. menu) */
+        if (!active || wnck_window_is_skip_pager(active) ||
+                wnck_window_is_skip_tasklist(active))
+                return;
+
         /* If a buttons window matches the closing window, destroy the button */
         list = gtk_container_get_children(GTK_CONTAINER(self));
         for (elem = list; elem; elem = elem->next) {
