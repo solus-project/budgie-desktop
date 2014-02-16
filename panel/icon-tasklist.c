@@ -46,6 +46,9 @@ static void icon_tasklist_dispose(GObject *object);
 static gboolean button_draw(GtkWidget *widget,
                             cairo_t *cr,
                             gpointer userdata);
+static gboolean button_on_click_cb(GtkWidget *widget,
+                                    GdkEvent *event,
+                                    gpointer data);
 
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
@@ -122,6 +125,37 @@ static gboolean button_draw(GtkWidget *widget,
         return TRUE;
 }
 
+static gboolean button_on_click_cb(GtkWidget *widget,
+                                     GdkEvent *event,
+                                     gpointer data)
+{
+        WnckWindow *bwindow = NULL;
+        guint32 timestamp = gtk_get_current_event_time();
+
+        if(event->type == GDK_BUTTON_PRESS)
+        {
+                bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(widget),
+                                                         "bwindow");
+                /* Something happen! return here. */
+                if(bwindow == NULL)
+                        return TRUE;
+
+                if(wnck_window_is_minimized(bwindow))
+                {
+                        wnck_window_unminimize(bwindow, timestamp);
+                        wnck_window_activate(bwindow, timestamp);
+                }
+                else
+                {
+                        if(wnck_window_is_active(bwindow))
+                                wnck_window_minimize(bwindow);
+                        else
+                                wnck_window_activate(bwindow, timestamp);
+                }
+        }
+        return FALSE;
+}
+
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata)
@@ -161,6 +195,11 @@ static void window_opened(WnckScreen *screen,
 
         /* Override drawing of this button */
         g_signal_connect(button, "draw", G_CALLBACK(button_draw), self);
+
+        /* Clicking the button */
+        g_signal_connect(button, "button-press-event",
+                         G_CALLBACK(button_on_click_cb),
+                         self);
 
         gtk_box_pack_start(GTK_BOX(self), button, FALSE, FALSE, 0);
         gtk_widget_show_all(button);
