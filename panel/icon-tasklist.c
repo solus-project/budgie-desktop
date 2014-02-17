@@ -236,8 +236,8 @@ static void active_changed(WnckScreen *screen,
         active = wnck_screen_get_active_window(screen);
 
         /* don't update our state for these guys (i.e. menu) */
-        if (!active || wnck_window_is_skip_pager(active) ||
-                wnck_window_is_skip_tasklist(active))
+        if (active && (wnck_window_is_skip_pager(active) ||
+                wnck_window_is_skip_tasklist(active)))
                 return;
 
         /* If a buttons window matches the closing window, destroy the button */
@@ -248,10 +248,10 @@ static void active_changed(WnckScreen *screen,
                 toggle = GTK_WIDGET(elem->data);
                 bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
                 /* Deselect previous window */
-                if (bwindow == prev_window)
+                if (!active)
                         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), FALSE);
-                /* Select new active window */
-                if (bwindow == active)
-                        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), TRUE);
+                else
+                        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle),
+                                bwindow == active);
         }
 }
