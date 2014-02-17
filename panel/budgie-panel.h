@@ -105,6 +105,7 @@ struct _BudgiePanel {
 
         gboolean x11;
         BudgiePanelPosition position;
+        GSettings *settings;
 };
 
 /* BudgiePanel class definition */

@@ -118,7 +118,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *menu;
         int width;
         GtkSettings *settings;
-        __attribute__ ((unused)) GSettings *gsettings;
+        GSettings *gsettings;
 
         init_styles(self);
 
@@ -126,6 +126,7 @@ static void budgie_panel_init(BudgiePanel *self)
         self->position = PANEL_BOTTOM;
 
         gsettings = g_settings_new(BUDGIE_SCHEMA);
+        self->settings = gsettings;
         settings_cb(gsettings, BUDGIE_PANEL_LOCATION, self);
         g_signal_connect(gsettings, "changed", G_CALLBACK(settings_cb), self);
 
@@ -222,6 +223,13 @@ static void budgie_panel_init(BudgiePanel *self)
 
 static void budgie_panel_dispose(GObject *object)
 {
+        BudgiePanel *self = BUDGIE_PANEL(object);
+
+        if (self->settings) {
+                g_object_unref(self->settings);
+                self->settings = NULL;
+        }
+
         /* Destruct */
         G_OBJECT_CLASS (budgie_panel_parent_class)->dispose (object);
 }
