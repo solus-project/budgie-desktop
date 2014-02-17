@@ -26,6 +26,11 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#define BUDGIE_SCHEMA "com.evolve-os.budgie.panel"
+#define BUDGIE_PANEL_LOCATION "location"
+#define PANEL_TOP_KEY "top"
+#define PANEL_BOTTOM_KEY "bottom"
+
 #define PANEL_CSS "\
 BudgiePanel {\
     border-width: 1px;\

@@ -41,6 +41,9 @@ G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 static void budgie_panel_class_init(BudgiePanelClass *klass);
 static void budgie_panel_init(BudgiePanel *self);
 static void budgie_panel_dispose(GObject *object);
+static void settings_cb(GSettings *settings,
+                        gchar *key,
+                        gpointer userdata);
 
 /* Private methods */
 static void init_styles(BudgiePanel *self);
@@ -115,11 +118,16 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *menu;
         int width;
         GtkSettings *settings;
+        __attribute__ ((unused)) GSettings *gsettings;
 
         init_styles(self);
 
-        /* This will become configurable in the future */
+        /* Controlled by GSettings */
         self->position = PANEL_BOTTOM;
+
+        gsettings = g_settings_new(BUDGIE_SCHEMA);
+        settings_cb(gsettings, BUDGIE_PANEL_LOCATION, self);
+        g_signal_connect(gsettings, "changed", G_CALLBACK(settings_cb), self);
 
         /* Sort ourselves out visually */
         settings = gtk_widget_get_settings(GTK_WIDGET(self));
@@ -240,4 +248,23 @@ static void init_styles(BudgiePanel *self)
         gtk_style_context_add_provider_for_screen(screen,
                 GTK_STYLE_PROVIDER(css_provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
+static void settings_cb(GSettings *settings,
+                        gchar *key,
+                        gpointer userdata)
+{
+        BudgiePanel *self = BUDGIE_PANEL(userdata);
+        gchar *value = NULL;
+
+        /* Panel location */
+        if (g_str_equal(key, BUDGIE_PANEL_LOCATION)) {
+                value = g_settings_get_string(settings, key);
+                /* top or bottom location */
+                if (g_str_equal(value, PANEL_TOP_KEY))
+                        self->position = PANEL_TOP;
+                else
+                        self->position = PANEL_BOTTOM;
+                realized_cb(userdata, userdata);
+        }
 }
