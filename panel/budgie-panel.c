@@ -68,15 +68,25 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
 
         gtk_widget_get_allocation(widget, &alloc);
         x = 0;
-        y = height - alloc.height;
+
+        /* Place at bottom or top */
+        if (self->position == PANEL_BOTTOM)
+                y = height - alloc.height;
+        else
+                y = 0;
+
         gtk_window_move(GTK_WINDOW(self), x, y);
 
         /* Reserve struts on X11 display */
         if (self->x11) {
                 window = gtk_widget_get_window(GTK_WIDGET(self));
-                /* Bottom strut */
-                if (window)
-                        xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
+                /* Bottom or top strut */
+                if (window) {
+                        if (self->position == PANEL_BOTTOM)
+                                xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
+                        else
+                                xstuff_set_wmspec_strut(window, 0, 0, alloc.height, 0);
+                }
         }
 }
 
@@ -107,6 +117,10 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkSettings *settings;
 
         init_styles(self);
+
+        /* This will become configurable in the future */
+        self->position = PANEL_BOTTOM;
+
         /* Sort ourselves out visually */
         settings = gtk_widget_get_settings(GTK_WIDGET(self));
         g_object_set(settings,

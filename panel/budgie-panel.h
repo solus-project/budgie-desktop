@@ -84,6 +84,11 @@ typedef struct _BudgiePanelClass   BudgiePanelClass;
 #define IS_BUDGIE_PANEL_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), BUDGIE_PANEL_TYPE))
 #define BUDGIE_PANEL_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), BUDGIE_PANEL_TYPE, BudgiePanelClass))
 
+typedef enum {
+        PANEL_TOP,
+        PANEL_BOTTOM
+} BudgiePanelPosition;
+
 /* BudgiePanel object */
 struct _BudgiePanel {
         GtkWindow parent;
@@ -94,6 +99,7 @@ struct _BudgiePanel {
         GtkWidget *menu;
 
         gboolean x11;
+        BudgiePanelPosition position;
 };
 
 /* BudgiePanel class definition */

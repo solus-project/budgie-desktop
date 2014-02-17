@@ -41,6 +41,7 @@ struct _BudgiePopover {
         GtkWindow parent;
         gint widg_x;
         gint widg_y;
+        gboolean top;
 };
 
 /* BudgiePopover class definition */

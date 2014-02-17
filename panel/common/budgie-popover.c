@@ -36,7 +36,8 @@ static void budgie_tail_path(cairo_t *cr,
                              gdouble gap1,
                              gdouble gap_width,
                              gdouble height,
-                             gdouble tail_height);
+                             gdouble tail_height,
+                             gboolean top);
 
 /* Initialisation */
 static void budgie_popover_class_init(BudgiePopoverClass *klass)
@@ -52,6 +53,7 @@ static void budgie_popover_init(BudgiePopover *self)
 {
         GtkWidget *empty = NULL;
 
+        self->top = FALSE;
         /* We don't override as we need some GtkWindow rendering */
         g_signal_connect(self, "draw", G_CALLBACK(budgie_popover_draw), self);
 
@@ -119,7 +121,7 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
         gap1 = self->widg_x;
         gap2 = gap1 + gap_width;
         gap2 -= margin;
-        gap_side = GTK_POS_BOTTOM;
+        gap_side = self->top == TRUE ? GTK_POS_TOP : GTK_POS_BOTTOM;
 
         /* Render a gap in the bottom center for our arrow */
         gtk_render_frame_gap(style, cr, x, y, width, height,
@@ -129,16 +131,25 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
 
         /* Clip to the tail, fill in the arrow background */
         cairo_save(cr);
-        budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height);
+        if (self->top)
+                budgie_tail_path(cr, gap1, gap_width, y-margin, tail_height, self->top);
+        else
+                budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height, self->top);
         cairo_clip(cr);
-        gtk_render_background(style, cr, x, y, alloc.width, alloc.height);
+        if (self->top)
+                gtk_render_background(style, cr, x, y-tail_height, alloc.width, alloc.height);
+        else
+                gtk_render_background(style, cr, x, y, alloc.width, alloc.height);
         cairo_restore(cr);
 
         /* Draw in the border */
         gtk_style_context_get_border_color(style, gtk_widget_get_state_flags(widget), &color);
         gdk_cairo_set_source_rgba(cr, &color);
         cairo_set_line_width(cr, 1);
-        budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height);
+        if (self->top)
+                budgie_tail_path(cr, gap1, gap_width, y-margin, tail_height, self->top);
+        else
+                budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height, self->top);
         cairo_stroke(cr);
 
         /* Draw children */
@@ -153,14 +164,24 @@ static void budgie_tail_path(cairo_t *cr,
                              gdouble gap1,
                              gdouble gap_width,
                              gdouble height,
-                             gdouble tail_height)
+                             gdouble tail_height,
+                             gboolean top)
 {
-        gdouble start_x = gap1;
-        gdouble end_x = gap1 + gap_width;
-        gdouble start_y = height-1;
-        gdouble end_y = start_y;
-        gdouble tip_x = start_x + (gap_width/2);
-        gdouble tip_y = start_y + tail_height;
+        gdouble start_x, end_x, tip_x;
+        gdouble start_y, end_y, tip_y;
+
+        start_x = gap1;
+        end_x = gap1 + gap_width;
+        tip_x = start_x + (gap_width/2);
+
+        if (top) {
+                start_y = height+tail_height;
+                tip_y = start_y - tail_height;
+        } else {
+                start_y = height - 1;
+                tip_y = start_y + tail_height;
+        }
+        end_y = start_y;
 
         /* Draw a triangle, basically */
         cairo_move_to(cr, start_x, start_y);
@@ -176,6 +197,7 @@ void budgie_popover_present(BudgiePopover *self,
         GtkAllocation alloc, our_alloc;
         gint x, y, tx, ty;
         gint margin = 0;
+        GdkScreen *screen;
 
         /* Get position of parent widget on screen */
         real_parent = gtk_widget_get_toplevel(parent);
@@ -188,6 +210,12 @@ void budgie_popover_present(BudgiePopover *self,
         gtk_widget_get_allocation(GTK_WIDGET(self), &our_alloc);
         ty -= alloc.height;
         ty -= our_alloc.height;
+
+        screen = gtk_widget_get_screen(GTK_WIDGET(self));
+        if (y < (gdk_screen_get_height(screen) / 2))
+                self->top = TRUE;
+        else
+                self->top = FALSE;
 
         gtk_window_move(GTK_WINDOW(self), tx-11, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
