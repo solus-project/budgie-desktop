@@ -33,6 +33,7 @@ it is launched.
  * Allow pinning menu launchers to panel (see above point)
  * Add some kind of polkit agent
  * Support Wayland (lack of wnck-style wayland interation = major issue)
+ * Fix popover grab (clicking desktop doesn't make popover hide, etc.)
 
 *Implementation note:*
 
