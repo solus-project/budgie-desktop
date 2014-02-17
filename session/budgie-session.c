@@ -28,6 +28,7 @@
 #include <sys/wait.h>
 
 #define BUDGIE_SESSION_ID "com.evolve_os.BudgieSession"
+#define ACTION_LOGOUT "logout"
 
 #define DESKTOP_WM "budgie-wm"
 #define DESKTOP_PANEL "budgie-panel"
@@ -35,6 +36,7 @@
 #define FILE_MANAGER "nautilus -n"
 
 static gboolean activated = FALSE;
+static gboolean should_exit = FALSE;
 
 static void activate(GApplication *application, gpointer userdata)
 {
@@ -107,6 +109,10 @@ static void activate(GApplication *application, gpointer userdata)
 
         /* Now we wait for previously async-launched WM to exit */
         while (TRUE) {
+                /* Logout requested */
+                if (should_exit)
+                        goto child_end;
+
                 wID = waitpid(pid, &c_ret, WNOHANG|WUNTRACED);
                 if (wID < 0) {
                         fprintf(stderr, "waitpid(%d) failure. Aborting\n",
@@ -129,14 +135,46 @@ end:
                 g_strfreev(p_argv);
 }
 
+static void logout_cb(GAction *action,
+                      GVariant *param,
+                      gpointer userdata)
+{
+        GApplication *application;
+
+        application = G_APPLICATION(userdata);
+        g_application_hold(application);
+        /* Mark process for exit */
+        should_exit = TRUE;
+        g_application_release(application);
+}
+
 int main(int argc, char **argv)
 {
         GApplication *app = NULL;
+        GSimpleAction *action = NULL;
         int status = 0;
 
         app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-        status = g_application_run(app, argc, argv);
+
+        /* Set up actions (currently just logout ) */
+        action = g_simple_action_new(ACTION_LOGOUT, NULL);
+        g_signal_connect(action, "activate", G_CALLBACK(logout_cb), app);
+        g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
+        g_object_unref(action);
+
+        if (argc > 1) {
+                if (g_str_equal(argv[1], "--logout")) {
+                        g_application_register(app, NULL, NULL);
+                        g_action_group_activate_action(G_ACTION_GROUP(app),
+                                ACTION_LOGOUT, NULL);
+                } else {
+                        printf("Unknown command: %s\n", argv[1]);
+                        return EXIT_FAILURE;
+                }
+        } else {
+                status = g_application_run(app, argc, argv);
+        }
 
         g_object_unref(app);
 
