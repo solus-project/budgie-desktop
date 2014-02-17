@@ -61,6 +61,14 @@ static void active_changed(WnckScreen *screen,
                            WnckWindow *prev_window,
                            gpointer userdata);
 
+static void update_window_icon(GtkImage *image,
+                               WnckWindow *window);
+
+static void window_update_icon(WnckWindow *window,
+                               gpointer userdata);
+static void window_update_title(WnckWindow *window,
+                                gpointer userdata);
+
 /* Initialisation */
 static void icon_tasklist_class_init(IconTasklistClass *klass)
 {
@@ -160,10 +168,7 @@ static void window_opened(WnckScreen *screen,
 {
         GtkWidget *button = NULL;
         GtkWidget *image = NULL;
-        GdkPixbuf *pixbuf = NULL;
-        __attribute__ ((unused)) GdkPixbuf *scaled = NULL;
         const gchar *title;
-        const gchar *icon;
         IconTasklist *self = ICON_TASKLIST(userdata);
 
         /* Don't add buttons for tasklist skipping apps */
@@ -171,15 +176,8 @@ static void window_opened(WnckScreen *screen,
                 return;
 
         title = wnck_window_get_name(window);
-        icon = wnck_window_get_icon_name(window);
-
-        /* Add the image as a primary component */
-        if (wnck_window_has_icon_name(window) && !g_str_equal(title, icon)) {
-                image = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
-        } else {
-                pixbuf = wnck_window_get_icon(window);
-                image = gtk_image_new_from_pixbuf(pixbuf);
-        }
+        image = gtk_image_new();
+        update_window_icon(GTK_IMAGE(image), window);
 
         /* Force sizes */
         gtk_image_set_pixel_size(GTK_IMAGE(image), -1);
@@ -198,6 +196,11 @@ static void window_opened(WnckScreen *screen,
 
         /* Store a reference to this window for destroy ops, etc. */
         g_object_set_data(G_OBJECT(button), "bwindow", window);
+
+        /* When the window changes, update the button
+         * Icon change is separate so we dont keep reloading images and wasting resources */
+        g_signal_connect(window, "name-changed", G_CALLBACK(window_update_title), button);
+        g_signal_connect(window, "icon-changed", G_CALLBACK(window_update_icon), button);
 
         /* Override drawing of this button */
         g_signal_connect(button, "draw", G_CALLBACK(button_draw), self);
@@ -262,4 +265,36 @@ static void active_changed(WnckScreen *screen,
                         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle),
                                 bwindow == active);
         }
+}
+
+static void update_window_icon(GtkImage *image,
+                               WnckWindow *window)
+{
+        GdkPixbuf *pixbuf;
+        const gchar *icon, *title;
+
+        icon = wnck_window_get_icon_name(window);
+        title = wnck_window_get_name(window);
+
+        if (wnck_window_has_icon_name(window) && !g_str_equal(title, icon)) {
+                gtk_image_set_from_icon_name(image, icon, GTK_ICON_SIZE_BUTTON);
+        } else {
+                pixbuf = wnck_window_get_icon(window);
+                gtk_image_set_from_pixbuf(image, pixbuf);
+        }
+}
+
+static void window_update_title(WnckWindow *window,
+                                gpointer userdata)
+{
+        gtk_widget_set_tooltip_text(GTK_WIDGET(userdata), wnck_window_get_name(window));
+}
+
+static void window_update_icon(WnckWindow *window,
+                               gpointer userdata)
+{
+        GtkImage *image;
+
+        image = GTK_IMAGE(gtk_bin_get_child(GTK_BIN(userdata)));
+        update_window_icon(image, window);
 }
