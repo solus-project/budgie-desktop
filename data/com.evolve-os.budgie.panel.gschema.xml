@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema path="/com/evolve-os/budgie/panel/" id="com.evolve-os.budgie.panel">
+    <key type="s" name="location">
+      <choices>
+        <choice value='top'/>
+        <choice value='bottom'/>
+      </choices>
+      <default>'bottom'</default>
+      <summary>Panel location</summary>
+      <description>Which screen edge to place the panel on</description>
+    </key>
+  </schema>
+</schemalist>
