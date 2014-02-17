@@ -27,20 +27,26 @@
 #include <gio/gdesktopappinfo.h>
 #include <sys/wait.h>
 
+#define BUDGIE_SESSION_ID "com.evolve_os.BudgieSession"
+
 #define DESKTOP_WM "budgie-wm"
 #define DESKTOP_PANEL "budgie-panel"
 #define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
 #define FILE_MANAGER "nautilus -n"
 
-int main(int argc, char **argv)
+static gboolean activated = FALSE;
+
+static void activate(GApplication *application, gpointer userdata)
 {
+        if (activated)
+                return;
+
         GError *error = NULL;
         gint exit = 0;
         GPid pid;
         __attribute__ ((unused)) int c_ret;
         gchar **p_argv = NULL;
         int wID;
-        int ret = EXIT_FAILURE;
         const gchar *home_dir;
         GDesktopAppInfo *gsd_app = NULL;
         const gchar *gsd_exec;
@@ -62,7 +68,7 @@ int main(int argc, char **argv)
         if (!g_shell_parse_argv(DESKTOP_WM, NULL, &p_argv, &error)) {
                 fprintf(stderr, "g_shell_parse_argv() failed\n");
                 g_error_free(error);
-                return EXIT_FAILURE;
+                return;
         }
 
         /* Launch WM immediately async, so we can start other display
@@ -96,6 +102,9 @@ int main(int argc, char **argv)
                 goto end;
         }
 
+        activated = TRUE;
+        g_application_hold(application);
+
         /* Now we wait for previously async-launched WM to exit */
         while (TRUE) {
                 wID = waitpid(pid, &c_ret, WNOHANG|WUNTRACED);
@@ -104,13 +113,13 @@ int main(int argc, char **argv)
                                 wID);
                         goto child_end;
                 } else if (wID == 0)
-                        sleep(1);
+                        g_main_context_iteration(NULL, TRUE);
                 else if (wID == pid)
                         break;
         }
-        ret = EXIT_SUCCESS;
 child_end:
         g_spawn_close_pid(pid);
+        g_application_release(application);
 end:
         if (gsd_app)
                 g_object_unref(gsd_app);
@@ -118,6 +127,18 @@ end:
                 g_error_free(error);
         if (p_argv)
                 g_strfreev(p_argv);
-        
-        return ret;
+}
+
+int main(int argc, char **argv)
+{
+        GApplication *app = NULL;
+        int status = 0;
+
+        app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
+        g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+        status = g_application_run(app, argc, argv);
+
+        g_object_unref(app);
+
+        return status;
 }
