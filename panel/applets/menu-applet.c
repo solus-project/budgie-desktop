@@ -23,6 +23,7 @@
 
 #include "menu-applet.h"
 #include "menu-window.h"
+#include "../budgie-panel.h"
 
 G_DEFINE_TYPE(MenuApplet, menu_applet, PANEL_APPLET_TYPE)
 
@@ -50,6 +51,7 @@ static void menu_applet_init(MenuApplet *self)
 {
         GtkWidget *menu, *menu_box, *menu_image;
         GtkWidget *menu_window;
+        GtkStyleContext *style;
 
         menu = gtk_toggle_button_new();
         gtk_widget_set_tooltip_text(menu, "Menu");
@@ -60,6 +62,10 @@ static void menu_applet_init(MenuApplet *self)
         gtk_button_set_relief(GTK_BUTTON(menu), GTK_RELIEF_NONE);
         gtk_widget_set_can_focus(menu, FALSE);
         g_object_set(menu, "margin-left", 10, "margin-right", 15, NULL);
+
+        style = gtk_widget_get_style_context(menu);
+        gtk_style_context_remove_class(style, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(style, BUDGIE_STYLE_MENU_ICON);
 
         /* Add content to menu button. */
         menu_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);

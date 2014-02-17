@@ -23,6 +23,7 @@
 #include <libwnck/libwnck.h>
 
 #include "icon-tasklist.h"
+#include "budgie-panel.h"
 
 /* IconTasklist object */
 struct _IconTasklist {
@@ -106,22 +107,21 @@ static gboolean button_draw(GtkWidget *widget,
                             gpointer userdata)
 {
         GtkAllocation alloc;
+        GtkStyleContext *style;
+
+        style = gtk_widget_get_style_context(widget);
+        gtk_style_context_remove_class(style, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(style, BUDGIE_STYLE_PANEL_ICON);
         gtk_widget_get_allocation(widget, &alloc);
+
+        gtk_render_background(style, cr, 0, 0, alloc.width, alloc.height);
+        gtk_render_frame(style, cr, 0, 0, alloc.width, alloc.height);
 
         /* Draw children of the button (i.e image) */
         gtk_container_propagate_draw(GTK_CONTAINER(widget),
                 gtk_bin_get_child(GTK_BIN(widget)),
                 cr);
 
-        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-                return TRUE;
-
-        /* Active window, render a partially transparent white line */
-        cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.8);
-        cairo_rectangle(cr, 0, alloc.height-2, alloc.width, 2);
-        cairo_fill(cr);
-
-        /* Render button differently */
         return TRUE;
 }
 

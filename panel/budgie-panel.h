@@ -31,14 +31,32 @@
 #define PANEL_TOP_KEY "top"
 #define PANEL_BOTTOM_KEY "bottom"
 
+#define BUDGIE_STYLE_PANEL "budgie-panel"
+#define BUDGIE_STYLE_PANEL_TOP "top"
+#define BUDGIE_STYLE_PANEL_ICON "launcher"
+#define BUDGIE_STYLE_MENU_ICON "menu-icon"
+#define BUDGIE_STYLE_MESSAGE_AREA "message-area"
+
 #define PANEL_CSS "\
-BudgiePanel {\
-    border-width: 1px;\
+.budgie-panel {\
     background-color: alpha(white, 0.0);\
 }\
-#WidgetBox {\
+.budgie-panel .message-area {\
     background-color: alpha(black, 0.8);\
     border-radius: 6px;\
+}\
+.budgie-panel .launcher {\
+    border: 2px solid alpha(white, 0.0);\
+    background-image: none;\
+    transition: 100ms ease-in;\
+}\
+.budgie-panel .launcher:active {\
+    border: 2px solid alpha(white, 0.0);\
+    border-bottom: 2px solid white;\
+}\
+.top .launcher:active {\
+    border: 2px solid alpha(white, 0.0);\
+    border-top: 2px solid white; \
 }\
 .panel-applet {\
     background-image: none;\
@@ -46,25 +64,16 @@ BudgiePanel {\
     border-radius: 6px;\
     border: solid alpha(white, 0.1) 1px;\
 }\
-BudgiePanel GtkButton:active {\
-    color: white;\
-    text-shadow: 0px 1px black;\
-    transition: all 200ms ease-in;\
+.budgie-panel .menu-icon,\
+.budgie-panel .menu-icon:active,\
+.budgie-panel .menu-icon:hover {\
     background-image: none;\
-    background-color: alpha(white, 0.0);\
-    border: 1px solid alpha(white, 0.0);\
-}\
-BudgiePanel GtkButton {\
-    color: alpha(white, 0.7);\
-    text-shadow: 0px 1px alpha(black, 0.8);\
-    transition: all 200ms ease-out; \
-    border: 1px solid alpha(white, 0.0);\
-    background-image: none;\
-    background-color: alpha(white, 0.0);\
 }\
 BudgiePopover {\
     border-radius: 6px;\
-}\
+}"
+
+#define PANEL_FORCE_CSS "\
 GtkListBox {\
     background-image: none;\
     background-color: alpha(black, 0.0);\
@@ -76,8 +85,7 @@ GtkListBoxRow {\
 }\
 .trough {\
     background-color: alpha(black, 0.0);\
-}\
-"
+}"
 
 typedef struct _BudgiePanel BudgiePanel;
 typedef struct _BudgiePanelClass   BudgiePanelClass;

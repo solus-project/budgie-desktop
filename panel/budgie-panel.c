@@ -44,7 +44,9 @@ static void budgie_panel_dispose(GObject *object);
 static void settings_cb(GSettings *settings,
                         gchar *key,
                         gpointer userdata);
-
+static gboolean budgie_panel_draw(GtkWidget *widget,
+                                  cairo_t *cr,
+                                  gpointer userdata);
 /* Private methods */
 static void init_styles(BudgiePanel *self);
 
@@ -74,7 +76,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
 
         /* Place at bottom or top */
         if (self->position == PANEL_BOTTOM)
-                y = height - alloc.height;
+                y = (height - alloc.height)+1;
         else
                 y = 0;
 
@@ -109,7 +111,7 @@ static void budgie_panel_init(BudgiePanel *self)
 {
         GtkWidget *tasklist;
         GtkWidget *layout;
-        GtkWidget *widgets, *widgets_wrap;
+        GtkWidget *widgets;
         GdkScreen *screen;
         GdkDisplay *display;
         GdkVisual *visual;
@@ -119,6 +121,7 @@ static void budgie_panel_init(BudgiePanel *self)
         int width;
         GtkSettings *settings;
         GSettings *gsettings;
+        GtkStyleContext *style;
 
         init_styles(self);
 
@@ -137,6 +140,10 @@ static void budgie_panel_init(BudgiePanel *self)
                 "gtk-menu-images", TRUE,
                 "gtk-button-images", TRUE,
                 NULL);
+        style = gtk_widget_get_style_context(GTK_WIDGET(self));
+        gtk_style_context_add_class(style, BUDGIE_STYLE_PANEL);
+        gtk_style_context_remove_class(style, "background");
+        g_signal_connect(self, "draw", G_CALLBACK(budgie_panel_draw), self);
 
         /* Not resizable.. */
         gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
@@ -169,13 +176,14 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Group widgets under one area */
         widgets = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
         /* Now have it themed by eventbox */
-        widgets_wrap = gtk_event_box_new();
-        g_object_set(widgets_wrap, "margin-right", 2, NULL);
+        g_signal_connect(widgets, "draw", G_CALLBACK(budgie_panel_draw), self);
+
+        gtk_widget_set_valign(widgets, GTK_ALIGN_FILL);
         g_object_set(widgets, "margin", 5, NULL);
-        gtk_widget_set_valign(widgets_wrap, GTK_ALIGN_CENTER);
-        gtk_widget_set_name(widgets_wrap, "WidgetBox");
-        gtk_container_add(GTK_CONTAINER(widgets_wrap), widgets);
-        gtk_box_pack_end(GTK_BOX(layout), widgets_wrap, FALSE, FALSE, 0);
+        style = gtk_widget_get_style_context(widgets);
+        gtk_style_context_add_class(style, BUDGIE_STYLE_MESSAGE_AREA);
+
+        gtk_box_pack_end(GTK_BOX(layout), widgets, FALSE, FALSE, 0);
 
         /* Add a clock at the end */
         clock = clock_applet_new();
@@ -249,6 +257,18 @@ static void init_styles(BudgiePanel *self)
         GdkScreen *screen;
         const gchar *data = PANEL_CSS;
 
+        /* Fallback */
+        css_provider = gtk_css_provider_new();
+        gtk_css_provider_load_from_data(css_provider, data,
+                (gssize)strlen(data)+1, NULL);
+        screen = gdk_screen_get_default();
+        gtk_style_context_add_provider_for_screen(screen,
+                GTK_STYLE_PROVIDER(css_provider),
+                GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+        g_object_unref(css_provider);
+
+        /* Forced */
+        data = PANEL_FORCE_CSS;
         css_provider = gtk_css_provider_new();
         gtk_css_provider_load_from_data(css_provider, data,
                 (gssize)strlen(data)+1, NULL);
@@ -256,6 +276,8 @@ static void init_styles(BudgiePanel *self)
         gtk_style_context_add_provider_for_screen(screen,
                 GTK_STYLE_PROVIDER(css_provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        g_object_unref(css_provider);
 }
 
 static void settings_cb(GSettings *settings,
@@ -263,16 +285,41 @@ static void settings_cb(GSettings *settings,
                         gpointer userdata)
 {
         BudgiePanel *self = BUDGIE_PANEL(userdata);
+        GtkStyleContext *style;
         gchar *value = NULL;
 
         /* Panel location */
         if (g_str_equal(key, BUDGIE_PANEL_LOCATION)) {
                 value = g_settings_get_string(settings, key);
+                style = gtk_widget_get_style_context(GTK_WIDGET(userdata));
                 /* top or bottom location */
-                if (g_str_equal(value, PANEL_TOP_KEY))
+                if (g_str_equal(value, PANEL_TOP_KEY)) {
                         self->position = PANEL_TOP;
-                else
+                        gtk_style_context_add_class(style, BUDGIE_STYLE_PANEL_TOP);
+                } else {
                         self->position = PANEL_BOTTOM;
+                        gtk_style_context_remove_class(style, BUDGIE_STYLE_PANEL_TOP);
+                }
                 realized_cb(userdata, userdata);
         }
+}
+
+static gboolean budgie_panel_draw(GtkWidget *widget,
+                                  cairo_t *cr,
+                                  gpointer userdata)
+{
+        GtkStyleContext *style;
+        GtkAllocation alloc;
+
+        gtk_widget_get_allocation(widget, &alloc);
+
+        style = gtk_widget_get_style_context(widget);
+        gtk_render_background(style, cr, 0, 0, alloc.width, alloc.height);
+        gtk_render_frame(style, cr, 0, 0, alloc.width, alloc.height);
+        if (GTK_IS_BIN(widget)) {
+                gtk_container_propagate_draw(GTK_CONTAINER(widget), gtk_bin_get_child(GTK_BIN(widget)), cr);
+                return TRUE;
+        }
+
+        return FALSE;
 }
