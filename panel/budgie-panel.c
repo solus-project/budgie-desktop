@@ -143,6 +143,7 @@ static void budgie_panel_init(BudgiePanel *self)
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
         gtk_style_context_add_class(style, BUDGIE_STYLE_PANEL);
         gtk_style_context_remove_class(style, "background");
+        gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
         g_signal_connect(self, "draw", G_CALLBACK(budgie_panel_draw), self);
 
         /* Not resizable.. */
@@ -195,6 +196,7 @@ static void budgie_panel_init(BudgiePanel *self)
         power = power_applet_new();
         self->power = power;
         gtk_box_pack_end(GTK_BOX(widgets), power, FALSE, FALSE, 0);
+        g_object_set(power, "margin-right", 3, NULL);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
