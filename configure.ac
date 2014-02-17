@@ -8,6 +8,8 @@ AC_PREFIX_DEFAULT(/usr/local)
 AM_SILENT_RULES([yes])
 LT_INIT([disable-static])
 
+GLIB_GSETTINGS
+
 # Package requirements
 PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.38.0])
 PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.38.0])
