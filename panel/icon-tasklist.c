@@ -160,6 +160,8 @@ static void window_opened(WnckScreen *screen,
 {
         GtkWidget *button = NULL;
         GtkWidget *image = NULL;
+        GdkPixbuf *pixbuf = NULL;
+        __attribute__ ((unused)) GdkPixbuf *scaled = NULL;
         const gchar *title;
         const gchar *icon;
         IconTasklist *self = ICON_TASKLIST(userdata);
@@ -172,10 +174,16 @@ static void window_opened(WnckScreen *screen,
         icon = wnck_window_get_icon_name(window);
 
         /* Add the image as a primary component */
-        if (!wnck_window_has_icon_name(window))
+        if (wnck_window_has_icon_name(window) && !g_str_equal(title, icon)) {
                 image = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
-        else
-                image = gtk_image_new_from_pixbuf(wnck_window_get_icon(window));
+        } else {
+                pixbuf = wnck_window_get_icon(window);
+                image = gtk_image_new_from_pixbuf(pixbuf);
+        }
+
+        /* Force sizes */
+        gtk_image_set_pixel_size(GTK_IMAGE(image), -1);
+        g_object_set(image, "icon-size", GTK_ICON_SIZE_BUTTON, NULL);
 
         button = gtk_toggle_button_new();
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
