@@ -58,6 +58,7 @@ static void list_header(GtkListBoxRow *before,
                         GtkListBoxRow *after,
                         gpointer userdata);
 static void changed_cb(GtkWidget *widget, gpointer userdata);
+static void logout_cb(GtkWidget *widget, gpointer userdata);
 
 /* Consider splitting into a panel-util helper */
 static gboolean string_contains(const gchar *string, const gchar *term);
@@ -75,9 +76,10 @@ static void menu_window_init(MenuWindow *self)
 {
         GtkWidget *scroll, *list, *sep;
         GtkWidget *layout, *box, *all_button;
-        GtkWidget *left_side;
+        GtkWidget *left_side, *right_side;
         GtkWidget *frame, *search_entry, *search_label;
         GtkWidget *placeholder;
+        GtkWidget *logout;
 
         self->priv = menu_window_get_instance_private(self);
 
@@ -127,7 +129,10 @@ static void menu_window_init(MenuWindow *self)
         gtk_box_pack_end(GTK_BOX(left_side), frame, FALSE, FALSE, 0);
 
         /* Right hand side is similar, just applications */
+        right_side = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_box_pack_start(GTK_BOX(layout), right_side, TRUE, TRUE, 0);
         scroll = gtk_scrolled_window_new(NULL, NULL);
+        gtk_box_pack_start(GTK_BOX(right_side), scroll, TRUE, TRUE, 0);
         self->priv->scroll_win = scroll;
         g_object_set(scroll, "margin", 4, NULL);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
@@ -138,10 +143,17 @@ static void menu_window_init(MenuWindow *self)
         gtk_list_box_set_header_func(GTK_LIST_BOX(list), list_header,
                 self, NULL);
 
+        /* Logout button */
+        logout = gtk_button_new_from_icon_name("system-log-out", GTK_ICON_SIZE_BUTTON);
+        g_signal_connect(logout, "clicked", G_CALLBACK(logout_cb), self);
+        gtk_button_set_relief(GTK_BUTTON(logout), GTK_RELIEF_NONE);
+        gtk_widget_set_tooltip_text(logout, "End the session");
+        gtk_widget_set_halign(logout, GTK_ALIGN_END);
+        gtk_box_pack_start(GTK_BOX(right_side), logout, FALSE, FALSE, 0);
+
         self->priv->app_box = list;
         self->priv->search_term = "";
         gtk_container_add(GTK_CONTAINER(scroll), list);
-        gtk_box_pack_start(GTK_BOX(layout), scroll, TRUE, TRUE, 0);
 
         /* Set a placeholder when filtering yields no results */
         placeholder = gtk_label_new("<big>No results.</big>");
@@ -412,6 +424,17 @@ static void changed_cb(GtkWidget *widget, gpointer userdata)
         /* Set the search term */
         self->priv->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+}
+
+static void logout_cb(GtkWidget *widget, gpointer userdata)
+{
+        MenuWindow *self;
+
+        self = MENU_WINDOW(userdata);
+        g_signal_emit_by_name(self, "focus-out-event", NULL);
+
+        if (!g_spawn_command_line_async("budgie-session --logout", NULL))
+                g_message("Unable to logout!");
 }
 
 static gboolean string_contains(const gchar *string, const gchar *term)
