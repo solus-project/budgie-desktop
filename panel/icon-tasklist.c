@@ -141,7 +141,7 @@ static gboolean button_clicked(GtkWidget *widget,
         guint32 timestamp = gtk_get_current_event_time();
 
         /* Only interested in presses */
-        if(event->type != GDK_BUTTON_PRESS)
+        if(event->type != GDK_BUTTON_PRESS && event->type != GDK_TOUCH_END)
                 return FALSE;
 
         bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(widget),
@@ -207,6 +207,9 @@ static void window_opened(WnckScreen *screen,
 
         /* Clicking the button */
         g_signal_connect(button, "button-press-event",
+                         G_CALLBACK(button_clicked),
+                         self);
+        g_signal_connect(button, "touch-event",
                          G_CALLBACK(button_clicked),
                          self);
 
