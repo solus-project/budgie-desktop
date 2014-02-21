@@ -3,7 +3,13 @@ Budgie Desktop
 
 Simple desktop using libmutter and a panel
 
-** NOTE: THIS IS NOT A FORK **
+                     _              __           _    
+                    | |            / _|         | |   
+         _ __   ___ | |_    __ _  | |_ ___  _ __| | __
+        | '_ \ / _ \| __|  / _` | |  _/ _ \| '__| |/ /
+        | | | | (_) | |_  | (_| | | || (_) | |  |   < 
+        |_| |_|\___/ \__|  \__,_| |_| \___/|_|  |_|\_\
+
 
 *Note:*
 Budgie Desktop integrates with the GNOME stack, and as such requires
