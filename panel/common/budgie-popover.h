@@ -49,6 +49,7 @@ struct _BudgiePopover {
         gboolean top;
         GdkDevice *pointer;
         glong con_id;
+        glong focus_id;
         GtkWidget *parent_widget;
 };
 

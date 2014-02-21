@@ -39,6 +39,10 @@ static void budgie_tail_path(cairo_t *cr,
                              gdouble tail_height,
                              gboolean top);
 
+static gboolean focus_lose(GtkWidget *widget,
+                           GdkEvent *event,
+                           gpointer userdata);
+
 /* Initialisation */
 static void budgie_popover_class_init(BudgiePopoverClass *klass)
 {
@@ -71,6 +75,8 @@ static void budgie_popover_init(BudgiePopover *self)
         self->top = FALSE;
         /* We don't override as we need some GtkWindow rendering */
         g_signal_connect(self, "draw", G_CALLBACK(budgie_popover_draw), self);
+        g_signal_connect(self, "key-press-event", G_CALLBACK(focus_lose), self);
+        self->focus_id = g_signal_connect(self, "focus-out-event", G_CALLBACK(focus_lose), self);
 
         empty = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
         gtk_window_set_titlebar(GTK_WINDOW(self), empty);
@@ -108,9 +114,11 @@ void budgie_popover_hide(BudgiePopover *self)
                 g_signal_handler_disconnect(self->parent_widget, self->con_id);
                 self->parent_widget = NULL;
         }
+        g_signal_handler_block(self, self->focus_id);
+        g_signal_emit_by_name(self, "focus-out-event", NULL, &ret);
+        g_signal_handler_unblock(self, self->focus_id);
         if (gtk_widget_get_realized(GTK_WIDGET(self)))
                 gtk_widget_unrealize(GTK_WIDGET(self));
-        g_signal_emit_by_name(self, "focus-out-event", NULL, &ret);
         self->con_id = 0;
 }
 
@@ -329,4 +337,21 @@ void budgie_popover_present(BudgiePopover *self,
         /* TODO: Handle keyboard grab too */
         popup_grab_on_window(gtk_widget_get_window(GTK_WIDGET(real_parent)),
                 NULL, self->pointer, time);
+}
+
+static gboolean focus_lose(GtkWidget *widget,
+                           GdkEvent *event,
+                           gpointer userdata)
+{
+        BudgiePopover *self;
+
+        self = BUDGIE_POPOVER(userdata);
+
+        if (event->type != GDK_KEY_PRESS || event->key.keyval == GDK_KEY_Escape) {
+                g_signal_handler_block(self, self->focus_id);
+                budgie_popover_hide(self);
+                g_signal_handler_unblock(self, self->focus_id);
+                return TRUE;
+        }
+        return FALSE;
 }
