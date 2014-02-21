@@ -36,17 +36,20 @@ typedef struct _BudgiePopoverClass   BudgiePopoverClass;
 #define IS_BUDGIE_POPOVER_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), BUDGIE_POPOVER_TYPE))
 #define BUDGIE_POPOVER_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), BUDGIE_POPOVER_TYPE, BudgiePopoverClass))
 
+/* BudgiePopover class definition */
+struct _BudgiePopoverClass {
+        GtkWindowClass parent_class;
+};
+
 /* BudgiePopover object */
 struct _BudgiePopover {
         GtkWindow parent;
         gint widg_x;
         gint widg_y;
         gboolean top;
-};
-
-/* BudgiePopover class definition */
-struct _BudgiePopoverClass {
-        GtkWindowClass parent_class;
+        GdkDevice *pointer;
+        glong con_id;
+        GtkWidget *parent_widget;
 };
 
 GType budgie_popover_get_type(void);
@@ -60,11 +63,19 @@ GType budgie_popover_get_type(void);
 GtkWidget *budgie_popover_new(void);
 
 /**
+ * Hide the BudgiePopover if it is visible
+ * @param self BudgiePopover instance
+ */
+void budgie_popover_hide(BudgiePopover *self);
+
+/**
  * Present a BudgiePopover on screen
  * @param self BudgiePopover instance
  * @param parent Parent to show the popover relative to
+ * @param event Button event, to show at a given X/Y
  */
 void budgie_popover_present(BudgiePopover *self,
-                            GtkWidget *parent);
+                            GtkWidget *parent,
+                            GdkEventButton *event);
 
 #endif /* budgie_popover_h */

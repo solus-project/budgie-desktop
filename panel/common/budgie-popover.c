@@ -48,6 +48,21 @@ static void budgie_popover_class_init(BudgiePopoverClass *klass)
         g_object_class->dispose = &budgie_popover_dispose;
 }
 
+static gboolean button_press(GtkWidget *widget, GdkEventButton *event, gpointer userdata)
+{
+        GtkAllocation alloc;
+        gint x, y;
+
+        gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
+        gtk_widget_get_allocation(widget, &alloc);
+
+        if ( ((event->x < x || event->x+alloc.width>x)) ||
+              ((event->y < y || event->y+alloc.height>y))) {
+                      budgie_popover_hide(BUDGIE_POPOVER(userdata));
+        }
+
+        return FALSE;
+}
 
 static void budgie_popover_init(BudgiePopover *self)
 {
@@ -63,8 +78,6 @@ static void budgie_popover_init(BudgiePopover *self)
         /* Skip, no decorations, etc */
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
-
-        gtk_widget_realize(GTK_WIDGET(self));
 }
 
 static void budgie_popover_dispose(GObject *object)
@@ -80,6 +93,25 @@ GtkWidget *budgie_popover_new(void)
 
         self = g_object_new(BUDGIE_POPOVER_TYPE, NULL);
         return GTK_WIDGET(self);
+}
+
+void budgie_popover_hide(BudgiePopover *self)
+{
+        __attribute__ ((unused)) gboolean ret;
+        /* tear us down */
+        if (self->pointer) {
+                gdk_device_ungrab(self->pointer, GDK_CURRENT_TIME);
+                self->pointer = NULL;
+        }
+        gtk_widget_hide(GTK_WIDGET(self));
+        if (self->con_id > 0 && self->parent_widget) {
+                g_signal_handler_disconnect(self->parent_widget, self->con_id);
+                self->parent_widget = NULL;
+        }
+        if (gtk_widget_get_realized(GTK_WIDGET(self)))
+                gtk_widget_unrealize(GTK_WIDGET(self));
+        g_signal_emit_by_name(self, "focus-out-event", NULL, &ret);
+        self->con_id = 0;
 }
 
 static gboolean budgie_popover_draw(GtkWidget *widget,
@@ -189,15 +221,59 @@ static void budgie_tail_path(cairo_t *cr,
         cairo_line_to(cr, end_x, end_y);
 }
 
+/* Stolen from GtkMenu */
+static gboolean popup_grab_on_window(GdkWindow *window,
+                                     GdkDevice *keyboard,
+                                     GdkDevice *pointer,
+                                     guint32  activate_time)
+{
+        if (keyboard &&
+        gdk_device_grab(keyboard, window,
+                         GDK_OWNERSHIP_WINDOW, TRUE,
+                         GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                         NULL, activate_time) != GDK_GRAB_SUCCESS)
+        return FALSE;
+
+        if (pointer &&
+                gdk_device_grab(pointer, window,
+                                GDK_OWNERSHIP_WINDOW, TRUE,
+                                GDK_SMOOTH_SCROLL_MASK |
+                                GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                                GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+                                GDK_POINTER_MOTION_MASK,
+                                NULL, activate_time) != GDK_GRAB_SUCCESS) {
+                if (keyboard)
+                        gdk_device_ungrab (keyboard, activate_time);
+
+                return FALSE;
+        }
+
+  return TRUE;
+}
+
 void budgie_popover_present(BudgiePopover *self,
-                            GtkWidget *parent)
+                            GtkWidget *parent,
+                            GdkEventButton *event)
 {
         GtkWidget *real_parent;
         GdkWindow *parent_window;
-        GtkAllocation alloc, our_alloc;
-        gint x, y, tx, ty;
-        gint margin = 0;
+        gint x, y, tx, ty, rx, margin;
         GdkScreen *screen;
+        GtkAllocation alloc, our_alloc;
+        GdkDeviceManager *manager;
+        gint32 time;
+
+        if (event) {
+                x = event->x;
+                y = event->y;
+        }
+
+        if (gtk_widget_get_visible(GTK_WIDGET(self))) {
+                budgie_popover_hide(self);
+                return;
+        }
+        if (!gtk_widget_get_realized(GTK_WIDGET(self)))
+                gtk_widget_realize(GTK_WIDGET(self));
 
         /* Get position of parent widget on screen */
         real_parent = gtk_widget_get_toplevel(parent);
@@ -205,24 +281,52 @@ void budgie_popover_present(BudgiePopover *self,
         gdk_window_get_position(parent_window, &x, &y);
         gtk_widget_translate_coordinates(parent, real_parent, x, y, &tx, &ty);
 
-        /* And subtract parent widget height */
         gtk_widget_get_allocation(parent, &alloc);
         gtk_widget_get_allocation(GTK_WIDGET(self), &our_alloc);
-        ty -= alloc.height;
-        ty -= our_alloc.height;
-
         screen = gtk_widget_get_screen(GTK_WIDGET(self));
-        if (y < (gdk_screen_get_height(screen) / 2))
+
+        /* Ensure we're in a sensible position (under/over) */
+        if (ty + our_alloc.height + 11 < gdk_screen_get_height(screen)) {
                 self->top = TRUE;
-        else
+                ty = y+alloc.y+alloc.height;
+        } else {
+                ty = (y+alloc.y)-our_alloc.height;
                 self->top = FALSE;
+        }
+
+        /* Ensure widg_x is within bounds */
+        if (event) {
+                /* Point tip to mouse x,y */
+                rx = event->x;
+        } else {
+                /* Center the tip when there is no event */
+                rx = alloc.x + (alloc.width/2);
+        }
+        /* ensure margin is accounted for */
+        g_object_get(parent, "margin", &margin, NULL);
+        tx -= margin;
+        rx -= margin;
+        if (rx >= our_alloc.width)
+                rx = our_alloc.width - 18;
+        if (rx <= 18)
+                rx = 18;
+        self->widg_x = rx;
+
 
         gtk_window_move(GTK_WINDOW(self), tx-11, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
-
-        /* Store x and y for later */
-        self->widg_x = alloc.x + (alloc.width/2);
-        g_object_get(parent, "margin", &margin, NULL);
-        self->widg_x -= margin;
-        self->widg_y = alloc.y;
+        if (event) {
+                self->pointer = event->device;
+                time = event->time;
+        } else {
+                manager = gdk_display_get_device_manager(gdk_screen_get_display(screen));
+                self->pointer = gdk_device_manager_get_client_pointer(manager);
+                time = GDK_CURRENT_TIME;
+        }
+        self->parent_widget = real_parent;
+        self->con_id = g_signal_connect(real_parent, "button-press-event", G_CALLBACK(button_press), self);
+        self->con_id = 0;
+        /* TODO: Handle keyboard grab too */
+        popup_grab_on_window(gtk_widget_get_window(GTK_WIDGET(real_parent)),
+                NULL, self->pointer, time);
 }
