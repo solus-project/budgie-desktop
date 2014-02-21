@@ -34,8 +34,6 @@ static void menu_applet_dispose(GObject *object);
 
 static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
                              gpointer userdata);
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
-                               gpointer userdata);
 static void toggled_cb(GtkWidget *widget, gpointer userdata);
 
 /* Initialisation */
@@ -82,8 +80,6 @@ static void menu_applet_init(MenuApplet *self)
         menu_window = menu_window_new();
         g_signal_connect(menu_window, "focus-out-event",
                 G_CALLBACK(focus_out_cb), self);
-        g_signal_connect(menu_window, "key-release-event",
-                G_CALLBACK(key_release_cb), self);
         self->menu_window = menu_window;
 }
 
@@ -113,17 +109,9 @@ static gboolean focus_out_cb(GtkWidget *widget, GdkEvent *event,
                 FALSE);
         g_signal_handler_unblock(self->menu_button, self->toggle_id);
 
-        gtk_widget_hide(self->menu_window);
         return TRUE;
 }
 
-static gboolean key_release_cb(GtkWidget *widget, GdkEventKey *event,
-                               gpointer userdata)
-{
-        if (event->keyval != GDK_KEY_Escape)
-                return FALSE;
-        return focus_out_cb(widget, NULL, userdata);
-}
 
 static void toggled_cb(GtkWidget *widget, gpointer userdata)
 {
@@ -133,10 +121,10 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         self = MENU_APPLET(userdata);
         button = GTK_TOGGLE_BUTTON(widget);
         if (!gtk_toggle_button_get_active(button)) {
-                gtk_widget_hide(self->menu_window);
+                budgie_popover_hide(BUDGIE_POPOVER(self->menu_window));
                 return;
         }
 
         menu_window_present(MENU_WINDOW(self->menu_window));
-        budgie_popover_present(BUDGIE_POPOVER(self->menu_window), widget);
+        budgie_popover_present(BUDGIE_POPOVER(self->menu_window), widget, NULL);
 }

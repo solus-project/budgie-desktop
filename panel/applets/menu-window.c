@@ -406,12 +406,11 @@ static GtkWidget* new_image_button(const gchar *text,
 static void clicked_cb(GtkWidget *widget, gpointer userdata)
 {
         GDesktopAppInfo *info;
-        MenuWindow *self;
 
         info = g_object_get_data(G_OBJECT(widget), "info");
-        self = MENU_WINDOW(userdata);
+
         /* Ensure we're hidden again */
-        g_signal_emit_by_name(self, "focus-out-event", NULL);
+        budgie_popover_hide(BUDGIE_POPOVER(userdata));
         /* Go launch it */
         g_app_info_launch(G_APP_INFO(info), NULL, NULL, NULL);
 }
@@ -428,10 +427,7 @@ static void changed_cb(GtkWidget *widget, gpointer userdata)
 
 static void logout_cb(GtkWidget *widget, gpointer userdata)
 {
-        MenuWindow *self;
-
-        self = MENU_WINDOW(userdata);
-        g_signal_emit_by_name(self, "focus-out-event", NULL);
+        budgie_popover_hide(BUDGIE_POPOVER(userdata));
 
         if (!g_spawn_command_line_async("budgie-session --logout", NULL))
                 g_message("Unable to logout!");
