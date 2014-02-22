@@ -36,7 +36,12 @@ typedef struct _MetaDefaultPluginClass   MetaDefaultPluginClass;
 typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
 
 #define BACKGROUND_SCHEMA "org.gnome.desktop.background"
-#define PICTURE_KEY "picture-uri"
+#define PICTURE_URI_KEY       "picture-uri"
+#define BACKGROUND_STYLE_KEY "picture-options"
+#define PRIMARY_COLOR_KEY "primary-color"
+#define SECONDARY_COLOR_KEY "secondary-color"
+#define COLOR_SHADING_TYPE_KEY "color-shading-type"
+
 #define BUDGIE_WM_SCHEMA "com.evolve-os.budgie.wm"
 #define MUTTER_EDGE_TILING "edge-tiling"
 
