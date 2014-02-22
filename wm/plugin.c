@@ -32,6 +32,7 @@
 #include <meta/util.h>
 #include <meta/meta-background-group.h>
 #include <meta/meta-background-actor.h>
+#include <meta/prefs.h>
 
 #include <libintl.h>
 #define _(x) dgettext (GETTEXT_PACKAGE, x)
@@ -225,6 +226,9 @@ meta_default_plugin_init (MetaDefaultPlugin *self)
   priv->info.author      = "Intel Corp.";
   priv->info.license     = "GPL";
   priv->info.description = "This is an example of a plugin implementation.";
+
+  /* Override schemas for edge-tiling */
+  meta_prefs_override_preference_schema(MUTTER_EDGE_TILING, BUDGIE_WM_SCHEMA);
 }
 
 static void settings_cb (GSettings *settings,
