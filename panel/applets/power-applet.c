@@ -142,7 +142,7 @@ static void update_ui(PowerApplet *self)
                 image_name = "battery-full";
         /* Fully charged OR charging */
         if (state == 4)
-                image_name = "battery-full-charged";
+                image = g_strdup_printf("battery-full-charged-%s", "symbolic");
         else if (state == 1)
                 image = g_strdup_printf("%s-charging-symbolic", image_name);
         else
