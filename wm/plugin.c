@@ -359,7 +359,8 @@ on_monitors_changed (MetaScreen *screen,
   clutter_actor_destroy_all_children (self->priv->background_group);
 
   wallpaper = g_settings_get_string (self->priv->settings, PICTURE_URI_KEY);
-  if (!wallpaper)
+  /* We don't currently support slideshows */
+  if (!wallpaper || g_str_has_suffix(wallpaper, ".xml"))
     random_colour = TRUE;
   else {
     gchar *color_str;
