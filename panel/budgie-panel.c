@@ -93,6 +93,7 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
                                 xstuff_set_wmspec_strut(window, 0, 0, alloc.height, 0);
                 }
         }
+        gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
 
@@ -191,6 +192,7 @@ static void budgie_panel_init(BudgiePanel *self)
         self->clock = clock;
         g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
         gtk_box_pack_start(GTK_BOX(widgets), clock, FALSE, FALSE, 0);
+        gtk_widget_set_valign(GTK_WIDGET(widgets), GTK_ALIGN_FILL);
 
         /* Add the power applet near the end */
         power = power_applet_new();
