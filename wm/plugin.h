@@ -42,6 +42,8 @@ typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
 #define SECONDARY_COLOR_KEY "secondary-color"
 #define COLOR_SHADING_TYPE_KEY "color-shading-type"
 
+#define GNOME_COLOR_HACK "gnome-control-center/pixmaps/noise-texture-light.png"
+
 #define BUDGIE_WM_SCHEMA "com.evolve-os.budgie.wm"
 #define MUTTER_EDGE_TILING "edge-tiling"
 

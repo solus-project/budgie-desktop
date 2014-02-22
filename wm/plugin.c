@@ -418,7 +418,8 @@ on_monitors_changed (MetaScreen *screen,
 
         meta_background_load_color (content, &primary_color);
       } else {
-        if (style == G_DESKTOP_BACKGROUND_STYLE_NONE)
+        if (style == G_DESKTOP_BACKGROUND_STYLE_NONE ||
+            g_str_has_suffix (filename, GNOME_COLOR_HACK))
         {
           if (shading_direction == G_DESKTOP_BACKGROUND_SHADING_SOLID)
             meta_background_load_color (content, &primary_color);
