@@ -37,56 +37,6 @@
 #define BUDGIE_STYLE_MENU_ICON "menu-icon"
 #define BUDGIE_STYLE_MESSAGE_AREA "message-area"
 
-#define PANEL_CSS "\
-.budgie-panel {\
-    background-color: alpha(white, 0.0);\
-}\
-.budgie-panel .message-area {\
-    background-color: alpha(black, 0.8);\
-    border-radius: 6px;\
-}\
-.budgie-panel .launcher {\
-    border: 2px solid alpha(white, 0.0);\
-    background-image: none;\
-    transition: 100ms ease-in;\
-}\
-.budgie-panel .launcher:active {\
-    border: 2px solid alpha(white, 0.0);\
-    border-bottom: 2px solid white;\
-}\
-.top .launcher:active {\
-    border: 2px solid alpha(white, 0.0);\
-    border-top: 2px solid white; \
-}\
-.panel-applet {\
-    background-image: none;\
-    border-color: alpha(white, 0.12);\
-    border-radius: 6px;\
-    border: solid alpha(white, 0.1) 1px;\
-}\
-.budgie-panel .menu-icon,\
-.budgie-panel .menu-icon:active,\
-.budgie-panel .menu-icon:hover {\
-    background-image: none;\
-}\
-BudgiePopover {\
-    border-radius: 6px;\
-}"
-
-#define PANEL_FORCE_CSS "\
-GtkListBox {\
-    background-image: none;\
-    background-color: alpha(black, 0.0);\
-    border-radius: 6px;\
-}\
-GtkListBoxRow {\
-    background-image: none;\
-    background-color: alpha(black, 0.0);\
-}\
-.trough {\
-    background-color: alpha(black, 0.0);\
-}"
-
 typedef struct _BudgiePanel BudgiePanel;
 typedef struct _BudgiePanelClass   BudgiePanelClass;
 

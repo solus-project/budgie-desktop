@@ -32,6 +32,8 @@ PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 # Because we target Linux.
 PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.38.0])
 
+AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES(Makefile
                 data/Makefile

@@ -1,0 +1,21 @@
+/**
+ * This file contains certain style hacks currently needed within
+ * budgie-panel, which cannot be overriden, until themes are
+ * adapted to suit the budgie-panel styling
+ *
+ * @note These overrides are for the main menu
+ */
+
+
+GtkListBox {
+    background-image: none;
+    background-color: alpha(black, 0.0);
+    border-radius: 6px;
+}
+GtkListBoxRow {
+    background-image: none;
+    background-color: alpha(black, 0.0);
+}
+.trough {
+    background-color: alpha(black, 0.0);
+}
