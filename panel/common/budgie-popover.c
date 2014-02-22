@@ -261,7 +261,7 @@ static gboolean popup_grab_on_window(GdkWindow *window,
 
 void budgie_popover_present(BudgiePopover *self,
                             GtkWidget *parent,
-                            GdkEventButton *event)
+                            GdkEvent *event)
 {
         GtkWidget *real_parent;
         GdkWindow *parent_window;
@@ -271,9 +271,12 @@ void budgie_popover_present(BudgiePopover *self,
         GdkDeviceManager *manager;
         gint32 time;
 
-        if (event) {
-                x = event->x;
-                y = event->y;
+        if (event && event->type == GDK_BUTTON_PRESS) {
+                x = event->button.x;
+                y = event->button.y;
+        } else if (event && event->type == GDK_TOUCH_END) {
+                x = event->touch.x;
+                y = event->touch.y;
         }
 
         if (gtk_widget_get_visible(GTK_WIDGET(self))) {
@@ -305,7 +308,7 @@ void budgie_popover_present(BudgiePopover *self,
         /* Ensure widg_x is within bounds */
         if (event) {
                 /* Point tip to mouse x,y */
-                rx = event->x;
+                rx = x;
         } else {
                 /* Center the tip when there is no event */
                 rx = alloc.x + (alloc.width/2);
@@ -324,8 +327,13 @@ void budgie_popover_present(BudgiePopover *self,
         gtk_window_move(GTK_WINDOW(self), tx-11, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
         if (event) {
-                self->pointer = event->device;
-                time = event->time;
+                if (event->type == GDK_BUTTON_PRESS) {
+                        self->pointer = event->button.device;
+                        time = event->button.time;
+                } else {
+                        self->pointer = event->touch.device;
+                        time = event->touch.time;
+                }
         } else {
                 manager = gdk_display_get_device_manager(gdk_screen_get_display(screen));
                 self->pointer = gdk_device_manager_get_client_pointer(manager);

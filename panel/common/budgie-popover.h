@@ -73,10 +73,10 @@ void budgie_popover_hide(BudgiePopover *self);
  * Present a BudgiePopover on screen
  * @param self BudgiePopover instance
  * @param parent Parent to show the popover relative to
- * @param event Button event, to show at a given X/Y
+ * @param event Event, to show at a given X/Y
  */
 void budgie_popover_present(BudgiePopover *self,
                             GtkWidget *parent,
-                            GdkEventButton *event);
+                            GdkEvent *event);
 
 #endif /* budgie_popover_h */
