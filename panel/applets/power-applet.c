@@ -136,7 +136,7 @@ static void update_ui(PowerApplet *self)
                 image_name = "battery-empty";
         else if (percent <= 35)
                 image_name = "battery-low";
-        else if (percent <= 99)
+        else if (percent <= 75)
                 image_name = "battery-good";
         else
                 image_name = "battery-full";
