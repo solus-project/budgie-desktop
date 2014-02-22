@@ -30,6 +30,7 @@
 #include <meta/meta-plugin.h>
 #include <meta/window.h>
 #include <meta/util.h>
+#include <meta/meta-background.h>
 #include <meta/meta-background-group.h>
 #include <meta/meta-background-actor.h>
 #include <meta/prefs.h>
@@ -321,6 +322,25 @@ show_stage (MetaPlugin *plugin)
 }
 
 static void
+background_load_file_cb (GObject      *source_object,
+                         GAsyncResult *res,
+                         gpointer      user_data)
+{
+  gboolean r;
+  GError *error = NULL;
+
+  r = meta_background_load_file_finish (META_BACKGROUND (source_object), 
+                                        res, 
+                                        &error);
+
+  if (!r)
+  {
+    g_warning ("%s", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
 on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin)
 {
@@ -330,52 +350,106 @@ on_monitors_changed (MetaScreen *screen,
   gchar *wallpaper = NULL;
   GFile *wallpaper_file = NULL;
   gchar *filename = NULL;
+  GDesktopBackgroundStyle style;
+  GDesktopBackgroundShading  shading_direction;
+  ClutterColor primary_color;
+  ClutterColor secondary_color;
   gboolean random_colour = FALSE;
 
   clutter_actor_destroy_all_children (self->priv->background_group);
 
-  wallpaper = g_settings_get_string(self->priv->settings, PICTURE_KEY);
+  wallpaper = g_settings_get_string (self->priv->settings, PICTURE_URI_KEY);
   if (!wallpaper)
-      random_colour = TRUE;
+    random_colour = TRUE;
   else {
-      wallpaper_file = g_file_new_for_uri(wallpaper);
-      filename = g_file_get_path(wallpaper_file);
-  }
+    gchar *color_str;
+
+    /* Shading direction*/
+    shading_direction = g_settings_get_enum (self->priv->settings, COLOR_SHADING_TYPE_KEY);
+
+    /* Primary color */
+    color_str = g_settings_get_string (self->priv->settings, PRIMARY_COLOR_KEY);
+    if (color_str)
+    {
+      clutter_color_from_string (&primary_color, color_str);
+      g_free (color_str);
+      color_str = NULL;
+    }
       
+    /* Secondary color */
+    color_str = g_settings_get_string (self->priv->settings, SECONDARY_COLOR_KEY);
+    if (color_str)
+    {
+      clutter_color_from_string (&secondary_color, color_str);
+      g_free (color_str);
+      color_str = NULL;
+    }
+
+    /* Picture options: "none", "wallpaper", "centered", "scaled", "stretched", "zoom", "spanned" */
+    style = g_settings_get_enum (self->priv->settings, BACKGROUND_STYLE_KEY);
+
+    wallpaper_file = g_file_new_for_uri(wallpaper);
+    filename = g_file_get_path(wallpaper_file);
+  }
 
   n = meta_screen_get_n_monitors (screen);
+
   for (i = 0; i < n; i++)
     {
+      MetaBackground *content;
       MetaRectangle rect;
       ClutterActor *background;
-      ClutterColor color;
+
+      background = meta_background_actor_new ();
+
+      content = meta_background_new (screen, 
+                                     i, 
+                                     META_BACKGROUND_EFFECTS_NONE);
+      // Don't use rand() here, mesa calls srand() internally when
+      // parsing the driconf XML, but it's nice if the colors are
+      // reproducible.
+      if (random_colour)
+      {
+        clutter_color_init (&primary_color,
+          g_random_int () % 255,
+          g_random_int () % 255,
+          g_random_int () % 255,
+          255);
+
+        meta_background_load_color (content, &primary_color);
+      } else {
+        if (style == G_DESKTOP_BACKGROUND_STYLE_NONE)
+        {
+          if (shading_direction == G_DESKTOP_BACKGROUND_SHADING_SOLID)
+            meta_background_load_color (content, &primary_color);
+          else
+            meta_background_load_gradient (content,
+                                           shading_direction,
+                                           &primary_color,
+                                           &secondary_color);
+        } else {
+          /* Set the background */
+          meta_background_load_file_async (content,
+                                           filename,
+                                           style,
+                                           NULL, /*TODO use cancellable*/
+                                           background_load_file_cb,
+                                           self);
+        }
+      }
+
+      clutter_actor_set_content (background, CLUTTER_CONTENT (content));
+      g_object_unref (content);
 
       meta_screen_get_monitor_geometry (screen, i, &rect);
-
-      /* Don't use rand() here, mesa calls srand() internally when
-         parsing the driconf XML, but it's nice if the colors are
-         reproducible.
-      */
-      if (random_colour) {
-            background = meta_background_actor_new ();
-            clutter_color_init (&color,
-                          g_random_int () % 255,
-                          g_random_int () % 255,
-                          g_random_int () % 255,
-                          255);
-            clutter_actor_set_background_color (background, &color);
-      } else {
-            /* Set the background */
-            background = clutter_texture_new_from_file(filename, NULL);
-      }
 
       clutter_actor_set_position (background, rect.x, rect.y);
       clutter_actor_set_size (background, rect.width, rect.height);
       clutter_actor_add_child (self->priv->background_group, background);
       clutter_actor_set_scale (background, 0.0, 0.0);
       clutter_actor_show (background);
-      clutter_actor_move_anchor_point_from_gravity (background,
-                                                    CLUTTER_GRAVITY_CENTER);
+      clutter_actor_set_pivot_point (background, 0.5, 0.5);
+
       /* Ease in the background using a scale effect */
       animation = clutter_actor_animate (background, CLUTTER_EASE_IN_SINE,
                                          BACKGROUND_TIMEOUT,
