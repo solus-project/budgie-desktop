@@ -138,6 +138,7 @@ static gboolean button_clicked(GtkWidget *widget,
                                gpointer data)
 {
         WnckWindow *bwindow = NULL;
+        GtkWidget *menu = NULL;
         guint32 timestamp = gtk_get_current_event_time();
 
         /* Only interested in presses */
@@ -150,6 +151,12 @@ static gboolean button_clicked(GtkWidget *widget,
         if(!bwindow)
                 return TRUE;
 
+        if (event->button.button == 3) {
+                menu = (GtkWidget*)g_object_get_data(G_OBJECT(widget), "bmenu");
+                gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL,
+                        NULL, event->button.button, timestamp);
+                return TRUE;
+        }
         if(wnck_window_is_minimized(bwindow)) {
                 wnck_window_unminimize(bwindow, timestamp);
                 wnck_window_activate(bwindow, timestamp);
@@ -168,6 +175,7 @@ static void window_opened(WnckScreen *screen,
 {
         GtkWidget *button = NULL;
         GtkWidget *image = NULL;
+        GtkWidget *menu = NULL;
         const gchar *title;
         IconTasklist *self = ICON_TASKLIST(userdata);
 
@@ -197,6 +205,10 @@ static void window_opened(WnckScreen *screen,
         /* Store a reference to this window for destroy ops, etc. */
         g_object_set_data(G_OBJECT(button), "bwindow", window);
 
+        /* Add an action menu */
+        menu = wnck_action_menu_new(window);
+        g_object_set_data(G_OBJECT(button), "bmenu", menu);
+
         /* When the window changes, update the button
          * Icon change is separate so we dont keep reloading images and wasting resources */
         g_signal_connect(window, "name-changed", G_CALLBACK(window_update_title), button);
@@ -224,6 +236,7 @@ static void window_closed(WnckScreen *screen,
         IconTasklist *self = ICON_TASKLIST(userdata);
         GList *list, *elem;
         GtkWidget *toggle;
+        GtkWidget *menu;
         WnckWindow *bwindow;
 
         /* If a buttons window matches the closing window, destroy the button */
@@ -233,8 +246,11 @@ static void window_closed(WnckScreen *screen,
                         continue;
                 toggle = GTK_WIDGET(elem->data);
                 bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
-                if (bwindow == window)
+                if (bwindow == window) {
+                        menu = (GtkWidget*)g_object_get_data(G_OBJECT(toggle), "bmenu");
+                        gtk_widget_destroy(menu);
                         gtk_widget_destroy(toggle);
+                }
         }
 }
 
