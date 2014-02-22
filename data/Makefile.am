@@ -6,7 +6,10 @@ gsettings_SCHEMAS = com.evolve-os.budgie.panel.gschema.xml
 
 EXTRA_DIST = \
 	budgie-desktop.desktop \
-	com.evolve-os.budgie.panel.gschema.xml
+	com.evolve-os.budgie.panel.gschema.xml \
+	budgie-panel.gresource.xml \
+	app.css \
+	style.css
 
 xsessiondir = $(datadir)/xsessions
 
