@@ -169,6 +169,31 @@ static gboolean button_clicked(GtkWidget *widget,
         return TRUE;
 }
 
+static gboolean scroll_handler(GtkWidget *widget,
+                          GdkEvent *event,
+                          gpointer data)
+{
+    WnckScreen *screen = data;
+    WnckWindow *active;
+    GList *windows, *to_activate;
+    GdkEventScroll scroll = event->scroll; 
+
+    guint32 timestamp = gtk_get_current_event_time();
+
+    windows = wnck_screen_get_windows(screen);
+    active = wnck_screen_get_active_window(screen);
+    to_activate = g_list_find(windows,active);
+
+    if (scroll.direction)
+        to_activate = g_list_previous(to_activate);
+    else
+        to_activate = g_list_next(to_activate);
+    /* if there is no next or previous window don't do nothing*/
+    if (to_activate)
+        wnck_window_activate(WNCK_WINDOW(to_activate->data), timestamp);
+    return TRUE;
+}
+
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata)
@@ -224,6 +249,10 @@ static void window_opened(WnckScreen *screen,
         g_signal_connect(button, "touch-event",
                          G_CALLBACK(button_clicked),
                          self);
+        gtk_widget_set_events (GTK_WIDGET(button),GDK_SCROLL_MASK);
+        g_signal_connect(button, "scroll-event", 
+                         G_CALLBACK(scroll_handler),
+                         screen);
 
         gtk_box_pack_start(GTK_BOX(self), button, FALSE, FALSE, 0);
         gtk_widget_show_all(button);
