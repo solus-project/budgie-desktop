@@ -59,20 +59,20 @@ static void update_volume(SoundApplet *self)
         vol = gvc_mixer_stream_get_volume(stream);
 
         /* Same maths as computed by volume.js in gnome-shell */
-        n = floor(3*vol/vol_norm);
+        n = floor(3*vol/vol_norm)+1;
 
-        if (gvc_mixer_stream_get_is_muted(stream)) {
+        if (gvc_mixer_stream_get_is_muted(stream) || vol <= 0) {
                 image = "audio-volume-muted-symbolic";
         } else {
                 switch (n) {
-                        case 3:
-                                image = "audio-volume-high-symbolic";
+                        case 1:
+                                image = "audio-volume-low-symbolic";
                                 break;
                         case 2:
                                 image = "audio-volume-medium-symbolic";
                                 break;
                         default:
-                                image = "audio-volume-low-symbolic";
+                                image = "audio-volume-high-symbolic";
                                 break;
                 }
         }
@@ -87,10 +87,26 @@ static void update_volume(SoundApplet *self)
                 g_free(tooltip);
         }
 }
+
+static void volume_cb(GvcMixerStream *stream, gulong vol, gpointer userdata)
+{
+        update_volume(SOUND_APPLET(userdata));
+}
+
+static void muted_cb(GvcMixerStream *stream, gboolean mute, gpointer userdata)
+{
+        update_volume(SOUND_APPLET(userdata));
+}
+
 static void state_changed(GvcMixerControl *mix, guint status, gpointer userdata)
 {
+        GvcMixerStream *stream;
+
         /* First time we connect, update the volume */
         if (status == GVC_STATE_READY) {
+                stream = gvc_mixer_control_get_default_sink(mix);
+                g_signal_connect(stream, "notify::volume", G_CALLBACK(volume_cb), userdata);
+                g_signal_connect(stream, "notify::is-muted", G_CALLBACK(muted_cb), userdata);
                 update_volume(SOUND_APPLET(userdata));
         }
 }
