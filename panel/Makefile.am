@@ -42,6 +42,7 @@ budgie_panel_CFLAGS = \
 
 budgie_panel_LDADD = \
 	../gvc/libgvc.la \
+	-lm \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \

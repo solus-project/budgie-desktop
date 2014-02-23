@@ -40,10 +40,14 @@ typedef struct _SoundAppletClass   SoundAppletClass;
 #define IS_SOUND_APPLET_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), SOUND_APPLET_TYPE))
 #define SOUND_APPLET_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), SOUND_APPLET_TYPE, SoundAppletClass))
 
+#define MIXER_NAME "Budgie Volume Control"
+
 /* SoundApplet object */
 struct _SoundApplet {
         PanelApplet parent;
         GtkWidget *label;
+        GvcMixerControl *mixer;
+        GtkWidget *image;
 };
 
 /* SoundApplet class definition */
