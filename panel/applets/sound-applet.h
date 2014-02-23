@@ -27,6 +27,8 @@
 #include <gtk/gtk.h>
 
 #include "../panel-applet.h"
+#include <pulse/pulseaudio.h>
+#include "gvc-mixer-control.h"
 
 typedef struct _SoundApplet SoundApplet;
 typedef struct _SoundAppletClass   SoundAppletClass;
