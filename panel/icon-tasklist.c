@@ -184,9 +184,9 @@ static gboolean scroll_handler(GtkWidget *widget,
         active = wnck_screen_get_active_window(screen);
         to_activate = g_list_find(windows,active);
 
-        if (scroll.direction)
+        if (scroll.direction == GDK_SCROLL_DOWN || scroll.direction == GDK_SCROLL_RIGHT)
                 to_activate = g_list_previous(to_activate);
-        else
+        else if(scroll.direction == GDK_SCROLL_UP || scroll.direction == GDK_SCROLL_LEFT)
                 to_activate = g_list_next(to_activate);
         /* if there is no next or previous window don't do nothing*/
         if(to_activate)
