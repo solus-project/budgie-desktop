@@ -12,4 +12,5 @@ SUBDIRS = \
 	data \
 	panel \
 	session \
-	wm
+	wm \
+	gvc

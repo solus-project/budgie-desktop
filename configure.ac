@@ -10,10 +10,20 @@ LT_INIT([disable-static])
 
 GLIB_GSETTINGS
 
+GETTEXT_PACKAGE=budgie-desktop
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+                   [The prefix for our gettext translation domains.])
+
 # Package requirements
 PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.38.0])
 PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.38.0])
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.10.0])
+
+PULSE_MIN_VERS=2.0
+
+PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
+
 # We require Mutter
 PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 
@@ -35,8 +45,12 @@ PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.38.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
 AC_CONFIG_MACRO_DIR([m4])
+
+GOBJECT_INTROSPECTION_CHECK([1.38.0])
+
 AC_CONFIG_FILES(Makefile
                 data/Makefile
+                gvc/Makefile
                 panel/Makefile
                 session/Makefile
                 wm/Makefile)
