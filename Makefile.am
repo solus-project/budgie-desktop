@@ -10,7 +10,7 @@ CLEANFILES =
 
 SUBDIRS = \
 	data \
+	gvc \
 	panel \
 	session \
-	wm \
-	gvc
+	wm

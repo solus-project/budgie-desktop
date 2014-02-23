@@ -28,6 +28,7 @@
 #include "applets/power-applet.h"
 #include "applets/menu-applet.h"
 #include "applets/clock-applet.h"
+#include "applets/sound-applet.h"
 #include "applets/windowlist-applet.h"
 
 /* X11 specific */
@@ -118,6 +119,7 @@ static void budgie_panel_init(BudgiePanel *self)
         GdkVisual *visual;
         GtkWidget *power;
         GtkWidget *clock;
+        GtkWidget *sound;
         GtkWidget *menu;
         int width;
         GtkSettings *settings;
@@ -199,6 +201,12 @@ static void budgie_panel_init(BudgiePanel *self)
         self->power = power;
         gtk_box_pack_end(GTK_BOX(widgets), power, FALSE, FALSE, 0);
         g_object_set(power, "margin-right", 3, NULL);
+
+        /* And now the sound */
+        sound = sound_applet_new();
+        self->sound = sound;
+        gtk_box_pack_end(GTK_BOX(widgets), sound, FALSE, FALSE, 0);
+        g_object_set(sound, "margin-right", 3, NULL);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);

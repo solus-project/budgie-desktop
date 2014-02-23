@@ -19,6 +19,8 @@ budgie_panel_SOURCES = \
 	applets/menu-window.c \
 	applets/power-applet.c \
 	applets/power-applet.h \
+	applets/sound-applet.c \
+	applets/sound-applet.h \
 	applets/windowlist-applet.h \
 	applets/windowlist-applet.c \
 	budgie-panel.c \
@@ -39,6 +41,7 @@ budgie_panel_CFLAGS = \
 	$(AM_CFLAGS)
 
 budgie_panel_LDADD = \
+	../gvc/libgvc.la \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \

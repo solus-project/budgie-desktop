@@ -59,6 +59,7 @@ struct _BudgiePanel {
         GtkWidget *tasklist;
         GtkWidget *power;
         GtkWidget *clock;
+        GtkWidget *sound;
         GtkWidget *menu;
 
         gboolean x11;
