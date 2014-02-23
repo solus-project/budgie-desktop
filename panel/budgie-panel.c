@@ -189,24 +189,24 @@ static void budgie_panel_init(BudgiePanel *self)
 
         gtk_box_pack_end(GTK_BOX(layout), widgets, FALSE, FALSE, 0);
 
-        /* Add a clock at the end */
-        clock = clock_applet_new();
-        self->clock = clock;
-        g_object_set(clock, "margin-left", 3, "margin-right", 1, NULL);
-        gtk_box_pack_start(GTK_BOX(widgets), clock, FALSE, FALSE, 0);
-        gtk_widget_set_valign(GTK_WIDGET(widgets), GTK_ALIGN_FILL);
-
-        /* Add the power applet near the end */
+        /* Add the power applet  */
         power = power_applet_new();
         self->power = power;
-        gtk_box_pack_end(GTK_BOX(widgets), power, FALSE, FALSE, 0);
-        g_object_set(power, "margin-right", 3, NULL);
+        gtk_box_pack_start(GTK_BOX(widgets), power, FALSE, FALSE, 0);
+        g_object_set(power, "margin-left", 3, NULL);
 
         /* And now the sound */
         sound = sound_applet_new();
         self->sound = sound;
-        gtk_box_pack_end(GTK_BOX(widgets), sound, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(widgets), sound, FALSE, FALSE, 0);
         g_object_set(sound, "margin-right", 3, NULL);
+
+        /* Add a clock at the end */
+        clock = clock_applet_new();
+        self->clock = clock;
+        g_object_set(clock, "margin-right", 1, NULL);
+        gtk_box_pack_end(GTK_BOX(widgets), clock, FALSE, FALSE, 0);
+        gtk_widget_set_valign(GTK_WIDGET(widgets), GTK_ALIGN_FILL);
 
         /* Ensure we close when destroyed */
         g_signal_connect(self, "destroy", G_CALLBACK(gtk_main_quit), NULL);
