@@ -26,7 +26,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "../panel-applet.h"
+#include "panel-applet.h"
 #include <pulse/pulseaudio.h>
 #include "gvc-mixer-control.h"
 

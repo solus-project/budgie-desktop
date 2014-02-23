@@ -26,7 +26,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "../panel-applet.h"
+#include "panel-applet.h"
 
 typedef struct _ClockApplet ClockApplet;
 typedef struct _ClockAppletClass   ClockAppletClass;

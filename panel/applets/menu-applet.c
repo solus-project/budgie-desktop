@@ -23,7 +23,7 @@
 
 #include "menu-applet.h"
 #include "menu-window.h"
-#include "../budgie-panel.h"
+#include "budgie-panel.h"
 
 G_DEFINE_TYPE(MenuApplet, menu_applet, PANEL_APPLET_TYPE)
 

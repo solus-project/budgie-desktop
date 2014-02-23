@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 #include <upower.h>
 
-#include "../panel-applet.h"
+#include "panel-applet.h"
 
 typedef struct _PowerApplet PowerApplet;
 typedef struct _PowerAppletClass   PowerAppletClass;

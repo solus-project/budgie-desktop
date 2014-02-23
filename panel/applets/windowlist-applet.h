@@ -26,7 +26,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "../panel-applet.h"
+#include "panel-applet.h"
 
 typedef struct _WindowlistApplet WindowlistApplet;
 typedef struct _WindowlistAppletClass   WindowlistAppletClass;
