@@ -33,7 +33,6 @@
 #define DESKTOP_WM "budgie-wm"
 #define DESKTOP_PANEL "budgie-panel"
 #define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
-#define FILE_MANAGER "nautilus -n"
 
 static gboolean activated = FALSE;
 static gboolean should_exit = FALSE;
@@ -91,15 +90,6 @@ static void activate(GApplication *application, gpointer userdata)
         /* Launch panel component */
         if (!g_spawn_command_line_async(DESKTOP_PANEL, &error)) {
                 fprintf(stderr, "Unable to launch panel: %s\n",
-                        error->message);
-                goto end;
-        }
-
-        /* Launch file manager in the background (nautilus)
-         * If user has desktop icons enabled this ensures they show
-         * immediately when the desktop shows */
-        if (!g_spawn_command_line_async(FILE_MANAGER, &error)) {
-                fprintf(stderr, "Unable to launch file manager: %s\n",
                         error->message);
                 goto end;
         }
