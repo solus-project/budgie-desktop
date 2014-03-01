@@ -85,7 +85,7 @@ static gboolean update_clock(gpointer userdata)
                         " <big>%H:%M:%S</big> <small>%x</small> ");
         else
                 date_string = g_date_time_format(dtime,
-                        " <big>%H:%M:%S</big> ");
+                        " <big>%H:%M</big>");
 
         gtk_label_set_markup(GTK_LABEL(self->label), date_string);
         g_free(date_string);
