@@ -46,6 +46,7 @@ typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
 
 #define BUDGIE_WM_SCHEMA "com.evolve-os.budgie.wm"
 #define MUTTER_EDGE_TILING "edge-tiling"
+#define MUTTER_MODAL_ATTACH "attach-modal-dialogs"
 
 struct _MetaDefaultPlugin
 {

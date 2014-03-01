@@ -228,8 +228,9 @@ meta_default_plugin_init (MetaDefaultPlugin *self)
   priv->info.license     = "GPL";
   priv->info.description = "This is an example of a plugin implementation.";
 
-  /* Override schemas for edge-tiling */
+  /* Override schemas for edge-tiling and attachment of modal dialogs to parent */
   meta_prefs_override_preference_schema(MUTTER_EDGE_TILING, BUDGIE_WM_SCHEMA);
+  meta_prefs_override_preference_schema(MUTTER_MODAL_ATTACH, BUDGIE_WM_SCHEMA);
 }
 
 static void settings_cb (GSettings *settings,
