@@ -36,6 +36,7 @@ struct _MenuWindowPriv {
         GtkWidget *all_button;
         GtkWidget *entry;
 
+        GMenuTree *tree;
         gchar *group;
         const gchar *search_term;
 };
@@ -173,6 +174,15 @@ static void menu_window_init(MenuWindow *self)
 
 static void menu_window_dispose(GObject *object)
 {
+        MenuWindow *self;
+
+        self = MENU_WINDOW(object);
+        /* Cleanup menu tree */
+        if (self->priv->tree) {
+                g_object_unref(self->priv->tree);
+                self->priv->tree = NULL;
+        }
+
         /* Destruct */
         G_OBJECT_CLASS (menu_window_parent_class)->dispose (object);
 }
@@ -220,6 +230,7 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         if (!directory) {
                 tree = gmenu_tree_new("gnome-applications.menu",
                         GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
+                self->priv->tree = tree;
 
                 gmenu_tree_load_sync(tree, &error);
                 if (error) {
@@ -275,8 +286,6 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
         }
 
         gmenu_tree_iter_unref(iter);
-        if (tree)
-                g_object_unref(tree);
 }
 
 static void toggled_cb(GtkWidget *widget, gpointer userdata)
