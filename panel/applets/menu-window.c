@@ -59,6 +59,7 @@ static void list_header(GtkListBoxRow *before,
                         gpointer userdata);
 static void changed_cb(GtkWidget *widget, gpointer userdata);
 static void logout_cb(GtkWidget *widget, gpointer userdata);
+static void search_activate_cb(GtkWidget *widget, gpointer userdata);
 
 /* Consider splitting into a panel-util helper */
 static gboolean string_contains(const gchar *string, const gchar *term);
@@ -125,6 +126,8 @@ static void menu_window_init(MenuWindow *self)
         self->priv->entry = search_entry;
         g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
                 self);
+        g_signal_connect(search_entry, "activate",
+                         G_CALLBACK(search_activate_cb), self);
         gtk_container_add(GTK_CONTAINER(frame), search_entry);
         gtk_box_pack_end(GTK_BOX(left_side), frame, FALSE, FALSE, 0);
 
@@ -431,6 +434,43 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
 
         if (!g_spawn_command_line_async("budgie-session --logout", NULL))
                 g_message("Unable to logout!");
+}
+
+static void search_activate_cb(GtkWidget *widget, gpointer userdata)
+{
+        MenuWindow *self;
+        GtkListBoxRow *row;
+        GDesktopAppInfo *info;
+        GtkWidget *child;
+
+        self = MENU_WINDOW(userdata);
+
+        if (strlen(self->priv->search_term) == 0 &&
+                g_str_equal(self->priv->search_term, ""))
+        {
+                /* Return if we don't have a search term (?) */
+                return;
+        }
+
+        /* Get the first item on the list.
+         * NOTE: This is quite awful. The first row when we search is in
+         *       the position y > the height of the header, since the
+         *       function gtk_list_box_get_row_at_index(..) don't
+         *       respect the filter.
+         */
+        row = gtk_list_box_get_row_at_y(GTK_LIST_BOX(self->priv->app_box),
+                40);
+
+        g_return_if_fail(row != NULL && GTK_IS_LIST_BOX_ROW(row));
+
+        child = gtk_bin_get_child(GTK_BIN(row));
+        info = g_object_get_data(G_OBJECT(child), "info");
+
+        /* Ensure we're hidden again */
+        budgie_popover_hide(BUDGIE_POPOVER(userdata));
+        /* Go launch it */
+        g_app_info_launch(G_APP_INFO(info), NULL, NULL, NULL);
+
 }
 
 static gboolean string_contains(const gchar *string, const gchar *term)
