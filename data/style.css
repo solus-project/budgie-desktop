@@ -15,13 +15,21 @@
     background-image: none;
     transition: 100ms ease-in;
 }
+.budgie-panel .launcher:hover {
+    border: 2px solid alpha(white, 0.0);
+    border-bottom: 2px solid alpha(white, 0.5);
+}
 .budgie-panel .launcher:active {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid white;
 }
+.top .launcher:hover {
+    border: 2px solid alpha(white, 0.0);
+    border-top: 2px solid alpha(white, 0.5); 
+}
 .top .launcher:active {
     border: 2px solid alpha(white, 0.0);
-    border-top: 2px solid white; 
+    border-top: 2px solid white;
 }
 .panel-applet {
     background-image: none;
