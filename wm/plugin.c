@@ -530,11 +530,14 @@ switch_workspace (MetaPlugin *plugin,
   while (l)
     {
       MetaWindowActor *window_actor = l->data;
+      MetaWindow *window = meta_window_actor_get_meta_window (window_actor);
+      MetaWorkspace   *workspace;
       ActorPrivate    *apriv	    = get_actor_private (window_actor);
       ClutterActor    *actor	    = CLUTTER_ACTOR (window_actor);
       gint             win_workspace;
 
-      win_workspace = meta_window_actor_get_workspace (window_actor);
+      workspace = meta_window_get_workspace (window);
+      win_workspace = meta_workspace_index (workspace);
 
       if (win_workspace == to || win_workspace == from)
         {
