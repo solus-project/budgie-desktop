@@ -318,9 +318,9 @@ void budgie_popover_present(BudgiePopover *self,
         tx -= margin;
         rx -= margin;
         if (rx >= our_alloc.width)
-                rx = our_alloc.width - 14;
-        if (rx <= 14)
-                rx = 14;
+                rx = our_alloc.width - 20;
+        if (rx <= 20)
+                rx = 20;
         self->widg_x = rx;
 
 
