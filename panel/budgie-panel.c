@@ -122,7 +122,6 @@ static void budgie_panel_init(BudgiePanel *self)
         GtkWidget *sound;
         GtkWidget *menu;
         int width;
-        GtkSettings *settings;
         GSettings *gsettings;
         GtkStyleContext *style;
 
@@ -137,12 +136,6 @@ static void budgie_panel_init(BudgiePanel *self)
         g_signal_connect(gsettings, "changed", G_CALLBACK(settings_cb), self);
 
         /* Sort ourselves out visually */
-        settings = gtk_widget_get_settings(GTK_WIDGET(self));
-        g_object_set(settings,
-                "gtk-application-prefer-dark-theme", TRUE,
-                "gtk-menu-images", TRUE,
-                "gtk-button-images", TRUE,
-                NULL);
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
         gtk_style_context_add_class(style, BUDGIE_STYLE_PANEL);
         gtk_style_context_remove_class(style, "background");
