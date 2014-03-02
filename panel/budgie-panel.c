@@ -162,6 +162,7 @@ static void budgie_panel_init(BudgiePanel *self)
         menu = menu_applet_new();
         self->menu = menu;
         gtk_box_pack_start(GTK_BOX(layout), menu, FALSE, FALSE, 0);
+        g_object_set(menu, "margin-left", 4, NULL);
 
         /* Add a tasklist to the panel on x11 */
         if (self->x11) {
