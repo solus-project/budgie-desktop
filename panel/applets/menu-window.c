@@ -404,6 +404,8 @@ static GtkWidget* new_image_button(const gchar *text,
         gtk_widget_set_halign(image, GTK_ALIGN_START);
         gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 0);
         label = gtk_label_new(text);
+        gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+        gtk_label_set_max_width_chars(GTK_LABEL(label), 35);
         gtk_widget_set_halign(label, GTK_ALIGN_START);
         gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
 
