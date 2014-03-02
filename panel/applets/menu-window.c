@@ -157,7 +157,7 @@ static void menu_window_init(MenuWindow *self)
         gtk_container_add(GTK_CONTAINER(scroll), list);
 
         /* Set a placeholder when filtering yields no results */
-        placeholder = gtk_label_new("<big>No results.</big>");
+        placeholder = gtk_label_new("<big>Sorry, no items found</big>");
         gtk_widget_set_valign(placeholder, GTK_ALIGN_START);
         gtk_widget_set_halign(placeholder, GTK_ALIGN_START);
         g_object_set(placeholder, "margin", 6, NULL);
