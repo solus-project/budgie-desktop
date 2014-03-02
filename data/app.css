@@ -19,3 +19,17 @@ GtkListBoxRow {
 .trough {
     background-color: alpha(black, 0.0);
 }
+
+.entry,
+.entry:focused,
+.entry:selected,
+.entry:active,
+.entry:hover,
+.entry {
+    border: none;
+    background-image: none;
+    background-color: white;
+    font-size: x-large;
+    transition: none;
+    box-shadow: none;
+}

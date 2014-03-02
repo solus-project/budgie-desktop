@@ -78,7 +78,8 @@ static void menu_window_init(MenuWindow *self)
         GtkWidget *scroll, *list, *sep;
         GtkWidget *layout, *box, *all_button;
         GtkWidget *left_side, *right_side;
-        GtkWidget *frame, *search_entry, *search_label;
+        GtkWidget *main_layout;
+        GtkWidget *search_entry;
         GtkWidget *placeholder;
         GtkWidget *logout;
 
@@ -86,14 +87,27 @@ static void menu_window_init(MenuWindow *self)
 
         /* Sensible default size */
         gtk_widget_set_size_request(GTK_WIDGET(self), 470, 510);
-        gtk_container_set_border_width(GTK_CONTAINER(self), 3);
 
         /* Main layout */
+        main_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_add(GTK_CONTAINER(self), main_layout);
+
+        /* Search field */
+        search_entry = gtk_search_entry_new();
+        self->priv->entry = search_entry;
+        g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
+                self);
+        gtk_box_pack_start(GTK_BOX(main_layout), search_entry, FALSE, FALSE, 0);
+
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        gtk_container_add(GTK_CONTAINER(self), layout);
+        gtk_box_pack_start(GTK_BOX(main_layout), layout, TRUE, TRUE, 0);
+        g_object_set(layout, "margin-top", 4, "margin-bottom", 4,
+                "margin-left", 2, NULL);
 
         left_side = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_box_pack_start(GTK_BOX(layout), left_side, FALSE, FALSE, 0);
+
+
 
         /* Left hand side is just a scroller for categories */
         scroll = gtk_scrolled_window_new(NULL, NULL);
@@ -115,20 +129,6 @@ static void menu_window_init(MenuWindow *self)
         sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
         gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 0);
 
-        /* Search field */
-        frame = gtk_frame_new(NULL);
-        gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
-        g_object_set(frame, "margin", 5, NULL);
-        search_label = gtk_label_new("<big>Search</big>");
-        gtk_label_set_use_markup(GTK_LABEL(search_label), TRUE);
-        gtk_frame_set_label_widget(GTK_FRAME(frame), search_label);
-        search_entry = gtk_search_entry_new();
-        self->priv->entry = search_entry;
-        g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
-                self);
-        gtk_container_add(GTK_CONTAINER(frame), search_entry);
-        gtk_box_pack_end(GTK_BOX(left_side), frame, FALSE, FALSE, 0);
-
         /* Right hand side is similar, just applications */
         right_side = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_box_pack_start(GTK_BOX(layout), right_side, TRUE, TRUE, 0);
@@ -145,7 +145,7 @@ static void menu_window_init(MenuWindow *self)
                 self, NULL);
 
         /* Logout button */
-        logout = gtk_button_new_from_icon_name("system-log-out", GTK_ICON_SIZE_BUTTON);
+        logout = gtk_button_new_from_icon_name("system-shutdown-symbolic", GTK_ICON_SIZE_BUTTON);
         g_signal_connect(logout, "clicked", G_CALLBACK(logout_cb), self);
         gtk_button_set_relief(GTK_BUTTON(logout), GTK_RELIEF_NONE);
         gtk_widget_set_tooltip_text(logout, "End the session");
@@ -157,7 +157,7 @@ static void menu_window_init(MenuWindow *self)
         gtk_container_add(GTK_CONTAINER(scroll), list);
 
         /* Set a placeholder when filtering yields no results */
-        placeholder = gtk_label_new("<big>No results.</big>");
+        placeholder = gtk_label_new("<big>Sorry, no items found</big>");
         gtk_widget_set_valign(placeholder, GTK_ALIGN_START);
         gtk_widget_set_halign(placeholder, GTK_ALIGN_START);
         g_object_set(placeholder, "margin", 6, NULL);
@@ -384,7 +384,7 @@ static GtkWidget* new_image_button(const gchar *text,
 {
         GtkWidget *button, *image, *label;
         GtkWidget *box;
-        guint icon_size = radio ? GTK_ICON_SIZE_MENU : GTK_ICON_SIZE_BUTTON;
+        guint icon_size = radio ? GTK_ICON_SIZE_BUTTON : GTK_ICON_SIZE_LARGE_TOOLBAR;
 
         if (radio) {
                 button = gtk_radio_button_new(NULL);
@@ -404,6 +404,8 @@ static GtkWidget* new_image_button(const gchar *text,
         gtk_widget_set_halign(image, GTK_ALIGN_START);
         gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 0);
         label = gtk_label_new(text);
+        gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+        gtk_label_set_max_width_chars(GTK_LABEL(label), 35);
         gtk_widget_set_halign(label, GTK_ALIGN_START);
         gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
 
