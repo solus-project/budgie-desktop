@@ -3,6 +3,7 @@ AM_CFLAGS =  -fstack-protector -Wall -pedantic \
         -Werror-implicit-function-declaration \
         -Wformat -Wformat-security -Werror=format-security \
         -Wno-conversion -Werror \
+        -Wunreachable-code \
         -DDATADIR=\"$(datadir)\"
 
 AM_CPPFLAGS += \
