@@ -132,21 +132,23 @@ static void update_ui(PowerApplet *self)
         g_object_get(self->battery, "state", &state, NULL);
 
         /* "empty" "low" "good" "full" */
-        if (percent <= 10)
+        if (percent <= 10) {
                 image_name = "battery-empty";
-        else if (percent <= 35)
+        } else if (percent <= 35) {
                 image_name = "battery-low";
-        else if (percent <= 75)
+        } else if (percent <= 75) {
                 image_name = "battery-good";
-        else
+        } else {
                 image_name = "battery-full";
+        }
         /* Fully charged OR charging */
-        if (state == 4)
+        if (state == 4) {
                 image = g_strdup_printf("battery-full-charged-%s", "symbolic");
-        else if (state == 1)
+        } else if (state == 1) {
                 image = g_strdup_printf("%s-charging-symbolic", image_name);
-        else
+        } else {
                 image = g_strdup_printf("%s-symbolic", image_name);
+        }
 
         /* Set a helpful tooltip */
         percent2 = (gint)percent;
@@ -159,10 +161,12 @@ static void update_ui(PowerApplet *self)
         g_free(image);
 
 end:
-        if (error)
+        if (error) {
                 g_error_free(error);
-        if (devices)
+        }
+        if (devices) {
                 g_ptr_array_unref(devices);
+        }
 }
 
 static void device_changed_cb(UpClient *client,
@@ -172,6 +176,7 @@ static void device_changed_cb(UpClient *client,
         PowerApplet *self;
 
         self = POWER_APPLET(userdata);
-        if (device == self->battery)
+        if (device == self->battery) {
                 update_ui(self);
+        }
 }

@@ -39,8 +39,9 @@ static gboolean should_exit = FALSE;
 
 static void activate(GApplication *application, gpointer userdata)
 {
-        if (activated)
+        if (activated) {
                 return;
+        }
 
         GError *error = NULL;
         gint exit = 0;
@@ -100,29 +101,34 @@ static void activate(GApplication *application, gpointer userdata)
         /* Now we wait for previously async-launched WM to exit */
         while (TRUE) {
                 /* Logout requested */
-                if (should_exit)
+                if (should_exit) {
                         goto child_end;
+                }
 
                 wID = waitpid(pid, &c_ret, WNOHANG|WUNTRACED);
                 if (wID < 0) {
                         fprintf(stderr, "waitpid(%d) failure. Aborting\n",
                                 wID);
                         goto child_end;
-                } else if (wID == 0)
+                } else if (wID == 0) {
                         g_main_context_iteration(NULL, TRUE);
-                else if (wID == pid)
+                } else if (wID == pid) {
                         break;
+                }
         }
 child_end:
         g_spawn_close_pid(pid);
         g_application_release(application);
 end:
-        if (gsd_app)
+        if (gsd_app) {
                 g_object_unref(gsd_app);
-        if (error)
+        }
+        if (error) {
                 g_error_free(error);
-        if (p_argv)
+        }
+        if (p_argv) {
                 g_strfreev(p_argv);
+        }
 }
 
 static void logout_cb(GAction *action,

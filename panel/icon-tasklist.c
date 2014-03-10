@@ -142,14 +142,16 @@ static gboolean button_clicked(GtkWidget *widget,
         guint32 timestamp = gtk_get_current_event_time();
 
         /* Only interested in presses */
-        if(event->type != GDK_BUTTON_PRESS && event->type != GDK_TOUCH_END)
+        if (event->type != GDK_BUTTON_PRESS && event->type != GDK_TOUCH_END) {
                 return FALSE;
+        }
 
         bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(widget),
                                                  "bwindow");
         /* Something happen! return here. */
-        if(!bwindow)
+        if (!bwindow) {
                 return TRUE;
+        }
 
         if (event->button.button == 3) {
                 menu = (GtkWidget*)g_object_get_data(G_OBJECT(widget), "bmenu");
@@ -157,14 +159,15 @@ static gboolean button_clicked(GtkWidget *widget,
                         NULL, event->button.button, timestamp);
                 return TRUE;
         }
-        if(wnck_window_is_minimized(bwindow)) {
+        if (wnck_window_is_minimized(bwindow)) {
                 wnck_window_unminimize(bwindow, timestamp);
                 wnck_window_activate(bwindow, timestamp);
         } else {
-                if(wnck_window_is_active(bwindow))
+                if (wnck_window_is_active(bwindow)) {
                         wnck_window_minimize(bwindow);
-                else
+                } else {
                         wnck_window_activate(bwindow, timestamp);
+                }
         }
         return TRUE;
 }
@@ -180,8 +183,9 @@ static void window_opened(WnckScreen *screen,
         IconTasklist *self = ICON_TASKLIST(userdata);
 
         /* Don't add buttons for tasklist skipping apps */
-        if (wnck_window_is_skip_tasklist(window))
+        if (wnck_window_is_skip_tasklist(window)) {
                 return;
+        }
 
         title = wnck_window_get_name(window);
         image = gtk_image_new();
@@ -199,8 +203,9 @@ static void window_opened(WnckScreen *screen,
         gtk_widget_set_tooltip_text(button, title);
 
         /* Press it if its active */
-        if (wnck_window_is_active(window))
+        if (wnck_window_is_active(window)) {
                 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+        }
 
         /* Store a reference to this window for destroy ops, etc. */
         g_object_set_data(G_OBJECT(button), "bwindow", window);
@@ -242,8 +247,9 @@ static void window_closed(WnckScreen *screen,
         /* If a buttons window matches the closing window, destroy the button */
         list = gtk_container_get_children(GTK_CONTAINER(self));
         for (elem = list; elem; elem = elem->next) {
-                if (!GTK_IS_TOGGLE_BUTTON(elem->data))
+                if (!GTK_IS_TOGGLE_BUTTON(elem->data)) {
                         continue;
+                }
                 toggle = GTK_WIDGET(elem->data);
                 bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
                 if (bwindow == window) {
@@ -267,22 +273,25 @@ static void active_changed(WnckScreen *screen,
 
         /* don't update our state for these guys (i.e. menu) */
         if (active && (wnck_window_is_skip_pager(active) ||
-                wnck_window_is_skip_tasklist(active)))
+                wnck_window_is_skip_tasklist(active))) {
                 return;
+        }
 
         /* If a buttons window matches the closing window, destroy the button */
         list = gtk_container_get_children(GTK_CONTAINER(self));
         for (elem = list; elem; elem = elem->next) {
-                if (!GTK_IS_TOGGLE_BUTTON(elem->data))
+                if (!GTK_IS_TOGGLE_BUTTON(elem->data)) {
                         continue;
+                }
                 toggle = GTK_WIDGET(elem->data);
                 bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(toggle), "bwindow");
                 /* Deselect previous window */
-                if (!active)
+                if (!active) {
                         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), FALSE);
-                else
+                } else {
                         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle),
                                 bwindow == active);
+                }
         }
 }
 
