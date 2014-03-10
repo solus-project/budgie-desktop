@@ -2,6 +2,9 @@
 
 bin_PROGRAMS = budgie-session
 
+EXTRA_DIST = \
+	org.freedesktop.login1.xml
+
 budgie_session_SOURCES = \
 	budgie-session.c
 
