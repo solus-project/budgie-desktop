@@ -26,7 +26,10 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+/* This file isn't generated for static anaylsis */
+#ifndef I_CAN_HAZ_SPARSE
 #include "sd_logind_proxy.h"
+#endif
 
 typedef struct _BudgieSessionDialog BudgieSessionDialog;
 typedef struct _BudgieSessionDialogClass   BudgieSessionDialogClass;

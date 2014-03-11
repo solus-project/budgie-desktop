@@ -31,6 +31,7 @@
 #define ACTION_LOGOUT "logout"
 
 #define DESKTOP_WM "budgie-wm"
+
 #define DESKTOP_PANEL "budgie-panel"
 #define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
 
