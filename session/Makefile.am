@@ -20,6 +20,8 @@ libsdloginproxy_la_LIBADD = \
 
 budgie_session_SOURCES = \
 	budgie-session.c \
+	../data/budgie-session-dialog-resources.h \
+	../data/budgie-session-dialog-resources.c \
 	budgie-session-dialog.h \
 	budgie-session-dialog.c
 
@@ -36,6 +38,8 @@ budgie_session_LDADD = \
 	libsdloginproxy.la
 
 budgie_session_dialog_SOURCES = \
+	../data/budgie-session-dialog-resources.h \
+	../data/budgie-session-dialog-resources.c \
 	budgie-session-dialog.h \
 	budgie-session-dialog.c \
 	budgie-session-dialog-main.c
