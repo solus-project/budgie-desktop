@@ -21,6 +21,7 @@
  * 
  */
 
+#include "common.h"
 #include "clock-applet.h"
 
 G_DEFINE_TYPE(ClockApplet, clock_applet, PANEL_APPLET_TYPE)
@@ -70,7 +71,7 @@ GtkWidget* clock_applet_new(void)
 static gboolean update_clock(gpointer userdata)
 {
         ClockApplet *self;
-        gchar *date_string;
+        autofree gchar *date_string = NULL;
         GDateTime *dtime;
         /* TODO: Make configurable */
         gboolean show_date = FALSE;
@@ -89,7 +90,6 @@ static gboolean update_clock(gpointer userdata)
         }
 
         gtk_label_set_markup(GTK_LABEL(self->label), date_string);
-        g_free(date_string);
         g_date_time_unref(dtime);
 
         return TRUE;

@@ -27,6 +27,7 @@
 #include <string.h>
 #include <gmenu-tree.h>
 
+#include "common.h"
 #include "menu-window.h"
 
 struct _MenuWindowPriv {
@@ -349,7 +350,7 @@ static void list_header(GtkListBoxRow *before,
         MenuWindow *self;
         GtkWidget *child, *header;
         gchar *prev = NULL, *next = NULL;
-        gchar *displ_name;
+        autofree gchar *displ_name = NULL;
 
         self = MENU_WINDOW(userdata);
         /* Hide headers when inside categories */
@@ -376,7 +377,6 @@ static void list_header(GtkListBoxRow *before,
                 /* Need a header */
                 displ_name = g_markup_printf_escaped("<big>%s</big>", prev);
                 header = gtk_label_new(displ_name);
-                g_free(displ_name);
                 gtk_label_set_use_markup(GTK_LABEL(header), TRUE);
                 gtk_list_box_row_set_header(before, header);
                 gtk_widget_set_halign(header, GTK_ALIGN_START);
@@ -454,7 +454,8 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
 
 static gboolean string_contains(const gchar *string, const gchar *term)
 {
-        gchar *small1, *small2;
+        autofree gchar *small1 = NULL;
+        autofree gchar *small2 = NULL;
         gboolean ret = FALSE;
         gchar *found = NULL;
 
@@ -468,7 +469,5 @@ static gboolean string_contains(const gchar *string, const gchar *term)
         if (found) {
                 ret = TRUE;
         }
-        g_free(small1);
-        g_free(small2);
         return ret;
 }

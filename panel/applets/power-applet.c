@@ -21,6 +21,7 @@
  * 
  */
 
+#include "common.h"
 #include "power-applet.h"
 
 G_DEFINE_TYPE(PowerApplet, power_applet, PANEL_APPLET_TYPE)
@@ -96,11 +97,12 @@ static void update_ui(PowerApplet *self)
         UpDevice *device;
         int i;
         gdouble percent;
-        gchar *image_name = NULL, *image = NULL;
+        gchar *image_name = NULL;
+        autofree gchar *image = NULL;
         guint8 state;
         /* No .0000's */
         gint percent2;
-        gchar *tooltip = NULL;
+        autofree gchar *tooltip = NULL;
 
         if (!self->battery) {
                 /* Determine the battery device */
@@ -154,11 +156,9 @@ static void update_ui(PowerApplet *self)
         percent2 = (gint)percent;
         tooltip = g_strdup_printf("Battery remaining: %d%%", percent2);
         gtk_widget_set_tooltip_text(GTK_WIDGET(self), tooltip);
-        g_free(tooltip);
 
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), image,
                 GTK_ICON_SIZE_MENU);
-        g_free(image);
 
 end:
         if (error) {

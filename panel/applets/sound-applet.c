@@ -20,7 +20,8 @@
  * 
  * 
  */
-
+ 
+#include "common.h"
 #include "sound-applet.h"
 #include <math.h>
 
@@ -52,7 +53,7 @@ static void update_volume(SoundApplet *self)
         int n;
         const gchar *image;
         gdouble db;
-        gchar *tooltip = NULL;
+        autofree gchar *tooltip = NULL;
 
         stream = gvc_mixer_control_get_default_sink(self->mixer);
         vol_norm = gvc_mixer_control_get_vol_max_norm(self->mixer);
@@ -84,7 +85,6 @@ static void update_volume(SoundApplet *self)
                 db = gvc_mixer_stream_get_decibel(stream);
                 tooltip = g_strdup_printf("%f dB", db);
                 gtk_widget_set_tooltip_text(GTK_WIDGET(self), tooltip);
-                g_free(tooltip);
         }
 }
 
