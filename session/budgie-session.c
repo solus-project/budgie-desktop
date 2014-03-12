@@ -145,7 +145,7 @@ static void logout_cb(GAction *action,
         g_application_release(application);
 }
 
-int main(int argc, char **argv)
+gint main(gint argc, gchar **argv)
 {
         GApplication *app = NULL;
         GSimpleAction *action = NULL;

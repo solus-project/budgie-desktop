@@ -24,7 +24,7 @@
 #include "budgie-panel.h"
 #include <stdlib.h>
 
-int main(int argc, char **argv)
+gint main(gint argc, gchar **argv)
 {
         __attribute__ ((unused)) BudgiePanel *panel;
 
