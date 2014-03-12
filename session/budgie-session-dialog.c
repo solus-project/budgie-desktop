@@ -217,7 +217,7 @@ static void clicked(GtkWidget *button, gpointer userdata)
                 /* Poweroff */
                 sd_login_manager_call_power_off_sync(self->proxy, TRUE, NULL, &error);
                 if (error) {
-                        g_printerr("Unable to reboot!");
+                        g_printerr("Unable to power off!");
                         g_error_free(error);
                 }
         } else if (g_str_equal(data, "reboot")) {
