@@ -5,7 +5,7 @@ gsettings_SCHEMAS = com.evolve-os.budgie.panel.gschema.xml
 @GSETTINGS_RULES@
 
 EXTRA_DIST = \
-	budgie-desktop.desktop \
+	budgie-desktop.desktop.in \
 	com.evolve-os.budgie.panel.gschema.xml \
 	budgie-panel.gresource.xml \
 	session-dialog.gresource.xml \

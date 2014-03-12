@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Budgie Desktop
 Comment=This session logs you into the Budgie Desktop
-Exec=/usr/bin/budgie-session
-TryExec=/usr/bin/budgie-session
+Exec=@prefix@/bin/budgie-session
+TryExec=@prefix@/bin/budgie-session
 Icon=
 Type=Application
+Name[en_US]=budgie-desktop.desktop
