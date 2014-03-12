@@ -447,8 +447,8 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
 {
         budgie_popover_hide(BUDGIE_POPOVER(userdata));
 
-        if (!g_spawn_command_line_async("budgie-session --logout", NULL)) {
-                g_message("Unable to logout!");
+        if (!g_spawn_command_line_async("budgie-session-dialog", NULL)) {
+                g_message("Unable to spawn session dialog!");
         }
 }
 

@@ -1,13 +1,12 @@
 -include $(top_srcdir)/common.mk
 
-bin_PROGRAMS = budgie-session
+bin_PROGRAMS = budgie-session \
+	       budgie-session-dialog
 
 EXTRA_DIST = \
 	org.freedesktop.login1.xml
 
 noinst_LTLIBRARIES = libsdloginproxy.la
-
-noinst_PROGRAMS = budgie-session-dialog
 
 libsdloginproxy_la_SOURCES = \
 	sd_logind_proxy.c

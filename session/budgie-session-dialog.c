@@ -229,8 +229,13 @@ static void clicked(GtkWidget *button, gpointer userdata)
                         g_printerr("Unable to reboot!");
                         g_error_free(error);
                 }
+        } else if (g_str_equal(data, "logout")) {
+                if (!g_spawn_command_line_async("budgie-session --logout", NULL)) {
+                        g_message("Unable to logout!");
+                }
         }
-        /* TODO: Implement logout and cancel */
+        g_object_unref(self);
+        gtk_main_quit();
 }
 
 static void init_styles(BudgieSessionDialog *self)
