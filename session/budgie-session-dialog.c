@@ -30,6 +30,7 @@ static void budgie_session_dialog_class_init(BudgieSessionDialogClass *klass);
 static void budgie_session_dialog_init(BudgieSessionDialog *self);
 static void budgie_session_dialog_dispose(GObject *object);
 
+static void clicked(GtkWidget *button, gpointer userdata);
 static void init_styles(BudgieSessionDialog *self);
 
 typedef enum {
@@ -147,11 +148,13 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         /* Add some buttons to uh.. logout, etc. :) */
         button = gtk_button_new_with_label("Logout");
         g_object_set_data(G_OBJECT(button), "action", "logout");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
         button = gtk_button_new_with_label("Reboot");
         g_object_set_data(G_OBJECT(button), "action", "reboot");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
         if (!can_reboot) {
@@ -160,6 +163,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
 
         button = gtk_button_new_with_label("Poweroff");
         g_object_set_data(G_OBJECT(button), "action", "poweroff");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
         if (!can_poweroff) {
@@ -168,6 +172,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
 
         button = gtk_button_new_with_label("Cancel");
         g_object_set_data(G_OBJECT(button), "action", "cancel");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
@@ -199,6 +204,33 @@ BudgieSessionDialog* budgie_session_dialog_new(void)
 
         self = g_object_new(BUDGIE_SESSION_DIALOG_TYPE, NULL);
         return self;
+}
+
+static void clicked(GtkWidget *button, gpointer userdata)
+{
+        BudgieSessionDialog *self;
+        const gchar *data;
+        GError *error = NULL;
+
+        self = BUDGIE_SESSION_DIALOG(userdata);
+        data = g_object_get_data(G_OBJECT(button), "action");
+
+        if (g_str_equal(data, "poweroff")) {
+                /* Poweroff */
+                sd_login_manager_call_power_off_sync(self->proxy, TRUE, NULL, &error);
+                if (error) {
+                        g_printerr("Unable to reboot!");
+                        g_error_free(error);
+                }
+        } else if (g_str_equal(data, "reboot")) {
+                /* Reboot */
+                sd_login_manager_call_reboot_sync(self->proxy, TRUE, NULL, &error);
+                if (error) {
+                        g_printerr("Unable to reboot!");
+                        g_error_free(error);
+                }
+        }
+        /* TODO: Implement logout and cancel */
 }
 
 static void init_styles(BudgieSessionDialog *self)
