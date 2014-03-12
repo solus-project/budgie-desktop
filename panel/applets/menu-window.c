@@ -291,8 +291,9 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
 static void toggled_cb(GtkWidget *widget, gpointer userdata)
 {
         MenuWindow *self;
-        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
                 return;
+        }
 
         self = MENU_WINDOW(userdata);
         self->priv->group = g_object_get_data(G_OBJECT(widget), "group");
@@ -326,14 +327,17 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         }
         gtk_widget_set_sensitive(self->priv->group_box, TRUE);
         /* If no group is set, don't filter */
-        if (self->priv->group == NULL)
+        if (self->priv->group == NULL) {
                 return TRUE;
+        }
 
-        if (data == NULL)
+        if (data == NULL) {
                 return TRUE;
+        }
 
-        if (!g_str_equal(data, self->priv->group))
+        if (!g_str_equal(data, self->priv->group)) {
                 return FALSE;
+        }
 
         return TRUE;
 }
@@ -351,10 +355,12 @@ static void list_header(GtkListBoxRow *before,
         /* Hide headers when inside categories */
         if (self->priv->group && !(strlen(self->priv->search_term) > 0 &&
                 !g_str_equal(self->priv->search_term, ""))) {
-                if (before)
+                if (before) {
                         gtk_list_box_row_set_header(before, NULL);
-                if (after)
+                }
+                if (after) {
                         gtk_list_box_row_set_header(after, NULL);
+                }
                 return;
         }
 
@@ -394,11 +400,12 @@ static GtkWidget* new_image_button(const gchar *text,
                 button = gtk_button_new();
         box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(button), box);
-        if (icon)
+        if (icon) {
                 image = gtk_image_new_from_gicon(icon, icon_size);
-        else
+        } else {
                 image = gtk_image_new_from_icon_name("applications-system",
                         icon_size);
+        }
 
         g_object_set(image, "margin-right", 10, NULL);
         gtk_widget_set_halign(image, GTK_ALIGN_START);
@@ -440,8 +447,9 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
 {
         budgie_popover_hide(BUDGIE_POPOVER(userdata));
 
-        if (!g_spawn_command_line_async("budgie-session --logout", NULL))
-                g_message("Unable to logout!");
+        if (!g_spawn_command_line_async("budgie-session-dialog", NULL)) {
+                g_message("Unable to spawn session dialog!");
+        }
 }
 
 static gboolean string_contains(const gchar *string, const gchar *term)
@@ -450,14 +458,16 @@ static gboolean string_contains(const gchar *string, const gchar *term)
         gboolean ret = FALSE;
         gchar *found = NULL;
 
-        if (!string || !term)
+        if (!string || !term) {
                 return FALSE;
+        }
 
         small1 = g_ascii_strdown(term, -1);
         small2 = g_ascii_strdown(string, -1);
         found = g_strrstr(small2, small1);
-        if (found)
+        if (found) {
                 ret = TRUE;
+        }
         g_free(small1);
         g_free(small2);
         return ret;

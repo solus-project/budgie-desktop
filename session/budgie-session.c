@@ -31,6 +31,7 @@
 #define ACTION_LOGOUT "logout"
 
 #define DESKTOP_WM "budgie-wm"
+
 #define DESKTOP_PANEL "budgie-panel"
 #define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
 
@@ -39,8 +40,9 @@ static gboolean should_exit = FALSE;
 
 static void activate(GApplication *application, gpointer userdata)
 {
-        if (activated)
+        if (activated) {
                 return;
+        }
 
         GError *error = NULL;
         gint exit = 0;
@@ -100,29 +102,34 @@ static void activate(GApplication *application, gpointer userdata)
         /* Now we wait for previously async-launched WM to exit */
         while (TRUE) {
                 /* Logout requested */
-                if (should_exit)
+                if (should_exit) {
                         goto child_end;
+                }
 
                 wID = waitpid(pid, &c_ret, WNOHANG|WUNTRACED);
                 if (wID < 0) {
                         fprintf(stderr, "waitpid(%d) failure. Aborting\n",
                                 wID);
                         goto child_end;
-                } else if (wID == 0)
+                } else if (wID == 0) {
                         g_main_context_iteration(NULL, TRUE);
-                else if (wID == pid)
+                } else if (wID == pid) {
                         break;
+                }
         }
 child_end:
         g_spawn_close_pid(pid);
         g_application_release(application);
 end:
-        if (gsd_app)
+        if (gsd_app) {
                 g_object_unref(gsd_app);
-        if (error)
+        }
+        if (error) {
                 g_error_free(error);
-        if (p_argv)
+        }
+        if (p_argv) {
                 g_strfreev(p_argv);
+        }
 }
 
 static void logout_cb(GAction *action,
@@ -147,12 +154,13 @@ int main(int argc, char **argv)
         app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
-        /* Set up actions (currently just logout ) */
+        /* Logout action */
         action = g_simple_action_new(ACTION_LOGOUT, NULL);
         g_signal_connect(action, "activate", G_CALLBACK(logout_cb), app);
         g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
         g_object_unref(action);
 
+        /* TODO: Use opts!! */
         if (argc > 1) {
                 if (g_str_equal(argv[1], "--logout")) {
                         g_application_register(app, NULL, NULL);

@@ -1,0 +1,10 @@
+/**
+ * This file contains styling overrides for
+ * BudgieSessionDialog
+ */
+
+
+GtkWindow {
+    border-radius: 6px;
+    border: none;
+}

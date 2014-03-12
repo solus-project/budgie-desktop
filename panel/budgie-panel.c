@@ -76,10 +76,11 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         x = 0;
 
         /* Place at bottom or top */
-        if (self->position == PANEL_BOTTOM)
+        if (self->position == PANEL_BOTTOM) {
                 y = (height - alloc.height)+1;
-        else
+        } else {
                 y = 0;
+        }
 
         gtk_window_move(GTK_WINDOW(self), x, y);
 
@@ -148,10 +149,11 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Decide if we're using X11 or Wayland */
         display = gdk_display_get_default();
-        if (GDK_IS_X11_DISPLAY(display))
+        if (GDK_IS_X11_DISPLAY(display)) {
                 self->x11 = TRUE;
-        else
+        } else {
                 self->x11 = FALSE;
+        }
 
         /* Our main layout is a horizontal box */
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -213,8 +215,9 @@ static void budgie_panel_init(BudgiePanel *self)
         /* Set ourselves up to be the correct size and position */
         screen = gdk_display_get_default_screen(display);
         visual = gdk_screen_get_rgba_visual(screen);
-        if (visual)
+        if (visual) {
                 gtk_widget_set_visual(GTK_WIDGET(self), visual);
+        }
 
         width = gdk_screen_get_width(screen);
         gtk_widget_set_size_request(GTK_WIDGET(self), width, PANEL_HEIGHT);

@@ -26,20 +26,20 @@ it is launched.
 
 *TODO:*
  * Ensure static size and position of panel
- * Fix weird glitches with widget/message area border rendering
+ * Fix weird glitches with widget/message area border rendering ✓
  * Start adding support for translations
  * Optimize menu (hack GdkPixbuf and GtkImage loading)
  * When GTK 3.12 is stable, use GtkPopover in place of BudgiePopover (for 3.12 systems only)
- * Add logout confirmation dialog
+ * Add logout confirmation dialog ✓
  * Add some form of notification system
  * Add network control (ConnMan & Network Manager)
- * Add sound control (PulseAudio) and support media keys
- * Integrate with systemd to provide shutdown and reboot options
+ * Add sound control (PulseAudio) and support media keys (partly done) ✓
+ * Integrate with systemd to provide shutdown and reboot options ✓
  * Allow adding launchers directly to panel
  * Allow pinning menu launchers to panel (see above point)
  * Add some kind of polkit agent
  * Support Wayland (lack of wnck-style wayland interation = major issue)
- * Fix popover grab (clicking desktop doesn't make popover hide, etc.)
+ * Fix popover grab (clicking desktop doesn't make popover hide, etc.) ✓
 
 *Implementation note:*
 
