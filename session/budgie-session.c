@@ -160,11 +160,12 @@ static void dialog_cb(GAction *action,
                       GVariant *param,
                       gpointer userdata)
 {
-        if (dialog) {
-                gtk_widget_destroy(GTK_WIDGET(dialog));
+        if (!dialog) {
+                dialog = budgie_session_dialog_new();
+                /* Just hide on delete */
+                g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
         }
 
-        dialog = budgie_session_dialog_new();
         gtk_widget_show_all(GTK_WIDGET(dialog));
 }
 

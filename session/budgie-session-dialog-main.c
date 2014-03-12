@@ -33,6 +33,7 @@ gint main(gint argc, gchar **argv)
 
         dialog = budgie_session_dialog_new();
         gtk_widget_show_all(GTK_WIDGET(dialog));
+        g_signal_connect(dialog, "delete-event", gtk_main_quit, NULL);
         gtk_main();
         
         return EXIT_SUCCESS;
