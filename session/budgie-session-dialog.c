@@ -32,6 +32,23 @@ static void budgie_session_dialog_dispose(GObject *object);
 
 static void init_styles(BudgieSessionDialog *self);
 
+typedef enum {
+        SD_CHALLENGE,
+        SD_YES,
+        SD_NO
+} SdResponse;
+
+static inline SdResponse get_response(gchar *resp)
+{
+        if (g_str_equal(resp, "challenge")) {
+                return SD_CHALLENGE;
+        } else if (g_str_equal(resp, "yes")) {
+                return SD_YES;
+        } else {
+                return SD_NO;
+        }
+}
+
 /* Initialisation */
 static void budgie_session_dialog_class_init(BudgieSessionDialogClass *klass)
 {
@@ -49,9 +66,55 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         GtkWidget *image;
         GtkWidget *label;
         gchar *txt = NULL;
+        GError *error = NULL;
         GtkStyleContext *style;
+        gboolean can_reboot = FALSE;
+        gboolean can_poweroff = FALSE;
+        gboolean can_systemd = TRUE;
+        gchar *result = NULL;
+        SdResponse response;
 
         init_styles(self);
+
+        /* Let's set up some systemd logic eh? */
+        self->proxy = sd_login_manager_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+                G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
+                "org.freedesktop.login1",
+                "/org/freedesktop/login1",
+                NULL,
+                &error);
+        if (error) {
+                g_error_free(error);
+                can_systemd = FALSE;
+        } else {
+                can_systemd = TRUE;
+        }
+
+        if (can_systemd) {
+                /* Can we reboot? */
+                if (!sd_login_manager_call_can_reboot_sync(self->proxy,
+                        &result, NULL, NULL)) {
+                        can_reboot = FALSE;
+                } else {
+                        response = get_response(result);
+                        g_free(result);
+                        if (response == SD_YES || response == SD_CHALLENGE) {
+                                can_reboot = TRUE;
+                        }
+                }
+                /* Can we shutdown? */
+                if (!sd_login_manager_call_can_power_off_sync(self->proxy,
+                        &result, NULL, NULL)) {
+                        can_poweroff = FALSE;
+                } else {
+                        response = get_response(result);
+                        g_free(result);
+                        if (response == SD_YES || response == SD_CHALLENGE) {
+                                can_poweroff = TRUE;
+                        }
+                }
+        }
+
 
         gtk_window_set_position(GTK_WINDOW(self), GTK_WIN_POS_CENTER_ALWAYS);
         gtk_window_set_title(GTK_WINDOW(self), "End your session?");
@@ -83,18 +146,28 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
 
         /* Add some buttons to uh.. logout, etc. :) */
         button = gtk_button_new_with_label("Logout");
+        g_object_set_data(G_OBJECT(button), "action", "logout");
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
         button = gtk_button_new_with_label("Reboot");
+        g_object_set_data(G_OBJECT(button), "action", "reboot");
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+        if (!can_reboot) {
+                gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+        }
 
         button = gtk_button_new_with_label("Poweroff");
+        g_object_set_data(G_OBJECT(button), "action", "poweroff");
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+        if (!can_poweroff) {
+                gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+        }
 
         button = gtk_button_new_with_label("Cancel");
+        g_object_set_data(G_OBJECT(button), "action", "cancel");
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
@@ -108,6 +181,13 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
 
 static void budgie_session_dialog_dispose(GObject *object)
 {
+        BudgieSessionDialog *self;
+
+        self = BUDGIE_SESSION_DIALOG(object);
+        if (self->proxy) {
+                g_object_unref(self->proxy);
+                self->proxy = NULL;
+        }
         /* Destruct */
         G_OBJECT_CLASS (budgie_session_dialog_parent_class)->dispose (object);
 }

@@ -44,6 +44,7 @@ typedef struct _BudgieSessionDialogClass   BudgieSessionDialogClass;
 /* BudgieSessionDialog object */
 struct _BudgieSessionDialog {
         GtkWindow parent;
+        SdLoginManager *proxy;
 };
 
 /* BudgieSessionDialog class definition */
