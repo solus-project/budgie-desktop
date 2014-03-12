@@ -42,6 +42,12 @@ static void budgie_session_dialog_class_init(BudgieSessionDialogClass *klass)
 
 static void budgie_session_dialog_init(BudgieSessionDialog *self)
 {
+        /* Just hide on delete, we're kept around for life! */
+        g_signal_connect(self, "delete", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+        gtk_window_set_position(GTK_WINDOW(self), GTK_WIN_POS_CENTER_ALWAYS);
+        gtk_window_set_title(GTK_WINDOW(self), "End your session?");
+        gtk_window_set_default_size(GTK_WINDOW(self), 400, 400);
 }
 
 static void budgie_session_dialog_dispose(GObject *object)
