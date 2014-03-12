@@ -87,6 +87,18 @@ done in an asynchronous manner. On my machine, 190 .desktop files in the
 menu yields a total budgie-panel RAM use of ~44MB (including all elements
 of the panel). This is largely due to the use of GdkPixbuf's
 
+
+*Dependencies:*
+
+ * libpulse
+ * libpulse-mainloop-glib
+ * GTK3 (>= 3.10.1)
+ * upower-glib (>= 0.9.21)
+ * libgnome-menu (>= 3.10.1)
+ * libwnck (>= 3.4.7)
+ * libmutter (>= 3.10.1)
+ * GLib (>= 2.38.0)
+
 Author
 ===
  * Ikey Doherty <ikey.doherty@gmail.com>
