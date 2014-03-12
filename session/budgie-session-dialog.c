@@ -21,6 +21,7 @@
  * 
  */
 
+#include "common.h"
 #include "budgie-session-dialog.h"
 
 G_DEFINE_TYPE(BudgieSessionDialog, budgie_session_dialog, GTK_TYPE_WINDOW)
@@ -66,13 +67,13 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         GtkWidget *top;
         GtkWidget *image;
         GtkWidget *label;
-        gchar *txt = NULL;
+        autofree gchar *txt = NULL;
         GError *error = NULL;
         GtkStyleContext *style;
         gboolean can_reboot = FALSE;
         gboolean can_poweroff = FALSE;
         gboolean can_systemd = TRUE;
-        gchar *result = NULL;
+        autofree gchar *result = NULL;
         SdResponse response;
 
         init_styles(self);
@@ -98,7 +99,6 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                         can_reboot = FALSE;
                 } else {
                         response = get_response(result);
-                        g_free(result);
                         if (response == SD_YES || response == SD_CHALLENGE) {
                                 can_reboot = TRUE;
                         }
@@ -109,7 +109,6 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                         can_poweroff = FALSE;
                 } else {
                         response = get_response(result);
-                        g_free(result);
                         if (response == SD_YES || response == SD_CHALLENGE) {
                                 can_poweroff = TRUE;
                         }
@@ -141,7 +140,6 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         /* And a helpful label */
         txt = g_strdup_printf("<big>Goodbye, %s!</big>", g_get_user_name());
         label = gtk_label_new(txt);
-        g_free(txt);
         gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
         gtk_box_pack_start(GTK_BOX(top), label, TRUE, TRUE, 0);
 
