@@ -8,6 +8,8 @@ EXTRA_DIST = \
 	budgie-desktop.desktop \
 	com.evolve-os.budgie.panel.gschema.xml \
 	budgie-panel.gresource.xml \
+	session-dialog.gresource.xml \
+	dialog.css \
 	app.css \
 	style.css
 
