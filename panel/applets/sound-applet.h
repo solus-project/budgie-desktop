@@ -63,6 +63,6 @@ GType sound_applet_get_type(void);
  * Construct a new SoundApplet
  * @return A new SoundApplet
  */
-GtkWidget* sound_applet_new(void);
+GtkWidget *sound_applet_new(void);
 
 #endif /* sound_applet_h */

@@ -57,6 +57,6 @@ GType clock_applet_get_type(void);
  * Construct a new ClockApplet
  * @return A new ClockApplet
  */
-GtkWidget* clock_applet_new(void);
+GtkWidget *clock_applet_new(void);
 
 #endif /* clock_applet_h */

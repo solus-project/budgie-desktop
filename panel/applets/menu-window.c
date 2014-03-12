@@ -50,7 +50,7 @@ static void menu_window_init(MenuWindow *self);
 static void menu_window_dispose(GObject *object);
 
 static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory);
-static GtkWidget* new_image_button(const gchar *text,
+static GtkWidget *new_image_button(const gchar *text,
                                    GIcon *icon,
                                    gboolean radio);
 static void toggled_cb(GtkWidget *widget, gpointer userdata);
@@ -189,7 +189,7 @@ static void menu_window_dispose(GObject *object)
 }
 
 /* Utility; return a new MenuWindow */
-GtkWidget* menu_window_new(void)
+GtkWidget *menu_window_new(void)
 {
         MenuWindow *self;
 
@@ -384,7 +384,7 @@ static void list_header(GtkListBoxRow *before,
         }
 }
 
-static GtkWidget* new_image_button(const gchar *text,
+static GtkWidget *new_image_button(const gchar *text,
                                    GIcon *icon,
                                    gboolean radio)
 {
@@ -450,24 +450,4 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
         if (!g_spawn_command_line_async("budgie-session-dialog", NULL)) {
                 g_message("Unable to spawn session dialog!");
         }
-}
-
-static gboolean string_contains(const gchar *string, const gchar *term)
-{
-        autofree gchar *small1 = NULL;
-        autofree gchar *small2 = NULL;
-        gboolean ret = FALSE;
-        gchar *found = NULL;
-
-        if (!string || !term) {
-                return FALSE;
-        }
-
-        small1 = g_ascii_strdown(term, -1);
-        small2 = g_ascii_strdown(string, -1);
-        found = g_strrstr(small2, small1);
-        if (found) {
-                ret = TRUE;
-        }
-        return ret;
 }

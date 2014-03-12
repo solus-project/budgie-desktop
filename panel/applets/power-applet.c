@@ -81,7 +81,7 @@ static void power_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new PowerApplet */
-GtkWidget* power_applet_new(void)
+GtkWidget *power_applet_new(void)
 {
         PowerApplet *self;
 

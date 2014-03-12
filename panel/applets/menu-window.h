@@ -57,7 +57,7 @@ GType menu_window_get_type(void);
  * Construct a new MenuWindow
  * @return A new MenuWindow
  */
-GtkWidget* menu_window_new(void);
+GtkWidget *menu_window_new(void);
 
 /**
  * Make the window presentable to be visible

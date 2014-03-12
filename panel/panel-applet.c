@@ -50,7 +50,7 @@ static void panel_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new PanelApplet */
-GtkWidget* panel_applet_new(void)
+GtkWidget *panel_applet_new(void)
 {
         PanelApplet *self;
 

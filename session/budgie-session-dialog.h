@@ -60,6 +60,6 @@ GType budgie_session_dialog_get_type(void);
  * Construct a new BudgieSessionDialog
  * @return A new BudgieSessionDialog
  */
-BudgieSessionDialog* budgie_session_dialog_new(void);
+BudgieSessionDialog *budgie_session_dialog_new(void);
 
 #endif /* budgie_session_dialog_h */

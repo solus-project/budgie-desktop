@@ -90,7 +90,7 @@ static void menu_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new MenuApplet */
-GtkWidget* menu_applet_new(void)
+GtkWidget *menu_applet_new(void)
 {
         MenuApplet *self;
 

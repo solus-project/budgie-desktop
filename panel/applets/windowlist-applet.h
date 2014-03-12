@@ -56,6 +56,6 @@ GType windowlist_applet_get_type(void);
  * Construct a new WindowlistApplet
  * @return A new WindowlistApplet
  */
-GtkWidget* windowlist_applet_new(void);
+GtkWidget *windowlist_applet_new(void);
 
 #endif /* windowlist_applet_h */

@@ -60,7 +60,7 @@ static void clock_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new ClockApplet */
-GtkWidget* clock_applet_new(void)
+GtkWidget *clock_applet_new(void)
 {
         ClockApplet *self;
 

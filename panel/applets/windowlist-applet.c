@@ -60,7 +60,7 @@ static void windowlist_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new WindowlistApplet */
-GtkWidget* windowlist_applet_new(void)
+GtkWidget *windowlist_applet_new(void)
 {
         WindowlistApplet *self;
 

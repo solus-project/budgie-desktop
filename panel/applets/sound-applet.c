@@ -141,7 +141,7 @@ static void sound_applet_dispose(GObject *object)
 }
 
 /* Utility; return a new SoundApplet */
-GtkWidget* sound_applet_new(void)
+GtkWidget *sound_applet_new(void)
 {
         SoundApplet *self;
 

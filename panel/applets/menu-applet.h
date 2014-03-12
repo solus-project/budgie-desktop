@@ -59,6 +59,6 @@ GType menu_applet_get_type(void);
  * Construct a new MenuApplet
  * @return A new MenuApplet
  */
-GtkWidget* menu_applet_new(void);
+GtkWidget *menu_applet_new(void);
 
 #endif /* menu_applet_h */

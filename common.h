@@ -32,3 +32,23 @@ static inline void cleanup_free(void *p)
 }
 
 #define autofree __attribute__ ((cleanup(cleanup_free)))
+
+static inline gboolean string_contains(const gchar *string, const gchar *term)
+{
+        autofree gchar *small1 = NULL;
+        autofree gchar *small2 = NULL;
+        gboolean ret = FALSE;
+        gchar *found = NULL;
+
+        if (!string || !term) {
+                return FALSE;
+        }
+
+        small1 = g_ascii_strdown(term, -1);
+        small2 = g_ascii_strdown(string, -1);
+        found = g_strrstr(small2, small1);
+        if (found) {
+                ret = TRUE;
+        }
+        return ret;
+}

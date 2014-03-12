@@ -62,6 +62,6 @@ GType power_applet_get_type(void);
  * Construct a new PowerApplet
  * @return A new PowerApplet
  */
-GtkWidget* power_applet_new(void);
+GtkWidget *power_applet_new(void);
 
 #endif /* power_applet_h */

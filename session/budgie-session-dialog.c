@@ -196,7 +196,7 @@ static void budgie_session_dialog_dispose(GObject *object)
 }
 
 /* Utility; return a new BudgieSessionDialog */
-BudgieSessionDialog* budgie_session_dialog_new(void)
+BudgieSessionDialog *budgie_session_dialog_new(void)
 {
         BudgieSessionDialog *self;
 

@@ -80,6 +80,6 @@ GType budgie_panel_get_type(void);
  * Construct a new BudgiePanel
  * @return A new BudgiePanel
  */
-BudgiePanel* budgie_panel_new(void);
+BudgiePanel *budgie_panel_new(void);
 
 #endif /* budgie_panel_h */

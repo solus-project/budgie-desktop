@@ -54,6 +54,6 @@ GType panel_applet_get_type(void);
  * Construct a new PanelApplet
  * @return A new PanelApplet
  */
-GtkWidget* panel_applet_new(void);
+GtkWidget *panel_applet_new(void);
 
 #endif /* panel_applet_h */

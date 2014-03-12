@@ -252,7 +252,7 @@ static void budgie_panel_dispose(GObject *object)
 }
 
 /* Utility; return a new BudgiePanel */
-BudgiePanel* budgie_panel_new(void)
+BudgiePanel *budgie_panel_new(void)
 {
         BudgiePanel *self;
 
