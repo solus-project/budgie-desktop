@@ -18,23 +18,16 @@ libsdloginproxy_la_LIBADD = \
 	$(GIO_UNIX_LIBS)
 
 budgie_session_SOURCES = \
-	budgie-session.c \
-	../data/budgie-session-dialog-resources.h \
-	../data/budgie-session-dialog-resources.c \
-	budgie-session-dialog.h \
-	budgie-session-dialog.c
+	budgie-session.c
 
 budgie_session_CFLAGS = \
 	$(GIO_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
-	$(GTK3_CFLAGS) \
 	$(AM_CFLAGS)
 
 budgie_session_LDADD = \
 	$(GIO_LIBS) \
-	$(GIO_UNIX_LIBS) \
-	$(GTK3_LIBS) \
-	libsdloginproxy.la
+	$(GIO_UNIX_LIBS)
 
 budgie_session_dialog_SOURCES = \
 	../data/budgie-session-dialog-resources.h \

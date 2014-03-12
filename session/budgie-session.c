@@ -26,12 +26,9 @@
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
 #include <sys/wait.h>
-#include <gtk/gtk.h>
-#include "budgie-session-dialog.h"
 
 #define BUDGIE_SESSION_ID "com.evolve_os.BudgieSession"
 #define ACTION_LOGOUT "logout"
-#define ACTION_DIALOG "dialog"
 
 #define DESKTOP_WM "budgie-wm"
 
@@ -40,8 +37,6 @@
 
 static gboolean activated = FALSE;
 static gboolean should_exit = FALSE;
-
-static BudgieSessionDialog *dialog = NULL;
 
 static void activate(GApplication *application, gpointer userdata)
 {
@@ -118,9 +113,6 @@ static void activate(GApplication *application, gpointer userdata)
                         goto child_end;
                 } else if (wID == 0) {
                         g_main_context_iteration(NULL, TRUE);
-                        while (gtk_events_pending()) {
-                                gtk_main_iteration();
-                        }
                 } else if (wID == pid) {
                         break;
                 }
@@ -138,9 +130,6 @@ end:
         if (p_argv) {
                 g_strfreev(p_argv);
         }
-        if (dialog) {
-                gtk_widget_destroy(GTK_WIDGET(dialog));
-        }
 }
 
 static void logout_cb(GAction *action,
@@ -156,26 +145,11 @@ static void logout_cb(GAction *action,
         g_application_release(application);
 }
 
-static void dialog_cb(GAction *action,
-                      GVariant *param,
-                      gpointer userdata)
-{
-        if (!dialog) {
-                dialog = budgie_session_dialog_new();
-                /* Just hide on delete */
-                g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-        }
-
-        gtk_widget_show_all(GTK_WIDGET(dialog));
-}
-
 int main(int argc, char **argv)
 {
         GApplication *app = NULL;
         GSimpleAction *action = NULL;
         int status = 0;
-
-        gtk_init(&argc, &argv);
 
         app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
@@ -186,22 +160,12 @@ int main(int argc, char **argv)
         g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
         g_object_unref(action);
 
-        /* Session dialog */
-        action = g_simple_action_new(ACTION_DIALOG, NULL);
-        g_signal_connect(action, "activate", G_CALLBACK(dialog_cb), app);
-        g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
-        g_object_unref(action);
-
         /* TODO: Use opts!! */
         if (argc > 1) {
                 if (g_str_equal(argv[1], "--logout")) {
                         g_application_register(app, NULL, NULL);
                         g_action_group_activate_action(G_ACTION_GROUP(app),
                                 ACTION_LOGOUT, NULL);
-                } else if (g_str_equal(argv[1], "--dialog")) {
-                        g_application_register(app, NULL, NULL);
-                        g_action_group_activate_action(G_ACTION_GROUP(app),
-                                ACTION_DIALOG, NULL);
                 } else {
                         printf("Unknown command: %s\n", argv[1]);
                         return EXIT_FAILURE;
