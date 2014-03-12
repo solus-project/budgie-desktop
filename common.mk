@@ -8,6 +8,7 @@ AM_CFLAGS =  -fstack-protector -Wall -pedantic \
         -DDATADIR=\"$(datadir)\"
 
 AM_CPPFLAGS += \
+	-I $(top_srcdir) \
 	-I $(top_srcdir)/gvc \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/panel/applets \
