@@ -7,6 +7,7 @@ EXTRA_DIST = \
 
 noinst_LTLIBRARIES = libsdloginproxy.la
 
+noinst_PROGRAMS = budgie-session-dialog
 
 libsdloginproxy_la_SOURCES = \
 	sd_logind_proxy.c
@@ -29,6 +30,23 @@ budgie_session_CFLAGS = \
 	$(AM_CFLAGS)
 
 budgie_session_LDADD = \
+	$(GIO_LIBS) \
+	$(GIO_UNIX_LIBS) \
+	$(GTK3_LIBS) \
+	libsdloginproxy.la
+
+budgie_session_dialog_SOURCES = \
+	budgie-session-dialog.h \
+	budgie-session-dialog.c \
+	budgie-session-dialog-main.c
+
+budgie_session_dialog_CFLAGS = \
+	$(GIO_CFLAGS) \
+	$(GIO_UNIX_CFLAGS) \
+	$(GTK3_CFLAGS) \
+	$(AM_CFLAGS)
+
+budgie_session_dialog_LDADD = \
 	$(GIO_LIBS) \
 	$(GIO_UNIX_LIBS) \
 	$(GTK3_LIBS) \
