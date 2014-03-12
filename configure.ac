@@ -50,6 +50,7 @@ GOBJECT_INTROSPECTION_CHECK([1.38.0])
 
 AC_CONFIG_FILES(Makefile
                 data/Makefile
+		data/budgie-desktop.desktop
                 gvc/Makefile
                 panel/Makefile
                 session/Makefile
