@@ -60,6 +60,7 @@ static void list_header(GtkListBoxRow *before,
                         GtkListBoxRow *after,
                         gpointer userdata);
 static void changed_cb(GtkWidget *widget, gpointer userdata);
+static void activate_cb(GtkWidget *widget, gpointer userdata);
 static void logout_cb(GtkWidget *widget, gpointer userdata);
 
 /* Consider splitting into a panel-util helper */
@@ -97,6 +98,8 @@ static void menu_window_init(MenuWindow *self)
         search_entry = gtk_search_entry_new();
         self->priv->entry = search_entry;
         g_signal_connect(search_entry, "changed", G_CALLBACK(changed_cb),
+                self);
+        g_signal_connect(search_entry, "activate", G_CALLBACK(activate_cb),
                 self);
         gtk_box_pack_start(GTK_BOX(main_layout), search_entry, FALSE, FALSE, 0);
 
@@ -443,6 +446,31 @@ static void changed_cb(GtkWidget *widget, gpointer userdata)
         /* Set the search term */
         self->priv->search_term = gtk_entry_get_text(GTK_ENTRY(widget));
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
+}
+
+static void activate_cb(GtkWidget *widget, gpointer userdata)
+{
+        MenuWindow *self;
+        GtkWidget *selected = NULL;
+        GtkWidget *child;
+        GList *kids, *elem;
+
+        self = MENU_WINDOW(userdata);
+        kids = gtk_container_get_children(GTK_CONTAINER(self->priv->app_box));
+        /* Find the first visible row */
+        for (elem = kids; elem != NULL; elem = elem->next) {
+                if (gtk_widget_get_visible(GTK_WIDGET(elem->data)) &&
+                        gtk_widget_get_child_visible(GTK_WIDGET(elem->data))) {
+                        selected = GTK_WIDGET(elem->data);
+                        break;
+                }
+        }
+        if (!selected) {
+                return;
+        }
+        child = gtk_bin_get_child(GTK_BIN(selected));
+        /* Palm it off to click handler */
+        clicked_cb(child, self);
 }
 
 static void logout_cb(GtkWidget *widget, gpointer userdata)
