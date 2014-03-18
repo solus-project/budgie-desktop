@@ -1,7 +1,9 @@
 Budgie Desktop
 ---
 
-Simple desktop using libmutter and a panel
+Simple desktop using libmutter and a panel :
+
+http://evolve-os.com/wp-content/uploads/2014/03/Screenshot-from-2014-03-12-212937.png
 
                      _              __           _    
                     | |            / _|         | |   
