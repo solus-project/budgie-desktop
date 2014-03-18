@@ -473,6 +473,7 @@ start (MetaPlugin *plugin)
   MetaScreen *screen = meta_plugin_get_screen (plugin);
 
   self->priv->background_group = meta_background_group_new ();
+  clutter_actor_set_background_color (self->priv->background_group, CLUTTER_COLOR_Black);
   clutter_actor_insert_child_below (meta_get_window_group_for_screen (screen),
                                     self->priv->background_group, NULL);
 
