@@ -25,8 +25,6 @@ budgie_panel_SOURCES = \
 	applets/windowlist-applet.c \
 	budgie-panel.c \
 	budgie-panel.h \
-	xutils.h \
-	xutils.c \
 	budgie-panel-main.c
 
 budgie_panel_CFLAGS = \
@@ -36,7 +34,6 @@ budgie_panel_CFLAGS = \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
 	$(UPOWER_CFLAGS) \
-	$(X11_CFLAGS) \
 	$(GMENU_CFLAGS) \
 	$(AM_CFLAGS)
 
@@ -47,5 +44,4 @@ budgie_panel_LDADD = \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
 	$(UPOWER_LIBS) \
-	$(X11_LIBS) \
 	$(GMENU_LIBS)
