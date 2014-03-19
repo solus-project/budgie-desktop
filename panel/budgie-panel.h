@@ -25,6 +25,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #define BUDGIE_SCHEMA "com.evolve-os.budgie.panel"
 #define BUDGIE_PANEL_LOCATION "location"

@@ -31,9 +31,6 @@
 #include "applets/sound-applet.h"
 #include "applets/windowlist-applet.h"
 
-/* X11 specific */
-#include "xutils.h"
-
 G_DEFINE_TYPE(BudgiePanel, budgie_panel, GTK_TYPE_WINDOW)
 
 #define PANEL_HEIGHT 45
@@ -67,6 +64,8 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
         int height, x, y;
         GtkAllocation alloc;
         GdkWindow *window;
+        long vals[4];
+        GdkAtom atom;
 
         self = BUDGIE_PANEL(userdata);
         screen = gtk_widget_get_screen(widget);
@@ -84,17 +83,24 @@ static void realized_cb(GtkWidget *widget, gpointer userdata)
 
         gtk_window_move(GTK_WINDOW(self), x, y);
 
-        /* Reserve struts on X11 display */
-        if (self->x11) {
-                window = gtk_widget_get_window(GTK_WIDGET(self));
-                /* Bottom or top strut */
-                if (window) {
-                        if (self->position == PANEL_BOTTOM)
-                                xstuff_set_wmspec_strut(window, 0, 0, 0, alloc.height);
-                        else
-                                xstuff_set_wmspec_strut(window, 0, 0, alloc.height, 0);
-                }
+        vals[0] = 0;
+        vals[1] = 0;
+        if (self->position == PANEL_BOTTOM){
+            vals[2] = 0;
+            vals[3] = alloc.height;
+        }else {
+            vals[2] = alloc.height;
+            vals[3] = 0;
         }
+
+        /* Reserve space for the bar with the window manager */
+        atom = gdk_atom_intern ("_NET_WM_STRUT", FALSE);
+        window = gtk_widget_get_window(GTK_WIDGET(widget));
+        if (window){
+            gdk_property_change (window, atom, gdk_atom_intern("CARDINAL", FALSE), 
+                            32, GDK_PROP_MODE_REPLACE, (guchar *)vals, 4);
+        }
+
         gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
