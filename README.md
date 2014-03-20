@@ -3,6 +3,7 @@ Budgie Desktop
 
 Simple desktop using libmutter and a panel :
 [![budgie_screenshot] (https://raw.githubusercontent.com/yomi0/budgie-desktop/master/Screenshot.png) (#screenshot)
+
                      _              __           _    
                     | |            / _|         | |   
          _ __   ___ | |_    __ _  | |_ ___  _ __| | __
