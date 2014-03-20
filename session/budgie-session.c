@@ -38,6 +38,13 @@
 static gboolean activated = FALSE;
 static gboolean should_exit = FALSE;
 
+/* args options */
+static gboolean opt_logout = FALSE;
+static GOptionEntry options[] = {
+        { "logout", 'l', 0, G_OPTION_ARG_NONE, &opt_logout, "Logout", NULL },
+        { NULL }
+};
+
 static void activate(GApplication *application, gpointer userdata)
 {
         if (activated) {
@@ -148,8 +155,20 @@ static void logout_cb(GAction *action,
 gint main(gint argc, gchar **argv)
 {
         GApplication *app = NULL;
+        GOptionContext *context = NULL;
         GSimpleAction *action = NULL;
         int status = 0;
+        GError *error = NULL;
+
+        /* Options */
+        context = g_option_context_new("- the budgie-desktop session manager");
+        g_option_context_add_main_entries(context, options, NULL);
+
+        if (!g_option_context_parse(context, &argc, &argv, &error)) {
+                g_printerr("%s\n", error->message);
+                g_error_free(error);
+                return EXIT_FAILURE;
+        }
 
         app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
@@ -160,16 +179,10 @@ gint main(gint argc, gchar **argv)
         g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
         g_object_unref(action);
 
-        /* TODO: Use opts!! */
-        if (argc > 1) {
-                if (g_str_equal(argv[1], "--logout")) {
-                        g_application_register(app, NULL, NULL);
-                        g_action_group_activate_action(G_ACTION_GROUP(app),
-                                ACTION_LOGOUT, NULL);
-                } else {
-                        printf("Unknown command: %s\n", argv[1]);
-                        return EXIT_FAILURE;
-                }
+        if (opt_logout) {
+                g_application_register(app, NULL, NULL);
+                g_action_group_activate_action(G_ACTION_GROUP(app),
+                                               ACTION_LOGOUT, NULL);
         } else {
                 status = g_application_run(app, argc, argv);
         }
