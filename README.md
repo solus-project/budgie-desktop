@@ -2,9 +2,7 @@ Budgie Desktop
 ---
 
 Simple desktop using libmutter and a panel :
-
-http://evolve-os.com/wp-content/uploads/2014/03/Screenshot-from-2014-03-12-212937.png
-
+[![budgie_screenshot] (https://raw.githubusercontent.com/yomi0/budgie-desktop/master/Screenshot.png) (#screenshot)
                      _              __           _    
                     | |            / _|         | |   
          _ __   ___ | |_    __ _  | |_ ___  _ __| | __
