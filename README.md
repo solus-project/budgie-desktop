@@ -3,6 +3,9 @@ Budgie Desktop
 
 Simple desktop using libmutter and a panel
 
+![budgie_screenshot](https://raw.githubusercontent.com/evolve-os/budgie-desktop/master/Screenshot.png)
+
+
                      _              __           _    
                     | |            / _|         | |   
          _ __   ___ | |_    __ _  | |_ ___  _ __| | __
