@@ -672,39 +672,7 @@ minimize (MetaPlugin *plugin, MetaWindowActor *window_actor)
 }
 
 /*
- * Minimize effect completion callback; this function restores actor state, and
- * calls the manager callback function.
- */
-static void
-on_maximize_effect_complete (ClutterTimeline *timeline, EffectCompleteData *data)
-{
-  /*
-   * Must reverse the effect of the effect.
-   */
-  MetaPlugin *plugin = data->plugin;
-  MetaWindowActor *window_actor = META_WINDOW_ACTOR (data->actor);
-  ActorPrivate *apriv = get_actor_private (window_actor);
-
-  apriv->tml_maximize = NULL;
-
-  /* FIXME - don't assume the original scale was 1.0 */
-  clutter_actor_set_scale (data->actor, 1.0, 1.0);
-  clutter_actor_move_anchor_point_from_gravity (data->actor,
-                                                CLUTTER_GRAVITY_NORTH_WEST);
-
-  /* Now notify the manager that we are done with this effect */
-  meta_plugin_maximize_completed (plugin, window_actor);
-
-  g_free (data);
-}
-
-/*
- * The Nature of Maximize operation is such that it is difficult to do a visual
- * effect that would work well. Scaling, the obvious effect, does not work that
- * well, because at the end of the effect we end up with window content bigger
- * and differently laid out than in the real window; this is a proof concept.
- *
- * (Something like a sound would be more appropriate.)
+ * Simple maximize handler
  */
 static void
 maximize (MetaPlugin *plugin,
@@ -712,56 +680,15 @@ maximize (MetaPlugin *plugin,
           gint end_x, gint end_y, gint end_width, gint end_height)
 {
   MetaWindowType type;
-  ClutterActor *actor = CLUTTER_ACTOR (window_actor);
   MetaWindow *meta_window = meta_window_actor_get_meta_window (window_actor);
-
-  gdouble  scale_x    = 1.0;
-  gdouble  scale_y    = 1.0;
-  gfloat   anchor_x   = 0;
-  gfloat   anchor_y   = 0;
 
   type = meta_window_get_window_type (meta_window);
 
   if (type == META_WINDOW_NORMAL)
     {
-      ClutterAnimation *animation;
-      EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
-      gfloat width, height;
-      gfloat x, y;
 
       apriv->is_maximized = TRUE;
-
-      clutter_actor_get_size (actor, &width, &height);
-      clutter_actor_get_position (actor, &x, &y);
-
-      /*
-       * Work out the scale and anchor point so that the window is expanding
-       * smoothly into the target size.
-       */
-      scale_x = (gdouble)end_width / (gdouble) width;
-      scale_y = (gdouble)end_height / (gdouble) height;
-
-      anchor_x = (gdouble)(x - end_x)*(gdouble)width /
-        ((gdouble)(end_width - width));
-      anchor_y = (gdouble)(y - end_y)*(gdouble)height /
-        ((gdouble)(end_height - height));
-
-      clutter_actor_move_anchor_point (actor, anchor_x, anchor_y);
-
-      animation = clutter_actor_animate (actor,
-                                         CLUTTER_EASE_IN_SINE,
-                                         MAXIMIZE_TIMEOUT,
-                                         "scale-x", scale_x,
-                                         "scale-y", scale_y,
-                                         NULL);
-      apriv->tml_maximize = clutter_animation_get_timeline (animation);
-      data->plugin = plugin;
-      data->actor = actor;
-      g_signal_connect (apriv->tml_maximize, "completed",
-                        G_CALLBACK (on_maximize_effect_complete),
-                        data);
-      return;
     }
 
   meta_plugin_maximize_completed (plugin, window_actor);
