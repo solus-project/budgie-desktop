@@ -275,6 +275,33 @@ get_actor_private (MetaWindowActor *actor)
 }
 
 static void
+actor_reparent (ClutterActor *actor,
+                ClutterActor *new_parent)
+{
+  ClutterActor *old_parent;
+
+  old_parent = clutter_actor_get_parent (actor);
+
+  if (old_parent == new_parent)
+    return;
+
+  if (old_parent != NULL)
+    {
+      /* Avoid the reference count dropping to zero and the actor being
+       * destroyed
+       */
+      g_object_ref (actor);
+      clutter_actor_remove_child (old_parent, actor);
+      clutter_actor_add_child (new_parent, actor);
+      g_object_unref (actor);
+    }
+  else
+    {
+      clutter_actor_add_child (new_parent, actor);
+    }
+}
+
+static void
 on_switch_workspace_effect_complete (ClutterTimeline *timeline, gpointer data)
 {
   MetaPlugin               *plugin  = META_PLUGIN (data);
@@ -290,7 +317,7 @@ on_switch_workspace_effect_complete (ClutterTimeline *timeline, gpointer data)
 
       if (apriv->orig_parent)
         {
-          clutter_actor_reparent (a, apriv->orig_parent);
+          actor_reparent (a, apriv->orig_parent);
           apriv->orig_parent = NULL;
         }
 
@@ -495,8 +522,8 @@ switch_workspace (MetaPlugin *plugin,
   MetaScreen *screen;
   MetaDefaultPluginPrivate *priv = META_DEFAULT_PLUGIN (plugin)->priv;
   GList        *l;
-  ClutterActor *workspace0  = clutter_group_new ();
-  ClutterActor *workspace1  = clutter_group_new ();
+  ClutterActor *workspace0  = clutter_actor_new ();
+  ClutterActor *workspace1  = clutter_actor_new ();
   ClutterActor *stage;
   int           screen_width, screen_height;
   ClutterAnimation *animation;
@@ -508,17 +535,15 @@ switch_workspace (MetaPlugin *plugin,
                         &screen_width,
                         &screen_height);
 
-  clutter_actor_set_anchor_point (workspace1,
-                                  screen_width,
-                                  screen_height);
+  clutter_actor_set_pivot_point (workspace1, 1.0, 1.0);
   clutter_actor_set_position (workspace1,
                               screen_width,
                               screen_height);
 
   clutter_actor_set_scale (workspace1, 0.0, 0.0);
 
-  clutter_container_add_actor (CLUTTER_CONTAINER (stage), workspace1);
-  clutter_container_add_actor (CLUTTER_CONTAINER (stage), workspace0);
+  clutter_actor_add_child (stage, workspace1);
+  clutter_actor_add_child (stage, workspace0);
 
   if (from == to)
     {
@@ -544,10 +569,12 @@ switch_workspace (MetaPlugin *plugin,
         {
           apriv->orig_parent = clutter_actor_get_parent (actor);
 
-          clutter_actor_reparent (actor,
-				  win_workspace == to ? workspace1 : workspace0);
-          clutter_actor_show_all (actor);
-          clutter_actor_raise_top (actor);
+          actor_reparent (actor,
+                          win_workspace == to ? workspace1 : workspace0);
+          clutter_actor_show (actor);
+          clutter_actor_set_child_above_sibling (clutter_actor_get_parent (actor),
+                                                 actor,
+                                                 NULL);
         }
       else if (win_workspace < 0)
         {
@@ -610,8 +637,7 @@ on_minimize_effect_complete (ClutterTimeline *timeline, EffectCompleteData *data
   /* FIXME - we shouldn't assume the original scale, it should be saved
    * at the start of the effect */
   clutter_actor_set_scale (data->actor, 1.0, 1.0);
-  clutter_actor_move_anchor_point_from_gravity (data->actor,
-                                                CLUTTER_GRAVITY_NORTH_WEST);
+  clutter_actor_set_pivot_point (data->actor, 0.0, 0.0);
 
   /* Now notify the manager that we are done with this effect */
   meta_plugin_minimize_completed (plugin, window_actor);
@@ -648,8 +674,7 @@ minimize (MetaPlugin *plugin, MetaWindowActor *window_actor)
 
       apriv->is_minimized = TRUE;
 
-      clutter_actor_move_anchor_point_from_gravity (actor,
-                                                    CLUTTER_GRAVITY_CENTER);
+      clutter_actor_set_pivot_point (actor, 0.5, 0.5);
 
       animation = clutter_actor_animate (actor,
                                          CLUTTER_EASE_IN_SINE,
@@ -730,8 +755,7 @@ on_map_effect_complete (ClutterTimeline *timeline, EffectCompleteData *data)
 
   apriv->tml_map = NULL;
 
-  clutter_actor_move_anchor_point_from_gravity (data->actor,
-                                                CLUTTER_GRAVITY_NORTH_WEST);
+  clutter_actor_set_pivot_point (data->actor, 0.0, 0.0);
 
   /* Now notify the manager that we are done with this effect */
   meta_plugin_map_completed (plugin, window_actor);
@@ -759,8 +783,7 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
       EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
 
-      clutter_actor_move_anchor_point_from_gravity (actor,
-                                                    CLUTTER_GRAVITY_CENTER);
+      clutter_actor_set_pivot_point (actor, 0.5, 0.5);
 
       clutter_actor_set_scale (actor, 0.0, 0.0);
       clutter_actor_set_opacity (actor, 0);
@@ -844,8 +867,7 @@ destroy (MetaPlugin *plugin, MetaWindowActor *window_actor)
       EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
 
-      clutter_actor_move_anchor_point_from_gravity (actor,
-                                                    CLUTTER_GRAVITY_CENTER);
+      clutter_actor_set_pivot_point (actor, 0.5, 0.5);
 
       animation = clutter_actor_animate (actor,
                                          CLUTTER_EASE_IN_SINE,
