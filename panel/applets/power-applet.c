@@ -33,7 +33,7 @@ static void power_applet_dispose(GObject *object);
 
 /* Private methods */
 static void update_ui(PowerApplet *self);
-#if UP_MINOR_VERSION < 99
+#if UP_MAJOR_VERSION == 0 && UP_MINOR_VERSION < 99
 static void device_changed_cb(UpClient *client,
                              UpDevice *device,
                              gpointer userdata);
@@ -59,10 +59,10 @@ static void power_applet_init(PowerApplet *self)
 
         /* Initialise upower */
         self->client = up_client_new();
-        #if UP_MINOR_VERSION < 99
+#if UP_MAJOR_VERSION == 0 && UP_MINOR_VERSION < 99
         g_signal_connect(self->client, "device-changed",
                 G_CALLBACK(device_changed_cb), self);
-        #endif
+#endif
         self->battery = NULL;
         update_ui(self);
 }
@@ -110,9 +110,9 @@ static void update_ui(PowerApplet *self)
 
         if (!self->battery) {
                 /* Determine the battery device */
-                #if UP_MINOR_VERSION < 99
+#if UP_MAJOR_VERSION == 0 && UP_MINOR_VERSION < 99
                 up_client_enumerate_devices_sync(self->client, NULL, &error);
-                #endif
+#endif
                 if (error) {
                         g_warning("Unable to list devices: %s",
                                 error->message);
@@ -175,7 +175,7 @@ end:
         }
 }
 
-#if UP_MINOR_VERSION < 99
+#if UP_MAJOR_VERSION == 0 && UP_MINOR_VERSION < 99
 static void device_changed_cb(UpClient *client,
                              UpDevice *device,
                              gpointer userdata)
