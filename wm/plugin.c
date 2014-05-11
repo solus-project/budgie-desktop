@@ -45,10 +45,12 @@
 
 #include "plugin.h"
 
-#define DESTROY_TIMEOUT    250
+#define DESTROY_TIMEOUT    200
+#define DESTROY_SCALE      0.8
 #define MINIMIZE_TIMEOUT   250
 #define MAXIMIZE_TIMEOUT   250
-#define MAP_TIMEOUT        250
+#define MAP_TIMEOUT        200
+#define MAP_SCALE          0.8
 #define BACKGROUND_TIMEOUT 250
 #define SWITCH_TIMEOUT     500
 
@@ -834,7 +836,7 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
       clutter_actor_move_anchor_point_from_gravity (actor,
                                                     CLUTTER_GRAVITY_CENTER);
 
-      clutter_actor_set_scale (actor, 0.0, 0.0);
+      clutter_actor_set_scale (actor, MAP_SCALE, MAP_SCALE);
       clutter_actor_set_opacity (actor, 0);
       clutter_actor_show (actor);
 
@@ -922,8 +924,8 @@ destroy (MetaPlugin *plugin, MetaWindowActor *window_actor)
       animation = clutter_actor_animate (actor,
                                          CLUTTER_EASE_IN_SINE,
                                          DESTROY_TIMEOUT,
-                                         "scale-x", 0.0,
-                                         "scale-y", 0.0,
+                                         "scale-x", DESTROY_SCALE,
+                                         "scale-y", DESTROY_SCALE,
                                          "opacity", 0,
                                          NULL);
       apriv->tml_destroy = clutter_animation_get_timeline (animation);
