@@ -102,6 +102,7 @@ static void menu_window_init(MenuWindow *self)
                 self);
         g_signal_connect(search_entry, "activate", G_CALLBACK(activate_cb),
                 self);
+        g_object_set(search_entry, "margin", 1, NULL);
         gtk_box_pack_start(GTK_BOX(main_layout), search_entry, FALSE, FALSE, 0);
 
         layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
