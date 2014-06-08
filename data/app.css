@@ -32,4 +32,9 @@ GtkListBoxRow {
     font-size: x-large;
     transition: none;
     box-shadow: none;
+    border-radius: 6px 6px 1px 1px;
+}
+
+BudgiePopover {
+    border-radius: 6px;
 }

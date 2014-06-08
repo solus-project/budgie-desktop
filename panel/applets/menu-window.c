@@ -92,6 +92,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Main layout */
         main_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_set_border_width(GTK_CONTAINER(self), 11);
         gtk_container_add(GTK_CONTAINER(self), main_layout);
 
         /* Search field */

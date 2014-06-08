@@ -70,7 +70,7 @@ static gboolean button_press(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 static void budgie_popover_init(BudgiePopover *self)
 {
-        GtkWidget *empty = NULL;
+        GdkVisual *visual = NULL;
 
         self->top = FALSE;
         /* We don't override as we need some GtkWindow rendering */
@@ -78,8 +78,10 @@ static void budgie_popover_init(BudgiePopover *self)
         g_signal_connect(self, "key-press-event", G_CALLBACK(focus_lose), self);
         self->focus_id = g_signal_connect(self, "focus-out-event", G_CALLBACK(focus_lose), self);
 
-        empty = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
-        gtk_window_set_titlebar(GTK_WINDOW(self), empty);
+        gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+        visual = gdk_screen_get_rgba_visual(gdk_screen_get_default());
+        gtk_widget_set_visual(GTK_WIDGET(self), visual);
+        gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
 
         /* Skip, no decorations, etc */
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
