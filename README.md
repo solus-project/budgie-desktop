@@ -27,6 +27,14 @@ If budgie-session cannot locate the file, gnome-settings-daemon will not
 be launched, and dynamic settings for themes, etc, will not work until
 it is launched.
 
+SECOND NOTE:
+Ubuntu breaks the living shit out of Budgie. Do not report bugs for
+Budgie under Unity, using the default Ubuntu themes, using Compiz or
+relating to Ubuntu's GTK patches, dbus-exports or overlay scrollbars.
+All of these, as duly noted above, break Budgie. As these are not
+"standard" GTK problems and local to Ubuntu, they will not be worked
+around.
+
 *TODO:*
  * Ensure static size and position of panel
  * Fix weird glitches with widget/message area border rendering ✓
