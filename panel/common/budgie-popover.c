@@ -220,6 +220,7 @@ static void __create_mask(GtkWidget *widget)
         gdk_window_shape_combine_region(window, ct, 0, 0);
 
         cairo_surface_destroy(surf);
+        cairo_region_destroy(ct);
         cairo_destroy(cr);
 }
 
