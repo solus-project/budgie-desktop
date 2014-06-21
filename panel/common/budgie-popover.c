@@ -125,9 +125,9 @@ void budgie_popover_hide(BudgiePopover *self)
         self->con_id = 0;
 }
 
-static gboolean budgie_popover_draw(GtkWidget *widget,
-                                    cairo_t *cr,
-                                    gboolean draw)
+static void __budgie_popover_draw(GtkWidget *widget,
+                                  cairo_t *cr,
+                                  gboolean draw)
 {
         BudgiePopover *self = BUDGIE_POPOVER(widget);
         GtkStyleContext *style;
@@ -145,6 +145,10 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
 
         x += margin;
         y += margin;
+
+        cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_paint(cr);
 
         style = gtk_widget_get_style_context(widget);
         gtk_style_context_add_class(style, GTK_STYLE_CLASS_FRAME);
@@ -197,6 +201,43 @@ static gboolean budgie_popover_draw(GtkWidget *widget,
                 budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height, self->top);
         }
         cairo_stroke(cr);
+}
+
+static void __create_mask(GtkWidget *widget)
+{
+        cairo_surface_t *surf = NULL;
+        cairo_t *cr = NULL;
+        cairo_region_t *ct = NULL;
+        GdkWindow *window = NULL;
+
+        GtkAllocation alloc;
+
+        gtk_widget_get_allocation(widget, &alloc);
+
+        surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
+        cr = cairo_create(surf);
+        cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_paint(cr);
+
+        __budgie_popover_draw(widget, cr, TRUE);
+
+        ct = gdk_cairo_region_create_from_surface(surf);
+        window = gtk_widget_get_window(widget);
+        gdk_window_shape_combine_region(window, ct, 0, 0);
+
+        cairo_surface_destroy(surf);
+        cairo_destroy(cr);
+}
+
+static gboolean budgie_popover_draw(GtkWidget *widget,
+                                    cairo_t *cr,
+                                    gboolean draw)
+{
+
+        __create_mask(widget);
+
+        __budgie_popover_draw(widget, cr, draw);
 
         /* Draw children */
         gtk_container_propagate_draw(GTK_CONTAINER(widget),
