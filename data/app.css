@@ -28,13 +28,34 @@ GtkListBoxRow {
 .entry {
     border: none;
     background-image: none;
-    background-color: white;
+    background-color: alpha(white, 0.35);
+        background-color: #3498db;
+
     font-size: x-large;
     transition: none;
     box-shadow: none;
     border-radius: 6px 6px 1px 1px;
+    color: white;
 }
 
 BudgiePopover {
     border-radius: 6px;
+    /*background-color: alpha(@theme_bg_color, 0.88);*/
+    background-color: #ecf0f1;
+}
+
+.budgie-panel * {
+        color: white;
+    icon-shadow: 1 1 alpha(black, 0.5);
+
+}
+
+.budgie-panel {
+        border-top: 1px solid alpha(black, 0.15);
+        border-left: 1px solid alpha(black, 0.15);
+        border-right: 1px solid alpha(black, 0.15);
+        /*background-color: alpha(@theme_bg_color, 0.3);*/
+            background-color: alpha(#3498db, 0.7);
+
+        border-radius: 9px 9px 0px 0px;
 }
