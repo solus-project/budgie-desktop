@@ -92,7 +92,7 @@ static void menu_window_init(MenuWindow *self)
 
         /* Main layout */
         main_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width(GTK_CONTAINER(self), 11);
+        gtk_container_set_border_width(GTK_CONTAINER(self), 0);
         gtk_container_add(GTK_CONTAINER(self), main_layout);
 
         /* Search field */
@@ -109,11 +109,11 @@ static void menu_window_init(MenuWindow *self)
         gtk_box_pack_start(GTK_BOX(main_layout), layout, TRUE, TRUE, 0);
         g_object_set(layout, "margin-top", 4, "margin-bottom", 4,
                 "margin-left", 2, NULL);
+        /* Ensure there's no conflict into tail-region */
+        g_object_set(main_layout, "margin-bottom", 12, NULL);
 
         left_side = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_box_pack_start(GTK_BOX(layout), left_side, FALSE, FALSE, 0);
-
-
 
         /* Left hand side is just a scroller for categories */
         scroll = gtk_scrolled_window_new(NULL, NULL);

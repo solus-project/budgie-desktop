@@ -70,8 +70,6 @@ static gboolean button_press(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 static void budgie_popover_init(BudgiePopover *self)
 {
-        GdkVisual *visual = NULL;
-
         self->top = FALSE;
         /* We don't override as we need some GtkWindow rendering */
         g_signal_connect(self, "draw", G_CALLBACK(budgie_popover_draw), self);
@@ -79,8 +77,6 @@ static void budgie_popover_init(BudgiePopover *self)
         self->focus_id = g_signal_connect(self, "focus-out-event", G_CALLBACK(focus_lose), self);
 
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
-        visual = gdk_screen_get_rgba_visual(gdk_screen_get_default());
-        gtk_widget_set_visual(GTK_WIDGET(self), visual);
         gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
 
         /* Skip, no decorations, etc */
@@ -135,16 +131,12 @@ static void __budgie_popover_draw(GtkWidget *widget,
         GtkPositionType gap_side;
         GdkRGBA color;
         gdouble x, y, tail_height, gap_width;
-        gdouble margin, width, height, gap1, gap2;
+        gdouble width, height, gap1, gap2;
 
         x = 0;
         y = 0;
         tail_height = 12;
         gap_width = 24;
-        margin = 11;
-
-        x += margin;
-        y += margin;
 
         cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.0);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
@@ -160,14 +152,11 @@ static void __budgie_popover_draw(GtkWidget *widget,
         /* Remove height of tail, and margin, from our rendered size */
         width = alloc.width;
         height = alloc.height - tail_height;
-        height -= margin;
-        width -= margin*2;
 
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         gap1 = (alloc.width/2)-(gap_width/2);
         gap1 = self->widg_x;
         gap2 = gap1 + gap_width;
-        gap2 -= margin;
         gap_side = self->top == TRUE ? GTK_POS_TOP : GTK_POS_BOTTOM;
 
         /* Render a gap in the bottom center for our arrow */
@@ -179,9 +168,9 @@ static void __budgie_popover_draw(GtkWidget *widget,
         /* Clip to the tail, fill in the arrow background */
         cairo_save(cr);
         if (self->top) {
-                budgie_tail_path(cr, gap1, gap_width, y-margin, tail_height, self->top);
+                budgie_tail_path(cr, gap1, gap_width, y, tail_height, self->top);
         } else {
-                budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height, self->top);
+                budgie_tail_path(cr, gap1, gap_width, height, tail_height, self->top);
         }
         cairo_clip(cr);
         if (self->top) {
@@ -196,9 +185,9 @@ static void __budgie_popover_draw(GtkWidget *widget,
         gdk_cairo_set_source_rgba(cr, &color);
         cairo_set_line_width(cr, 1);
         if (self->top) {
-                budgie_tail_path(cr, gap1, gap_width, y-margin, tail_height, self->top);
+                budgie_tail_path(cr, gap1, gap_width, y, tail_height, self->top);
         } else {
-                budgie_tail_path(cr, gap1, gap_width, height+margin, tail_height, self->top);
+                budgie_tail_path(cr, gap1, gap_width, height, tail_height, self->top);
         }
         cairo_stroke(cr);
 }
