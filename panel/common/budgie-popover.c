@@ -43,6 +43,9 @@ static gboolean focus_lose(GtkWidget *widget,
                            GdkEvent *event,
                            gpointer userdata);
 
+static gboolean map_event(GtkWidget *widget,
+                          GdkEvent *event,
+                          gpointer userdata);
 /* Initialisation */
 static void budgie_popover_class_init(BudgiePopoverClass *klass)
 {
@@ -74,6 +77,7 @@ static void budgie_popover_init(BudgiePopover *self)
         /* We don't override as we need some GtkWindow rendering */
         g_signal_connect(self, "draw", G_CALLBACK(budgie_popover_draw), self);
         g_signal_connect(self, "key-press-event", G_CALLBACK(focus_lose), self);
+        g_signal_connect(self, "map-event", G_CALLBACK(map_event), self);
         self->focus_id = g_signal_connect(self, "focus-out-event", G_CALLBACK(focus_lose), self);
 
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
@@ -219,12 +223,18 @@ static void __create_mask(GtkWidget *widget)
         cairo_destroy(cr);
 }
 
+static gboolean map_event(GtkWidget *widget,
+                          GdkEvent *event,
+                          gpointer userdata)
+{
+        __create_mask(widget);
+        return FALSE;
+}
+
 static gboolean budgie_popover_draw(GtkWidget *widget,
                                     cairo_t *cr,
                                     gboolean draw)
 {
-
-        __create_mask(widget);
 
         __budgie_popover_draw(widget, cr, draw);
 
