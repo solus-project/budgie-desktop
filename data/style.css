@@ -10,8 +10,8 @@
     /*background-color: alpha(black, 0.8);*/
     background-color: alpha(white, 0.36);
     border-radius: 6px;
-    text-shadow: 1 1 alpha(black, 0.5);
-    icon-shadow: 1 1 alpha(black, 0.5);
+    text-shadow: 1px 1px alpha(black, 0.5);
+    icon-shadow: 1px 1px alpha(black, 0.5);
 }
 .budgie-panel .launcher {
     border: 2px solid alpha(white, 0.0);
