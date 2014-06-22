@@ -33,10 +33,12 @@
 #define PANEL_BOTTOM_KEY "bottom"
 
 #define BUDGIE_STYLE_PANEL "budgie-panel"
+#define BUDGIE_STYLE_MAX_PANEL "max-budgie-panel"
 #define BUDGIE_STYLE_PANEL_TOP "top"
 #define BUDGIE_STYLE_PANEL_ICON "launcher"
 #define BUDGIE_STYLE_MENU_ICON "menu-icon"
 #define BUDGIE_STYLE_MESSAGE_AREA "message-area"
+#define BUDGIE_STYLE_MAX_MESSAGE_AREA "max-message-area"
 
 typedef struct _BudgiePanel BudgiePanel;
 typedef struct _BudgiePanelClass   BudgiePanelClass;
@@ -57,6 +59,7 @@ typedef enum {
 struct _BudgiePanel {
         GtkWindow parent;
 
+        GtkWidget *widgets;
         GtkWidget *tasklist;
         GtkWidget *power;
         GtkWidget *clock;
@@ -82,5 +85,14 @@ GType budgie_panel_get_type(void);
  * @return A new BudgiePanel
  */
 BudgiePanel *budgie_panel_new(void);
+
+/**
+ * Notify BudgiePanel that the window area is obscured
+ * @param panel BudgiePanel instance
+ * @param obscured Boolean indicated that the workspace is obscured by
+ * a maximized screen
+ */
+void budgie_panel_set_view_obscured(BudgiePanel *panel,
+                                    gboolean obscured);
 
 #endif /* budgie_panel_h */

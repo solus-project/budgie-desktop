@@ -17,6 +17,7 @@
 struct _IconTasklist {
         GtkBox parent;
         WnckScreen *screen;
+        glong max_count;
 };
 
 /* IconTasklist class definition */
@@ -57,6 +58,11 @@ static void window_update_icon(WnckWindow *window,
 static void window_update_title(WnckWindow *window,
                                 gpointer userdata);
 
+static void window_update_state(WnckWindow *window,
+                                WnckWindowState changed_mask,
+                                WnckWindowState new_state,
+                                gpointer userdata);
+
 /* Initialisation */
 static void icon_tasklist_class_init(IconTasklistClass *klass)
 {
@@ -77,7 +83,7 @@ static void icon_tasklist_init(IconTasklist *self)
         g_signal_connect(self->screen, "active-window-changed",
                 G_CALLBACK(active_changed), self);
 
-        wnck_screen_force_update(self->screen);
+        //wnck_screen_force_update(self->screen);
         /* Align to the center vertically */
         gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_START);
 }
@@ -169,6 +175,7 @@ static void window_opened(WnckScreen *screen,
         GtkWidget *menu = NULL;
         const gchar *title;
         IconTasklist *self = ICON_TASKLIST(userdata);
+        WnckWindowState state;
 
         /* Don't add buttons for tasklist skipping apps */
         if (wnck_window_is_skip_tasklist(window)) {
@@ -206,6 +213,15 @@ static void window_opened(WnckScreen *screen,
          * Icon change is separate so we dont keep reloading images and wasting resources */
         g_signal_connect(window, "name-changed", G_CALLBACK(window_update_title), button);
         g_signal_connect(window, "icon-changed", G_CALLBACK(window_update_icon), button);
+        g_signal_connect(window, "state-changed", G_CALLBACK(window_update_state), self);
+
+        /* We actually need to force the update here first time */
+        state = wnck_window_get_state(window);
+        if (wnck_window_is_maximized_vertically(window)) {
+                /* Force window_update_state to run */
+                window_update_state(window, WNCK_WINDOW_STATE_MAXIMIZED_VERTICALLY,
+                        state, self);
+        }
 
         /* Override drawing of this button */
         g_signal_connect(button, "draw", G_CALLBACK(button_draw), self);
@@ -313,4 +329,38 @@ static void window_update_icon(WnckWindow *window,
 
         image = GTK_IMAGE(gtk_bin_get_child(GTK_BIN(userdata)));
         update_window_icon(image, window);
+}
+
+static void window_update_state(WnckWindow *window,
+                                WnckWindowState changed_mask,
+                                WnckWindowState new_state,
+                                gpointer userdata)
+{
+        BudgiePanel *toplevel = NULL;
+        IconTasklist *self = ICON_TASKLIST(userdata);
+
+        toplevel = BUDGIE_PANEL(gtk_widget_get_toplevel(GTK_WIDGET(self)));
+
+        if (new_state & WNCK_WINDOW_STATE_MINIMIZED &&
+            new_state & WNCK_WINDOW_STATE_MAXIMIZED_VERTICALLY) {
+               /* Reduce maximized count */
+               if (self->max_count > 0) {
+                       self->max_count -= 1;
+               }
+        } else {
+                /* Not minimized */
+                if (new_state & WNCK_WINDOW_STATE_MAXIMIZED_VERTICALLY) {
+                        self->max_count += 1;
+                } else if (changed_mask & WNCK_WINDOW_STATE_MAXIMIZED_VERTICALLY) {
+                        if (self->max_count > 0) {
+                                self->max_count -= 1;
+                        }
+                }
+        }
+        /* If we have a single visible maximized window, we show "obscured" */
+        if (self->max_count > 0) {
+                budgie_panel_set_view_obscured(toplevel, TRUE);
+        } else {
+                budgie_panel_set_view_obscured(toplevel, FALSE);
+        }
 }

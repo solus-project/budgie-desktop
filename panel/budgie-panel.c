@@ -171,6 +171,7 @@ static void budgie_panel_init(BudgiePanel *self)
 
         /* Group widgets under one area */
         widgets = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+        self->widgets = widgets;
         /* Now have it themed by eventbox */
         g_signal_connect(widgets, "draw", G_CALLBACK(budgie_panel_draw), self);
 
@@ -254,6 +255,24 @@ BudgiePanel *budgie_panel_new(void)
 
         self = g_object_new(BUDGIE_PANEL_TYPE, NULL);
         return self;
+}
+
+void budgie_panel_set_view_obscured(BudgiePanel *self,
+                                    gboolean obscured)
+{
+        GtkStyleContext *style, *style2;
+
+        style = gtk_widget_get_style_context(GTK_WIDGET(self));
+        style2 = gtk_widget_get_style_context(GTK_WIDGET(self->widgets));
+
+        /* Set the "max-screen" style */
+        if (obscured) {
+                gtk_style_context_add_class(style, BUDGIE_STYLE_MAX_PANEL);
+                gtk_style_context_add_class(style2, BUDGIE_STYLE_MAX_MESSAGE_AREA);
+        } else {
+                gtk_style_context_remove_class(style, BUDGIE_STYLE_MAX_PANEL);
+                gtk_style_context_remove_class(style2, BUDGIE_STYLE_MAX_MESSAGE_AREA);
+        }
 }
 
 static void init_styles(BudgiePanel *self)
