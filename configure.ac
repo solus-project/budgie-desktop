@@ -1,4 +1,4 @@
-AC_INIT([Budgie Desktop], 2, [ikey.doherty@gmail.com], [budgie-desktop], [http://ikeydoherty.github.io/])
+AC_INIT([Budgie Desktop], 3, [ikey.doherty@gmail.com], [budgie-desktop], [http://ikeydoherty.github.io/])
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC
@@ -31,7 +31,7 @@ PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
 
 # Required for power-applet
-PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.21])
+PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.20])
 
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
