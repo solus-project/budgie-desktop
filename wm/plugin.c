@@ -4,7 +4,12 @@
  * Copyright (c) 2008 Intel Corp.
  *
  * Author: Tomas Frydrych <tf@linux.intel.com>
+ * 
  * Adapted for budgie-wm by Ikey Doherty <ikey.doherty@gmail.com>
+ * Contributions can be checked with git log wm/plugin.c for new author
+ * list. My contributions to this file remain external to my employment
+ * and the GNOME project. They are here solely for the Evolve OS Budgie
+ * Desktop.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
