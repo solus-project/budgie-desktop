@@ -28,8 +28,6 @@ GtkListBoxRow {
 .entry {
     border: none;
     background-image: none;
-    background-color: alpha(white, 0.35);
-    /*background-color: #3498db;*/
     background-color: white;
 
     font-size: x-large;
