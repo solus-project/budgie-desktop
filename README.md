@@ -53,6 +53,7 @@ do currently render the menu useless.
  * Add some kind of polkit agent
  * Support Wayland (lack of wnck-style wayland interation = major issue)
  * Fix popover grab (clicking desktop doesn't make popover hide, etc.) ✓
+ * Darken panel when windows are maximized (hat-tip to Elementary here) ✓
 
 *Implementation note:*
 
