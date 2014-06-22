@@ -312,7 +312,7 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
         MenuWindow *self;
         GtkWidget *child;
         gchar *data = NULL;
-        const gchar *app_name, *desc, *name;
+        const gchar *app_name, *desc, *name, *exec;
         GDesktopAppInfo *info;
 
         self = MENU_WINDOW(userdata);
@@ -329,9 +329,11 @@ static gboolean filter_list(GtkListBoxRow *row, gpointer userdata)
                 app_name = g_app_info_get_display_name(G_APP_INFO(info));
                 desc = g_app_info_get_description(G_APP_INFO(info));
                 name = g_app_info_get_name(G_APP_INFO(info));
+                exec = g_app_info_get_executable(G_APP_INFO(info));
                 return (string_contains(app_name, self->priv->search_term) ||
                         string_contains(desc, self->priv->search_term) ||
-                        string_contains(name, self->priv->search_term));
+                        string_contains(name, self->priv->search_term) ||
+                        string_contains(exec, self->priv->search_term));
         }
         gtk_widget_set_sensitive(self->priv->group_box, TRUE);
         /* If no group is set, don't filter */
