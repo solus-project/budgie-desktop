@@ -33,6 +33,8 @@ static void icon_tasklist_init(IconTasklist *self);
 static void icon_tasklist_dispose(GObject *object);
 
 /* Private functionality */
+static void update_toplevel(IconTasklist *self);
+
 static gboolean button_draw(GtkWidget *widget,
                             cairo_t *cr,
                             gpointer userdata);
@@ -248,6 +250,14 @@ static void window_closed(WnckScreen *screen,
         GtkWidget *menu;
         WnckWindow *bwindow;
 
+        /* Ugly but needs handling separately */
+        if (wnck_window_is_maximized_vertically(window)) {
+                if (self->max_count > 0) {
+                        self->max_count -= 1;
+                }
+                update_toplevel(self);
+        }
+
         /* If a buttons window matches the closing window, destroy the button */
         list = gtk_container_get_children(GTK_CONTAINER(self));
         for (elem = list; elem; elem = elem->next) {
@@ -336,10 +346,7 @@ static void window_update_state(WnckWindow *window,
                                 WnckWindowState new_state,
                                 gpointer userdata)
 {
-        BudgiePanel *toplevel = NULL;
         IconTasklist *self = ICON_TASKLIST(userdata);
-
-        toplevel = BUDGIE_PANEL(gtk_widget_get_toplevel(GTK_WIDGET(self)));
 
         if (new_state & WNCK_WINDOW_STATE_MINIMIZED &&
             new_state & WNCK_WINDOW_STATE_MAXIMIZED_VERTICALLY) {
@@ -357,6 +364,15 @@ static void window_update_state(WnckWindow *window,
                         }
                 }
         }
+        update_toplevel(self);
+}
+
+static void update_toplevel(IconTasklist *self)
+{
+        BudgiePanel *toplevel = NULL;
+
+        toplevel = BUDGIE_PANEL(gtk_widget_get_toplevel(GTK_WIDGET(self)));
+
         /* If we have a single visible maximized window, we show "obscured" */
         if (self->max_count > 0) {
                 budgie_panel_set_view_obscured(toplevel, TRUE);
