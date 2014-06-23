@@ -139,6 +139,8 @@ gint main(gint argc, gchar **argv)
         GSimpleAction *action = NULL;
         int status = 0;
 
+        g_setenv("DESKTOP_SESSION", "gnome", TRUE);
+
         app = g_application_new(BUDGIE_SESSION_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
