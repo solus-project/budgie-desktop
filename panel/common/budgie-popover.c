@@ -358,13 +358,15 @@ void budgie_popover_present(BudgiePopover *self,
         if (rx >= our_alloc.width) {
                 rx = our_alloc.width - 20;
         }
-        if (rx <= 20) {
-                rx = 20;
-        }
+
+        /* TODO: Always attempt to position ourselves centered above
+         * the widget, work out offset and place tail accordingly
+         * Currently this works fine for the LHS-menu, but will need
+         * updating when we make this reusable for the aggregate menu */
         self->widg_x = rx;
 
 
-        gtk_window_move(GTK_WINDOW(self), tx-11, ty);
+        gtk_window_move(GTK_WINDOW(self), tx, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
         if (event) {
                 if (event->type == GDK_BUTTON_PRESS) {
