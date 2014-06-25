@@ -39,6 +39,9 @@ static gboolean button_draw(GtkWidget *widget,
 static gboolean button_clicked(GtkWidget *widget,
                                GdkEvent *event,
                                gpointer data);
+static void button_size_allocated(GtkWidget *button,
+                                  GtkAllocation *allocation,
+                                  gpointer user_data);
 
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
@@ -166,6 +169,19 @@ static gboolean button_clicked(GtkWidget *widget,
         return TRUE;
 }
 
+static void button_size_allocated(GtkWidget *button,
+                                  GtkAllocation *allocation,
+                                  gpointer user_data)
+{
+        /* Set the icon geometry (used for the minimise animation) */
+        gint x, y;
+        GtkWidget *toplevel = gtk_widget_get_toplevel(button);
+        WnckWindow *bwindow = (WnckWindow*)g_object_get_data(G_OBJECT(button), "bwindow");
+        gtk_widget_translate_coordinates(button, toplevel, 0, 0, &x, &y);
+        gdk_window_get_root_coords(gtk_widget_get_window(toplevel), x, y, &x, &y);
+        wnck_window_set_icon_geometry(bwindow, x, y, allocation->width, allocation->height);
+}
+
 static void window_opened(WnckScreen *screen,
                           WnckWindow *window,
                           gpointer userdata)
@@ -233,6 +249,8 @@ static void window_opened(WnckScreen *screen,
         g_signal_connect(button, "touch-event",
                          G_CALLBACK(button_clicked),
                          self);
+
+        g_signal_connect(button, "size-allocate", G_CALLBACK(button_size_allocated), self);
 
         gtk_box_pack_start(GTK_BOX(self), button, FALSE, FALSE, 0);
         gtk_widget_show_all(button);
