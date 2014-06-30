@@ -105,6 +105,8 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
 
 
         gtk_window_set_position(GTK_WINDOW(self), GTK_WIN_POS_CENTER_ALWAYS);
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
+        gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_title(GTK_WINDOW(self), "End your session?");
         gtk_window_set_default_size(GTK_WINDOW(self), 300, -1);
 
