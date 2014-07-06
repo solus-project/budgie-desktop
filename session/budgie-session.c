@@ -14,6 +14,7 @@
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
 #include <sys/wait.h>
+#include "common.h"
 
 #define BUDGIE_SESSION_ID "com.evolve_os.BudgieSession"
 #define ACTION_LOGOUT "logout"
@@ -21,10 +22,29 @@
 #define DESKTOP_WM "budgie-wm"
 
 #define DESKTOP_PANEL "budgie-panel"
-#define GSD_DESKTOP "/etc/xdg/autostart/gnome-settings-daemon.desktop"
 
 static gboolean activated = FALSE;
 static gboolean should_exit = FALSE;
+
+/**
+ * Activate all autostart entries
+ * Note this is only done via SYSTEM directories, we currently DO NOT
+ * support user-specific (~/.config/autostart) entries yet, as we'd
+ * have to track what's been launched, and what to ignore, order of
+ * execution, etc.
+ */
+static void activate_autostarts(void);
+
+/**
+ * Whether or not we should attempt to execute this entry.
+ */
+static gboolean should_autostart(GDesktopAppInfo *info);
+
+/**
+* Iterate a null terminated array
+*/
+#define foreach_string(x,y,i) const char *y = NULL;int i;\
+for (i=0; (y = *(x+i)) != NULL; i++ )
 
 static void activate(GApplication *application, gpointer userdata)
 {
@@ -39,21 +59,8 @@ static void activate(GApplication *application, gpointer userdata)
         gchar **p_argv = NULL;
         int wID;
         const gchar *home_dir;
-        GDesktopAppInfo *gsd_app = NULL;
-        const gchar *gsd_exec;
 
         home_dir = g_get_home_dir();
-
-        gsd_app = g_desktop_app_info_new_from_filename(GSD_DESKTOP);
-        if (gsd_app) {
-                gsd_exec = g_app_info_get_executable(G_APP_INFO(gsd_app));
-                /* Launch the settings daemon */
-                if (!g_spawn_command_line_async(gsd_exec, &error)) {
-                        fprintf(stderr, "Unable to launch settings: %s\n",
-                                error->message);
-                        goto end;
-                }
-        }
 
         /* Need to pass an argv to g_spawn_async */
         if (!g_shell_parse_argv(DESKTOP_WM, NULL, &p_argv, &error)) {
@@ -76,6 +83,10 @@ static void activate(GApplication *application, gpointer userdata)
 
         /* Give the window manager a second to sort itself out */
         sleep(1);
+
+        /* Ensures things like gnome-settings-daemon launch *after* the
+         * window manager but before the panel */
+        activate_autostarts();
 
         /* Launch panel component */
         if (!g_spawn_command_line_async(DESKTOP_PANEL, &error)) {
@@ -109,9 +120,6 @@ child_end:
         g_spawn_close_pid(pid);
         g_application_release(application);
 end:
-        if (gsd_app) {
-                g_object_unref(gsd_app);
-        }
         if (error) {
                 g_error_free(error);
         }
@@ -131,6 +139,111 @@ static void logout_cb(GAction *action,
         /* Mark process for exit */
         should_exit = TRUE;
         g_application_release(application);
+}
+
+static void activate_autostarts(void)
+{
+        const gchar * const *xdg_system = NULL;
+        char *path = NULL;
+
+        GFileType type;
+        GFile *file = NULL;
+        GFileInfo *next_file = NULL;
+        GFileEnumerator *listing = NULL;
+        const gchar *next_path;
+        gchar *full_path;
+
+        GDesktopAppInfo *app_info = NULL;
+
+        xdg_system = g_get_system_config_dirs();
+        if (!xdg_system) {
+                g_warning("Unable to determine xdg system directories. Not autostarting applications\n");
+                return;
+        }
+
+        /* Iterate each entry and launch all items in these directories */
+        foreach_string(xdg_system, dir, i) {
+                path = g_strdup_printf("%s/autostart", dir);
+                if (!path) {
+                        /* OOM */
+                        abort();
+                }
+
+                /* Check we have a directory */
+                file = g_file_new_for_path(path);
+                type = g_file_query_file_type(file, G_FILE_QUERY_INFO_NONE, NULL);
+                if (type != G_FILE_TYPE_DIRECTORY) {
+                        goto next;
+                }
+
+                /* Enumerate this directory */
+                listing = g_file_enumerate_children(file, "standard::*", G_FILE_QUERY_INFO_NONE,
+                        NULL, NULL);
+
+                while ((next_file = g_file_enumerator_next_file(listing, NULL, NULL)) != NULL) {
+                        next_path = g_file_info_get_name(next_file);
+
+                        /* Only interested in .desktop files */
+                        if (!g_str_has_suffix(next_path, ".desktop")) {
+                                continue;
+                        }
+                        full_path = g_strdup_printf("%s/%s", path, next_path);
+
+                        /* Try to load it as a valid desktop file */
+                        app_info = g_desktop_app_info_new_from_filename((const char*)full_path);
+                        if (!app_info) {
+                                goto failed;
+                        }
+
+                        /* Now launch it */
+                        /* Eventually we're going to need a global launch context
+                         * within Budgie. */
+                        if (should_autostart(app_info)) {
+                                if (!g_app_info_launch(G_APP_INFO(app_info), NULL, NULL, NULL)) {
+                                        g_warning("Failed to launch: %s\n", full_path);
+                                }
+                        }
+
+                        g_object_unref(app_info);
+failed:
+                        g_free(full_path);
+                        g_object_unref(next_file);
+                }
+                g_file_enumerator_close(listing, NULL, NULL);
+next:
+                g_object_unref(file);
+                g_free(path);
+        }
+}
+
+static gboolean should_autostart(GDesktopAppInfo *info)
+{
+        g_assert(info != NULL);
+
+        gboolean should_start = FALSE;
+        gchar *show_in;
+
+        if (g_desktop_app_info_has_key(info, "OnlyShowIn")) {
+                show_in = g_desktop_app_info_get_string(info, "OnlyShowIn");
+                /* Determine if its a GNOME or Budgie system */
+                if (string_contains((const gchar*)show_in, "GNOME;") ||
+                        string_contains((const gchar*)show_in, "Budgie;")) {
+                        should_start = TRUE;
+                }
+                g_free(show_in);
+        } else {
+                /* Normal autostart - woo */
+                should_start = TRUE;
+        }
+
+        if (should_start) {
+                goto end;
+        }
+
+        /* TODO: Support Autostart "conditions" */
+
+end:
+        return should_start;
 }
 
 gint main(gint argc, gchar **argv)
