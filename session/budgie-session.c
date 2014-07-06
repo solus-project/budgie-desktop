@@ -41,6 +41,11 @@ static void activate_autostarts(void);
 static gboolean should_autostart(GDesktopAppInfo *info);
 
 /**
+ * Whether the autostart condition is satisfied
+ */
+static gboolean is_autostart_condition_satisfied(GDesktopAppInfo *info);
+
+/**
 * Iterate a null terminated array
 */
 #define foreach_string(x,y,i) const char *y = NULL;int i;\
@@ -236,14 +241,60 @@ static gboolean should_autostart(GDesktopAppInfo *info)
                 should_start = TRUE;
         }
 
-        if (should_start) {
+        if (!should_start) {
                 goto end;
         }
 
-        /* TODO: Support Autostart "conditions" */
+        if (is_autostart_condition_satisfied(info)) {
+                should_start = TRUE;
+        } else {
+                should_start = FALSE;
+        }
 
+        /* TODO: Support delay/init conditions */
 end:
         return should_start;
+}
+
+static gboolean is_autostart_condition_satisfied(GDesktopAppInfo *info)
+{
+        g_assert(info != NULL);
+
+        gchar *condition;
+        gchar **splits = NULL;
+        gboolean satisfied = FALSE;
+        const gchar *schema;
+        const gchar *key;
+        GSettings *settings = NULL;
+
+        /* AutostartCondition=GSettings org.gnome.desktop.background show-desktop-icons */
+        if (!g_desktop_app_info_has_key(info, "AutostartCondition")) {
+                return TRUE;
+        }
+
+        condition = g_desktop_app_info_get_string(info, "AutostartCondition");
+        splits = g_strsplit(condition, " ", 3);
+
+        if (!g_str_equal(splits[0], "GSettings")) {
+                goto clean;
+        }
+
+        schema = splits[1];
+        key = splits[2];
+
+        settings = g_settings_new(schema);
+        if (g_settings_get_boolean(settings, key) == TRUE) {
+                satisfied = TRUE;
+        } else {
+                satisfied = FALSE;
+        }
+
+        g_object_unref(settings);
+clean:
+        g_free(condition);
+        g_strfreev(splits);
+
+        return satisfied;
 }
 
 gint main(gint argc, gchar **argv)
