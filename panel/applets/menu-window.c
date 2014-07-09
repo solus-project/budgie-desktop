@@ -51,6 +51,8 @@ static void changed_cb(GtkWidget *widget, gpointer userdata);
 static void activate_cb(GtkWidget *widget, gpointer userdata);
 static void logout_cb(GtkWidget *widget, gpointer userdata);
 
+static void menu_changed(GMenuTree *tree, gpointer userdata);
+
 /* Consider splitting into a panel-util helper */
 static gboolean string_contains(const gchar *string, const gchar *term);
 
@@ -225,6 +227,8 @@ static void populate_menu(MenuWindow *self, GMenuTreeDirectory *directory)
                 tree = gmenu_tree_new("gnome-applications.menu",
                         GMENU_TREE_FLAGS_SORT_DISPLAY_NAME);
                 self->priv->tree = tree;
+
+                g_signal_connect(tree, "changed", G_CALLBACK(menu_changed), self);
 
                 gmenu_tree_load_sync(tree, &error);
                 if (error) {
@@ -472,4 +476,27 @@ static void logout_cb(GtkWidget *widget, gpointer userdata)
         if (!g_spawn_command_line_async("budgie-session-dialog", NULL)) {
                 g_message("Unable to spawn session dialog!");
         }
+}
+
+static void menu_changed(GMenuTree *tree, gpointer userdata)
+{
+        GList *kids, *elem;
+        MenuWindow *self = MENU_WINDOW(userdata);
+
+        /* Remove all of the applications in the list box */
+        kids = gtk_container_get_children(GTK_CONTAINER(self->priv->app_box));
+        for (elem = kids; elem != NULL; elem = elem->next) {
+                gtk_widget_destroy(GTK_WIDGET(elem->data));
+        }
+
+        /* Remove everything but the "all" button in the categories */
+        kids = gtk_container_get_children(GTK_CONTAINER(self->priv->group_box));
+        for (elem = kids; elem != NULL; elem = elem->next) {
+                if (elem->data != self->priv->all_button) {
+                        gtk_widget_destroy(GTK_WIDGET(elem->data));
+                }
+        }
+
+        /* We're done - reload menus */
+        populate_menu(self, NULL);
 }
