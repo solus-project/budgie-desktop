@@ -461,6 +461,7 @@ static void activate_cb(GtkWidget *widget, gpointer userdata)
                         break;
                 }
         }
+        g_list_free(kids);
         if (!selected) {
                 return;
         }
@@ -488,6 +489,7 @@ static void menu_changed(GMenuTree *tree, gpointer userdata)
         for (elem = kids; elem != NULL; elem = elem->next) {
                 gtk_widget_destroy(GTK_WIDGET(elem->data));
         }
+        g_list_free(kids);
 
         /* Remove everything but the "all" button in the categories */
         kids = gtk_container_get_children(GTK_CONTAINER(self->priv->group_box));
@@ -496,6 +498,7 @@ static void menu_changed(GMenuTree *tree, gpointer userdata)
                         gtk_widget_destroy(GTK_WIDGET(elem->data));
                 }
         }
+        g_list_free(kids);
 
         /* We're done - reload menus */
         populate_menu(self, NULL);

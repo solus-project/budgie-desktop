@@ -290,6 +290,7 @@ static void window_closed(WnckScreen *screen,
                         gtk_widget_destroy(toggle);
                 }
         }
+        g_list_free(list);
 }
 
 static void active_changed(WnckScreen *screen,
@@ -325,6 +326,7 @@ static void active_changed(WnckScreen *screen,
                                 bwindow == active);
                 }
         }
+        g_list_free(list);
 }
 
 static void update_window_icon(GtkImage *image,
