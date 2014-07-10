@@ -90,6 +90,8 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                         if (response == SD_YES || response == SD_CHALLENGE) {
                                 can_reboot = TRUE;
                         }
+                        g_free(result);
+                        result = NULL;
                 }
                 /* Can we shutdown? */
                 if (!sd_login_manager_call_can_power_off_sync(self->proxy,
@@ -100,9 +102,10 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                         if (response == SD_YES || response == SD_CHALLENGE) {
                                 can_poweroff = TRUE;
                         }
+                        g_free(result);
+                        result = NULL;
                 }
         }
-
 
         gtk_window_set_position(GTK_WINDOW(self), GTK_WIN_POS_CENTER_ALWAYS);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
@@ -222,7 +225,6 @@ static void clicked(GtkWidget *button, gpointer userdata)
                         g_message("Unable to logout!");
                 }
         }
-        g_object_unref(self);
         gtk_main_quit();
 }
 
