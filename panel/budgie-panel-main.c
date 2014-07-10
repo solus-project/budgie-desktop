@@ -53,7 +53,7 @@ gint main(gint argc, gchar **argv)
         app = g_application_new(BUDGIE_PANEL_ID, G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
-        /* Logout action */
+        /* Menu action */
         action = g_simple_action_new(ACTION_MENU, NULL);
         g_signal_connect(action, "activate", G_CALLBACK(menu_cb), app);
         g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(action));
