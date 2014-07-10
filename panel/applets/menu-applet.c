@@ -116,3 +116,10 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         menu_window_present(MENU_WINDOW(self->menu_window));
         budgie_popover_present(BUDGIE_POPOVER(self->menu_window), widget, NULL);
 }
+
+void menu_applet_show_menu(MenuApplet *self)
+{
+        gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(self->menu_button));
+
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(self->menu_button), !active);
+}

@@ -95,4 +95,10 @@ BudgiePanel *budgie_panel_new(void);
 void budgie_panel_set_view_obscured(BudgiePanel *panel,
                                     gboolean obscured);
 
+/**
+ * Request that the main menu is shown to the user
+ * @param panel BudgiePanel instance
+ */
+void budgie_panel_show_menu(BudgiePanel *panel);
+
 #endif /* budgie_panel_h */

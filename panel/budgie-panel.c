@@ -349,3 +349,12 @@ static gboolean budgie_panel_draw(GtkWidget *widget,
 
         return FALSE;
 }
+
+void budgie_panel_show_menu(BudgiePanel *self)
+{
+        /* So currently we have a hard-coded pass-along system to
+         * get the menu shown, but when we actually support "plugins",
+         * or applets, we'll use method pointers to achieve this
+         */
+         menu_applet_show_menu(MENU_APPLET(self->menu));
+}

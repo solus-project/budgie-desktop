@@ -61,4 +61,10 @@ GType menu_applet_get_type(void);
  */
 GtkWidget *menu_applet_new(void);
 
+/**
+ * Present the menu
+ * @param applet MenuApplet instance
+ */
+void menu_applet_show_menu(MenuApplet *applet);
+
 #endif /* menu_applet_h */
