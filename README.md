@@ -16,8 +16,7 @@ Simple desktop using libmutter and a panel
 
 *Note:*
 Budgie Desktop integrates with the GNOME stack, and as such requires
-certain components to operate correctly. Your distribution should provide
-an autostart file for gnome-settings-daemon in its package.
+certain components to operate correctly. 
 
 Ubuntu users:
 It is highly likely your theme or Ubuntu setup can affect the usability
@@ -29,6 +28,8 @@ do currently render the menu useless.
 
     gsettings set com.canonical.desktop.interface scrollbar-mode normal
 
+Also note: If you are using Ubuntu, poweroff/restart *do work*  as the
+login1 interface is provided.
 
 *TODO:*
  * Ensure static size and position of panel
