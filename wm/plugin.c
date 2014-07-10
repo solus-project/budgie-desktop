@@ -50,11 +50,11 @@
 
 #include "plugin.h"
 
-#define DESTROY_TIMEOUT    200
+#define DESTROY_TIMEOUT    100
 #define DESTROY_SCALE      0.8
-#define MINIMIZE_TIMEOUT   250
-#define MAXIMIZE_TIMEOUT   250
-#define MAP_TIMEOUT        200
+#define MINIMIZE_TIMEOUT   150
+#define MAXIMIZE_TIMEOUT   100
+#define MAP_TIMEOUT        110
 #define MAP_SCALE          0.8
 #define BACKGROUND_TIMEOUT 250
 #define SWITCH_TIMEOUT     500
