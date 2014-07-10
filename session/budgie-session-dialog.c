@@ -60,6 +60,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         GtkStyleContext *style;
         gboolean can_reboot = FALSE;
         gboolean can_poweroff = FALSE;
+        gboolean can_suspend = FALSE;
         gboolean can_systemd = TRUE;
         autofree gchar *result = NULL;
         SdResponse response;
@@ -89,6 +90,18 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                         response = get_response(result);
                         if (response == SD_YES || response == SD_CHALLENGE) {
                                 can_reboot = TRUE;
+                        }
+                        g_free(result);
+                        result = NULL;
+                }
+                /* Can we suspend? */
+                if (!sd_login_manager_call_can_suspend_sync(self->proxy,
+                        &result, NULL, NULL)) {
+                        can_suspend = FALSE;
+                } else {
+                        response = get_response(result);
+                        if (response == SD_YES || response == SD_CHALLENGE) {
+                                can_suspend = TRUE;
                         }
                         g_free(result);
                         result = NULL;
@@ -149,6 +162,15 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
         if (!can_reboot) {
+                gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+        }
+
+        button = gtk_button_new_with_label("Suspend");
+        g_object_set_data(G_OBJECT(button), "action", "suspend");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
+        gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
+        gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+        if (!can_suspend) {
                 gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
         }
 
@@ -218,6 +240,13 @@ static void clicked(GtkWidget *button, gpointer userdata)
                 sd_login_manager_call_reboot_sync(self->proxy, TRUE, NULL, &error);
                 if (error) {
                         g_printerr("Unable to reboot!");
+                        g_error_free(error);
+                }
+        } else if (g_str_equal(data, "suspend")) {
+                /* Suspend */
+                sd_login_manager_call_suspend_sync(self->proxy, TRUE, NULL, &error);
+                if (error) {
+                        g_printerr("Unable to suspend!");
                         g_error_free(error);
                 }
         } else if (g_str_equal(data, "logout")) {
