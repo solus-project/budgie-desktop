@@ -150,20 +150,11 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_box_pack_start(GTK_BOX(top), label, TRUE, TRUE, 0);
 
         /* Add some buttons to uh.. logout, etc. :) */
-        button = gtk_button_new_with_label("Logout");
+        button = gtk_button_new_with_label("Log Out");
         g_object_set_data(G_OBJECT(button), "action", "logout");
         g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
-
-        button = gtk_button_new_with_label("Reboot");
-        g_object_set_data(G_OBJECT(button), "action", "reboot");
-        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
-        gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
-        gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
-        if (!can_reboot) {
-                gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
-        }
 
         button = gtk_button_new_with_label("Suspend");
         g_object_set_data(G_OBJECT(button), "action", "suspend");
@@ -174,7 +165,16 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                 gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
         }
 
-        button = gtk_button_new_with_label("Poweroff");
+        button = gtk_button_new_with_label("Restart");
+        g_object_set_data(G_OBJECT(button), "action", "reboot");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
+        gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
+        gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+        if (!can_reboot) {
+                gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+        }
+
+        button = gtk_button_new_with_label("Shut Down");
         g_object_set_data(G_OBJECT(button), "action", "poweroff");
         g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
