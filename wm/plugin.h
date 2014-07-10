@@ -48,6 +48,8 @@ typedef struct _MetaDefaultPluginPrivate MetaDefaultPluginPrivate;
 #define MUTTER_EDGE_TILING "edge-tiling"
 #define MUTTER_MODAL_ATTACH "attach-modal-dialogs"
 
+#define BUDGIE_KEYBINDING_MAIN_MENU "panel-main-menu"
+
 struct _MetaDefaultPlugin
 {
   MetaPlugin parent;

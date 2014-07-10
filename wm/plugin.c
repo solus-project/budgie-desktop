@@ -39,6 +39,7 @@
 #include <meta/meta-background-group.h>
 #include <meta/meta-background-actor.h>
 #include <meta/prefs.h>
+#include <meta/keybindings.h>
 
 #include <libintl.h>
 #define _(x) dgettext (GETTEXT_PACKAGE, x)
@@ -150,6 +151,17 @@ typedef struct
   MetaPlugin *plugin;
 } EffectCompleteData;
 
+/* Budgie specific callbacks */
+void budgie_launch_menu (MetaDisplay    *display,
+                         MetaScreen     *screen,
+                         MetaWindow     *window,
+                         XIDeviceEvent  *event,
+                         MetaKeyBinding *binding,
+                         gpointer        user_data)
+{
+  /* Ask budgie-panel to open the menu */
+  g_spawn_command_line_async("budgie-panel --menu", NULL);
+}
 
 static void
 meta_default_plugin_dispose (GObject *object)
@@ -325,6 +337,10 @@ show_stage (MetaPlugin *plugin)
   stage = meta_get_stage_for_screen (screen);
 
   clutter_actor_show (stage);
+
+  /* Set up our own keybinding overrides */
+  meta_keybindings_set_custom_handler(BUDGIE_KEYBINDING_MAIN_MENU,
+                                      budgie_launch_menu, NULL, NULL);
 
   return FALSE;
 }
