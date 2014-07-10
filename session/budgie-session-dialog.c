@@ -56,6 +56,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         GtkWidget *image;
         GtkWidget *label;
         autofree gchar *txt = NULL;
+        const gchar *name;
         GError *error = NULL;
         GtkStyleContext *style;
         gboolean can_reboot = FALSE;
@@ -144,7 +145,12 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_box_pack_start(GTK_BOX(top), image, FALSE, FALSE, 0);
 
         /* And a helpful label */
-        txt = g_strdup_printf("<big>Goodbye, %s!</big>", g_get_user_name());
+        name = g_get_real_name();
+        /* Documented behaviour for when the real name is unknown */
+        if (g_str_equal(name, "Unknown")) {
+                name = g_get_user_name();
+        }
+        txt = g_strdup_printf("<big>Goodbye, %s!</big>", name);
         label = gtk_label_new(txt);
         gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
         gtk_box_pack_start(GTK_BOX(top), label, TRUE, TRUE, 0);
