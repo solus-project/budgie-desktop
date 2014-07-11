@@ -34,6 +34,11 @@ static gboolean focus_lose(GtkWidget *widget,
 static gboolean map_event(GtkWidget *widget,
                           GdkEvent *event,
                           gpointer userdata);
+
+static void size_allocated(GtkWidget *widget,
+                           GtkAllocation *allocation,
+                           gpointer user_data);
+
 /* Initialisation */
 static void budgie_popover_class_init(BudgiePopoverClass *klass)
 {
@@ -74,6 +79,12 @@ static void budgie_popover_init(BudgiePopover *self)
         /* Skip, no decorations, etc */
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+
+        /* Track our own size */
+        g_signal_connect(self, "size-allocate", G_CALLBACK(size_allocated), NULL);
+        self->our_width = 0;
+        self->our_height = 0;
+
 }
 
 static void budgie_popover_dispose(GObject *object)
@@ -107,9 +118,6 @@ void budgie_popover_hide(BudgiePopover *self)
         g_signal_handler_block(self, self->focus_id);
         g_signal_emit_by_name(self, "focus-out-event", NULL, &ret);
         g_signal_handler_unblock(self, self->focus_id);
-        if (gtk_widget_get_realized(GTK_WIDGET(self))) {
-                gtk_widget_unrealize(GTK_WIDGET(self));
-        }
         self->con_id = 0;
 }
 
@@ -140,6 +148,13 @@ static void __budgie_popover_draw(GtkWidget *widget,
         gtk_widget_get_allocation(widget, &alloc);
         /* Have parent class do drawing, so we gain shadows */
         ((GtkWidgetClass*)budgie_popover_parent_class)->draw(widget, cr);
+
+        /* If we know about our dimensions already, use them as the allocation
+         * above may have already disappeared */
+        if (self->our_width > 1 && self->our_height > 1) {
+                alloc.width = self->our_width;
+                alloc.height = self->our_height;
+        }
 
         /* Remove height of tail, and margin, from our rendered size */
         width = alloc.width;
@@ -332,6 +347,14 @@ void budgie_popover_present(BudgiePopover *self,
 
         gtk_widget_get_allocation(parent, &alloc);
         gtk_widget_get_allocation(GTK_WIDGET(self), &our_alloc);
+
+        /* If we know about our dimensions already, use them as the allocation
+         * above may have already disappeared */
+        if (self->our_width > 1 && self->our_height > 1) {
+                our_alloc.width = self->our_width;
+                our_alloc.height = self->our_height;
+        }
+
         screen = gtk_widget_get_screen(GTK_WIDGET(self));
 
         /* Ensure we're in a sensible position (under/over) */
@@ -355,6 +378,7 @@ void budgie_popover_present(BudgiePopover *self,
         g_object_get(parent, "margin", &margin, NULL);
         tx -= margin;
         rx -= margin;
+
         if (rx >= our_alloc.width) {
                 rx = our_alloc.width - 20;
         }
@@ -364,7 +388,6 @@ void budgie_popover_present(BudgiePopover *self,
          * Currently this works fine for the LHS-menu, but will need
          * updating when we make this reusable for the aggregate menu */
         self->widg_x = rx;
-
 
         gtk_window_move(GTK_WINDOW(self), tx, ty);
         gtk_widget_show_all(GTK_WIDGET(self));
@@ -404,4 +427,14 @@ static gboolean focus_lose(GtkWidget *widget,
                 return TRUE;
         }
         return FALSE;
+}
+
+static void size_allocated(GtkWidget *widget,
+                           GtkAllocation *allocation,
+                           gpointer user_data)
+{
+        BudgiePopover *self = BUDGIE_POPOVER(widget);
+
+        self->our_width = allocation->width;
+        self->our_height = allocation->height;
 }

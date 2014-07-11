@@ -46,6 +46,8 @@ struct _BudgiePopover {
         GtkWindow parent;
         gint widg_x;
         gint widg_y;
+        gint our_height;
+        gint our_width;
         gboolean top;
         GdkDevice *pointer;
         glong con_id;
