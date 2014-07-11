@@ -75,6 +75,7 @@ static void budgie_popover_init(BudgiePopover *self)
 
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
         gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
+        gtk_window_set_keep_above(GTK_WINDOW(self), TRUE);
 
         /* Skip, no decorations, etc */
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
