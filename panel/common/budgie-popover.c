@@ -86,6 +86,7 @@ static void budgie_popover_init(BudgiePopover *self)
         self->our_width = 0;
         self->our_height = 0;
 
+        gtk_window_set_wmclass(GTK_WINDOW(self), "budgie-popover", "budgie-popover");
 }
 
 static void budgie_popover_dispose(GObject *object)
