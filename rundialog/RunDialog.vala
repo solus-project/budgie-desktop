@@ -21,11 +21,12 @@ public class RunDialog : Gtk.Window
 
     private Gee.HashMap<string,GLib.DesktopAppInfo> mapping;
 
-    private static string default_icon = "system-run-symbolic";
+    private static string DEFAULT_ICON = "system-run-symbolic";
+    private static string ERROR_ICON   = "dialog-error-symbolic";
 
     public RunDialog()
     {
-        side_image = new Gtk.Image.from_icon_name(default_icon, Gtk.IconSize.INVALID);
+        side_image = new Gtk.Image.from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
         side_image.pixel_size = 96;
         side_image.halign = Gtk.Align.START;
         side_image.valign = Gtk.Align.START;
@@ -168,7 +169,7 @@ public class RunDialog : Gtk.Window
                 side_image.set_from_gicon(appinfo.get_icon(), Gtk.IconSize.INVALID);
                 return;
         } else {
-            side_image.set_from_icon_name(default_icon, Gtk.IconSize.INVALID);
+            side_image.set_from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
         }
     }
 
@@ -180,15 +181,26 @@ public class RunDialog : Gtk.Window
             if (entry.text.length == 0) {
                 return;
             }
-            /* Go ahead and try to launch the command given */
+            if (mapping.has_key(entry.text)) {
+                /* Better to launch via the API */
+                var appinfo = mapping[entry.text];
+                try {
+                    appinfo.launch(null, null);
+                    this.destroy();
+                } catch (Error e) {
+                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
+                }
+                return;
+            }
+            /* Otherwise go ahead and try to launch the command given */
             try {
                 if (!Process.spawn_command_line_async(entry.text)) {
-                    side_image.set_from_icon_name("dialog-error", Gtk.IconSize.INVALID);
+                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
                 } else {
                     this.destroy();
                 }
             } catch (Error e) {
-                    side_image.set_from_icon_name("dialog-error", Gtk.IconSize.INVALID);
+                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
             }
     }
 
