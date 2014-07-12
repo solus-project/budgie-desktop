@@ -12,7 +12,8 @@
 namespace Budgie
 {
 
-public class RunDialog : Gtk.Window {
+public class RunDialog : Gtk.Window
+{
 
     private Gtk.Image side_image;
     private Gtk.SearchEntry entry;
@@ -22,7 +23,8 @@ public class RunDialog : Gtk.Window {
 
     private static string default_icon = "system-run-symbolic";
 
-    public RunDialog() {     
+    public RunDialog()
+    {
         side_image = new Gtk.Image.from_icon_name(default_icon, Gtk.IconSize.INVALID);
         side_image.pixel_size = 96;
         side_image.halign = Gtk.Align.START;
@@ -115,7 +117,8 @@ public class RunDialog : Gtk.Window {
      * 
      * @param tree_root Initialised GMenu.TreeDirectory, or null
      */
-    private void load_menus(GMenu.TreeDirectory? tree_root = null) {
+    private void load_menus(GMenu.TreeDirectory? tree_root = null)
+    {
         GMenu.TreeDirectory root;
     
         // Load the tree for the first time
@@ -191,11 +194,13 @@ public class RunDialog : Gtk.Window {
 
 } // End RunDialog
 
-class RunDialogMain : GLib.Application {
+class RunDialogMain : GLib.Application
+{
 
     static Budgie.RunDialog dialog;
 
-    public override void activate() {
+    public override void activate()
+    {
         if (dialog == null) {
             dialog = new Budgie.RunDialog();
             Gtk.main();
@@ -203,14 +208,16 @@ class RunDialogMain : GLib.Application {
         dialog.present();
     }
 
-    private RunDialogMain() {
+    private RunDialogMain()
+    {
 		Object (application_id: "com.evolve_os.BudgieRunDialog", flags: 0);
     }
     /**
      * Main entry
      */
 
-    public static int main(string[] args) {
+    public static int main(string[] args)
+    {
         Budgie.RunDialogMain app;
         Gtk.init(ref args);
 
