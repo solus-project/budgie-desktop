@@ -47,12 +47,16 @@ login1 interface is provided.
  * Support Wayland (lack of wnck-style wayland interation = major issue)
  * Fix popover grab (clicking desktop doesn't make popover hide, etc.) ✓
  * Darken panel when windows are maximized (hat-tip to Elementary here) ✓
+ * Rewrite in Vala!
 
 *Implementation note:*
 
 All elements are written entirely from scratch, using GTK and C. A sole
 exception is the wm/plugin.c file, which is a slight modification of the
 default Mutter plugin.
+
+The current aim is to rewrite the entire project using Vala, simplifying
+maintainence and enabling more contributions from other people.
 
 *budgie-wm:*
 
