@@ -1,0 +1,12 @@
+.budgie-run-dialog-content {
+    border-radius: 12px;
+}
+
+BudgieRunDialog GtkImage {
+    border-radius: 100%;
+    background-color: alpha(@bg_color, 0.99);
+}
+
+BudgieRunDialog {
+    background-color: transparent;
+}

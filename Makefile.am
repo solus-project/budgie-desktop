@@ -13,5 +13,6 @@ SUBDIRS = \
 	data \
 	gvc \
 	panel \
+	rundialog \
 	session \
 	wm
