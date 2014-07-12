@@ -174,21 +174,35 @@ public class RunDialog : Gtk.Window {
             side_image.set_from_icon_name(default_icon, Gtk.IconSize.INVALID);
         }
     }
+} // End RunDialog
 
+class RunDialogMain : GLib.Application {
+
+    static Budgie.RunDialog dialog;
+
+    public override void activate() {
+        if (dialog == null) {
+            dialog = new Budgie.RunDialog();
+            Gtk.main();
+        }
+        dialog.present();
+    }
+
+    private RunDialogMain() {
+		Object (application_id: "com.evolve_os.BudgieRunDialog", flags: 0);
+    }
     /**
      * Main entry
      */
 
     public static int main(string[] args) {
-        Budgie.RunDialog d;
+        Budgie.RunDialogMain app;
         Gtk.init(ref args);
 
-        d = new Budgie.RunDialog();
-        Gtk.main();
+        app = new Budgie.RunDialogMain();
 
-        return 0;
+        return app.run(args);
     }
-
-} // End RunDialog
+} // End RunDialogMain
 
 } // End Budgie namespace
