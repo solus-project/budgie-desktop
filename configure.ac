@@ -45,6 +45,9 @@ AC_CONFIG_MACRO_DIR([m4])
 
 GOBJECT_INTROSPECTION_CHECK([1.38.0])
 
+# Need Vala.
+AM_PROG_VALAC([0.22], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
+
 AC_CONFIG_FILES(Makefile
                 data/Makefile
                 data/budgie-desktop.desktop
