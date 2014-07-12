@@ -96,13 +96,7 @@ public class RunDialog : Gtk.Window {
         completion.inline_completion = true;
 
         entry.changed.connect(entry_changed);
-        entry.activate.connect((e) => {
-            if (entry.text.length == 0) {
-                return;
-            }
-            /* i.e. not implemented yet */
-            stdout.printf("Activating: %s\n", entry.text);
-        });
+        entry.activate.connect(entry_activated);
 
         /* Finally, handle ESC */
         key_press_event.connect((w,e) => {
@@ -174,6 +168,27 @@ public class RunDialog : Gtk.Window {
             side_image.set_from_icon_name(default_icon, Gtk.IconSize.INVALID);
         }
     }
+
+    /**
+     * Handle activation of the entry
+     */
+     protected void entry_activated()
+     {
+            if (entry.text.length == 0) {
+                return;
+            }
+            /* Go ahead and try to launch the command given */
+            try {
+                if (!Process.spawn_command_line_async(entry.text)) {
+                    side_image.set_from_icon_name("dialog-error", Gtk.IconSize.INVALID);
+                } else {
+                    this.destroy();
+                }
+            } catch (Error e) {
+                    side_image.set_from_icon_name("dialog-error", Gtk.IconSize.INVALID);
+            }
+    }
+
 } // End RunDialog
 
 class RunDialogMain : GLib.Application {
