@@ -163,6 +163,18 @@ void budgie_launch_menu (MetaDisplay    *display,
   g_spawn_command_line_async("budgie-panel --menu", NULL);
 }
 
+void budgie_launch_rundialog (MetaDisplay    *display,
+                              MetaScreen     *screen,
+                              MetaWindow     *window,
+                              XIDeviceEvent  *event,
+                              MetaKeyBinding *binding,
+                            gpointer        user_data)
+{
+  /* Run the budgie-run-dialog
+   * TODO: Make this path customisable */
+  g_spawn_command_line_async("budgie-run-dialog", NULL);
+}
+
 static void
 meta_default_plugin_dispose (GObject *object)
 {
@@ -341,6 +353,8 @@ show_stage (MetaPlugin *plugin)
   /* Set up our own keybinding overrides */
   meta_keybindings_set_custom_handler(BUDGIE_KEYBINDING_MAIN_MENU,
                                       budgie_launch_menu, NULL, NULL);
+  meta_keybindings_set_custom_handler(BUDGIE_KEYBINDING_RUN_DIALOG,
+                                      budgie_launch_rundialog, NULL, NULL);
 
   return FALSE;
 }
