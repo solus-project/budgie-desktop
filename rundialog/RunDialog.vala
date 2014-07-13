@@ -168,7 +168,7 @@ public class RunDialog : Gtk.Window
                 return;
             }
             root = tree.get_root_directory();
-            mapping = new Gee.HashMap<string,GLib.DesktopAppInfo>();
+            mapping = new Gee.HashMap<string,GLib.DesktopAppInfo>(null,null,null);
         } else {
             root = tree_root;
         }
