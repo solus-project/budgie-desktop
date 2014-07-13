@@ -102,6 +102,28 @@ public class RunDialog : Gtk.Window
             stderr.printf("CSS loading issue: %s\n", e.message);
         }
 
+        entry.changed.connect(entry_changed);
+        entry.activate.connect(entry_activated);
+
+        /* Finally, handle ESC */
+        key_press_event.connect((w,e) => {
+            if (e.keyval == Gdk.Key.Escape) {
+                this.destroy();
+                return true;
+            }
+            return false;
+        });
+
+        show_all();
+
+        GLib.Idle.add(init_menus);
+    }
+
+    /**
+     * Load our menu entries
+     */
+    private bool init_menus()
+    {
         // Set up auto-complete
         var store = new Gtk.ListStore(1, typeof(string));
         Gtk.TreeIter iter;
@@ -123,19 +145,7 @@ public class RunDialog : Gtk.Window
         entry.completion = completion;
         completion.inline_completion = true;
 
-        entry.changed.connect(entry_changed);
-        entry.activate.connect(entry_activated);
-
-        /* Finally, handle ESC */
-        key_press_event.connect((w,e) => {
-            if (e.keyval == Gdk.Key.Escape) {
-                this.destroy();
-                return true;
-            }
-            return false;
-        });
-
-        show_all();
+        return false;
     }
 
     /**
