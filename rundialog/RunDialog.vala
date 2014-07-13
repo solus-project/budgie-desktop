@@ -29,13 +29,15 @@ public class RunDialog : Gtk.Window
         side_image = new Gtk.Image.from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
         side_image.pixel_size = 96;
         side_image.halign = Gtk.Align.START;
-        side_image.valign = Gtk.Align.START;
+        side_image.valign = Gtk.Align.CENTER;
         entry = new Gtk.SearchEntry();
 
         // Initialisation stuffs
         window_position = Gtk.WindowPosition.CENTER;
         destroy.connect(() => Gtk.main_quit());
         set_keep_above(true);
+        title = "Run Program...";
+        icon_name = DEFAULT_ICON;
 
         // Enable RGBA for transparent window background
         var visual = screen.get_rgba_visual();
@@ -47,6 +49,8 @@ public class RunDialog : Gtk.Window
         var main_layout = new Gtk.Overlay();
         add(main_layout);
         var layout = new Gtk.EventBox();
+        layout.valign = Gtk.Align.FILL;
+        entry.valign = Gtk.Align.CENTER;
         layout.get_style_context().add_class("budgie-run-dialog-content");
 
         /* Window sizing hacks relating to the image size */
@@ -54,14 +58,35 @@ public class RunDialog : Gtk.Window
         main_layout.add_overlay(side_image);
         side_image.show_all();
         side_image.margin = 15;
-        entry.margin_left = side_image.pixel_size-side_image.margin;
-        entry.margin_right = 10;
+        entry.margin_left = side_image.pixel_size+(side_image.margin/2);
+        entry.margin_right = side_image.margin;
         layout.add(entry);
-        layout.margin = 22;
         layout.margin_left = side_image.margin+layout.margin;
         layout.margin_right = 0;
 
         set_size_request(350+(side_image.margin), side_image.pixel_size+side_image.margin);
+
+        // Ensure sizes are consistent with overlay
+        side_image.size_allocate.connect((a) => {
+            Gtk.Allocation alloc;
+            layout.get_allocation(out alloc);
+            layout.set_size_request(alloc.width, a.height+side_image.margin);
+        });
+
+        // We can't use normal margin due to use of overlay, so we draw.. less.
+        layout.draw.connect((c)=> {
+            var s = layout.get_style_context();
+            Gtk.Allocation alloc;
+            layout.get_allocation(out alloc);
+            var margin = side_image.pixel_size/5;
+            Gtk.render_background(s, c, alloc.x+margin, alloc.y+margin,
+                alloc.width-(margin*2), alloc.height-(margin*2));
+            Gtk.render_frame(s, c, alloc.x+margin, alloc.y+margin,
+                alloc.width-(margin*2), alloc.height-(margin*2));
+
+            layout.propagate_draw(layout.get_child(), c);
+            return true;
+        });
 
         this.set_decorated(false);
 
