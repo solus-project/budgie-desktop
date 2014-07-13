@@ -247,7 +247,7 @@ class RunDialogMain : GLib.Application
 
     private RunDialogMain()
     {
-		Object (application_id: "com.evolve_os.BudgieRunDialog", flags: 0);
+        Object (application_id: "com.evolve_os.BudgieRunDialog", flags: 0);
     }
     /**
      * Main entry
