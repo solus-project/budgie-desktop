@@ -55,6 +55,8 @@ sd_logind_proxy.h: org.freedesktop.login1.xml
 	--interface-prefix org.freedesktop.login1 \
 	$<
 
+sd_logind_proxy.c:
+
 BUILT_SOURCES = \
 	sd_logind_proxy.h \
 	sd_logind_proxy.c
