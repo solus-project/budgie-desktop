@@ -867,43 +867,20 @@ map (MetaPlugin *plugin, MetaWindowActor *window_actor)
       ClutterAnimation *animation;
       EffectCompleteData *data = g_new0 (EffectCompleteData, 1);
       ActorPrivate *apriv = get_actor_private (window_actor);
-      const gchar *wm_class;
 
       clutter_actor_move_anchor_point_from_gravity (actor,
                                                     CLUTTER_GRAVITY_CENTER);
+      clutter_actor_set_scale (actor, MAP_SCALE, MAP_SCALE);
+      clutter_actor_set_opacity (actor, 0);
+      clutter_actor_show (actor);
 
-      wm_class = meta_window_get_wm_class (meta_window);
-
-      if (g_str_equal(wm_class, "budgie-popover"))
-      {
-              /* Handle budgie-popover somewhat differently */
-              gfloat height, width;
-              height = clutter_actor_get_height (actor);
-              width = clutter_actor_get_height (actor);
-
-              clutter_actor_set_size (actor, width, 0.0);
-              clutter_actor_set_opacity (actor, 0);
-              clutter_actor_show (actor);
-              animation = clutter_actor_animate (actor,
-                                         CLUTTER_EASE_IN_BOUNCE,
-                                         MAP_TIMEOUT+30,
-                                         "width", width,
-                                         "height", height,
+      animation = clutter_actor_animate (actor,
+                                         CLUTTER_EASE_IN_SINE,
+                                         MAP_TIMEOUT,
+                                         "scale-x", 1.0,
+                                         "scale-y", 1.0,
                                          "opacity", 255,
                                          NULL);
-      } else {                      
-              clutter_actor_set_scale (actor, MAP_SCALE, MAP_SCALE);
-              clutter_actor_set_opacity (actor, 0);
-              clutter_actor_show (actor);
-
-              animation = clutter_actor_animate (actor,
-                                                 CLUTTER_EASE_IN_SINE,
-                                                 MAP_TIMEOUT,
-                                                 "scale-x", 1.0,
-                                                 "scale-y", 1.0,
-                                                 "opacity", 255,
-                                                 NULL);
-      }
       apriv->tml_map = clutter_animation_get_timeline (animation);
       data->actor = actor;
       data->plugin = plugin;
