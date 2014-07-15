@@ -28,7 +28,7 @@ GtkListBoxRow {
 .entry {
     border: none;
     background-image: none;
-    background-color: white;
+    background-color: #f7f7f7;
 
     font-size: x-large;
     transition: none;
@@ -39,8 +39,8 @@ GtkListBoxRow {
 
 BudgiePopover {
     border-radius: 6px;
-    /*background-color: alpha(@theme_bg_color, 0.88);*/
-    background-color: #ecf0f1;
+    border: 1px solid #44ACF2;
+    background-color: #f7f7f7;
 }
 
 /* Sample theming - not used */
