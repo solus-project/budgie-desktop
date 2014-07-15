@@ -30,7 +30,7 @@ struct _MenuWindowPriv {
         const gchar *search_term;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(MenuWindow, menu_window, BUDGIE_POPOVER_TYPE)
+G_DEFINE_TYPE_WITH_PRIVATE(MenuWindow, menu_window, BUDGIE_TYPE_POPOVER)
 
 /* Boilerplate GObject code */
 static void menu_window_class_init(MenuWindowClass *klass);
@@ -75,6 +75,8 @@ static void menu_window_init(MenuWindow *self)
         GtkWidget *placeholder;
         GtkWidget *logout;
 
+        budgie_popover_do_init(BUDGIE_POPOVER(self));
+
         self->priv = menu_window_get_instance_private(self);
 
         /* Sensible default size */
@@ -82,7 +84,6 @@ static void menu_window_init(MenuWindow *self)
 
         /* Main layout */
         main_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width(GTK_CONTAINER(self), 0);
         gtk_container_add(GTK_CONTAINER(self), main_layout);
 
         /* Search field */
@@ -429,7 +430,7 @@ static void clicked_cb(GtkWidget *widget, gpointer userdata)
         info = g_object_get_data(G_OBJECT(widget), "info");
 
         /* Ensure we're hidden again */
-        budgie_popover_hide(BUDGIE_POPOVER(userdata));
+        gtk_widget_hide(GTK_WIDGET(userdata));
         /* Go launch it */
         g_app_info_launch(G_APP_INFO(info), NULL, NULL, NULL);
 }
@@ -472,7 +473,7 @@ static void activate_cb(GtkWidget *widget, gpointer userdata)
 
 static void logout_cb(GtkWidget *widget, gpointer userdata)
 {
-        budgie_popover_hide(BUDGIE_POPOVER(userdata));
+        gtk_widget_hide(GTK_WIDGET(userdata));
 
         if (!g_spawn_command_line_async("budgie-session-dialog", NULL)) {
                 g_message("Unable to spawn session dialog!");

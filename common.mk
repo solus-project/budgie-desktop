@@ -12,4 +12,4 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir)/gvc \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/panel/applets \
-	-I $(top_srcdir)/panel/common
+	-I $(top_srcdir)/widgets

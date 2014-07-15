@@ -109,12 +109,12 @@ static void toggled_cb(GtkWidget *widget, gpointer userdata)
         self = MENU_APPLET(userdata);
         button = GTK_TOGGLE_BUTTON(widget);
         if (!gtk_toggle_button_get_active(button)) {
-                budgie_popover_hide(BUDGIE_POPOVER(self->menu_window));
+                gtk_widget_hide(GTK_WIDGET(self->menu_window));
                 return;
         }
 
         menu_window_present(MENU_WINDOW(self->menu_window));
-        budgie_popover_present(BUDGIE_POPOVER(self->menu_window), widget, NULL);
+        budgie_popover_present(BUDGIE_POPOVER(self->menu_window), widget);
 }
 
 void menu_applet_show_menu(MenuApplet *self)

@@ -25,7 +25,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include "budgie-popover.h"
+#include "BudgiePopover.h"
 
 typedef struct _MenuWindow MenuWindow;
 typedef struct _MenuWindowClass   MenuWindowClass;

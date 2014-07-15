@@ -58,6 +58,7 @@ AC_CONFIG_FILES([Makefile
                 panel/Makefile
                 rundialog/Makefile
                 session/Makefile
+                widgets/Makefile
                 wm/Makefile])
 AC_OUTPUT
 

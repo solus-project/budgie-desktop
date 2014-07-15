@@ -12,6 +12,7 @@ CLEANFILES =
 SUBDIRS = \
 	data \
 	gvc \
+	widgets \
 	panel \
 	rundialog \
 	session \

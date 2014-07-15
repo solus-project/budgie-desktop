@@ -5,8 +5,6 @@ bin_PROGRAMS = budgie-panel
 budgie_panel_SOURCES = \
 	../data/budgie-panel-resources.h \
 	../data/budgie-panel-resources.c \
-	common/budgie-popover.h \
-	common/budgie-popover.c \
 	panel-applet.h \
 	panel-applet.c \
 	icon-tasklist.h \
@@ -39,6 +37,7 @@ budgie_panel_CFLAGS = \
 
 budgie_panel_LDADD = \
 	../gvc/libgvc.la \
+	../widgets/libbudgiewidgets.la \
 	-lm \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
