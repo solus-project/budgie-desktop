@@ -51,3 +51,13 @@ BudgiePopover {
     background-color: alpha(#3498db, 0.7);
     border-radius: 9px 9px 0px 0px;
 }*/
+
+BudgiePopover GtkCalendar.view,
+BudgiePopover GtkCalendar.header,
+BudgiePopover GtkCalendar.button,
+BudgiePopover GtkCalendar.button:hover,
+BudgiePopover GtkCalendar.button:insensitive {
+    border-width: 0;
+    background-color: transparent;
+    background-image: none;
+}

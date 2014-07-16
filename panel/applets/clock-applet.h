@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 
 #include "panel-applet.h"
+#include "BudgiePopover.h"
 
 typedef struct _ClockApplet ClockApplet;
 typedef struct _ClockAppletClass   ClockAppletClass;
@@ -42,6 +43,7 @@ typedef struct _ClockAppletClass   ClockAppletClass;
 struct _ClockApplet {
         PanelApplet parent;
         GtkWidget *label;
+        BudgiePopover *pop;
 };
 
 /* ClockApplet class definition */

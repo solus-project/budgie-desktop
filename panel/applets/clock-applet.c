@@ -30,19 +30,53 @@ static void clock_applet_class_init(ClockAppletClass *klass)
         g_object_class->dispose = &clock_applet_dispose;
 }
 
+static gboolean mouse_press(GtkWidget *widget,
+                            GdkEventButton *event,
+                            gpointer userdata)
+{
+        ClockApplet *self = CLOCK_APPLET(userdata);
+
+        if (event->button == 1) {
+                budgie_popover_present(self->pop, GTK_WIDGET(self->label));
+                return TRUE;
+        }
+
+        return FALSE;
+}
+
 static void clock_applet_init(ClockApplet *self)
 {
+        GtkWidget *ebox = gtk_event_box_new();
+        GtkWidget *cal;
+
+        gtk_container_add(GTK_CONTAINER(self), ebox);
+
         self->label = gtk_label_new("--");
-        gtk_container_add(GTK_CONTAINER(self), self->label);
+        gtk_container_add(GTK_CONTAINER(ebox), self->label);
 
         /* Don't show an empty label */
         update_clock(self);
         /* Update the clock every second */
         g_timeout_add(1000, update_clock, self);
+
+        g_signal_connect(ebox, "button-release-event", G_CALLBACK(mouse_press), self);
+
+        cal = gtk_calendar_new();
+        self->pop = budgie_popover_new();
+
+        gtk_widget_show_all(cal);
+        gtk_container_add(GTK_CONTAINER(self->pop), cal);
 }
 
 static void clock_applet_dispose(GObject *object)
 {
+        ClockApplet *self = CLOCK_APPLET(object);
+
+        if (self->pop) {
+                g_object_unref(self->pop);
+                self->pop = NULL;
+        }
+
         /* Destruct */
         G_OBJECT_CLASS (clock_applet_parent_class)->dispose (object);
 }
