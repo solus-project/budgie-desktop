@@ -22,6 +22,7 @@ struct _MenuWindowPriv {
         GtkWidget *group_box;
         GtkWidget *app_box;
         GtkWidget *scroll_win;
+        GtkWidget *scroll_win_side;
         GtkWidget *all_button;
         GtkWidget *entry;
 
@@ -113,6 +114,7 @@ static void menu_window_init(MenuWindow *self)
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         self->priv->group_box = box;
+        self->priv->scroll_win_side = scroll;
         gtk_container_add(GTK_CONTAINER(scroll), box);
         gtk_box_pack_start(GTK_BOX(left_side), scroll, TRUE, TRUE, 0);
 
@@ -205,6 +207,9 @@ void menu_window_present(MenuWindow *self)
         gtk_list_box_invalidate_filter(GTK_LIST_BOX(self->priv->app_box));
         adj = gtk_scrolled_window_get_vadjustment(
                 GTK_SCROLLED_WINDOW(self->priv->scroll_win));
+        gtk_adjustment_set_value(adj, 0);
+        adj = gtk_scrolled_window_get_vadjustment(
+                GTK_SCROLLED_WINDOW(self->priv->scroll_win_side));
         gtk_adjustment_set_value(adj, 0);
         gtk_widget_grab_focus(self->priv->entry);
 }
