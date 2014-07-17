@@ -1,0 +1,227 @@
+/*
+ * BudgiePanel.vala
+ * 
+ * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
+namespace Budgie
+{
+
+public enum PanelPosition
+{
+    BOTTOM = 0,
+    TOP,
+    LEFT,
+    RIGHT
+}
+
+public class Panel : Gtk.Window
+{
+
+    private int intended_height = 30;
+    private PanelPosition position;
+    private Gtk.Box master_layout;
+
+    public Panel()
+    {
+        /* Set an RGBA visual whenever we can */
+        Gdk.Visual? vis = screen.get_rgba_visual();
+        if (vis != null) {
+            set_visual(vis);
+        } else {
+            message("No RGBA visual available");
+        }
+        app_paintable = true;
+        resizable = false;
+
+        /* Ensure to initialise styles */
+        try {
+            File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style.css");
+            var prov = new Gtk.CssProvider();
+            prov.load_from_file(ruri);
+            Gtk.StyleContext.add_provider_for_screen(screen, prov, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+            ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/app.css");
+            prov = new Gtk.CssProvider();
+            prov.load_from_file(ruri);
+            Gtk.StyleContext.add_provider_for_screen(screen, prov, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        } catch (Error e) {
+            stderr.printf("Unable to load styles: %s\n", e.message);
+        }
+
+        // Base styling
+        get_style_context().remove_class("background");
+        get_style_context().add_class("budgie-panel");
+
+        // simple layout
+        master_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        add(master_layout);
+
+        set_decorated(false);
+        type_hint = Gdk.WindowTypeHint.DOCK;
+        set_keep_above(true);
+
+        size_allocate.connect((s) => {
+            update_position();
+            set_struts();
+        });
+
+        // TODO: Hook into existing GSettings key
+        position = PanelPosition.BOTTOM;
+
+        show_all();
+
+        set_struts();
+    }
+
+    /* Struts on X11 are used to reserve screen-estate, i.e. for guys like us.
+     * woo.
+     */
+    protected void set_struts()
+    {
+        Gdk.Atom atom;
+        long struts[4];
+
+        if (!get_realized()) {
+            return;
+        }
+
+        // Struts dependent on position
+        switch (position) {
+            case PanelPosition.TOP:
+                struts = { 0, 0, intended_height, 0};
+                break;
+            case PanelPosition.LEFT:
+                struts = { intended_height, 0, 0, 0 };
+                break;
+            case PanelPosition.RIGHT:
+                struts = { 0, intended_height, 0, 0};
+                break;
+            case PanelPosition.BOTTOM:
+            default:
+                struts = { 0, 0, 0, intended_height };
+                break;
+        }
+
+        atom = Gdk.Atom.intern("_NET_WM_STRUT", false);
+        Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
+            32, Gdk.PropMode.REPLACE, (uint8[])struts, 4);
+    }
+
+    protected void update_position()
+    {
+        int height = get_allocated_height();
+        int width = get_allocated_width();
+        int x = 0, y = 0;
+
+        switch (position) {
+            case PanelPosition.TOP:
+                y = 0;
+                break;
+            case PanelPosition.LEFT:
+                y = 0;
+                break;
+            case PanelPosition.RIGHT:
+                x = get_screen().get_width()-width;
+                break;
+            case PanelPosition.BOTTOM:
+            default:
+                y = get_screen().get_height()-height;
+                break;
+        }
+
+        if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
+            // Effectively we're now vertical. deal with it.
+            master_layout.set_orientation(Gtk.Orientation.VERTICAL);
+        } else {
+            master_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
+        }
+
+        move(x,y);
+
+        queue_draw();
+    }
+
+    /**
+     * Ensure our CSS theming is followed. In future we'll enable much more
+     * in the way of customisations (background image anyone?)
+     */
+    public override bool draw(Cairo.Context cr)
+    {
+        var st = get_style_context();
+
+        if (position == PanelPosition.RIGHT) {
+            cr.rotate(90);
+        }
+        st.render_background(cr, 0, 0, get_allocated_width(), get_allocated_height());
+        st.render_frame(cr, 0, 0, get_allocated_width(), get_allocated_height());
+
+        return base.draw(cr);
+    }
+
+
+    /* The next methods are all designed to force a specific size only! */
+    public override void get_preferred_width(out int min, out int natural)
+    {
+        var width = screen.get_width();
+        if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
+            width = intended_height;
+        }
+        min = width;
+        natural = width;
+    }
+
+    public override void get_preferred_height(out int min, out int natural)
+    {
+        if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
+            min = screen.get_height();
+            natural = min;
+        } else {
+            min = intended_height;
+            natural = intended_height;
+        }
+    }
+
+    public override void get_preferred_height_for_width(int width, out int min, out int natural)
+    {
+        if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
+            min = screen.get_height();
+            natural = min;
+        } else {
+            min = intended_height;
+            natural = intended_height;
+        }
+    }
+
+    public override void get_preferred_width_for_height(int height, out int min, out int natural)
+    {
+        var width = screen.get_width();
+        if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
+            width = intended_height;
+        }
+        min = width;
+        natural = width;
+    }
+
+} // End Panel class
+
+} // End Budgie namespace
+
+public static int main(string[] args)
+{
+    Gtk.init(ref args);
+    Budgie.Panel panel;
+
+    panel = new Budgie.Panel();
+    Gtk.main();
+
+    // TODO: Convert to an application
+    panel = null;
+
+    return 0;
+}

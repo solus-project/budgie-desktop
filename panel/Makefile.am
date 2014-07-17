@@ -5,25 +5,7 @@ bin_PROGRAMS = budgie-panel
 budgie_panel_SOURCES = \
 	../data/budgie-panel-resources.h \
 	../data/budgie-panel-resources.c \
-	panel-applet.h \
-	panel-applet.c \
-	icon-tasklist.h \
-	icon-tasklist.c \
-	applets/clock-applet.h \
-	applets/clock-applet.c \
-	applets/menu-applet.h \
-	applets/menu-applet.c \
-	applets/menu-window.h \
-	applets/menu-window.c \
-	applets/power-applet.c \
-	applets/power-applet.h \
-	applets/sound-applet.c \
-	applets/sound-applet.h \
-	applets/windowlist-applet.h \
-	applets/windowlist-applet.c \
-	budgie-panel.c \
-	budgie-panel.h \
-	budgie-panel-main.c
+	BudgiePanel.vala
 
 budgie_panel_CFLAGS = \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
@@ -31,9 +13,7 @@ budgie_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
-	$(UPOWER_CFLAGS) \
-	$(GMENU_CFLAGS) \
-	$(AM_CFLAGS)
+	$(GMENU_CFLAGS)
 
 budgie_panel_LDADD = \
 	../gvc/libgvc.la \
@@ -42,5 +22,10 @@ budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
-	$(UPOWER_LIBS) \
 	$(GMENU_LIBS)
+
+budgie_panel_VALAFLAGS = \
+	--pkg gtk+-3.0 \
+	--pkg libgnome-menu-3.0 \
+	--pkg libwnck-3.0 \
+	--pkg gio-unix-2.0
