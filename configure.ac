@@ -36,6 +36,9 @@ PKG_CHECK_MODULES([UPOWER], [upower-glib >= 0.9.20])
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
+# Required for panel applets
+PKG_CHECK_MODULES([LIBPEAS], [libpeas-gtk-1.0 >= 1.8.0])
+
 # Because we target Linux.
 PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.38.0])
 
