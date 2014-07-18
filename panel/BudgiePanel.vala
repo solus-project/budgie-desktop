@@ -27,6 +27,13 @@ public class Panel : Gtk.Window
     private PanelPosition position;
     private Gtk.Box master_layout;
 
+    Peas.Engine engine;
+
+    /* Totally temporary - we'll extend to user plugins in the end and
+     * ensure these directories are correct at compile time */
+    static string module_directory = "/usr/lib/budgie-desktop";
+    static string module_data_directory = "/usr/share/budgie-panel/plugins";
+
     public Panel()
     {
         /* Set an RGBA visual whenever we can */
@@ -71,12 +78,31 @@ public class Panel : Gtk.Window
             set_struts();
         });
 
+        // Initialize plugins engine
+        engine = Peas.Engine.get_default();
+        engine.add_search_path(module_directory, module_data_directory);
+        // Home directory
+        var dirm = "%s/budgie-panel".printf(Environment.get_user_data_dir());
+        engine.add_search_path(dirm, null);
+        var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
+
         // TODO: Hook into existing GSettings key
         position = PanelPosition.BOTTOM;
 
         show_all();
 
         set_struts();
+    }
+
+    protected void load_plugin(string plugin_name)
+    {
+        foreach (var plugin in engine.get_plugin_list()) {
+            if (plugin.get_name() == plugin_name) {
+                engine.try_load_plugin(plugin);
+                return;
+            }
+        }
+        stdout.printf("Unable to load %s\n", plugin_name);
     }
 
     /* Struts on X11 are used to reserve screen-estate, i.e. for guys like us.

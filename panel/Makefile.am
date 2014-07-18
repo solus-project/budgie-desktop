@@ -24,11 +24,15 @@ budgie_panel_LDADD = \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
 	$(LIBPEAS_LIBS) \
-	$(GMENU_LIBS)
+	$(GMENU_LIBS) \
+	../budgie-plugin/libbudgie-plugin.la
 
 budgie_panel_VALAFLAGS = \
+	--vapidir=../budgie-plugin \
 	--pkg gtk+-3.0 \
 	--pkg libgnome-menu-3.0 \
 	--pkg libwnck-3.0 \
 	--pkg gio-unix-2.0 \
-	--pkg libpeas-1.0
+	--pkg libpeas-1.0 \
+	--pkg PeasGtk-1.0 \
+	--pkg BudgiePlugin

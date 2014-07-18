@@ -58,6 +58,7 @@ AC_CONFIG_FILES([Makefile
                 data/Makefile
                 data/budgie-desktop.desktop
                 gvc/Makefile
+                budgie-plugin/Makefile
                 panel/Makefile
                 rundialog/Makefile
                 session/Makefile
