@@ -35,4 +35,4 @@ budgie_panel_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
-	--pkg BudgiePlugin
+	--pkg budgie-1.0

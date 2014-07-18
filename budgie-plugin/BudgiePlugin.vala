@@ -15,7 +15,9 @@ namespace Budgie
 public interface Plugin : Peas.ExtensionBase
 {
     /**
-     * Return the main content of this widget
+     * budgie_plugin_get_panel_widget:
+     * 
+     * Returns: (transfer none): A Gtk+ widget for use on the BudgiePanel
      */
     public abstract Gtk.Widget get_panel_widget();
 
