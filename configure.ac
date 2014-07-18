@@ -63,6 +63,7 @@ AC_CONFIG_FILES([Makefile
                 panel/Makefile
                 panel/applets/Makefile
                 panel/applets/clock/Makefile
+                panel/applets/icontasklist/Makefile
                 rundialog/Makefile
                 session/Makefile
                 widgets/Makefile

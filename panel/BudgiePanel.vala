@@ -23,12 +23,15 @@ public enum PanelPosition
 public class Panel : Gtk.Window
 {
 
-    private int intended_height = 30;
+    private int intended_height = 45;
     private PanelPosition position;
     private Gtk.Box master_layout;
     private Gtk.Box widgets_area;
 
     Peas.Engine engine;
+    // Must keep in scope otherwise they garbage collect and die
+    Budgie.Plugin tasklist;
+    Budgie.Plugin clock;
 
     /* Totally temporary - we'll extend to user plugins in the end and
      * ensure these directories are correct at compile time */
@@ -105,10 +108,15 @@ public class Panel : Gtk.Window
 
             if (i.get_name() == "Clock Applet") {
                 widgets_area.pack_end(widget, false, false, 0);
+                clock = plugin;
+            } else if (i.get_name() == "Icon Tasklist") {
+                tasklist = plugin;
+                master_layout.pack_start(widget, true, true, 0);
             }
         });
 
         load_plugin("Clock Applet");
+        load_plugin("Icon Tasklist");
 
         show_all();
 

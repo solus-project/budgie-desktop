@@ -1,2 +1,4 @@
 SUBDIRS = \
-	clock
+	clock \
+	icontasklist
+
