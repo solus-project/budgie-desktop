@@ -36,3 +36,6 @@ budgie_panel_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0
+
+SUBDIRS = \
+	applets

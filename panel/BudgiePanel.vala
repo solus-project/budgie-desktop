@@ -26,6 +26,7 @@ public class Panel : Gtk.Window
     private int intended_height = 30;
     private PanelPosition position;
     private Gtk.Box master_layout;
+    private Gtk.Box widgets_area;
 
     Peas.Engine engine;
 
@@ -88,6 +89,26 @@ public class Panel : Gtk.Window
 
         // TODO: Hook into existing GSettings key
         position = PanelPosition.BOTTOM;
+
+        // where the clock, etc, live
+        var widgets_wrap = new Gtk.EventBox();
+        widgets_wrap.get_style_context().add_class("message-area");
+        widgets_area = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
+        widgets_area.margin = 5;
+        widgets_wrap.add(widgets_area);
+        master_layout.pack_end(widgets_wrap, false, false, 0);
+
+        // Right now our plugins are kinda locked in where they go. Sorry
+        extset.extension_added.connect((i,p) => {
+            var plugin = p as Budgie.Plugin;
+            var widget = plugin.get_panel_widget();
+
+            if (i.get_name() == "Clock Applet") {
+                widgets_area.pack_end(widget, false, false, 0);
+            }
+        });
+
+        load_plugin("Clock Applet");
 
         show_all();
 

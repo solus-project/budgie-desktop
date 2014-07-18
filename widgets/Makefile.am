@@ -13,4 +13,5 @@ libbudgiewidgets_la_LIBADD = \
 
 libbudgiewidgets_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
+	--vapi=BudgieWidgets.vapi \
 	-H BudgiePopover.h

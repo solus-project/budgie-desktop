@@ -1,0 +1,2 @@
+SUBDIRS = \
+	clock
