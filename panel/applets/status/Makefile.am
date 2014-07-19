@@ -17,12 +17,14 @@ pkglib_LTLIBRARIES += libstatusapplet.la
 
 libstatusapplet_la_SOURCES = \
 	StatusApplet.vala \
-	SoundIndicator.vala
+	SoundIndicator.vala \
+	PowerIndicator.vala
 
 libstatusapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(GVC_CFLAGS) \
+	$(UPOWER_CFLAGS) \
 	$(LIBPEAS_CFLAGS)
 
 libstatusapplet_la_LIBADD = \
@@ -30,6 +32,7 @@ libstatusapplet_la_LIBADD = \
 	${top_builddir}/budgie-plugin/libbudgie-plugin.la \
 	${top_builddir}/gvc/libgvc.la \
 	$(GTK3_LIBS) \
+	$(UPOWER_LIBS) \
 	$(LIBPEAS_LIBS)
 
 libstatusapplet_la_LDFLAGS = \
@@ -41,10 +44,12 @@ libstatusapplet_la_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
 	--vapidir=${top_builddir}/widgets \
 	--vapidir=${top_srcdir} \
+	$(VALAFLAGS) \
 	--pkg gtk+-3.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg BudgieWidgets \
 	--pkg libpulse \
-	--pkg gvc-1.0
+	--pkg gvc-1.0 \
+	--pkg upower-glib-1.0

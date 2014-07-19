@@ -14,6 +14,7 @@ public class StatusApplet : Budgie.Plugin, Peas.ExtensionBase
 
     protected Gtk.Box widget;
     protected SoundIndicator sound;
+    protected PowerIndicator power;
 
     construct {
         init_ui();
@@ -22,11 +23,15 @@ public class StatusApplet : Budgie.Plugin, Peas.ExtensionBase
     protected void init_ui()
     {
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        widget.margin_left = 4;
+        widget.margin_right = 2;
+
+        power = new PowerIndicator();
+        widget.pack_start(power, false, false, 0);
 
         sound = new SoundIndicator();
         widget.pack_start(sound, false, false, 0);
-        widget.margin_left = 4;
-        widget.margin_right = 2;
+
 
         orientation_changed.connect((o)=> {
             widget.set_orientation(o);

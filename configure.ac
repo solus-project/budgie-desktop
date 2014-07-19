@@ -54,6 +54,14 @@ PKG_CHECK_MODULES([GEE], [gee-0.8])
 # Need Vala.
 AM_PROG_VALAC([0.22], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 
+# Determine if upower is newer than we're supporting right now
+PKG_CHECK_MODULES(UPOWER99, [upower-glib >= 0.9.99], [have_upower0999=yes], [have_upower0999=no])
+if test "x$have_upower0999" = "xyes" ; then
+    VALAFLAGS="$VALAFLAGS --define HAVE_UPOWER0999"
+fi
+
+AC_SUBST(VALAFLAGS)
+
 AC_CONFIG_FILES([Makefile
                 data/Makefile
                 data/budgie-desktop.desktop
