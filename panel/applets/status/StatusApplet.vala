@@ -25,6 +25,8 @@ public class StatusApplet : Budgie.Plugin, Peas.ExtensionBase
 
         sound = new SoundIndicator();
         widget.pack_start(sound, false, false, 0);
+        widget.margin_left = 4;
+        widget.margin_right = 2;
 
         orientation_changed.connect((o)=> {
             widget.set_orientation(o);
