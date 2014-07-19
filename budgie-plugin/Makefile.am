@@ -25,7 +25,6 @@ libbudgie_plugin_la_LIBADD = \
 libbudgie_plugin_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg gtk+-3.0 \
-	--vapi=budgie-1.0.vapi \
 	-H BudgiePlugin.h
 
 include_HEADERS = \
@@ -51,8 +50,6 @@ typelibs_DATA = Budgie-1.0.typelib
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 
-budgie-1.0.vapi:
-
 vapidir = $(datadir)/vala/vapi
 vapi_DATA = \
 	budgie-1.0.vapi \
@@ -60,6 +57,7 @@ vapi_DATA = \
 
 EXTRA_DIST += \
 	budgie-1.0.deps \
+	budgie-1.0.vapi \
 	budgie-1.0.pc.in
 
 pkgconfigdir = \
