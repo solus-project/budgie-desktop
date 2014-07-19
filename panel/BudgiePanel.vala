@@ -112,6 +112,7 @@ public class Panel : Gtk.Window
             if (i.get_name() == "Budgie Menu Applet") {
                 menu = plugin;
                 master_layout.pack_start(widget, false, false, 5);
+                widget.margin_left = 5;
             } else if (i.get_name() == "Status Applet") {
                 status_area = plugin;
                 widgets_area.pack_start(widget, true, true, 0);
