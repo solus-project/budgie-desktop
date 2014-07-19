@@ -321,18 +321,36 @@ public class Panel : Gtk.Window
 
 } // End Panel class
 
-} // End Budgie namespace
-
-public static int main(string[] args)
+class PanelMain : GLib.Application
 {
-    Gtk.init(ref args);
-    Budgie.Panel panel;
 
-    panel = new Budgie.Panel();
-    Gtk.main();
+    static Budgie.Panel? panel = null;
 
-    // TODO: Convert to an application
-    panel = null;
+    public override void activate()
+    {
+        if (panel == null) {
+            panel = new Budgie.Panel();
+            Gtk.main();
+        }
+    }
 
-    return 0;
-}
+    private PanelMain()
+    {
+        Object (application_id: "com.evolve_os.BudgiePanel", flags: 0);
+    }
+    /**
+     * Main entry
+     */
+
+    public static int main(string[] args)
+    {
+        Budgie.PanelMain app;
+        Gtk.init(ref args);
+
+        app = new Budgie.PanelMain();
+
+        return app.run(args);
+    }
+} // End BudgiePanelMain
+
+} // End Budgie namespace
