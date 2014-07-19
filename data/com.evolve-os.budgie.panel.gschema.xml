@@ -12,6 +12,12 @@
       <summary>Panel location</summary>
       <description>Which screen edge to place the panel on</description>
     </key>
+
+    <key type="b" name="gnome-panel-theme-integration">
+      <default>false</default>
+      <summary>GNOME Panel theme integration</summary>
+      <description>Whether to enable GNOME Panel theme integration</description>
+    </key>
   </schema>
 
   <schema path="/com/evolve-os/budgie/wm/" id="com.evolve-os.budgie.wm">
