@@ -134,7 +134,6 @@ public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
     {
         IconButton? btn = null;
         if (!buttons.has_key(window)) {
-            warning("Invalid window discovered!!");
             return;
         }
         btn = buttons[window];
