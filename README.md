@@ -1,53 +1,26 @@
 Budgie Desktop
 ---
 
-Simple desktop using libmutter and a panel
+Simple, yet elegant desktop
 
 ![budgie_screenshot](https://raw.githubusercontent.com/evolve-os/budgie-desktop/master/Screenshot.png)
-
-
-                     _              __           _    
-                    | |            / _|         | |   
-         _ __   ___ | |_    __ _  | |_ ___  _ __| | __
-        | '_ \ / _ \| __|  / _` | |  _/ _ \| '__| |/ /
-        | | | | (_) | |_  | (_| | | || (_) | |  |   < 
-        |_| |_|\___/ \__|  \__,_| |_| \___/|_|  |_|\_\
 
 
 *Note:*
 Budgie Desktop integrates with the GNOME stack, and as such requires
 certain components to operate correctly. 
 
-Ubuntu users:
-It is highly likely your theme or Ubuntu setup can affect the usability
-of budgie-panel.
-
-If you have focus/use issues with the panel (i.e. not taking input) *please*
-disable overlay scrollbars! I am investigating the grab-issue, but they
-do currently render the menu useless.
-
-    gsettings set com.canonical.desktop.interface scrollbar-mode normal
-
-Also note: If you are using Ubuntu, poweroff/restart *do work*  as the
-login1 interface is provided.
 
 *TODO:*
- * Ensure static size and position of panel ✓
- * Fix weird glitches with widget/message area border rendering ✓
  * Start adding support for translations
- * Optimize menu (hack GdkPixbuf and GtkImage loading)
- * Add logout confirmation dialog ✓
+ * Optimize menu (migrate from GtkListBox)
  * Add some form of notification system
  * Add network control (ConnMan & Network Manager)
  * Add sound control (PulseAudio) and support media keys (partly done) ✓
- * Integrate with systemd to provide shutdown and reboot options ✓
  * Allow adding launchers directly to panel
  * Allow pinning menu launchers to panel (see above point)
- * Add some kind of polkit agent
- * Support Wayland (lack of wnck-style wayland interation = major issue)
- * Fix popover grab (clicking desktop doesn't make popover hide, etc.) ✓
- * Darken panel when windows are maximized (hat-tip to Elementary here) ✓
  * Rewrite in Vala! (mostly done, panel is complete)
+ * Enable customisation of panel layout, etc.
 
 *Implementation note:*
 
@@ -67,8 +40,8 @@ better default animations, support wallpaper, etc.
 
 *budgie-panel:*
 
-GTK3 C "panel" application. Supports task switching, has a menu, a simple
-"clock", and a battery indicator.
+GTK3 "panel" application. Supports task switching, has a menu, a simple
+"clock", and a battery indicator. Customisable applet support coming soon.
 
 *budgie-session:*
 
@@ -77,29 +50,10 @@ tries not to die. Has simple facility to stop the session via the command:
 
     budgie-session --logout
 
+*budgie-run-dialog:*
 
-*Issues preventing Wayland compatibility:*
-
-budgie-wm is currently based on libmutter, so naturally with 3.12 will
-gain support to be a Wayland compositor. Right now, the reference wayland
-compositor, Weston, has a few problems that will cause major headaches for
-budgie:
-
- * Cannot determine own X and Y position (panel)
- * Cannot actually set X and Y (panel), so will hack Mutter to use gravity, private protocol
- * Wayland doesn't agree with things like wnck. So asking for the list of windows and events isn't
-   possible, meaning you can't actually have a tasklist. Unless its in-process (Mutter/Weston/etc).
-   Which I'm not going to support. So it'll have to be an XDG protocol or some such.
-
-*Menu Notes:*
-
-When started, the panel will use trivial amounts of RAM (in the region of
-7MB). However, when you first open the menu, GTK actually loads the images.
-This needs to be hacked a bit, as it delays the first open, and should be
-done in an asynchronous manner. On my machine, 190 .desktop files in the
-menu yields a total budgie-panel RAM use of ~44MB (including all elements
-of the panel). This is largely due to the use of GdkPixbuf's
-
+A utility that enables you to quickly launch applications by their executable
+path without having to use the terminal or menu
 
 *Dependencies:*
 
@@ -111,6 +65,15 @@ of the panel). This is largely due to the use of GdkPixbuf's
  * libwnck (>= 3.4.7)
  * libmutter (>= 3.10.1)
  * GLib (>= 2.38.0)
+ * gee-0.8 (not gee-1.0!)
+ * valac
+
+Ubuntu users:
+It is highly likely your theme or Ubuntu setup can affect the usability
+of budgie-panel.
+
+Do not use the Ubuntu GTK3 modifications or plugins, because they break
+Budgie. I will not support them. (overlay scrollbars and such)
 
 Author
 ===
