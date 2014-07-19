@@ -5,7 +5,8 @@ EXTRA_DIST = ${top_srcdir}/README.md \
 	     ${top_srcdir}/common.mk \
 	     ${top_srcdir}/LICENSE \
 	     ${top_srcdir}/common.h \
-	     ${top_srcdir}/gvc-1.0.vapi
+	     ${top_srcdir}/gvc-1.0.vapi \
+	     ${top_srcdir}/upower-glib-1.0.vapi \
 
 NULL =
 CLEANFILES =
