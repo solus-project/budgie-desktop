@@ -125,11 +125,16 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_title(GTK_WINDOW(self), "End your session?");
-        gtk_window_set_default_size(GTK_WINDOW(self), 300, -1);
+        gtk_window_set_default_size(GTK_WINDOW(self), 300, 0);
+        gtk_window_fullscreen(GTK_WINDOW(self));
+
 
         main_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+        GtkWidget *align = gtk_alignment_new(0.5, 0.5, 0, 0); 
+        gtk_container_add(GTK_CONTAINER(align), main_layout); 
+        
         gtk_container_set_border_width(GTK_CONTAINER(main_layout), 10);
-        gtk_container_add(GTK_CONTAINER(self), main_layout);
+        gtk_container_add(GTK_CONTAINER(self), align);
 
         top = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start(GTK_BOX(main_layout), top, FALSE, FALSE, 0);
