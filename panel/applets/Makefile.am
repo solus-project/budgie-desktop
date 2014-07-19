@@ -1,5 +1,7 @@
 SUBDIRS = \
 	budgie-menu \
 	clock \
-	icontasklist
+	icontasklist \
+	status
+
 

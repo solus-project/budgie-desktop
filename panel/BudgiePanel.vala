@@ -25,6 +25,7 @@ public class Panel : Gtk.Window
     Budgie.Plugin menu;
     Budgie.Plugin tasklist;
     Budgie.Plugin clock;
+    Budgie.Plugin status_area;
     Settings settings;
 
     /* Totally temporary - we'll extend to user plugins in the end and
@@ -108,6 +109,9 @@ public class Panel : Gtk.Window
             if (i.get_name() == "Budgie Menu Applet") {
                 menu = plugin;
                 master_layout.pack_start(widget, false, false, 5);
+            } else if (i.get_name() == "Status Applet") {
+                status_area = plugin;
+                widgets_area.pack_start(widget, true, true, 0);
             } else if (i.get_name() == "Clock Applet") {
                 widgets_area.pack_end(widget, false, false, 0);
                 clock = plugin;
@@ -119,6 +123,7 @@ public class Panel : Gtk.Window
 
         load_plugin("Budgie Menu Applet");
         load_plugin("Icon Tasklist");
+        load_plugin("Status Applet");
         load_plugin("Clock Applet");
 
         show_all();

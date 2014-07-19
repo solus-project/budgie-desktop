@@ -1,0 +1,8 @@
+[Plugin]
+Module=statusapplet.so
+Name=Status Applet
+Description=Provides a status for the panel
+Authors=Ikey Doherty
+Copyright=Copyright © 2014 Ikey Doherty
+Website=https://evolve-os.com
+Icon=user-info

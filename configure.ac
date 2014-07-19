@@ -65,6 +65,7 @@ AC_CONFIG_FILES([Makefile
                 panel/applets/budgie-menu/Makefile
                 panel/applets/clock/Makefile
                 panel/applets/icontasklist/Makefile
+                panel/applets/status/Makefile
                 rundialog/Makefile
                 session/Makefile
                 widgets/Makefile
