@@ -51,9 +51,13 @@ public class PowerIndicator : Gtk.Bin
     {
         if (battery == null) {
             // try to discover the battery
-            // TODO: Find out if sync is needed on older upower!
 #if ! HAVE_UPOWER0999
-            client.enumerate_devices_sync(null);
+            try {
+                client.enumerate_devices_sync(null);
+            } catch (Error e) {
+                warning("Unable to enumerate devices");
+                return;
+            }
 #endif
             var devices = client.get_devices();
 
