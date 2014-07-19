@@ -24,6 +24,7 @@ public class Panel : Gtk.Window
     // Must keep in scope otherwise they garbage collect and die
     Budgie.Plugin tasklist;
     Budgie.Plugin clock;
+    Settings settings;
 
     /* Totally temporary - we'll extend to user plugins in the end and
      * ensure these directories are correct at compile time */
@@ -82,8 +83,12 @@ public class Panel : Gtk.Window
         engine.add_search_path(dirm, null);
         var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
-        // TODO: Hook into existing GSettings key
+        // Get an update from GSettings where we should be (position set
+        // for error fallback)
         position = PanelPosition.BOTTOM;
+        settings = new Settings("com.evolve-os.budgie.panel");
+        settings.changed.connect(on_settings_change);
+        on_settings_change("location");
 
         // where the clock, etc, live
         var widgets_wrap = new Gtk.EventBox();
@@ -114,6 +119,29 @@ public class Panel : Gtk.Window
         show_all();
 
         set_struts();
+    }
+
+    protected void on_settings_change(string key)
+    {
+        if (key == "location") {
+            var val = settings.get_string(key);
+            switch (val) {
+                case "top":
+                    position = PanelPosition.TOP;
+                    break;
+                case "left":
+                    position = PanelPosition.LEFT;
+                    break;
+                case "right":
+                    position = PanelPosition.RIGHT;
+                    break;
+                default:
+                    position = PanelPosition.BOTTOM;
+                    break;
+            }
+            update_position();
+            set_struts();
+        }
     }
 
     protected void load_plugin(string plugin_name)
