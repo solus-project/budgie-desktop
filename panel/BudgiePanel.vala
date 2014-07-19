@@ -463,9 +463,14 @@ class PanelMain : GLib.Application
         app = new Budgie.PanelMain();
 
         if (invoke_menu) {
-            app.register(null);
-            app.activate_action("menu", null);
-            Process.exit(0);
+            try {
+                app.register(null);
+                app.activate_action("menu", null);
+                Process.exit(0);
+            } catch (Error e) {
+                stderr.printf("Error activating menu: %s\n", e.message);
+                return 1;
+            }
         }
 
         return app.run(args);
