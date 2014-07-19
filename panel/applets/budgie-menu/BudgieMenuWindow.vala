@@ -1,0 +1,406 @@
+/*
+ * BudgieMenuWindow.vala
+ * 
+ * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
+const string APPS_ID = "gnome-applications.menu";
+const string LOGOUT_BINARY = "budgie-session-dialog";
+
+/**
+ * Factory widget to represent a category
+ */
+public class CategoryButton : Gtk.RadioButton
+{
+
+    public new unowned GMenu.TreeDirectory? group { public get ; protected set; }
+
+    public CategoryButton(GMenu.TreeDirectory? parent)
+    {
+        Gtk.Image img;
+        Gtk.Label lab;
+
+        if (parent != null) {
+            img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.BUTTON);
+            lab = new Gtk.Label(parent.get_name());
+        } else {
+            // Special case, "All"
+            img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.BUTTON);
+            lab = new Gtk.Label("All");
+        }
+        lab.set_alignment(0.0f, 0.5f);
+
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
+        layout.pack_start(img, false, false, 5);
+        layout.pack_start(lab, true, true, 0);
+        add(layout);
+
+        relief = Gtk.ReliefStyle.NONE;
+        // Makes us look like a normal button :)
+        set_property("draw-indicator", false);
+        group = parent;
+    }
+}
+
+/**
+ * Factory widget to represent a menu item
+ */
+public class MenuButton : Gtk.Button
+{
+
+    public unowned DesktopAppInfo info { public get ; protected set ; }
+    public unowned GMenu.TreeDirectory parent_menu { public get ; protected set ; }
+
+    public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory)
+    {
+        var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.BUTTON);
+        var lab = new Gtk.Label(parent.get_display_name());
+        lab.set_alignment(0.0f, 0.5f);
+
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
+        layout.pack_start(img, false, false, 5);
+        layout.pack_start(lab, true, true, 0);
+        add(layout);
+
+        this.info = parent;
+        this.parent_menu = directory;
+        set_tooltip_text(parent.get_description());
+
+        relief = Gtk.ReliefStyle.NONE;
+    }
+}
+
+public class BudgieMenuWindow : Budgie.Popover
+{
+    protected Gtk.SearchEntry search_entry;
+    protected Gtk.Box categories;
+    protected Gtk.ListBox content;
+    private GMenu.Tree tree;
+    protected Gtk.ScrolledWindow categories_scroll;
+    protected Gtk.ScrolledWindow content_scroll;
+    protected CategoryButton all_categories;
+
+    // The current group 
+    protected GMenu.TreeDirectory? group = null;
+
+    // Current search term
+    protected string search_term = "";
+
+    /**
+     * Load "menus" (.desktop's) recursively (ripped from our RunDialog)
+     * 
+     * @param tree_root Initialised GMenu.TreeDirectory, or null
+     */
+    private void load_menus(GMenu.TreeDirectory? tree_root = null)
+    {
+        GMenu.TreeDirectory root;
+    
+        // Load the tree for the first time
+        if (tree_root == null) {
+            tree = new GMenu.Tree(APPS_ID, GMenu.TreeFlags.SORT_DISPLAY_NAME);
+
+            try {
+                tree.load_sync();
+            } catch (Error e) {
+                stderr.printf("Error: %s\n", e.message);
+                return;
+            }
+            root = tree.get_root_directory();
+        } else {
+            root = tree_root;
+        }
+
+        var it = root.iter();
+        GMenu.TreeItemType type;
+
+        while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
+            if (type == GMenu.TreeItemType.DIRECTORY) {
+                var dir = it.get_directory();
+                var btn = new CategoryButton(dir);
+                btn.join_group(all_categories);
+                categories.pack_start(btn, false, false, 0);
+
+                // Ensures we find the correct button
+                btn.toggled.connect(()=>{
+                    update_category(btn);
+                });
+
+                load_menus(dir);
+            } else if (type == GMenu.TreeItemType.ENTRY) {
+                // store the entry by its command line (without path)
+                var appinfo = it.get_entry().get_app_info();
+                if (tree_root == null) {
+                    warning("%s has no parent directory, not adding to menu\n", appinfo.get_display_name());
+                } else {
+                    var btn = new MenuButton(appinfo, tree_root);
+                    btn.clicked.connect(()=> {
+                        hide();
+                        launch_app(btn.info);
+                    });
+                    content.add(btn);
+                }
+            }
+        }
+    }
+
+    public BudgieMenuWindow()
+    {
+        var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        add(master_layout);
+
+        // search entry up north
+        search_entry = new Gtk.SearchEntry();
+        master_layout.pack_start(search_entry, false, false, 0);
+
+        // middle holds the categories and applications
+        var middle = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        master_layout.pack_start(middle, true, true, 5);
+
+        // clickable categories
+        categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        categories_scroll = new Gtk.ScrolledWindow(null, null);
+        categories_scroll.add(categories);
+        categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        middle.pack_start(categories_scroll, false, false, 0);
+
+        // "All" button"
+        all_categories = new CategoryButton(null);
+        all_categories.toggled.connect(()=> {
+            update_category(all_categories);
+        });
+        categories.pack_start(all_categories, false, false, 0);
+
+        // vis sep
+        var sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+        middle.pack_start(sep, false, false, 5);
+
+        // new vertical layout holds the power button at the end.
+        // I hate this button. It needs to die.
+        var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        middle.pack_start(right_layout, true, true, 0);
+
+        // holds all the applications
+        content = new Gtk.ListBox();
+        content_scroll = new Gtk.ScrolledWindow(null, null);
+        content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        content_scroll.add(content);
+        right_layout.pack_start(content_scroll, true, true, 0);
+
+        // placeholder in case of no results
+        var placeholder = new Gtk.Label("<big>Sorry, no items found</big>");
+        placeholder.use_markup = true;
+        placeholder.show();
+        placeholder.margin = 6;
+        content.halign = Gtk.Align.START;
+        content.valign = Gtk.Align.START;
+        content.set_placeholder(placeholder);
+
+        // the aforementioned hated power button
+        var power = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.BUTTON);
+        // lambdaception
+        power.clicked.connect(()=> {
+            hide();
+            Idle.add(()=> {
+                try {
+                    Process.spawn_command_line_async(LOGOUT_BINARY);
+                } catch (Error e) {
+                    stdout.printf("Error invoking logout binary: %s\n", e.message);
+                }
+                return false;
+            });
+        });
+        right_layout.pack_end(power, false, false, 0);
+        power.halign = Gtk.Align.END;
+        power.valign = Gtk.Align.END;
+        power.relief = Gtk.ReliefStyle.NONE;
+    
+        // management of our listbox
+        content.set_header_func(do_list_header);
+        content.set_filter_func(do_filter_list);
+
+        // searching functionality :)
+        search_entry.changed.connect(()=> {
+            search_term = search_entry.text.down();
+            content.invalidate_headers();
+            content.invalidate_filter();
+        });
+
+        // Enabling activation by search entry
+        search_entry.activate.connect(on_entry_activate);
+        // sensible vertical height
+        set_size_request(-1, 510);
+        // load them in the background
+        Idle.add(()=> {
+            load_menus(null);
+            return false;
+        });
+    }
+
+    protected void on_entry_activate()
+    {
+        Gtk.ListBoxRow? selected = null;
+
+        foreach (var child in content.get_children()) {
+            if (child.get_visible() && child.get_child_visible()) {
+                selected = child as Gtk.ListBoxRow;
+                break;
+            }
+        }
+        if (selected == null) {
+            return;
+        }
+
+        MenuButton btn = selected.get_child() as MenuButton;
+        launch_app(btn.info);
+    }
+
+    /**
+     * Provide category headers in the "All" category
+     */
+    protected void do_list_header(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        MenuButton? child = null;
+        string? prev = null;
+        string? next = null;
+
+        // In a category listing, kill headers
+        if (group != null) {
+            if (before != null) {
+                before.set_header(null);
+            }
+            if (after != null) {
+                after.set_header(null);
+            }
+            return;
+        }
+
+        // Just retrieve the category names
+        if (before != null) {
+            child = before.get_child() as MenuButton;
+            prev = child.parent_menu.get_name();
+        }
+
+        if (after != null) {
+            child = after.get_child() as MenuButton;
+            next = child.parent_menu.get_name();
+        }
+        
+        // Only add one if we need one!
+        if (before == null || after == null || prev != next) {
+            var label = new Gtk.Label(Markup.printf_escaped("<big>%s</big>", prev));
+            label.halign = Gtk.Align.START;
+            label.use_markup = true;
+            before.set_header(label);
+            label.margin = 6;
+        }
+    }
+
+    /**
+     * Filter out results in the list according to whatever the current filter is,
+     * i.e. group based or search based
+     */
+    protected bool do_filter_list(Gtk.ListBoxRow row)
+    {
+        MenuButton child = row.get_child() as MenuButton;
+
+        if (search_term.length > 0) {
+            string? app_name, desc, name, exec;
+
+            // "disable" categories while searching
+            categories.sensitive = false;
+
+            // Ugly and messy but we need to ensure we're not dealing with NULL strings
+            app_name = child.info.get_display_name();
+            if (app_name != null) {
+                app_name.down();
+            } else {
+                app_name = "";
+            }
+            desc = child.info.get_description();
+            if (desc != null) {
+                desc.down();
+            } else {
+                desc = "";
+            }
+            name = child.info.get_name();
+            if (name != null) {
+                name.down();
+            } else {
+                name = "";
+            };
+            exec = child.info.get_executable();
+            if (exec != null) {
+                exec.down();
+            } else {
+                exec = "";
+            }
+            return (search_term in app_name || search_term in desc ||
+                    search_term in name || search_term in exec);
+        }
+
+        // "enable" categories if not searching
+        categories.sensitive = true;
+
+        // No more filtering, show all
+        if (group == null) {
+            return true;
+        }
+        // If the GMenu.TreeDirectory isn't the same as the current filter, hide it
+        if (child.parent_menu != group) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Change the current group/category
+     */
+    protected void update_category(CategoryButton btn)
+    {
+        if (btn.active) {
+            group = btn.group;
+            content.invalidate_filter();
+            content.invalidate_headers();
+        }
+    }
+
+    /**
+     * Launch an application
+     */
+    protected void launch_app(DesktopAppInfo info)
+    {
+        hide();
+        // Do it on the idle thread to make sure we don't have focus wars
+        Idle.add(()=> {
+            try {
+                info.launch(null,null);
+            } catch (Error e) {
+                stdout.printf("Error launching application: %s\n", e.message);
+            }
+            return false;
+        });
+    }
+
+    /**
+     * We need to make some changes to our display before we go showing ourselves
+     * again! :)
+     */
+    public override void show()
+    {
+        search_term = "";
+        search_entry.text = "";
+        group = null;
+        all_categories.set_active(true);
+        content_scroll.get_vadjustment().set_value(0);
+        categories_scroll.get_vadjustment().set_value(0);
+        categories.sensitive = true;
+        search_entry.grab_focus();
+        base.show();
+    }
+
+}// End BudgieMenuWindow class

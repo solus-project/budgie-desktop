@@ -22,6 +22,7 @@ public class Panel : Gtk.Window
 
     Peas.Engine engine;
     // Must keep in scope otherwise they garbage collect and die
+    Budgie.Plugin menu;
     Budgie.Plugin tasklist;
     Budgie.Plugin clock;
     Settings settings;
@@ -104,7 +105,10 @@ public class Panel : Gtk.Window
             var plugin = p as Budgie.Plugin;
             var widget = plugin.get_panel_widget();
 
-            if (i.get_name() == "Clock Applet") {
+            if (i.get_name() == "Budgie Menu Applet") {
+                menu = plugin;
+                master_layout.pack_start(widget, false, false, 5);
+            } else if (i.get_name() == "Clock Applet") {
                 widgets_area.pack_end(widget, false, false, 0);
                 clock = plugin;
             } else if (i.get_name() == "Icon Tasklist") {
@@ -113,8 +117,9 @@ public class Panel : Gtk.Window
             }
         });
 
-        load_plugin("Clock Applet");
+        load_plugin("Budgie Menu Applet");
         load_plugin("Icon Tasklist");
+        load_plugin("Clock Applet");
 
         show_all();
 
