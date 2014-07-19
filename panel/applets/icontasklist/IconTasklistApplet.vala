@@ -169,7 +169,6 @@ public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
     protected void init_ui()
     {
         // Init wnck
-        Wnck.set_client_type(Wnck.ClientType.PAGER);
         screen = Wnck.Screen.get_default();
         screen.window_opened.connect(window_opened);
         screen.window_closed.connect(window_closed);
