@@ -15,7 +15,7 @@ namespace Budgie
 public class Panel : Gtk.Window
 {
 
-    private int intended_height = 45;
+    private int intended_height = 40;
     private PanelPosition position;
     private Gtk.Box master_layout;
     private Gtk.Box widgets_area;
