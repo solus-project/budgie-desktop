@@ -75,13 +75,13 @@ public class RunDialog : Gtk.Window
 
         // We can't use normal margin due to use of overlay, so we draw.. less.
         layout.draw.connect((c)=> {
-            var s = layout.get_style_context();
+            var st = layout.get_style_context();
             Gtk.Allocation alloc;
             layout.get_allocation(out alloc);
             var margin = side_image.pixel_size/5;
-            Gtk.render_background(s, c, alloc.x+margin, alloc.y+margin,
+            st.render_background(c, alloc.x+margin, alloc.y+margin,
                 alloc.width-(margin*2), alloc.height-(margin*2));
-            Gtk.render_frame(s, c, alloc.x+margin, alloc.y+margin,
+            st.render_frame(c, alloc.x+margin, alloc.y+margin,
                 alloc.width-(margin*2), alloc.height-(margin*2));
 
             layout.propagate_draw(layout.get_child(), c);
