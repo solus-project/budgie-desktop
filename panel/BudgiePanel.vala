@@ -319,24 +319,54 @@ public class Panel : Gtk.Window
         natural = width;
     }
 
+    /**
+     * Simple action, eventually applets will need to register for this ability, it
+     * hooks them up to the panel-main-menu action under Budgie
+     * Note it is currently hard-coded for Budgie Menu
+     */
+    public void invoke_menu()
+    {
+        if (menu != null) {
+            menu.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
+        }
+    }
 } // End Panel class
 
 class PanelMain : GLib.Application
 {
 
     static Budgie.Panel? panel = null;
+    private static bool invoke_menu = false;
+
+	private const GLib.OptionEntry[] options = {
+        { "menu", 0, 0, OptionArg.NONE, ref invoke_menu, "Invoke the panel menu", null },
+        { null }
+    };
 
     public override void activate()
     {
+        hold();
         if (panel == null) {
             panel = new Budgie.Panel();
             Gtk.main();
         }
+        release();
     }
 
     private PanelMain()
     {
         Object (application_id: "com.evolve_os.BudgiePanel", flags: 0);
+        /* Set up our options, currently only "menu" */
+        var action = new SimpleAction("menu", null);
+        action.activate.connect(()=> {
+            hold();
+            // Only on valid panel instances
+            if (panel != null) {
+                panel.invoke_menu();
+            }
+            release();
+        });
+        add_action(action);
     }
     /**
      * Main entry
@@ -347,7 +377,23 @@ class PanelMain : GLib.Application
         Budgie.PanelMain app;
         Gtk.init(ref args);
 
+        try {
+            var opt_context = new OptionContext("- Budgie Panel");
+            opt_context.set_help_enabled(true);
+            opt_context.add_main_entries(options, null);
+            opt_context.parse(ref args);
+        } catch (OptionError e) {
+            stdout.printf("Error: %s\nRun with --help to see valid options\n", e.message);
+            return 0;
+        }
+
         app = new Budgie.PanelMain();
+
+        if (invoke_menu) {
+            app.register(null);
+            app.activate_action("menu", null);
+            Process.exit(0);
+        }
 
         return app.run(args);
     }

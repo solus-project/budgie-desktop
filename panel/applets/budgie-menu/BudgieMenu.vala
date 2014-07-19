@@ -44,6 +44,17 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
             }
             return false;
         });
+
+        // This enables us to respond to the "panel-main-menu" action
+        action_invoked.connect((t) => {
+            if (t != Budgie.ActionType.INVOKE_MAIN_MENU) {
+                return;
+            }
+            Idle.add(()=> {
+                popover.present(widget);
+                return false;
+            });
+        });
     }
         
     public Gtk.Widget get_panel_widget()

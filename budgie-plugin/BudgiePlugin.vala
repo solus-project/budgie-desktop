@@ -20,6 +20,16 @@ public enum PanelPosition
     RIGHT
 }
 
+/**
+ * budgie_action_type:
+ * 
+ * Certain plugins can respond to various events if they are geared
+ * towards them
+ */
+public enum ActionType {
+    INVOKE_MAIN_MENU = 0
+}
+
 public interface Plugin : Peas.ExtensionBase
 {
     /**
@@ -32,7 +42,7 @@ public interface Plugin : Peas.ExtensionBase
     /**
      * budgie_plugin_orientation_changed:
      *
-     * Informs Plugin's that their parent layout has been altered and should accomodate
+     * Informs Plugins that their parent layout has been altered and should accomodate
      *
      * @param orientation: (transfer none): The orientation of the applet
      */
@@ -41,12 +51,23 @@ public interface Plugin : Peas.ExtensionBase
     /**
      * budgie_plugin_position_changed:
      *
-     * Informs Plugin's that their parent container has moved on screen
+     * Informs Plugins that their parent container has moved on screen
      * i.e. the panel has moved to a different screen edge
      *
      * @param position: (transfer none): Position of the container's screen-edge
      */
     public signal void position_changed(Budgie.PanelPosition position);
+
+    /**
+     * budgie_plugin_action_invoked:
+     *
+     * Informs Plugins that a particular global action of type ActionType
+     * has been invoked or performed. Interested plugins should listen for
+     * these events to offer better integration
+     *
+     * @param action_type: (transfer none): The type of action performed/invoked
+     */
+    public signal void action_invoked(Budgie.ActionType action_type);
 }
 
 }
