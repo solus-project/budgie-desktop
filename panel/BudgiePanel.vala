@@ -88,8 +88,9 @@ public class Panel : Gtk.Window
         // where the clock, etc, live
         var widgets_wrap = new Gtk.EventBox();
         widgets_wrap.get_style_context().add_class("message-area");
+        widgets_wrap.margin = 3;
         widgets_area = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-        widgets_area.margin = 5;
+        widgets_area.margin = 2;
         widgets_wrap.add(widgets_area);
         master_layout.pack_end(widgets_wrap, false, false, 0);
 
