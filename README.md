@@ -24,7 +24,7 @@ certain components to operate correctly.
 
 *Implementation note:*
 
-All elements are written entirely from scratch, using GTK and eiether Vala
+All elements are written entirely from scratch, using GTK and either Vala
 or C. A rewrite took place to lower the barrier of entry for new contributors
 and to ease maintainence.
 A sole exception is the wm/plugin.c file, which is a slight modification of the
