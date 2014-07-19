@@ -120,7 +120,7 @@ public class Panel : Gtk.Window
                 clock = plugin;
             } else if (i.get_name() == "Icon Tasklist") {
                 tasklist = plugin;
-                master_layout.pack_start(widget, true, true, 0);
+                master_layout.pack_start(widget, false, false, 0);
             }
             widget.show();
         });
