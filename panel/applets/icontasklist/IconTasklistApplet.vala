@@ -180,6 +180,14 @@ public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
         buttons = new Gee.HashMap<Wnck.Window,IconButton>(null,null,null);
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+        /* Update orientation when parent panel does
+         * TODO: Have support for left/right hand side launchers, etc
+         * with the position_changed signal */
+
+        orientation_changed.connect((o)=> {
+            widget.set_orientation(o);
+        });
     }
         
     public Gtk.Widget get_panel_widget()

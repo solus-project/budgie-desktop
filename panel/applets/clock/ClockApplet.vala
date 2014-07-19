@@ -40,6 +40,23 @@ public class ClockApplet : Budgie.Plugin, Peas.ExtensionBase
         });
         pop.add(cal);
         Timeout.add(1000, update_clock);
+
+        position_changed.connect(on_position_change);
+    }
+
+    protected void on_position_change(Budgie.PanelPosition position)
+    {
+        switch (position) {
+            case Budgie.PanelPosition.LEFT:
+                clock.set_angle(90);
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                clock.set_angle(-90);
+                break;
+            default:
+                clock.set_angle(0);
+                break;
+        }
     }
         
     public Gtk.Widget get_panel_widget()

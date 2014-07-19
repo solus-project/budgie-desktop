@@ -12,6 +12,14 @@
 namespace Budgie
 {
 
+public enum PanelPosition
+{
+    BOTTOM = 0,
+    TOP,
+    LEFT,
+    RIGHT
+}
+
 public interface Plugin : Peas.ExtensionBase
 {
     /**
@@ -21,6 +29,24 @@ public interface Plugin : Peas.ExtensionBase
      */
     public abstract Gtk.Widget get_panel_widget();
 
+    /**
+     * budgie_plugin_orientation_changed:
+     *
+     * Informs Plugin's that their parent layout has been altered and should accomodate
+     *
+     * @param orientation: (transfer none): The orientation of the applet
+     */
+    public signal void orientation_changed(Gtk.Orientation orientation);
+
+    /**
+     * budgie_plugin_position_changed:
+     *
+     * Informs Plugin's that their parent container has moved on screen
+     * i.e. the panel has moved to a different screen edge
+     *
+     * @param position: (transfer none): Position of the container's screen-edge
+     */
+    public signal void position_changed(Budgie.PanelPosition position);
 }
 
 }

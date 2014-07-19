@@ -12,14 +12,6 @@
 namespace Budgie
 {
 
-public enum PanelPosition
-{
-    BOTTOM = 0,
-    TOP,
-    LEFT,
-    RIGHT
-}
-
 public class Panel : Gtk.Window
 {
 
@@ -91,7 +83,7 @@ public class Panel : Gtk.Window
         var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
         // TODO: Hook into existing GSettings key
-        position = PanelPosition.BOTTOM;
+        position = PanelPosition.RIGHT;
 
         // where the clock, etc, live
         var widgets_wrap = new Gtk.EventBox();
@@ -173,6 +165,8 @@ public class Panel : Gtk.Window
         int height = get_allocated_height();
         int width = get_allocated_width();
         int x = 0, y = 0;
+        // temp
+        Budgie.Plugin[] applets = {tasklist, clock};
 
         switch (position) {
             case PanelPosition.TOP:
@@ -190,12 +184,23 @@ public class Panel : Gtk.Window
                 break;
         }
 
+        Gtk.Orientation orientation;
+
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
             // Effectively we're now vertical. deal with it.
-            master_layout.set_orientation(Gtk.Orientation.VERTICAL);
+            orientation = Gtk.Orientation.VERTICAL;
         } else {
-            master_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
+            orientation = Gtk.Orientation.HORIZONTAL;
         }
+
+        master_layout.set_orientation(orientation);
+        // Eventually foreach the loaded applets
+        foreach (var applet in applets) {
+            if (applet != null) {
+                applet.orientation_changed(orientation);
+                applet.position_changed(position);
+            }
+        };
 
         move(x,y);
 
@@ -210,9 +215,6 @@ public class Panel : Gtk.Window
     {
         var st = get_style_context();
 
-        if (position == PanelPosition.RIGHT) {
-            cr.rotate(90);
-        }
         st.render_background(cr, 0, 0, get_allocated_width(), get_allocated_height());
         st.render_frame(cr, 0, 0, get_allocated_width(), get_allocated_height());
 
