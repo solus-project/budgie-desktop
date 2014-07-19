@@ -43,6 +43,7 @@
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid white;
 }
+/* Top launchers */
 .top .launcher:hover {
     border: 2px solid alpha(white, 0.0);
     border-top: 2px solid alpha(white, 0.5); 
@@ -51,6 +52,27 @@
     border: 2px solid alpha(white, 0.0);
     border-top: 2px solid white;
 }
+
+/* Left hand side launchers */
+.left .launcher:hover {
+    border: 2px solid alpha(white, 0.0);
+    border-left: 2px solid alpha(white, 0.5);
+}
+.left .launcher:active {
+    border: 2px solid alpha(white, 0.0);
+    border-left: 2px solid white;
+}
+
+/* Right hand side launchers */
+.right .launcher:hover {
+    border: 2px solid alpha(white, 0.0);
+    border-right: 2px solid alpha(white, 0.5);
+}
+.right .launcher:active {
+    border: 2px solid alpha(white, 0.0);
+    border-right: 2px solid white;
+}
+
 .panel-applet {
     background-image: none;
     border-color: alpha(white, 0.12);

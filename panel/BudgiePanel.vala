@@ -169,20 +169,40 @@ public class Panel : Gtk.Window
         // temp
         Budgie.Plugin[] applets = {tasklist, clock};
 
+        string[] classes =  {
+            "top",
+            "bottom",
+            "left",
+            "right"
+        };
+        string newclass;
         switch (position) {
             case PanelPosition.TOP:
+                newclass = "top";
                 y = 0;
                 break;
             case PanelPosition.LEFT:
+                newclass = "left";
                 y = 0;
                 break;
             case PanelPosition.RIGHT:
+                newclass = "right";
                 x = get_screen().get_width()-width;
                 break;
             case PanelPosition.BOTTOM:
             default:
+                newclass = "";
                 y = get_screen().get_height()-height;
                 break;
+        }
+        var st = get_style_context();
+        foreach (var tclass in classes) {
+            if (newclass != tclass) {
+                st.remove_class(tclass);
+            }
+        }
+        if (newclass != "") {
+            st.add_class(newclass);
         }
 
         Gtk.Orientation orientation;
