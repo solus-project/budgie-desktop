@@ -99,6 +99,7 @@ public class Panel : Gtk.Window
         widgets_area = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
         widgets_area.margin = 2;
         widgets_wrap.add(widgets_area);
+        widgets_wrap.show_all();
         master_layout.pack_end(widgets_wrap, false, false, 0);
 
         // Right now our plugins are kinda locked in where they go. Sorry
@@ -119,6 +120,7 @@ public class Panel : Gtk.Window
                 tasklist = plugin;
                 master_layout.pack_start(widget, true, true, 0);
             }
+            widget.show();
         });
 
         load_plugin("Budgie Menu Applet");
@@ -126,7 +128,8 @@ public class Panel : Gtk.Window
         load_plugin("Status Applet");
         load_plugin("Clock Applet");
 
-        show_all();
+        master_layout.show();
+        show();
 
         set_struts();
     }

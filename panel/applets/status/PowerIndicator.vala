@@ -66,6 +66,7 @@ public class PowerIndicator : Gtk.Bin
                 warning("Unable to discover a battery");
                 return;
             }
+            hide();
         }
 
         // Got a battery, determine the icon to use
@@ -94,5 +95,6 @@ public class PowerIndicator : Gtk.Bin
         set_tooltip_text(tip);
 
         widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
+        show_all();
     }
 } // End class

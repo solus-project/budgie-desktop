@@ -35,6 +35,8 @@ public class SoundIndicator : Gtk.Bin
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
         mixer.open();
+
+        show_all();
     }
 
     /**

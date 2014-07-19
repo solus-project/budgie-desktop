@@ -41,6 +41,7 @@ public class ClockApplet : Budgie.Plugin, Peas.ExtensionBase
         pop.add(cal);
         Timeout.add(1000, update_clock);
 
+        widget.show_all();
         position_changed.connect(on_position_change);
     }
 

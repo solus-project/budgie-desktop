@@ -55,6 +55,8 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
                 return false;
             });
         });
+
+        widget.show_all();
     }
         
     public Gtk.Widget get_panel_widget()
