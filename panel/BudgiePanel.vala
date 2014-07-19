@@ -83,7 +83,7 @@ public class Panel : Gtk.Window
         var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
         // TODO: Hook into existing GSettings key
-        position = PanelPosition.RIGHT;
+        position = PanelPosition.BOTTOM;
 
         // where the clock, etc, live
         var widgets_wrap = new Gtk.EventBox();
