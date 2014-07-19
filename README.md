@@ -32,7 +32,7 @@ Also note: If you are using Ubuntu, poweroff/restart *do work*  as the
 login1 interface is provided.
 
 *TODO:*
- * Ensure static size and position of panel
+ * Ensure static size and position of panel ✓
  * Fix weird glitches with widget/message area border rendering ✓
  * Start adding support for translations
  * Optimize menu (hack GdkPixbuf and GtkImage loading)
@@ -47,16 +47,18 @@ login1 interface is provided.
  * Support Wayland (lack of wnck-style wayland interation = major issue)
  * Fix popover grab (clicking desktop doesn't make popover hide, etc.) ✓
  * Darken panel when windows are maximized (hat-tip to Elementary here) ✓
- * Rewrite in Vala!
+ * Rewrite in Vala! (mostly done, panel is complete)
 
 *Implementation note:*
 
-All elements are written entirely from scratch, using GTK and C. A sole
-exception is the wm/plugin.c file, which is a slight modification of the
+All elements are written entirely from scratch, using GTK and eiether Vala
+or C. A rewrite took place to lower the barrier of entry for new contributors
+and to ease maintainence.
+A sole exception is the wm/plugin.c file, which is a slight modification of the
 default Mutter plugin.
 
-The current aim is to rewrite the entire project using Vala, simplifying
-maintainence and enabling more contributions from other people.
+The entire project will be rewritten in Vala at some point, with over 58%
+of it already complete at the time of writing this document.
 
 *budgie-wm:*
 
