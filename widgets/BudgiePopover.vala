@@ -278,6 +278,8 @@ public class Popover : Gtk.Window
         their_width = widget_alloc.width;
         widg_x = trans_x;
 
+        queue_draw();
+
         // And now we go and position ourselves.
         move(our_x, our_y);
 
