@@ -27,6 +27,8 @@ public class Panel : Gtk.Window
     Budgie.Plugin clock;
     Budgie.Plugin status_area;
     Settings settings;
+    // Simply for the colourisation of the panel
+    Wnck.Screen wnck_screen;
 
     /* Totally temporary - we'll extend to user plugins in the end and
      * ensure these directories are correct at compile time */
@@ -123,6 +125,14 @@ public class Panel : Gtk.Window
             widget.show();
         });
 
+        // set up wnck
+        Wnck.set_client_type(Wnck.ClientType.PAGER);
+        wnck_screen = Wnck.Screen.get_default();
+        wnck_screen.window_opened.connect(on_window_opened);
+        wnck_screen.window_closed.connect(on_window_closed);
+        wnck_screen.active_window_changed.connect(on_active_window_changed);
+
+        // load plugins
         load_plugin("Budgie Menu Applet");
         load_plugin("Icon Tasklist");
         load_plugin("Status Applet");
@@ -336,6 +346,61 @@ public class Panel : Gtk.Window
     {
         if (menu != null) {
             menu.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
+        }
+    }
+
+    /*
+     * WNCK stuff follows, simply to update the panel background
+     */
+    protected void on_window_opened(Wnck.Window window)
+    {
+        ulong id = window.state_changed.connect(on_window_state_changed);
+        window.set_data("__bid", id);
+        update_panel_state();
+    }
+
+    protected void on_window_closed(Wnck.Window window)
+    {
+        // quicker than waiting on GC.
+        ulong id = window.get_data("__bid");
+        window.disconnect(id);
+        update_panel_state();
+    }
+
+    protected void on_active_window_changed(Wnck.Window? prev_window)
+    {
+        update_panel_state();
+    }
+
+    protected void on_window_state_changed(Wnck.WindowState mask, Wnck.WindowState new_state)
+    {
+        update_panel_state();
+    }
+
+    protected void update_panel_state()
+    {
+        bool havemax = false;
+        // Might not have a workspace. Shrug. Revisit if/when it becomes a problem
+        Wnck.Workspace? workspace = wnck_screen.get_active_workspace();
+        foreach (var window in wnck_screen.get_windows()) {
+            bool subvis = false;
+            if (workspace != null) {
+                subvis = window.is_visible_on_workspace(workspace);
+            } else {
+                if (!window.is_minimized() && !window.is_shaded()) {
+                    subvis = true;
+                }
+            }
+            if (window.is_maximized_vertically() && subvis) {
+                havemax = true;
+                break;
+            }
+        }
+        // Set the max-budgie-panel style, i.e. a darker panel :)
+        if (havemax) {
+            get_style_context().add_class("max-budgie-panel");
+        } else {
+            get_style_context().remove_class("max-budgie-panel");
         }
     }
 } // End Panel class
