@@ -248,11 +248,13 @@ class RunDialogMain : GLib.Application
 
     public override void activate()
     {
+        hold();
         if (dialog == null) {
             dialog = new Budgie.RunDialog();
             Gtk.main();
         }
         dialog.present();
+        release();
     }
 
     private RunDialogMain()
