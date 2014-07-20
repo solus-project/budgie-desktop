@@ -22,6 +22,17 @@ PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.10.0])
 
 PULSE_MIN_VERS=2.0
 
+MODULEDIR=${libdir}/budgie-desktop
+AC_SUBST(MODULEDIR)
+AC_DEFINE_UNQUOTED(MODULEDIR, "$MODULEDIR",
+                   [Installation directory for Budgie plugins])
+
+# Technically unused right now but might be used in the future
+MODULE_DATA_DIR=${datadir}/budgie-desktop/plugins
+AC_SUBST(MODULE_DATA_DIR)
+AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
+                   [Installation directory for Budgie plugin data])
+
 PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
 
 # We require Mutter

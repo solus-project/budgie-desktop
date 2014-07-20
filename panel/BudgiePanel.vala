@@ -32,7 +32,7 @@ public class Panel : Gtk.Window
 
     /* Totally temporary - we'll extend to user plugins in the end and
      * ensure these directories are correct at compile time */
-    static string module_directory = "/usr/lib/budgie-desktop";
+    static string module_directory = MODULE_DIRECTORY;
     static string module_data_directory = "/usr/share/budgie-panel/plugins";
 
     public Panel()
