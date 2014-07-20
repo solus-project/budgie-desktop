@@ -30,10 +30,9 @@ public class Panel : Gtk.Window
     // Simply for the colourisation of the panel
     Wnck.Screen wnck_screen;
 
-    /* Totally temporary - we'll extend to user plugins in the end and
-     * ensure these directories are correct at compile time */
+    // Defined at compile time, check panelconfig.h and panelconfig.vapi
     static string module_directory = MODULE_DIRECTORY;
-    static string module_data_directory = "/usr/share/budgie-panel/plugins";
+    static string module_data_directory = MODULE_DATA_DIRECTORY;
 
     public Panel()
     {
