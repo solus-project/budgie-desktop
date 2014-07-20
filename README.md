@@ -10,10 +10,6 @@ Simple, yet elegant desktop
 Budgie Desktop integrates with the GNOME stack, and as such requires
 certain components to operate correctly. 
 
-*Maintainer note*: Currently /usr/lib/budgie-desktop is the hard-coded location
-of system-wide plugins for Budgie. Make sure to either patch around this
-current limitation or configure as appropriate.
-
 *TODO:*
  * Start adding support for translations
  * Optimize menu (migrate from GtkListBox)
