@@ -69,6 +69,7 @@ path without having to use the terminal or menu
  * libmutter (>= 3.10.1)
  * GLib (>= 2.38.0)
  * gee-0.8 (not gee-1.0!)
+ * libpeas-1.0
  * valac
 
 Ubuntu users:
