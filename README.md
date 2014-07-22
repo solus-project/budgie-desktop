@@ -6,6 +6,16 @@ Simple, yet elegant desktop
 ![budgie_screenshot](https://raw.githubusercontent.com/evolve-os/budgie-desktop/master/Screenshot.png)
 
 
+                     _              __           _    
+                    | |            / _|         | |   
+         _ __   ___ | |_    __ _  | |_ ___  _ __| | __
+        | '_ \ / _ \| __|  / _` | |  _/ _ \| '__| |/ /
+        | | | | (_) | |_  | (_| | | || (_) | |  |   < 
+        |_| |_|\___/ \__|  \__,_| |_| \___/|_|  |_|\_\
+
+
+What's that? Not a fork.  Exactly.
+
 *Note:*
 Budgie Desktop integrates with the GNOME stack, and as such requires
 certain components to operate correctly. 
