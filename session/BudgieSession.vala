@@ -1,5 +1,5 @@
 /*
- * Session.vala
+ * BudgieSession.vala
  * 
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
  * 
