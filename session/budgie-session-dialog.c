@@ -64,6 +64,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gboolean can_suspend = FALSE;
         gboolean can_systemd = TRUE;
         autofree gchar *result = NULL;
+        GtkWidget *header = NULL;
         SdResponse response;
 
         init_styles(self);
@@ -196,7 +197,10 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
         /* Cheat, shadow + styling, but no titlebar */
-        gtk_window_set_titlebar(GTK_WINDOW(self), gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+        header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+        style = gtk_widget_get_style_context(header);
+        gtk_style_context_add_class(style, "invisi-header");
+        gtk_window_set_titlebar(GTK_WINDOW(self), header);
 
         /* Can haz style? */
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
