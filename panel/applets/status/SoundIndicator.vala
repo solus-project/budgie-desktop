@@ -93,6 +93,10 @@ public class SoundIndicator : Gtk.Bin
             var tooltip = "%f dB".printf(db);
             widget.set_tooltip_text(tooltip);
         }
+
+        // Gtk 3.12 issue, ensure we show all..
+        show_all();
+        queue_draw();
     }
 
 } // End class
