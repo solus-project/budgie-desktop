@@ -155,7 +155,11 @@ typedef struct
 void budgie_launch_menu (MetaDisplay    *display,
                          MetaScreen     *screen,
                          MetaWindow     *window,
+#if MUTTER_MINOR_VERSION >= 13
+                         ClutterKeyEvent *event,
+#else
                          XIDeviceEvent  *event,
+#endif
                          MetaKeyBinding *binding,
                          gpointer        user_data)
 {
@@ -166,7 +170,11 @@ void budgie_launch_menu (MetaDisplay    *display,
 void budgie_launch_rundialog (MetaDisplay    *display,
                               MetaScreen     *screen,
                               MetaWindow     *window,
+#if MUTTER_MINOR_VERSION >= 13
+                              ClutterKeyEvent *event,
+#else
                               XIDeviceEvent  *event,
+#endif
                               MetaKeyBinding *binding,
                             gpointer        user_data)
 {
