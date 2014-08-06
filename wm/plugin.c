@@ -51,6 +51,13 @@
 
 #include "plugin.h"
 
+#ifndef MUTTER_MINOR_VERSION
+#include <meta/meta-version.h>
+#if META_MINOR_VERSION >= 13
+#define BUDGIEUNSTABLE 1
+#endif
+#endif
+
 #define DESTROY_TIMEOUT    100
 #define DESTROY_SCALE      0.8
 #define MINIMIZE_TIMEOUT   150
@@ -155,7 +162,7 @@ typedef struct
 void budgie_launch_menu (MetaDisplay    *display,
                          MetaScreen     *screen,
                          MetaWindow     *window,
-#if MUTTER_MINOR_VERSION >= 13
+#if defined(BUDGIEUNSTABLE)
                          ClutterKeyEvent *event,
 #else
                          XIDeviceEvent  *event,
@@ -170,7 +177,7 @@ void budgie_launch_menu (MetaDisplay    *display,
 void budgie_launch_rundialog (MetaDisplay    *display,
                               MetaScreen     *screen,
                               MetaWindow     *window,
-#if MUTTER_MINOR_VERSION >= 13
+#if defined(BUDGIEUNSTABLE)
                               ClutterKeyEvent *event,
 #else
                               XIDeviceEvent  *event,
