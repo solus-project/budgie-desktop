@@ -30,6 +30,7 @@ certain components to operate correctly.
  * Allow pinning menu launchers to panel (see above point)
  * Rewrite in Vala! (mostly done, panel is complete)
  * Enable customisation of panel layout, etc.
+ * Dynamically resize appletsa according to panel size
 
 *Implementation note:*
 
