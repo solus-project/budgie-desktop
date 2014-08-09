@@ -13,6 +13,12 @@
       <description>Which screen edge to place the panel on</description>
     </key>
 
+    <key type="i" name="size">
+      <default>40</default>
+      <summary>Panel size</summary>
+      <description>Height of panel if horizontal, or the width if it is vertical</description>
+    </key>
+
     <key type="b" name="gnome-panel-theme-integration">
       <default>false</default>
       <summary>GNOME Panel theme integration</summary>

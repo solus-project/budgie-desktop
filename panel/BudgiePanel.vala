@@ -15,7 +15,19 @@ namespace Budgie
 public class Panel : Gtk.Window
 {
 
-    private int intended_height = 40;
+    protected int intended_height;
+
+    public int panel_size {
+        get {
+            return intended_height;
+        }
+        set {
+            intended_height = value;
+            update_position();
+            set_struts();
+        }
+    }
+
     private PanelPosition position;
     private Gtk.Box master_layout;
     private Gtk.Box widgets_area;
@@ -92,6 +104,10 @@ public class Panel : Gtk.Window
         settings = new Settings("com.evolve-os.budgie.panel");
         settings.changed.connect(on_settings_change);
         on_settings_change("location");
+
+        // Ensure we dynamically update our size
+        settings.bind("size", this, "panel_size", SettingsBindFlags.GET);
+        panel_size = settings.get_int("size");
 
         // where the clock, etc, live
         var widgets_wrap = new Gtk.EventBox();
