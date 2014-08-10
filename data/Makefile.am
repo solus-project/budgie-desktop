@@ -1,14 +1,12 @@
 -include $(top_srcdir)/common.mk
 
 #@INTLTOOL_XML_NOMERGE_RULE@
-gsettings_SCHEMAS = com.evolve-os.budgie.panel.gschema.xml \
-	com.evolve-os.budgie.panel.object.gschema.xml
+gsettings_SCHEMAS = com.evolve-os.budgie.panel.gschema.xml
 @GSETTINGS_RULES@
 
 EXTRA_DIST = \
 	budgie-desktop.desktop.in \
 	com.evolve-os.budgie.panel.gschema.xml \
-	com.evolve-os.budgie.panel.object.gschema.xml \
 	budgie-panel.gresource.xml \
 	rundialog.gresource.xml \
 	session-dialog.gresource.xml \
