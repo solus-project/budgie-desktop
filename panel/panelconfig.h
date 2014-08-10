@@ -6,4 +6,7 @@ const char *BUDGIE_MODULE_DIRECTORY = MODULE_DIR;
 
 /* i.e. /usr/share/budgie-desktop/plugins */
 const char *BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+
+/* i.e. /usr/share/budgie-desktop */
+const char *BUDGIE_DATADIR = DATADIR;
 #endif

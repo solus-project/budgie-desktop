@@ -11,17 +11,21 @@
 
 public class ClockApplet : Budgie.Plugin, Peas.ExtensionBase
 {
+    public Budgie.Applet get_panel_widget()
+    {
+        return new ClockAppletImpl();
+    }
+}
+
+public class ClockAppletImpl : Budgie.Applet
+{
 
     protected Gtk.EventBox widget;
     protected Gtk.Label clock;
     protected Gtk.Calendar cal;
     protected Budgie.Popover pop;
 
-    construct {
-        init_ui();
-    }
-
-    protected void init_ui()
+    public ClockAppletImpl()
     {
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
@@ -41,7 +45,9 @@ public class ClockApplet : Budgie.Plugin, Peas.ExtensionBase
         pop.add(cal);
         Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
 
-        widget.show_all();
+        update_clock();
+        add(widget);
+        show_all();
         position_changed.connect(on_position_change);
     }
 
@@ -58,12 +64,6 @@ public class ClockApplet : Budgie.Plugin, Peas.ExtensionBase
                 clock.set_angle(0);
                 break;
         }
-    }
-        
-    public Gtk.Widget get_panel_widget()
-    {
-        update_clock();
-        return widget;
     }
 
     /**

@@ -109,14 +109,18 @@ public class IconButton : Gtk.ToggleButton
 
 public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
 {
+    public Budgie.Applet get_panel_widget()
+    {
+        return new IconTasklistAppletImpl();
+    }
+}
+
+public class IconTasklistAppletImpl : Budgie.Applet
+{
 
     protected Gtk.Box widget;
     protected Wnck.Screen screen;
     protected Gee.HashMap<Wnck.Window,IconButton> buttons;
-
-    construct {
-        init_ui();
-    }
 
     protected void window_opened(Wnck.Window window)
     {
@@ -166,7 +170,7 @@ public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
         btn.set_active(true);
     }
 
-    protected void init_ui()
+    public IconTasklistAppletImpl()
     {
         // Init wnck
         screen = Wnck.Screen.get_default();
@@ -186,13 +190,9 @@ public class IconTasklistApplet : Budgie.Plugin, Peas.ExtensionBase
         orientation_changed.connect((o)=> {
             widget.set_orientation(o);
         });
+        add(widget);
+        show_all();
     }
-        
-    public Gtk.Widget get_panel_widget()
-    {
-        return widget;
-    }
-
 } // End class
 
 [ModuleInit]

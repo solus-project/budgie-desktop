@@ -11,27 +11,27 @@
 
 public class TaskListApplet : Budgie.Plugin, Peas.ExtensionBase
 {
+    public Budgie.Applet get_panel_widget()
+    {
+        return new TaskListAppletImpl();
+    }
+}
+
+public class TaskListAppletImpl : Budgie.Applet
+{
 
     protected Wnck.Tasklist widget;
 
-    construct {
-        init_ui();
-    }
-
-    protected void init_ui()
+    public TaskListAppletImpl()
     {
         widget = new Wnck.Tasklist();
         widget.set_grouping(Wnck.TasklistGroupingType.AUTO_GROUP);
 
-        widget.show_all();
+        add(widget);
+        show_all();
         orientation_changed.connect((o) => {
             widget.set_orientation(o);
         });
-    }
-        
-    public Gtk.Widget get_panel_widget()
-    {
-        return widget;
     }
 } // End class
 

@@ -6,4 +6,7 @@ namespace Budgie {
 
 	[CCode (cheader_filename = "panelconfig.h")]
     public extern const string MODULE_DATA_DIRECTORY;
+
+	[CCode (cheader_filename = "panelconfig.h")]
+    public extern const string DATADIR;
 }

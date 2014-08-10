@@ -15,14 +15,17 @@ budgie_panel_CFLAGS = \
 	$(GTK3_CFLAGS) \
 	$(WNCK3_CFLAGS) \
 	$(LIBPEAS_CFLAGS) \
+	$(GEE_CFLAGS) \
 	-DMODULE_DIR=\"$(MODULEDIR)\" \
-	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\"
+	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
+	-DDATADIR=\"$(datadir)/budgie-desktop\"
 
 budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
 	$(WNCK3_LIBS) \
 	$(LIBPEAS_LIBS) \
+	$(GEE_LIBS) \
 	../budgie-plugin/libbudgie-plugin.la
 
 budgie_panel_VALAFLAGS = \
@@ -34,7 +37,8 @@ budgie_panel_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg budgie-1.0 \
-	--pkg PeasGtk-1.0
+	--pkg PeasGtk-1.0 \
+	--pkg gee-0.8
 
 EXTRA_DIST += \
 	panelconfig.h \

@@ -14,15 +14,20 @@ const string BUDGIE_STYLE_MENU_ICON = "menu-icon";
 
 public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
 {
+    public Budgie.Applet get_panel_widget()
+    {
+        return new BudgieMenuApplet();
+    }
+}
+
+public class BudgieMenuApplet : Budgie.Applet
+{
 
     protected Gtk.ToggleButton widget;
     protected Budgie.Popover? popover;
 
-    construct {
-        init_ui();
-    }
 
-    protected void init_ui()
+    public BudgieMenuApplet()
     {
         widget = new Gtk.ToggleButton();
         var img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
@@ -56,12 +61,8 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
             });
         });
 
-        widget.show_all();
-    }
-        
-    public Gtk.Widget get_panel_widget()
-    {
-        return widget;
+        add(widget);
+        show_all();
     }
 } // End class
 

@@ -15,12 +15,17 @@ EXTRA_DIST = \
 	dialog.css \
 	app.css \
 	style.css \
+	layout.ini \
 	rundialog-style.css
 
 xsessiondir = $(datadir)/xsessions
 
 xsession_DATA = \
 	budgie-desktop.desktop
+
+defaultsdir = $(datadir)/budgie-desktop
+defaults_DATA = \
+	layout.ini
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/budgie-panel.gresource.xml)
 dialog_resources = $(shell glib-compile-resources --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/session-dialog.gresource.xml)

@@ -30,14 +30,31 @@ public enum ActionType {
     INVOKE_MAIN_MENU = 0
 }
 
+/**
+ * BudgiePlugin
+ */
 public interface Plugin : Peas.ExtensionBase
 {
     /**
      * budgie_plugin_get_panel_widget:
      * 
-     * Returns: (transfer none): A Gtk+ widget for use on the BudgiePanel
+     * Returns: (transfer full): A Gtk+ widget for use on the BudgiePanel
      */
-    public abstract Gtk.Widget get_panel_widget();
+    public abstract Budgie.Applet get_panel_widget();
+}
+
+/**
+ * BudgieApplet
+ */
+public class Applet : Gtk.Bin
+{
+
+    /**
+     * budgie_plugin_new:
+     *
+     * Construct a new BudgiePlugin
+     */
+    public Applet() {}
 
     /**
      * budgie_plugin_orientation_changed:

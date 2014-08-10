@@ -8,19 +8,22 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-
 public class StatusApplet : Budgie.Plugin, Peas.ExtensionBase
+{
+    public Budgie.Applet get_panel_widget()
+    {
+        return new StatusAppletImpl();
+    }
+}
+
+public class StatusAppletImpl : Budgie.Applet
 {
 
     protected Gtk.Box widget;
     protected SoundIndicator sound;
     protected PowerIndicator power;
 
-    construct {
-        init_ui();
-    }
-
-    protected void init_ui()
+    public StatusAppletImpl()
     {
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         widget.margin_left = 4;
@@ -36,15 +39,10 @@ public class StatusApplet : Budgie.Plugin, Peas.ExtensionBase
         orientation_changed.connect((o)=> {
             widget.set_orientation(o);
         });
+        show_all();
+        widget.show();
+        add(widget);
     }
-
-        
-    public Gtk.Widget get_panel_widget()
-    {
-        return widget;
-    }
-
-
 } // End class
 
 [ModuleInit]

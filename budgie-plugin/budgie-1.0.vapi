@@ -3,7 +3,11 @@
 namespace Budgie {
 	[CCode (cheader_filename = "BudgiePlugin.h")]
 	public interface Plugin : Peas.ExtensionBase {
-		public abstract Gtk.Widget get_panel_widget ();
+		public abstract Budgie.Applet get_panel_widget ();
+	}
+	[CCode (cheader_filename = "BudgiePlugin.h")]
+	public class Applet : Gtk.Bin {
+        public Applet();
 		public signal void action_invoked (Budgie.ActionType action_type);
 		public signal void orientation_changed (Gtk.Orientation orientation);
 		public signal void position_changed (Budgie.PanelPosition position);

@@ -34,10 +34,14 @@ public class Panel : Gtk.Window
 
     Peas.Engine engine;
     // Must keep in scope otherwise they garbage collect and die
-    Budgie.Plugin menu;
-    Budgie.Plugin tasklist;
-    Budgie.Plugin clock;
-    Budgie.Plugin status_area;
+
+    /* Global plugin table */
+    Gee.HashMap<string,Budgie.Plugin?> plugin_map;
+    /* Loaded applet table */
+    Gee.HashMap<string,Budgie.Applet?> applets;
+
+    KeyFile config;
+
     Settings settings;
     // Simply for the colourisation of the panel
     Wnck.Screen wnck_screen;
@@ -98,6 +102,9 @@ public class Panel : Gtk.Window
         engine.add_search_path(dirm, null);
         var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
+        plugin_map = new Gee.HashMap<string,Budgie.Plugin?>(null,null,null);
+        applets = new Gee.HashMap<string,Budgie.Applet?>(null,null,null);
+
         // Get an update from GSettings where we should be (position set
         // for error fallback)
         position = PanelPosition.BOTTOM;
@@ -120,26 +127,7 @@ public class Panel : Gtk.Window
         master_layout.pack_end(widgets_wrap, false, false, 0);
 
         // Right now our plugins are kinda locked in where they go. Sorry
-        extset.extension_added.connect((i,p) => {
-            var plugin = p as Budgie.Plugin;
-            var widget = plugin.get_panel_widget();
-
-            if (i.get_name() == "Budgie Menu Applet") {
-                menu = plugin;
-                master_layout.pack_start(widget, false, false, 5);
-                widget.margin_left = 5;
-            } else if (i.get_name() == "Status Applet") {
-                status_area = plugin;
-                widgets_area.pack_start(widget, true, true, 0);
-            } else if (i.get_name() == "Clock Applet") {
-                widgets_area.pack_end(widget, false, false, 0);
-                clock = plugin;
-            } else if (i.get_name() == "Icon Tasklist") {
-                tasklist = plugin;
-                master_layout.pack_start(widget, false, false, 0);
-            }
-            widget.show();
-        });
+        extset.extension_added.connect(on_extension_added);
 
         // set up wnck
         Wnck.set_client_type(Wnck.ClientType.PAGER);
@@ -148,11 +136,7 @@ public class Panel : Gtk.Window
         wnck_screen.window_closed.connect(on_window_closed);
         wnck_screen.active_window_changed.connect(on_active_window_changed);
 
-        // load plugins
-        load_plugin("Budgie Menu Applet");
-        load_plugin("Icon Tasklist");
-        load_plugin("Status Applet");
-        load_plugin("Clock Applet");
+        load_config();
 
         master_layout.show();
         show();
@@ -183,15 +167,191 @@ public class Panel : Gtk.Window
         }
     }
 
-    protected void load_plugin(string plugin_name)
+    /* Taken from config */
+    protected void add_applet(ref Budgie.Applet applet, string name)
     {
-        foreach (var plugin in engine.get_plugin_list()) {
-            if (plugin.get_name() == plugin_name) {
-                engine.try_load_plugin(plugin);
+        Gtk.PackType pack = Gtk.PackType.START;
+        unowned Gtk.Box? pack_target = master_layout;
+        bool center = false;
+        int index = 0;
+        int pad_start = 0, pad_end = 0;
+
+        try {
+            if (config.has_key(name, "Pack")) {
+                var ptype = config.get_string(name, "Pack").down();
+                switch (ptype) {
+                    case "end":
+                        pack = Gtk.PackType.END;
+                        break;
+                    /*case "center":
+                        center = true;
+                        break;*/
+                    default:
+                        pack = Gtk.PackType.START;
+                        break;
+                }
+            }
+            if (config.has_key(name, "Index")) {
+                index = config.get_integer(name, "Index");
+            }
+            if (config.has_key(name, "PaddingStart")) {
+                pad_start = config.get_integer(name, "PaddingStart");
+            }
+            if (config.has_key(name, "PaddingEnd")) {
+                pad_end = config.get_integer(name, "PaddingEnd");
+            }
+            if (config.has_key(name, "StatusArea")) {
+                if (config.get_boolean(name, "StatusArea") == true) {
+                    pack_target = widgets_area;
+                }
+            }
+            // Deprecated in 3.12, use margin-start, margin-end in future
+            applet.margin_left = pad_start;
+            applet.margin_right = pad_end;
+
+            if (index != 0) {
+                pack_target.child_set_property(applet, "position", index);
+            }
+        } catch (Error e) {
+            warning("Plugin load error gaining attributes: %s", e.message);
+        }
+
+        applet.show();
+
+        if (center) {
+            // not yet supported as we need checks for 3.2
+            /*pack_target.set_center_widget(widget);*/
+            pack_target.pack_start(applet, false, false, 0);
+        } else if (pack == Gtk.PackType.START) {
+            pack_target.pack_start(applet, false, false, 0);
+        } else {
+            pack_target.pack_end(applet, false, false, 0);
+        }
+        applets[name] = applet;
+    }
+
+    /* Load an applet */
+    protected void load_applet(string name)
+    {
+        /* Determine if the plugin is loaded yet. */
+        string? plug = null;
+
+        if (applets.has_key(name)) {
+            return;
+        }
+
+        try {
+            plug = config.get_string(name, "ID");
+            // Found the correct plugin handler, we can go handle this.
+            if (plugin_map.has_key(plug)) {
+                var applet = plugin_map[plug].get_panel_widget();
+                add_applet(ref applet, name);
+                return;
+            }
+        } catch (Error e) {
+            warning("Error loading %s: %s", name, e.message);
+            return;
+        }
+
+        // Got this far we actually need to load the underlying plugin
+        unowned Peas.PluginInfo? plugin = null;
+
+        foreach(var plugini in engine.get_plugin_list()) {
+            if (plugini.get_name() == plug) {
+                plugin = plugini;
+                break;
+            }
+        }
+        if (plugin == null) {
+            warning("Could not find plugin: %s", plug);
+            return;
+        }
+        engine.try_load_plugin(plugin);
+    }
+
+    /**
+     * Handle post-plugin-load. Try to add pending applets if required.
+     */
+    protected void on_extension_added(Peas.PluginInfo i, Object p)
+    {
+        var plugin = p as Budgie.Plugin;
+        plugin_map[i.get_name()] = plugin;
+        string[] children;
+
+        try {
+            children = config.get_string_list("Panel", "Children");
+        } catch (Error e) {
+            message("Panel config specifies no children!");
+            return;
+        }
+
+        // Iterate the children, and then load them into the panel
+        foreach (var child in children) {
+            child = child.strip();
+            try {
+                var plug = config.get_string(child, "ID");
+                if (plug == i.get_name()) {
+                    /* Try to add an applet for this one, first time this plugin
+                     * has loaded */
+                    if (!applets.has_key(child)) {
+                        var applet = plugin.get_panel_widget();
+                        add_applet(ref applet, child);
+                    }
+                }
+            } catch (Error e) {
+                warning("Applet initialisation issue: %s", e.message);
+            }
+        }
+    }
+
+    /*
+     * Load config for our applets
+     */
+    protected void load_config()
+    {
+        string[] children;
+        bool user_config = false;
+
+        string configdir = Environment.get_user_config_dir();
+        string path = @"$configdir/budgie.ini";
+
+        config = new GLib.KeyFile();
+        try {
+            config.load_from_file(path, KeyFileFlags.KEEP_COMMENTS);
+            user_config = true;
+        } catch (Error e) {
+            message("Unable to find user config: %s", e.message);
+        }
+
+        if (!user_config) {
+            // Load in the default panel configuration
+            path = @"$DATADIR/layout.ini";
+            try {
+                config.load_from_file(path, KeyFileFlags.KEEP_COMMENTS);
+            } catch (Error e) {
+                critical("Unable to find default config %s: %s", path, e.message);
                 return;
             }
         }
-        stdout.printf("Unable to load %s\n", plugin_name);
+
+        // Get the children that should be here
+        try {
+            children = config.get_string_list("Panel", "Children");
+        } catch (Error e) {
+            message("Panel config specifies no children!");
+            return;
+        }
+
+        // Iterate the children, and then load them into the panel
+        foreach (var child in children) {
+            child = child.strip();
+
+            if (!config.has_group(child)) {
+                warning("%s not found", child);
+                continue;
+            }
+            load_applet(child);
+        }
     }
 
     /* Struts on X11 are used to reserve screen-estate, i.e. for guys like us.
@@ -233,8 +393,6 @@ public class Panel : Gtk.Window
         int height = get_allocated_height();
         int width = get_allocated_width();
         int x = 0, y = 0;
-        // temp
-        Budgie.Plugin[] applets = {tasklist, clock};
 
         string[] classes =  {
             "top",
@@ -282,8 +440,7 @@ public class Panel : Gtk.Window
         }
 
         master_layout.set_orientation(orientation);
-        // Eventually foreach the loaded applets
-        foreach (var applet in applets) {
+        foreach (var applet in applets.values) {
             if (applet != null) {
                 applet.orientation_changed(orientation);
                 applet.position_changed(position);
@@ -360,8 +517,10 @@ public class Panel : Gtk.Window
      */
     public void invoke_menu()
     {
-        if (menu != null) {
-            menu.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
+        foreach(var applet in applets.values) {
+            if (applet != null) {
+                applet.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
+            }
         }
     }
 
@@ -488,7 +647,6 @@ class PanelMain : GLib.Application
                 return 1;
             }
         }
-
         return app.run(args);
     }
 } // End BudgiePanelMain
