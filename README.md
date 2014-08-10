@@ -29,7 +29,8 @@ certain components to operate correctly.
  * Allow adding launchers directly to panel
  * Allow pinning menu launchers to panel (see above point)
  * Rewrite in Vala! (mostly done, panel is complete)
- * Enable customisation of panel layout, etc.
+ * Enable customisation of panel layout, etc. ✓
+ * Add dynamic editor for panel layout
  * Dynamically resize appletsa according to panel size
 
 *Implementation note:*
