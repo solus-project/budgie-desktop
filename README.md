@@ -31,7 +31,8 @@ certain components to operate correctly.
  * Rewrite in Vala! (mostly done, panel is complete)
  * Enable customisation of panel layout, etc. ✓
  * Add dynamic editor for panel layout
- * Dynamically resize appletsa according to panel size
+ * Add support for GNOME Panel theming
+ * Dynamically resize applets according to panel size
 
 *Implementation note:*
 
