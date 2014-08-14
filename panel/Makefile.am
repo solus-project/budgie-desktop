@@ -2,11 +2,28 @@
 
 EXTRA_DIST = 
 
+panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/budgie-panel.gresource.xml)
+
+BUILT_SOURCES = \
+	budgie-panel-resources.h \
+	budgie-panel-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
+
+# resources
+budgie-panel-resources.h: $(top_srcdir)/data/budgie-panel.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name budgie_panel $<
+
+budgie-panel-resources.c: $(top_srcdir)/data/budgie-panel.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name budgie_panel $<
+
+
 bin_PROGRAMS = budgie-panel
 
 budgie_panel_SOURCES = \
-	../data/budgie-panel-resources.h \
-	../data/budgie-panel-resources.c \
+	budgie-panel-resources.h \
+	budgie-panel-resources.c \
 	BudgiePanel.vala \
 	Editor.vala
 

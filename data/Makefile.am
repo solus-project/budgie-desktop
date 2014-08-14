@@ -24,36 +24,3 @@ xsession_DATA = \
 defaultsdir = $(datadir)/budgie-desktop
 defaults_DATA = \
 	layout.ini
-
-panel_resources = $(shell glib-compile-resources --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/budgie-panel.gresource.xml)
-dialog_resources = $(shell glib-compile-resources --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/session-dialog.gresource.xml)
-rundialog_resources = $(shell glib-compile-resources --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/rundialog.gresource.xml)
-
-BUILT_SOURCES = \
-	budgie-panel-resources.h \
-	budgie-panel-resources.c \
-	budgie-session-dialog-resources.h \
-	budgie-session-dialog-resources.c \
-	budgie-run-dialog-resources.h \
-	budgie-run-dialog-resources.c
-
-CLEANFILES = \
-	$(BUILT_SOURCES)
-
-budgie-panel-resources.h: budgie-panel.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name budgie_panel $<
-
-budgie-panel-resources.c: budgie-panel.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name budgie_panel $<
-
-budgie-session-dialog-resources.h: session-dialog.gresource.xml $(dialog_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name budgie_session_dialog $<
-
-budgie-session-dialog-resources.c: session-dialog.gresource.xml $(dialog_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name budgie_session_dialog $<
-
-budgie-run-dialog-resources.h: rundialog.gresource.xml $(rundialog_files)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-header --c-name budgie_run_dialog $<
-
-budgie-run-dialog-resources.c: rundialog.gresource.xml $(rundialog_files)
-	glib-compile-resources --target=$@ --sourcedir=$(srcdir) --generate-source --c-name budgie_run_dialog $<

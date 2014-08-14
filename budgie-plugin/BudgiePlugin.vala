@@ -50,25 +50,27 @@ public class Applet : Gtk.Bin
 {
 
     /**
-     * budgie_plugin_new:
+     * budgie_applet_construct:
      *
-     * Construct a new BudgiePlugin
+     * Construct a new BudgieApplet
+     *
+     * Returns: (transfer full): A new BudgieApplet instance
      */
     public Applet() {}
 
     /**
-     * budgie_plugin_orientation_changed:
+     * budgie_applet_orientation_changed:
      *
-     * Informs Plugins that their parent layout has been altered and should accomodate
+     * Informs applets that their parent layout has been altered and should accomodate
      *
      * @param orientation: (transfer none): The orientation of the applet
      */
     public signal void orientation_changed(Gtk.Orientation orientation);
 
     /**
-     * budgie_plugin_position_changed:
+     * budgie_applet_position_changed:
      *
-     * Informs Plugins that their parent container has moved on screen
+     * Informs applets that their parent container has moved on screen
      * i.e. the panel has moved to a different screen edge
      *
      * @param position: (transfer none): Position of the container's screen-edge
@@ -76,10 +78,10 @@ public class Applet : Gtk.Bin
     public signal void position_changed(Budgie.PanelPosition position);
 
     /**
-     * budgie_plugin_action_invoked:
+     * budgie_applet_action_invoked:
      *
-     * Informs Plugins that a particular global action of type ActionType
-     * has been invoked or performed. Interested plugins should listen for
+     * Informs applets that a particular global action of type ActionType
+     * has been invoked or performed. Interested applets should listen for
      * these events to offer better integration
      *
      * @param action_type: (transfer none): The type of action performed/invoked
