@@ -1,7 +1,24 @@
 -include $(top_srcdir)/common.mk
 
+dialog_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/session-dialog.gresource.xml)
+
+BUILT_SOURCES = \
+	budgie-session-dialog-resources.h \
+	budgie-session-dialog-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
+
+# Resources
+budgie-session-dialog-resources.h: $(top_srcdir)/data/session-dialog.gresource.xml $(dialog_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name budgie_session_dialog $<
+
+budgie-session-dialog-resources.c: $(top_srcdir)/data/session-dialog.gresource.xml $(dialog_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name budgie_session_dialog $<
+
+
 bin_PROGRAMS = budgie-session \
-	       budgie-session-dialog
+	budgie-session-dialog
 
 EXTRA_DIST = \
 	org.freedesktop.login1.xml
@@ -36,8 +53,8 @@ budgie_session_VALAFLAGS = \
 	--pkg posix
 
 budgie_session_dialog_SOURCES = \
-	../data/budgie-session-dialog-resources.h \
-	../data/budgie-session-dialog-resources.c \
+	budgie-session-dialog-resources.h \
+	budgie-session-dialog-resources.c \
 	budgie-session-dialog.h \
 	budgie-session-dialog.c \
 	budgie-session-dialog-main.c
@@ -63,10 +80,10 @@ sd_logind_proxy.h: org.freedesktop.login1.xml
 
 sd_logind_proxy.c:
 
-BUILT_SOURCES = \
+BUILT_SOURCES += \
 	sd_logind_proxy.h \
 	sd_logind_proxy.c
 
-CLEANFILES = \
+CLEANFILES += \
 	$(BUILT_SOURCES) \
 	sd_logind_proxy.c
