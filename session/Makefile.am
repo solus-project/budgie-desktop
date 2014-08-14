@@ -26,7 +26,8 @@ EXTRA_DIST = \
 noinst_LTLIBRARIES = libsdloginproxy.la
 
 libsdloginproxy_la_SOURCES = \
-	sd_logind_proxy.c
+	sd_logind_proxy.c \
+	sd_logind_proxy.h
 
 libsdloginproxy_la_CFLAGS = \
 	$(GIO_UNIX_CFLAGS)
