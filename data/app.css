@@ -7,25 +7,25 @@
  */
 
 
-GtkListBox {
+BudgiePopover GtkListBox {
     background-image: none;
     background-color: alpha(black, 0.0);
     border-radius: 6px;
 }
-GtkListBoxRow {
+BudgiePopover GtkListBoxRow {
     background-image: none;
     background-color: alpha(black, 0.0);
 }
-.trough {
+BudgiePopover .trough {
     background-color: alpha(black, 0.0);
 }
 
-.entry,
-.entry:focused,
-.entry:selected,
-.entry:active,
-.entry:hover,
-.entry {
+BudgiePopover .entry,
+BudgiePopover .entry:focused,
+BudgiePopover .entry:selected,
+BudgiePopover .entry:active,
+BudgiePopover .entry:hover,
+BudgiePopover .entry {
     border: none;
     background-image: none;
     background-color: #f7f7f7;

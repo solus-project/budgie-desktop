@@ -7,7 +7,8 @@ bin_PROGRAMS = budgie-panel
 budgie_panel_SOURCES = \
 	../data/budgie-panel-resources.h \
 	../data/budgie-panel-resources.c \
-	BudgiePanel.vala
+	BudgiePanel.vala \
+	Editor.vala
 
 budgie_panel_CFLAGS = \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \

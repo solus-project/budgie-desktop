@@ -12,6 +12,51 @@
 namespace Budgie
 {
 
+/**
+ * Used to track Applets in a sane way
+ */
+public class AppletInfo : GLib.Object
+{
+
+    /** Applet instance */
+    public Budgie.Applet applet { public get; private set; }
+
+    /** Known icon name */
+    public string icon {  public get; protected set; }
+
+    /** Instance name */
+    public string name { public get; protected set; }
+
+    /** Plugin name providing the applet instance */
+    public string plugin_name { public get; private set; }
+
+    /** Packing type */
+    public Gtk.PackType pack_type { public get ; public set ; }
+
+    /** Whether to place in the status area or not */
+    public bool status_area { public get ; public set ; }
+
+    /** Start padding */
+    public int pad_start { public get ; public set ; }
+
+    /** End padding */
+    public int pad_end { public get ; public set; }
+
+    /** Position (packging index */
+    public int position { public get; public set; }
+
+    /**
+     * Construct a new AppletInfo. Simply a wrapper around applets
+     */
+    public AppletInfo(Budgie.Plugin? plugin, Budgie.Applet applet, string name)
+    {
+        this.applet = applet;
+        icon = plugin.plugin_info.get_icon_name();
+        this.name = name;
+        plugin_name = plugin.plugin_info.get_name();
+    }
+}
+
 public class Panel : Gtk.Window
 {
 
@@ -33,18 +78,23 @@ public class Panel : Gtk.Window
     private Gtk.Box widgets_area;
 
     Peas.Engine engine;
+    Peas.ExtensionSet extset;
+
     // Must keep in scope otherwise they garbage collect and die
 
     /* Global plugin table */
     Gee.HashMap<string,Budgie.Plugin?> plugin_map;
     /* Loaded applet table */
-    Gee.HashMap<string,Budgie.Applet?> applets;
+    Gee.HashMap<string,Budgie.AppletInfo?> applets;
 
     KeyFile config;
 
     Settings settings;
     // Simply for the colourisation of the panel
     Wnck.Screen wnck_screen;
+
+    // Panel editor/preferences
+    private PanelEditor prefs_dialog;
 
     // Defined at compile time, check panelconfig.h and panelconfig.vapi
     static string module_directory = MODULE_DIRECTORY;
@@ -89,21 +139,16 @@ public class Panel : Gtk.Window
         type_hint = Gdk.WindowTypeHint.DOCK;
         set_keep_above(true);
 
-        size_allocate.connect((s) => {
-            update_position();
-            set_struts();
-        });
-
         // Initialize plugins engine
         engine = Peas.Engine.get_default();
         engine.add_search_path(module_directory, module_data_directory);
         // Home directory
         var dirm = "%s/budgie-panel".printf(Environment.get_user_data_dir());
         engine.add_search_path(dirm, null);
-        var extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
+        extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
         plugin_map = new Gee.HashMap<string,Budgie.Plugin?>(null,null,null);
-        applets = new Gee.HashMap<string,Budgie.Applet?>(null,null,null);
+        applets = new Gee.HashMap<string,Budgie.AppletInfo?>(null,null,null);
 
         // Get an update from GSettings where we should be (position set
         // for error fallback)
@@ -125,6 +170,7 @@ public class Panel : Gtk.Window
         widgets_wrap.add(widgets_area);
         widgets_wrap.show_all();
         master_layout.pack_end(widgets_wrap, false, false, 0);
+        master_layout.child_set_property(widgets_wrap, "position", 1);
 
         // Right now our plugins are kinda locked in where they go. Sorry
         extset.extension_added.connect(on_extension_added);
@@ -140,6 +186,18 @@ public class Panel : Gtk.Window
 
         master_layout.show();
         show();
+
+        // post config/extension loading routine, ensure we dynamically load at runtime
+        engine.load_plugin.connect_after((i)=> {
+            var ext = extset.get_extension(i);
+            on_extension_added(i, ext);
+        });
+
+
+        size_allocate.connect((s) => {
+            update_position();
+            set_struts();
+        });
 
         set_struts();
     }
@@ -168,13 +226,15 @@ public class Panel : Gtk.Window
     }
 
     /* Taken from config */
-    protected void add_applet(ref Budgie.Applet applet, string name)
+    protected void add_applet(ref Budgie.AppletInfo applet_info)
     {
         Gtk.PackType pack = Gtk.PackType.START;
         unowned Gtk.Box? pack_target = master_layout;
         bool center = false;
         int index = 0;
         int pad_start = 0, pad_end = 0;
+        string name = applet_info.name;
+        unowned Budgie.Applet applet = applet_info.applet;
 
         try {
             if (config.has_key(name, "Pack")) {
@@ -191,9 +251,6 @@ public class Panel : Gtk.Window
                         break;
                 }
             }
-            if (config.has_key(name, "Index")) {
-                index = config.get_integer(name, "Index");
-            }
             if (config.has_key(name, "PaddingStart")) {
                 pad_start = config.get_integer(name, "PaddingStart");
             }
@@ -208,10 +265,6 @@ public class Panel : Gtk.Window
             // Deprecated in 3.12, use margin-start, margin-end in future
             applet.margin_left = pad_start;
             applet.margin_right = pad_end;
-
-            if (index != 0) {
-                pack_target.child_set_property(applet, "position", index);
-            }
         } catch (Error e) {
             warning("Plugin load error gaining attributes: %s", e.message);
         }
@@ -227,7 +280,189 @@ public class Panel : Gtk.Window
         } else {
             pack_target.pack_end(applet, false, false, 0);
         }
-        applets[name] = applet;
+
+        // We're pretty interested in what happens in the editor..
+        applet_info.pack_type = pack;
+        applet_info.pad_start = pad_start;
+        applet_info.pad_end = pad_end;
+        if (pack_target == widgets_area) {
+            applet_info.status_area = true;
+        }
+
+        foreach (var sprog in pack_target.get_children()) {
+            if (sprog == applet) {
+                break;
+            }
+            index++;
+        }
+        applet_info.position = index;
+        applets[name] = applet_info;
+        applet_info.notify.connect(applet_updated);
+
+        applet_added(ref applet_info);
+    }
+
+    /* Something about the applet was altered */
+    public void applet_updated(Object o, ParamSpec p)
+    {
+        AppletInfo app_info = o as AppletInfo;
+        Gtk.Box owner = app_info.applet.get_parent() as Gtk.Box;
+
+        if (p.name == "pad-start") {
+            app_info.applet.margin_left = app_info.pad_start;
+        }
+        if (p.name == "pad-end") {
+            app_info.applet.margin_right = app_info.pad_end;
+        }
+        if (p.name == "position") {
+            /* This is where it gets complicated.. */
+            if (app_info.position < 0) {
+                app_info.position = 0;
+                return;
+            }
+            if (app_info.position > owner.get_children().length()-1) {
+                app_info.position = (int)owner.get_children().length()-1;
+                return;
+            }
+            owner.reorder_child(app_info.applet, app_info.position);
+        }
+        if (p.name == "pack-type") {
+            owner.child_set_property(app_info.applet, "pack-type", app_info.pack_type);
+        }
+        if (p.name == "status-area") {
+            // actually need to remove the child from area its in and reparent it.
+            Gtk.Box? new_owner;
+            if (owner == master_layout) {
+                new_owner = widgets_area;
+            } else {
+                new_owner = master_layout;
+            }
+
+            owner.remove(app_info.applet);
+            new_owner.pack_start(app_info.applet, false, false, 0);
+            // Always goes to being a pack start, i.e. at the end of the current items
+            app_info.pack_type = Gtk.PackType.START;
+            app_info.position = (int)new_owner.get_children().length();
+        }
+        update_config();
+    }
+
+    /* Add a new applet dynamically
+     */
+    public void add_new_applet(string id)
+    {
+        // Ensure unique name
+        string name = id;
+        string base_name = name;
+        uint suffix = 1;
+        while (true) {
+            if (config.has_group(name)) {
+                suffix += 1;
+                name = "%s-%u".printf(base_name, suffix);
+            } else {
+                break;
+            }
+        }
+
+        string[] children = config.get_string_list("Panel", "Children");
+        children += name;
+        config.set_string(name, "ID", id);
+        config.set_string_list("Panel", "Children", children);
+        load_applet(name);
+        update_config();
+    }
+
+    /* Remove applet. Also somewhat dynamically
+     */
+    public void remove_applet(string name)
+    {
+        AppletInfo appl = applets[name];
+        // So we can actually reposition everyone..
+        Gtk.Box? owner = appl.applet.get_parent() as Gtk.Box;
+        int position = appl.position;
+
+        applet_removed(name);
+        /* Send a destroy */
+        appl.applet.destroy();
+        applets.remove(name);
+
+        /* Unfortunately this is ugly as all shit, but what can ya do. */
+        uint length = owner.get_children().length();
+        foreach (var applet in applets.values) {
+            if (applet.applet.get_parent() == owner && applet.position > position) {
+                applet.position -= 1;
+            }
+            if (applet.position < 0) {
+                applet.position = 0;
+            }
+        }
+        appl = null;
+        applets.unset(name);
+        update_config();
+    }
+
+    public int compare_applet(Budgie.AppletInfo? A, Budgie.AppletInfo? B)
+    {
+            return (int) (A.position > B.position) - (int) (A.position < B.position);
+    }
+
+    /* Update our config */
+    protected void update_config()
+    {
+        KeyFile outconfig = new KeyFile();
+        var apls = new Gee.ArrayList<AppletInfo?>();
+        var stpls = new Gee.ArrayList<AppletInfo?>();
+
+        foreach (var applet in applets.values) {
+            if (applet.status_area) {
+                stpls.add(applet);
+            } else {
+                apls.add(applet);
+            }
+        }
+
+        apls.sort(compare_applet);
+        stpls.sort(compare_applet);
+
+        // Begin writing our config.
+        string[] children = {};
+        foreach (var a in apls) {
+            children += a.name;
+        }
+        foreach (var a in stpls) {
+            children += a.name;
+        }
+
+        outconfig.set_string_list("Panel", "Children", children);
+        // And now basically write off each applet info
+        foreach (var a in children) {
+            var applet = applets[a];
+            outconfig.set_string(a, "ID", applet.plugin_name);
+            if (applet.pack_type != Gtk.PackType.START) {
+                string pck_string = applet.pack_type == Gtk.PackType.START ? "start" : "end";
+                outconfig.set_string(a, "Pack", pck_string);
+            }
+            if (applet.pad_start > 0) {
+                outconfig.set_integer(a, "PaddingStart", applet.pad_start);
+            }
+            if (applet.pad_end > 0) {
+                outconfig.set_integer(a, "PaddingEnd", applet.pad_end);
+            }
+            if (applet.status_area) {
+                outconfig.set_boolean(a, "StatusArea", applet.status_area);
+            }
+        }
+        string output_conf = outconfig.to_data();
+
+        string configdir = Environment.get_user_config_dir();
+        string path = @"$configdir/budgie.ini";
+        try {
+            FileUtils.set_contents(path, output_conf);
+        } catch (Error e) {
+            warning("Unable to save Budgie config: %s", e.message);
+        }
+
+        config = (owned)outconfig;
     }
 
     /* Load an applet */
@@ -245,7 +480,8 @@ public class Panel : Gtk.Window
             // Found the correct plugin handler, we can go handle this.
             if (plugin_map.has_key(plug)) {
                 var applet = plugin_map[plug].get_panel_widget();
-                add_applet(ref applet, name);
+                var ainfo = new AppletInfo(plugin_map[plug], applet, name);
+                add_applet(ref ainfo);
                 return;
             }
         } catch (Error e) {
@@ -295,7 +531,8 @@ public class Panel : Gtk.Window
                      * has loaded */
                     if (!applets.has_key(child)) {
                         var applet = plugin.get_panel_widget();
-                        add_applet(ref applet, child);
+                        var ainfo = new AppletInfo(plugin, applet, child);
+                        add_applet(ref ainfo);
                     }
                 }
             } catch (Error e) {
@@ -440,10 +677,11 @@ public class Panel : Gtk.Window
         }
 
         master_layout.set_orientation(orientation);
-        foreach (var applet in applets.values) {
-            if (applet != null) {
-                applet.orientation_changed(orientation);
-                applet.position_changed(position);
+        widgets_area.set_orientation(orientation);
+        foreach (var applet_info in applets.values) {
+            if (applet_info != null) {
+                applet_info.applet.orientation_changed(orientation);
+                applet_info.applet.position_changed(position);
             }
         };
 
@@ -517,11 +755,38 @@ public class Panel : Gtk.Window
      */
     public void invoke_menu()
     {
-        foreach(var applet in applets.values) {
-            if (applet != null) {
-                applet.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
+        foreach(var applet_info in applets.values) {
+            if (applet_info != null) {
+                applet_info.applet.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
             }
         }
+    }
+
+    /** Signals **/
+    public signal void applet_added(ref AppletInfo info);
+    public signal void applet_removed(string name);
+
+    /**
+     * Show our editor/prefs dialog
+     */
+    public void invoke_prefs()
+    {
+        if (prefs_dialog != null && prefs_dialog.get_visible()) {
+            prefs_dialog.present();
+            return;
+        }
+        if(prefs_dialog != null) {
+            prefs_dialog.destroy();
+        }
+
+        prefs_dialog = new PanelEditor(this);
+        /* We now emit for lazy-sake to populate the prefs dialog */
+        foreach (var applet_info in applets.values) {
+            applet_added(ref applet_info);
+        }
+
+        prefs_dialog.show_all();
+        prefs_dialog.present();
     }
 
     /*
@@ -585,9 +850,11 @@ class PanelMain : GLib.Application
 
     static Budgie.Panel? panel = null;
     private static bool invoke_menu = false;
+    private static bool invoke_prefs = false;
 
 	private const GLib.OptionEntry[] options = {
         { "menu", 0, 0, OptionArg.NONE, ref invoke_menu, "Invoke the panel menu", null },
+        { "prefs", 0, 0, OptionArg.NONE, ref invoke_prefs, "Invoke the panel preferences", null },
         { null }
     };
 
@@ -611,6 +878,17 @@ class PanelMain : GLib.Application
             // Only on valid panel instances
             if (panel != null) {
                 panel.invoke_menu();
+            }
+            release();
+        });
+        add_action(action);
+
+        action = new SimpleAction("prefs", null);
+        action.activate.connect(()=> {
+            hold();
+            // Again, only on valid instances
+            if (panel != null) {
+                panel.invoke_prefs();
             }
             release();
         });
@@ -644,6 +922,15 @@ class PanelMain : GLib.Application
                 Process.exit(0);
             } catch (Error e) {
                 stderr.printf("Error activating menu: %s\n", e.message);
+                return 1;
+            }
+        } else if (invoke_prefs) {
+            try {
+                app.register(null);
+                app.activate_action("prefs", null);
+                Process.exit(0);
+            } catch (Error e) {
+                stderr.printf("Error activating prefs: %s\n", e.message);
                 return 1;
             }
         }
