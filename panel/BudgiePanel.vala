@@ -12,9 +12,9 @@
 /* These exist for theme integration. */
 public class PanelToplevel : Budgie.Panel {
 
-    public PanelToplevel(bool gnome_mode)
+    public PanelToplevel()
     {
-        base(gnome_mode);
+        base();
     }
 }
 public class PanelApplet : Gtk.Bin {
@@ -111,9 +111,9 @@ public class Panel : Gtk.Window
     static string module_directory = MODULE_DIRECTORY;
     static string module_data_directory = MODULE_DATA_DIRECTORY;
 
-    bool gnome_mode = true;
+    public bool gnome_mode { set; get; }
 
-    public Panel(bool gnome_theme)
+    public Panel()
     {
         /* Set an RGBA visual whenever we can */
         Gdk.Visual? vis = screen.get_rgba_visual();
@@ -125,7 +125,8 @@ public class Panel : Gtk.Window
         app_paintable = true;
         resizable = false;
 
-        gnome_mode = gnome_theme;
+        settings = new Settings("com.evolve-os.budgie.panel");
+        gnome_mode = settings.get_boolean("gnome-panel-theme-integration");
 
         /* Ensure to initialise styles */
         try {
@@ -144,9 +145,9 @@ public class Panel : Gtk.Window
 
         // Base styling
         if (!gnome_mode) {
-            get_style_context().remove_class("background");
             get_style_context().add_class("budgie-panel");
         }
+        get_style_context().remove_class("background");
 
         // simple layout
         master_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -170,7 +171,6 @@ public class Panel : Gtk.Window
         // Get an update from GSettings where we should be (position set
         // for error fallback)
         position = PanelPosition.BOTTOM;
-        settings = new Settings("com.evolve-os.budgie.panel");
         settings.changed.connect(on_settings_change);
         on_settings_change("location");
 
@@ -308,6 +308,7 @@ public class Panel : Gtk.Window
 
         // Existing themes refer to PanelToplevel and PanelApplet extensively.
         if (gnome_mode) {
+            message("I r in gnome mode ya");
             target_widg = new PanelApplet();
             // Ensures we don't get wnck.pager throwing a hissy fit in gnome mode
             target_widg.set_size_request(1, 1);
@@ -875,6 +876,9 @@ public class Panel : Gtk.Window
 
     protected void update_panel_state()
     {
+        if (gnome_mode) {
+            return;
+        }
         bool havemax = false;
         // Might not have a workspace. Shrug. Revisit if/when it becomes a problem
         Wnck.Workspace? workspace = wnck_screen.get_active_workspace();
@@ -920,9 +924,9 @@ class PanelMain : GLib.Application
         if (panel == null) {
             var settings = new Settings("com.evolve-os.budgie.panel");
             if (settings.get_boolean("gnome-panel-theme-integration") == true) {
-                panel = new PanelToplevel(true);
+                panel = new PanelToplevel();
             } else {
-                panel = new Budgie.Panel(false);
+                panel = new Budgie.Panel();
             }
             Gtk.main();
         }
