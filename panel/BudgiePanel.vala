@@ -200,6 +200,23 @@ public class Panel : Gtk.Window
         });
 
         set_struts();
+
+        // Horrible, but all we can do for now.
+        var menu = new Gtk.Menu();
+        var item = new Gtk.MenuItem.with_label("Preferences...");
+        item.activate.connect(()=> {
+            invoke_prefs();
+        });
+        menu.add(item);
+        menu.show_all();
+
+        button_release_event.connect((b)=> {
+            if (b.button == 3) {
+                menu.popup(null, null, null, b.button, Gdk.CURRENT_TIME);
+                return true;
+            }
+            return false;
+        });
     }
 
     protected void on_settings_change(string key)
