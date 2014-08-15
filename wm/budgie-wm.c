@@ -23,8 +23,9 @@ int main(int argc, char **argv)
 
         /* Add default option context */
         ctx = meta_get_option_context();
-        if (!g_option_context_parse(ctx, &argc, &argv, NULL))
+        if (!g_option_context_parse(ctx, &argc, &argv, NULL)) {
                 return FALSE;
+        }
 
         meta_plugin_manager_set_plugin_type(meta_default_plugin_get_type());
 
