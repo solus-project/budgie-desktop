@@ -1,0 +1,8 @@
+[Plugin]
+Module=workspacesapplet.so
+Name=Workspaces Switcher
+Description=Provides a traditional workspace switcher
+Authors=Ikey Doherty
+Copyright=Copyright © 2014 Ikey Doherty
+Website=https://evolve-os.com
+Icon=gnome-panel-workspace-switcher

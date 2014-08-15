@@ -3,6 +3,7 @@ SUBDIRS = \
 	clock \
 	tasklist \
 	icontasklist \
-	status
+	status \
+	workspaces
 
 

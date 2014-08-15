@@ -309,6 +309,8 @@ public class Panel : Gtk.Window
         // Existing themes refer to PanelToplevel and PanelApplet extensively.
         if (gnome_mode) {
             target_widg = new PanelApplet();
+            // Ensures we don't get wnck.pager throwing a hissy fit in gnome mode
+            target_widg.set_size_request(1, 1);
             (target_widg as PanelApplet).add(applet);
             target_widg.show();
         } else {

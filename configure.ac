@@ -86,6 +86,7 @@ AC_CONFIG_FILES([Makefile
                 panel/applets/icontasklist/Makefile
                 panel/applets/tasklist/Makefile
                 panel/applets/status/Makefile
+                panel/applets/workspaces/Makefile
                 rundialog/Makefile
                 session/Makefile
                 widgets/Makefile
