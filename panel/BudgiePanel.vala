@@ -113,8 +113,15 @@ public class Panel : Gtk.Window
 
     public bool gnome_mode { set; get; }
 
+    private int primary_monitor;
+    private Gdk.Rectangle primary_monitor_rect;
+
     public Panel()
     {
+        primary_monitor = screen.get_primary_monitor();
+        
+        screen.get_monitor_geometry(primary_monitor, out primary_monitor_rect);
+
         /* Set an RGBA visual whenever we can */
         Gdk.Visual? vis = screen.get_rgba_visual();
         if (vis != null) {
@@ -651,7 +658,14 @@ public class Panel : Gtk.Window
     protected void set_struts()
     {
         Gdk.Atom atom;
-        long struts[4];
+        long struts[12];
+        /*
+        strut-left strut-right strut-top strut-bottom
+        strut-left-start-y   strut-left-end-y
+        strut-right-start-y  strut-right-end-y
+        strut-top-start-x    strut-top-end-x
+        strut-bottom-start-x strut-bottom-end-x
+        */
 
         if (!get_realized()) {
             return;
@@ -660,23 +674,26 @@ public class Panel : Gtk.Window
         // Struts dependent on position
         switch (position) {
             case PanelPosition.TOP:
-                struts = { 0, 0, intended_height, 0};
+                struts = { 0, 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 break;
             case PanelPosition.LEFT:
-                struts = { intended_height, 0, 0, 0 };
+                struts = { intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 break;
             case PanelPosition.RIGHT:
-                struts = { 0, intended_height, 0, 0};
+                struts = { 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 break;
             case PanelPosition.BOTTOM:
             default:
-                struts = { 0, 0, 0, intended_height };
+                struts = { 0, 0, 0, intended_height,
+                0, 0, 0, 0, 0, 0, 
+                primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width};
                 break;
         }
 
-        atom = Gdk.Atom.intern("_NET_WM_STRUT", false);
+        // all relevant WMs support this, Mutter included
+        atom = Gdk.Atom.intern("_NET_WM_STRUT_PARTIAL", false);
         Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
-            32, Gdk.PropMode.REPLACE, (uint8[])struts, 4);
+            32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
     protected void update_position()
@@ -695,20 +712,20 @@ public class Panel : Gtk.Window
         switch (position) {
             case PanelPosition.TOP:
                 newclass = "top";
-                y = 0;
+                y = primary_monitor_rect.y+0;
                 break;
             case PanelPosition.LEFT:
                 newclass = "left";
-                y = 0;
+                y = primary_monitor_rect.y+0;
                 break;
             case PanelPosition.RIGHT:
                 newclass = "right";
-                x = get_screen().get_width()-width;
+                x = primary_monitor_rect.x+primary_monitor_rect.width-width;
                 break;
             case PanelPosition.BOTTOM:
             default:
                 newclass = "";
-                y = get_screen().get_height()-height;
+                y = primary_monitor_rect.y+primary_monitor_rect.height-height;
                 break;
         }
         if (!gnome_mode) {
@@ -764,7 +781,7 @@ public class Panel : Gtk.Window
     /* The next methods are all designed to force a specific size only! */
     public override void get_preferred_width(out int min, out int natural)
     {
-        var width = screen.get_width();
+        var width = primary_monitor_rect.width;
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
             width = intended_height;
         }
@@ -775,7 +792,7 @@ public class Panel : Gtk.Window
     public override void get_preferred_height(out int min, out int natural)
     {
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
-            min = screen.get_height();
+            min = primary_monitor_rect.height;
             natural = min;
         } else {
             min = intended_height;
@@ -796,7 +813,7 @@ public class Panel : Gtk.Window
 
     public override void get_preferred_width_for_height(int height, out int min, out int natural)
     {
-        var width = screen.get_width();
+        var width = primary_monitor_rect.width;
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
             width = intended_height;
         }
