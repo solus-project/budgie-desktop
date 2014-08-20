@@ -12,7 +12,7 @@
 namespace Budgie
 {
 
-public class PanelEditor : Gtk.Window
+public class PanelEditor : Gtk.Dialog
 {
     // Holds our content, basically.
     Gtk.ListBox content;
@@ -34,11 +34,19 @@ public class PanelEditor : Gtk.Window
     // The real layout is just a stack.
     Gtk.Stack main_layout;
 
+    // Wrap everything in a Notebook
+    Gtk.Notebook book;
+
     // Currently selected AppletInfo
     unowned AppletInfo? current_info;
 
     // Currently selected PluginInfo
     unowned Peas.PluginInfo? current_plugin;
+
+    protected Gtk.Button app_add_btn;
+    protected Gtk.Button app_cancel_btn;
+
+    protected Settings settings;
 
     public PanelEditor(Budgie.Panel parent_panel)
     {
@@ -48,10 +56,37 @@ public class PanelEditor : Gtk.Window
         icon_name = "preferences-desktop";
         window_position = Gtk.WindowPosition.CENTER;
 
-        main_layout = new Gtk.Stack();
-        add(main_layout);
+        settings = new Settings("com.evolve-os.budgie.panel");
 
-        set_size_request(400, 360);
+        book = new Gtk.Notebook();
+        get_content_area().pack_start(book, true, true, 0);
+
+        var close = new Gtk.Button.with_label("Close");
+        add_action_widget(close, Gtk.ResponseType.CLOSE);
+        Gtk.Container owner = close.get_parent() as Gtk.Container;
+        owner.child_set_property(close, "secondary", true);
+        owner.set_border_width(0);
+        owner.set_property("margin-left", 0);
+        owner.set_property("margin-right", 0);
+        owner.set_property("margin-top", 6);
+
+        close.clicked.connect(()=> {
+            destroy();
+        });
+
+        main_layout = new Gtk.Stack();
+        main_layout.set_border_width(6);
+        book.append_page(main_layout, new Gtk.Label("Applets"));
+        // If someone switches to the other page, make sure we hide these now
+        // undocumented behaviours..
+        book.switch_page.connect((p, n)=> {
+            if (n != 0) {
+                app_add_btn.hide();
+                app_cancel_btn.hide();
+                main_layout.set_visible_child_name("main");
+            }
+        });
+        set_size_request(400, 390);
         var sidesplit = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         main_layout.add_named(sidesplit, "main");
 
@@ -75,6 +110,8 @@ public class PanelEditor : Gtk.Window
         add_btn.set_icon_name("list-add-symbolic");
         add_btn.clicked.connect(()=> {
             main_layout.set_visible_child_name("add-applet");
+            app_add_btn.visible = true;
+            app_cancel_btn.visible = true;
         });
 
         tbar.add(add_btn);
@@ -226,6 +263,8 @@ public class PanelEditor : Gtk.Window
             }
         });
 
+        on_row_selected(content.get_selected_row());
+
         panel.applet_added.connect(on_applet_added);
         panel.applet_removed.connect(on_applet_removed);
 
@@ -250,6 +289,10 @@ public class PanelEditor : Gtk.Window
 
         main_layout.add_named(create_applet_area(), "add-applet");
         main_layout.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
+
+        book.append_page(create_panel_area(), new Gtk.Label("Panel"));
+        book.show_all();
+        close.show();
     }
 
     public int on_sort(Gtk.ListBoxRow before, Gtk.ListBoxRow after)
@@ -355,12 +398,10 @@ public class PanelEditor : Gtk.Window
     /** Create the area used to add applets.. */
     protected Gtk.Widget? create_applet_area()
     {
-        var dialog = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-
         Gtk.ListBox rows = new Gtk.ListBox();
         Gtk.ScrolledWindow scroller = new Gtk.ScrolledWindow(null, null);
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        scroller.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
+        scroller.set_shadow_type(Gtk.ShadowType.IN);
         scroller.add(rows);
 
         rows.set_sort_func(applet_sort);
@@ -382,19 +423,21 @@ public class PanelEditor : Gtk.Window
             rows.add(row);
         }
 
-        // bottom row..
-        Gtk.ButtonBox end = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-        end.set_layout(Gtk.ButtonBoxStyle.END);
-        end.spacing = 4;
-
         var cancel_btn = new Gtk.Button.with_label("Cancel");
+        add_action_widget(cancel_btn, Gtk.ResponseType.CANCEL);
+        app_cancel_btn = cancel_btn;
+        cancel_btn.visible = false;
         cancel_btn.clicked.connect(()=> {
             main_layout.set_visible_child_name("main");
+            app_add_btn.visible = false;
+            cancel_btn.visible = false;
         });
+
         var add_btn = new Gtk.Button.with_label("Add");
+        add_action_widget(add_btn, Gtk.ResponseType.OK);
+        app_add_btn = add_btn;
+        add_btn.visible = false;
         add_btn.sensitive = false;
-        end.add(cancel_btn);
-        end.add(add_btn);
 
         rows.row_selected.connect((r)=> {
             if (r == null) {
@@ -411,13 +454,62 @@ public class PanelEditor : Gtk.Window
                 panel.add_new_applet(current_plugin.get_name());
                 return false;
             });
+            add_btn.visible = false;
+            cancel_btn.visible = false;
             main_layout.set_visible_child_name("main");
         });
 
-        dialog.pack_start(scroller, true, true, 5);
-        dialog.pack_end(end, false, false, 5);
+        return scroller;
+    }
 
-        return dialog;
+    protected Gtk.Widget? create_panel_area()
+    {
+        Gtk.Grid wrap = new Gtk.Grid();
+        wrap.valign = Gtk.Align.FILL;
+        wrap.halign = Gtk.Align.FILL;
+        wrap.set_border_width(6);
+
+        wrap.row_spacing = 6;
+        wrap.column_spacing = 30;
+
+        // panel position
+        var label = new Gtk.Label("Position on screen");
+        label.set_alignment(0.0f, 0.5f);
+        var combo = new Gtk.ComboBoxText();
+        combo.insert(-1, "top", "Top");
+        combo.insert(-1, "left", "Left");
+        combo.insert(-1, "right", "Right");
+        combo.insert(-1, "bottom", "Bottom");
+        settings.bind("location", combo, "active-id", SettingsBindFlags.DEFAULT);
+        combo.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 0, 1, 1);
+        wrap.attach(combo, 1, 0, 1, 1);
+
+        // size
+        label = new Gtk.Label("Size");
+        label.set_alignment(0.0f, 0.5f);
+        var spin = new Gtk.SpinButton.with_range(15, 200, 1);
+        settings.bind("size", spin, "value", SettingsBindFlags.DEFAULT);
+        spin.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 1, 1, 1);
+        wrap.attach(spin, 1, 1, 1, 1);
+
+        // gnome panel theme integration
+        label = new Gtk.Label("GNOME Panel theme integration");
+        label.set_alignment(0.0f, 0.5f);
+        var check = new Gtk.Switch();
+        settings.bind("gnome-panel-theme-integration", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 2, 1, 1);
+        wrap.attach(check, 1, 2, 1, 1);
+
+        label = new Gtk.Label("Enabling GNOME Panel theme integration requires you to restart Budgie");
+        label.get_style_context().add_class("dim-label");
+        label.set_alignment(0.0f, 0.5f);
+        label.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 3, 2, 1);
+
+        return wrap;
     }
 }
 

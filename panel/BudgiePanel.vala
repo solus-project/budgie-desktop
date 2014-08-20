@@ -841,7 +841,7 @@ public class Panel : Gtk.Window
             applet_added(ref applet_info);
         }
 
-        prefs_dialog.show_all();
+        prefs_dialog.show();
         prefs_dialog.present();
     }
 
