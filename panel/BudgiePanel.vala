@@ -892,6 +892,8 @@ public class Panel : Gtk.Window
 
     protected void update_panel_state()
     {
+        int wx, wy, ww, wh; // wnck out vars
+
         if (gnome_mode) {
             return;
         }
@@ -900,6 +902,9 @@ public class Panel : Gtk.Window
         Wnck.Workspace? workspace = wnck_screen.get_active_workspace();
         foreach (var window in wnck_screen.get_windows()) {
             bool subvis = false;
+
+            window.get_client_window_geometry(out wx, out wy, out ww, out wh);
+
             if (workspace != null) {
                 subvis = window.is_visible_on_workspace(workspace);
             } else {
@@ -907,7 +912,15 @@ public class Panel : Gtk.Window
                     subvis = true;
                 }
             }
-            if (window.is_maximized_vertically() && subvis) {
+            if (window.is_maximized_vertically() && subvis &&
+                // ensure that the window is fully contained within the
+                // primary monitor as maximizing a window on other
+                // monitors should not affect the shading of the bar
+                wx >= primary_monitor_rect.x &&
+                wx <= primary_monitor_rect.x + primary_monitor_rect.width &&
+                wy >= primary_monitor_rect.y &&
+                wy <= primary_monitor_rect.y + primary_monitor_rect.height
+            ) {
                 havemax = true;
                 break;
             }
