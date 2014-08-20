@@ -674,19 +674,32 @@ public class Panel : Gtk.Window
         // Struts dependent on position
         switch (position) {
             case PanelPosition.TOP:
-                struts = { 0, 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { 0, 0, primary_monitor_rect.y+intended_height, 0,
+                    0, 0, 0, 0,
+                    primary_monitor_rect.x, primary_monitor_rect.x+primary_monitor_rect.width,
+                    0, 0
+                };
                 break;
             case PanelPosition.LEFT:
-                struts = { intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { intended_height, 0, 0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height, 
+                    0, 0, 0, 0, 0, 0
+                };
                 break;
             case PanelPosition.RIGHT:
-                struts = { 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { 0, intended_height, 0, 0,
+                    0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height,
+                    0, 0, 0, 0
+                };
                 break;
             case PanelPosition.BOTTOM:
             default:
-                struts = { 0, 0, 0, intended_height,
-                0, 0, 0, 0, 0, 0, 
-                primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width};
+                struts = { 0, 0, 0, 
+                    (screen.get_height()-primary_monitor_rect.height-primary_monitor_rect.y) + intended_height,
+                    0, 0, 0, 0, 0, 0, 
+                    primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width
+                };
                 break;
         }
 
