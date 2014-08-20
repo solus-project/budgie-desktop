@@ -690,6 +690,9 @@ public class Panel : Gtk.Window
                 break;
         }
 
+        atom = Gdk.Atom.intern("_NET_WM_STRUT", false);
+        Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
+            32, Gdk.PropMode.REPLACE, (uint8[])struts, 4);
         // all relevant WMs support this, Mutter included
         atom = Gdk.Atom.intern("_NET_WM_STRUT_PARTIAL", false);
         Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
