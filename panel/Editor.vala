@@ -48,6 +48,11 @@ public class PanelEditor : Gtk.Dialog
 
     protected Settings settings;
 
+    ulong is_status_id;
+    ulong pack_type_id;
+    ulong pad_start_id;
+    ulong pad_end_id;
+
     public PanelEditor(Budgie.Panel parent_panel)
     {
         this.panel = parent_panel;
@@ -205,7 +210,7 @@ public class PanelEditor : Gtk.Dialog
         is_status.active = false;
         grid.attach(label, 0, 0, 1, 1);
         grid.attach(is_status, 1, 0, 1, 1);
-        is_status.clicked.connect(()=> {
+        is_status_id = is_status.clicked.connect(()=> {
             if (current_info == null) {
                 return;
             }
@@ -247,7 +252,7 @@ public class PanelEditor : Gtk.Dialog
         combo.append_text("end");
         grid.attach(label, 0, 3, 1, 1);
         grid.attach(combo, 1, 3, 1, 1);
-        combo.changed.connect(()=> {
+        pack_type_id = combo.changed.connect(()=> {
             if (current_info == null) {
                 return;
             }
@@ -271,13 +276,13 @@ public class PanelEditor : Gtk.Dialog
         content.set_activate_on_single_click(true);
         content.row_selected.connect(on_row_selected);
 
-        pad_start.changed.connect(()=> {
+        pad_start_id = pad_start.changed.connect(()=> {
             if (current_info == null) {
                 return;
             }
             current_info.pad_start = (int)pad_start.get_value();
         });
-        pad_end.changed.connect(()=> {
+        pad_end_id = pad_end.changed.connect(()=> {
             if (current_info == null) {
                 return;
             }
@@ -336,6 +341,11 @@ public class PanelEditor : Gtk.Dialog
 
     public void update_config(AppletInfo applet)
     {
+        SignalHandler.block(is_status, is_status_id);
+        SignalHandler.block(pack_type, pack_type_id);
+        SignalHandler.block(pad_start, pad_start_id);
+        SignalHandler.block(pad_end, pad_end_id);
+
         switch (applet.pack_type) {
             case Gtk.PackType.START:
                 pack_type.active = 0;
@@ -348,6 +358,12 @@ public class PanelEditor : Gtk.Dialog
         is_status.set_active(applet.status_area);
         pad_start.set_value(applet.pad_start);
         pad_end.set_value(applet.pad_end);
+
+        SignalHandler.unblock(is_status, is_status_id);
+        SignalHandler.unblock(pack_type, pack_type_id);
+        SignalHandler.unblock(pad_start, pad_start_id);
+        SignalHandler.unblock(pad_end, pad_end_id);
+
     }
 
     public void on_applet_added(ref AppletInfo applet)
