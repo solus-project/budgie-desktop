@@ -32,8 +32,6 @@ public class Popover : Gtk.Window
 
     public Popover()
     {
-        destroy.connect(Gtk.main_quit);
-
         set_visual(get_screen().get_rgba_visual());
 
         set_decorated(false);
