@@ -30,18 +30,8 @@ public class Popover : Gtk.Window
     /* Simply ensures we retain some gap from the screen edge */
     private int screen_gap = 5;
 
-    /* Hacky integration for C */
-    private bool has_init = false;
-
     public Popover()
     {
-    }
-
-    protected void do_init()
-    {
-        if (has_init) {
-            return;
-        }
         destroy.connect(Gtk.main_quit);
 
         set_visual(get_screen().get_rgba_visual());
@@ -90,8 +80,6 @@ public class Popover : Gtk.Window
 
         our_width = -1;
         our_height = -1;
-
-        has_init = true;
     }
 
     public override bool draw(Cairo.Context ctx)
@@ -222,9 +210,6 @@ public class Popover : Gtk.Window
         int win_x, win_y;
         int trans_x, trans_y;
 
-        if (!has_init) {
-            do_init();
-        }
         our_x = 0;
         our_y = 0;
 
