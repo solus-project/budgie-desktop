@@ -23,64 +23,64 @@ public class PanelApplet : Gtk.Bin {
 namespace Budgie
 {
 
+/**
+ * Used to track Applets in a sane way
+ */
+public class AppletInfo : GLib.Object
+{
+
+    /** Applet instance */
+    public Budgie.Applet applet { public get; private set; }
+
+    /** Known icon name */
+    public string icon {  public get; protected set; }
+
+    /** Instance name */
+    public string name { public get; protected set; }
+
+    /** Plugin name providing the applet instance */
+    public string plugin_name { public get; private set; }
+
+    /** Packing type */
+    public Gtk.PackType pack_type { public get ; public set ; }
+
+    /** Whether to place in the status area or not */
+    public bool status_area { public get ; public set ; }
+
+    /** Start padding */
+    public int pad_start { public get ; public set ; }
+
+    /** End padding */
+    public int pad_end { public get ; public set; }
+
+    /** Position (packging index */
+    public int position { public get; public set; }
+
     /**
-     * Used to track Applets in a sane way
+     * Construct a new AppletInfo. Simply a wrapper around applets
      */
-    public class AppletInfo : GLib.Object
+    public AppletInfo(Budgie.Plugin? plugin, Budgie.Applet applet, string name)
     {
-
-        /** Applet instance */
-        public Budgie.Applet applet { public get; private set; }
-
-        /** Known icon name */
-        public string icon {  public get; protected set; }
-
-        /** Instance name */
-        public string name { public get; protected set; }
-
-        /** Plugin name providing the applet instance */
-        public string plugin_name { public get; private set; }
-
-        /** Packing type */
-        public Gtk.PackType pack_type { public get ; public set ; }
-
-        /** Whether to place in the status area or not */
-        public bool status_area { public get ; public set ; }
-
-        /** Start padding */
-        public int pad_start { public get ; public set ; }
-
-        /** End padding */
-        public int pad_end { public get ; public set; }
-
-        /** Position (packging index */
-        public int position { public get; public set; }
-
-        /**
-         * Construct a new AppletInfo. Simply a wrapper around applets
-         */
-        public AppletInfo(Budgie.Plugin? plugin, Budgie.Applet applet, string name)
-        {
-            this.applet = applet;
-            icon = plugin.plugin_info.get_icon_name();
-            this.name = name;
-            plugin_name = plugin.plugin_info.get_name();
-        }
+        this.applet = applet;
+        icon = plugin.plugin_info.get_icon_name();
+        this.name = name;
+        plugin_name = plugin.plugin_info.get_name();
     }
+}
 
-    public class Panel : Gtk.Window
-    {
+public class Panel : Gtk.Window
+{
 
-        protected int intended_height;
+    protected int intended_height;
 
-        public int panel_size {
-            get {
-                return intended_height;
-            }
-            set {
-                intended_height = value;
-                update_position();
-                set_struts();
+    public int panel_size {
+        get {
+            return intended_height;
+        }
+        set {
+            intended_height = value;
+            update_position();
+            set_struts();
         }
     }
 
