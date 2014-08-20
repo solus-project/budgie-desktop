@@ -23,64 +23,64 @@ public class PanelApplet : Gtk.Bin {
 namespace Budgie
 {
 
-/**
- * Used to track Applets in a sane way
- */
-public class AppletInfo : GLib.Object
-{
-
-    /** Applet instance */
-    public Budgie.Applet applet { public get; private set; }
-
-    /** Known icon name */
-    public string icon {  public get; protected set; }
-
-    /** Instance name */
-    public string name { public get; protected set; }
-
-    /** Plugin name providing the applet instance */
-    public string plugin_name { public get; private set; }
-
-    /** Packing type */
-    public Gtk.PackType pack_type { public get ; public set ; }
-
-    /** Whether to place in the status area or not */
-    public bool status_area { public get ; public set ; }
-
-    /** Start padding */
-    public int pad_start { public get ; public set ; }
-
-    /** End padding */
-    public int pad_end { public get ; public set; }
-
-    /** Position (packging index */
-    public int position { public get; public set; }
-
     /**
-     * Construct a new AppletInfo. Simply a wrapper around applets
+     * Used to track Applets in a sane way
      */
-    public AppletInfo(Budgie.Plugin? plugin, Budgie.Applet applet, string name)
+    public class AppletInfo : GLib.Object
     {
-        this.applet = applet;
-        icon = plugin.plugin_info.get_icon_name();
-        this.name = name;
-        plugin_name = plugin.plugin_info.get_name();
-    }
-}
 
-public class Panel : Gtk.Window
-{
+        /** Applet instance */
+        public Budgie.Applet applet { public get; private set; }
 
-    protected int intended_height;
+        /** Known icon name */
+        public string icon {  public get; protected set; }
 
-    public int panel_size {
-        get {
-            return intended_height;
+        /** Instance name */
+        public string name { public get; protected set; }
+
+        /** Plugin name providing the applet instance */
+        public string plugin_name { public get; private set; }
+
+        /** Packing type */
+        public Gtk.PackType pack_type { public get ; public set ; }
+
+        /** Whether to place in the status area or not */
+        public bool status_area { public get ; public set ; }
+
+        /** Start padding */
+        public int pad_start { public get ; public set ; }
+
+        /** End padding */
+        public int pad_end { public get ; public set; }
+
+        /** Position (packging index */
+        public int position { public get; public set; }
+
+        /**
+         * Construct a new AppletInfo. Simply a wrapper around applets
+         */
+        public AppletInfo(Budgie.Plugin? plugin, Budgie.Applet applet, string name)
+        {
+            this.applet = applet;
+            icon = plugin.plugin_info.get_icon_name();
+            this.name = name;
+            plugin_name = plugin.plugin_info.get_name();
         }
-        set {
-            intended_height = value;
-            update_position();
-            set_struts();
+    }
+
+    public class Panel : Gtk.Window
+    {
+
+        protected int intended_height;
+
+        public int panel_size {
+            get {
+                return intended_height;
+            }
+            set {
+                intended_height = value;
+                update_position();
+                set_struts();
         }
     }
 
@@ -674,25 +674,35 @@ public class Panel : Gtk.Window
         // Struts dependent on position
         switch (position) {
             case PanelPosition.TOP:
-                struts = { 0, 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { 0, 0, primary_monitor_rect.y+intended_height, 0,
+                    0, 0, 0, 0,
+                    primary_monitor_rect.x, primary_monitor_rect.x+primary_monitor_rect.width,
+                    0, 0
+                };
                 break;
             case PanelPosition.LEFT:
-                struts = { intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { intended_height, 0, 0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height, 
+                    0, 0, 0, 0, 0, 0
+                };
                 break;
             case PanelPosition.RIGHT:
-                struts = { 0, intended_height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                struts = { 0, intended_height, 0, 0,
+                    0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height,
+                    0, 0, 0, 0
+                };
                 break;
             case PanelPosition.BOTTOM:
             default:
-                struts = { 0, 0, 0, intended_height,
-                0, 0, 0, 0, 0, 0, 
-                primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width};
+                struts = { 0, 0, 0, 
+                    (screen.get_height()-primary_monitor_rect.height-primary_monitor_rect.y) + intended_height,
+                    0, 0, 0, 0, 0, 0, 
+                    primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width
+                };
                 break;
         }
 
-        atom = Gdk.Atom.intern("_NET_WM_STRUT", false);
-        Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
-            32, Gdk.PropMode.REPLACE, (uint8[])struts, 4);
         // all relevant WMs support this, Mutter included
         atom = Gdk.Atom.intern("_NET_WM_STRUT_PARTIAL", false);
         Gdk.property_change(get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
