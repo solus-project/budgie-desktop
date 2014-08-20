@@ -317,25 +317,25 @@ public class BudgieMenuWindow : Budgie.Popover
             // Ugly and messy but we need to ensure we're not dealing with NULL strings
             app_name = child.info.get_display_name();
             if (app_name != null) {
-                app_name.down();
+                app_name = app_name.down();
             } else {
                 app_name = "";
             }
             desc = child.info.get_description();
             if (desc != null) {
-                desc.down();
+                desc = desc.down();
             } else {
                 desc = "";
             }
             name = child.info.get_name();
             if (name != null) {
-                name.down();
+                name = name.down();
             } else {
                 name = "";
             };
             exec = child.info.get_executable();
             if (exec != null) {
-                exec.down();
+                exec = exec.down();
             } else {
                 exec = "";
             }
