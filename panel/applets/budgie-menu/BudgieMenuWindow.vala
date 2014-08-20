@@ -91,6 +91,25 @@ public class BudgieMenuWindow : Budgie.Popover
     // Current search term
     protected string search_term = "";
 
+    /* Reload menus, essentially. */
+    public void refresh_tree()
+    {
+        foreach (var child in content.get_children()) {
+            child.destroy();
+        }
+        foreach (var child in categories.get_children()) {
+            if (child != all_categories) {
+                child.destroy();
+            }
+        }
+        try {
+            tree.load_sync();
+        } catch (Error e) {
+            stderr.printf("Error: %s\n", e.message);
+        }
+        load_menus(null);
+    }
+
     /**
      * Load "menus" (.desktop's) recursively (ripped from our RunDialog)
      * 
@@ -101,7 +120,7 @@ public class BudgieMenuWindow : Budgie.Popover
         GMenu.TreeDirectory root;
     
         // Load the tree for the first time
-        if (tree_root == null) {
+        if (tree == null) {
             tree = new GMenu.Tree(APPS_ID, GMenu.TreeFlags.SORT_DISPLAY_NAME);
 
             try {
@@ -110,13 +129,16 @@ public class BudgieMenuWindow : Budgie.Popover
                 stderr.printf("Error: %s\n", e.message);
                 return;
             }
+            tree.changed.connect(refresh_tree);
+        }
+        if (tree_root == null) {
             root = tree.get_root_directory();
         } else {
             root = tree_root;
         }
 
         var it = root.iter();
-        GMenu.TreeItemType type;
+        GMenu.TreeItemType? type;
 
         while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
             if (type == GMenu.TreeItemType.DIRECTORY) {
