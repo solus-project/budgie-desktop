@@ -26,7 +26,7 @@ public class Popover : Gtk.Window
     private int widg_x;
     private int their_width;
     private bool should_regrab = false;
-    private bool passive = false;
+    public bool passive = false;
 
     /* Simply ensures we retain some gap from the screen edge */
     private int screen_gap = 5;
