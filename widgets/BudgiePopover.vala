@@ -26,12 +26,15 @@ public class Popover : Gtk.Window
     private int widg_x;
     private int their_width;
     private bool should_regrab = false;
+    public bool passive = false;
 
     /* Simply ensures we retain some gap from the screen edge */
     private int screen_gap = 5;
 
-    public Popover()
+    public Popover(bool is_passive = false)
     {
+        passive = is_passive;
+
         set_visual(get_screen().get_rgba_visual());
 
         set_decorated(false);
@@ -300,16 +303,18 @@ public class Popover : Gtk.Window
 
     protected void do_grab()
     {
-        // Let's get grabbing
-        var manager = get_screen().get_display().get_device_manager();
-        var pointer = manager.get_client_pointer();
-        Gdk.EventMask mask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK |
-            Gdk.EventMask.SMOOTH_SCROLL_MASK | Gdk.EventMask.BUTTON_PRESS_MASK |
-            Gdk.EventMask.BUTTON_RELEASE_MASK |
-            Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
-            Gdk.EventMask.POINTER_MOTION_MASK;
-        pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
-        Gtk.device_grab_add(this, pointer, false);
+        if (!passive) {
+            // Let's get grabbing
+            var manager = get_screen().get_display().get_device_manager();
+            var pointer = manager.get_client_pointer();
+            Gdk.EventMask mask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK |
+                Gdk.EventMask.SMOOTH_SCROLL_MASK | Gdk.EventMask.BUTTON_PRESS_MASK |
+                Gdk.EventMask.BUTTON_RELEASE_MASK |
+                Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
+                Gdk.EventMask.POINTER_MOTION_MASK;
+            pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
+            Gtk.device_grab_add(this, pointer, false);
+        }
     }
 
     protected void do_ungrab()
