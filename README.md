@@ -88,6 +88,9 @@ of budgie-panel.
 Do not use the Ubuntu GTK3 modifications or plugins, because they break
 Budgie. I will not support them. (overlay scrollbars and such)
 
+Lastly, always set --prefix=/usr when using autogen.sh, or configure, otherwise you
+won't be able to start the desktop on most distros
+
 Author
 ===
  * Ikey Doherty <ikey.doherty@gmail.com>
