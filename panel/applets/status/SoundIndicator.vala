@@ -119,12 +119,11 @@ public class SoundIndicator : Gtk.Bin
         status_widget.set_range(0, vol_max);
         status_widget.set_value(vol);
         status_widget.set_increments(step_size, step_size);
-        /* Throws the alignment off in the popover :(
         if (vol_norm < vol_max) {
             status_widget.add_mark(vol_norm, Gtk.PositionType.TOP, null);
         } else {
             status_widget.clear_marks();
-        }*/
+        }
         SignalHandler.unblock(status_widget, change_id);
 
         // Set a tooltip if we know the dB 

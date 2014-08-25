@@ -73,6 +73,9 @@ public class StatusAppletImpl : Budgie.Applet
         grid.attach(sound.status_widget, 1, row, 1, 1);
         sound.status_widget.hexpand = true;
         sound.status_widget.halign = Gtk.Align.FILL;
+        sound.status_widget.valign = Gtk.Align.END;
+        sound.status_image.valign = Gtk.Align.CENTER;
+        sound.status_image.margin_top = 6; /* Due to mark */
 
         var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         row += 1;
