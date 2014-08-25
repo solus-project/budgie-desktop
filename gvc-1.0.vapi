@@ -116,6 +116,9 @@ namespace Gvc {
 		[CCode (has_construct_function = false)]
 		protected MixerSourceOutput ();
 	}
+	[CCode (cname = "gvc_mixer_stream_push_volume", cheader_filename = "pulse/pulseaudio.h,gvc-mixer-stream.h")]
+	public void push_volume(MixerStream stream);
+
 	[CCode (cheader_filename = "pulse/pulseaudio.h,gvc-mixer-stream.h", type_id = "gvc_mixer_stream_get_type ()")]
 	public abstract class MixerStream : GLib.Object {
 		[CCode (has_construct_function = false)]
