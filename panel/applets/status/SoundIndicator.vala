@@ -24,6 +24,12 @@ public class SoundIndicator : Gtk.Bin
     /** Default stream */
     public Gvc.MixerStream stream { protected set ; public get ; }
 
+    /** For the Status popover */
+    public Gtk.Scale status_widget { protected set ; public get ; }
+    public Gtk.Image status_image { protected set; public get; }
+
+    private ulong change_id;
+
     public SoundIndicator()
     {
         // Start off with at least some icon until we connect to pulseaudio */
@@ -36,6 +42,13 @@ public class SoundIndicator : Gtk.Bin
         mixer.state_changed.connect(on_state_change);
         mixer.open();
 
+        status_widget = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
+        status_widget.set_draw_value(false);
+
+        status_image = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.INVALID);
+        status_image.pixel_size = icon_size;
+
+        change_id = status_widget.value_changed.connect(on_scale_change);
         show_all();
     }
 
@@ -53,6 +66,16 @@ public class SoundIndicator : Gtk.Bin
                 }
             });
             update_volume();
+        }
+    }
+
+    /**
+     * Update from the scale (set volume.)
+     */
+    protected void on_scale_change()
+    {
+        if (stream.set_volume((uint32)status_widget.get_value())) {
+            Gvc.push_volume(stream);
         }
     }
 
@@ -86,6 +109,23 @@ public class SoundIndicator : Gtk.Bin
             }
         }
         widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
+        status_image.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
+
+        var vol_max = mixer.get_vol_max_amplified();
+
+        // Each scroll increments by 5%, much better than units..
+        var step_size = vol_max / 20;
+        SignalHandler.block(status_widget, change_id);
+        status_widget.set_range(0, vol_max);
+        status_widget.set_value(vol);
+        status_widget.set_increments(step_size, step_size);
+        /* Throws the alignment off in the popover :(
+        if (vol_norm < vol_max) {
+            status_widget.add_mark(vol_norm, Gtk.PositionType.TOP, null);
+        } else {
+            status_widget.clear_marks();
+        }*/
+        SignalHandler.unblock(status_widget, change_id);
 
         // Set a tooltip if we know the dB 
         if (stream.get_can_decibel()) {
