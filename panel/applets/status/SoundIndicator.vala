@@ -126,12 +126,10 @@ public class SoundIndicator : Gtk.Bin
         }
         SignalHandler.unblock(status_widget, change_id);
 
-        // Set a tooltip if we know the dB 
-        if (stream.get_can_decibel()) {
-            var db = stream.get_decibel();
-            var tooltip = "%f dB".printf(db);
-            widget.set_tooltip_text(tooltip);
-        }
+        // This usually goes up to about 150% (152.2% on mine though.)
+        var pct = ((float)vol / (float)vol_norm)*100;
+        var ipct = (uint)pct;
+        widget.set_tooltip_text(@"$ipct%");
 
         // Gtk 3.12 issue, ensure we show all..
         show_all();
