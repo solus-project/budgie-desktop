@@ -15,6 +15,7 @@ SUBDIRS = \
 	data \
 	gvc \
 	widgets \
+	imports \
 	budgie-plugin \
 	panel \
 	rundialog \

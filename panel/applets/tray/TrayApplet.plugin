@@ -1,0 +1,8 @@
+[Plugin]
+Module=trayapplet.so
+Name=Tray Applet
+Description=Provides a notification area for the panel
+Authors=Ikey Doherty
+Copyright=Copyright © 2014 Ikey Doherty
+Website=https://evolve-os.com
+Icon=tray-message

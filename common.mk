@@ -13,4 +13,5 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir)/budgie-plugin \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/panel/applets \
-	-I $(top_srcdir)/widgets
+	-I $(top_srcdir)/widgets \
+	-I $(top_srcdir)/imports/natray

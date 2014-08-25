@@ -4,6 +4,7 @@ SUBDIRS = \
 	tasklist \
 	icontasklist \
 	status \
-	workspaces
+	workspaces \
+	tray
 
 

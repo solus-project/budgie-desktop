@@ -79,6 +79,8 @@ AC_CONFIG_FILES([Makefile
                 gvc/Makefile
                 budgie-plugin/budgie-1.0.pc
                 budgie-plugin/Makefile
+                imports/Makefile
+                imports/natray/Makefile
                 panel/Makefile
                 panel/applets/Makefile
                 panel/applets/budgie-menu/Makefile
@@ -87,6 +89,7 @@ AC_CONFIG_FILES([Makefile
                 panel/applets/tasklist/Makefile
                 panel/applets/status/Makefile
                 panel/applets/workspaces/Makefile
+                panel/applets/tray/Makefile
                 rundialog/Makefile
                 session/Makefile
                 widgets/Makefile
