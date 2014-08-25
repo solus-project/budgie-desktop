@@ -22,13 +22,14 @@ public class SoundIndicator : Gtk.Bin
     public Gvc.MixerControl mixer { protected set ; public get ; }
 
     /** Default stream */
-    public Gvc.MixerStream stream { protected set ; public get ; }
+    public Gvc.MixerStream? stream { protected set ; public get ; }
 
     /** For the Status popover */
     public Gtk.Scale status_widget { protected set ; public get ; }
     public Gtk.Image status_image { protected set; public get; }
 
     private ulong change_id;
+    private double step_size;
 
     public SoundIndicator()
     {
@@ -36,7 +37,11 @@ public class SoundIndicator : Gtk.Bin
         widget = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.INVALID);
         widget.pixel_size = icon_size;
         margin = 2;
-        add(widget);
+        var wrap = new Gtk.EventBox();
+        wrap.add(widget);
+        wrap.margin = 0;
+        wrap.border_width = 0;
+        add(wrap);
 
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
@@ -49,6 +54,10 @@ public class SoundIndicator : Gtk.Bin
         status_image.pixel_size = icon_size;
 
         change_id = status_widget.value_changed.connect(on_scale_change);
+
+        /* Catch scroll wheel events */
+        wrap.add_events(Gdk.EventMask.SCROLL_MASK);
+        wrap.scroll_event.connect(on_scroll_event);
         show_all();
     }
 
@@ -77,6 +86,50 @@ public class SoundIndicator : Gtk.Bin
         if (stream.set_volume((uint32)status_widget.get_value())) {
             Gvc.push_volume(stream);
         }
+    }
+
+    /**
+     * Update from scroll events. turn volume up + down.
+     */
+    protected bool on_scroll_event(Gdk.EventScroll event)
+    {
+        return_if_fail(stream != null);
+
+        uint32 vol = stream.get_volume();
+        var orig_vol = vol;
+
+        switch (event.direction) {
+            case Gdk.ScrollDirection.UP:
+                vol += (uint32)step_size;
+                break;
+            case Gdk.ScrollDirection.DOWN:
+                vol -= (uint32)step_size;
+                // uint. im lazy :p
+                if (vol > orig_vol) {
+                    vol = 0;
+                }
+                break;
+            default:
+                // Go home, you're drunk.
+                return false;
+        }
+
+        /* Ensure sanity + amp capability */
+        var max_amp = mixer.get_vol_max_amplified();
+        var norm = mixer.get_vol_max_norm();
+        if (max_amp < norm) {
+            max_amp = norm;
+        }
+
+        if (vol > max_amp) {
+            vol = (uint32)max_amp;
+        }
+
+        if (stream.set_volume(vol)) {
+            Gvc.push_volume(stream);
+        }
+
+        return true;
     }
 
     /**
@@ -114,7 +167,7 @@ public class SoundIndicator : Gtk.Bin
         var vol_max = mixer.get_vol_max_amplified();
 
         // Each scroll increments by 5%, much better than units..
-        var step_size = vol_max / 20;
+        step_size = vol_max / 20;
         SignalHandler.block(status_widget, change_id);
         status_widget.set_range(0, vol_max);
         status_widget.set_value(vol);
