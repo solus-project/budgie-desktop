@@ -1,0 +1,8 @@
+[Plugin]
+Module=notificationsapplet.so
+Name=Notifications Applet
+Description=Provides a notification daemon for Budgie Desktop
+Authors=Josh Klar
+Copyright=Copyright © 2014 Josh Klar
+Website=https://evolve-os.com
+Icon=clock

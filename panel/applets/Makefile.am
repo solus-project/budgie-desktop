@@ -5,6 +5,7 @@ SUBDIRS = \
 	icontasklist \
 	status \
 	workspaces \
-	tray
+	tray \
+	notifications
 
 
