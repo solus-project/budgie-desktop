@@ -44,7 +44,8 @@ budgie_panel_LDADD = \
 	$(WNCK3_LIBS) \
 	$(LIBPEAS_LIBS) \
 	$(GEE_LIBS) \
-	../budgie-plugin/libbudgie-plugin.la
+	../budgie-plugin/libbudgie-plugin.la \
+	../widgets/libbudgiewidgets.la
 
 budgie_panel_VALAFLAGS = \
 	--vapidir=../budgie-plugin \

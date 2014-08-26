@@ -1,6 +1,6 @@
 -include $(top_srcdir)/common.mk
 
-noinst_LTLIBRARIES = libbudgiewidgets.la
+lib_LTLIBRARIES = libbudgiewidgets.la
 
 libbudgiewidgets_la_SOURCES = \
 	BudgiePopover.vala
