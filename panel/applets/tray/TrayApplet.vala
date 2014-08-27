@@ -44,6 +44,7 @@ public class TrayAppletImpl : Budgie.Applet
         set_size_request(-1, -1);
         tray = new Na.Tray.for_screen(get_screen(), Gtk.Orientation.HORIZONTAL);
         tray.set_icon_size(icon_size);
+        tray.set_padding(5);
         add(tray);
         show_all();
     }
