@@ -30,6 +30,24 @@
       <summary>Enable panel shadow</summary>
       <description>Whether to enable an aesthetic drop shadow for the panel</description>
     </key>
+
+    <key type="b" name="enable-menu-label">
+      <default>false</default>
+      <summary>Enable "Menu" label on menu button</summary>
+      <description>Simply show the menu label on the menu button</description>
+    </key>
+
+    <key type="s" name="menu-label">
+      <default>'Menu'</default>
+      <summary>Menu button label</summary>
+      <description>The menu label to display on the menu button</description>
+    </key>
+
+    <key type="s" name="menu-icon">
+      <default>'view-grid-symbolic'</default>
+      <summary>Menu button icon</summary>
+      <description>The icon to display on the main menu button</description>
+    </key>
   </schema>
 
   <schema path="/com/evolve-os/budgie/wm/" id="com.evolve-os.budgie.wm">

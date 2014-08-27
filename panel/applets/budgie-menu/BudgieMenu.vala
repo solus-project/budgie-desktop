@@ -9,8 +9,8 @@
  * (at your option) any later version.
  */
 
-const int icon_size = 32;
 const string BUDGIE_STYLE_MENU_ICON = "menu-icon";
+const int icon_size = 32;
 
 public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
 {
@@ -25,14 +25,26 @@ public class BudgieMenuApplet : Budgie.Applet
 
     protected Gtk.EventBox widget;
     protected Budgie.Popover? popover;
-
+    protected Settings settings;
+    Gtk.Image img;
+    Gtk.Label label;
 
     public BudgieMenuApplet()
     {
+        settings = new Settings("com.evolve-os.budgie.panel");
+        settings.changed.connect(on_settings_changed);
+
         widget = new Gtk.EventBox();
-        var img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
+        img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
         img.pixel_size = icon_size;
-        widget.add(img);
+
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.pack_start(img, false, false, 3);
+        label = new Gtk.Label("");
+        label.halign = Gtk.Align.START;
+        layout.pack_start(label, true, true, 3);
+
+        widget.add(layout);
 
         // Better styling to fit in with the budgie-panel
         var st = widget.get_style_context();
@@ -60,6 +72,25 @@ public class BudgieMenuApplet : Budgie.Applet
 
         add(widget);
         show_all();
+        on_settings_changed("enable-menu-label");
+        on_settings_changed("menu-icon");
+        on_settings_changed("menu-label");
+    }
+
+    protected void on_settings_changed(string key)
+    {
+        switch (key)
+        {
+            case "menu-icon":
+                img.set_from_icon_name(settings.get_string(key), Gtk.IconSize.INVALID);
+                break;
+            case "menu-label":
+                label.set_label(settings.get_string(key));
+                break;
+            case "enable-menu-label":
+                label.set_visible(settings.get_boolean(key));
+                break;
+        }
     }
 } // End class
 
