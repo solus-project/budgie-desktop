@@ -71,6 +71,12 @@ if test "x$have_upower0999" = "xyes" ; then
     VALAFLAGS="$VALAFLAGS --define HAVE_UPOWER0999"
 fi
 
+# Check for GTK3.11+ (GtkPopover)
+PKG_CHECK_MODULES(GTK311, [gtk+-3.0  >= 3.11], [have_gtk311=yes], [have_gtk311=no])
+if test "x$have_gtk311" = "xyes" ; then
+    VALAFLAGS="$VALAFLAGS --define HAVE_GTK311"
+fi
+
 AC_SUBST(VALAFLAGS)
 
 AC_CONFIG_FILES([Makefile
