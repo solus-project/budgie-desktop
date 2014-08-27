@@ -353,7 +353,6 @@ public class Popover : Gtk.Window
 
         // Remove grabs - we done now
         do_ungrab();
-        unrealize();
     }
 
     protected override bool grab_broken_event(Gdk.EventGrabBroken event)
