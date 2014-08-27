@@ -255,7 +255,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // Enabling activation by search entry
         search_entry.activate.connect(on_entry_activate);
         // sensible vertical height
-        set_size_request(-1, 510);
+        set_size_request(200, 510);
         // load them in the background
         Idle.add(()=> {
             load_menus(null);

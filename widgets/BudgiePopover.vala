@@ -39,7 +39,7 @@ public class Popover : Gtk.Window
 
         set_decorated(false);
         set_border_width(2);
-
+        resizable = false;
         notify.connect((s,p) => {
             if (p.name != "bottom-tail") {
                 return;
@@ -81,6 +81,11 @@ public class Popover : Gtk.Window
 
         our_width = -1;
         our_height = -1;
+
+        size_allocate.connect((r)=> {
+            our_width = r.width;
+            our_height = r.height;
+        });
     }
 
     public override bool draw(Cairo.Context ctx)
@@ -121,20 +126,7 @@ public class Popover : Gtk.Window
         int gap_end;
         int screen_width = get_screen().get_width();
 
-        // Normally we'll go with the centered approach
-        gap_start = (our_width/2)-(tail_width/2);
-
-        if (widg_x <= our_width/2) {
-            // stuck on left hand side
-            gap_start = widg_x;
-            if (gap_start <= 0) {
-                gap_start = 3;
-            }
-        } else if (widg_x >= screen_width - (our_width/2)) {
-            // right hand side handling
-            int tgap_start = screen_width - widg_x;
-            gap_start = our_width - tgap_start;
-        }
+        gap_start = widg_x;
         gap_end = gap_start+tail_width;
 
         // First render pass
@@ -214,6 +206,9 @@ public class Popover : Gtk.Window
         our_x = 0;
         our_y = 0;
 
+        get_child().show();
+        queue_resize_no_redraw();
+
         toplevel.get_window().get_position(out win_x, out win_y);
 
         // find out where the widget is
@@ -224,21 +219,14 @@ public class Popover : Gtk.Window
         parent.translate_coordinates(toplevel, win_x, win_y,
             out trans_x, out trans_y);
 
-
         // trans_x and and trans_y are EXACTLY where the widget is.
         our_x = trans_x;
         our_y = trans_y;
 
-        // Ensure we always have valid sizing data
-        if (our_height <= 0 || our_width <= 0) {
-            if (!get_realized()) {
-                realize();
-            }
-            Gtk.Allocation our_alloc;
-            get_allocation(out our_alloc);
-            our_height = our_alloc.height;
-            our_width = our_alloc.width;
+        if (!get_realized()) {
+            realize();
         }
+        get_window().set_focus_on_map(true);
 
         // Should we go with top or bottom ?
         var screen = parent.get_screen();
@@ -253,20 +241,27 @@ public class Popover : Gtk.Window
         // Ensure we always center ourselves
         our_x += widget_alloc.width/2;
         our_x -= our_width/2;
+        their_width = widget_alloc.width;
 
-        // maintain a small distance from the edge of the screen, looks bad
+        int save_x = our_x;
+
         if (our_x <= 0) {
             our_x = screen_gap;
-        } else if (our_x+our_width > get_screen().get_width()) {
+        } else if (our_x+our_width >= get_screen().get_width()) {
             our_x = (get_screen().get_width() - our_width)-screen_gap;
+            //trans_x += screen_gap;
         }
-
-        their_width = widget_alloc.width;
-        widg_x = trans_x;
+        widg_x = (trans_x - our_x);
+        // Reset the enforced gap
+        if (save_x <= 0) {
+            widg_x += screen_gap;
+        } else if (save_x+our_width >= get_screen().get_width()) {
+            widg_x += screen_gap;
+        }
 
         queue_draw();
 
-        // And now we go and position ourselves.
+        // And now we go and position ourselves
         move(our_x, our_y);
 
         show_all();
@@ -339,6 +334,7 @@ public class Popover : Gtk.Window
 
         // Remove grabs - we done now
         do_ungrab();
+        unrealize();
     }
 
     protected override bool grab_broken_event(Gdk.EventGrabBroken event)

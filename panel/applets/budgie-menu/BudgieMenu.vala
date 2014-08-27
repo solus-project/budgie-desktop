@@ -23,28 +23,25 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
 public class BudgieMenuApplet : Budgie.Applet
 {
 
-    protected Gtk.ToggleButton widget;
+    protected Gtk.EventBox widget;
     protected Budgie.Popover? popover;
 
 
     public BudgieMenuApplet()
     {
-        widget = new Gtk.ToggleButton();
+        widget = new Gtk.EventBox();
         var img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
         img.pixel_size = icon_size;
         widget.add(img);
 
         // Better styling to fit in with the budgie-panel
         var st = widget.get_style_context();
-        st.remove_class(Gtk.STYLE_CLASS_BUTTON);
         st.add_class(BUDGIE_STYLE_MENU_ICON);
-        widget.relief = Gtk.ReliefStyle.NONE;
-
         popover = new BudgieMenuWindow();
 
         widget.button_release_event.connect((e)=> {
             if (e.button == 1) {
-                popover.present(widget);
+                popover.present(this);
                 return true;
             }
             return false;

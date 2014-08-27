@@ -126,6 +126,7 @@ public class StatusAppletImpl : Budgie.Applet
 
     protected void show_popover()
     {
+        popover.set_size_request(200, 150);
         popover.present(this);
     }
 } // End class

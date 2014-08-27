@@ -23,10 +23,8 @@ public class PowerIndicator : Gtk.Bin
 
     public PowerIndicator()
     {
-        // Start off with at least some icon until we connect to pulseaudio */
         widget = new Gtk.Image();
         widget.pixel_size = icon_size;
-        margin = 2;
         add(widget);
 
         client = new Up.Client();
@@ -68,6 +66,7 @@ public class PowerIndicator : Gtk.Bin
             });
             if (battery == null) {
                 warning("Unable to discover a battery");
+                hide();
                 return;
             }
             hide();
@@ -97,6 +96,7 @@ public class PowerIndicator : Gtk.Bin
         // Set a handy tooltip until we gain a menu in StatusApplet
         string tip = "Battery remaining: %d%%".printf((int)battery.percentage);
         set_tooltip_text(tip);
+        margin = 2;
 
         widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
         show_all();
