@@ -68,6 +68,34 @@ public class AppletInfo : GLib.Object
     }
 }
 
+/**
+ * Panel Shadow. Very simples.
+ */
+public class PanelShadow : Gtk.Window
+{
+
+    public PanelShadow()
+    {
+        decorated = false;
+        skip_taskbar_hint = true;
+        skip_pager_hint = true;
+        type_hint = Gdk.WindowTypeHint.DOCK;
+    }
+
+    public override bool draw(Cairo.Context ctx)
+    {
+        var style = get_style_context();
+        Gtk.Allocation alloc;
+
+        get_allocation(out alloc);
+
+        style.render_background(ctx, alloc.x, alloc.y, alloc.width, alloc.height);
+        style.render_frame(ctx, alloc.x, alloc.y, alloc.width, alloc.height);
+
+        return true;
+    }
+}
+
 public class Panel : Gtk.Window
 {
 
@@ -91,6 +119,10 @@ public class Panel : Gtk.Window
     Peas.Engine engine;
     Peas.ExtensionSet extset;
 
+    // Right now lock to 4px shadow
+    const int SHADOW_SIZE = 4;
+    private PanelShadow shadow;
+
     // Must keep in scope otherwise they garbage collect and die
 
     /* Global plugin table */
@@ -112,6 +144,7 @@ public class Panel : Gtk.Window
     static string module_data_directory = MODULE_DATA_DIRECTORY;
 
     public bool gnome_mode { set; get; }
+    protected bool use_shadow;
 
     private int primary_monitor;
     private Gdk.Rectangle primary_monitor_rect;
@@ -132,8 +165,14 @@ public class Panel : Gtk.Window
         app_paintable = true;
         resizable = false;
 
+        // need a shadow. only supports bottom position right now.
+        shadow = new PanelShadow();
+        shadow.set_visual(vis);
+
         settings = new Settings("com.evolve-os.budgie.panel");
         gnome_mode = settings.get_boolean("gnome-panel-theme-integration");
+
+        on_settings_change("enable-shadow");
 
         /* Ensure to initialise styles */
         try {
@@ -261,6 +300,10 @@ public class Panel : Gtk.Window
                     position = PanelPosition.BOTTOM;
                     break;
             }
+            update_position();
+            set_struts();
+        } else if (key == "enable-shadow") {
+            use_shadow = settings.get_boolean(key);
             update_position();
             set_struts();
         }
@@ -714,6 +757,8 @@ public class Panel : Gtk.Window
         int height = get_allocated_height();
         int width = get_allocated_width();
         int x = 0, y = 0;
+        int pan_x = 0, pan_y = 0;
+        int pan_width = 0, pan_height = 0;
 
         string[] classes =  {
             "top",
@@ -726,34 +771,53 @@ public class Panel : Gtk.Window
             case PanelPosition.TOP:
                 newclass = "top";
                 y = primary_monitor_rect.y+0;
+                pan_width = width;
+                pan_height = SHADOW_SIZE;
+                pan_y = intended_height;
                 break;
             case PanelPosition.LEFT:
                 newclass = "left";
                 y = primary_monitor_rect.y+0;
+                pan_x = width - (SHADOW_SIZE/2);
+                pan_width = SHADOW_SIZE;
+                pan_height = height;
                 break;
             case PanelPosition.RIGHT:
                 newclass = "right";
                 x = primary_monitor_rect.x+primary_monitor_rect.width-width;
+                pan_x = x - (SHADOW_SIZE/2);
+                pan_width = SHADOW_SIZE;
+                pan_height = height;
                 break;
             case PanelPosition.BOTTOM:
             default:
-                newclass = "";
+                newclass = "bottom";
                 y = primary_monitor_rect.y+primary_monitor_rect.height-height;
+                pan_width = width;
+                pan_height = SHADOW_SIZE;
+                pan_y = y - SHADOW_SIZE;
                 break;
         }
         if (!gnome_mode) {
             var st = get_style_context();
+            var st2 = shadow.get_style_context();
             foreach (var tclass in classes) {
                 if (newclass != tclass) {
                     st.remove_class(tclass);
+                    st2.remove_class(tclass);
                 }
             }
             if (newclass != "") {
                 st.add_class(newclass);
+                st2.add_class(newclass);
             }
         }
 
         Gtk.Orientation orientation;
+
+        if (position != PanelPosition.BOTTOM) {
+            use_shadow = false;
+        }
 
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
             // Effectively we're now vertical. deal with it.
@@ -772,6 +836,16 @@ public class Panel : Gtk.Window
         };
 
         move(x,y);
+
+        /* Move shadow too. */
+        if (use_shadow) {
+            shadow.set_default_size(pan_width, pan_height);
+            shadow.set_size_request(pan_width, pan_height);
+            shadow.move(pan_x, pan_y);
+            shadow.show();
+        } else {
+            shadow.hide();
+        }
 
         queue_draw();
     }

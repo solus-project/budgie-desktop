@@ -490,6 +490,7 @@ public class PanelEditor : Gtk.Dialog
 
         // panel position
         var label = new Gtk.Label("Position on screen");
+        label.hexpand = true;
         label.set_alignment(0.0f, 0.5f);
         var combo = new Gtk.ComboBoxText();
         combo.insert(-1, "top", "Top");
@@ -515,7 +516,7 @@ public class PanelEditor : Gtk.Dialog
         label.set_alignment(0.0f, 0.5f);
         var check = new Gtk.Switch();
         settings.bind("gnome-panel-theme-integration", check, "active", SettingsBindFlags.DEFAULT);
-        check.valign = Gtk.Align.END;
+        check.valign = Gtk.Align.START;
         wrap.attach(label, 0, 2, 1, 1);
         wrap.attach(check, 1, 2, 1, 1);
 

@@ -31,11 +31,17 @@ public class Popover : Gtk.Window
     /* Simply ensures we retain some gap from the screen edge */
     private int screen_gap = 5;
 
+    /* We simply steal the popovers stylecontext to trick css theming */
+    private Gtk.Widget theft;
+
     public Popover(bool is_passive = false)
     {
         passive = is_passive;
 
         set_visual(get_screen().get_rgba_visual());
+
+        /* For CSS */
+        theft = new Gtk.Popover(this);
 
         set_decorated(false);
         set_border_width(2);
@@ -98,7 +104,7 @@ public class Popover : Gtk.Window
 
         ctx.set_operator(Cairo.Operator.OVER);
         ctx.set_antialias(Cairo.Antialias.SUBPIXEL);
-        var st = get_style_context();
+        var st = theft.get_style_context();
 
         // Currently reserved, in case we ever decide on more complex
         // borders, or whatnot.
@@ -351,6 +357,16 @@ public class Popover : Gtk.Window
             do_grab();
         }
         return base.focus_in_event(focus);
+    }
+
+    /* Override the widget path, tricking GtkThemingEngine into believing
+     * we're a GtkPopover. Ensures children widgets are correctly themed */
+    protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
+    {
+        unowned Gtk.WidgetPath path = base.get_path_for_child(child);
+        path.iter_set_object_type(0, this.theft.get_type());
+
+        return path;
     }
 
 } // end Popover class

@@ -7,57 +7,45 @@
  */
 
 
-BudgiePopover GtkListBox {
+GtkPopover GtkListBox {
     background-image: none;
     background-color: alpha(black, 0.0);
     border-radius: 6px;
 }
-BudgiePopover GtkListBoxRow {
+GtkPopover GtkListBoxRow {
     background-image: none;
     background-color: alpha(black, 0.0);
 }
-BudgiePopover .trough {
+GtkPopover .trough {
     background-color: alpha(black, 0.0);
 }
 
-BudgiePopover .entry,
-BudgiePopover .entry:focused,
-BudgiePopover .entry:selected,
-BudgiePopover .entry:active,
-BudgiePopover .entry:hover,
-BudgiePopover .entry {
-    border: none;
+GtkPopover .entry,
+GtkPopover .entry:focused,
+GtkPopover .entry:selected,
+GtkPopover .entry:active,
+GtkPopover .entry:hover
+{
+    border: 1px solid alpha(white, 0.0);
+   border-image: none;
     background-image: none;
-    background-color: #f7f7f7;
-
-    font-size: x-large;
-    transition: none;
+    background-color: alpha(white, 0.0);
     box-shadow: none;
-    border-radius: 6px 6px 1px 1px;
-    color: black;
 }
 
-BudgiePopover {
-    border-radius: 6px;
-    border: 1px solid #44ACF2;
-    background-color: #f7f7f7;
-}
-
-/* Sample theming - not used */
-/*.budgie-panel {
-    border-top: 1px solid alpha(black, 0.15);
-    border-left: 1px solid alpha(black, 0.15);
-    border-right: 1px solid alpha(black, 0.15);
-    background-color: alpha(#3498db, 0.7);
-    border-radius: 9px 9px 0px 0px;
-}*/
-
-BudgiePopover GtkCalendar.view,
-BudgiePopover GtkCalendar.header,
-BudgiePopover GtkCalendar.button,
-BudgiePopover GtkCalendar.button:hover,
-BudgiePopover GtkCalendar.button:insensitive {
+GtkPopover GtkCalendar.view,
+GtkPopover GtkCalendar.header {
     border-width: 0;
     background-color: transparent;
     background-image: none;
+}
+
+
+/* Stolen from Numix - swapped direction for top vs bottom */
+BudgiePanelShadow {
+    background-color: transparent;
+    background-image: linear-gradient(to top,
+                                      rgba(0, 0, 0, 0.3),
+                                      transparent
+                                      );
 }

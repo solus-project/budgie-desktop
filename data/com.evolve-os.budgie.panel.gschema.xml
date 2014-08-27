@@ -24,6 +24,12 @@
       <summary>GNOME Panel theme integration</summary>
       <description>Whether to enable GNOME Panel theme integration</description>
     </key>
+
+    <key type="b" name="enable-shadow">
+      <default>false</default>
+      <summary>Enable panel shadow</summary>
+      <description>Whether to enable an aesthetic drop shadow for the panel</description>
+    </key>
   </schema>
 
   <schema path="/com/evolve-os/budgie/wm/" id="com.evolve-os.budgie.wm">
