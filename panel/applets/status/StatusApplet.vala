@@ -52,6 +52,11 @@ public class StatusAppletImpl : Budgie.Applet
             }
             return false;
         });
+
+        icon_size_changed.connect((i,s)=> {
+            power.widget.pixel_size = (int)s;
+            sound.widget.pixel_size = (int)s;
+        });
         show_all();
     }
 

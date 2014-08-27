@@ -9,8 +9,6 @@
  * (at your option) any later version.
  */
 
-const int icon_size = 22;
-
 public class TrayApplet : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget()
@@ -22,11 +20,18 @@ public class TrayApplet : Budgie.Plugin, Peas.ExtensionBase
 public class TrayAppletImpl : Budgie.Applet
 {
     protected Na.Tray? tray;
+    protected int icon_size = 22;
 
     public TrayAppletImpl()
     {
         orientation_changed.connect((o)=> {
             tray.set_orientation(o);
+        });
+        icon_size_changed.connect((i,s)=> {
+            if (tray != null) {
+                icon_size = (int)s;
+                tray.set_icon_size(icon_size);
+            }
         });
         // When we get parented, go add the tray
         notify.connect((o,p)=> {

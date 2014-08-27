@@ -9,21 +9,22 @@
  * (at your option) any later version.
  */
 
-// So, this needs to become configurable :P
-const int ICON_SIZE = 32;
 
 const string BUDGIE_STYLE_CLASS_BUTTON = "launcher";
 
 public class IconButton : Gtk.ToggleButton
 {
 
-    protected new Gtk.Image image;
+    public new Gtk.Image image;
     protected unowned Wnck.Window window;
     protected Wnck.ActionMenu menu;
+    public int icon_size;
 
-    public IconButton(Wnck.Window window)
+    public IconButton(Wnck.Window window, int size)
     {
         image = new Gtk.Image();
+        image.pixel_size = size;
+        icon_size = size;
         add(image);
 
         this.window = window;
@@ -66,7 +67,7 @@ public class IconButton : Gtk.ToggleButton
     /**
      * Update the icon
      */
-    protected void update_icon()
+    public void update_icon()
     {
         // Prefer icon theme
         if (window.has_icon_name() && window.get_icon_name() != window.get_name()) {
@@ -74,7 +75,7 @@ public class IconButton : Gtk.ToggleButton
         } else {
             image.set_from_pixbuf(window.get_icon());
         }
-        image.pixel_size = ICON_SIZE;
+        image.pixel_size = icon_size;
     }
 
     /**
@@ -121,6 +122,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
     protected Gtk.Box widget;
     protected Wnck.Screen screen;
     protected Gee.HashMap<Wnck.Window,IconButton> buttons;
+    protected int icon_size = 32;
 
     protected void window_opened(Wnck.Window window)
     {
@@ -128,7 +130,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         if (window.is_skip_tasklist()) {
             return;
         }
-        var btn = new IconButton(window);
+        var btn = new IconButton(window, icon_size);
         buttons[window] = btn;
         widget.pack_start(btn, false, false, 0);
         btn.show_all();
@@ -180,6 +182,17 @@ public class IconTasklistAppletImpl : Budgie.Applet
 
         // Easy mapping :)
         buttons = new Gee.HashMap<Wnck.Window,IconButton>(null,null,null);
+        icon_size_changed.connect((i,s)=> {
+            icon_size = (int)i;
+            Wnck.set_default_icon_size(icon_size);
+            foreach (var btn in buttons.values) {
+                Idle.add(()=>{
+                    btn.icon_size = icon_size;
+                    btn.update_icon();
+                    return false;
+                });
+            }
+        });
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 

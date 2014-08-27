@@ -78,6 +78,17 @@ public class Applet : Gtk.Bin
     public signal void position_changed(Budgie.PanelPosition position);
 
     /**
+     * budgie_applet_icon_size_changed:
+     *
+     * Informs applets of their new recommended maximum icon size, to ensure
+     * that their icon fits in with the panel size.
+     *
+     * @param max_size: (transfer none): The new icon size to use
+     * @param smaller: (transfer none): Smaller safe icon size
+     */
+    public signal void icon_size_changed(uint max_size, uint smaller);
+
+    /**
      * budgie_applet_action_invoked:
      *
      * Informs applets that a particular global action of type ActionType

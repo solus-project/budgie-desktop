@@ -353,6 +353,7 @@ public class Panel : Gtk.Window
         } catch (Error e) {
             warning("Plugin load error gaining attributes: %s", e.message);
         }
+        inform_size(applet);
 
         applet.show();
 
@@ -446,6 +447,7 @@ public class Panel : Gtk.Window
             app_info.pack_type = Gtk.PackType.START;
             app_info.position = (int)new_owner.get_children().length();
         }
+        inform_size(app_info.applet);
         update_config();
     }
 
@@ -832,6 +834,7 @@ public class Panel : Gtk.Window
             if (applet_info != null) {
                 applet_info.applet.orientation_changed(orientation);
                 applet_info.applet.position_changed(position);
+                inform_size(applet_info.applet);
             }
         };
 
@@ -1019,6 +1022,33 @@ public class Panel : Gtk.Window
             get_style_context().remove_class("max-budgie-panel");
         }
     }
+
+    /* Inform a given applet the new maximum icon size */
+    protected void inform_size(Applet applet)
+    {
+        /* Always remove a few pixels because icons are sensitive creatures */
+        int offset = 5;
+        /* Maximum size */
+        int height = intended_height - offset;
+
+        int rem = height % 8;
+        int size = height - rem;
+
+        /* Smaller variant for stautc icons, etc. */
+        int reduced_height = height - ((int)(height * 0.35));
+        int rem2 = reduced_height % 8;
+        int smaller = reduced_height - rem2;
+
+        if (size < 16) {
+            size = 16;
+        }
+        if (smaller < 16) {
+            smaller = 16;
+        }
+
+        applet.icon_size_changed((uint)size, (uint)smaller);
+    }
+
 } // End Panel class
 
 class PanelMain : GLib.Application

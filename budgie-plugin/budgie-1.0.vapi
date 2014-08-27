@@ -10,6 +10,7 @@ namespace Budgie {
         public Applet();
 		public signal void action_invoked (Budgie.ActionType action_type);
 		public signal void orientation_changed (Gtk.Orientation orientation);
+		public signal void icon_size_changed(uint max_size, uint smaller);
 		public signal void position_changed (Budgie.PanelPosition position);
 	}
 	[CCode (cheader_filename = "BudgiePlugin.h")]
