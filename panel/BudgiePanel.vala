@@ -1034,7 +1034,7 @@ public class Panel : Gtk.Window
         int rem = height % 8;
         int size = height - rem;
 
-        /* Smaller variant for stautc icons, etc. */
+        /* Smaller variant  */
         int reduced_height = height - ((int)(height * 0.35));
         int rem2 = reduced_height % 8;
         int smaller = reduced_height - rem2;
