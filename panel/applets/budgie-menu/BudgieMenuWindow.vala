@@ -44,6 +44,8 @@ public class CategoryButton : Gtk.RadioButton
         // Makes us look like a normal button :)
         set_property("draw-indicator", false);
         group = parent;
+
+        get_style_context().add_class("menuitem");
     }
 }
 
@@ -72,6 +74,9 @@ public class MenuButton : Gtk.Button
         set_tooltip_text(parent.get_description());
 
         relief = Gtk.ReliefStyle.NONE;
+
+        get_style_context().add_class("menuitem");
+
     }
 }
 
@@ -174,6 +179,8 @@ public class BudgieMenuWindow : Budgie.Popover
     {
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
+
+        border_width = 6;
 
         // search entry up north
         search_entry = new Gtk.SearchEntry();
