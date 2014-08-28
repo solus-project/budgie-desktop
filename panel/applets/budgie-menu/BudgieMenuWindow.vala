@@ -44,8 +44,6 @@ public class CategoryButton : Gtk.RadioButton
         // Makes us look like a normal button :)
         set_property("draw-indicator", false);
         group = parent;
-
-        get_style_context().add_class("menuitem");
     }
 }
 
@@ -74,9 +72,6 @@ public class MenuButton : Gtk.Button
         set_tooltip_text(parent.get_description());
 
         relief = Gtk.ReliefStyle.NONE;
-
-        get_style_context().add_class("menuitem");
-
     }
 }
 
