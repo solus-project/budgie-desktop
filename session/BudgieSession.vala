@@ -60,28 +60,30 @@ public class Session : GLib.Application
         hold();
         running = true;
         prepare_xdg();
+        Gee.ArrayList<string?> launched = new Gee.ArrayList<string?>();
 
         process_map = new Gee.HashMap<string,WatchedProcess?>(null,null,null);
-        launch_xdg("Initialization");
+        launch_xdg("Initialization", ref launched);
 
         /* Launch our items - want the window manager first */
         if (!launch_watched(WM_NAME)) {
             critical("Unable to launch %s", WM_NAME);
             Process.exit(1);
         }
-        launch_xdg("WindowManager");
+        launch_xdg("WindowManager", ref launched);
 
         // Now we need all "init" style items
         if (!launch_watched(PANEL_NAME)) {
             critical("Unable to launch %s", PANEL_NAME);
         }
         // And now "panel" style items, where appropriate
-        launch_xdg("Panel");
+        launch_xdg("Panel", ref launched);
 
         // And now all you other fellers.
-        launch_xdg("Desktop");
-        launch_xdg("Applications");
+        launch_xdg("Desktop", ref launched);
+        launch_xdg("Applications", ref launched);
 
+        launched = null;
         loop.run();
 
         release();
@@ -276,12 +278,17 @@ public class Session : GLib.Application
      * Note: "Applications" is also a catch-call for anything that is *not*
      * categorised
      */
-    protected void launch_xdg(string condition)
+    protected void launch_xdg(string condition, ref Gee.ArrayList<string?> launched_items)
     {
         foreach (var entry in mapping.values) {
             bool launch = false;
             bool monitor = false;
             int delay = 0;
+
+            if (entry.get_commandline() in launched_items) {
+                continue;
+            }
+            launched_items.add(entry.get_commandline());
 
             if (entry.has_key("X-GNOME-Autostart-Phase")) {
                 var phase = entry.get_string("X-GNOME-Autostart-Phase");
@@ -332,7 +339,7 @@ public class Session : GLib.Application
 
     protected bool should_autostart(ref DesktopAppInfo info)
     {
-        bool ret = false;
+        bool ret = true;
         /* First condition, check we should show */
         if (info.has_key("OnlyShowIn")) {
             var showin = info.get_string("OnlyShowIn");
