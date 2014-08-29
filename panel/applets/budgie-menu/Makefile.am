@@ -51,3 +51,7 @@ libbudgiemenuapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg BudgieWidgets
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(libbudgiemenuapplet_la_SOURCES:.vala=.c) libbudgiemenuapplet_la_vala.stamp

@@ -65,3 +65,7 @@ EXTRA_DIST += \
 
 SUBDIRS = \
 	applets
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(budgie_panel_SOURCES:.vala=.c) budgie_panel_vala.stamp

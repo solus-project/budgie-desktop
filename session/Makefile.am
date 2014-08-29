@@ -88,3 +88,8 @@ BUILT_SOURCES += \
 CLEANFILES += \
 	$(BUILT_SOURCES) \
 	sd_logind_proxy.c
+
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(budgie_session_SOURCES:.vala=.c) budgie_session_vala.stamp

@@ -53,3 +53,8 @@ libstatusapplet_la_VALAFLAGS = \
 	--pkg libpulse \
 	--pkg gvc-1.0 \
 	--pkg upower-glib-1.0
+
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(libstatusapplet_la_SOURCES:.vala=.c) libstatusapplet_la_vala.stamp

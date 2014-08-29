@@ -38,3 +38,8 @@ budgie_run_dialog_VALAFLAGS = \
 	--pkg libgnome-menu-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg gee-0.8
+
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(budgie_run_dialog_SOURCES:.vala=.c) budgie_run_dialog_vala.stamp

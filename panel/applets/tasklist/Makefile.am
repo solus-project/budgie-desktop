@@ -43,3 +43,8 @@ libtasklistapplet_la_VALAFLAGS = \
 	--pkg libwnck-3.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0
+
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(libtasklistapplet_la_SOURCES:.vala=.c) libtasklistapplet_la_vala.stamp
