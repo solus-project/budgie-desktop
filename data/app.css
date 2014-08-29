@@ -49,3 +49,8 @@ BudgiePanelShadow {
                                       transparent
                                       );
 }
+
+PanelToplevel GtkEventBox {
+    background-image: none;
+    background-color: transparent;
+}

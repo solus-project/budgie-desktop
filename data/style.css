@@ -5,6 +5,7 @@
 
 .budgie-panel {
     background-color: alpha(black, 0.0);
+    background-image: none;
     border-top: 1px solid alpha(white, 0.0);
     transition: 100ms ease-out;
 }
