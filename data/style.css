@@ -91,6 +91,43 @@
     icon-shadow: 1px 1px alpha(black, 0.5);
 }
 
-BudgiePopover {
-    border-radius: 6px;
+/* Fallback for 3.10 where popover theming is non existent.
+ * Copyright Numix Project, gratefully stolen from them to
+ * provide a consistent fallback. */
+GtkPopover {
+    margin: 10px;
+    padding: 2px;
+    border-radius: 2px;
+    border-color: shade(@bg_color, 0.8);
+    border-width: 1px;
+    border-style: solid;
+    background-clip: border-box;
+    background-color: @bg_color;
+    color: @theme_fg_color;
+    box-shadow: 0 2px 3px alpha(black, 0.5);
+}
+
+GtkPopover.osd {
+    box-shadow: 0 2px 7px 3px alpha(black, 0.5);
+}
+
+GtkPopover > .list,
+GtkPopover > .view,
+GtkPopover > .toolbar {
+    background-color: transparent;
+}
+
+GtkPopover.osd > .toolbar .button {
+    border-radius: 0;
+    border-width: 0;
+    background-image: none;
+    background-color: transparent;
+}
+
+GtkPopover .separator {
+    border: 0;
+    background-color: transparent;
+    color: alpha(currentColor, 0.5);
+    font-size: 80%;
+    font-weight: bold;
 }
