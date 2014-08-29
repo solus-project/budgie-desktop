@@ -43,6 +43,7 @@ public class CategoryButton : Gtk.RadioButton
         relief = Gtk.ReliefStyle.NONE;
         // Makes us look like a normal button :)
         set_property("draw-indicator", false);
+        set_can_focus(false);
         group = parent;
     }
 }
@@ -210,6 +211,7 @@ public class BudgieMenuWindow : Budgie.Popover
 
         // holds all the applications
         content = new Gtk.ListBox();
+        content.row_activated.connect(on_row_activate);
         content_scroll = new Gtk.ScrolledWindow(null, null);
         content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         content_scroll.add(content);
@@ -280,6 +282,16 @@ public class BudgieMenuWindow : Budgie.Popover
         }
 
         MenuButton btn = selected.get_child() as MenuButton;
+        launch_app(btn.info);
+    }
+
+    protected void on_row_activate(Gtk.ListBoxRow? row)
+    {
+        if (row == null) {
+            return;
+        }
+        /* Launch this item, i.e. keyboard access. */
+        MenuButton btn = row.get_child() as MenuButton;
         launch_app(btn.info);
     }
 
@@ -420,10 +432,15 @@ public class BudgieMenuWindow : Budgie.Popover
         search_entry.text = "";
         group = null;
         all_categories.set_active(true);
+        content.select_row(null);
         content_scroll.get_vadjustment().set_value(0);
         categories_scroll.get_vadjustment().set_value(0);
         categories.sensitive = true;
-        search_entry.grab_focus();
+        Idle.add(()=> {
+            /* grab focus when we're not busy, ensuring it works.. */
+            search_entry.grab_focus();
+            return false;
+        });
         base.show();
     }
 
