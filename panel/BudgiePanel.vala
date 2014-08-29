@@ -828,15 +828,21 @@ public class Panel : Gtk.Window
             orientation = Gtk.Orientation.HORIZONTAL;
         }
 
-        master_layout.set_orientation(orientation);
-        widgets_area.set_orientation(orientation);
-        foreach (var applet_info in applets.values) {
-            if (applet_info != null) {
-                applet_info.applet.orientation_changed(orientation);
-                applet_info.applet.position_changed(position);
-                inform_size(applet_info.applet);
-            }
-        };
+        if (master_layout is Gtk.Orientable) {
+                master_layout.set_orientation(orientation);
+        }
+        if (widgets_area is Gtk.Orientable) {
+                widgets_area.set_orientation(orientation);
+        }
+        if (applets != null && applets.values != null) {
+                foreach (var applet_info in applets.values) {
+                    if (applet_info != null) {
+                        applet_info.applet.orientation_changed(orientation);
+                        applet_info.applet.position_changed(position);
+                        inform_size(applet_info.applet);
+                    }
+                };
+        }
 
         move(x,y);
 
