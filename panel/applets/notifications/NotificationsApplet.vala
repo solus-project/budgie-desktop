@@ -174,7 +174,7 @@ public class NotificationsAppletImpl : Budgie.Applet
                                                string icon,
                                                string summary,
                                                string body,
-                                               uint32 timeout,
+                                               int32 timeout,
                                                HashTable<string,Variant> hints)
     {
         Notification? notif;

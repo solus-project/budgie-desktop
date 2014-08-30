@@ -115,7 +115,7 @@ public class Notification : Gtk.Bin
         }
     }
 
-    public uint32 timeout { public get ; public set ; }
+    public int32 timeout { public get ; public set ; }
     public int64 start_time { public get; public set; }
     public string app_name { public get ; public set; }
 
