@@ -186,6 +186,12 @@ public class NotificationsAppletImpl : Budgie.Applet
         } else {
             /* Slide a new notification in */
             notif = new Notification(summary, body, icon);
+            notif.dismiss.connect((h)=> {
+                notif.timeout = 1000;
+                /* Place holder code, at some point we'll want to slide
+                   these fellas out too. */
+                ((Gtk.Revealer)notif.get_parent()).set_reveal_child(false);
+            });
             notif.app_name = app_name;
         }
         notif.hashid = id;

@@ -122,6 +122,9 @@ public class Notification : Gtk.Bin
     /* Used for purposes of identification */
     public uint32 hashid { public get; public set; }
 
+    /* Emitted when someone clicks the close button */
+    public signal void dismiss(uint32 hashid);
+
     public Notification(string summary, string? body, string? icon_name = "mail-message-new", NotificationPriority priority = NotificationPriority.LOW)
     {
         // main layout
@@ -177,6 +180,10 @@ public class Notification : Gtk.Bin
         close.halign = Gtk.Align.END;
         close.valign = Gtk.Align.START;
         close.relief = Gtk.ReliefStyle.NONE;
+        close.set_can_focus(false);
+        close.clicked.connect(()=> {
+            this.dismiss(this.hashid);
+        });
         layout.pack_end(close, false, false, 0);
     }
 
