@@ -47,6 +47,8 @@ public class Popover : Gtk.Window
     /* We simply steal the popovers stylecontext to trick css theming */
     private Gtk.Widget theft;
 
+    private Gtk.Widget? parent_widg;
+
     public Popover(bool is_passive = false)
     {
         passive = is_passive;
@@ -76,10 +78,6 @@ public class Popover : Gtk.Window
             }
         });
 
-        size_allocate.connect((s) => {
-            our_width = s.width;
-            our_height = s.height;
-        });
 
         // Must die on Escape
         key_press_event.connect((k) => {
@@ -104,6 +102,9 @@ public class Popover : Gtk.Window
         size_allocate.connect((r)=> {
             our_width = r.width;
             our_height = r.height;
+            if (get_visible() && get_realized()) {
+                present(parent_widg, true);
+            }
         });
     }
 
@@ -216,11 +217,12 @@ public class Popover : Gtk.Window
         ctx.line_to(end_x, end_y);
     }
 
-    public new void present(Gtk.Widget? parent = null)
+    public new void present(Gtk.Widget? parent = null, bool reposition = false)
     {
         var toplevel = parent.get_toplevel();
         int win_x, win_y;
         int trans_x, trans_y;
+        this.parent_widg = parent;
 
         our_x = 0;
         our_y = 0;
@@ -242,10 +244,12 @@ public class Popover : Gtk.Window
         our_x = trans_x;
         our_y = trans_y;
 
-        if (!get_realized()) {
-            realize();
+        if (!reposition) {
+            if (!get_realized()) {
+                realize();
+            }
+            get_window().set_focus_on_map(true);
         }
-        get_window().set_focus_on_map(true);
 
         // Should we go with top or bottom ?
         var screen = parent.get_screen();

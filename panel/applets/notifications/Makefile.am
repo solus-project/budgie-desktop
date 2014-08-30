@@ -16,7 +16,8 @@ EXTRA_DIST += \
 pkglib_LTLIBRARIES += libnotificationsapplet.la
 
 libnotificationsapplet_la_SOURCES = \
-	NotificationsApplet.vala
+	NotificationsApplet.vala \
+	NotificationWidget.vala
 
 libnotificationsapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
@@ -42,3 +43,8 @@ libnotificationsapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg BudgieWidgets
+
+
+dist-hook:
+	cd $(distdir) && \
+	rm $(libnotificationsapplet_la_SOURCES:.vala=.c) libnotificationsapplet_la_vala.stamp

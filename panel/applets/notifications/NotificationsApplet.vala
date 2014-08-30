@@ -24,7 +24,10 @@ public class NotificationServer : Object {
     private weak DBusConnection conn;
     private uint32 counter;
 
-    public signal void new_notification();
+    /**
+     * Used internally to notify the owner of new notifications
+     */
+    public signal void new_notification(string app_name, string app_icon, string summary, string body, int32 timeout);
 
     public NotificationServer (DBusConnection conn)
     {
@@ -60,7 +63,7 @@ public class NotificationServer : Object {
         int32 expire_timeout)
     {
         this.counter++;
-        new_notification();
+        new_notification(app_name, app_icon, summary, body, expire_timeout);
         return this.counter;
     }
 }
@@ -87,6 +90,8 @@ public class NotificationsAppletImpl : Budgie.Applet
     protected Gtk.Label no_notifications_text;
     protected Gtk.Box no_notifications;
 
+    int num_notifications = 0;
+
     public NotificationsAppletImpl()
     {
         Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications",
@@ -101,6 +106,7 @@ public class NotificationsAppletImpl : Budgie.Applet
         widget.add(icon);
 
         pop = new Budgie.Popover();
+        pop.border_width = 6;
         pop_child = new Gtk.Box(Gtk.Orientation.VERTICAL, PADDING_PX);
         pop_child_outer = new Gtk.Box(Gtk.Orientation.HORIZONTAL, PADDING_PX);
         
@@ -127,7 +133,7 @@ public class NotificationsAppletImpl : Budgie.Applet
         no_notifications.pack_start(no_notifications_text, false, false, 0);
 
         pop_child.pack_start(no_notifications, true, false, PADDING_PX);
-        pop.set_size_request(100, 100);
+        pop.set_size_request(300, 100);
 
         icon_size_changed.connect((i,s)=> {
             icon.pixel_size = (int)s;
@@ -141,20 +147,51 @@ public class NotificationsAppletImpl : Budgie.Applet
             this.nserver = new NotificationServer(conn);
             conn.register_object("/org/freedesktop/Notifications", this.nserver);
 
-            this.nserver.new_notification.connect(()=> {
-                this.icon.set_from_icon_name(NOTIFICATIONS_UNREAD_ICON, Gtk.IconSize.INVALID);
-                this.pop.passive = true;
-                this.pop.present(this.icon);
-                Timeout.add(NOTIFICATION_SHOW_SECONDS*1000, () => {
-                    this.icon.set_from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
-                    this.pop.hide();
-                    this.pop.passive = false;
-                    return false;
-                });
-            });
+            this.nserver.new_notification.connect(on_notification);
         } catch (IOError e) {
             // bail?
         }
+    }
+
+    protected void on_notification(string app_name, string icon, string summary, string body, int32 timeout)
+    {
+        this.icon.set_from_icon_name(NOTIFICATIONS_UNREAD_ICON, Gtk.IconSize.INVALID);
+        pop.passive = true;
+        pop_child.remove(no_notifications);
+
+        /* Slide a new notification in */
+        var notif = new Notification(summary, body, icon);
+        var revealer = new Gtk.Revealer();
+        revealer.add(notif);
+        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+        revealer.set_reveal_child(false);
+        pop_child.pack_start(revealer, false, false, 0);
+
+        Idle.add(()=>{
+            revealer.set_reveal_child(true);
+            return false;
+        });
+        pop.present(this.icon);
+
+        num_notifications += 1;
+
+        if (timeout <= 0) {
+            timeout = NOTIFICATION_SHOW_SECONDS * 1000;
+        }
+
+        Timeout.add(timeout, () => {
+            revealer.destroy();
+            num_notifications -= 1;
+            /* hide only when the count reaches 0. */
+            if (num_notifications == 0) {
+                this.icon.set_from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
+                pop.hide();
+                pop.passive = false;
+                pop_child.pack_start(no_notifications, true, false, PADDING_PX);
+
+            }
+            return false;
+        });
     }
 
     private void on_nserver_name_acquired() {
