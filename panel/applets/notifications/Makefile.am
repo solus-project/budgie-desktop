@@ -22,13 +22,15 @@ libnotificationsapplet_la_SOURCES = \
 libnotificationsapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
-	$(LIBPEAS_CFLAGS)
+	$(LIBPEAS_CFLAGS) \
+	$(GEE_CFLAGS)
 
 libnotificationsapplet_la_LIBADD = \
 	${top_builddir}/widgets/libbudgiewidgets.la \
 	${top_builddir}/budgie-plugin/libbudgie-plugin.la \
 	$(GTK3_LIBS) \
-	$(LIBPEAS_LIBS)
+	$(LIBPEAS_LIBS) \
+	$(GEE_LIBS)
 
 libnotificationsapplet_la_LDFLAGS = \
 	-module \
@@ -42,8 +44,8 @@ libnotificationsapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
+	--pkg gee-0.8 \
 	--pkg BudgieWidgets
-
 
 dist-hook:
 	cd $(distdir) && \

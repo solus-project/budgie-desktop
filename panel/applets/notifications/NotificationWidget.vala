@@ -75,6 +75,53 @@ public class PriorityIndicator : Gtk.EventBox
 public class Notification : Gtk.Bin
 {
 
+    protected Gtk.Label _summary;
+    public string summary {
+        public get {
+            return _summary.get_label();
+        }
+        public set {
+            if (! value.contains("<big>")) {
+                _summary.set_markup("<big>%s</big>".printf(value));
+            } else {
+                _summary.set_markup(value);
+            }
+        }
+    }
+    protected Gtk.Label? _body;
+    public string? body {
+        public get {
+            if (_body != null) {
+                return _body.get_label();
+            }
+            return null;
+        }
+        public set {
+            if (_body != null) {
+                _body.set_markup(value);
+            }
+        }
+    }
+    protected Gtk.Image _icon;
+    public string? icon_name {
+        public owned get {
+            Gtk.IconSize os;
+            string oi;
+            _icon.get_icon_name(out oi, out os);
+            return oi;
+        }
+        public set {
+            _icon.set_from_icon_name(value, Gtk.IconSize.INVALID);
+        }
+    }
+
+    public uint32 timeout { public get ; public set ; }
+    public int64 start_time { public get; public set; }
+    public string app_name { public get ; public set; }
+
+    /* Used for purposes of identification */
+    public uint32 hashid { public get; public set; }
+
     public Notification(string summary, string? body, string? icon_name = "mail-message-new", NotificationPriority priority = NotificationPriority.LOW)
     {
         // main layout
@@ -87,6 +134,7 @@ public class Notification : Gtk.Bin
 
         // side image
         var image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.DIALOG);
+        _icon = image;
         image.margin_right = 4;
         layout.pack_start(image, false, false, 0);
 
@@ -103,6 +151,7 @@ public class Notification : Gtk.Bin
         content.pack_start(heading, false, false, 0);
         heading.halign = Gtk.Align.START;
         heading.valign = Gtk.Align.START;
+        _summary = heading;
 
         // body if one exists.
         if (body != null) {
@@ -112,12 +161,14 @@ public class Notification : Gtk.Bin
                 str = "%s...".printf(str[0:100]);
             }
             var body_label = new Gtk.Label(str);
+            body_label.set_use_markup(true);
             content.pack_start(body_label, false, false, 0);
             body_label.halign = Gtk.Align.START;
             body_label.valign = Gtk.Align.START;
             body_label.set_line_wrap(true);
             body_label.margin_bottom = 4;
             body_label.margin_right = 4;
+            _body = body_label;
         }
 
         // close button

@@ -2,6 +2,7 @@
  * NotificationsApplet.vala
  * 
  * Copyright 2014 Josh Klar <j@iv597.com>
+ * Also Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,27 +13,33 @@
 const int ICON_SIZE_PX = 22;
 const int PADDING_PX = 10;
 
-const int NOTIFICATION_SHOW_SECONDS = 5;
+const int NOTIFICATION_SHOW_SECONDS = 5000;
 
 const int    NOTIFICATIONS_CLEAR_POPUP_ICON_SIZE_PX = 92;
 const string NOTIFICATIONS_CLEAR_POPUP_ICON = "face-smile-big-symbolic";
 const string NOTIFICATIONS_CLEAR_ICON = "user-invisible-symbolic";
 const string NOTIFICATIONS_UNREAD_ICON = "user-available-symbolic";
 
+const int CRAQMONKEYTIMEMAX = 20000;
+
 [DBus (name = "org.freedesktop.Notifications")]
 public class NotificationServer : Object {
     private weak DBusConnection conn;
-    private uint32 counter;
 
     /**
      * Used internally to notify the owner of new notifications
      */
-    public signal void new_notification(string app_name, string app_icon, string summary, string body, int32 timeout);
+    public signal void new_notification(string app_name,
+                                        uint32 id,
+                                        uint32 replace_id,
+                                        string app_icon,
+                                        string summary,
+                                        string body,
+                                        int32 timeout);
 
     public NotificationServer (DBusConnection conn)
     {
         this.conn = conn;
-        this.counter = -1;
     }
 
     public string[] get_capabilities()
@@ -55,16 +62,17 @@ public class NotificationServer : Object {
     public new uint32 notify(
         string app_name,
         uint32 replaces_id, // ignored
-        string app_icon, // ignored
+        string app_icon,
         string summary,
         string body,
         string[] actions,
         HashTable<string, Variant> hints,
         int32 expire_timeout)
     {
-        this.counter++;
-        new_notification(app_name, app_icon, summary, body, expire_timeout);
-        return this.counter;
+        uint32 hash = (uint32)(app_name.hash() ^ GLib.get_real_time());
+        new_notification(app_name, hash, replaces_id, app_icon, summary, body, expire_timeout);
+
+        return hash;
     }
 }
 
@@ -92,11 +100,19 @@ public class NotificationsAppletImpl : Budgie.Applet
 
     int num_notifications = 0;
 
+    /* We map the given hash to a notification, allowing replacements */
+    protected Gee.HashMap<uint32,Notification> notifications;
+
+    protected const int TIMEOUT = 100;
+    protected bool managed = false;
+
     public NotificationsAppletImpl()
     {
         Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications",
             BusNameOwnerFlags.NONE, on_nserver_bus_acquired,
             on_nserver_name_acquired, on_nserver_name_lost);
+
+        notifications = new Gee.HashMap<uint32,Notification>(null, null, null);
 
         widget = new Gtk.EventBox();
         widget.margin_left = 2;
@@ -153,45 +169,136 @@ public class NotificationsAppletImpl : Budgie.Applet
         }
     }
 
-    protected void on_notification(string app_name, string icon, string summary, string body, int32 timeout)
+    protected Notification? spawn_notification(string app_name,
+                                               uint32 id,
+                                               uint32 replace_id,
+                                               string icon,
+                                               string summary,
+                                               string body,
+                                               uint32 timeout)
+    {
+        Notification? notif;
+
+        if (replace_id in notifications) {
+            /* Update existing notification */
+            notif = notifications[replace_id];
+            notif.icon_name = icon;
+            notif.summary = summary;
+            notif.body = body;
+        } else {
+            /* Slide a new notification in */
+            notif = new Notification(summary, body, icon);
+            notif.app_name = app_name;
+        }
+        notif.hashid = id;
+        notifications[id] = notif;
+
+        if (timeout <= 0 || timeout >= CRAQMONKEYTIMEMAX) {
+            notif.timeout = NOTIFICATION_SHOW_SECONDS;
+        } else {
+            notif.timeout = timeout;
+        }
+        /* Always reset start time. */
+        notif.start_time = GLib.get_real_time () / 1000;
+
+        return notifications[id];
+    }
+
+    protected bool manage_notifications()
+    {
+        Notification[] removals = {};
+        uint32[] orphans = {};
+
+        /* Cleanup orphans from replace_id's */
+        foreach (var id in notifications.keys) {
+            var notification = notifications[id];
+            if (id != notification.hashid) {
+                orphans += id;
+            }
+        }
+        foreach (var id in orphans) {
+            notifications.unset(id);
+        }
+
+        if (notifications != null && notifications.size >= 1) {
+            foreach (var notification in notifications.values) {
+                Gtk.Revealer? parent = (Gtk.Revealer)notification.get_parent();
+                var current_time = GLib.get_real_time () / 1000;
+                var visible_time = current_time - notification.start_time;
+                /* Destroy if its been visible too long */
+                if (visible_time >= notification.timeout + parent.get_transition_duration()) {
+                    removals += notification;
+                } else if (visible_time >= notification.timeout) {
+                    /* Set it to hide instead - we reap later */
+                    parent.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+                    parent.set_reveal_child(false);
+                }
+            }
+        }
+        /* Clean up outside the hashmap iteration */
+        foreach (var notification in removals) {
+            notifications.unset(notification.hashid);
+            notification.get_parent().destroy();
+        }
+        /* Disconnect ourselves */
+        if (notifications.size == 0) {
+            this.managed = false;
+
+            this.icon.set_from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
+            pop.hide();
+            pop.passive = false;
+            if (no_notifications.get_parent() != pop_child) {
+                pop_child.pack_start(no_notifications, true, false, PADDING_PX);
+                pop_child.show_all();
+            }
+            return false;
+        }
+
+        /* More notifications to manage, continue */
+        return true;
+    }
+
+    protected void on_notification(string app_name,
+                                   uint32 id,
+                                   uint32 replace_id,
+                                   string icon,
+                                   string summary,
+                                   string body,
+                                   int32 timeout)
     {
         this.icon.set_from_icon_name(NOTIFICATIONS_UNREAD_ICON, Gtk.IconSize.INVALID);
         pop.passive = true;
-        pop_child.remove(no_notifications);
-
-        /* Slide a new notification in */
-        var notif = new Notification(summary, body, icon);
-        var revealer = new Gtk.Revealer();
-        revealer.add(notif);
-        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
-        revealer.set_reveal_child(false);
-        pop_child.pack_start(revealer, false, false, 0);
-
-        Idle.add(()=>{
-            revealer.set_reveal_child(true);
-            return false;
-        });
-        pop.present(this.icon);
-
-        num_notifications += 1;
-
-        if (timeout <= 0) {
-            timeout = NOTIFICATION_SHOW_SECONDS * 1000;
+        if (no_notifications.get_parent() == pop_child) {
+            pop_child.remove(no_notifications);
         }
 
-        Timeout.add(timeout, () => {
-            revealer.destroy();
-            num_notifications -= 1;
-            /* hide only when the count reaches 0. */
-            if (num_notifications == 0) {
-                this.icon.set_from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
-                pop.hide();
-                pop.passive = false;
-                pop_child.pack_start(no_notifications, true, false, PADDING_PX);
+        Notification? notif = spawn_notification(app_name, id, replace_id, icon, summary, body, timeout);
+        if (notif.get_parent() == null) {
+            var revealer = new Gtk.Revealer();
+            revealer.add(notif);
+            revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            revealer.set_reveal_child(false);
+            pop_child.pack_start(revealer, false, false, 0);
+        }
 
-            }
-            return false;
-        });
+        var revealer = (Gtk.Revealer)notif.get_parent();
+        /* Ensure animation works for additions while visible */
+        if (pop.get_visible() && pop.get_realized()) {
+            Idle.add(()=> {
+                revealer.set_reveal_child(true);
+                return false;
+            });
+        } else {
+            pop.set_size_request(300, 100);
+            revealer.set_reveal_child(true);
+        }
+
+        pop.present(this.icon);
+
+        /* Once we have an notification we set a background update to check notification timeouts, etc. */
+        if (!this.managed) {
+            Timeout.add(TIMEOUT, manage_notifications);
+        }
     }
 
     private void on_nserver_name_acquired() {
