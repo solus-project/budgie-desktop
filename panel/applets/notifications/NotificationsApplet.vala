@@ -295,6 +295,11 @@ public class NotificationsAppletImpl : Budgie.Applet
             pop_child.remove(no_notifications);
         }
 
+        if (icon == "") {
+            /* fallback icon name. */
+            icon = "mail-message-new";
+        }
+
         Notification? notif = spawn_notification(app_name, id, replace_id, icon, summary, body, timeout, hints);
         if (notif.get_parent() == null) {
             var revealer = new Gtk.Revealer();

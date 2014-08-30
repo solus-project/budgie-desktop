@@ -147,9 +147,7 @@ public class Notification : Gtk.Bin
 
         // heading (TODO: Sanitize input!)
         var heading = new Gtk.Label("<big>%s</big>".printf(summary));
-        heading.margin_top = 4;
-        heading.margin_bottom = 4;
-        heading.margin_right = 4;
+        heading.margin = 4;
         heading.use_markup = true;
         content.pack_start(heading, false, false, 0);
         heading.halign = Gtk.Align.START;
@@ -171,6 +169,7 @@ public class Notification : Gtk.Bin
             body_label.set_line_wrap(true);
             body_label.margin_bottom = 4;
             body_label.margin_right = 4;
+            body_label.margin_left = 4;
             _body = body_label;
         }
 
