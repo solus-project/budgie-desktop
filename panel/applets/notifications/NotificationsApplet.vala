@@ -98,8 +98,6 @@ public class NotificationsAppletImpl : Budgie.Applet
     protected Gtk.Label no_notifications_text;
     protected Gtk.Box no_notifications;
 
-    int num_notifications = 0;
-
     /* We map the given hash to a notification, allowing replacements */
     protected Gee.HashMap<uint32,Notification> notifications;
 
