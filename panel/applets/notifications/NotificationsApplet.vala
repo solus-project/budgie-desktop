@@ -35,7 +35,8 @@ public class NotificationServer : Object {
                                         string app_icon,
                                         string summary,
                                         string body,
-                                        int32 timeout);
+                                        int32 timeout,
+                                        HashTable<string,Variant> hints);
 
     public NotificationServer (DBusConnection conn)
     {
@@ -70,7 +71,7 @@ public class NotificationServer : Object {
         int32 expire_timeout)
     {
         uint32 hash = (uint32)(app_name.hash() ^ GLib.get_real_time());
-        new_notification(app_name, hash, replaces_id, app_icon, summary, body, expire_timeout);
+        new_notification(app_name, hash, replaces_id, app_icon, summary, body, expire_timeout, hints);
 
         return hash;
     }
@@ -173,9 +174,26 @@ public class NotificationsAppletImpl : Budgie.Applet
                                                string icon,
                                                string summary,
                                                string body,
-                                               uint32 timeout)
+                                               uint32 timeout,
+                                               HashTable<string,Variant> hints)
     {
         Notification? notif;
+        NotificationPriority p = NotificationPriority.LOW;
+
+        if ("urgency" in hints) {
+            uint8 urgency = hints["urgency"].get_byte();
+            switch (urgency) {
+                case 1:
+                    p = NotificationPriority.NORMAL;
+                    break;
+                case 2:
+                    p = NotificationPriority.CRITICAL;
+                    break;
+                default:
+                    p = NotificationPriority.LOW;
+                    break;
+            }
+        }
 
         if (replace_id in notifications) {
             /* Update existing notification */
@@ -185,7 +203,7 @@ public class NotificationsAppletImpl : Budgie.Applet
             notif.body = body;
         } else {
             /* Slide a new notification in */
-            notif = new Notification(summary, body, icon);
+            notif = new Notification(summary, body, icon, p);
             notif.dismiss.connect((h)=> {
                 notif.timeout = 1000;
                 /* Place holder code, at some point we'll want to slide
@@ -268,7 +286,8 @@ public class NotificationsAppletImpl : Budgie.Applet
                                    string icon,
                                    string summary,
                                    string body,
-                                   int32 timeout)
+                                   int32 timeout,
+                                   HashTable<string,Variant> hints)
     {
         this.icon.set_from_icon_name(NOTIFICATIONS_UNREAD_ICON, Gtk.IconSize.INVALID);
         pop.passive = true;
@@ -276,7 +295,7 @@ public class NotificationsAppletImpl : Budgie.Applet
             pop_child.remove(no_notifications);
         }
 
-        Notification? notif = spawn_notification(app_name, id, replace_id, icon, summary, body, timeout);
+        Notification? notif = spawn_notification(app_name, id, replace_id, icon, summary, body, timeout, hints);
         if (notif.get_parent() == null) {
             var revealer = new Gtk.Revealer();
             revealer.add(notif);
