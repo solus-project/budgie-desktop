@@ -44,12 +44,12 @@ public class NotificationServer : Object {
         out string spec_version) 
     {
         name = "budgie-panel";
-        vendor = "EvolveOS";
+        vendor = "Evolve OS";
         version = "0.0.1";
         spec_version = "1";
     }
 
-    public uint32 notify(
+    public new uint32 notify(
         string app_name,
         uint32 replaces_id, // ignored
         string app_icon, // ignored
@@ -60,7 +60,6 @@ public class NotificationServer : Object {
         int32 expire_timeout)
     {
         this.counter++;
-        //message("%s".printf(summary));
         new_notification();
         return this.counter;
     }
@@ -95,6 +94,8 @@ public class NotificationsAppletImpl : Budgie.Applet
             on_nserver_name_acquired, on_nserver_name_lost);
 
         widget = new Gtk.EventBox();
+        widget.margin_left = 2;
+        widget.margin_right = 2;
         icon = new Gtk.Image.from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
         icon.pixel_size = ICON_SIZE_PX;
         widget.add(icon);
@@ -126,7 +127,11 @@ public class NotificationsAppletImpl : Budgie.Applet
         no_notifications.pack_start(no_notifications_text, false, false, 0);
 
         pop_child.pack_start(no_notifications, true, false, PADDING_PX);
+        pop.set_size_request(100, 100);
 
+        icon_size_changed.connect((i,s)=> {
+            icon.pixel_size = (int)s;
+        });
         add(widget);
         show_all();
     }
