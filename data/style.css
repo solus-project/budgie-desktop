@@ -109,11 +109,11 @@ GtkPopover {
     margin: 10px;
     padding: 2px;
     border-radius: 2px;
-    border-color: shade(@bg_color, 0.8);
+    border-color: shade(@theme_bg_color, 0.8);
     border-width: 1px;
     border-style: solid;
     background-clip: border-box;
-    background-color: @bg_color;
+    background-color: @theme_bg_color;
     color: @theme_fg_color;
     box-shadow: 0 2px 3px alpha(black, 0.5);
 }
