@@ -66,6 +66,7 @@ public class PowerIndicator : Gtk.Bin
             });
             if (battery == null) {
                 warning("Unable to discover a battery");
+                remove(widget);
                 hide();
                 return;
             }
