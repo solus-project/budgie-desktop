@@ -23,8 +23,8 @@ certain components to operate correctly.
 *TODO:*
  * Start adding support for translations
  * Optimize menu (migrate from GtkListBox)
- * Add some form of notification system
- * Add network control (ConnMan & Network Manager)
+ * Add some form of notification system ✓
+ * Add appindicator to eventually replace new tray
  * Add sound control (PulseAudio) and support media keys (partly done) ✓
  * Allow adding launchers directly to panel
  * Allow pinning menu launchers to panel (see above point)
@@ -32,7 +32,7 @@ certain components to operate correctly.
  * Enable customisation of panel layout, etc. ✓
  * Add dynamic editor for panel layout ✓
  * Add support for GNOME Panel theming ✓
- * Dynamically resize applets according to panel size
+ * Dynamically resize applets according to panel size ✓
 
 *Implementation note:*
 
