@@ -81,6 +81,7 @@ public class StatusAppletImpl : Budgie.Applet
         sound.status_widget.valign = Gtk.Align.END;
         sound.status_image.valign = Gtk.Align.CENTER;
         sound.status_image.margin_top = 6; /* Due to mark */
+        sound.status_widget.margin_left = 2; /* Due to button for settings */
 
         var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         row += 1;
@@ -94,6 +95,7 @@ public class StatusAppletImpl : Budgie.Applet
         var label = new Gtk.Button.with_label("Settings");
         label.set_relief(Gtk.ReliefStyle.NONE);
         label.set_property("margin-left", 1);
+        label.get_child().set_halign(Gtk.Align.START);
         label.clicked.connect(()=>{
             popover.hide();
             try {
@@ -102,7 +104,7 @@ public class StatusAppletImpl : Budgie.Applet
                 message("Error invoking gnome-control-center: %s", e.message);
             }
         });
-        label.halign = Gtk.Align.START;
+        label.halign = Gtk.Align.FILL;
         label.hexpand = true;
         grid.attach(label, 1, row, 1, 1);
 
