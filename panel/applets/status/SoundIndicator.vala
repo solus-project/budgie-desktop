@@ -99,10 +99,10 @@ public class SoundIndicator : Gtk.Bin
         var orig_vol = vol;
 
         switch (event.direction) {
-            case Gdk.ScrollDirection.UP:
+            case Gdk.ScrollDirection.DOWN:
                 vol += (uint32)step_size;
                 break;
-            case Gdk.ScrollDirection.DOWN:
+            case Gdk.ScrollDirection.UP:
                 vol -= (uint32)step_size;
                 // uint. im lazy :p
                 if (vol > orig_vol) {
