@@ -31,6 +31,8 @@ public class SoundIndicator : Gtk.Bin
     private ulong change_id;
     private double step_size;
 
+    protected bool respect_lugholes = true;
+
     public SoundIndicator()
     {
         // Start off with at least some icon until we connect to pulseaudio */
@@ -42,6 +44,11 @@ public class SoundIndicator : Gtk.Bin
         wrap.margin = 0;
         wrap.border_width = 0;
         add(wrap);
+
+        /* So I can use the mouse wheel to scroll the sound to obscene volumes. */
+        if (Environment.get_variable("BUDGIE_DISRESPECT_LUGHOLES") != null) {
+            respect_lugholes = false;
+        }
 
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
@@ -123,6 +130,11 @@ public class SoundIndicator : Gtk.Bin
 
         if (vol > max_amp) {
             vol = (uint32)max_amp;
+        }
+
+        /* Prevent amplification using scroll on sound indicator */
+        if (respect_lugholes && vol >= norm) {
+            vol = (uint32)norm;
         }
 
         if (stream.set_volume(vol)) {
