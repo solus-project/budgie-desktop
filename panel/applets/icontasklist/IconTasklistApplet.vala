@@ -12,6 +12,9 @@
 
 const string BUDGIE_STYLE_CLASS_BUTTON = "launcher";
 
+/**
+ * Attempt to match startup notification IDs
+ */
 public static bool startupid_match(string id1, string id2)
 {
     /* Simple. If id1 == id2, or id1(WINID+1) == id2 */
@@ -24,6 +27,52 @@ public static bool startupid_match(string id1, string id2)
     string id3 = "%s-%d_%s".printf(string.joinv("-", splits[0:splits.length-1]), winid, string.joinv("_", spluts[1:spluts.length]));
 
     return (id2 == id3);
+}
+
+
+/**
+ * Trivial helper for IconTasklist - i.e. desktop lookups
+ */
+public class DesktopHelper : Object {
+
+    Gee.HashMap<string?,string?> simpletons;
+    bool init = false;
+
+    public DesktopHelper()
+    {
+        /* Initialize simpletons. */
+        simpletons = new Gee.HashMap<string?,string?>(null,null,null);
+        simpletons["google-chrome-stable"] = "google-chrome";
+        message("Inited");
+    }
+
+    /**
+     * Obtain a DesktopAppInfo for a given window.
+     * @param window X11 window to obtain DesktopAppInfo for
+     *
+     * @return a DesktopAppInfo if found, otherwise null.
+     * 
+     * @note This is immensely inefficient. We still need to cache some
+     * lookups.
+     */
+    public DesktopAppInfo? get_app_info_for_window(Wnck.Window? window)
+    {
+        if (window == null) {
+            return null;
+        }
+        if (window.get_class_group_name() == null) {
+            return null;
+        }
+        var app_name = window.get_class_group_name().down();
+
+        var p1 = new DesktopAppInfo("%s.desktop".printf(app_name));
+        if (p1 == null) {
+            if (app_name in simpletons) {
+                p1 = new DesktopAppInfo("%s.desktop".printf(simpletons[app_name]));
+            }
+        }
+        return p1;
+    }
 }
 
 public class IconButton : Gtk.ToggleButton
@@ -211,6 +260,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
     private Settings settings;
 
     protected Gdk.AppLaunchContext context;
+    protected DesktopHelper helper;
 
     protected void window_opened(Wnck.Window window)
     {
@@ -238,6 +288,16 @@ public class IconTasklistAppletImpl : Budgie.Applet
                 btn.window = window;
                 btn.update_from_window();
                 button = btn;
+            }
+        }
+        // lternatively.. find a "free slot"
+        var pinfo = helper.get_app_info_for_window(window);
+        if (pinfo != null) {
+            var pinfo2 = pin_buttons[pinfo.get_id()];
+            if (pinfo2 != null && pinfo2.window == null) {
+                pinfo2.window = window;
+                pinfo2.update_from_window();
+                button = pinfo2;
             }
         }
 
@@ -303,6 +363,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
         screen.active_window_changed.connect(active_window_changed);
         this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
 
+        helper = new DesktopHelper();
+
         // Easy mapping :)
         buttons = new Gee.HashMap<Wnck.Window,IconButton>(null,null,null);
         pin_buttons = new Gee.HashMap<string?,PinnedIconButton?>(null,null,null);
@@ -354,7 +416,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
             if (pin_buttons.has_key(desktopfile)) {
                 continue;
             }
-            var info = new DesktopAppInfo.from_filename(desktopfile);
+            var info = new DesktopAppInfo(desktopfile);
             if (info == null) {
                 message("Invalid application! %s", desktopfile);
                 continue;
