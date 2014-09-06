@@ -111,7 +111,18 @@ public class Notification : Gtk.Bin
             return oi;
         }
         public set {
-            _icon.set_from_icon_name(value, Gtk.IconSize.INVALID);
+            if ("/" in value && "." in value) {
+                _icon.set_from_file(value);
+            } else {
+                /* Determine that its sensible.. */
+                Gtk.IconTheme it = Gtk.IconTheme.get_default();
+                var icn = it.lookup_icon(value, Gtk.IconSize.BUTTON, Gtk.IconLookupFlags.USE_BUILTIN);
+                if (icn == null) {
+                    _icon.set_from_icon_name("mail-message-new", Gtk.IconSize.DIALOG);
+                } else {
+                    _icon.set_from_icon_name(value, Gtk.IconSize.DIALOG);
+                }
+            }
         }
     }
 
@@ -136,8 +147,9 @@ public class Notification : Gtk.Bin
         layout.pack_start(indicator, false, false, 0);
 
         // side image
-        var image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.DIALOG);
+        var image = new Gtk.Image();
         _icon = image;
+        this.icon_name = icon_name;
         image.margin_right = 4;
         layout.pack_start(image, false, false, 0);
 
