@@ -267,6 +267,7 @@ public class PinnedIconButton : IconButton
     public DesktopAppInfo app_info;
     protected unowned Gdk.AppLaunchContext? context;
     public string? id = null;
+    private Gtk.Menu alt_menu;
 
     public PinnedIconButton(DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
     {
@@ -276,12 +277,26 @@ public class PinnedIconButton : IconButton
         this.context = context;
         set_tooltip_text("Launch %s".printf(info.get_display_name()));
         image.set_from_gicon(info.get_icon(), Gtk.IconSize.INVALID);
+
+        alt_menu = new Gtk.Menu();
+        var item = new Gtk.MenuItem.with_label("Unpin from panel");
+        alt_menu.add(item);
+        item.show_all();
+
+        item.activate.connect(()=> {
+            DesktopHelper.set_pinned(this.app_info, false);
+        });
     }
 
     protected override bool on_button_release(Gdk.EventButton event)
     {
         if (window == null)
         {
+            if (event.button == 3) {
+                // Expose our own unpin option
+                alt_menu.popup(null, null, null, event.button, Gtk.get_current_event_time());
+                return true;
+            }
             if (event.button != 1) {
                 return true;
             }
