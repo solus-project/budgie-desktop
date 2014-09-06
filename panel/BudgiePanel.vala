@@ -149,6 +149,12 @@ public class Panel : Gtk.Window
     private int primary_monitor;
     private Gdk.Rectangle primary_monitor_rect;
 
+    private ulong alloc_id;
+    private int stored_x;
+    private int stored_y;
+    private int stored_height;
+    private int stored_width;
+
     public Panel()
     {
         primary_monitor = screen.get_primary_monitor();
@@ -171,6 +177,7 @@ public class Panel : Gtk.Window
 
         settings = new Settings("com.evolve-os.budgie.panel");
         gnome_mode = settings.get_boolean("gnome-panel-theme-integration");
+        alloc_id = size_allocate.connect(on_size_allocate);
 
         on_settings_change("enable-shadow");
 
@@ -247,6 +254,8 @@ public class Panel : Gtk.Window
 
         load_config();
 
+        // prevent masses of size allocates
+        stored_y = stored_width = stored_height = stored_x = 0;
         master_layout.show();
         show();
 
@@ -254,12 +263,6 @@ public class Panel : Gtk.Window
         engine.load_plugin.connect_after((i)=> {
             var ext = extset.get_extension(i);
             on_extension_added(i, ext);
-        });
-
-
-        size_allocate.connect((s) => {
-            update_position();
-            set_struts();
         });
 
         set_struts();
@@ -280,6 +283,22 @@ public class Panel : Gtk.Window
             }
             return false;
         });
+    }
+
+    protected void on_size_allocate(Gtk.Allocation alloc)
+    {
+        // Only update when we *absolutely* need to.
+        if (alloc.x == stored_x && alloc.y == stored_y && alloc.width == stored_width && alloc.height == stored_height) {
+            return;
+        }
+
+        stored_x = alloc.x;
+        stored_y = alloc.y;
+        stored_width = alloc.width;
+        stored_height = alloc.height;
+
+        update_position();
+        set_struts();
     }
 
     protected void on_settings_change(string key)
@@ -844,7 +863,9 @@ public class Panel : Gtk.Window
                 };
         }
 
+        SignalHandler.block(this, alloc_id);
         move(x,y);
+        SignalHandler.unblock(this, alloc_id);
 
         /* Move shadow too. */
         if (use_shadow) {
