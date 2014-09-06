@@ -10,6 +10,13 @@
  */
 
 
+/**
+ * Note: Please blame Joey for any insanity in this file. Launchers is
+ * what he wanted. Consequently some of this seems to make sense at first
+ * glance. Then you actually *look*. Honestly, just walk away now. File
+ * a bug but pretend this is a git submodule we don't maintain. Cheers.
+ */
+
 const string BUDGIE_STYLE_CLASS_BUTTON = "launcher";
 
 /**
@@ -74,6 +81,34 @@ public class DesktopHelper : Object {
         }
         return p1;
     }
+
+    public static void set_pinned(DesktopAppInfo app_info, bool pinned)
+    {
+        Settings settings = new Settings("com.evolve-os.budgie.panel");
+        string[] launchers = settings.get_strv("pinned-launchers");
+        if (pinned) {
+            if (app_info.get_id() in launchers) {
+                return;
+            }
+            launchers += app_info.get_id();
+            settings.set_strv("pinned-launchers", launchers);
+            return;
+        }
+        // Unpin a launcher
+        string[] new_launchers = {};
+        bool did_remove = false;
+        foreach (var launcher in launchers) {
+            if (launcher != app_info.get_id()) {
+                new_launchers += launcher;
+            } else {
+                did_remove = true;
+            }
+        }
+        // Go ahead and set
+        if (did_remove) {
+            settings.set_strv("pinned-launchers", new_launchers);
+        }
+    }
 }
 
 public class IconButton : Gtk.ToggleButton
@@ -83,7 +118,11 @@ public class IconButton : Gtk.ToggleButton
     public unowned Wnck.Window? window;
     protected Wnck.ActionMenu menu;
     public int icon_size;
-    protected DesktopAppInfo? ainfo;
+    public DesktopAppInfo? ainfo;
+    private Gtk.MenuItem pinnage;
+    private Gtk.MenuItem unpinnage;
+
+    public bool requested_pin = false;
 
     public void update_from_window()
     {
@@ -102,6 +141,27 @@ public class IconButton : Gtk.ToggleButton
 
         // Actions menu
         menu = new Wnck.ActionMenu(window);
+
+        var sep = new Gtk.SeparatorMenuItem();
+        menu.append(sep);
+        pinnage = new Gtk.MenuItem.with_label("Pin to panel");
+        unpinnage = new Gtk.MenuItem.with_label("Unpin from panel");
+        sep.show();
+        menu.append(pinnage);
+        menu.append(unpinnage);
+
+        /* Handle running instance pin/unpin */
+        pinnage.activate.connect(()=> {
+            requested_pin = true;
+            DesktopHelper.set_pinned(ainfo, true);
+        });
+
+        unpinnage.activate.connect(()=> {
+            if (this is /*Sparta*/ PinnedIconButton) {
+                var p = this as PinnedIconButton;
+                DesktopHelper.set_pinned(p.app_info, false);
+            }
+        });
     }
 
     public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
@@ -170,6 +230,14 @@ public class IconButton : Gtk.ToggleButton
     {
         var timestamp = Gtk.get_current_event_time();
 
+        if (this is /*Sparta*/ PinnedIconButton) {
+            unpinnage.show();
+            pinnage.hide();
+        } else {
+            unpinnage.hide();
+            pinnage.show();
+        }
+
         // Right click, i.e. actions menu
         if (event.button == 3) {
             menu.popup(null, null, null, event.button, timestamp);
@@ -195,7 +263,7 @@ public class IconButton : Gtk.ToggleButton
 
 public class PinnedIconButton : IconButton
 {
-    protected DesktopAppInfo app_info;
+    public DesktopAppInfo app_info;
     protected unowned Gdk.AppLaunchContext? context;
     public string? id = null;
 
@@ -312,12 +380,9 @@ public class IconTasklistAppletImpl : Budgie.Applet
         if (pinfo != null) {
             var pinfo2 = pin_buttons[pinfo.get_id()];
             if (pinfo2 != null && pinfo2.window == null) {
-                /* Check its "group leader" ... */
-                if (window.get_group_leader() == window.get_xid()) {
-                    pinfo2.window = window;
-                    pinfo2.update_from_window();
-                    button = pinfo2;
-                }
+                pinfo2.window = window;
+                pinfo2.update_from_window();
+                button = pinfo2;
             }
         }
 
@@ -376,11 +441,6 @@ public class IconTasklistAppletImpl : Budgie.Applet
 
     public IconTasklistAppletImpl()
     {
-        // Init wnck
-        screen = Wnck.Screen.get_default();
-        screen.window_opened.connect(window_opened);
-        screen.window_closed.connect(window_closed);
-        screen.active_window_changed.connect(active_window_changed);
         this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
 
         helper = new DesktopHelper();
@@ -388,6 +448,26 @@ public class IconTasklistAppletImpl : Budgie.Applet
         // Easy mapping :)
         buttons = new Gee.HashMap<Wnck.Window,IconButton>(null,null,null);
         pin_buttons = new Gee.HashMap<string?,PinnedIconButton?>(null,null,null);
+
+        main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        main_layout.pack_start(pinned, false, false, 0);
+        pinned.set_property("margin-right", 10);
+
+        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        main_layout.pack_start(widget, false, false, 0);
+
+        settings = new Settings("com.evolve-os.budgie.panel");
+        settings.changed.connect(on_settings_change);
+
+        on_settings_change("pinned-launchers");
+
+        // Init wnck
+        screen = Wnck.Screen.get_default();
+        screen.window_opened.connect(window_opened);
+        screen.window_closed.connect(window_closed);
+        screen.active_window_changed.connect(active_window_changed);
+
         icon_size_changed.connect((i,s)=> {
             icon_size = (int)i;
             Wnck.set_default_icon_size(icon_size);
@@ -407,14 +487,6 @@ public class IconTasklistAppletImpl : Budgie.Applet
             }
         });
 
-        main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        main_layout.pack_start(pinned, false, false, 0);
-        pinned.set_property("margin-right", 10);
-
-        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        main_layout.pack_start(widget, false, false, 0);
-
         // Update orientation when parent panel does
         orientation_changed.connect((o)=> {
             main_layout.set_orientation(o);
@@ -422,10 +494,6 @@ public class IconTasklistAppletImpl : Budgie.Applet
             pinned.set_orientation(o);
         });
 
-        settings = new Settings("com.evolve-os.budgie.panel");
-        settings.changed.connect(on_settings_change);
-
-        on_settings_change("pinned-launchers");
         add(main_layout);
         show_all();
     }
@@ -451,6 +519,25 @@ public class IconTasklistAppletImpl : Budgie.Applet
             var button = new PinnedIconButton(info, icon_size, ref this.context);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button, false, false, 0);
+
+            // Do we already have an icon button for this?
+            foreach (var keyn in buttons.keys) {
+                var btn = buttons[keyn];
+                if (btn.ainfo == null) {
+                    continue;
+                }
+                if (btn.ainfo.get_id() == info.get_id() && btn.requested_pin) {
+                    // Pinning an already active button.
+                    button.window = btn.window;
+                    // destroy old one
+                    btn.destroy();
+                    buttons.unset(keyn);
+                    buttons[keyn] = button;
+                    button.update_from_window();
+                    break;
+                }
+            }
+
             button.show_all();
         }
         string[] removals = {};
@@ -465,8 +552,11 @@ public class IconTasklistAppletImpl : Budgie.Applet
                 btn.destroy();
             } else {
                 /* We need to move this fella.. */
-                pinned.remove(btn);
-                widget.pack_start(btn, false, false, 0);
+                IconButton b2 = new IconButton(btn.window, icon_size, (owned)btn.app_info);
+                btn.destroy();
+                widget.pack_start(b2, false, false, 0);
+                buttons[b2.window]  = b2;
+                b2.show_all();
             }
             removals += key_name;
         }
