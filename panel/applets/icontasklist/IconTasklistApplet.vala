@@ -43,7 +43,6 @@ public class DesktopHelper : Object {
         /* Initialize simpletons. */
         simpletons = new Gee.HashMap<string?,string?>(null,null,null);
         simpletons["google-chrome-stable"] = "google-chrome";
-        message("Inited");
     }
 
     /**
@@ -63,12 +62,14 @@ public class DesktopHelper : Object {
         if (window.get_class_group_name() == null) {
             return null;
         }
-        var app_name = window.get_class_group_name().down();
+        var app_name = window.get_class_group_name();
+        var c = app_name[0].tolower();
+        var app_name_clean = "%c%s".printf(c,app_name[1:app_name.length]);
 
-        var p1 = new DesktopAppInfo("%s.desktop".printf(app_name));
+        var p1 = new DesktopAppInfo("%s.desktop".printf(app_name_clean));
         if (p1 == null) {
-            if (app_name in simpletons) {
-                p1 = new DesktopAppInfo("%s.desktop".printf(simpletons[app_name]));
+            if (app_name_clean in simpletons) {
+                p1 = new DesktopAppInfo("%s.desktop".printf(simpletons[app_name_clean]));
             }
         }
         return p1;
@@ -82,6 +83,7 @@ public class IconButton : Gtk.ToggleButton
     public unowned Wnck.Window? window;
     protected Wnck.ActionMenu menu;
     public int icon_size;
+    protected DesktopAppInfo? ainfo;
 
     public void update_from_window()
     {
@@ -102,7 +104,7 @@ public class IconButton : Gtk.ToggleButton
         menu = new Wnck.ActionMenu(window);
     }
 
-    public IconButton(Wnck.Window? window, int size)
+    public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
     {
         image = new Gtk.Image();
         image.pixel_size = size;
@@ -111,6 +113,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.window = window;
         relief = Gtk.ReliefStyle.NONE;
+        this.ainfo = ainfo;
 
         // Replace styling with our own
         var st = get_style_context();
@@ -147,10 +150,15 @@ public class IconButton : Gtk.ToggleButton
         if (window == null) {
             return;
         }
-        if (window.get_icon() != null) {
-            image.set_from_pixbuf(window.get_icon());
+
+        if (window.get_icon_is_fallback()) {
+            if (ainfo != null && ainfo.get_icon() != null) {
+                image.set_from_gicon(ainfo.get_icon(), Gtk.IconSize.INVALID);
+            } else {
+                image.set_from_pixbuf(window.get_icon());
+            }
         } else {
-            image.set_from_icon_name(window.get_icon_name(), Gtk.IconSize.INVALID);
+            image.set_from_pixbuf(window.get_icon());
         }
         image.pixel_size = icon_size;
     }
@@ -193,7 +201,7 @@ public class PinnedIconButton : IconButton
 
     public PinnedIconButton(DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
     {
-        base(null, size);
+        base(null, size, info);
         this.app_info = info;
 
         this.context = context;
@@ -273,6 +281,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         if (window.get_application() != null) {
             launch_id = window.get_application().get_startup_id();
         }
+        var pinfo = helper.get_app_info_for_window(window);
 
         // Check whether its launched with startup notification, if so
         // attempt to use a pin button where appropriate.
@@ -290,20 +299,22 @@ public class IconTasklistAppletImpl : Budgie.Applet
                 button = btn;
             }
         }
-        // lternatively.. find a "free slot"
-        var pinfo = helper.get_app_info_for_window(window);
+        // Alternatively.. find a "free slot"
         if (pinfo != null) {
             var pinfo2 = pin_buttons[pinfo.get_id()];
             if (pinfo2 != null && pinfo2.window == null) {
-                pinfo2.window = window;
-                pinfo2.update_from_window();
-                button = pinfo2;
+                /* Check its "group leader" ... */
+                if (window.get_group_leader() == window.get_xid()) {
+                    pinfo2.window = window;
+                    pinfo2.update_from_window();
+                    button = pinfo2;
+                }
             }
         }
 
         // Fallback to new button.
         if (button == null) {
-            var btn = new IconButton(window, icon_size);
+            var btn = new IconButton(window, icon_size, pinfo);
             button = btn;
             widget.pack_start(btn, false, false, 0);
         }
