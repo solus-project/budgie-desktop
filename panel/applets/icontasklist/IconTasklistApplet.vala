@@ -145,7 +145,7 @@ public class IconButton : Gtk.ToggleButton
     /**
      * Update the icon
      */
-    public void update_icon()
+    public virtual void update_icon()
     {
         if (window == null) {
             return;
@@ -231,6 +231,15 @@ public class PinnedIconButton : IconButton
         } else {
             return base.on_button_release(event);
         }
+    }
+
+    public override void update_icon()
+    {
+        if (window != null) {
+            base.update_icon();
+            return;
+        }
+        image.pixel_size = icon_size;
     }
 
     public void reset()
@@ -383,6 +392,13 @@ public class IconTasklistAppletImpl : Budgie.Applet
             icon_size = (int)i;
             Wnck.set_default_icon_size(icon_size);
             foreach (var btn in buttons.values) {
+                Idle.add(()=>{
+                    btn.icon_size = icon_size;
+                    btn.update_icon();
+                    return false;
+                });
+            }
+            foreach (var btn in pin_buttons.values) {
                 Idle.add(()=>{
                     btn.icon_size = icon_size;
                     btn.update_icon();
