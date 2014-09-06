@@ -50,6 +50,7 @@ public class DesktopHelper : Object {
         /* Initialize simpletons. */
         simpletons = new Gee.HashMap<string?,string?>(null,null,null);
         simpletons["google-chrome-stable"] = "google-chrome";
+        simpletons["gnome-clocks"] = "org.gnome.clocks";
     }
 
     /**
