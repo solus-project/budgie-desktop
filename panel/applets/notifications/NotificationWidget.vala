@@ -116,7 +116,7 @@ public class Notification : Gtk.Bin
             } else {
                 /* Determine that its sensible.. */
                 Gtk.IconTheme it = Gtk.IconTheme.get_default();
-                var icn = it.lookup_icon(value, Gtk.IconSize.BUTTON, Gtk.IconLookupFlags.USE_BUILTIN);
+                var icn = it.lookup_icon(value, Gtk.IconSize.DIALOG, 0);
                 if (icn == null) {
                     _icon.set_from_icon_name("mail-message-new", Gtk.IconSize.DIALOG);
                 } else {
