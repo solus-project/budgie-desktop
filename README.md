@@ -22,12 +22,10 @@ certain components to operate correctly.
 
 *TODO:*
  * Start adding support for translations
- * Optimize menu (migrate from GtkListBox)
  * Add some form of notification system ✓
  * Add appindicator to eventually replace new tray
  * Add sound control (PulseAudio) and support media keys (partly done) ✓
- * Allow adding launchers directly to panel
- * Allow pinning menu launchers to panel (see above point)
+ * Allow adding launchers directly to panel ✓
  * Rewrite in Vala! (mostly done, panel is complete)
  * Enable customisation of panel layout, etc. ✓
  * Add dynamic editor for panel layout ✓
