@@ -26,13 +26,14 @@ public class CategoryButton : Gtk.RadioButton
         Gtk.Label lab;
 
         if (parent != null) {
-            img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.BUTTON);
+            img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
             lab = new Gtk.Label(parent.get_name());
         } else {
             // Special case, "All"
-            img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.BUTTON);
+            img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.INVALID);
             lab = new Gtk.Label("All");
         }
+        img.pixel_size = 22;
         lab.set_alignment(0.0f, 0.5f);
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
@@ -59,7 +60,8 @@ public class MenuButton : Gtk.Button
 
     public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory)
     {
-        var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.BUTTON);
+        var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
+        img.pixel_size = 22;
         var lab = new Gtk.Label(parent.get_display_name());
         lab.set_alignment(0.0f, 0.5f);
 
