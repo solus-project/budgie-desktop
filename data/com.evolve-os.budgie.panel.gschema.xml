@@ -20,7 +20,7 @@
     </key>
 
     <key type="i" name="size">
-      <default>42</default>
+      <default>40</default>
       <summary>Panel size</summary>
       <description>Height of panel if horizontal, or the width if it is vertical</description>
     </key>

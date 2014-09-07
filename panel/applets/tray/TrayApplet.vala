@@ -24,6 +24,8 @@ public class TrayAppletImpl : Budgie.Applet
 
     public TrayAppletImpl()
     {
+        margin = 1;
+
         orientation_changed.connect((o)=> {
             tray.set_orientation(o);
         });

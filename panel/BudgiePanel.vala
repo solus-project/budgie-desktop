@@ -1054,7 +1054,7 @@ public class Panel : Gtk.Window
     protected void inform_size(Applet applet)
     {
         /* Always remove a few pixels because icons are sensitive creatures */
-        int offset = 5;
+        int offset = 8;
         /* Maximum size */
         int height = intended_height - offset;
 
