@@ -32,9 +32,6 @@ public class TaskListAppletImpl : Budgie.Applet
         orientation_changed.connect((o) => {
             widget.set_orientation(o);
         });
-
-        margin_top = 2;
-        margin_bottom = 2;
     }
 } // End class
 
