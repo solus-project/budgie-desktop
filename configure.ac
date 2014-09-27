@@ -71,6 +71,10 @@ if test "x$have_upower0999" = "xyes" ; then
     VALAFLAGS="$VALAFLAGS --define HAVE_UPOWER0999"
 fi
 
+# Determine if we need to go on crack to fix mutter.
+PKG_CHECK_MODULES(MUTTER314, [libmutter >= 3.14.0], [have_mutter314=yes], [have_upower314=no])
+AM_CONDITIONAL([HAVE_MUTTER_314], [test x$have_mutter314 = x"yes"])
+
 # Check for GTK3.11+ (GtkPopover)
 PKG_CHECK_MODULES(GTK311, [gtk+-3.0  >= 3.11], [have_gtk311=yes], [have_gtk311=no])
 if test "x$have_gtk311" = "xyes" ; then

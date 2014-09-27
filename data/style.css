@@ -40,7 +40,7 @@
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid alpha(white, 0.5);
 }
-.budgie-panel .launcher:active {
+.budgie-panel .launcher:checked {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid white;
 }
@@ -49,7 +49,7 @@
     border: 2px solid alpha(white, 0.0);
     border-top: 2px solid alpha(white, 0.5); 
 }
-.top .launcher:active {
+.top .launcher:checked {
     border: 2px solid alpha(white, 0.0);
     border-top: 2px solid white;
 }
@@ -59,7 +59,7 @@
     border: 2px solid alpha(white, 0.0);
     border-left: 2px solid alpha(white, 0.5);
 }
-.left .launcher:active {
+.left .launcher:checked {
     border: 2px solid alpha(white, 0.0);
     border-left: 2px solid white;
 }
@@ -69,7 +69,7 @@
     border: 2px solid alpha(white, 0.0);
     border-right: 2px solid alpha(white, 0.5);
 }
-.right .launcher:active {
+.right .launcher:checked {
     border: 2px solid alpha(white, 0.0);
     border-right: 2px solid white;
 }
@@ -81,7 +81,7 @@
     border: solid alpha(white, 0.1) 1px;
 }
 .budgie-panel .menu-icon,
-.budgie-panel .menu-icon:active,
+.budgie-panel .menu-icon:checked,
 .budgie-panel .menu-icon:hover {
     background-image: none;
 }

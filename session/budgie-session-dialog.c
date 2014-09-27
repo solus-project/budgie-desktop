@@ -58,13 +58,11 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         autofree gchar *txt = NULL;
         const gchar *name;
         GError *error = NULL;
-        GtkStyleContext *style;
         gboolean can_reboot = FALSE;
         gboolean can_poweroff = FALSE;
         gboolean can_suspend = FALSE;
         gboolean can_systemd = TRUE;
         autofree gchar *result = NULL;
-        GtkWidget *header = NULL;
         SdResponse response;
 
         init_styles(self);
@@ -195,16 +193,6 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
-
-        /* Cheat, shadow + styling, but no titlebar */
-        header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        style = gtk_widget_get_style_context(header);
-        gtk_style_context_add_class(style, "invisi-header");
-        gtk_window_set_titlebar(GTK_WINDOW(self), header);
-
-        /* Can haz style? */
-        style = gtk_widget_get_style_context(GTK_WIDGET(self));
-        gtk_style_context_add_class(style, GTK_STYLE_CLASS_OSD);
 }
 
 static void budgie_session_dialog_dispose(GObject *object)

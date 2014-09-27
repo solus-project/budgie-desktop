@@ -4,12 +4,13 @@
  */
 
 
-GtkWindow {
+/*GtkWindow {
     border-radius: 6px;
     border: none;
+    background-color: alpha(black, 0.6);
 }
 
 .invisi-header {
     background-image: none;
     background-color: transparent;
-}
+}*/
