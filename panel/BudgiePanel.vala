@@ -10,14 +10,37 @@
  */
 
 /* These exist for theme integration. */
-public class PanelToplevel : Budgie.Panel {
+public class PanelToplevel : Gtk.Bin {
 
     public PanelToplevel()
     {
-        base();
     }
 }
 public class PanelApplet : Gtk.Bin {
+}
+public class AppletHolder : Gtk.Bin {
+
+    public bool gnome_mode { public get; public set ; }
+
+    public AppletHolder() {
+        gnome_mode = true;
+    }
+
+    protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
+    {
+        unowned Gtk.WidgetPath path = base.get_path_for_child(child);
+        if (gnome_mode) {
+            path.iter_set_object_type(0, typeof(PanelToplevel));
+            for (int i=0; i<path.length(); i++) {
+                if (path.iter_get_object_type(i) == typeof(AppletHolder)) {
+                    path.iter_set_object_type(i, typeof(PanelApplet));
+                    break;
+                }
+            }
+        }
+
+        return path;
+    }
 }
 
 namespace Budgie
@@ -155,6 +178,8 @@ public class Panel : Gtk.Window
     private int stored_height;
     private int stored_width;
 
+    protected Gtk.Widget? target_style;
+
     public Panel()
     {
         primary_monitor = screen.get_primary_monitor();
@@ -176,10 +201,11 @@ public class Panel : Gtk.Window
         shadow.set_visual(vis);
 
         settings = new Settings("com.evolve-os.budgie.panel");
-        gnome_mode = settings.get_boolean("gnome-panel-theme-integration");
         alloc_id = size_allocate.connect(on_size_allocate);
 
         on_settings_change("enable-shadow");
+
+        target_style = this;
 
         /* Ensure to initialise styles */
         try {
@@ -196,12 +222,6 @@ public class Panel : Gtk.Window
             stderr.printf("Unable to load styles: %s\n", e.message);
         }
 
-        // Base styling
-        if (!gnome_mode) {
-            get_style_context().add_class("budgie-panel");
-        }
-        get_style_context().remove_class("background");
-
         // simple layout
         master_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(master_layout);
@@ -209,6 +229,8 @@ public class Panel : Gtk.Window
         set_decorated(false);
         type_hint = Gdk.WindowTypeHint.DOCK;
         set_keep_above(true);
+
+        get_style_context().remove_class("background");
 
         // Initialize plugins engine
         engine = Peas.Engine.get_default();
@@ -254,6 +276,8 @@ public class Panel : Gtk.Window
 
         load_config();
 
+        on_settings_change("gnome-panel-theme-integration");
+
         // prevent masses of size allocates
         stored_y = stored_width = stored_height = stored_x = 0;
         master_layout.show();
@@ -283,6 +307,16 @@ public class Panel : Gtk.Window
             }
             return false;
         });
+    }
+
+    protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
+    {
+        unowned Gtk.WidgetPath path = base.get_path_for_child(child);
+        if (gnome_mode) {
+            path.iter_set_object_type(0, typeof(PanelToplevel));
+        }
+
+        return path;
     }
 
     protected void on_size_allocate(Gtk.Allocation alloc)
@@ -325,6 +359,9 @@ public class Panel : Gtk.Window
             use_shadow = settings.get_boolean(key);
             update_position();
             set_struts();
+        } else if (key == "gnome-panel-theme-integration") {
+            gnome_mode = settings.get_boolean(key);
+            update_toplevel_style();
         }
     }
 
@@ -338,7 +375,7 @@ public class Panel : Gtk.Window
         int pad_start = 0, pad_end = 0;
         string name = applet_info.name;
         unowned Budgie.Applet applet = applet_info.applet;
-        Gtk.Widget? target_widg;
+        AppletHolder? target_widg;
 
         try {
             if (config.has_key(name, "Pack")) {
@@ -377,15 +414,12 @@ public class Panel : Gtk.Window
         applet.show();
 
         // Existing themes refer to PanelToplevel and PanelApplet extensively.
-        if (gnome_mode) {
-            target_widg = new PanelApplet();
-            // Ensures we don't get wnck.pager throwing a hissy fit in gnome mode
-            target_widg.set_size_request(1, 1);
-            (target_widg as PanelApplet).add(applet);
-            target_widg.show();
-        } else {
-            target_widg = applet;
-        }
+        target_widg = new AppletHolder();
+        target_widg.gnome_mode = gnome_mode;
+        // Ensures we don't get wnck.pager throwing a hissy fit in gnome mode
+        target_widg.set_size_request(1, 1);
+        (target_widg as AppletHolder).add(applet);
+        target_widg.show();
 
         if (center) {
             // not yet supported as we need checks for 3.2
@@ -406,8 +440,8 @@ public class Panel : Gtk.Window
         }
 
         foreach (var sprog in pack_target.get_children()) {
-            if (sprog is PanelApplet) {
-                var sprog2 = (sprog as PanelApplet).get_child() as Budgie.Applet;
+            if (sprog is AppletHolder) {
+                var sprog2 = (sprog as AppletHolder).get_child() as Budgie.Applet;
                 if (sprog2 == applet) {
                     break;
                 }
@@ -427,7 +461,7 @@ public class Panel : Gtk.Window
     public void applet_updated(Object o, ParamSpec p)
     {
         AppletInfo app_info = o as AppletInfo;
-        Gtk.Widget? target_widg  = gnome_mode ? app_info.applet.get_parent() : app_info.applet;
+        Gtk.Widget? target_widg  = app_info.applet.get_parent();
         Gtk.Box owner = target_widg.get_parent() as Gtk.Box;
 
         if (p.name == "pad-start") {
@@ -501,7 +535,7 @@ public class Panel : Gtk.Window
     {
         AppletInfo appl = applets[name];
         // So we can actually reposition everyone
-        Gtk.Widget? target_widg = gnome_mode ? appl.applet.get_parent() : appl.applet;
+        Gtk.Widget? target_widg = appl.applet.get_parent();
         Gtk.Box? owner = target_widg.get_parent() as Gtk.Box;
         int position = appl.position;
 
@@ -513,7 +547,7 @@ public class Panel : Gtk.Window
         /* Unfortunately this is ugly as all shit, but what can ya do. */
         uint length = owner.get_children().length();
         foreach (var applet in applets.values) {
-            Gtk.Widget? target2 = gnome_mode ? applet.applet.get_parent() : applet.applet;
+            Gtk.Widget? target2 = applet.applet.get_parent();
             if (target2.get_parent() == owner && applet.position > position) {
                 applet.position -= 1;
             }
@@ -819,19 +853,17 @@ public class Panel : Gtk.Window
                 pan_y = y - SHADOW_SIZE;
                 break;
         }
-        if (!gnome_mode) {
-            var st = get_style_context();
-            var st2 = shadow.get_style_context();
-            foreach (var tclass in classes) {
-                if (newclass != tclass) {
-                    st.remove_class(tclass);
-                    st2.remove_class(tclass);
-                }
+        var st = get_style_context();
+        var st2 = shadow.get_style_context();
+        foreach (var tclass in classes) {
+            if (newclass != tclass) {
+                st.remove_class(tclass);
+                st2.remove_class(tclass);
             }
-            if (newclass != "") {
-                st.add_class(newclass);
-                st2.add_class(newclass);
-            }
+        }
+        if (newclass != "") {
+            st.add_class(newclass);
+            st2.add_class(newclass);
         }
 
         Gtk.Orientation orientation;
@@ -880,13 +912,41 @@ public class Panel : Gtk.Window
         queue_draw();
     }
 
+    protected void update_toplevel_style()
+    {
+        if (gnome_mode) {
+            if (target_style == this || target_style == null) {
+                target_style = new PanelToplevel();
+            }
+        } else {
+            if (target_style != this) {
+                target_style.destroy();
+            }
+            target_style = this;
+        }
+
+        // Base styling
+        if (gnome_mode) {
+            get_style_context().remove_class("budgie-panel");
+        } else {
+            get_style_context().add_class("budgie-panel");
+        }
+
+        foreach(var applet_info in applets.values) {
+            var parent = applet_info.applet.get_parent() as AppletHolder;
+            parent.gnome_mode = gnome_mode;
+        }
+
+        queue_draw();
+    }
+
     /**
      * Ensure our CSS theming is followed. In future we'll enable much more
      * in the way of customisations (background image anyone?)
      */
     public override bool draw(Cairo.Context cr)
     {
-        var st = get_style_context();
+        var st = target_style.get_style_context();
 
         st.render_background(cr, 0, 0, get_allocated_width(), get_allocated_height());
         st.render_frame(cr, 0, 0, get_allocated_width(), get_allocated_height());
@@ -1011,9 +1071,6 @@ public class Panel : Gtk.Window
     {
         int wx, wy, ww, wh; // wnck out vars
 
-        if (gnome_mode) {
-            return;
-        }
         bool havemax = false;
         // Might not have a workspace. Shrug. Revisit if/when it becomes a problem
         Wnck.Workspace? workspace = wnck_screen.get_active_workspace();
@@ -1095,12 +1152,7 @@ class PanelMain : GLib.Application
     {
         hold();
         if (panel == null) {
-            var settings = new Settings("com.evolve-os.budgie.panel");
-            if (settings.get_boolean("gnome-panel-theme-integration") == true) {
-                panel = new PanelToplevel();
-            } else {
-                panel = new Budgie.Panel();
-            }
+            panel = new Budgie.Panel();
             Gtk.main();
         }
         release();

@@ -520,12 +520,6 @@ public class PanelEditor : Gtk.Dialog
         wrap.attach(label, 0, 2, 1, 1);
         wrap.attach(check, 1, 2, 1, 1);
 
-        label = new Gtk.Label("Enabling GNOME Panel theme integration requires you to restart Budgie");
-        label.get_style_context().add_class("dim-label");
-        label.set_alignment(0.0f, 0.5f);
-        label.valign = Gtk.Align.END;
-        wrap.attach(label, 0, 3, 2, 1);
-
         return wrap;
     }
 }
