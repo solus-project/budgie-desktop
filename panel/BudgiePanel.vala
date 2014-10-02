@@ -185,6 +185,7 @@ public class Panel : Gtk.Window
         primary_monitor = screen.get_primary_monitor();
         
         screen.get_monitor_geometry(primary_monitor, out primary_monitor_rect);
+        screen.monitors_changed.connect(on_screen_changed);
 
         /* Set an RGBA visual whenever we can */
         Gdk.Visual? vis = screen.get_rgba_visual();
@@ -307,6 +308,17 @@ public class Panel : Gtk.Window
             }
             return false;
         });
+    }
+
+    protected void on_screen_changed()
+    {
+        screen.get_monitor_geometry(primary_monitor, out primary_monitor_rect);
+        stored_x = 0;
+        stored_y = 0;
+        stored_width = 0;
+        stored_height = 0;
+
+        queue_resize();
     }
 
     protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
