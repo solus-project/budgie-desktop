@@ -193,6 +193,7 @@ public class IconButton : Gtk.ToggleButton
             if (source_id > 0) {
                 remove_tick_callback(source_id);
             }
+            queue_draw();
             return;
         } else if (window.needs_attention() && !we_urgent) {
             we_urgent = true;
