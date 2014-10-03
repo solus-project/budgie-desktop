@@ -229,7 +229,7 @@ public class PanelEditor : Gtk.Dialog
         var spinner = new Gtk.SpinButton.with_range(0, 100, 1);
         label = new Gtk.Label("Start padding");
         pad_start = spinner;
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         grid.attach(label, 0, 1, 1, 1);
         grid.attach(spinner, 1, 1, 1, 1);
 
@@ -237,14 +237,14 @@ public class PanelEditor : Gtk.Dialog
         spinner = new Gtk.SpinButton.with_range(0, 100, 1);
         label = new Gtk.Label("End padding");
         pad_end = spinner;
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         grid.attach(label, 0, 2, 1, 1);
         grid.attach(spinner, 1, 2, 1, 1);
         applet_config = grid;
 
         // pack type
         label = new Gtk.Label("Placement");
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         var combo = new Gtk.ComboBoxText();
         pack_type = combo;
         combo.append_text("start");
@@ -372,7 +372,7 @@ public class PanelEditor : Gtk.Dialog
         var item = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
         var label = new Gtk.Label(applet.name);
         label.set_use_markup(true);
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         var image = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.LARGE_TOOLBAR);
         item.pack_start(image, false, false, 10);
         item.pack_start(label, true, true, 5);
@@ -432,7 +432,7 @@ public class PanelEditor : Gtk.Dialog
             Gtk.Label label = new Gtk.Label(cleaned);
             row.pack_start(label, true, true, 5);
             label.use_markup = true;
-            label.set_alignment(0.0f, 0.5f);
+            label.set_halign(Gtk.Align.START);
 
             row.set_data("plugin-info", plugin);
             row.show_all();
@@ -491,7 +491,7 @@ public class PanelEditor : Gtk.Dialog
         // panel position
         var label = new Gtk.Label("Position on screen");
         label.hexpand = true;
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         var combo = new Gtk.ComboBoxText();
         combo.insert(-1, "top", "Top");
         combo.insert(-1, "left", "Left");
@@ -504,7 +504,7 @@ public class PanelEditor : Gtk.Dialog
 
         // size
         label = new Gtk.Label("Size");
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         var spin = new Gtk.SpinButton.with_range(15, 200, 1);
         settings.bind("size", spin, "value", SettingsBindFlags.DEFAULT);
         spin.valign = Gtk.Align.END;
@@ -513,7 +513,7 @@ public class PanelEditor : Gtk.Dialog
 
         // gnome panel theme integration
         label = new Gtk.Label("GNOME Panel theme integration");
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         var check = new Gtk.Switch();
         settings.bind("gnome-panel-theme-integration", check, "active", SettingsBindFlags.DEFAULT);
         check.valign = Gtk.Align.START;
@@ -522,7 +522,7 @@ public class PanelEditor : Gtk.Dialog
 
         // shadow for panel
         label = new Gtk.Label("Enable panel shadow");
-        label.set_alignment(0.0f, 0.5f);
+        label.set_halign(Gtk.Align.START);
         check = new Gtk.Switch();
         settings.bind("enable-shadow", check, "active", SettingsBindFlags.DEFAULT);
         check.valign = Gtk.Align.START;
