@@ -31,16 +31,19 @@
     transition: 100ms ease-in;
 }
 
-.budgie-panel .launcher {
+.budgie-panel .launcher,
+PanelToplevel .launcher {
     border: 2px solid alpha(white, 0.0);
     background-image: none;
     transition: 100ms ease-in;
 }
-.budgie-panel .launcher:hover {
+.budgie-panel .launcher:hover,
+PanelToplevel .launcher:hover {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid alpha(white, 0.5);
 }
-.budgie-panel .launcher:active {
+.budgie-panel .launcher:active,
+PanelToplevel launcher:active {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid white;
 }
