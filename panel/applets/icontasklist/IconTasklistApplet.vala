@@ -20,6 +20,18 @@
 const string BUDGIE_STYLE_CLASS_BUTTON = "launcher";
 
 /**
+ * Maximum number of full flash cycles for urgency before giving up. Note
+ * that the background colour will remain fully opaque until the calling
+ * application then resets whatever caused the urgency/attention demand
+ */
+const int MAX_CYCLES = 12;
+
+/**
+ * Default opacity when beginning urgency cycles in the launcher
+ */
+const double DEFAULT_OPACITY = 0.1;
+
+/**
  * Attempt to match startup notification IDs
  */
 public static bool startupid_match(string id1, string id2)
@@ -125,6 +137,14 @@ public class IconButton : Gtk.ToggleButton
 
     public bool requested_pin = false;
 
+    private bool we_urgent = false;
+    private double urg_opacity = DEFAULT_OPACITY;
+    protected bool should_fade_in = true;
+    private uint source_id;
+    protected Gtk.Allocation our_alloc;
+
+    protected int current_cycles = 0;
+
     public void update_from_window()
     {
         if (window == null) {
@@ -139,6 +159,7 @@ public class IconButton : Gtk.ToggleButton
         });
         update_icon();
         set_active(window.is_active());
+        window.state_changed.connect(on_state_changed);
 
         // Actions menu
         menu = new Wnck.ActionMenu(window);
@@ -163,6 +184,72 @@ public class IconButton : Gtk.ToggleButton
                 DesktopHelper.set_pinned(p.app_info, false);
             }
         });
+    }
+
+    protected void on_state_changed(Wnck.WindowState changed, Wnck.WindowState state)
+    {
+        if (!window.needs_attention() && we_urgent) {
+            we_urgent = false;
+            if (source_id > 0) {
+                remove_tick_callback(source_id);
+            }
+            return;
+        } else if (window.needs_attention() && !we_urgent) {
+            we_urgent = true;
+            should_fade_in = true;
+            urg_opacity = DEFAULT_OPACITY;
+            current_cycles = 0;
+            source_id = add_tick_callback(on_tick);
+        }
+    }
+
+    protected bool on_tick(Gtk.Widget widget, Gdk.FrameClock clock)
+    {
+        // Looks fine with 60hz. Might go nuts higher.
+        var increment = 0.01;
+
+        if (should_fade_in) {
+            urg_opacity += increment;
+        } else {
+            urg_opacity -= increment;
+        }
+
+        if (urg_opacity >= 1.0) {
+            should_fade_in = false;
+            urg_opacity = 1.0;
+            current_cycles += 1;
+        } else if (urg_opacity <= 0.0) {
+            should_fade_in = true;
+            urg_opacity = 0.0;
+        }
+
+        queue_draw();
+
+        /* Stop flashing when we've fully cycled MAX_CYCLES */
+        if (current_cycles >= MAX_CYCLES && urg_opacity >= 1.0) {
+            return false;
+        }
+
+        return we_urgent;
+    }
+
+    public override bool draw(Cairo.Context cr)
+    {
+        if (!we_urgent) {
+            return base.draw(cr);
+        }
+
+        /* Redundant right now but we might decide on something new in future. */
+        int x = our_alloc.x;
+        int y = our_alloc.y;
+        int width = our_alloc.width;
+        int height = our_alloc.height;
+
+        cr.set_source_rgba(0.85, 0.0, 0.0, urg_opacity);
+        cr.rectangle(x, y, width, height);
+        cr.paint();
+
+        return base.draw(cr);
     }
 
     public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
@@ -201,6 +288,8 @@ public class IconButton : Gtk.ToggleButton
         translate_coordinates(toplevel, 0, 0, out x, out y);
         toplevel.get_window().get_root_coords(x, y, out x, out y);
         window.set_icon_geometry(x, y, alloc.width, alloc.height);
+
+        our_alloc = alloc;
     }
 
     /**
