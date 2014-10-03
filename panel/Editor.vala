@@ -520,6 +520,15 @@ public class PanelEditor : Gtk.Dialog
         wrap.attach(label, 0, 2, 1, 1);
         wrap.attach(check, 1, 2, 1, 1);
 
+        // shadow for panel
+        label = new Gtk.Label("Enable panel shadow");
+        label.set_alignment(0.0f, 0.5f);
+        check = new Gtk.Switch();
+        settings.bind("enable-shadow", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.START;
+        wrap.attach(label, 0, 3, 1, 1);
+        wrap.attach(check, 1, 3, 1, 1);
+
         return wrap;
     }
 }
