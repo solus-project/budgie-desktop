@@ -43,7 +43,7 @@ PanelToplevel .launcher:hover {
     border-bottom: 2px solid alpha(white, 0.5);
 }
 .budgie-panel .launcher:active,
-PanelToplevel launcher:active {
+PanelToplevel .launcher:active {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid white;
 }
