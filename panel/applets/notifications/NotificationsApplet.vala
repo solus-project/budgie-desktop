@@ -15,7 +15,7 @@ const int PADDING_PX = 10;
 
 const int NOTIFICATION_SHOW_SECONDS = 5000;
 
-const int    NOTIFICATIONS_CLEAR_POPUP_ICON_SIZE_PX = 92;
+const int    NOTIFICATIONS_CLEAR_POPUP_ICON_SIZE_PX = 64;
 const string NOTIFICATIONS_CLEAR_POPUP_ICON = "face-smile-big-symbolic";
 const string NOTIFICATIONS_CLEAR_ICON = "user-invisible-symbolic";
 const string NOTIFICATIONS_UNREAD_ICON = "user-available-symbolic";
@@ -140,12 +140,14 @@ public class NotificationsAppletImpl : Budgie.Applet
         no_notifications_icon.pixel_size = NOTIFICATIONS_CLEAR_POPUP_ICON_SIZE_PX;
 
         no_notifications_text = new Gtk.Label(null);
-        no_notifications_text.set_markup("<b>All caught up!</b>");
+        no_notifications_text.set_markup("<big>All caught up!</big>");
+        no_notifications_text.set_halign(Gtk.Align.START);
+        no_notifications_text.set_property("margin-left", 15);
 
-        no_notifications = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        no_notifications = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
         no_notifications.pack_start(no_notifications_icon, false, false, 0);
-        no_notifications.pack_start(no_notifications_text, false, false, 0);
+        no_notifications.pack_start(no_notifications_text, true, true, 0);
 
         pop_child.pack_start(no_notifications, true, false, PADDING_PX);
         pop.set_size_request(300, 100);
