@@ -205,6 +205,7 @@ public class Panel : Gtk.Window
         alloc_id = size_allocate.connect(on_size_allocate);
 
         on_settings_change("enable-shadow");
+        on_settings_change("dark-theme");
 
         target_style = this;
 
@@ -374,6 +375,9 @@ public class Panel : Gtk.Window
         } else if (key == "gnome-panel-theme-integration") {
             gnome_mode = settings.get_boolean(key);
             update_toplevel_style();
+        } else if (key == "dark-theme") {
+            this.get_settings().set_property("gtk-application-prefer-dark-theme",
+                settings.get_boolean(key));
         }
     }
 

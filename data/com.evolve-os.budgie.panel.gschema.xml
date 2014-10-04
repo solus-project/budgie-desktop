@@ -31,6 +31,12 @@
       <description>Whether to enable GNOME Panel theme integration</description>
     </key>
 
+    <key type="b" name="dark-theme">
+      <default>false</default>
+      <summary>Use the dark theme</summary>
+      <description>Whether to use the dark theme variant globally</description>
+    </key>
+
     <key type="b" name="enable-shadow">
       <default>false</default>
       <summary>Enable panel shadow</summary>

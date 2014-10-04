@@ -529,6 +529,15 @@ public class PanelEditor : Gtk.Dialog
         wrap.attach(label, 0, 3, 1, 1);
         wrap.attach(check, 1, 3, 1, 1);
 
+        // shadow for panel
+        label = new Gtk.Label("Enable dark theme for Budgie");
+        label.set_halign(Gtk.Align.START);
+        check = new Gtk.Switch();
+        settings.bind("dark-theme", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.START;
+        wrap.attach(label, 0, 4, 1, 1);
+        wrap.attach(check, 1, 4, 1, 1);
+
         return wrap;
     }
 }
