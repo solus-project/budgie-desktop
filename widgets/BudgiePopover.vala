@@ -272,15 +272,11 @@ public class Popover : Gtk.Window
             our_x = screen_gap;
         } else if (our_x+our_width >= get_screen().get_width()) {
             our_x = (get_screen().get_width() - our_width)-screen_gap;
-            //trans_x += screen_gap;
         }
         widg_x = (trans_x - our_x);
-        // Reset the enforced gap
-        if (save_x <= 0) {
-            widg_x += screen_gap;
-        } else if (save_x+our_width >= get_screen().get_width()) {
-            widg_x += screen_gap;
-        }
+
+        // Center the tail itself.
+        widg_x += ((their_width/2)-(tail_width/2));
 
         queue_draw();
 
