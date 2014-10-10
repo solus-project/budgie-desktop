@@ -7,18 +7,57 @@
     background-color: alpha(black, 0.0);
     background-image: none;
     border-top: 1px solid alpha(white, 0.0);
+    border-bottom: 2px solid black;
     transition: 100ms ease-out;
 }
 
 .max-budgie-panel  {
     background-color: alpha(black, 0.7);
     border-top: 1px solid alpha(white, 0.2);
+    border-bottom: 2px solid black;
     transition: 100ms ease-in;
 }
 
+
+/* top panel */
+.budgie-panel.top {
+    border: 1px solid alpha(white, 0.0);
+    border-top: 2px solid black;
+}
+
+.max-budgie-panel.top {
+    border: 1px solid alpha(black, 0.7);
+    border-top: 2px solid black;
+    border-bottom: 1px solid alpha(white, 0.2);
+}
+
+/* left panel */
+.budgie-panel.left {
+    border: 1px solid alpha(white, 0.0);
+    border-left: 2px solid black;
+}
+
+.max-budgie-panel.left {
+    border: 1px solid alpha(black, 0.7);
+    border-left: 2px solid black;
+    border-right: 1px solid alpha(white, 0.2);
+}
+
+/* right panel */
+.budgie-panel.right {
+    border: 1px solid alpha(white, 0.0);
+    border-right: 2px solid black;
+}
+
+.max-budgie-panel.right {
+    border: 1px solid alpha(black, 0.7);
+    border-right: 2px solid black;
+    border-left: 1px solid alpha(white, 0.2);
+}
+
 .budgie-panel .message-area {
-    background-color: alpha(black, 0.8);
-    border: 1px solid alpha(white, 0.1);
+    background-color: alpha(black, 0.2);
+    border: 1px solid alpha(white, 0.06);
     border-radius: 6px;
     text-shadow: 1px 1px alpha(black, 0.5);
     icon-shadow: 1px 1px alpha(black, 0.5);
