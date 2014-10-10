@@ -131,7 +131,7 @@ public class IconButton : Gtk.ToggleButton
     public unowned Wnck.Window? window;
     protected Wnck.ActionMenu menu;
     public int icon_size;
-    public DesktopAppInfo? ainfo;
+    public GLib.DesktopAppInfo? ainfo;
     private Gtk.MenuItem pinnage;
     private Gtk.MenuItem unpinnage;
 
@@ -184,6 +184,38 @@ public class IconButton : Gtk.ToggleButton
                 DesktopHelper.set_pinned(p.app_info, false);
             }
         });
+
+        if (ainfo != null) {
+            // Desktop app actions =)
+            unowned string[] actions = ainfo.list_actions();
+            if (actions.length == 0) {
+                return;
+            }
+            sep = new Gtk.SeparatorMenuItem();
+            menu.append(sep);
+            sep.show_all();
+            foreach (var action in actions) {
+                var display_name = ainfo.get_action_name(action);
+                var item = new Gtk.MenuItem.with_label(display_name);
+                item.set_data("__aname", action);
+                item.activate.connect(()=> {
+                    string? act = item.get_data("__aname");
+                    if (act == null) {
+                        return;
+                    }
+                    // Never know.
+                    if (ainfo == null) {
+                        return;
+                    }
+                    var launch_context = Gdk.Screen.get_default().get_display().get_app_launch_context();
+                    launch_context.set_screen(get_screen());
+                    launch_context.set_timestamp(Gdk.CURRENT_TIME);
+                    ainfo.launch_action(act, launch_context);
+                });
+                item.show_all();
+                menu.append(item);
+            }
+        }
     }
 
     protected void on_state_changed(Wnck.WindowState changed, Wnck.WindowState state)

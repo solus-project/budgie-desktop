@@ -40,6 +40,7 @@ libicontasklistapplet_la_LDFLAGS = \
 
 libicontasklistapplet_la_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
+	--vapidir=${top_builddir}/ \
 	--pkg gtk+-3.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
