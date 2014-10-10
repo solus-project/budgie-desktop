@@ -83,6 +83,8 @@ Ubuntu users:
 It is highly likely your theme or Ubuntu setup can affect the usability
 of budgie-panel.
 
+Ambiance is *NOT SUPPORTED*
+
 Do not use the Ubuntu GTK3 modifications or plugins, because they break
 Budgie. I will not support them. (overlay scrollbars and such)
 
