@@ -246,7 +246,9 @@ public class IconButton : Gtk.ToggleButton
         int width = our_alloc.width;
         int height = our_alloc.height;
 
-        cr.set_source_rgba(0.85, 0.0, 0.0, urg_opacity);
+        Gdk.RGBA col = new Gdk.RGBA();
+        col.parse("#36689E");
+        cr.set_source_rgba(col.red, col.green, col.blue, urg_opacity);
         cr.rectangle(x, y, width, height);
         cr.paint();
 
