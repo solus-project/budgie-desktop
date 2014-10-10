@@ -100,7 +100,7 @@ public class SoundIndicator : Gtk.Bin
      */
     protected bool on_scroll_event(Gdk.EventScroll event)
     {
-        return_if_fail(stream != null);
+        return_val_if_fail(stream != null, false);
 
         uint32 vol = stream.get_volume();
         var orig_vol = vol;
