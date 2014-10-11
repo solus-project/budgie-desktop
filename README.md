@@ -24,7 +24,7 @@ certain components to operate correctly.
  * Start adding support for translations
  * Add some form of notification system ✓
  * Add appindicator to eventually replace new tray
- * Add sound control (PulseAudio) and support media keys (partly done) ✓
+ * Add sound control (PulseAudio) and support media keys  ✓
  * Allow adding launchers directly to panel ✓
  * Rewrite in Vala! (mostly done, panel is complete)
  * Enable customisation of panel layout, etc. ✓
@@ -40,8 +40,6 @@ and to ease maintainence.
 A sole exception is the wm/plugin.c file, which is a slight modification of the
 default Mutter plugin.
 
-The entire project will be rewritten in Vala at some point, with over 58%
-of it already complete at the time of writing this document.
 
 *budgie-wm:*
 
@@ -50,20 +48,23 @@ better default animations, support wallpaper, etc.
 
 *budgie-panel:*
 
-GTK3 "panel" application. Supports task switching, has a menu, a simple
-"clock", and a battery indicator. Customisable applet support coming soon.
+Plugin based panel. Users/developers can provide their own custom applets,
+which are fully integrated. They can be moved, added, removed again, and
+even broken!
 
 *budgie-session:*
 
-Tiny C "session" program, simply starts the aforementioned programs and
-tries not to die. Has simple facility to stop the session via the command:
+Session management binary, keeps stuff running. Supports some really uninteresting
+things like GSettings start conditions and desktop environment based OnlyStartIn
+entries.
 
     budgie-session --logout
 
 *budgie-run-dialog:*
 
 A utility that enables you to quickly launch applications by their executable
-path without having to use the terminal or menu
+path without having to use the terminal or menu. Normally a program starts
+because of this.
 
 *Dependencies:*
 
