@@ -363,6 +363,11 @@ public class IconButton : Gtk.ToggleButton
             pinnage.show();
         }
 
+        if (ainfo == null) {
+            unpinnage.hide();
+            pinnage.hide();
+        }
+
         // Right click, i.e. actions menu
         if (event.button == 3) {
             menu.popup(null, null, null, event.button, timestamp);
