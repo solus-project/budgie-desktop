@@ -53,12 +53,21 @@ public class PanelMover : Object
     protected Settings settings;
     private Gdk.Rectangle primary_monitor_rect;
 
+    // Track open windows, overlaps, etc.
+    Wnck.Screen wnck_screen;
+
     public PanelMover(Budgie.Panel? panel) {
         this.panel = panel;
 
         var primary_monitor = panel.screen.get_primary_monitor();
-        
         panel.screen.get_monitor_geometry(primary_monitor, out primary_monitor_rect);
+
+        // set up wnck
+        Wnck.set_client_type(Wnck.ClientType.PAGER);
+        wnck_screen = Wnck.Screen.get_default();
+        wnck_screen.window_opened.connect(on_window_opened);
+        wnck_screen.window_closed.connect(on_window_closed);
+        wnck_screen.active_window_changed.connect(on_active_window_changed);
 
         panel.enter_notify_event.connect(on_panel_enter);
         panel.leave_notify_event.connect(on_panel_leave);
@@ -281,6 +290,75 @@ public class PanelMover : Object
     {
         return p * p * p - p * Math.sin(p * Math.PI);
     }
+
+    /*
+     * WNCK stuff follows, simply to update the panel background
+     */
+    protected void on_window_opened(Wnck.Window window)
+    {
+        ulong id = window.state_changed.connect(on_window_state_changed);
+        window.set_data("__bid", id);
+        update_panel_state();
+    }
+
+    protected void on_window_closed(Wnck.Window window)
+    {
+        // quicker than waiting on GC.
+        ulong id = window.get_data("__bid");
+        window.disconnect(id);
+        update_panel_state();
+    }
+
+    protected void on_active_window_changed(Wnck.Window? prev_window)
+    {
+        update_panel_state();
+    }
+
+    protected void on_window_state_changed(Wnck.WindowState mask, Wnck.WindowState new_state)
+    {
+        update_panel_state();
+    }
+
+    protected void update_panel_state()
+    {
+        int wx, wy, ww, wh; // wnck out vars
+
+        bool havemax = false;
+        // Might not have a workspace. Shrug. Revisit if/when it becomes a problem
+        Wnck.Workspace? workspace = wnck_screen.get_active_workspace();
+        foreach (var window in wnck_screen.get_windows()) {
+            bool subvis = false;
+
+            window.get_client_window_geometry(out wx, out wy, out ww, out wh);
+
+            if (workspace != null) {
+                subvis = window.is_visible_on_workspace(workspace);
+            } else {
+                if (!window.is_minimized() && !window.is_shaded()) {
+                    subvis = true;
+                }
+            }
+            if (window.is_maximized_vertically() && subvis &&
+                // ensure that the window is fully contained within the
+                // primary monitor as maximizing a window on other
+                // monitors should not affect the shading of the bar
+                wx >= primary_monitor_rect.x &&
+                wx <= primary_monitor_rect.x + primary_monitor_rect.width &&
+                wy >= primary_monitor_rect.y &&
+                wy <= primary_monitor_rect.y + primary_monitor_rect.height
+            ) {
+                havemax = true;
+                break;
+            }
+        }
+        // Set the max-budgie-panel style, i.e. a darker panel :)
+        if (havemax) {
+            panel.get_style_context().add_class("max-budgie-panel");
+        } else {
+            panel.get_style_context().remove_class("max-budgie-panel");
+        }
+    }
+
 } // End PanelMover
 
 } // End Budgie namespace
