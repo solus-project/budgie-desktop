@@ -638,6 +638,18 @@ public class IconTasklistAppletImpl : Budgie.Applet
             widget.set_orientation(o);
             pinned.set_orientation(o);
         });
+        position_changed.connect((p) => {
+            pinned.set_property("margin", 0);
+            switch (p) {
+                case Budgie.PanelPosition.LEFT:
+                case Budgie.PanelPosition.RIGHT:
+                    pinned.set_property("margin-bottom", 10);
+                    break;
+                default:
+                    pinned.set_property("margin-right", 10);
+                    break;
+            }
+        });
 
         add(main_layout);
         show_all();
