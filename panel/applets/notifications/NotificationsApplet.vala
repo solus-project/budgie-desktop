@@ -23,7 +23,8 @@ const string NOTIFICATIONS_UNREAD_ICON = "user-available-symbolic";
 const int CRAQMONKEYTIMEMAX = 20000;
 
 [DBus (name = "org.freedesktop.Notifications")]
-public class NotificationServer : Object {
+public class NotificationServer : Object
+{
     private weak DBusConnection conn;
 
     /**
@@ -159,7 +160,8 @@ public class NotificationsAppletImpl : Budgie.Applet
         show_all();
     }
 
-    private void on_nserver_bus_acquired(DBusConnection conn) {
+    private void on_nserver_bus_acquired(DBusConnection conn)
+    {
         try {
             this.nserver = new NotificationServer(conn);
             conn.register_object("/org/freedesktop/Notifications", this.nserver);
@@ -331,10 +333,13 @@ public class NotificationsAppletImpl : Budgie.Applet
         }
     }
 
-    private void on_nserver_name_acquired() {
+    private void on_nserver_name_acquired()
+    {
     }
 
-    private void on_nserver_name_lost(DBusConnection? conn, string name) {
+    private void on_nserver_name_lost(DBusConnection? conn, string name)
+    {
+        // TODO: Notify user
     }
 } // End class
 

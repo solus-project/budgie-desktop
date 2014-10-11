@@ -52,7 +52,8 @@ public static bool startupid_match(string id1, string id2)
 /**
  * Trivial helper for IconTasklist - i.e. desktop lookups
  */
-public class DesktopHelper : Object {
+public class DesktopHelper : Object
+{
 
     Gee.HashMap<string?,string?> simpletons;
     bool init = false;

@@ -22,7 +22,8 @@ namespace Gtk
 }
 #endif
 
-namespace Budgie {
+namespace Budgie
+{
 
 public class Popover : Gtk.Window
 {
@@ -265,8 +266,6 @@ public class Popover : Gtk.Window
         our_x += widget_alloc.width/2;
         our_x -= our_width/2;
         their_width = widget_alloc.width;
-
-        int save_x = our_x;
 
         if (our_x <= 0) {
             our_x = screen_gap;

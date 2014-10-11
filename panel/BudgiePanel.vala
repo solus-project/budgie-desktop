@@ -10,19 +10,23 @@
  */
 
 /* These exist for theme integration. */
-public class PanelToplevel : Gtk.Bin {
+public class PanelToplevel : Gtk.Bin
+{
 
     public PanelToplevel()
     {
     }
 }
-public class PanelApplet : Gtk.Bin {
+public class PanelApplet : Gtk.Bin
+{
 }
-public class AppletHolder : Gtk.Bin {
+public class AppletHolder : Gtk.Bin
+{
 
     public bool gnome_mode { public get; public set ; }
 
-    public AppletHolder() {
+    public AppletHolder()
+    {
         gnome_mode = true;
     }
 
