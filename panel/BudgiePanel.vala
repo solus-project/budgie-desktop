@@ -139,7 +139,7 @@ public class Panel : Gtk.Window
         }
     }
 
-    private PanelPosition position;
+    public PanelPosition position;
     private Gtk.Box master_layout;
     private Gtk.Box widgets_area;
 
@@ -177,12 +177,18 @@ public class Panel : Gtk.Window
     private Gdk.Rectangle primary_monitor_rect;
 
     private ulong alloc_id;
-    private int stored_x;
-    private int stored_y;
-    private int stored_height;
-    private int stored_width;
+    public int stored_x;
+    public int stored_y;
+    public int stored_height;
+    public int stored_width;
+
+    protected PanelMover mover;
+    /* Whether to draw the borders (i.e. in movement) */
+    protected bool draw_border = true;
 
     protected Gtk.Widget? target_style;
+
+    protected bool hidden_struts = false;
 
     public Panel()
     {
@@ -313,6 +319,30 @@ public class Panel : Gtk.Window
             }
             return false;
         });
+
+        add_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+        mover = new PanelMover(this);
+        mover.animation_begin.connect(()=> {
+            draw_border = false;
+            queue_draw();
+        });
+        mover.animation_end.connect(()=> {
+            draw_border = true;
+            queue_draw();
+        });
+        mover.visibility_changed.connect((b)=> {
+            hidden_struts = b;
+            set_struts();
+        });
+
+        /* First start, hide panel after a second so user actually knows
+         * where it is before it disappears.. */
+        if (settings.get_string("hide-policy") == "automatic") {
+            Timeout.add(1000, ()=> {
+                mover.hide();
+                return false;
+            });
+        }
     }
 
     protected void on_screen_changed()
@@ -802,23 +832,29 @@ public class Panel : Gtk.Window
             return;
         }
 
+        long panel_size = intended_height;
+
+        if (hidden_struts) {
+            panel_size = 1;
+        }
+
         // Struts dependent on position
         switch (position) {
             case PanelPosition.TOP:
-                struts = { 0, 0, primary_monitor_rect.y+intended_height, 0,
+                struts = { 0, 0, primary_monitor_rect.y+panel_size, 0,
                     0, 0, 0, 0,
                     primary_monitor_rect.x, primary_monitor_rect.x+primary_monitor_rect.width,
                     0, 0
                 };
                 break;
             case PanelPosition.LEFT:
-                struts = { intended_height, 0, 0, 0,
+                struts = { panel_size, 0, 0, 0,
                     primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height, 
                     0, 0, 0, 0, 0, 0
                 };
                 break;
             case PanelPosition.RIGHT:
-                struts = { 0, intended_height, 0, 0,
+                struts = { 0, panel_size, 0, 0,
                     0, 0,
                     primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height,
                     0, 0, 0, 0
@@ -827,7 +863,7 @@ public class Panel : Gtk.Window
             case PanelPosition.BOTTOM:
             default:
                 struts = { 0, 0, 0, 
-                    (screen.get_height()-primary_monitor_rect.height-primary_monitor_rect.y) + intended_height,
+                    (screen.get_height()-primary_monitor_rect.height-primary_monitor_rect.y) + panel_size,
                     0, 0, 0, 0, 0, 0, 
                     primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width
                 };
@@ -993,7 +1029,9 @@ public class Panel : Gtk.Window
         var st = target_style.get_style_context();
 
         st.render_background(cr, 0, 0, get_allocated_width(), get_allocated_height());
-        st.render_frame(cr, 0, 0, get_allocated_width(), get_allocated_height());
+        if (draw_border) {
+            st.render_frame(cr, 0, 0, get_allocated_width(), get_allocated_height());
+        }
 
         return base.draw(cr);
     }

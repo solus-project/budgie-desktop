@@ -13,6 +13,16 @@
       <description>Which screen edge to place the panel on</description>
     </key>
 
+    <key type="s" name="hide-policy">
+      <choices>
+        <choice value='never'/>
+        <choice value='automatic'/>
+      </choices>
+      <default>'never'</default>
+      <summary>Panel hide policy</summary>
+      <description>Hide the panel when it isn't being used</description>
+    </key>
+
     <key type="as" name="pinned-launchers">
       <default>[]</default>
       <summary>Pinned launchers</summary>

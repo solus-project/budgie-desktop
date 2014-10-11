@@ -25,6 +25,7 @@ budgie_panel_SOURCES = \
 	budgie-panel-resources.h \
 	budgie-panel-resources.c \
 	BudgiePanel.vala \
+	PanelMover.vala \
 	Editor.vala
 
 budgie_panel_CFLAGS = \
@@ -44,6 +45,7 @@ budgie_panel_LDADD = \
 	$(WNCK3_LIBS) \
 	$(LIBPEAS_LIBS) \
 	$(GEE_LIBS) \
+	-lm \
 	../budgie-plugin/libbudgie-plugin.la \
 	../widgets/libbudgiewidgets.la
 
