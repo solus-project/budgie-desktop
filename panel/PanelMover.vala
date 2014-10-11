@@ -145,7 +145,7 @@ public class PanelMover : Object
             /* Bail */
             widget.get_window().move(cur_info.target_x, cur_info.target_y);
             animation_end();
-            visibility_changed(hiding);
+            visibility_changed(!hiding);
             if (hiding) {
                 shown = false;
             } else {

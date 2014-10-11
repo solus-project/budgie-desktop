@@ -325,14 +325,18 @@ public class Panel : Gtk.Window
         mover.animation_begin.connect(()=> {
             draw_border = false;
             queue_draw();
+            shadow.hide();
         });
         mover.animation_end.connect(()=> {
             draw_border = true;
             queue_draw();
         });
         mover.visibility_changed.connect((b)=> {
-            hidden_struts = b;
+            hidden_struts = !b;
             set_struts();
+            if (b && use_shadow && position == PanelPosition.BOTTOM) {
+                shadow.show();
+            }
         });
 
         /* First start, hide panel after a second so user actually knows
