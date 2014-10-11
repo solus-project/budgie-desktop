@@ -50,6 +50,28 @@ BudgiePanelShadow {
                                       );
 }
 
+BudgiePanelShadow.top {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom,
+                                      rgba(0, 0, 0, 0.3),
+                                      transparent
+                                      );
+}
+BudgiePanelShadow.left {
+    background-color: transparent;
+    background-image: linear-gradient(to right,
+                                      rgba(0, 0, 0, 0.3),
+                                      transparent
+                                      );
+}
+BudgiePanelShadow.right {
+    background-color: transparent;
+    background-image: linear-gradient(to left,
+                                      rgba(0, 0, 0, 0.3),
+                                      transparent
+                                      );
+}
+
 PanelToplevel GtkEventBox {
     background-image: none;
     background-color: transparent;

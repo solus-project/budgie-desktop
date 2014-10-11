@@ -101,12 +101,62 @@ public class AppletInfo : GLib.Object
 public class PanelShadow : Gtk.Window
 {
 
-    public PanelShadow()
+    protected Budgie.Panel? panel;
+    public static const int SHADOW_SIZE = 4;
+
+    public PanelShadow(Budgie.Panel? panel)
     {
         decorated = false;
         skip_taskbar_hint = true;
         skip_pager_hint = true;
         type_hint = Gdk.WindowTypeHint.DOCK;
+
+        resizable = false;
+
+        this.panel = panel;
+    }
+
+    /* The next methods are all designed to force a specific size only! */
+    public override void get_preferred_width(out int min, out int natural)
+    {
+        var width = panel.primary_monitor_rect.width;
+        if (panel.position == PanelPosition.LEFT || panel.position == PanelPosition.RIGHT) {
+            width = SHADOW_SIZE;
+        }
+        min = width;
+        natural = width;
+    }
+
+    public override void get_preferred_height(out int min, out int natural)
+    {
+        if (panel.position == PanelPosition.LEFT || panel.position == PanelPosition.RIGHT) {
+            min = panel.primary_monitor_rect.height;
+            natural = min;
+        } else {
+            min = SHADOW_SIZE;
+            natural = SHADOW_SIZE;
+        }
+    }
+
+    public override void get_preferred_height_for_width(int width, out int min, out int natural)
+    {
+        if (panel.position == PanelPosition.LEFT || panel.position == PanelPosition.RIGHT) {
+            min = screen.get_height();
+            natural = min;
+        } else {
+            min = SHADOW_SIZE;
+            natural = SHADOW_SIZE;
+        }
+    }
+
+    public override void get_preferred_width_for_height(int height, out int min, out int natural)
+    {
+        var width = panel.primary_monitor_rect.width;
+        if (panel.position == PanelPosition.LEFT || panel.position == PanelPosition.RIGHT) {
+            width = SHADOW_SIZE;
+        }
+        min = width;
+        natural = width;
     }
 
     public override bool draw(Cairo.Context ctx)
@@ -174,7 +224,7 @@ public class Panel : Gtk.Window
     protected bool use_shadow;
 
     private int primary_monitor;
-    private Gdk.Rectangle primary_monitor_rect;
+    public Gdk.Rectangle primary_monitor_rect;
 
     private ulong alloc_id;
     public int stored_x;
@@ -208,7 +258,7 @@ public class Panel : Gtk.Window
         resizable = false;
 
         // need a shadow. only supports bottom position right now.
-        shadow = new PanelShadow();
+        shadow = new PanelShadow(this);
         shadow.set_visual(vis);
 
         settings = new Settings("com.evolve-os.budgie.panel");
@@ -334,8 +384,8 @@ public class Panel : Gtk.Window
         mover.visibility_changed.connect((b)=> {
             hidden_struts = !b;
             set_struts();
-            if (b && use_shadow && position == PanelPosition.BOTTOM) {
-                shadow.show();
+            if (b && use_shadow ) {
+                update_position();
             }
         });
 
@@ -886,7 +936,6 @@ public class Panel : Gtk.Window
         int width = get_allocated_width();
         int x = 0, y = 0;
         int pan_x = 0, pan_y = 0;
-        int pan_width = 0, pan_height = 0;
 
         string[] classes =  {
             "top",
@@ -899,30 +948,22 @@ public class Panel : Gtk.Window
             case PanelPosition.TOP:
                 newclass = "top";
                 y = primary_monitor_rect.y+0;
-                pan_width = width;
-                pan_height = SHADOW_SIZE;
                 pan_y = intended_height;
                 break;
             case PanelPosition.LEFT:
                 newclass = "left";
                 y = primary_monitor_rect.y+0;
-                pan_x = width - (SHADOW_SIZE/2);
-                pan_width = SHADOW_SIZE;
-                pan_height = height;
+                pan_x = width;
                 break;
             case PanelPosition.RIGHT:
                 newclass = "right";
                 x = primary_monitor_rect.x+primary_monitor_rect.width-width;
-                pan_x = x - (SHADOW_SIZE/2);
-                pan_width = SHADOW_SIZE;
-                pan_height = height;
+                pan_x = x - SHADOW_SIZE;
                 break;
             case PanelPosition.BOTTOM:
             default:
                 newclass = "bottom";
                 y = primary_monitor_rect.y+primary_monitor_rect.height-height;
-                pan_width = width;
-                pan_height = SHADOW_SIZE;
                 pan_y = y - SHADOW_SIZE;
                 break;
         }
@@ -940,10 +981,6 @@ public class Panel : Gtk.Window
         }
 
         Gtk.Orientation orientation;
-
-        if (position != PanelPosition.BOTTOM) {
-            use_shadow = false;
-        }
 
         if (position == PanelPosition.LEFT || position == PanelPosition.RIGHT) {
             // Effectively we're now vertical. deal with it.
@@ -985,8 +1022,7 @@ public class Panel : Gtk.Window
 
         /* Move shadow too. */
         if (use_shadow) {
-            shadow.set_default_size(pan_width, pan_height);
-            shadow.set_size_request(pan_width, pan_height);
+            shadow.hide();
             shadow.move(pan_x, pan_y);
             shadow.show();
         } else {
