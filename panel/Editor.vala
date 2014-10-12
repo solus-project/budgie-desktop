@@ -538,6 +538,18 @@ public class PanelEditor : Gtk.Dialog
         wrap.attach(label, 0, 4, 1, 1);
         wrap.attach(check, 1, 4, 1, 1);
 
+        // can haz autohide plox?
+        label = new Gtk.Label("Autohide policy");
+        label.hexpand = true;
+        label.set_halign(Gtk.Align.START);
+        combo = new Gtk.ComboBoxText();
+        combo.insert(-1, "never", "Never");
+        combo.insert(-1, "automatic", "Automatic");
+        settings.bind("hide-policy", combo, "active-id", SettingsBindFlags.DEFAULT);
+        combo.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 5, 1, 1);
+        wrap.attach(combo, 1, 5, 1, 1);
+
         return wrap;
     }
 }
