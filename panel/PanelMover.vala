@@ -53,6 +53,8 @@ public class PanelMover : Object
     protected Settings settings;
     private Gdk.Rectangle primary_monitor_rect;
 
+    public bool bounce { public set; public get; }
+
     // Track open windows, overlaps, etc.
     Wnck.Screen wnck_screen;
 
@@ -73,6 +75,7 @@ public class PanelMover : Object
         panel.leave_notify_event.connect(on_panel_leave);
 
         settings = new Settings("com.evolve-os.budgie.panel");
+        settings.bind("bounce-animation", this, "bounce", SettingsBindFlags.DEFAULT);
         settings.changed.connect(on_settings_change);
 
         if (settings.get_string("hide-policy") == "automatic") {
@@ -169,9 +172,17 @@ public class PanelMover : Object
         /* Moving **down** */
         double trouble;
         if (hiding) {
-            trouble = back_ease_in(factor);
+            if (bounce) {
+                trouble = back_ease_in(factor);
+            } else {
+                trouble = expo_ease_in(factor);
+            }
         } else {
-            trouble = elastic_ease_out(factor);
+            if (bounce) {
+                trouble = elastic_ease_out(factor);
+            } else {
+                trouble = expo_ease_out(factor);
+            }
         }
         double delta;
         int x, y;
@@ -281,6 +292,10 @@ public class PanelMover : Object
         panel.add_tick_callback(on_tick);
     }
 
+    /* These easing functions originally came from
+     * https://github.com/warrenm/AHEasing/blob/master/AHEasing/easing.c
+     * and are available under the terms of the WTFPL
+     */
     protected double elastic_ease_out(double p)
     {
         return Math.sin(-13 * Math.PI_2 * (p + 1)) * Math.pow(2, -10 * p) + 1;
@@ -289,6 +304,16 @@ public class PanelMover : Object
     protected double back_ease_in(double p)
     {
         return p * p * p - p * Math.sin(p * Math.PI);
+    }
+
+    protected double expo_ease_in(double p)
+    {
+        return (p == 0.0) ? p : Math.pow(2, 10 * (p - 1));
+    }
+
+    protected double expo_ease_out(double p)
+    {
+        return (p == 1.0) ? p : 1 - Math.pow(2, -10 * p);
     }
 
     /*

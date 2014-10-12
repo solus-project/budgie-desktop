@@ -23,6 +23,12 @@
       <description>Hide the panel when it isn't being used</description>
     </key>
 
+    <key type="b" name="bounce-animation">
+      <default>true</default>
+      <summary>Use bounce animation for autohide</summary>
+      <description>Whether to enable bounce animations for auto hiding of the panel</description>
+    </key>
+
     <key type="as" name="pinned-launchers">
       <default>[]</default>
       <summary>Pinned launchers</summary>
