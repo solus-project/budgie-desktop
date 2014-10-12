@@ -35,8 +35,18 @@ AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
 
 PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
 
-# We require Mutter
-PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
+AC_ARG_ENABLE(wm, AS_HELP_STRING([--enable-wm], [enable wm @<:@default=yes@:>@]),
+	      [], [enable_wm=yes])
+AS_IF([test "x$enable_wm" = "xyes"],
+	[AC_DEFINE([BUILD_WM], [1], [Building window manager])],
+	[])
+AM_CONDITIONAL([BUILD_WM], [test x$enable_wm = x"yes"])
+
+if test "x$enable_wm" = "xyes"; then
+    # Required for Window Manager component
+    
+    PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
+fi
 
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
@@ -104,3 +114,20 @@ AC_CONFIG_FILES([Makefile
                 wm/Makefile])
 AC_OUTPUT
 
+AC_MSG_RESULT([
+        budgie-desktop $VERSION
+        ========
+
+        prefix:                 ${prefix}
+        libdir:                 ${libdir}
+        sysconfdir:             ${sysconfdir}
+        exec_prefix:            ${exec_prefix}
+        bindir:                 ${bindir}
+        datarootdir:            ${datarootdir}
+
+        compiler:               ${CC}
+        cflags:                 ${CFLAGS}
+        ldflags:                ${LDFLAGS}
+
+        wm:                     ${enable_wm}
+])

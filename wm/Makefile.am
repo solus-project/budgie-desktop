@@ -1,5 +1,7 @@
 -include $(top_srcdir)/common.mk
 
+if BUILD_WM
+
 bin_PROGRAMS = budgie-wm
 
 budgie_wm_SOURCES = \
@@ -13,3 +15,5 @@ budgie_wm_CFLAGS = \
 
 budgie_wm_LDADD = \
 	$(MUTTER_LIBS)
+
+endif
