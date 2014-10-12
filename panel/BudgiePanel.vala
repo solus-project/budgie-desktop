@@ -30,9 +30,15 @@ public class AppletHolder : Gtk.Bin
         gnome_mode = true;
     }
 
+#if GTK313
+    protected override Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
+    {
+        Gtk.WidgetPath path = base.get_path_for_child(child);
+#else
     protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
     {
         unowned Gtk.WidgetPath path = base.get_path_for_child(child);
+#endif
         if (gnome_mode) {
             path.iter_set_object_type(0, typeof(PanelToplevel));
             for (int i=0; i<path.length(); i++) {
