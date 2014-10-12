@@ -275,7 +275,7 @@ public class Panel : Gtk.Window
 
         /* Ensure to initialise styles */
         try {
-#if GTK313
+#if HAVE_GTK313
             File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style_313.css");
 #else
             File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style.css");

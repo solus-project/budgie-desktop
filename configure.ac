@@ -93,7 +93,7 @@ fi
 # Check for GTK3.13+ (Le World Blow Up)
 PKG_CHECK_MODULES(GTK313, [gtk+-3.0  >= 3.13], [have_gtk313=yes], [have_gtk313=no])
 if test "x$have_gtk313" = "xyes" ; then
-    VALAFLAGS="$VALAFLAGS --define HAVE_GTK311"
+    VALAFLAGS="$VALAFLAGS --define HAVE_GTK313"
 fi
 
 AC_SUBST(VALAFLAGS)

@@ -372,7 +372,7 @@ public class Popover : Gtk.Window
 
     /* Override the widget path, tricking GtkThemingEngine into believing
      * we're a GtkPopover. Ensures children widgets are correctly themed */
-#if GTK313
+#if HAVE_GTK313
     protected override Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
     {
         Gtk.WidgetPath path = base.get_path_for_child(child);
