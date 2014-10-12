@@ -667,7 +667,6 @@ public class Panel : Gtk.Window
         applet_removed(name);
         /* Send a destroy */
         appl.applet.destroy();
-        applets.remove(name);
 
         /* Unfortunately this is ugly as all shit, but what can ya do. */
         uint length = owner.get_children().length();
