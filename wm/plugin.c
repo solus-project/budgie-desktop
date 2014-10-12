@@ -65,6 +65,7 @@
 #define MAP_TIMEOUT        110
 #define MAP_SCALE          0.8
 #define BACKGROUND_TIMEOUT 250
+#define BACKGROUND_OUT_TIMEOUT 600
 #define SWITCH_TIMEOUT     500
 
 #define ACTOR_DATA_KEY "MCCP-Default-actor-data"
@@ -394,6 +395,13 @@ background_load_file_cb (GObject      *source_object,
 }
 
 static void
+on_background_destroy (ClutterTimeline *timeline, gpointer data)
+{
+  ClutterActor *actor = CLUTTER_ACTOR(data);
+  clutter_actor_destroy(actor);
+}
+
+static void
 on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin)
 {
@@ -409,7 +417,30 @@ on_monitors_changed (MetaScreen *screen,
   ClutterColor secondary_color;
   gboolean random_colour = FALSE;
 
-  clutter_actor_destroy_all_children (self->priv->background_group);
+  {
+    /* Destroy le kiddies */
+    GList *sprog = NULL, *kids = NULL;
+    ClutterActor *child = NULL;
+    ClutterTimeline *tml = NULL;
+
+    kids = clutter_actor_get_children (self->priv->background_group);
+    for (sprog = kids; sprog; sprog = sprog->next)
+    {
+      child = CLUTTER_ACTOR(sprog->data);
+      animation = clutter_actor_animate (child, CLUTTER_EASE_OUT_SINE,
+                                         BACKGROUND_OUT_TIMEOUT,
+                                         "opacity", 0,
+                                         NULL);
+      tml = clutter_animation_get_timeline (animation);
+      g_signal_connect (tml,
+                        "completed",
+                        G_CALLBACK (on_background_destroy),
+                        child);
+      animation = NULL;
+    }
+
+    g_list_free(kids);
+  }
 
   wallpaper = g_settings_get_string (self->priv->settings, PICTURE_URI_KEY);
   /* We don't currently support slideshows */
@@ -501,15 +532,14 @@ on_monitors_changed (MetaScreen *screen,
       clutter_actor_set_position (background, rect.x, rect.y);
       clutter_actor_set_size (background, rect.width, rect.height);
       clutter_actor_add_child (self->priv->background_group, background);
-      clutter_actor_set_scale (background, 0.0, 0.0);
+      clutter_actor_set_opacity (background, 0);
       clutter_actor_show (background);
       clutter_actor_set_pivot_point (background, 0.5, 0.5);
 
       /* Ease in the background using a scale effect */
       animation = clutter_actor_animate (background, CLUTTER_EASE_IN_SINE,
                                          BACKGROUND_TIMEOUT,
-                                         "scale-x", 1.0,
-                                         "scale-y", 1.0,
+                                         "opacity", 255,
                                          NULL);
     }
     if (wallpaper_file)
@@ -554,6 +584,7 @@ switch_workspace (MetaPlugin *plugin,
 
   screen = meta_plugin_get_screen (plugin);
   stage = meta_get_stage_for_screen (screen);
+  clutter_actor_set_background_color (stage, clutter_color_get_static( CLUTTER_COLOR_BLACK));
 
   meta_screen_get_size (screen,
                         &screen_width,
