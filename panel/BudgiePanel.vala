@@ -275,7 +275,11 @@ public class Panel : Gtk.Window
 
         /* Ensure to initialise styles */
         try {
+#if GTK313
+            File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style_313.css");
+#else
             File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style.css");
+#endif
             var prov = new Gtk.CssProvider();
             prov.load_from_file(ruri);
             Gtk.StyleContext.add_provider_for_screen(screen, prov, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
