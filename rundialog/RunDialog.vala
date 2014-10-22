@@ -36,6 +36,8 @@ public class RunDialog : Gtk.Window
         window_position = Gtk.WindowPosition.CENTER;
         destroy.connect(() => Gtk.main_quit());
         set_keep_above(true);
+        set_skip_taskbar_hint(true);
+        set_skip_pager_hint(true);
         title = "Run Program...";
         icon_name = DEFAULT_ICON;
 
