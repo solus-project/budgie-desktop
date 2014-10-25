@@ -201,6 +201,7 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         style = gtk_widget_get_style_context(header);
         gtk_style_context_add_class(style, "invisi-header");
         gtk_window_set_titlebar(GTK_WINDOW(self), header);
+        gtk_style_context_remove_class(style, "titlebar");
 
         /* Can haz style? */
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
