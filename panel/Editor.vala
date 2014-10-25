@@ -17,9 +17,6 @@ public class PanelEditor : Gtk.Dialog
     // Holds our content, basically.
     Gtk.ListBox content;
 
-    // Because.
-    Gtk.HeaderBar header;
-
     // Our applet config area
     Gtk.Grid applet_config;
 
