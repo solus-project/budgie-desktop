@@ -27,10 +27,12 @@ public class RunDialog : Gtk.Window
     public RunDialog()
     {
         side_image = new Gtk.Image.from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
-        side_image.pixel_size = 96;
+        side_image.pixel_size = 64;
         side_image.halign = Gtk.Align.START;
         side_image.valign = Gtk.Align.CENTER;
+        side_image.margin_right = 15;
         entry = new Gtk.SearchEntry();
+        entry.margin_right = 15;
 
         // Initialisation stuffs
         window_position = Gtk.WindowPosition.CENTER;
@@ -41,56 +43,17 @@ public class RunDialog : Gtk.Window
         title = "Run Program...";
         icon_name = DEFAULT_ICON;
 
-        // Enable RGBA for transparent window background
-        var visual = screen.get_rgba_visual();
-        if (visual != null) {
-            set_visual(visual);
-        } else {
-            GLib.warning("Unable to set RGBA visual: RunDialog will look ugly");
-        }
-        var main_layout = new Gtk.Overlay();
-        add(main_layout);
-        var layout = new Gtk.EventBox();
-        layout.valign = Gtk.Align.FILL;
-        entry.valign = Gtk.Align.CENTER;
-        layout.get_style_context().add_class("budgie-run-dialog-content");
 
+        var main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         /* Window sizing hacks relating to the image size */
-        main_layout.add(layout);
-        main_layout.add_overlay(side_image);
-        side_image.show_all();
-        side_image.margin = 15;
-        entry.margin_left = side_image.pixel_size+(side_image.margin/2);
-        entry.margin_right = side_image.margin;
-        layout.add(entry);
-        layout.margin_left = side_image.margin+layout.margin;
-        layout.margin_right = 0;
+        main_layout.pack_start(side_image, false, false, 0);
+        main_layout.pack_start(entry, true, true, 0);
+        add(main_layout);
 
         set_size_request(350+(side_image.margin), side_image.pixel_size+side_image.margin);
+        border_width = 4;
 
-        // Ensure sizes are consistent with overlay
-        side_image.size_allocate.connect((a) => {
-            Gtk.Allocation alloc;
-            layout.get_allocation(out alloc);
-            layout.set_size_request(alloc.width, a.height+side_image.margin);
-        });
-
-        // We can't use normal margin due to use of overlay, so we draw.. less.
-        layout.draw.connect((c)=> {
-            var st = layout.get_style_context();
-            Gtk.Allocation alloc;
-            layout.get_allocation(out alloc);
-            var margin = side_image.pixel_size/5;
-            st.render_background(c, alloc.x+margin, alloc.y+margin,
-                alloc.width-(margin*2), alloc.height-(margin*2));
-            st.render_frame(c, alloc.x+margin, alloc.y+margin,
-                alloc.width-(margin*2), alloc.height-(margin*2));
-
-            layout.propagate_draw(layout.get_child(), c);
-            return true;
-        });
-
-        this.set_decorated(false);
+        get_style_context().add_class("budgie-run-dialog");
 
         // Load our default styling
         try {
@@ -115,6 +78,14 @@ public class RunDialog : Gtk.Window
             }
             return false;
         });
+
+        var empty = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        empty.draw.connect((c)=> {
+            return true;
+        });
+        set_titlebar(empty);
+        empty.get_style_context().add_class("invisi-header");
+        empty.get_style_context().remove_class("titlebar");
 
         show_all();
 

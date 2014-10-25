@@ -1,13 +1,9 @@
-.budgie-run-dialog-content {
-    border-radius: 12px;
-    background-color: @theme_bg_color;
+.budgie-run-dialog {
+    border-radius: 6px;
+    border: none;
 }
 
-BudgieRunDialog GtkImage {
-    border-radius: 100%;
-    background-color: alpha(@theme_bg_color, 0.99);
-}
-
-BudgieRunDialog {
+.invisi-header {
+    background-image: none;
     background-color: transparent;
 }
