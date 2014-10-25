@@ -24,6 +24,7 @@
 #pragma once
 
 #include <glib.h>
+#include <glib-object.h>
 
 static inline void cleanup_free(void *p)
 {
@@ -31,7 +32,14 @@ static inline void cleanup_free(void *p)
         g_free(v);
 }
 
+static inline void cleanup_unref(void *p)
+{
+        void *v = *(void**)p;
+        g_object_unref(G_OBJECT(v));
+}
+
 #define autofree __attribute__ ((cleanup(cleanup_free)))
+#define autounref __attribute__ ((cleanup(cleanup_unref)))
 
 static inline gboolean string_contains(const gchar *string, const gchar *term)
 {
