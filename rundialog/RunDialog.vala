@@ -89,6 +89,7 @@ public class RunDialog : Gtk.Window
 
         show_all();
 
+        get_settings().set_property("gtk-application-prefer-dark-theme", true);
         GLib.Idle.add(init_menus);
     }
 
