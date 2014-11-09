@@ -34,6 +34,7 @@
 #include <meta/keybindings.h>
 #include <meta/util.h>
 #include <glib/gi18n-lib.h>
+#include <meta/meta-version.h>
 
 #include <clutter/clutter.h>
 #include <gmodule.h>
@@ -423,9 +424,18 @@ on_monitors_changed (MetaScreen *screen,
                                            &secondary_color);
         } else {
           /* Set the background */
+          #if META_MINOR_VERSION > 14
+          if (wallpaper_file)
+          {
+            meta_background_set_file (background,
+                                      wallpaper_file,
+                                      style);
+          }
+          #else
           meta_background_set_filename (background,
                                         filename,
                                         style);
+          #endif
         }
       }
       meta_background_actor_set_background (META_BACKGROUND_ACTOR (background_actor), background);
