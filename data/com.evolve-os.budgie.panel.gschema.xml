@@ -35,6 +35,12 @@
       <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
     </key>
 
+    <key type="a(si)" name="app-scores">
+      <default>[]</default>
+      <summary>Pinned launchers</summary>
+      <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
+    </key>
+
     <key type="i" name="size">
       <default>42</default>
       <summary>Panel size</summary>

@@ -58,6 +58,8 @@ public class MenuButton : Gtk.Button
     public unowned DesktopAppInfo info { public get ; protected set ; }
     public unowned GMenu.TreeDirectory parent_menu { public get ; protected set ; }
 
+    public int score { public set ; public get; }
+
     public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory)
     {
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
@@ -73,6 +75,8 @@ public class MenuButton : Gtk.Button
         this.info = parent;
         this.parent_menu = directory;
         set_tooltip_text(parent.get_description());
+
+        score = 0;
 
         relief = Gtk.ReliefStyle.NONE;
     }
@@ -165,6 +169,8 @@ public class BudgieMenuWindow : Budgie.Popover
                     var btn = new MenuButton(appinfo, tree_root);
                     btn.clicked.connect(()=> {
                         hide();
+                        btn.score++;
+                        content.invalidate_sort();
                         launch_app(btn.info);
                     });
                     content.add(btn);
@@ -250,6 +256,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // management of our listbox
         content.set_header_func(do_list_header);
         content.set_filter_func(do_filter_list);
+        content.set_sort_func(do_sort_list);
 
         // searching functionality :)
         search_entry.changed.connect(()=> {
@@ -331,6 +338,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // Only add one if we need one!
         if (before == null || after == null || prev != next) {
             var label = new Gtk.Label(Markup.printf_escaped("<big>%s</big>", prev));
+            label.get_style_context().add_class("dim-label");
             label.halign = Gtk.Align.START;
             label.use_markup = true;
             before.set_header(label);
@@ -394,6 +402,27 @@ public class BudgieMenuWindow : Budgie.Popover
         }
         return true;
     }
+
+    protected int do_sort_list(Gtk.ListBoxRow row1, Gtk.ListBoxRow row2)
+    {
+        MenuButton child1 = row1.get_child() as MenuButton;
+        MenuButton child2 = row2.get_child() as MenuButton;
+
+        int run = 0;
+        if (child1.score > child2.score) {
+            run = -1;
+        } else if (child2.score > child1.score) {
+            run = 1;
+        }
+
+        //int run1 = intcmp(child1.score, child2.score);
+        if (run != 0) {
+            return run;
+        }
+
+        return 0;
+    }
+
 
     /**
      * Change the current group/category
