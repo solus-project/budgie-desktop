@@ -415,12 +415,7 @@ public class BudgieMenuWindow : Budgie.Popover
             run = 1;
         }
 
-        //int run1 = intcmp(child1.score, child2.score);
-        if (run != 0) {
-            return run;
-        }
-
-        return 0;
+        return run;
     }
 
 
