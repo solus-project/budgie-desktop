@@ -95,6 +95,8 @@ public class BudgieMenuWindow : Budgie.Popover
     // The current group 
     protected GMenu.TreeDirectory? group = null;
 
+    protected Settings settings;
+
     // Current search term
     protected string search_term = "";
 
@@ -115,6 +117,7 @@ public class BudgieMenuWindow : Budgie.Popover
             stderr.printf("Error: %s\n", e.message);
         }
         load_menus(null);
+        apply_scores();
     }
 
     /**
@@ -178,6 +181,42 @@ public class BudgieMenuWindow : Budgie.Popover
             }
         }
     }
+
+    protected void unwrap_score(Variant v, out string s, out int i)
+    {
+        Variant t = v.get_child_value(0);
+        s = t.get_string();
+        t = v.get_child_value(1);
+        i = t.get_int32();
+    }
+
+    /* Apply "scores" to enable usage-sorting */
+    protected void apply_scores()
+    {
+        var scores = settings.get_value("app-scores");
+
+        HashTable<string,int> m = new HashTable<string,int>(str_hash, str_equal);
+
+        /* Prevent large loops by caching score items */
+        for (int i = 0; i < scores.n_children(); i++) {
+            var tupe = scores.get_child_value(i);
+            string dname; int score;
+            unwrap_score(tupe, out dname, out score);
+
+            m.insert(dname, score);
+        }
+
+        foreach (var sprog in content.get_children()) {
+            MenuButton child = (sprog as Gtk.Bin).get_child() as MenuButton;
+            var key = child.info.get_filename();
+            if (m.contains(key)) {
+                child.score = m.get(key);
+            }
+        }
+
+        content.invalidate_sort();
+    }
+
 
     public BudgieMenuWindow()
     {
@@ -252,7 +291,10 @@ public class BudgieMenuWindow : Budgie.Popover
         power.halign = Gtk.Align.END;
         power.valign = Gtk.Align.END;
         power.relief = Gtk.ReliefStyle.NONE;
-    
+
+        // Currently just to track usage
+        settings = new Settings("com.evolve-os.budgie.panel");
+
         // management of our listbox
         content.set_header_func(do_list_header);
         content.set_filter_func(do_filter_list);
@@ -272,6 +314,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // load them in the background
         Idle.add(()=> {
             load_menus(null);
+            apply_scores();
             return false;
         });
     }
