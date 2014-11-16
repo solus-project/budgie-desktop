@@ -54,7 +54,7 @@
     </key>
 
     <key type="b" name="dark-theme">
-      <default>false</default>
+      <default>true</default>
       <summary>Use the dark theme</summary>
       <description>Whether to use the dark theme variant globally</description>
     </key>
