@@ -173,8 +173,9 @@ public class BudgieMenuWindow : Budgie.Popover
                     btn.clicked.connect(()=> {
                         hide();
                         btn.score++;
-                        content.invalidate_sort();
                         launch_app(btn.info);
+                        content.invalidate_sort();
+                        content.invalidate_headers();
                     });
                     content.add(btn);
                 }
@@ -386,6 +387,8 @@ public class BudgieMenuWindow : Budgie.Popover
             label.use_markup = true;
             before.set_header(label);
             label.margin = 6;
+        } else {
+            before.set_header(null);
         }
     }
 
