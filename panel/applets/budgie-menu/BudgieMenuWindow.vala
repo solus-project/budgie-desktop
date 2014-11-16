@@ -20,7 +20,7 @@ public class CategoryButton : Gtk.RadioButton
 
     public new unowned GMenu.TreeDirectory? group { public get ; protected set; }
 
-    public CategoryButton(GMenu.TreeDirectory? parent)
+    public CategoryButton(GMenu.TreeDirectory? parent, int icon_size)
     {
         Gtk.Image img;
         Gtk.Label lab;
@@ -33,7 +33,7 @@ public class CategoryButton : Gtk.RadioButton
             img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.INVALID);
             lab = new Gtk.Label("All");
         }
-        img.pixel_size = 22;
+        img.pixel_size = icon_size;
         lab.set_alignment(0.0f, 0.5f);
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
@@ -60,10 +60,10 @@ public class MenuButton : Gtk.Button
 
     public int score { public set ; public get; }
 
-    public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory)
+    public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory, int icon_size)
     {
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
-        img.pixel_size = 22;
+        img.pixel_size = icon_size;
         var lab = new Gtk.Label(parent.get_display_name());
         lab.set_alignment(0.0f, 0.5f);
 
@@ -101,6 +101,8 @@ public class BudgieMenuWindow : Budgie.Popover
 
     // Current search term
     protected string search_term = "";
+
+    protected int icon_size = 22;
 
     /* Reload menus, essentially. */
     public void refresh_tree()
@@ -155,7 +157,7 @@ public class BudgieMenuWindow : Budgie.Popover
         while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
             if (type == GMenu.TreeItemType.DIRECTORY) {
                 var dir = it.get_directory();
-                var btn = new CategoryButton(dir);
+                var btn = new CategoryButton(dir, icon_size);
                 btn.join_group(all_categories);
                 categories.pack_start(btn, false, false, 0);
 
@@ -171,7 +173,7 @@ public class BudgieMenuWindow : Budgie.Popover
                 if (tree_root == null) {
                     warning("%s has no parent directory, not adding to menu\n", appinfo.get_display_name());
                 } else {
-                    var btn = new MenuButton(appinfo, tree_root);
+                    var btn = new MenuButton(appinfo, tree_root, icon_size);
                     btn.clicked.connect(()=> {
                         hide();
                         btn.score++;
@@ -265,6 +267,10 @@ public class BudgieMenuWindow : Budgie.Popover
 
         border_width = 6;
 
+        // Currently just to track usage
+        settings = new Settings("com.evolve-os.budgie.panel");
+        icon_size = settings.get_int("menu-icons-size");
+
         // search entry up north
         search_entry = new Gtk.SearchEntry();
         master_layout.pack_start(search_entry, false, false, 0);
@@ -281,7 +287,7 @@ public class BudgieMenuWindow : Budgie.Popover
         middle.pack_start(categories_scroll, false, false, 0);
 
         // "All" button"
-        all_categories = new CategoryButton(null);
+        all_categories = new CategoryButton(null, icon_size);
         all_categories.toggled.connect(()=> {
             update_category(all_categories);
         });
@@ -331,9 +337,6 @@ public class BudgieMenuWindow : Budgie.Popover
         power.halign = Gtk.Align.END;
         power.valign = Gtk.Align.END;
         power.relief = Gtk.ReliefStyle.NONE;
-
-        // Currently just to track usage
-        settings = new Settings("com.evolve-os.budgie.panel");
 
         settings.changed.connect(on_settings_changed);
         on_settings_changed("menu-compact");

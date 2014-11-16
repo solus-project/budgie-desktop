@@ -83,6 +83,12 @@
       <description>The icon to display on the main menu button</description>
     </key>
 
+    <key type="i" name="menu-icons-size">
+      <default>22</default>
+      <summary>Icon sizes in menu</summary>
+      <description>Icon size to use for buttons within the Budgie Menu</description>
+    </key>
+
     <key type="b" name="menu-compact">
       <default>true</default>
       <summary>Compact menu style (no categories)</summary>
