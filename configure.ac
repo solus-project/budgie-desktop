@@ -1,4 +1,4 @@
-AC_INIT([Budgie Desktop], 7, [ikey.doherty@gmail.com], [budgie-desktop], [http://ikeydoherty.github.io/])
+AC_INIT([Budgie Desktop], 8, [ikey@evolve-os.com], [budgie-desktop], [https://evolve-os.com/])
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC

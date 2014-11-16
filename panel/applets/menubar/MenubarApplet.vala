@@ -272,7 +272,7 @@ public class MenubarAppletImpl : Budgie.Applet
                 "website", "https://evolve-os.com",
                 "license-type", license,
                 "authors", authors,
-                "version", "7",
+                "version", "8",
                 "comments", comments,
                 "logo_icon_name", "help-about",
                 "website-label", "Evolve OS");
