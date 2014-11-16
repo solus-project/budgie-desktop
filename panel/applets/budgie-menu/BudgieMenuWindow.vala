@@ -297,8 +297,6 @@ public class BudgieMenuWindow : Budgie.Popover
         side_sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
         middle.pack_start(side_sep, false, false, 5);
 
-        // new vertical layout holds the power button at the end.
-        // I hate this button. It needs to die.
         var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         middle.pack_start(right_layout, true, true, 0);
 
@@ -318,25 +316,6 @@ public class BudgieMenuWindow : Budgie.Popover
         content.halign = Gtk.Align.START;
         content.valign = Gtk.Align.START;
         content.set_placeholder(placeholder);
-
-        // the aforementioned hated power button
-        var power = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.BUTTON);
-        // lambdaception
-        power.clicked.connect(()=> {
-            hide();
-            Idle.add(()=> {
-                try {
-                    Process.spawn_command_line_async(LOGOUT_BINARY);
-                } catch (Error e) {
-                    stdout.printf("Error invoking logout binary: %s\n", e.message);
-                }
-                return false;
-            });
-        });
-        right_layout.pack_end(power, false, false, 0);
-        power.halign = Gtk.Align.END;
-        power.valign = Gtk.Align.END;
-        power.relief = Gtk.ReliefStyle.NONE;
 
         settings.changed.connect(on_settings_changed);
         on_settings_changed("menu-compact");
