@@ -91,11 +91,13 @@ public class BudgieMenuWindow : Budgie.Popover
     protected Gtk.ScrolledWindow categories_scroll;
     protected Gtk.ScrolledWindow content_scroll;
     protected CategoryButton all_categories;
+    protected Gtk.Separator side_sep;
 
     // The current group 
     protected GMenu.TreeDirectory? group = null;
 
     protected Settings settings;
+    protected bool compact_mode;
 
     // Current search term
     protected string search_term = "";
@@ -286,8 +288,8 @@ public class BudgieMenuWindow : Budgie.Popover
         categories.pack_start(all_categories, false, false, 0);
 
         // vis sep
-        var sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-        middle.pack_start(sep, false, false, 5);
+        side_sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+        middle.pack_start(side_sep, false, false, 5);
 
         // new vertical layout holds the power button at the end.
         // I hate this button. It needs to die.
@@ -333,8 +335,11 @@ public class BudgieMenuWindow : Budgie.Popover
         // Currently just to track usage
         settings = new Settings("com.evolve-os.budgie.panel");
 
+        settings.changed.connect(on_settings_changed);
+        on_settings_changed("menu-compact");
+        on_settings_changed("menu-headers");
+
         // management of our listbox
-        content.set_header_func(do_list_header);
         content.set_filter_func(do_filter_list);
         content.set_sort_func(do_sort_list);
 
@@ -348,7 +353,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // Enabling activation by search entry
         search_entry.activate.connect(on_entry_activate);
         // sensible vertical height
-        set_size_request(200, 510);
+        set_size_request(300, 510);
         // load them in the background
         Idle.add(()=> {
             load_menus(null);
@@ -356,6 +361,32 @@ public class BudgieMenuWindow : Budgie.Popover
             return false;
         });
     }
+
+    protected void on_settings_changed(string key)
+    {
+        switch (key) {
+            case "menu-compact":
+                var vis = settings.get_boolean(key);
+                side_sep.no_show_all = vis;
+                categories_scroll.no_show_all = vis;
+                side_sep.set_visible(vis);
+                categories_scroll.set_visible(vis);
+                compact_mode = vis;
+                break;
+            case "menu-headers":
+                if (settings.get_boolean(key)) {
+                    content.set_header_func(do_list_header);
+                } else {
+                    content.set_header_func(null);
+                }
+                content.invalidate_headers();
+                break;
+            default:
+                // not interested
+                break;
+        }
+    }
+
 
     protected void on_entry_activate()
     {
@@ -559,6 +590,13 @@ public class BudgieMenuWindow : Budgie.Popover
             return false;
         });
         base.show();
+        if (!compact_mode) {
+            categories_scroll.show_all();
+            side_sep.show_all();
+        } else {
+            categories_scroll.hide();
+            side_sep.hide();
+        }
     }
 
 }// End BudgieMenuWindow class

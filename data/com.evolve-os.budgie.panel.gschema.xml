@@ -82,6 +82,19 @@
       <summary>Menu button icon</summary>
       <description>The icon to display on the main menu button</description>
     </key>
+
+    <key type="b" name="menu-compact">
+      <default>true</default>
+      <summary>Compact menu style (no categories)</summary>
+      <description>Whether to use a compact or full Budgie Menu (show categories)</description>
+    </key>
+
+    <key type="b" name="menu-headers">
+      <default>true</default>
+      <summary>Whether to show menu headers</summary>
+      <description>Enable menu category headers</description>
+    </key>
+
   </schema>
 
   <schema path="/com/evolve-os/budgie/wm/" id="com.evolve-os.budgie.wm">
