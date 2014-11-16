@@ -66,7 +66,7 @@
 #define MAP_SCALE          0.8
 #define BACKGROUND_TIMEOUT 250
 #define BACKGROUND_OUT_TIMEOUT 600
-#define SWITCH_TIMEOUT     500
+#define SWITCH_TIMEOUT     1
 
 #define ACTOR_DATA_KEY "MCCP-Default-actor-data"
 
