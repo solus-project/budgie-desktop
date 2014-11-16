@@ -293,6 +293,7 @@ public class PanelEditor : Gtk.Dialog
         main_layout.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
 
         book.append_page(create_panel_area(), new Gtk.Label("Panel"));
+        book.append_page(create_menu_area(), new Gtk.Label("Menu"));
         book.show_all();
         close.show();
     }
@@ -549,6 +550,83 @@ public class PanelEditor : Gtk.Dialog
 
         return wrap;
     }
+
+    protected Gtk.Widget? create_menu_area()
+    {
+        Gtk.Grid wrap = new Gtk.Grid();
+        wrap.valign = Gtk.Align.FILL;
+        wrap.halign = Gtk.Align.FILL;
+        wrap.set_border_width(6);
+
+        wrap.row_spacing = 6;
+        wrap.column_spacing = 30;
+
+        // show menu label?
+        var label = new Gtk.Label("Menu label on panel");
+        label.hexpand = true;
+        label.set_halign(Gtk.Align.START);
+        var check = new Gtk.Switch();
+        check.hexpand = false;
+        check.halign = Gtk.Align.END;
+        settings.bind("enable-menu-label", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.START;
+        wrap.attach(label, 0, 0, 1, 1);
+        wrap.attach(check, 1, 0, 1, 1);
+
+        // compact menu
+        label = new Gtk.Label("Compact menu");
+        label.set_halign(Gtk.Align.START);
+        check = new Gtk.Switch();
+        check.hexpand = false;
+        check.halign = Gtk.Align.END;
+        settings.bind("menu-compact", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.START;
+        wrap.attach(label, 0, 1, 1, 1);
+        wrap.attach(check, 1, 1, 1, 1);
+
+        // menu headers
+        label = new Gtk.Label("Category headers in menu");
+        label.set_halign(Gtk.Align.START);
+        check = new Gtk.Switch();
+        check.hexpand = false;
+        check.halign = Gtk.Align.END;
+        settings.bind("menu-headers", check, "active", SettingsBindFlags.DEFAULT);
+        check.valign = Gtk.Align.START;
+        wrap.attach(label, 0, 2, 1, 1);
+        wrap.attach(check, 1, 2, 1, 1);
+
+        // size
+        label = new Gtk.Label("Icon size");
+        label.set_halign(Gtk.Align.START);
+        var spin = new Gtk.SpinButton.with_range(16, 96, 1);
+        settings.bind("menu-icons-size", spin, "value", SettingsBindFlags.DEFAULT);
+        spin.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 3, 1, 1);
+        wrap.attach(spin, 1, 3, 1, 1);
+
+        // menu label
+        label = new Gtk.Label("Menu label");
+        label.set_halign(Gtk.Align.START);
+        var entry = new Gtk.Entry();
+        entry.hexpand = false;
+        settings.bind("menu-label", entry, "text", SettingsBindFlags.DEFAULT);
+        entry.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 4, 1, 1);
+        wrap.attach(entry, 1, 4, 1, 1);
+
+        // menu icon
+        label = new Gtk.Label("Menu icon");
+        label.set_halign(Gtk.Align.START);
+        entry = new Gtk.Entry();
+        entry.hexpand = false;
+        settings.bind("menu-icon", entry, "text", SettingsBindFlags.DEFAULT);
+        entry.valign = Gtk.Align.END;
+        wrap.attach(label, 0, 5, 1, 1);
+        wrap.attach(entry, 1, 5, 1, 1);
+
+        return wrap;
+    }
+
 }
 
 } // End namespace
