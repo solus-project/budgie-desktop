@@ -37,8 +37,8 @@
 
     <key type="a(si)" name="app-scores">
       <default>[]</default>
-      <summary>Pinned launchers</summary>
-      <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
+      <summary>Internal launch-counter</summary>
+      <description>Counter for launched items, maintaining a "used" count for items in the menu.</description>
     </key>
 
     <key type="i" name="size">
