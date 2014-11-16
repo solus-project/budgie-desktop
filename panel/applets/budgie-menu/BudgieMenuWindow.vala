@@ -176,6 +176,7 @@ public class BudgieMenuWindow : Budgie.Popover
                         launch_app(btn.info);
                         content.invalidate_sort();
                         content.invalidate_headers();
+                        save_scores();
                     });
                     content.add(btn);
                 }
@@ -218,6 +219,42 @@ public class BudgieMenuWindow : Budgie.Popover
         content.invalidate_sort();
     }
 
+    protected Variant mktuple(string text, int val)
+    {
+        Variant l = new Variant.string(text);
+        Variant r = new Variant.int32(val);
+        Variant t = new Variant.tuple(new Variant[] { l, r});
+
+        return t;
+    }
+
+    /* Save "scores" (usage-sorting */
+    protected void save_scores()
+    {
+
+        Variant[] children = null;
+
+        foreach (var sprog in content.get_children()) {
+            MenuButton child = (sprog as Gtk.Bin).get_child() as MenuButton;
+            if (child.score == 0) {
+                continue;
+            }
+            var key = child.info.get_filename();
+            var tuple = mktuple(key, child.score);
+            if (children == null) {
+                children = new Variant[] { tuple };
+            } else {
+                children += tuple;
+            }
+        }
+
+        if (children == null) {
+            return;
+        }
+        var arr = new Variant.array(null, children);
+        settings.set_value("app-scores", arr);
+
+    }
 
     public BudgieMenuWindow()
     {
@@ -335,7 +372,11 @@ public class BudgieMenuWindow : Budgie.Popover
         }
 
         MenuButton btn = selected.get_child() as MenuButton;
+        btn.score++;
         launch_app(btn.info);
+        content.invalidate_sort();
+        content.invalidate_headers();
+        save_scores();
     }
 
     protected void on_row_activate(Gtk.ListBoxRow? row)
@@ -345,7 +386,11 @@ public class BudgieMenuWindow : Budgie.Popover
         }
         /* Launch this item, i.e. keyboard access. */
         MenuButton btn = row.get_child() as MenuButton;
+        btn.score++;
         launch_app(btn.info);
+        content.invalidate_sort();
+        content.invalidate_headers();
+        save_scores();
     }
 
     /**
