@@ -31,6 +31,9 @@ const int MAX_CYCLES = 12;
  */
 const double DEFAULT_OPACITY = 0.1;
 
+const double INACTIVE_OPACITY = 0.5;
+const double ACTIVE_OPACITY = 1.0;
+
 /**
  * Attempt to match startup notification IDs
  */
@@ -149,6 +152,10 @@ public class IconButton : Gtk.ToggleButton
     public void update_from_window()
     {
         if (window == null) {
+            if (this is PinnedIconButton) {
+                var p = this as PinnedIconButton;
+                p.set_opacity(INACTIVE_OPACITY);
+            }
             return;
         }
         set_tooltip_text(window.get_name());
@@ -161,6 +168,13 @@ public class IconButton : Gtk.ToggleButton
         update_icon();
         set_active(window.is_active());
         window.state_changed.connect(on_state_changed);
+
+
+        /* Opaque, due to being **active** */
+        if (this is PinnedIconButton) {
+            var p = this as PinnedIconButton;
+            p.set_opacity(ACTIVE_OPACITY);
+        }
 
         // Actions menu
         menu = new Wnck.ActionMenu(window);
@@ -408,6 +422,8 @@ public class PinnedIconButton : IconButton
         set_tooltip_text("Launch %s".printf(info.get_display_name()));
         image.set_from_gicon(info.get_icon(), Gtk.IconSize.INVALID);
 
+        set_opacity(INACTIVE_OPACITY);
+
         alt_menu = new Gtk.Menu();
         var item = new Gtk.MenuItem.with_label("Unpin from panel");
         alt_menu.add(item);
@@ -466,6 +482,7 @@ public class PinnedIconButton : IconButton
         menu = null;
         window = null;
         id = null;
+        set_opacity(INACTIVE_OPACITY);
     }
 }
 
