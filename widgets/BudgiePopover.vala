@@ -1,8 +1,8 @@
 /*
  * BudgiePopover.vala
- * 
+ *
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -179,7 +179,7 @@ public class Popover : Gtk.Window
             // TODO: Obtain line width from somewhere sensible
             ctx.set_line_width(1);
             var border_color = st.get_border_color(get_state_flags());
-    
+
             ctx.set_source_rgba(border_color.red, border_color.green, border_color.blue, border_color.alpha);
             height -= tail_height;
             if (bottom_tail) {
@@ -267,10 +267,17 @@ public class Popover : Gtk.Window
         our_x -= our_width/2;
         their_width = widget_alloc.width;
 
+
+        // get the max width of the current monitor
+        Gdk.Rectangle geometry;
+        int monitor = screen.get_monitor_at_window(toplevel.get_window());
+        screen.get_monitor_geometry(monitor, out geometry);
+        int max_width = geometry.width;
+
         if (our_x <= 0) {
             our_x = screen_gap;
-        } else if (our_x+our_width >= get_screen().get_width()) {
-            our_x = (get_screen().get_width() - our_width)-screen_gap;
+        } else if (our_x+our_width >= max_width) {
+            our_x = (max_width - our_width)-screen_gap;
         }
         widg_x = (trans_x - our_x);
 
