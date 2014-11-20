@@ -59,7 +59,6 @@ public class DesktopHelper : Object
 {
 
     Gee.HashMap<string?,string?> simpletons;
-    bool init = false;
 
     public DesktopHelper()
     {
@@ -293,7 +292,7 @@ public class IconButton : Gtk.ToggleButton
         int width = our_alloc.width;
         int height = our_alloc.height;
 
-        Gdk.RGBA col = new Gdk.RGBA();
+        Gdk.RGBA col = {};
         col.parse("#36689E");
         cr.set_source_rgba(col.red, col.green, col.blue, urg_opacity);
         cr.rectangle(x, y, width, height);
