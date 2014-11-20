@@ -145,7 +145,6 @@ public class Popover : Gtk.Window
 
         int gap_start;
         int gap_end;
-        int screen_width = get_screen().get_width();
 
         gap_start = widg_x;
         gap_end = gap_start+tail_width;
