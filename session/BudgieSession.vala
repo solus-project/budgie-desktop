@@ -402,6 +402,17 @@ public class Session : GLib.Application
             return 0;
         }
 
+        if (!should_logout) {
+            if (Environment.get_variable("DBUS_SESSION_BUS_ADDRESS") == null) {
+                string[] cmd = { "dbus-launch", "--exit-with-session" };
+                foreach (var c in args) {
+                    cmd += c;
+                }
+                if (Posix.execvp("dbus-launch", cmd) != 0) {
+                    critical("Could not execv for dbus session support");
+                }
+            }
+        }
         app = new Budgie.Session();
 
         if (should_logout) {
