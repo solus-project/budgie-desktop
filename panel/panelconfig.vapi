@@ -9,4 +9,10 @@ namespace Budgie {
 
 	[CCode (cheader_filename = "panelconfig.h")]
     public extern const string DATADIR;
+
+    [CCode (cheader_filename = "panelconfig.h")]
+    public extern const string VERSION;
+
+    [CCode (cheader_filename = "panelconfig.h")]
+    public extern const string WEBSITE;
 }

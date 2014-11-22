@@ -25,7 +25,10 @@ libmenubarapplet_la_CFLAGS = \
 	$(GEE_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
 	$(LIBPEAS_CFLAGS) \
-	-DGMENU_I_KNOW_THIS_IS_UNSTABLE
+	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
+	-DMODULE_DIR=\"$(MODULEDIR)\" \
+	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
+	-DDATADIR=\"$(datadir)/budgie-desktop\"
 
 
 libmenubarapplet_la_LIBADD = \
@@ -43,7 +46,9 @@ libmenubarapplet_la_LDFLAGS = \
 
 libmenubarapplet_la_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
+	--vapidir=${top_builddir}/panel \
 	--pkg gtk+-3.0 \
+	--pkg panelconfig \
 	--pkg libgnome-menu-3.0 \
 	--pkg gee-0.8 \
 	--pkg gio-unix-2.0 \

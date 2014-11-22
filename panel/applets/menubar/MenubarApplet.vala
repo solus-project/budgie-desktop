@@ -269,10 +269,10 @@ public class MenubarAppletImpl : Budgie.Applet
             Gtk.show_about_dialog(null,
                 "program-name", "Budgie Desktop",
                 "copyright", "Copyright © 2014 Evolve OS",
-                "website", "https://evolve-os.com",
+                "website", Budgie.WEBSITE,
                 "license-type", license,
                 "authors", authors,
-                "version", "8",
+                "version", Budgie.VERSION,
                 "comments", comments,
                 "logo_icon_name", "help-about",
                 "website-label", "Evolve OS");
