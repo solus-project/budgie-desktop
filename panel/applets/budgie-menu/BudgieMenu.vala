@@ -65,7 +65,11 @@ public class BudgieMenuApplet : Budgie.Applet
                 return;
             }
             Idle.add(()=> {
-                popover.present(widget);
+                if (!popover.get_visible()) {
+                    popover.present(widget);
+                } else {
+                    popover.hide();
+                }
                 return false;
             });
         });
