@@ -372,7 +372,8 @@ public class Panel : Gtk.Window
             return false;
         });
 
-        add_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+        add_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
+                   Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
         mover = new PanelMover(this);
         mover.animation_begin.connect(()=> {
             draw_border = false;
