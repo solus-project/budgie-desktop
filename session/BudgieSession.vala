@@ -409,7 +409,7 @@ public class Session : GLib.Application
                     cmd += c;
                 }
                 if (Posix.execvp("dbus-launch", cmd) != 0) {
-                    critical("Could not execv for dbus session support");
+                    critical("Could not execvp for dbus session support");
                 }
             }
         }
