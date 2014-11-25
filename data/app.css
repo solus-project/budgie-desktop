@@ -7,6 +7,15 @@
  */
 
 
+/* GtkSidebar */
+.sidebar {
+    background-color: shade(@theme_bg_color, 0.99);
+}
+.sidebar-item {
+    padding: 10px;
+}
+
+
 GtkPopover GtkListBox {
     background-image: none;
     background-color: alpha(black, 0.0);
