@@ -51,8 +51,10 @@ budgie_panel_LDADD = \
 
 budgie_panel_VALAFLAGS = \
 	--vapidir=../budgie-plugin \
+	--vapidir=../widgets \
 	--vapidir=. \
 	--pkg panelconfig \
+	--pkg BudgieWidgets \
 	--pkg gtk+-3.0 \
 	--pkg libwnck-3.0 \
 	--pkg gio-unix-2.0 \
