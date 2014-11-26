@@ -47,6 +47,7 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg libwnck-3.0 \
 	--pkg budgie-1.0 \
 	--pkg gio-unix-2.0 \
+	$(VALAFLAGS) \
 	--pkg gee-0.8
 
 

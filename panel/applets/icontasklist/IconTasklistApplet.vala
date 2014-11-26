@@ -68,11 +68,13 @@ public class DesktopHelper : Object
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
 
+#if HAVE_GLIB240
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(()=> {
             startupids = null;
             reload_ids();
         });
+#endif
         reload_ids();
     }
 

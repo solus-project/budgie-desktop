@@ -96,6 +96,12 @@ if test "x$have_gtk313" = "xyes" ; then
     VALAFLAGS="$VALAFLAGS --define HAVE_GTK313"
 fi
 
+# Check for glib >= 2.40 (GAppInfoMonitor introduction)
+PKG_CHECK_MODULES(GLIB240, [gio-2.0  >= 2.40], [have_glib240=yes], [have_glib240=no])
+if test "x$have_glib240" = "xyes" ; then
+    VALAFLAGS="$VALAFLAGS --define HAVE_GLIB240"
+fi
+
 AC_SUBST(VALAFLAGS)
 
 AC_CONFIG_FILES([Makefile
