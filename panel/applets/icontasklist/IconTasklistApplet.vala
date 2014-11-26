@@ -59,6 +59,7 @@ public class DesktopHelper : Object
 {
 
     Gee.HashMap<string?,string?> simpletons;
+    Gee.HashMap<string?,string?> startupids;
 
     public DesktopHelper()
     {
@@ -66,6 +67,23 @@ public class DesktopHelper : Object
         simpletons = new Gee.HashMap<string?,string?>(null,null,null);
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
+
+        var monitor = AppInfoMonitor.get();
+        monitor.changed.connect(()=> {
+            startupids = null;
+            reload_ids();
+        });
+    }
+
+    void reload_ids()
+    {
+        startupids = new Gee.HashMap<string?,string?>(null,null,null);
+        foreach (var appinfo in AppInfo.get_all()) {
+            var dinfo = appinfo as DesktopAppInfo;
+            if (dinfo.get_startup_wm_class() != null) {
+                startupids[dinfo.get_startup_wm_class()] = dinfo.get_id();
+            }
+        }
     }
 
     /**
@@ -86,13 +104,23 @@ public class DesktopHelper : Object
             return null;
         }
         var app_name = window.get_class_group_name();
-        var c = app_name[0].tolower();
-        var app_name_clean = "%c%s".printf(c,app_name[1:app_name.length]);
+        string? app_name_clean;
+        // track suffix in case we use startup wm class to find id
+        string suffix = ".desktop";
 
-        var p1 = new DesktopAppInfo("%s.desktop".printf(app_name_clean));
+        if (window.get_class_instance_name() in startupids) {
+            app_name = startupids[window.get_class_instance_name()];
+            app_name_clean = app_name;
+            suffix = "";
+        } else {
+            var c = app_name[0].tolower();
+            app_name_clean = "%c%s".printf(c,app_name[1:app_name.length]);
+        }
+
+        var p1 = new DesktopAppInfo("%s%s".printf(app_name_clean, suffix));
         if (p1 == null) {
             if (app_name_clean in simpletons) {
-                p1 = new DesktopAppInfo("%s.desktop".printf(simpletons[app_name_clean]));
+                p1 = new DesktopAppInfo("%s%s".printf(simpletons[app_name_clean], suffix));
             }
         }
         return p1;
