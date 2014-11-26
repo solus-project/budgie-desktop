@@ -73,6 +73,7 @@ public class DesktopHelper : Object
             startupids = null;
             reload_ids();
         });
+        reload_ids();
     }
 
     void reload_ids()
