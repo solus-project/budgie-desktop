@@ -8,7 +8,8 @@ EXTRA_DIST = ${top_srcdir}/README.md \
 	     ${top_srcdir}/gvc-1.0.vapi \
 	     ${top_srcdir}/upower-glib-1.0.vapi \
 	     ${top_srcdir}/gio-2.0.vapi \
-	     ${top_srcdir}/gio-unix-2.0.vapi
+	     ${top_srcdir}/gio-unix-2.0.vapi \
+	     ${top_srcdir}/glib-2.0.vapi
 
 NULL =
 CLEANFILES =
