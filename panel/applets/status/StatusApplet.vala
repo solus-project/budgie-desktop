@@ -34,15 +34,15 @@ public class StatusAppletImpl : Budgie.Applet
         wrap.margin_left = 4;
         wrap.margin_right = 2;
 
-        var image = new Gtk.Image.from_icon_name("emblem-system-symbolic", Gtk.IconSize.INVALID);
-        image.margin = 2;
-        widget.pack_start(image, false, false, 0);
-
         power = new PowerIndicator();
         widget.pack_start(power, false, false, 0);
 
         sound = new SoundIndicator();
         widget.pack_start(sound, false, false, 0);
+
+        var image = new Gtk.Image.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.INVALID);
+        image.margin = 2;
+        widget.pack_start(image, false, false, 0);
 
         create_popover();
 
