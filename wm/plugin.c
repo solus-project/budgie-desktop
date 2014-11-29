@@ -49,6 +49,8 @@
 #include <gmodule.h>
 #include <string.h>
 
+#include <gio/gdesktopappinfo.h>
+
 #include "plugin.h"
 
 #ifndef MUTTER_MINOR_VERSION
@@ -133,6 +135,7 @@ struct _MetaDefaultPluginPrivate
   ClutterActor          *background_group;
   GSettings             *settings;
 
+  GtkWidget             *menu;
   MetaPluginInfo         info;
 };
 
@@ -196,6 +199,7 @@ meta_default_plugin_dispose (GObject *object)
 {
   MetaDefaultPluginPrivate *priv = META_DEFAULT_PLUGIN (object)->priv;
   g_object_unref(priv->settings);
+  gtk_widget_destroy(priv->menu);
   G_OBJECT_CLASS (meta_default_plugin_parent_class)->dispose (object);
 }
 
@@ -548,15 +552,116 @@ on_monitors_changed (MetaScreen *screen,
     g_free(filename);
 }
 
+static gboolean on_button_press(ClutterActor *actor,
+                                  ClutterEvent *event,
+                                  gpointer userdata)
+{
+  GtkMenu *menu = GTK_MENU(userdata);
+
+  if (gtk_widget_get_visible(GTK_WIDGET(menu)) && gtk_widget_get_realized(GTK_WIDGET(menu)))
+  {
+    gtk_menu_popdown(menu);
+  }
+  if (event->button.button != 3)
+  {
+     return FALSE;
+  }
+  gtk_menu_popup(menu, NULL, NULL, NULL, NULL, event->button.button, GDK_CURRENT_TIME);
+  return TRUE;
+}
+
+static void launch_personalise(GtkMenuItem *item,
+                                gpointer userdata)
+{
+  g_spawn_command_line_async("budgie-panel --prefs", NULL);
+}
+
+static void launch_settings(GtkMenuItem *item,
+                             gpointer userdata)
+{
+  MetaDefaultPlugin *self = META_DEFAULT_PLUGIN (userdata);
+  MetaScreen *screen = meta_plugin_get_screen (META_PLUGIN(self));
+  GDesktopAppInfo *info = NULL;
+  gint workspace;
+
+  info = g_desktop_app_info_new ("gnome-control-center.desktop");
+  if (!info) {
+    /* Need to report this.. */
+    return;
+  }
+  GdkAppLaunchContext *ctx = gdk_display_get_app_launch_context(gdk_display_get_default());
+  workspace = meta_screen_get_active_workspace_index(screen);
+
+  gdk_app_launch_context_set_desktop(ctx, workspace);
+  gdk_app_launch_context_set_timestamp(ctx, GDK_CURRENT_TIME);
+
+  g_app_info_launch(G_APP_INFO(info), NULL, G_APP_LAUNCH_CONTEXT(ctx), NULL);
+  g_object_unref(ctx);
+  g_object_unref(info);
+}
+
+static void launch_background_settings(GtkMenuItem *item,
+                                        gpointer userdata)
+{
+  MetaDefaultPlugin *self = META_DEFAULT_PLUGIN (userdata);
+  MetaScreen *screen = meta_plugin_get_screen (META_PLUGIN(self));
+  GDesktopAppInfo *info = NULL;
+  gint workspace;
+
+  info = g_desktop_app_info_new ("gnome-background-panel.desktop");
+  if (!info) {
+    /* Need to report this.. */
+    return;
+  }
+  GdkAppLaunchContext *ctx = gdk_display_get_app_launch_context(gdk_display_get_default());
+  workspace = meta_screen_get_active_workspace_index(screen);
+
+  gdk_app_launch_context_set_desktop(ctx, workspace);
+  gdk_app_launch_context_set_timestamp(ctx, GDK_CURRENT_TIME);
+
+  g_app_info_launch(G_APP_INFO(info), NULL, G_APP_LAUNCH_CONTEXT(ctx), NULL);
+  g_object_unref(ctx);
+  g_object_unref(info);
+}
+
 static void
 start (MetaPlugin *plugin)
 {
   MetaDefaultPlugin *self = META_DEFAULT_PLUGIN (plugin);
   MetaScreen *screen = meta_plugin_get_screen (plugin);
+  GtkWidget *menu = NULL;
+  GtkWidget *menu_item = NULL;
 
   self->priv->background_group = meta_background_group_new ();
   clutter_actor_insert_child_below (meta_get_window_group_for_screen (screen),
                                     self->priv->background_group, NULL);
+
+  menu = gtk_menu_new();
+  gtk_widget_show(menu);
+  menu_item = gtk_menu_item_new_with_label("Change Background");
+  g_signal_connect(menu_item, "activate", G_CALLBACK(launch_background_settings),
+    plugin);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+  gtk_widget_show(menu_item);
+
+  menu_item = gtk_menu_item_new_with_label("Personalise");
+  g_signal_connect(menu_item, "activate", G_CALLBACK(launch_personalise),
+    plugin);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+  gtk_widget_show(menu_item);
+
+  menu_item = gtk_separator_menu_item_new();
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+  gtk_widget_show(menu_item);
+
+  menu_item = gtk_menu_item_new_with_label("Settings");
+  g_signal_connect(menu_item, "activate", G_CALLBACK(launch_settings), plugin);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+  gtk_widget_show(menu_item);
+
+  clutter_actor_set_reactive(self->priv->background_group, TRUE);
+  g_signal_connect (self->priv->background_group, "button-press-event",
+    G_CALLBACK(on_button_press), menu);
 
   g_signal_connect (screen, "monitors-changed",
                     G_CALLBACK (on_monitors_changed), plugin);
