@@ -168,6 +168,7 @@ public class IconButton : Gtk.ToggleButton
     public GLib.DesktopAppInfo? ainfo;
     private Gtk.MenuItem pinnage;
     private Gtk.MenuItem unpinnage;
+    private Gtk.SeparatorMenuItem sep_item;
 
     public bool requested_pin = false;
 
@@ -211,6 +212,7 @@ public class IconButton : Gtk.ToggleButton
 
         var sep = new Gtk.SeparatorMenuItem();
         menu.append(sep);
+        sep_item = sep;
         pinnage = new Gtk.MenuItem.with_label("Pin to panel");
         unpinnage = new Gtk.MenuItem.with_label("Unpin from panel");
         sep.show();
@@ -411,6 +413,9 @@ public class IconButton : Gtk.ToggleButton
         if (ainfo == null) {
             unpinnage.hide();
             pinnage.hide();
+            sep_item.hide();
+        } else {
+            sep_item.show();
         }
 
         // Right click, i.e. actions menu
