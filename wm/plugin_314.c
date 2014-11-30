@@ -580,8 +580,9 @@ start (MetaPlugin *plugin)
   g_signal_connect(menu_item, "activate", G_CALLBACK(launch_settings), plugin);
   gtk_widget_show(menu_item);
 
-  g_signal_connect (self->priv->background_group, G_CALLBACK("button-press-event"),
-    on_button_press, menu);
+  clutter_actor_set_reactive(self->priv->background_group, TRUE);
+  g_signal_connect (self->priv->background_group, "button-press-event",
+    G_CALLBACK(on_button_press), menu);
   clutter_actor_show (meta_get_stage_for_screen (screen));
 
   /* Set up our own keybinding overrides */
