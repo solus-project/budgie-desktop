@@ -70,6 +70,7 @@ public class RunDialog : Gtk.Window
     private Gtk.Box results;
     private Gtk.Grid grid;
     private Gtk.ScrolledWindow scrolled;
+    private RunDialogItem first_item;
 
     private static string DEFAULT_ICON = "system-run-symbolic";
 
@@ -100,7 +101,6 @@ public class RunDialog : Gtk.Window
         scrolled.set_size_request (-1, GRID_ROWS * RunDialogItem.REQUEST_SIZE);
         scrolled.add(grid);
         results.add(scrolled);
-
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, (int) this.border_width);
         main_layout.pack_start(entry, false, false, 0);
@@ -166,8 +166,13 @@ public class RunDialog : Gtk.Window
                 grid.remove(c);
             results.show();
             int i = 0, current_column = -1, current_row = -1;
+            first_item = null;
             foreach (DesktopAppInfo app in apps) {
                 var item = new RunDialogItem(app);
+                if (first_item == null) {
+                    item.set_relief (Gtk.ReliefStyle.HALF);
+                    first_item = item;
+                }
                 item.clicked.connect(() => this.destroy ());
                 item.show();
                 current_column = i % GRID_COLUMS;
@@ -221,6 +226,10 @@ public class RunDialog : Gtk.Window
      {
             if (entry.text.length == 0) {
                 return;
+            }
+            if (first_item != null) {
+                first_item.launch ();
+                destroy();
             }
     }
 
