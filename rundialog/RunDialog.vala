@@ -67,15 +67,15 @@ public class RunDialog : Gtk.Window
 {
 
     private Gtk.SearchEntry entry;
-    private Gtk.Box results;
     private Gtk.Grid grid;
-    private Gtk.ScrolledWindow scrolled;
     private RunDialogItem first_item;
 
     private static string DEFAULT_ICON = "system-run-symbolic";
 
     private static int GRID_COLUMS = 3;
     private static int GRID_ROWS = 3;
+
+    protected Gtk.Revealer revealer;
 
     public RunDialog()
     {
@@ -92,19 +92,24 @@ public class RunDialog : Gtk.Window
         this.border_width = 4;
 
         entry = new Gtk.SearchEntry();
-
-        results = new Gtk.Box(Gtk.Orientation.VERTICAL, (int) this.border_width);
         grid = new Gtk.Grid();
-        scrolled = new Gtk.ScrolledWindow(null, null);
+
+        var box_results = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        var scrolled = new Gtk.ScrolledWindow(null, null);
         scrolled.get_style_context().add_class("entry");
         scrolled.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         scrolled.set_size_request (-1, GRID_ROWS * RunDialogItem.REQUEST_SIZE);
         scrolled.add(grid);
-        results.add(scrolled);
+        box_results.add(scrolled);
+
+        revealer = new Gtk.Revealer();
+        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+        revealer.set_border_width (this.border_width);
+        revealer.add(box_results);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, (int) this.border_width);
         main_layout.pack_start(entry, false, false, 0);
-        main_layout.pack_end (results, false, false, 0);
+        main_layout.pack_end (revealer, false, false, 0);
         add(main_layout);
 
         get_style_context().add_class("budgie-run-dialog");
@@ -142,8 +147,7 @@ public class RunDialog : Gtk.Window
         empty.get_style_context().remove_class("titlebar");
 
         show_all();
-        results.hide();
-
+        hide_results ();
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
     }
 
@@ -153,45 +157,62 @@ public class RunDialog : Gtk.Window
      */
     protected void entry_changed ()
     {
+        clean ();
         if (entry.text.length <= 0) {
-            clean ();
+            hide_results ();
             return;
-        } else {
-            List<DesktopAppInfo> apps = this.search_applications (entry.text);
-            if (apps.length () == 0) {
-                clean();
-                return;
+        }
+
+        List<DesktopAppInfo> apps = this.search_applications (entry.text);
+
+        if (apps.length () == 0) {
+            hide_results ();
+            return;
+        }
+        
+        show_results ();
+        int i = 0, current_column = -1, current_row = -1;
+        first_item = null;
+
+        foreach (DesktopAppInfo app in apps)
+        {
+            var item = new RunDialogItem(app);
+            item.clicked.connect(() => this.destroy ());
+            item.show();
+            current_column = i % GRID_COLUMS;
+            if (current_column == 0)
+                current_row++;
+            grid.attach (item, current_column, current_row, 1, 1);
+            if (first_item == null) {
+                first_item = item;
             }
-            foreach (var c in grid.get_children ())
-                grid.remove(c);
-            results.show();
-            int i = 0, current_column = -1, current_row = -1;
-            first_item = null;
-            foreach (DesktopAppInfo app in apps) {
-                var item = new RunDialogItem(app);
-                if (first_item == null) {
-                    item.set_relief (Gtk.ReliefStyle.HALF);
-                    first_item = item;
-                }
-                item.clicked.connect(() => this.destroy ());
-                item.show();
-                current_column = i % GRID_COLUMS;
-                if (current_column == 0)
-                    current_row++;
-                grid.attach (item, current_column, current_row, 1, 1);
-                i++;
-            }
+            i++;
         }
     }
 
     /**
-     * Clean the window, remove results.
+     * Remove results.
      */
     private void clean ()
     {
         foreach (var c in grid.get_children ())
             grid.remove(c);
-        results.hide();
+    }
+
+   /**
+    * Show results
+    */
+    protected void show_results()
+    {
+        revealer.set_reveal_child(true);
+    }
+
+   /**
+    * Hide results
+    */
+    protected void hide_results()
+    {
+        revealer.set_reveal_child(false);
     }
 
     /**
