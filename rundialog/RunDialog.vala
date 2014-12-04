@@ -171,14 +171,15 @@ public class RunDialog : Gtk.Window
         {
             var item = new RunDialogItem(app);
             item.clicked.connect(() => this.destroy ());
+            if (first_item == null) {
+                first_item = item;
+                item.get_style_context ().add_class ("suggested-action");
+            }
             item.show();
             current_column = i % GRID_COLUMS;
             if (current_column == 0)
                 current_row++;
             grid.attach (item, current_column, current_row, 1, 1);
-            if (first_item == null) {
-                first_item = item;
-            }
             i++;
         }
     }
