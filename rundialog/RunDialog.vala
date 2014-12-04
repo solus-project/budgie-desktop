@@ -88,7 +88,7 @@ public class RunDialog : Gtk.Window
         title = "Run Program...";
         icon_name = DEFAULT_ICON;
         set_resizable (false);
-        set_size_request (400, -1);
+        set_size_request (410, -1);
         this.border_width = 4;
 
         entry = new Gtk.SearchEntry();
