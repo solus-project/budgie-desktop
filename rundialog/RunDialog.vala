@@ -13,12 +13,11 @@
 namespace Budgie
 {
 
-class RunDialogItem : Gtk.Button
+public class RunDialogItem : Gtk.Button
 {
     public static int REQUEST_SIZE = 90;
 
     protected static Gtk.IconSize IMAGE_SIZE = Gtk.IconSize.DIALOG;
-    protected static int MAX_NAME_LENGTH = 10;
 
     public DesktopAppInfo app;
 
@@ -31,7 +30,7 @@ class RunDialogItem : Gtk.Button
         add(box);
         box.set_size_request (REQUEST_SIZE, 0);
         box.add (get_icon ());
-        box.add (new Gtk.Label(get_name()));
+        box.add (get_name ());
         show_all();
         clicked.connect(launch);
     }
@@ -43,14 +42,12 @@ class RunDialogItem : Gtk.Button
         return image;
     }
 
-    protected string get_name()
+    protected Gtk.Label get_name()
     {
-        var name = app.get_name ();
-
-        if (name.length > MAX_NAME_LENGTH) {
-            name = name.substring (0, MAX_NAME_LENGTH - 1);
-            name += "…";
-        }
+        var name = new Gtk.Label(app.get_name ());
+        name.set_line_wrap (true);
+        name.set_ellipsize (Pango.EllipsizeMode.END);
+        name.max_width_chars = 1;
         return name;
     }
 
@@ -76,6 +73,8 @@ public class RunDialog : Gtk.Window
     private static int GRID_ROWS = 3;
 
     protected Gtk.Revealer revealer;
+    protected Gtk.Label exec;
+    protected Gtk.Label description;
 
     public RunDialog()
     {
@@ -97,7 +96,9 @@ public class RunDialog : Gtk.Window
 
         grid = new Gtk.Grid();
         revealer = new Gtk.Revealer();
-        var box_results = get_results_box (grid, revealer);
+        exec = new Gtk.Label("");
+        description = new Gtk.Label("");
+        var box_results = get_results_box (grid, revealer, exec, description);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.pack_start(headerbar, false, false, 0);
@@ -171,8 +172,11 @@ public class RunDialog : Gtk.Window
         {
             var item = new RunDialogItem(app);
             item.clicked.connect(() => this.destroy ());
+            item.enter_notify_event.connect(() => this.set_info(item));
+            item.leave_notify_event.connect(() => this.set_info(null));
             if (first_item == null) {
                 first_item = item;
+                this.set_info (item);
                 item.get_style_context ().add_class ("suggested-action");
             }
             item.show();
@@ -228,11 +232,21 @@ public class RunDialog : Gtk.Window
     /**
      * Build the box results
      */
-    protected Gtk.Widget get_results_box (Gtk.Grid grid, Gtk.Revealer revealer)
+    protected Gtk.Widget get_results_box (Gtk.Grid grid,
+                                          Gtk.Revealer revealer,
+                                          Gtk.Label exec,
+                                          Gtk.Label description)
     {
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL,
                                (int) this.border_width);
         box.margin_top = (int) this.border_width;
+
+        description.set_alignment (0, 0);
+        description.set_line_wrap (true);
+        description.set_ellipsize (Pango.EllipsizeMode.END);
+        description.max_width_chars = 1;
+        box.pack_start (description, true, true, this.border_width);
+
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.get_style_context().add_class("entry");
         scrolled.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -240,11 +254,29 @@ public class RunDialog : Gtk.Window
         scrolled.add(grid);
         box.add(scrolled);
 
+        exec.set_alignment (0, 0);
+        exec.set_line_wrap (true);
+        exec.set_ellipsize (Pango.EllipsizeMode.END);
+        exec.max_width_chars = 1;
+        box.pack_end(exec, true, true, this.border_width);
+
         revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
         revealer.set_transition_duration (100);
         revealer.add(box);
 
         return revealer;
+    }
+
+    /**
+     * Set information about the application is going to be launched
+     */
+    public bool set_info(RunDialogItem? item)
+    {
+        if (item == null)
+            item = first_item;
+        description.set_text (item.app.get_description ());
+        exec.set_text ("Execute command <%s>".printf(item.app.get_executable ()));
+        return false;
     }
 
     /**
