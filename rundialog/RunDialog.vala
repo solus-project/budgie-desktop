@@ -92,27 +92,20 @@ public class RunDialog : Gtk.Window
         this.border_width = 4;
 
         entry = new Gtk.SearchEntry();
+        var headerbar = get_headerbar (entry);
+        set_focus_child (entry);
+
         grid = new Gtk.Grid();
-
-        var box_results = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        var scrolled = new Gtk.ScrolledWindow(null, null);
-        scrolled.get_style_context().add_class("entry");
-        scrolled.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        scrolled.set_size_request (-1, GRID_ROWS * RunDialogItem.REQUEST_SIZE);
-        scrolled.add(grid);
-        box_results.add(scrolled);
-
         revealer = new Gtk.Revealer();
-        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-        revealer.set_border_width (this.border_width);
-        revealer.add(box_results);
+        var box_results = get_results_box (grid, revealer);
 
-        var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, (int) this.border_width);
-        main_layout.pack_start(entry, false, false, 0);
-        main_layout.pack_end (revealer, false, false, 0);
+        var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        main_layout.pack_start(headerbar, false, false, 0);
+        main_layout.pack_end (box_results, false, false, 0);
         add(main_layout);
 
         get_style_context().add_class("budgie-run-dialog");
+        get_style_context().add_class("header-bar");
 
         // Load our default styling
         try {
@@ -169,7 +162,7 @@ public class RunDialog : Gtk.Window
             hide_results ();
             return;
         }
-        
+
         show_results ();
         int i = 0, current_column = -1, current_row = -1;
         first_item = null;
@@ -190,10 +183,73 @@ public class RunDialog : Gtk.Window
         }
     }
 
+
+    /**
+     * Launch the budgie-panel preferences and exit
+     */
+    protected void launch_panel_preferences ()
+    {
+        try {
+            Process.spawn_command_line_async ("budgie-panel --prefs");
+            this.destroy();
+        }
+        catch (SpawnError e) {
+            stderr.printf ("Error launching budgie settings: %s\n",
+                           e.message);
+        }
+    }
+
+    /**
+     * Build the headerbar
+     */
+    protected Gtk.Box get_headerbar (Gtk.SearchEntry entry)
+    {
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, (int) this.border_width);
+
+        var preferences = new Gtk.Button.from_icon_name ("preferences-desktop",
+                                                         Gtk.IconSize.MENU);
+        preferences.tooltip_text = "Budgie Settings";
+        preferences.clicked.connect(launch_panel_preferences);
+
+        var close = new Gtk.Button.from_icon_name ("window-close-symbolic",
+                                                   Gtk.IconSize.MENU);
+        close.relief = Gtk.ReliefStyle.NONE;
+        close.clicked.connect(() => this.destroy());
+
+        box.add(preferences);
+        box.add(new Gtk.Separator (Gtk.Orientation.VERTICAL));
+        box.pack_start (entry, true, true, 0);
+        box.add(close);
+
+        return box;
+    }
+
+    /**
+     * Build the box results
+     */
+    protected Gtk.Widget get_results_box (Gtk.Grid grid, Gtk.Revealer revealer)
+    {
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL,
+                               (int) this.border_width);
+        box.margin_top = (int) this.border_width;
+        var scrolled = new Gtk.ScrolledWindow (null, null);
+        scrolled.get_style_context().add_class("entry");
+        scrolled.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        scrolled.set_size_request (-1, GRID_ROWS * RunDialogItem.REQUEST_SIZE);
+        scrolled.add(grid);
+        box.add(scrolled);
+
+        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+        revealer.set_transition_duration (100);
+        revealer.add(box);
+
+        return revealer;
+    }
+
     /**
      * Remove results.
      */
-    private void clean ()
+    protected void clean ()
     {
         foreach (var c in grid.get_children ())
             grid.remove(c);
