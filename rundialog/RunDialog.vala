@@ -1,8 +1,9 @@
 /*
  * RunDialog.vala
- * 
- * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
+ * Copyright: 2014 Ikey Doherty <ikey.doherty@gmail.com>
+ *                 Leo Iannacone <info@leoiannacone.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -12,28 +13,71 @@
 namespace Budgie
 {
 
+public class RunDialogItem : Gtk.Button
+{
+    public static int REQUEST_SIZE = 90;
+
+    protected static Gtk.IconSize IMAGE_SIZE = Gtk.IconSize.DIALOG;
+
+    public DesktopAppInfo app;
+
+    public RunDialogItem(DesktopAppInfo app)
+    {
+        this.app = app;
+        this.relief = Gtk.ReliefStyle.NONE;
+
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
+        add(box);
+        box.set_size_request (REQUEST_SIZE, 0);
+        box.add (get_icon ());
+        box.add (get_name ());
+        show_all();
+        clicked.connect(launch);
+    }
+
+    protected Gtk.Image get_icon()
+    {
+        var image = new Gtk.Image();
+        image.set_from_gicon (app.get_icon (), IMAGE_SIZE);
+        return image;
+    }
+
+    protected Gtk.Label get_name()
+    {
+        var name = new Gtk.Label(app.get_name ());
+        name.set_line_wrap (true);
+        name.set_ellipsize (Pango.EllipsizeMode.END);
+        name.max_width_chars = 1;
+        return name;
+    }
+
+    public void launch() {
+        try {
+            app.launch (null, null);
+        } catch (GLib.Error e) {
+            stderr.printf("Error launching app: %s\n", e.message);
+        }
+    }
+}
+
 public class RunDialog : Gtk.Window
 {
 
-    private Gtk.Image side_image;
     private Gtk.SearchEntry entry;
-    private GMenu.Tree tree;
-
-    private Gee.HashMap<string,GLib.DesktopAppInfo> mapping;
+    private Gtk.Grid grid;
+    private RunDialogItem first_item;
 
     private static string DEFAULT_ICON = "system-run-symbolic";
-    private static string ERROR_ICON   = "dialog-error-symbolic";
+
+    private static int GRID_COLUMS = 3;
+    private static int GRID_ROWS = 3;
+
+    protected Gtk.Revealer revealer;
+    protected Gtk.Label exec;
+    protected Gtk.Label description;
 
     public RunDialog()
     {
-        side_image = new Gtk.Image.from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
-        side_image.pixel_size = 64;
-        side_image.halign = Gtk.Align.START;
-        side_image.valign = Gtk.Align.CENTER;
-        side_image.margin_right = 15;
-        entry = new Gtk.SearchEntry();
-        entry.margin_right = 15;
-
         // Initialisation stuffs
         window_position = Gtk.WindowPosition.CENTER;
         destroy.connect(() => Gtk.main_quit());
@@ -42,18 +86,27 @@ public class RunDialog : Gtk.Window
         set_skip_pager_hint(true);
         title = "Run Program...";
         icon_name = DEFAULT_ICON;
+        set_resizable (false);
+        set_size_request (410, -1);
+        this.border_width = 4;
 
+        entry = new Gtk.SearchEntry();
+        var headerbar = get_headerbar (entry);
+        set_focus_child (entry);
 
-        var main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        /* Window sizing hacks relating to the image size */
-        main_layout.pack_start(side_image, false, false, 0);
-        main_layout.pack_start(entry, true, true, 0);
+        grid = new Gtk.Grid();
+        revealer = new Gtk.Revealer();
+        exec = new Gtk.Label("");
+        description = new Gtk.Label("");
+        var box_results = get_results_box (grid, revealer, exec, description);
+
+        var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        main_layout.pack_start(headerbar, false, false, 0);
+        main_layout.pack_end (box_results, false, false, 0);
         add(main_layout);
 
-        set_size_request(350+(side_image.margin), side_image.pixel_size+side_image.margin);
-        border_width = 4;
-
         get_style_context().add_class("budgie-run-dialog");
+        get_style_context().add_class("header-bar");
 
         // Load our default styling
         try {
@@ -88,98 +141,192 @@ public class RunDialog : Gtk.Window
         empty.get_style_context().remove_class("titlebar");
 
         show_all();
-
+        hide_results ();
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
-        GLib.Idle.add(init_menus);
+    }
+
+
+    /**
+     * Handle changes to the text entry, update the results if we can
+     */
+    protected void entry_changed ()
+    {
+        clean ();
+        if (entry.text.length <= 0) {
+            hide_results ();
+            return;
+        }
+
+        List<DesktopAppInfo> apps = this.search_applications (entry.text);
+
+        if (apps.length () == 0) {
+            hide_results ();
+            return;
+        }
+
+        show_results ();
+        int i = 0, current_column = -1, current_row = -1;
+        first_item = null;
+
+        foreach (DesktopAppInfo app in apps)
+        {
+            var item = new RunDialogItem(app);
+            item.clicked.connect(() => this.destroy ());
+            item.enter_notify_event.connect(() => this.set_info(item));
+            item.leave_notify_event.connect(() => this.set_info(null));
+            if (first_item == null) {
+                first_item = item;
+                this.set_info (item);
+                item.get_style_context ().add_class ("suggested-action");
+            }
+            item.show();
+            current_column = i % GRID_COLUMS;
+            if (current_column == 0)
+                current_row++;
+            grid.attach (item, current_column, current_row, 1, 1);
+            i++;
+        }
+    }
+
+
+    /**
+     * Launch the budgie-panel preferences and exit
+     */
+    protected void launch_panel_preferences ()
+    {
+        try {
+            Process.spawn_command_line_async ("budgie-panel --prefs");
+            this.destroy();
+        }
+        catch (SpawnError e) {
+            stderr.printf ("Error launching budgie settings: %s\n",
+                           e.message);
+        }
     }
 
     /**
-     * Load our menu entries
+     * Build the headerbar
      */
-    private bool init_menus()
+    protected Gtk.Box get_headerbar (Gtk.SearchEntry entry)
     {
-        // Set up auto-complete
-        var store = new Gtk.ListStore(1, typeof(string));
-        Gtk.TreeIter iter;
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, (int) this.border_width);
 
-        load_menus();
+        var preferences = new Gtk.Button.from_icon_name ("preferences-desktop",
+                                                         Gtk.IconSize.MENU);
+        preferences.tooltip_text = "Budgie Settings";
+        preferences.clicked.connect(launch_panel_preferences);
 
-        // Shove this back into a model
-        if (mapping != null) {
-            foreach (var entry in mapping.entries) {
-                store.append(out iter);
-                store.set(iter, 0, entry.key);
-            }
-        }
+        var close = new Gtk.Button.from_icon_name ("window-close-symbolic",
+                                                   Gtk.IconSize.MENU);
+        close.relief = Gtk.ReliefStyle.NONE;
+        close.clicked.connect(() => this.destroy());
 
-        // Nice auto-completion, based on command lines (executables)
-        var completion = new Gtk.EntryCompletion();
-        completion.set_model(store);
-        completion.set_text_column(0);
-        entry.completion = completion;
-        completion.inline_completion = true;
+        box.add(preferences);
+        box.add(new Gtk.Separator (Gtk.Orientation.VERTICAL));
+        box.pack_start (entry, true, true, 0);
+        box.add(close);
 
+        return box;
+    }
+
+    /**
+     * Build the box results
+     */
+    protected Gtk.Widget get_results_box (Gtk.Grid grid,
+                                          Gtk.Revealer revealer,
+                                          Gtk.Label exec,
+                                          Gtk.Label description)
+    {
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL,
+                               (int) this.border_width);
+        box.margin_top = (int) this.border_width;
+
+        description.set_alignment (0, 0);
+        description.set_line_wrap (true);
+        description.set_ellipsize (Pango.EllipsizeMode.END);
+        description.max_width_chars = 1;
+        box.pack_start (description, true, true, this.border_width);
+
+        var scrolled = new Gtk.ScrolledWindow (null, null);
+        scrolled.get_style_context().add_class("entry");
+        scrolled.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        scrolled.set_size_request (-1, GRID_ROWS * RunDialogItem.REQUEST_SIZE);
+        scrolled.add(grid);
+        box.add(scrolled);
+
+        exec.set_alignment (0, 0);
+        exec.set_line_wrap (true);
+        exec.set_ellipsize (Pango.EllipsizeMode.END);
+        exec.max_width_chars = 1;
+        box.pack_end(exec, true, true, this.border_width);
+
+        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+        revealer.set_transition_duration (100);
+        revealer.add(box);
+
+        return revealer;
+    }
+
+    /**
+     * Set information about the application is going to be launched
+     */
+    public bool set_info(RunDialogItem? item)
+    {
+        if (item == null)
+            item = first_item;
+        description.set_text (item.app.get_description ());
+        exec.set_text ("Execute command <%s>".printf(item.app.get_executable ()));
         return false;
     }
 
     /**
-     * Load "menus" (.desktop's) recursively
-     * 
-     * @param tree_root Initialised GMenu.TreeDirectory, or null
+     * Remove results.
      */
-    private void load_menus(GMenu.TreeDirectory? tree_root = null)
+    protected void clean ()
     {
-        GMenu.TreeDirectory root;
-    
-        // Load the tree for the first time
-        if (tree_root == null) {
-            tree = new GMenu.Tree("gnome-applications.menu", GMenu.TreeFlags.SORT_DISPLAY_NAME);
+        foreach (var c in grid.get_children ())
+            grid.remove(c);
+    }
 
-            try {
-                tree.load_sync();
-            } catch (Error e) {
-                stderr.printf("Error: %s\n", e.message);
-                return;
-            }
-            root = tree.get_root_directory();
-            mapping = new Gee.HashMap<string,GLib.DesktopAppInfo>(null,null,null);
-        } else {
-            root = tree_root;
-        }
+   /**
+    * Show results
+    */
+    protected void show_results()
+    {
+        revealer.set_reveal_child(true);
+    }
 
-        var it = root.iter();
-        GMenu.TreeItemType type;
-
-        while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
-            if (type == GMenu.TreeItemType.DIRECTORY) {
-                var dir = it.get_directory();
-                load_menus(dir);
-            } else if (type == GMenu.TreeItemType.ENTRY) {
-                // store the entry by its command line (without path)
-                var appinfo = it.get_entry().get_app_info();
-                var cmd = appinfo.get_executable();
-                var splits = cmd.split("/");
-                var cmdline = splits[splits.length-1];
-                mapping[cmdline] = appinfo;
-            }
-        }
+   /**
+    * Hide results
+    */
+    protected void hide_results()
+    {
+        revealer.set_reveal_child(false);
     }
 
     /**
-     * Handle changes to the text entry, update the icon if we can
+     * Search for applications
      */
-    protected void entry_changed()
+    private List<DesktopAppInfo> search_applications (string pattern)
     {
-        if (entry.text.length < 0) {
-            return;
+        var result = new List<DesktopAppInfo>();
+        if (pattern.length == 0)
+            return result;
+        string**[] search = DesktopAppInfo.search(pattern);
+        string** group;
+        string desktop;
+        int i=0, j=0;
+        while ((group = search[i]) != null) {
+            i++; j = 0;
+            while ((desktop = group[j]) != null) {
+                j++;
+                var app = new DesktopAppInfo(desktop);
+                if (app == null || app.get_nodisplay())
+                    continue;
+                result.append(app);
+            }
         }
-        if (mapping.has_key(entry.text)) {
-                var appinfo = mapping[entry.text];
-                side_image.set_from_gicon(appinfo.get_icon(), Gtk.IconSize.INVALID);
-                return;
-        } else {
-            side_image.set_from_icon_name(DEFAULT_ICON, Gtk.IconSize.INVALID);
-        }
+        return result;
     }
 
     /**
@@ -190,26 +337,9 @@ public class RunDialog : Gtk.Window
             if (entry.text.length == 0) {
                 return;
             }
-            if (mapping.has_key(entry.text)) {
-                /* Better to launch via the API */
-                var appinfo = mapping[entry.text];
-                try {
-                    appinfo.launch(null, null);
-                    this.destroy();
-                } catch (Error e) {
-                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
-                }
-                return;
-            }
-            /* Otherwise go ahead and try to launch the command given */
-            try {
-                if (!Process.spawn_command_line_async(entry.text)) {
-                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
-                } else {
-                    this.destroy();
-                }
-            } catch (Error e) {
-                    side_image.set_from_icon_name(ERROR_ICON, Gtk.IconSize.INVALID);
+            if (first_item != null) {
+                first_item.launch ();
+                destroy();
             }
     }
 
