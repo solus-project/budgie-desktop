@@ -37,7 +37,8 @@ budgie_run_dialog_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg libgnome-menu-3.0 \
 	--pkg gio-unix-2.0 \
-	--pkg gee-0.8
+	--pkg gee-0.8 \
+	--vapidir=..
 
 
 dist-hook:
