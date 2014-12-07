@@ -28,14 +28,11 @@ public class RunDialogItemImage : Gtk.Image
 
     public override void show ()
     {
-        if (animated)
-        {
+        if (animated) {
             animation_show = true;
             animation_start_time = get_monotonic_time();
             add_tick_callback (on_tick);
-        }
-        else
-        {
+        } else {
             animation_end ();
         }
         base.show();
@@ -43,8 +40,7 @@ public class RunDialogItemImage : Gtk.Image
 
     public override bool draw (Cairo.Context cr)
     {
-        if (animated)
-        {
+        if (animated) {
             // if animation_show
             double factor = (double) animation_elapsed / animation_duration;
             if (factor > 1)
@@ -64,8 +60,7 @@ public class RunDialogItemImage : Gtk.Image
         animation_elapsed = frame.get_frame_time() - animation_start_time;
         animated = animation_duration > animation_elapsed;
         widget.queue_draw ();
-        if (!animated)
-        {
+        if (!animated) {
             animation_end();
             return false;
         }
@@ -113,12 +108,9 @@ public class RunDialogItem : Gtk.Button
 
     public void launch()
     {
-        try
-        {
+        try {
             app.launch (null, null);
-        }
-        catch (GLib.Error e)
-        {
+        } catch (GLib.Error e) {
             stderr.printf("Error launching app: %s\n", e.message);
         }
     }
@@ -172,17 +164,14 @@ public class RunDialog : Gtk.Window
         get_style_context().add_class("header-bar");
 
         // Load our default styling
-        try
-        {
+        try {
             var prov = new Gtk.CssProvider();
             var file = File.new_for_uri("resource://com/evolve-os/budgie/run-dialog/rundialog-style.css");
             prov.load_from_file(file);
 
             Gtk.StyleContext.add_provider_for_screen(this.screen, prov,
                     Gtk.STYLE_PROVIDER_PRIORITY_USER);
-        }
-        catch (GLib.Error e)
-        {
+        } catch (GLib.Error e) {
             stderr.printf("CSS loading issue: %s\n", e.message);
         }
 
@@ -192,8 +181,7 @@ public class RunDialog : Gtk.Window
         /* Finally, handle ESC */
         key_press_event.connect((w, e) =>
         {
-            if (e.keyval == Gdk.Key.Escape)
-            {
+            if (e.keyval == Gdk.Key.Escape) {
                 this.destroy();
                 return true;
             }
@@ -225,16 +213,14 @@ public class RunDialog : Gtk.Window
         old_items.reverse();
         clean();
 
-        if (entry.text.length <= 0)
-        {
+        if (entry.text.length <= 0) {
             hide_results ();
             return;
         }
 
         List<DesktopAppInfo> apps = this.search_applications (entry.text);
 
-        if (apps.length () == 0)
-        {
+        if (apps.length () == 0) {
             hide_results ();
             return;
         }
@@ -242,8 +228,7 @@ public class RunDialog : Gtk.Window
         show_results ();
         int i = 0, current_column = -1, current_row = -1;
 
-        foreach (DesktopAppInfo app in apps)
-        {
+        foreach (DesktopAppInfo app in apps) {
             var item = new RunDialogItem(app);
 
             // Do not animate if Item is already in the current position
@@ -254,16 +239,16 @@ public class RunDialog : Gtk.Window
             item.clicked.connect(() => this.destroy ());
             item.enter_notify_event.connect(() => this.set_info(item));
             item.leave_notify_event.connect(() => this.set_info(null));
-            if (i == 0)
-            {
+            if (i == 0) {
                 // first item
                 first_item = item;
                 this.set_info (item);
                 item.get_style_context ().add_class ("suggested-action");
             }
             current_column = i % GRID_COLUMS;
-            if (current_column == 0)
+            if (current_column == 0) {
                 current_row++;
+            }
             grid.attach (item, current_column, current_row, 1, 1);
             item.show_all();
             i++;
@@ -276,13 +261,10 @@ public class RunDialog : Gtk.Window
      */
     protected void launch_panel_preferences ()
     {
-        try
-        {
+        try {
             Process.spawn_command_line_async ("budgie-panel --prefs");
             this.destroy();
-        }
-        catch (SpawnError e)
-        {
+        } catch (SpawnError e) {
             stderr.printf ("Error launching budgie settings: %s\n",
                            e.message);
         }
@@ -356,8 +338,9 @@ public class RunDialog : Gtk.Window
      */
     public bool set_info(RunDialogItem? item)
     {
-        if (item == null)
+        if (item == null) {
             item = first_item;
+        }
         description.set_text (item.app.get_description ());
         exec.set_text ("Execute command <%s>".printf(item.app.get_executable ()));
         return false;
@@ -368,8 +351,9 @@ public class RunDialog : Gtk.Window
      */
     protected void clean ()
     {
-        foreach (var c in grid.get_children())
+        foreach (var c in grid.get_children()) {
             grid.remove(c);
+        }
     }
 
     /**
@@ -394,21 +378,21 @@ public class RunDialog : Gtk.Window
     private List<DesktopAppInfo> search_applications (string pattern)
     {
         var result = new List<DesktopAppInfo>();
-        if (pattern.length == 0)
+        if (pattern.length == 0) {
             return result;
+        }
         string **[] search = DesktopAppInfo.search(pattern);
         string **group;
         string desktop;
         int i = 0, j = 0;
-        while ((group = search[i]) != null)
-        {
+        while ((group = search[i]) != null) {
             i++; j = 0;
-            while ((desktop = group[j]) != null)
-            {
+            while ((desktop = group[j]) != null) {
                 j++;
                 var app = new DesktopAppInfo(desktop);
-                if (app == null || app.get_nodisplay())
+                if (app == null || app.get_nodisplay()) {
                     continue;
+                }
                 result.append(app);
             }
         }
@@ -420,12 +404,10 @@ public class RunDialog : Gtk.Window
      */
     protected void entry_activated()
     {
-        if (entry.text.length == 0)
-        {
+        if (entry.text.length == 0) {
             return;
         }
-        if (first_item != null)
-        {
+        if (first_item != null) {
             first_item.launch ();
             destroy();
         }
@@ -441,8 +423,7 @@ class RunDialogMain : GLib.Application
     public override void activate()
     {
         hold();
-        if (dialog == null)
-        {
+        if (dialog == null) {
             dialog = new Budgie.RunDialog();
             Gtk.main();
         }
