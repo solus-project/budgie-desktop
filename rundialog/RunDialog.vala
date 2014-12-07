@@ -13,11 +13,72 @@
 namespace Budgie
 {
 
+
+public class RunDialogItemImage : Gtk.Image
+{
+    private uint animation_duration = 100000; // default 200ms
+    private int64 animation_start_time = -1;
+    private int64 animation_elapsed = -1;
+    private bool animation_show = false;
+    private bool animation_destroy = false;
+
+    public bool animated = true;
+
+    public signal void animation_end();
+
+    public override void show ()
+    {
+        if (animated)
+        {
+            animation_show = true;
+            animation_start_time = get_monotonic_time();
+            add_tick_callback (on_tick);
+        }
+        else
+        {
+            animation_end ();
+        }
+        base.show();
+    }
+
+    public override bool draw (Cairo.Context cr)
+    {
+        if (animated)
+        {
+            // if animation_show
+            double factor = (double) animation_elapsed / animation_duration;
+            if (factor > 1)
+                factor = 1;
+            if (animation_destroy)
+                factor = 1 - factor;
+            double x = get_allocated_width () * (1 - factor) / 2;
+            cr.translate (x, 0);
+            cr.scale(factor, 1);
+        }
+        base.draw(cr);
+        return true;
+    }
+
+    public bool on_tick (Gtk.Widget widget, Gdk.FrameClock frame)
+    {
+        animation_elapsed = frame.get_frame_time() - animation_start_time;
+        animated = animation_duration > animation_elapsed;
+        widget.queue_draw ();
+        if (!animated)
+        {
+            animation_end();
+            return false;
+        }
+        return true;
+    }
+}
+
+
 public class RunDialogItem : Gtk.Button
 {
     public static int REQUEST_SIZE = 90;
 
-    protected static Gtk.IconSize IMAGE_SIZE = Gtk.IconSize.DIALOG;
+    public RunDialogItemImage image;
 
     public DesktopAppInfo app;
 
@@ -31,14 +92,13 @@ public class RunDialogItem : Gtk.Button
         box.set_size_request (REQUEST_SIZE, 0);
         box.add (get_icon ());
         box.add (get_name ());
-        show_all();
         clicked.connect(launch);
     }
 
-    protected Gtk.Image get_icon()
+    protected Gtk.Widget get_icon()
     {
-        var image = new Gtk.Image();
-        image.set_from_gicon (app.get_icon (), IMAGE_SIZE);
+        image = new RunDialogItemImage();
+        image.set_from_gicon (app.get_icon (), Gtk.IconSize.DIALOG);
         return image;
     }
 
@@ -51,15 +111,18 @@ public class RunDialogItem : Gtk.Button
         return name;
     }
 
-    public void launch() {
-        try {
+    public void launch()
+    {
+        try
+        {
             app.launch (null, null);
-        } catch (GLib.Error e) {
+        }
+        catch (GLib.Error e)
+        {
             stderr.printf("Error launching app: %s\n", e.message);
         }
     }
 }
-
 public class RunDialog : Gtk.Window
 {
 
@@ -91,14 +154,14 @@ public class RunDialog : Gtk.Window
         this.border_width = 4;
 
         entry = new Gtk.SearchEntry();
-        var headerbar = get_headerbar (entry);
+        var headerbar = init_headerbar (entry);
         set_focus_child (entry);
 
         grid = new Gtk.Grid();
         revealer = new Gtk.Revealer();
         exec = new Gtk.Label("");
         description = new Gtk.Label("");
-        var box_results = get_results_box (grid, revealer, exec, description);
+        var box_results = init_results_box (grid, revealer, exec, description);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.pack_start(headerbar, false, false, 0);
@@ -109,14 +172,17 @@ public class RunDialog : Gtk.Window
         get_style_context().add_class("header-bar");
 
         // Load our default styling
-        try {
+        try
+        {
             var prov = new Gtk.CssProvider();
             var file = File.new_for_uri("resource://com/evolve-os/budgie/run-dialog/rundialog-style.css");
             prov.load_from_file(file);
 
             Gtk.StyleContext.add_provider_for_screen(this.screen, prov,
-                Gtk.STYLE_PROVIDER_PRIORITY_USER);
-        } catch (GLib.Error e) {
+                    Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        }
+        catch (GLib.Error e)
+        {
             stderr.printf("CSS loading issue: %s\n", e.message);
         }
 
@@ -124,8 +190,10 @@ public class RunDialog : Gtk.Window
         entry.activate.connect(entry_activated);
 
         /* Finally, handle ESC */
-        key_press_event.connect((w,e) => {
-            if (e.keyval == Gdk.Key.Escape) {
+        key_press_event.connect((w, e) =>
+        {
+            if (e.keyval == Gdk.Key.Escape)
+            {
                 this.destroy();
                 return true;
             }
@@ -133,15 +201,16 @@ public class RunDialog : Gtk.Window
         });
 
         var empty = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        empty.draw.connect((c)=> {
+        empty.draw.connect((c) =>
+        {
             return true;
         });
         set_titlebar(empty);
         empty.get_style_context().add_class("invisi-header");
         empty.get_style_context().remove_class("titlebar");
 
-        show_all();
         hide_results ();
+        show_all();
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
     }
 
@@ -151,39 +220,52 @@ public class RunDialog : Gtk.Window
      */
     protected void entry_changed ()
     {
-        clean ();
-        if (entry.text.length <= 0) {
+        var old_items = grid.get_children().copy();
+        // reverse the items, since we are going to check from position 0
+        old_items.reverse();
+        clean();
+
+        if (entry.text.length <= 0)
+        {
             hide_results ();
             return;
         }
 
         List<DesktopAppInfo> apps = this.search_applications (entry.text);
 
-        if (apps.length () == 0) {
+        if (apps.length () == 0)
+        {
             hide_results ();
             return;
         }
 
         show_results ();
         int i = 0, current_column = -1, current_row = -1;
-        first_item = null;
 
         foreach (DesktopAppInfo app in apps)
         {
             var item = new RunDialogItem(app);
+
+            // Do not animate if Item is already in the current position
+            var old_item = (RunDialogItem) old_items.nth_data(i);
+            var animated = (old_item == null || app.get_filename() != old_item.app.get_filename());
+
+            item.image.animated = animated;
             item.clicked.connect(() => this.destroy ());
             item.enter_notify_event.connect(() => this.set_info(item));
             item.leave_notify_event.connect(() => this.set_info(null));
-            if (first_item == null) {
+            if (i == 0)
+            {
+                // first item
                 first_item = item;
                 this.set_info (item);
                 item.get_style_context ().add_class ("suggested-action");
             }
-            item.show();
             current_column = i % GRID_COLUMS;
             if (current_column == 0)
                 current_row++;
             grid.attach (item, current_column, current_row, 1, 1);
+            item.show_all();
             i++;
         }
     }
@@ -194,11 +276,13 @@ public class RunDialog : Gtk.Window
      */
     protected void launch_panel_preferences ()
     {
-        try {
+        try
+        {
             Process.spawn_command_line_async ("budgie-panel --prefs");
             this.destroy();
         }
-        catch (SpawnError e) {
+        catch (SpawnError e)
+        {
             stderr.printf ("Error launching budgie settings: %s\n",
                            e.message);
         }
@@ -207,17 +291,17 @@ public class RunDialog : Gtk.Window
     /**
      * Build the headerbar
      */
-    protected Gtk.Box get_headerbar (Gtk.SearchEntry entry)
+    protected Gtk.Box init_headerbar (Gtk.SearchEntry entry)
     {
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, (int) this.border_width);
 
         var preferences = new Gtk.Button.from_icon_name ("preferences-desktop",
-                                                         Gtk.IconSize.MENU);
+                Gtk.IconSize.MENU);
         preferences.tooltip_text = "Budgie Settings";
         preferences.clicked.connect(launch_panel_preferences);
 
         var close = new Gtk.Button.from_icon_name ("window-close-symbolic",
-                                                   Gtk.IconSize.MENU);
+                Gtk.IconSize.MENU);
         close.relief = Gtk.ReliefStyle.NONE;
         close.clicked.connect(() => this.destroy());
 
@@ -232,10 +316,10 @@ public class RunDialog : Gtk.Window
     /**
      * Build the box results
      */
-    protected Gtk.Widget get_results_box (Gtk.Grid grid,
-                                          Gtk.Revealer revealer,
-                                          Gtk.Label exec,
-                                          Gtk.Label description)
+    protected Gtk.Widget init_results_box (Gtk.Grid grid,
+                                           Gtk.Revealer revealer,
+                                           Gtk.Label exec,
+                                           Gtk.Label description)
     {
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL,
                                (int) this.border_width);
@@ -284,21 +368,21 @@ public class RunDialog : Gtk.Window
      */
     protected void clean ()
     {
-        foreach (var c in grid.get_children ())
+        foreach (var c in grid.get_children())
             grid.remove(c);
     }
 
-   /**
-    * Show results
-    */
+    /**
+     * Show results
+     */
     protected void show_results()
     {
         revealer.set_reveal_child(true);
     }
 
-   /**
-    * Hide results
-    */
+    /**
+     * Hide results
+     */
     protected void hide_results()
     {
         revealer.set_reveal_child(false);
@@ -312,13 +396,15 @@ public class RunDialog : Gtk.Window
         var result = new List<DesktopAppInfo>();
         if (pattern.length == 0)
             return result;
-        string**[] search = DesktopAppInfo.search(pattern);
-        string** group;
+        string **[] search = DesktopAppInfo.search(pattern);
+        string **group;
         string desktop;
-        int i=0, j=0;
-        while ((group = search[i]) != null) {
+        int i = 0, j = 0;
+        while ((group = search[i]) != null)
+        {
             i++; j = 0;
-            while ((desktop = group[j]) != null) {
+            while ((desktop = group[j]) != null)
+            {
                 j++;
                 var app = new DesktopAppInfo(desktop);
                 if (app == null || app.get_nodisplay())
@@ -332,15 +418,17 @@ public class RunDialog : Gtk.Window
     /**
      * Handle activation of the entry
      */
-     protected void entry_activated()
-     {
-            if (entry.text.length == 0) {
-                return;
-            }
-            if (first_item != null) {
-                first_item.launch ();
-                destroy();
-            }
+    protected void entry_activated()
+    {
+        if (entry.text.length == 0)
+        {
+            return;
+        }
+        if (first_item != null)
+        {
+            first_item.launch ();
+            destroy();
+        }
     }
 
 } // End RunDialog
@@ -353,7 +441,8 @@ class RunDialogMain : GLib.Application
     public override void activate()
     {
         hold();
-        if (dialog == null) {
+        if (dialog == null)
+        {
             dialog = new Budgie.RunDialog();
             Gtk.main();
         }
