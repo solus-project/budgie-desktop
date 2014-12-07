@@ -53,7 +53,7 @@ public class BudgieMenuApplet : Budgie.Applet
 
         widget.button_release_event.connect((e)=> {
             if (e.button == 1) {
-                popover.present(this);
+                popover.present(img);
                 return true;
             }
             return false;
@@ -66,7 +66,7 @@ public class BudgieMenuApplet : Budgie.Applet
             }
             Idle.add(()=> {
                 if (!popover.get_visible()) {
-                    popover.present(widget);
+                    popover.present(img);
                 } else {
                     popover.hide();
                 }
