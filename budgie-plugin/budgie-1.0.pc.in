@@ -1,8 +1,8 @@
-prefix=/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include
-datarootdir=${prefix}/share
+prefix=@prefix@
+exec_prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+datarootdir=@datarootdir@
 
 Name: Budgie
 Description: Budgie Library
