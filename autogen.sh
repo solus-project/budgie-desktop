@@ -2,15 +2,12 @@
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
-test -z "$srcdir" && srcdir=.
+test -n "$srcdir" || srcdir=`dirname "$0"`
+test -n "$srcdir" || srcdir=.
 
 PKG_NAME="budgie-desktop"
-
-(test -f $srcdir/configure.ac) || {
-    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
-    echo " top-level budgie-desktop directory"
-    exit 1
-}
+prevdir="$PWD"
+cd "$srcdir"
 
 # Fetch submodules if needed
 if test ! -f gvc/Makefile.am;
@@ -20,9 +17,14 @@ then
 fi
 git submodule update
 
-which gnome-autogen.sh || {
-    echo "You need to install gnome-common from GNOME Git (or from"
-    echo "your OS vendor's package manager)."
-    exit 1
-}
-USE_COMMON_DOC_BUILD=no . gnome-autogen.sh
+AUTORECONF=`which autoreconf`
+if test -z $AUTORECONF;
+then
+  echo "*** No autoreconf found, please install it ***"
+  exit 1
+else
+  autoreconf --force --install || exit $?
+fi
+
+cd "$prevdir"
+test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
