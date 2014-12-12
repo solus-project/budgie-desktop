@@ -61,7 +61,7 @@ EXTRA_DIST += \
 	budgie-1.0.pc.in
 
 pkgconfigdir = \
-	$(prefix)/lib/pkgconfig
+	$(libdir)/pkgconfig
 
 pkgconfig_DATA = \
 	budgie-1.0.pc
