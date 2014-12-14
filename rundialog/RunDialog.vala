@@ -43,10 +43,12 @@ public class RunDialogItemImage : Gtk.Image
         if (animated) {
             // if animation_show
             double factor = (double) animation_elapsed / animation_duration;
-            if (factor > 1)
+            if (factor > 1) {
                 factor = 1;
-            if (animation_destroy)
+            }
+            if (animation_destroy) {
                 factor = 1 - factor;
+            }
             double x = get_allocated_width () * (1 - factor) / 2;
             cr.translate (x, 0);
             cr.scale(factor, 1);
@@ -179,8 +181,7 @@ public class RunDialog : Gtk.Window
         entry.activate.connect(entry_activated);
 
         /* Finally, handle ESC */
-        key_press_event.connect((w, e) =>
-        {
+        key_press_event.connect((w, e) => {
             if (e.keyval == Gdk.Key.Escape) {
                 this.destroy();
                 return true;
@@ -189,17 +190,16 @@ public class RunDialog : Gtk.Window
         });
 
         var empty = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        empty.draw.connect((c) =>
-        {
+        empty.draw.connect((c) => {
             return true;
         });
         set_titlebar(empty);
         empty.get_style_context().add_class("invisi-header");
         empty.get_style_context().remove_class("titlebar");
 
+        get_settings().set_property("gtk-application-prefer-dark-theme", true);
         hide_results ();
         show_all();
-        get_settings().set_property("gtk-application-prefer-dark-theme", true);
     }
 
 
