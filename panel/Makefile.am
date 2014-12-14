@@ -1,6 +1,6 @@
 -include $(top_srcdir)/common.mk
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/budgie-panel.gresource.xml)
 
@@ -26,6 +26,7 @@ budgie_panel_SOURCES = \
 	budgie-panel-resources.c \
 	BudgiePanel.vala \
 	PanelMover.vala \
+	IconSelect.vala \
 	Editor.vala
 
 budgie_panel_CFLAGS = \

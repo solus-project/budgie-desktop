@@ -1,8 +1,8 @@
 /*
  * BudgiePanel.vala
- * 
+ *
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -35,6 +35,7 @@ public class PanelEditor : Gtk.Window
     Gtk.CheckButton is_status;
     Gtk.SpinButton pad_start;
     Gtk.SpinButton pad_end;
+    Gtk.Entry menu_icon_entry;
 
     // Wrap everything in a stack
     Gtk.Stack book;
@@ -46,6 +47,8 @@ public class PanelEditor : Gtk.Window
 
     // Currently selected PluginInfo
     unowned Peas.PluginInfo? current_plugin;
+
+    private IconSelect? icon_select_dialog;
 
     protected Gtk.Button app_add_btn;
     protected Gtk.Button app_cancel_btn;
@@ -223,6 +226,18 @@ public class PanelEditor : Gtk.Window
         }
 
         return strcmp(before_info.get_name(), after_info.get_name());
+    }
+
+    public void on_icon_select_button_clicked()
+    {
+        if (this.icon_select_dialog == null) {
+            this.icon_select_dialog = new IconSelect(this);
+            this.icon_select_dialog.on_ok.connect((icon) => {
+                this.menu_icon_entry.set_text(icon);
+            });
+        }
+
+        this.icon_select_dialog.show();
     }
 
     protected Gtk.Widget? create_applet_main_area()
@@ -616,11 +631,21 @@ public class PanelEditor : Gtk.Window
         layout.pack_start(item, false, false, 0);
 
         // menu icon
-        entry = new Gtk.Entry();
-        group.add_widget(entry);
-        settings.bind("menu-icon", entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu icon", null, entry);
-        layout.pack_start(item, false, false, 0);
+        Gtk.Box menu_icon_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+        this.menu_icon_entry = new Gtk.Entry();
+        group.add_widget(this.menu_icon_entry);
+        settings.bind("menu-icon", this.menu_icon_entry, "text", SettingsBindFlags.DEFAULT);
+        item = create_action_item("Menu icon", "Set a icon to use for menu", this.menu_icon_entry);
+        menu_icon_box.pack_start(item, true, true, 5);
+
+        var button = new Gtk.Button.with_label("...");
+        button.clicked.connect(()=> {
+            on_icon_select_button_clicked();
+        });
+        menu_icon_box.pack_start(button, false, false, 0);
+
+        layout.pack_start(menu_icon_box, false, false, 0);
 
         return layout;
     }
