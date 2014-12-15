@@ -19,6 +19,8 @@ public class IconSelect : Gtk.Window
 
     Gtk.ListStore icon_model;
     Gtk.ComboBoxText category_select_box;
+    Gtk.FileChooserWidget file_chooser;
+    Gtk.ScrolledWindow scroll;
 
     public IconSelect(Budgie.PanelEditor parent_panel_editor)
     {
@@ -70,13 +72,23 @@ public class IconSelect : Gtk.Window
                                           typeof(Gdk.Pixbuf));
 
         // Icon view
-        Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow(null, null);
+        scroll = new Gtk.ScrolledWindow(null, null);
         Gtk.IconView icon_view = new Gtk.IconView.with_model(icon_model);
+        icon_view.set_selection_mode(Gtk.SelectionMode.SINGLE);
         icon_view.item_width = 32;
         icon_view.item_padding = 2;
         icon_view.pixbuf_column = 2;
         scroll.add(icon_view);
         main_box.pack_start(scroll);
+
+        // File chooser
+        file_chooser = new Gtk.FileChooserWidget(Gtk.FileChooserAction.OPEN);
+        Gtk.FileFilter image_filter = new Gtk.FileFilter();
+        image_filter.add_pixbuf_formats();
+        image_filter.set_filter_name("All supported image formats");
+        file_chooser.add_filter(image_filter);
+        file_chooser.select_multiple = false;
+        main_box.pack_start(file_chooser);
 
         // buttons (Ok, Cancel)
         Gtk.Box button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
@@ -93,18 +105,21 @@ public class IconSelect : Gtk.Window
          */
 
         // Load icons based on the category selected
-        category_select_box.changed.connect(() => load_icons());
+        category_select_box.changed.connect(on_category_select_box_changed);
 
         // Set icon
         button_ok.clicked.connect(() => {
-            // STUB: SET ICON
-            Gtk.TreePath item = icon_view.get_selected_items().data;
-            Gtk.TreeIter iter;
-            Value name;
+            if(icon_view.get_selected_items() == null) {
+                panel_editor.menu_icon_entry.set_text(file_chooser.get_filename());
+            } else {
+                Gtk.TreePath item = icon_view.get_selected_items().data;
+                Gtk.TreeIter iter;
+                Value name;
 
-            icon_model.get_iter(out iter, item);
-            icon_model.get_value(iter, 0, out name);
-            panel_editor.menu_icon_entry.set_text((string)name);
+                icon_model.get_iter(out iter, item);
+                icon_model.get_value(iter, 0, out name);
+                panel_editor.menu_icon_entry.set_text((string)name);
+            }
 
             this.hide();
         });
@@ -144,6 +159,18 @@ public class IconSelect : Gtk.Window
                                2, icon);
         }
 
+    }
+
+    public void on_category_select_box_changed()
+    {
+        if (category_select_box.get_active_text() == "Image file [..]") {
+            scroll.hide();
+            file_chooser.show();
+        } else {
+            file_chooser.hide();
+            scroll.show();
+            load_icons();
+        }
     }
 
 }

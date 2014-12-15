@@ -241,11 +241,11 @@ public class PanelEditor : Gtk.Window
 
         icon_select_dialog = new IconSelect(this);
 
-        // Load all icons for first time
-        icon_select_dialog.load_icons();
-
         icon_select_dialog.show_all();
         icon_select_dialog.present();
+
+        // {FIXME} Set initial window format
+        icon_select_dialog.on_category_select_box_changed();
     }
 
     protected Gtk.Widget? create_applet_main_area()
