@@ -109,7 +109,7 @@ public class IconSelect : Gtk.Window
 
         // Set icon
         button_ok.clicked.connect(() => {
-            if(icon_view.get_selected_items() == null) {
+            if(category_select_box.get_active() == 1) {
                 panel_editor.menu_icon_entry.set_text(file_chooser.get_filename());
             } else {
                 Gtk.TreePath item = icon_view.get_selected_items().data;
@@ -133,30 +133,42 @@ public class IconSelect : Gtk.Window
     /**
      * Load Requested Icons
      */
-    public void load_icons()
+    public async void load_icons()
     {
         Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
         Gtk.TreeIter iter;
         Gdk.Pixbuf icon;
-        var category = "";
+        string category;
 
         // Clear old list
         icon_model.clear();
 
-        if (category_select_box.get_active_text() == "All Icons")
+        // if user request all icons, unset category
+        if (category_select_box.get_active() == 0)
             category = null;
         else
             category = category_select_box.get_active_text();
 
         foreach (var icon_name in icon_theme.list_icons(category))
         {
-            icon_model.append(out iter);
-            icon = icon_theme.load_icon(icon_name, 32, 0);
-            if (icon.width == 32)
-                icon_model.set(iter,
-                               0, icon_name,
-                               1, category,
-                               2, icon);
+            // Prevent duplicate load when user change category before previous call end
+            if(category == null && category_select_box.get_active() != 0) break;
+            if(category != null && category_select_box.get_active_text() != category) break;
+
+            GLib.Idle.add(load_icons.callback);
+            yield;
+
+            try {
+                icon_model.append(out iter);
+                icon = icon_theme.load_icon(icon_name, 32, 0);
+                if (icon.width == 32)
+                    icon_model.set(iter,
+                                   0, icon_name,
+                                   1, category,
+                                   2, icon);
+            } catch (Error e) {
+                warning(e.message);
+            }
         }
 
     }
@@ -169,7 +181,7 @@ public class IconSelect : Gtk.Window
         } else {
             file_chooser.hide();
             scroll.show();
-            load_icons();
+            load_icons.begin();
         }
     }
 
