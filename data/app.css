@@ -85,3 +85,8 @@ PanelToplevel GtkEventBox {
     background-image: none;
     background-color: transparent;
 }
+
+/* active workspace */
+WnckPager:selected {
+    background: rgba(0, 0, 0, 0.25),;
+}
