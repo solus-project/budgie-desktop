@@ -34,6 +34,9 @@ public class ClockAppletImpl : Budgie.Applet
     protected bool show_seconds = false;
     protected bool show_date = false;
 
+    private DateTime time;
+    private int day;
+
     protected Settings settings;
 
     public ClockAppletImpl()
@@ -41,7 +44,16 @@ public class ClockAppletImpl : Budgie.Applet
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
         cal = new Gtk.Calendar();
+        time = new DateTime.now_local();
         widget.add(clock);
+
+        // check current month
+        cal.month_changed.connect(() => {
+            if(cal.month+1 == time.get_month())
+                cal.mark_day(time.get_day_of_month());
+            else
+                cal.unmark_day(time.get_day_of_month());
+        });
 
         // Interesting part - calender in a popover :)
         pop = new Budgie.Popover();
@@ -104,8 +116,19 @@ public class ClockAppletImpl : Budgie.Applet
      */
     protected bool update_clock()
     {
-        DateTime time = new DateTime.now_local();
+        time = new DateTime.now_local();
+        int current_day = time.get_day_of_month();
+        int current_month = time.get_month();
+        int current_year = time.get_year();
         string format;
+
+        // update calendar if day change
+        if(day != current_day) {
+            cal.unmark_day(day);
+            cal.select_month(current_month-1, current_year);
+            cal.mark_day(current_day);
+            day = current_day;
+        }
 
         if (ampm) {
             format = "%l:%M";
