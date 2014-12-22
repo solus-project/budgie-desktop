@@ -19,6 +19,31 @@ public enum ThemeType {
     CURSOR_THEME
 }
 
+/**
+ * Alternative to a separator, gives a shadow effect :)
+ *
+ * @note Until we need otherwise, this is a vertical only widget..
+ */
+public class ShadowBlock : Gtk.EventBox
+{
+
+    public ShadowBlock()
+    {
+        get_style_context().add_class("shadow-block");
+    }
+
+    public override void get_preferred_width(out int min, out int nat)
+    {
+        min = 5;
+        nat = 5;
+    }
+
+    public override void get_preferred_width_for_height(int height, out int min, out int nat)
+    {
+        min = 5;
+        nat = 5;
+    }
+}
 
 public class PanelEditor : Gtk.Window
 {
@@ -82,12 +107,12 @@ public class PanelEditor : Gtk.Window
         book.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN);
         var sbar = new Budgie.Sidebar();
         sbar.set_stack(book);
-        var ssep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-        ssep.show();
+        var shadow = new ShadowBlock();
+        shadow.show();
 
         var wrap = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         wrap.pack_start(sbar, false, false, 0);
-        wrap.pack_start(ssep, false, false, 0);
+        wrap.pack_start(shadow, false, false, 0);
         wrap.pack_start(book, true, true, 0);
         wrap.show_all();
 
