@@ -400,11 +400,6 @@ public class Panel : Gtk.Window
                 return false;
             });
         }
-
-        Timeout.add_seconds(12, ()=> {
-            do_greeting();
-            return false;
-        });
     }
 
     protected void on_screen_changed()
@@ -448,39 +443,6 @@ public class Panel : Gtk.Window
 
         update_position();
         set_struts();
-    }
-
-    /* its a sekrit =) */
-    void do_greeting()
-    {
-        DateTime local = new DateTime.now_local();
-        if (local.get_month() != 12) {
-            return;
-        }
-        if (!(local.get_day_of_month() >= 20 && local.get_day_of_month() <= 26)) {
-            return;
-        }
-
-        try {
-            /* If they haz notify-send.. well. send a nice notification =) */
-            string[] titles = { "Seasons greetings!",
-                                  "Happy Holidays!",
-                                  "Merry Christmas!"
-            };
-            string[] bodies = {
-                    "On behalf of the Evolve OS team, we hope you thoroughly enjoy your holidays!",
-                    "The Evolve OS team sends you warm greetings during the holidays!",
-                    "And an awesome new year, on behalf of the Evolve OS team!"
-            };
-            int index = Random.int_range(0, titles.length);
-            // Random has cracked up on me before, lets not make crashing a feature.
-            index = index > (titles.length-1) ? titles.length -1 : index;
-
-            string command = "notify-send '%s' '%s' -i starred -t 8000".printf(titles[index], bodies[index]);
-            Process.spawn_command_line_async(command);
-        } catch (Error e) {
-            message("Unable to give you a greeting, no notify-send :'(");
-        }
     }
 
     protected void on_settings_change(string key)
