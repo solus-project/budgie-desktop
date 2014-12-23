@@ -18,14 +18,18 @@ pkglib_LTLIBRARIES += libstatusapplet.la
 libstatusapplet_la_SOURCES = \
 	StatusApplet.vala \
 	SoundIndicator.vala \
-	PowerIndicator.vala
+	PowerIndicator.vala \
+	MprisWidget.vala \
+	mpris/MprisClient.vala \
+	mpris/MprisGui.vala
 
 libstatusapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(GVC_CFLAGS) \
 	$(UPOWER_CFLAGS) \
-	$(LIBPEAS_CFLAGS)
+	$(LIBPEAS_CFLAGS) \
+	$(GIO_UNIX_CFLAGS)
 
 libstatusapplet_la_LIBADD = \
 	${top_builddir}/widgets/libbudgiewidgets.la \
@@ -33,7 +37,8 @@ libstatusapplet_la_LIBADD = \
 	${top_builddir}/gvc/libgvc.la \
 	$(GTK3_LIBS) \
 	$(UPOWER_LIBS) \
-	$(LIBPEAS_LIBS)
+	$(LIBPEAS_LIBS) \
+	$(GIO_UNIX_LIBS)
 
 libstatusapplet_la_LDFLAGS = \
 	-module \
@@ -52,7 +57,8 @@ libstatusapplet_la_VALAFLAGS = \
 	--pkg BudgieWidgets \
 	--pkg libpulse \
 	--pkg gvc-1.0 \
-	--pkg upower-glib-1.0
+	--pkg upower-glib-1.0 \
+	--pkg gio-unix-2.0
 
 
 dist-hook:
