@@ -81,10 +81,6 @@ public class StatusAppletImpl : Budgie.Applet
         /* mpris widget */
         mpris = new MprisWidget();
         grid.attach(mpris, 0, row, 2, 1);
-
-        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-        row += 1;
-        grid.attach(sep, 0, row, 2, 1);
         row += 1;
 
         /* sound row */
@@ -98,7 +94,7 @@ public class StatusAppletImpl : Budgie.Applet
         sound.status_image.margin_top = 6; /* Due to mark */
         sound.status_widget.margin_left = 2; /* Due to button for settings */
 
-        sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         row += 1;
         grid.attach(sep, 0, row, 2, 1);
         row += 1;
