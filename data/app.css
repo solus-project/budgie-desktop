@@ -101,5 +101,5 @@ WnckPager:selected {
 }
 
 ClientImage {
-    background-color: alpha(@theme_bg_color, 0.0);
+    background-color: transparent;
 }

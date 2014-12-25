@@ -29,22 +29,41 @@ public class ClientImage : Gtk.Image
 
     public override bool draw(Cairo.Context cr)
     {
-        base.draw(cr);
         Gtk.Allocation alloc;
         get_allocation(out alloc);
 
-        var pattern = new Cairo.Pattern.linear(alloc.width, alloc.height, alloc.width, alloc.y);
+        /* Render to new surface.. */
+        var surf = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
+        var cr2 = new Cairo.Context(surf);
+        base.draw(cr2);
 
-        var rgba = get_style_context().get_background_color(get_state_flags());
+        var alpha = 1.0;
+        /* Just makes sure we fade out the bottom part of the image where we overlay
+         * controls. Inspiration: http://zetcode.com/gfx/pycairo/transparency/
+         *
+         * craqmonkies follow.
+         */
 
-        /* Overlay with a fade effect from bottom to half-way-up-ish. */
-        pattern.add_color_stop_rgba(0.0, rgba.red, rgba.green, rgba.blue, 1.0);
-        pattern.add_color_stop_rgba(0.4, rgba.red, rgba.green, rgba.blue, 0.75);
-        pattern.add_color_stop_rgba(0.8, rgba.red, rgba.green, rgba.blue, 0.0);
+        var start = (int)(alloc.height*0.40);
+        var step = ((1.0 / (alloc.height-start)))*1.35;
 
-        cr.set_source(pattern);
-        cr.rectangle(0,0,alloc.width, alloc.height);
+        cr.rectangle(0, 0, alloc.width, start);
+        cr.save();
+        cr.clip();
+        cr.set_source_surface(surf, 0, 0);
         cr.paint();
+        cr.restore();
+
+        for (int i = start; i < alloc.height; i++) {
+            cr.rectangle(0, i, alloc.width, 1);
+            cr.save();
+            cr.clip();
+            cr.set_source_surface(surf, 0, 0);
+            cr.paint_with_alpha(alpha);
+            cr.restore();
+
+            alpha -= step;
+        }
 
         return true;
     }
