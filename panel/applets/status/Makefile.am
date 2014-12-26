@@ -21,7 +21,8 @@ libstatusapplet_la_SOURCES = \
 	PowerIndicator.vala \
 	MprisWidget.vala \
 	mpris/MprisClient.vala \
-	mpris/MprisGui.vala
+	mpris/MprisGui.vala \
+	UserClient.vala
 
 libstatusapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
