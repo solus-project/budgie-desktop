@@ -42,14 +42,14 @@ AS_IF([test "x$enable_wm" = "xyes"],
 	[])
 AM_CONDITIONAL([BUILD_WM], [test x$enable_wm = x"yes"])
 
-if test "x$enable_wm" = "xyes"; then
-    # Required for Window Manager component
-    
-    PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1])
-    # Determine if we need to go on crack to fix mutter.
-    PKG_CHECK_MODULES(MUTTER314, [libmutter >= 3.14.0], [have_mutter314=yes], [have_mutter314=no])
-    AM_CONDITIONAL([HAVE_MUTTER_314], [test x$have_mutter314 = x"yes"])
-fi
+PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1], enable_wm=no)
+AS_IF([test "x$enable_wm" = "xno"],
+	[AC_DEFINE([BUILD_WM], [0], [Not Building window manager])],
+	[])
+
+# Determine if we need to go on crack to fix mutter.
+PKG_CHECK_MODULES(MUTTER314, [libmutter >= 3.14.0], [have_mutter314=yes], [have_mutter314=no])
+AM_CONDITIONAL([HAVE_MUTTER_314], [test x$have_mutter314 = x"yes"])
 
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
