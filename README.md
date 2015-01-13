@@ -84,6 +84,9 @@ Ubuntu users:
 It is highly likely your theme or Ubuntu setup can affect the usability
 of budgie-panel.
 
+Please also note that currently, 14.04 is unsupported after commit ce3cae9b5c04f7ed14ede1fea0f992c9c83536f0
+Love nor money could not make the Ubuntu-specific issues go away.
+
 Ambiance is *NOT SUPPORTED*
 
 Do not use the Ubuntu GTK3 modifications or plugins, because they break
