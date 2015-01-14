@@ -80,17 +80,35 @@ because of this.
  * libpeas-1.0
  * valac
 
-Ubuntu users:
+*Ubuntu users:*
 It is highly likely your theme or Ubuntu setup can affect the usability
 of budgie-panel.
 
-Please also note that currently, 14.04 is unsupported after commit ce3cae9b5c04f7ed14ede1fea0f992c9c83536f0
-Love nor money could not make the Ubuntu-specific issues go away.
+As of commit ce3cae9b5c04f7ed14ede1fea0f992c9c83536f0 Budgie is unusable on
+Ubuntu 14.04. This is because Ubuntu 14.04 is using Vala 0.22.1, which does
+not correctly export dbus proxies in dynamic type modules.
+
+ * Related bug:  https://bugzilla.gnome.org/show_bug.cgi?id=711423
+ * Patch: https://mail.gnome.org/archives/commits-list/2013-November/msg00814.html
+
+Currently this means we cannot provide updates, as a minimum Vala version of 0.23.1
+is required to correctly build Budgie. It currently means we'll have to rewrite
+parts of Budgie using dbus interfaces into C.
 
 Ambiance is *NOT SUPPORTED*
 
 Do not use the Ubuntu GTK3 modifications or plugins, because they break
 Budgie. I will not support them. (overlay scrollbars and such)
+
+Please ensure you use *gnome-settings-daemon*, not an Ubuntu fork, or Budgie
+will not function correctly.
+Please also ensure you use *gnome-control-center*, not an Ubuntu fork, for the
+same reason.
+
+Love nor money cannot make these Ubuntu-specific issues go away. Consequently,
+given how large the README section is for Ubuntu, support is limited, to say
+the least.
+
 
 Lastly, always set --prefix=/usr when using autogen.sh, or configure, otherwise you
 won't be able to start the desktop on most distros
