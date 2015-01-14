@@ -80,7 +80,8 @@ because of this.
  * libpeas-1.0
  * valac
 
-*Ubuntu users:*
+Ubuntu users:
+-----
 It is highly likely your theme or Ubuntu setup can affect the usability
 of budgie-panel.
 
