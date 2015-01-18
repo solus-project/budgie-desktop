@@ -23,7 +23,7 @@ public class StatusAppletImpl : Budgie.Applet
     protected SoundIndicator sound;
     protected PowerIndicator power;
     protected Budgie.Popover popover;
-    protected MprisWidget mpris;
+    /*protected MprisWidget mpris;*/
     protected AccountsUser? user;
     protected Gtk.Image user_img;
 
@@ -105,10 +105,10 @@ public class StatusAppletImpl : Budgie.Applet
         int row = 0;
         const int width = 3;
 
-        /* mpris widget */
+        /* mpris widget - being a buggy POS - disable it for now. 
         mpris = new MprisWidget();
         grid.attach(mpris, 0, row, width, 1);
-        row += 1;
+        row += 1;*/
 
         /* sound row */
         grid.attach(sound.status_image, 0, row, 1, 1);
