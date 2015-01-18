@@ -100,16 +100,16 @@ static void budgie_wm_start(MetaPlugin *plugin)
         MetaScreen *screen = meta_plugin_get_screen(plugin);
 
         /* Init background */
-        self->priv->background_group = meta_background_group_new ();
-        clutter_actor_insert_child_below (meta_get_window_group_for_screen (screen),
+        self->priv->background_group = meta_background_group_new();
+        clutter_actor_insert_child_below(meta_get_window_group_for_screen(screen),
         self->priv->background_group, NULL);
 
-        g_signal_connect (screen, "monitors-changed",
-        G_CALLBACK (on_monitors_changed), plugin);
-        on_monitors_changed (screen, plugin);
+        g_signal_connect(screen, "monitors-changed",
+                G_CALLBACK(on_monitors_changed), plugin);
+        on_monitors_changed(screen, plugin);
 
         /* Now we're in action. */
-        clutter_actor_show (meta_get_stage_for_screen (screen));
+        clutter_actor_show(meta_get_stage_for_screen(screen));
 
         /* Set up our own keybinding overrides */
         meta_keybindings_set_custom_handler(BUDGIE_KEYBINDING_MAIN_MENU,
