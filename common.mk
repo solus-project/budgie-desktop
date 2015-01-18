@@ -14,4 +14,6 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/panel/applets \
 	-I $(top_srcdir)/widgets \
-	-I $(top_srcdir)/imports/natray
+	-I $(top_srcdir)/imports/natray \
+	-I $(top_srcdir)/wm \
+	-I $(top_srcdir)/wm/ui

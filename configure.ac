@@ -42,14 +42,10 @@ AS_IF([test "x$enable_wm" = "xyes"],
 	[])
 AM_CONDITIONAL([BUILD_WM], [test x$enable_wm = x"yes"])
 
-PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.10.1], enable_wm=no)
+PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.14.0], enable_wm=no)
 AS_IF([test "x$enable_wm" = "xno"],
 	[AC_DEFINE([BUILD_WM], [0], [Not Building window manager])],
 	[])
-
-# Determine if we need to go on crack to fix mutter.
-PKG_CHECK_MODULES(MUTTER314, [libmutter >= 3.14.0], [have_mutter314=yes], [have_mutter314=no])
-AM_CONDITIONAL([HAVE_MUTTER_314], [test x$have_mutter314 = x"yes"])
 
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
@@ -76,7 +72,7 @@ GOBJECT_INTROSPECTION_CHECK([1.38.0])
 PKG_CHECK_MODULES([GEE], [gee-0.8])
 
 # Need Vala.
-AM_PROG_VALAC([0.22], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
+AM_PROG_VALAC([0.26], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 
 # Determine if upower is newer than we're supporting right now
 PKG_CHECK_MODULES(UPOWER99, [upower-glib >= 0.9.99], [have_upower0999=yes], [have_upower0999=no])
