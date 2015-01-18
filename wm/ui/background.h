@@ -29,7 +29,6 @@ typedef struct _BudgieBackgroundPrivate BudgieBackgroundPrivate;
 /* BudgieBackground object */
 struct _BudgieBackground {
         MetaBackgroundGroup parent;
-        /* TODO: Make private. */
         BudgieBackgroundPrivate* priv;
 };
 
