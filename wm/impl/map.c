@@ -18,7 +18,7 @@
 #define MAP_SCALE       0.8f
 
 /* How long to fade in a menu */
-#define FADE_TIMEOUT    150
+#define FADE_TIMEOUT    115
 
 /* To be used in some normal sense somewhere else.. */
 static ClutterPoint PV_CENTER = { 0.5f, 0.5f };
