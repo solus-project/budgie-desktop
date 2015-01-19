@@ -21,30 +21,28 @@ Budgie Desktop integrates with the GNOME stack, and as such requires
 certain components to operate correctly. 
 
 *TODO:*
- * Start adding support for translations
- * Add some form of notification system ✓
- * Add appindicator to eventually replace new tray
- * Add sound control (PulseAudio) and support media keys  ✓
- * Allow adding launchers directly to panel ✓
- * Rewrite in Vala! (mostly done, panel is complete)
- * Enable customisation of panel layout, etc. ✓
- * Add dynamic editor for panel layout ✓
- * Add support for GNOME Panel theming ✓
- * Dynamically resize applets according to panel size ✓
+ * Start adding support for translations (v9)
+ * Redo notifications (v9)
+ * Add appindicator to eventually replace new tray (v9)
+ * Finish WM migration to 3.14
+ * Redo menu and panel using GtkFlowBox and such wonders. (poss v10)
+ * Introduce menu pagination (v9)
+ * Panel colours (v9)
+ * Wayland support, complete it, and validate on Intel NUC (v9)
+ * Drop many deps. (v9)
+ 
+
 
 *Implementation note:*
 
 All elements are written entirely from scratch, using GTK and either Vala
 or C. A rewrite took place to lower the barrier of entry for new contributors
 and to ease maintainence.
-A sole exception is the wm/plugin.c file, which is a slight modification of the
-default Mutter plugin.
-
+(Exception: Parts of the default mutter plugin currently reside in wm/legacy.*)
 
 *budgie-wm:*
 
-libmutter based window manager. Uses a modified default plugin to use
-better default animations, support wallpaper, etc.
+libmutter based window manager.
 
 *budgie-panel:*
 
@@ -70,12 +68,12 @@ because of this.
 
  * libpulse
  * libpulse-mainloop-glib
- * GTK3 (>= 3.10.1)
+ * GTK3 (>= 3.12.0)
  * upower-glib (>= 0.9.20)
  * libgnome-menu (>= 3.10.1)
  * libwnck (>= 3.4.7)
- * libmutter (>= 3.10.1)
- * GLib (>= 2.38.0)
+ * libmutter (>= 3.14.0)
+ * GLib (>= 2.40.0)
  * gee-0.8 (not gee-1.0!)
  * libpeas-1.0
  * valac
