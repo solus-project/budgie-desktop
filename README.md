@@ -23,7 +23,7 @@ certain components to operate correctly.
 *TODO:*
  * Start adding support for translations (v9)
  * Redo notifications (v9)
- * Add appindicator to eventually replace new tray (v9)
+ * Add appindicator to eventually replace new tray (v9) (see below)
  * Finish WM migration to 3.14
  * Redo menu and panel using GtkFlowBox and such wonders. (poss v10)
  * Introduce menu pagination (v9)
@@ -32,6 +32,11 @@ certain components to operate correctly.
  * Drop many deps. (v9)
  
 
+The tray will still remain an option, but it won't be the *default*
+implementation in many cases. This is mainly due to the extremely
+buggy nature of xembed. Remember our policy (unless we really don't
+have a choice, like moving to a non-buggy Mutter, or dropping Ubuntu
+due to very very old components) - is to retain choice, not remove it.
 
 *Implementation note:*
 
