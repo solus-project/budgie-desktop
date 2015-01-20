@@ -22,7 +22,6 @@ libicontasklistapplet_la_CFLAGS = \
 	$(LIBPEAS_CFLAGS) \
 	$(WNCK3_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
-	$(GEE_CFLAGS) \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE
 
 libicontasklistapplet_la_LIBADD = \
@@ -30,8 +29,7 @@ libicontasklistapplet_la_LIBADD = \
 	$(GTK3_LIBS) \
 	$(LIBPEAS_LIBS) \
 	$(WNCK3_LIBS) \
-	$(GIO_UNIX_LIBS) \
-	$(GEE_LIBS)
+	$(GIO_UNIX_LIBS)
 
 libicontasklistapplet_la_LDFLAGS = \
 	-module \
@@ -47,8 +45,7 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg libwnck-3.0 \
 	--pkg budgie-1.0 \
 	--pkg gio-unix-2.0 \
-	$(VALAFLAGS) \
-	--pkg gee-0.8
+	$(VALAFLAGS)
 
 
 dist-hook:

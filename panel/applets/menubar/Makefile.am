@@ -22,7 +22,6 @@ libmenubarapplet_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(GMENU_CFLAGS) \
-	$(GEE_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
 	$(LIBPEAS_CFLAGS) \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
@@ -35,7 +34,6 @@ libmenubarapplet_la_LIBADD = \
 	${top_builddir}/budgie-plugin/libbudgie-plugin.la \
 	$(GTK3_LIBS) \
 	$(GMENU_LIBS) \
-	$(GEE_LIBS) \
 	$(GIO_UNIX_LIBS) \
 	$(LIBPEAS_LIBS)
 
@@ -50,7 +48,6 @@ libmenubarapplet_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg panelconfig \
 	--pkg libgnome-menu-3.0 \
-	--pkg gee-0.8 \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \

@@ -40,17 +40,14 @@ budgie_session_SOURCES = \
 
 budgie_session_CFLAGS = \
 	$(GIO_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
-	$(GEE_CFLAGS)
+	$(GIO_UNIX_CFLAGS)
 
 budgie_session_LDADD = \
 	$(GIO_LIBS) \
-	$(GIO_UNIX_LIBS) \
-	$(GEE_LIBS)
+	$(GIO_UNIX_LIBS)
 
 budgie_session_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
-	--pkg gee-0.8 \
 	--pkg posix
 
 budgie_session_dialog_SOURCES = \

@@ -209,9 +209,9 @@ public class Panel : Gtk.Window
     // Must keep in scope otherwise they garbage collect and die
 
     /* Global plugin table */
-    Gee.HashMap<string,Budgie.Plugin?> plugin_map;
+    HashTable<string,Budgie.Plugin?> plugin_map;
     /* Loaded applet table */
-    Gee.HashMap<string,Budgie.AppletInfo?> applets;
+    HashTable<string,Budgie.AppletInfo?> applets;
 
     KeyFile config;
 
@@ -310,8 +310,8 @@ public class Panel : Gtk.Window
         engine.add_search_path(dirm, null);
         extset = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
-        plugin_map = new Gee.HashMap<string,Budgie.Plugin?>(null,null,null);
-        applets = new Gee.HashMap<string,Budgie.AppletInfo?>(null,null,null);
+        plugin_map = new HashTable<string,Budgie.Plugin?>(str_hash, str_equal);
+        applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
 
         // Get an update from GSettings where we should be (position set
         // for error fallback)
@@ -671,7 +671,7 @@ public class Panel : Gtk.Window
 
         /* Unfortunately this is ugly as all shit, but what can ya do. */
         uint length = owner.get_children().length();
-        foreach (var applet in applets.values) {
+        applets.foreach((k,applet)=> {
             Gtk.Widget? target2 = applet.applet.get_parent();
             if (target2.get_parent() == owner && applet.position > position) {
                 applet.position -= 1;
@@ -679,9 +679,9 @@ public class Panel : Gtk.Window
             if (applet.position < 0) {
                 applet.position = 0;
             }
-        }
+        });
         appl = null;
-        applets.unset(name);
+        applets.remove(name);
         update_config();
     }
 
@@ -694,27 +694,27 @@ public class Panel : Gtk.Window
     protected void update_config()
     {
         KeyFile outconfig = new KeyFile();
-        var apls = new Gee.ArrayList<AppletInfo?>();
-        var stpls = new Gee.ArrayList<AppletInfo?>();
+        var apls = new Array<AppletInfo?>();
+        var stpls = new Array<AppletInfo?>();
 
-        foreach (var applet in applets.values) {
+        applets.foreach((k, applet)=> {
             if (applet.status_area) {
-                stpls.add(applet);
+                stpls.append_val(applet);
             } else {
-                apls.add(applet);
+                apls.append_val(applet);
             }
-        }
+        });
 
-        apls.sort(compare_applet);
-        stpls.sort(compare_applet);
+        apls.sort((CompareFunc)compare_applet);
+        stpls.sort((CompareFunc)compare_applet);
 
         // Begin writing our config.
         string[] children = {};
-        foreach (var a in apls) {
-            children += a.name;
+        for (int i = 0; i < apls.length; i++) {
+            children += apls.index(i).name;
         }
-        foreach (var a in stpls) {
-            children += a.name;
+        for (int i = 0; i < stpls.length; i++) {
+            children += stpls.index(i).name;
         }
 
         outconfig.set_string_list("Panel", "Children", children);
@@ -755,14 +755,14 @@ public class Panel : Gtk.Window
         /* Determine if the plugin is loaded yet. */
         string? plug = null;
 
-        if (applets.has_key(name)) {
+        if (applets.contains(name)) {
             return;
         }
 
         try {
             plug = config.get_string(name, "ID");
             // Found the correct plugin handler, we can go handle this.
-            if (plugin_map.has_key(plug)) {
+            if (plugin_map.contains(plug)) {
                 var applet = plugin_map[plug].get_panel_widget();
                 var ainfo = new AppletInfo(plugin_map[plug], applet, name);
                 add_applet(ref ainfo);
@@ -813,7 +813,7 @@ public class Panel : Gtk.Window
                 if (plug == i.get_name()) {
                     /* Try to add an applet for this one, first time this plugin
                      * has loaded */
-                    if (!applets.has_key(child)) {
+                    if (!applets.contains(child)) {
                         var applet = plugin.get_panel_widget();
                         var ainfo = new AppletInfo(plugin, applet, child);
                         add_applet(ref ainfo);
@@ -1003,8 +1003,8 @@ public class Panel : Gtk.Window
         if (widgets_area is Gtk.Orientable) {
                 widgets_area.set_orientation(orientation);
         }
-        if (applets != null && applets.values != null) {
-                foreach (var applet_info in applets.values) {
+        if (applets != null && applets.size() > 0) {
+                applets.foreach((k,applet_info)=> {
                     if (applet_info != null) {
                         applet_info.applet.orientation_changed(orientation);
                         applet_info.applet.position_changed(position);
@@ -1021,7 +1021,7 @@ public class Panel : Gtk.Window
                         }
                         applet_info.applet.thaw_notify();
                     }
-                };
+                });
         }
 
         SignalHandler.block(this, alloc_id);
@@ -1060,10 +1060,10 @@ public class Panel : Gtk.Window
             get_style_context().add_class("budgie-panel");
         }
 
-        foreach(var applet_info in applets.values) {
+        applets.foreach((k,applet_info)=> {
             var parent = applet_info.applet.get_parent() as AppletHolder;
             parent.gnome_mode = gnome_mode;
-        }
+        });
 
         queue_draw();
     }
@@ -1135,11 +1135,11 @@ public class Panel : Gtk.Window
      */
     public void invoke_menu()
     {
-        foreach(var applet_info in applets.values) {
+        applets.foreach((k,applet_info)=> {
             if (applet_info != null) {
                 applet_info.applet.action_invoked(Budgie.ActionType.INVOKE_MAIN_MENU);
             }
-        }
+        });
     }
 
     /** Signals **/
@@ -1161,9 +1161,10 @@ public class Panel : Gtk.Window
 
         prefs_dialog = new PanelEditor(this);
         /* We now emit for lazy-sake to populate the prefs dialog */
-        foreach (var applet_info in applets.values) {
-            applet_added(ref applet_info);
-        }
+        applets.foreach((k,applet_info)=> {
+            var a = applets.get(k);
+            applet_added(ref a);
+        });
 
         prefs_dialog.show_all();
         prefs_dialog.present();
