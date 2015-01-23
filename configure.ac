@@ -68,6 +68,9 @@ AC_CONFIG_MACRO_DIR([m4])
 
 GOBJECT_INTROSPECTION_CHECK([1.38.0])
 
+# For various Vala things.
+PKG_CHECK_MODULES([GEE], [gee-0.8])
+
 # Need Vala.
 AM_PROG_VALAC([0.26], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 

@@ -101,7 +101,7 @@ public class NotificationsAppletImpl : Budgie.Applet
     protected Gtk.Box no_notifications;
 
     /* We map the given hash to a notification, allowing replacements */
-    protected HashTable<uint32,Notification> notifications;
+    protected Gee.HashMap<uint32,Notification> notifications;
 
     protected const int TIMEOUT = 100;
     protected bool managed = false;
@@ -112,7 +112,8 @@ public class NotificationsAppletImpl : Budgie.Applet
             BusNameOwnerFlags.NONE, on_nserver_bus_acquired,
             on_nserver_name_acquired, on_nserver_name_lost);
 
-        notifications = new HashTable<uint32,Notification>(int_hash, int_equal);
+        notifications = new Gee.HashMap<uint32,Notification>(null, null, null);
+
         widget = new Gtk.EventBox();
         widget.margin_left = 2;
         widget.margin_right = 2;
@@ -198,7 +199,7 @@ public class NotificationsAppletImpl : Budgie.Applet
             }
         }
 
-        if (notifications.contains(replace_id)) {
+        if (replace_id in notifications) {
             /* Update existing notification */
             notif = notifications[replace_id];
             notif.icon_name = icon;
@@ -235,17 +236,18 @@ public class NotificationsAppletImpl : Budgie.Applet
         uint32[] orphans = {};
 
         /* Cleanup orphans from replace_id's */
-        notifications.foreach((id, notification)=> {
+        foreach (var id in notifications.keys) {
+            var notification = notifications[id];
             if (id != notification.hashid) {
                 orphans += id;
             }
-        });
+        }
         foreach (var id in orphans) {
-            notifications.remove(id);
+            notifications.unset(id);
         }
 
-        if (notifications != null && notifications.size() >= 1) {
-            notifications.foreach((k,notification)=> {
+        if (notifications != null && notifications.size >= 1) {
+            foreach (var notification in notifications.values) {
                 Gtk.Revealer? parent = (Gtk.Revealer)notification.get_parent();
                 var current_time = GLib.get_real_time () / 1000;
                 var visible_time = current_time - notification.start_time;
@@ -257,15 +259,15 @@ public class NotificationsAppletImpl : Budgie.Applet
                     parent.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
                     parent.set_reveal_child(false);
                 }
-            });
+            }
         }
         /* Clean up outside the hashmap iteration */
         foreach (var notification in removals) {
-            notifications.remove(notification.hashid);
+            notifications.unset(notification.hashid);
             notification.get_parent().destroy();
         }
         /* Disconnect ourselves */
-        if (notifications.size() == 0) {
+        if (notifications.size == 0) {
             this.managed = false;
 
             this.icon.set_from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);

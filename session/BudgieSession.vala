@@ -42,11 +42,10 @@ public class Session : GLib.Application
 
     bool running = false;
     GLib.MainLoop loop = null;
-    HashTable<string,WatchedProcess?> process_map;
+    Gee.HashMap<string,WatchedProcess?> process_map;
     // xdg mapping
-    HashTable<string,DesktopAppInfo> mapping;
+    Gee.HashMap<string,DesktopAppInfo>  mapping;
     bool relaunch = true;
-    string[] launched_items;
 
     /**
      * We only ever want to be activated once (unique instance)
@@ -61,30 +60,30 @@ public class Session : GLib.Application
         hold();
         running = true;
         prepare_xdg();
-        launched_items = {};
+        Gee.ArrayList<string?> launched = new Gee.ArrayList<string?>();
 
-        process_map = new HashTable<string,WatchedProcess?>(str_hash, str_equal);
-        launch_xdg("Initialization");
+        process_map = new Gee.HashMap<string,WatchedProcess?>(null,null,null);
+        launch_xdg("Initialization", ref launched);
 
         /* Launch our items - want the window manager first */
         if (!launch_watched(WM_NAME)) {
             critical("Unable to launch %s", WM_NAME);
             Process.exit(1);
         }
-        launch_xdg("WindowManager");
+        launch_xdg("WindowManager", ref launched);
 
         // Now we need all "init" style items
         if (!launch_watched(PANEL_NAME)) {
             critical("Unable to launch %s", PANEL_NAME);
         }
         // And now "panel" style items, where appropriate
-        launch_xdg("Panel");
+        launch_xdg("Panel", ref launched);
 
         // And now all you other fellers.
-        launch_xdg("Desktop");
-        launch_xdg("Applications");
+        launch_xdg("Desktop", ref launched);
+        launch_xdg("Applications", ref launched);
 
-        launched_items = null;
+        launched = null;
         loop.run();
 
         release();
@@ -110,7 +109,7 @@ public class Session : GLib.Application
             return false;
         }
 
-        if (!process_map.contains(cmdline)) {
+        if (!process_map.has_key(cmdline)) {
             p = new WatchedProcess();
             p.n_times = 0;
         } else {
@@ -145,12 +144,12 @@ public class Session : GLib.Application
     {
         WatchedProcess? p = null;
 
-        process_map.foreach((k,process)=> {
+        foreach (var process in process_map.values) {
             if (process.pid == pid) {
                 p = process;
-                return;
+                break;
             }
-        });
+        }
 
         stdout.printf("%d (%s) closed with exit code: %d\n", pid, p.cmd_line, status);
         stdout.printf("Launched %d times\n", p.n_times);
@@ -174,7 +173,7 @@ public class Session : GLib.Application
                     loop.quit();
                 }
             } // otherwise it was a normal requested operation
-            process_map.remove(p.cmd_line);
+            process_map.unset(p.cmd_line);
         }
     }
 
@@ -193,12 +192,12 @@ public class Session : GLib.Application
         // process
         relaunch = false;
         // Kill processes that we explicitly own
-        process_map.foreach((k,process)=> {
+        foreach (var process in process_map.values) {
             if (process.n_times < MAX_LAUNCH) {
                 Posix.kill(process.pid, ProcessSignal.TERM);
                 Process.close_pid(process.pid);
             }
-        });
+        }
         loop.quit();
         release();
     }
@@ -208,7 +207,7 @@ public class Session : GLib.Application
      */
     private void prepare_xdg()
     {
-        mapping = new HashTable<string,DesktopAppInfo>(str_hash, str_equal);
+        mapping = new Gee.HashMap<string,DesktopAppInfo>(null,null,null);
 
         /* Layered from left to right - user at the end can override all */
         var xdgdirs = Environment.get_system_config_dirs();
@@ -241,8 +240,8 @@ public class Session : GLib.Application
                             /* If this is a link to /dev/null its disabled */
                             if (cinfo.get_symlink_target() == "/dev/null") {
                                 // Remove from the previously built table
-                                if (mapping.contains(path)) {
-                                    mapping.remove(path);
+                                if (mapping.has_key(path)) {
+                                    mapping.unset(path);
                                     continue;
                                 }
                             }
@@ -258,8 +257,8 @@ public class Session : GLib.Application
                             mapping[path] = appinfo;
                         } else {
                             /* Overridden layer might have changed something */
-                            if (mapping.contains(path)) {
-                                mapping.remove(path);
+                            if (mapping.has_key(path)) {
+                                mapping.unset(path);
                             }
                         }
                     } catch (Error e) {
@@ -279,22 +278,22 @@ public class Session : GLib.Application
      * Note: "Applications" is also a catch-call for anything that is *not*
      * categorised
      */
-    protected void launch_xdg(string condition)
+    protected void launch_xdg(string condition, ref Gee.ArrayList<string?> launched_items)
     {
-        mapping.foreach((k,entry)=> {
+        foreach (var entry in mapping.values) {
             bool launch = false;
             bool monitor = false;
             int delay = 0;
 
             if (entry.get_commandline() in launched_items) {
-                return;
+                continue;
             }
-            launched_items += entry.get_commandline();
+            launched_items.add(entry.get_commandline());
 
             if (entry.has_key("X-GNOME-Autostart-Phase")) {
                 var phase = entry.get_string("X-GNOME-Autostart-Phase");
                 if (condition != phase) {
-                    return;
+                    continue;
                 }
                 launch = true;
             } else if (condition == "Applications") {
@@ -335,7 +334,7 @@ public class Session : GLib.Application
             } catch (Error e) {
                 warning("Unable to launch item: %s", e.message);
             }
-        });
+        }
     }
 
     protected bool should_autostart(ref DesktopAppInfo info)

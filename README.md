@@ -79,6 +79,7 @@ because of this.
  * libwnck (>= 3.4.7)
  * libmutter (>= 3.14.0)
  * GLib (>= 2.40.0)
+ * gee-0.8 (not gee-1.0!)
  * libpeas-1.0
  * valac
 

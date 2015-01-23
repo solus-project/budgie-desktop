@@ -25,7 +25,7 @@ public class MenubarAppletImpl : Budgie.Applet
     protected Gtk.MenuBar widget;
     protected Settings settings;
     Gtk.Image img;
-    protected HashTable<GMenu.TreeDirectory?,Gtk.Menu?> mapping;
+    protected Gee.HashMap<GMenu.TreeDirectory?,Gtk.Menu?> mapping;
     GMenu.Tree? tree = null;
     Gtk.Menu apps_menu;
     Gtk.Menu places_menu;
@@ -327,7 +327,7 @@ public class MenubarAppletImpl : Budgie.Applet
         show_all();
         on_settings_changed("menu-icon");
 
-        mapping = new HashTable<GMenu.TreeDirectory?,Gtk.Menu?>(direct_hash, direct_equal);
+        mapping = new Gee.HashMap<GMenu.TreeDirectory?,Gtk.Menu?>();
 
         /* Kinda required. We can't become a menubar. */
         widget.get_style_context().add_class("gnome-panel-menu-bar");

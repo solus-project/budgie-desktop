@@ -58,13 +58,13 @@ public static bool startupid_match(string id1, string id2)
 public class DesktopHelper : Object
 {
 
-    HashTable<string?,string?> simpletons;
-    HashTable<string?,string?> startupids;
+    Gee.HashMap<string?,string?> simpletons;
+    Gee.HashMap<string?,string?> startupids;
 
     public DesktopHelper()
     {
         /* Initialize simpletons. */
-        simpletons = new HashTable<string?,string?>(str_hash, str_equal);
+        simpletons = new Gee.HashMap<string?,string?>(null,null,null);
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
 
@@ -80,7 +80,7 @@ public class DesktopHelper : Object
 
     void reload_ids()
     {
-        startupids = new HashTable<string?,string?>(str_hash, str_equal);
+        startupids = new Gee.HashMap<string?,string?>(null,null,null);
         foreach (var appinfo in AppInfo.get_all()) {
             var dinfo = appinfo as DesktopAppInfo;
             if (dinfo.get_startup_wm_class() != null) {
@@ -111,7 +111,7 @@ public class DesktopHelper : Object
         // track suffix in case we use startup wm class to find id
         string suffix = ".desktop";
 
-        if (startupids.contains(window.get_class_instance_name())) {
+        if (window.get_class_instance_name() in startupids) {
             app_name = startupids[window.get_class_instance_name()];
             app_name_clean = app_name;
             suffix = "";
@@ -537,8 +537,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
     protected Gtk.Box pinned;
 
     protected Wnck.Screen screen;
-    protected HashTable<Wnck.Window,IconButton> buttons;
-    protected HashTable<string?,PinnedIconButton?> pin_buttons;
+    protected Gee.HashMap<Wnck.Window,IconButton> buttons;
+    protected Gee.HashMap<string?,PinnedIconButton?> pin_buttons;
     protected int icon_size = 32;
     private Settings settings;
 
@@ -562,12 +562,12 @@ public class IconTasklistAppletImpl : Budgie.Applet
         // attempt to use a pin button where appropriate.
         if (launch_id != null) {
             PinnedIconButton? btn = null;
-            pin_buttons.foreach((k,pbtn)=> {
+            foreach (var pbtn in pin_buttons.values) {
                 if (pbtn.id != null && startupid_match(pbtn.id, launch_id)) {
                     btn = pbtn;
-                    return;
+                    break;
                 }
-            });
+            }
             if (btn != null) {
                 btn.window = window;
                 btn.update_from_window();
@@ -597,7 +597,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
     protected void window_closed(Wnck.Window window)
     {
         IconButton? btn = null;
-        if (!buttons.contains(window)) {
+        if (!buttons.has_key(window)) {
             return;
         }
         btn = buttons[window];
@@ -608,7 +608,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         } else {
             btn.destroy();
         }
-        buttons.remove(window);
+        buttons.unset(window);
     }
 
     /**
@@ -621,7 +621,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         if (previous_window != null)
         {
             // Update old active button
-            if (buttons.contains(previous_window)) {
+            if (buttons.has_key(previous_window)) {
                 btn = buttons[previous_window];
                 btn.set_active(false);
             } 
@@ -630,7 +630,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         if (new_active == null) {
             return;
         }
-        if (!buttons.contains(new_active)) {
+        if (!buttons.has_key(new_active)) {
             return;
         }
         btn = buttons[new_active];
@@ -644,8 +644,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
         helper = new DesktopHelper();
 
         // Easy mapping :)
-        buttons = new HashTable<Wnck.Window,IconButton>(direct_hash, direct_equal);
-        pin_buttons = new HashTable<string?,PinnedIconButton?>(str_hash, str_equal);
+        buttons = new Gee.HashMap<Wnck.Window,IconButton>(null,null,null);
+        pin_buttons = new Gee.HashMap<string?,PinnedIconButton?>(null,null,null);
 
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -669,20 +669,20 @@ public class IconTasklistAppletImpl : Budgie.Applet
         icon_size_changed.connect((i,s)=> {
             icon_size = (int)i;
             Wnck.set_default_icon_size(icon_size);
-            buttons.foreach((k,btn)=> {
+            foreach (var btn in buttons.values) {
                 Idle.add(()=>{
                     btn.icon_size = icon_size;
                     btn.update_icon();
                     return false;
                 });
-            });
-            pin_buttons.foreach((k,btn)=> {
+            }
+            foreach (var btn in pin_buttons.values) {
                 Idle.add(()=>{
                     btn.icon_size = icon_size;
                     btn.update_icon();
                     return false;
                 });
-            });
+            }
         });
 
         // Update orientation when parent panel does
@@ -718,7 +718,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
         /* We don't actually remove anything >_> */
         foreach (string desktopfile in settings.get_strv(key)) {
             /* Ensure we don't have this fella already. */
-            if (pin_buttons.contains(desktopfile)) {
+            if (pin_buttons.has_key(desktopfile)) {
                 continue;
             }
             var info = new DesktopAppInfo(desktopfile);
@@ -731,31 +731,33 @@ public class IconTasklistAppletImpl : Budgie.Applet
             pinned.pack_start(button, false, false, 0);
 
             // Do we already have an icon button for this?
-            buttons.foreach((keyn, btn)=> {
+            foreach (var keyn in buttons.keys) {
+                var btn = buttons[keyn];
                 if (btn.ainfo == null) {
-                    return;
+                    continue;
                 }
                 if (btn.ainfo.get_id() == info.get_id() && btn.requested_pin) {
                     // Pinning an already active button.
                     button.window = btn.window;
                     // destroy old one
                     btn.destroy();
-                    buttons.remove(keyn);
+                    buttons.unset(keyn);
                     buttons[keyn] = button;
                     button.update_from_window();
-                    return;
+                    break;
                 }
-            });
+            }
 
             button.show_all();
         }
         string[] removals = {};
         /* Conversely, remove ones which have been unset. */
-        pin_buttons.foreach((key_name,btn)=> {
+        foreach (string key_name in pin_buttons.keys) {
             if (key_name in files) {
-                return;
+                continue;
             }
             /* We have a removal. */
+            PinnedIconButton? btn = pin_buttons[key_name];
             if (btn.window == null) {
                 btn.destroy();
             } else {
@@ -767,9 +769,9 @@ public class IconTasklistAppletImpl : Budgie.Applet
                 b2.show_all();
             }
             removals += key_name;
-        });
+        }
         foreach (string key_name in removals) {
-            pin_buttons.remove(key_name);
+            pin_buttons.unset(key_name);
         }
 
         for (int i=0; i<files.length; i++) {
