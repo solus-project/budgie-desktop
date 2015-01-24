@@ -26,13 +26,17 @@ public class BudgieMenuApplet : Budgie.Applet
     protected Gtk.EventBox widget;
     protected Budgie.Popover? popover;
     protected Settings settings;
+    protected Settings ksettings;
     Gtk.Image img;
     Gtk.Label label;
+    private string[] modifiers;
 
     public BudgieMenuApplet()
     {
         settings = new Settings("com.evolve-os.budgie.panel");
+        ksettings = new Settings("org.gnome.desktop.wm.keybindings");
         settings.changed.connect(on_settings_changed);
+        ksettings.changed.connect(on_settings_changed);
 
         widget = new Gtk.EventBox();
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
@@ -79,9 +83,19 @@ public class BudgieMenuApplet : Budgie.Applet
         on_settings_changed("enable-menu-label");
         on_settings_changed("menu-icon");
         on_settings_changed("menu-label");
+        on_settings_changed("panel-main-menu");
 
         icon_size_changed.connect((i,s)=> {
             img.pixel_size = (int)i;
+        });
+
+        popover.key_release_event.connect((e)=> {
+            var human = Gdk.keyval_name(e.keyval);
+            if (human in modifiers) {
+                popover.hide();
+                return Gdk.EVENT_STOP;
+            }
+            return Gdk.EVENT_PROPAGATE;
         });
     }
 
@@ -97,6 +111,12 @@ public class BudgieMenuApplet : Budgie.Applet
                 break;
             case "enable-menu-label":
                 label.set_visible(settings.get_boolean(key));
+                break;
+            case "panel-main-menu":
+                /* Reset modifiers.. */
+                modifiers = ksettings.get_strv(key);
+                break;
+            default:
                 break;
         }
     }
