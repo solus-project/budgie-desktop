@@ -182,11 +182,18 @@ public class IconButton : Gtk.ToggleButton
 
     public void update_from_window()
     {
+        we_urgent = false;
+        if (source_id > 0) {
+            remove_tick_callback(source_id);
+            source_id = 0;
+        }
+
         if (window == null) {
             if (this is PinnedIconButton) {
                 var p = this as PinnedIconButton;
                 p.set_opacity(INACTIVE_OPACITY);
             }
+            queue_draw();
             return;
         }
         set_tooltip_text(window.get_name());
@@ -263,6 +270,7 @@ public class IconButton : Gtk.ToggleButton
                 menu.append(item);
             }
         }
+        queue_draw();
     }
 
     protected void on_state_changed(Wnck.WindowState changed, Wnck.WindowState state)
@@ -271,6 +279,7 @@ public class IconButton : Gtk.ToggleButton
             we_urgent = false;
             if (source_id > 0) {
                 remove_tick_callback(source_id);
+                source_id = 0;
             }
             queue_draw();
             return;
