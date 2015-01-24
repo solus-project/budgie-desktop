@@ -54,7 +54,7 @@
     </key>
 
     <key type="b" name="dark-theme">
-      <default>true</default>
+      <default>false</default>
       <summary>Use the dark theme</summary>
       <description>Whether to use the dark theme variant globally</description>
     </key>
@@ -78,7 +78,7 @@
     </key>
 
     <key type="s" name="menu-icon">
-      <default>'view-list-symbolic'</default>
+      <default>'open-menu-symbolic'</default>
       <summary>Menu button icon</summary>
       <description>The icon to display on the main menu button</description>
     </key>
