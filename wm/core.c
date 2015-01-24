@@ -24,6 +24,7 @@
 #include "legacy.h"
 #include "impl.h"
 #include "background.h"
+#define SHOW_TIMEOUT 1000
 
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieWM, budgie_wm, META_TYPE_PLUGIN)
@@ -98,6 +99,7 @@ static void budgie_wm_start(MetaPlugin *plugin)
 {
         BudgieWM *self = BUDGIE_WM(plugin);
         MetaScreen *screen = meta_plugin_get_screen(plugin);
+        ClutterActor* actors[2];
 
         /* Init background */
         self->priv->background_group = meta_background_group_new();
@@ -109,7 +111,25 @@ static void budgie_wm_start(MetaPlugin *plugin)
         on_monitors_changed(screen, plugin);
 
         /* Now we're in action. */
+        clutter_actor_show(meta_get_window_group_for_screen(screen));
+        clutter_actor_show(self->priv->background_group);
+        clutter_actor_set_opacity(meta_get_window_group_for_screen(screen), 0);
+        clutter_actor_set_opacity(self->priv->background_group, 0);
+
+        actors[0] = meta_get_window_group_for_screen(screen);
+        actors[1] = self->priv->background_group;
+
+        clutter_actor_set_background_color(meta_get_stage_for_screen(screen),
+                clutter_color_get_static(CLUTTER_COLOR_BLACK));
         clutter_actor_show(meta_get_stage_for_screen(screen));
+
+        for (int i = 0; i < 2; i++) {
+                clutter_actor_save_easing_state(actors[i]);
+                clutter_actor_set_easing_mode(actors[i], CLUTTER_EASE_OUT_QUAD);
+                clutter_actor_set_easing_duration(actors[i], SHOW_TIMEOUT);
+                g_object_set(actors[i], "opacity", 255, NULL);
+                clutter_actor_restore_easing_state(actors[i]);
+        }
 
         /* Set up our own keybinding overrides */
         meta_keybindings_set_custom_handler(BUDGIE_KEYBINDING_MAIN_MENU,
