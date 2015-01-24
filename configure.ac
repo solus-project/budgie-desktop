@@ -36,16 +36,16 @@ AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
 PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
 
 AC_ARG_ENABLE(wm, AS_HELP_STRING([--enable-wm], [enable wm @<:@default=yes@:>@]),
-	      [], [enable_wm=yes])
+             [], [enable_wm=yes])
 AS_IF([test "x$enable_wm" = "xyes"],
-	[AC_DEFINE([BUILD_WM], [1], [Building window manager])],
-	[])
+       [AC_DEFINE([BUILD_WM], [1], [Building window manager])],
+       [])
 AM_CONDITIONAL([BUILD_WM], [test x$enable_wm = x"yes"])
 
-PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.14.0], enable_wm=no)
-AS_IF([test "x$enable_wm" = "xno"],
-	[AC_DEFINE([BUILD_WM], [0], [Not Building window manager])],
-	[])
+if test "x$enable_wm" = "xyes"; then
+    # Required for Window Manager component
+    PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.14.0])
+fi
 
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
