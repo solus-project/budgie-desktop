@@ -21,10 +21,13 @@ public class TrayAppletImpl : Budgie.Applet
 {
     protected Na.Tray? tray;
     protected int icon_size = 22;
+    Gtk.EventBox box;
 
     public TrayAppletImpl()
     {
         margin = 1;
+        box = new Gtk.EventBox();
+        add(box);
 
         orientation_changed.connect((o)=> {
             tray.set_orientation(o);
@@ -52,7 +55,7 @@ public class TrayAppletImpl : Budgie.Applet
         tray = new Na.Tray.for_screen(get_screen(), Gtk.Orientation.HORIZONTAL);
         tray.set_icon_size(icon_size);
         tray.set_padding(5);
-        add(tray);
+        box.add(tray);
         show_all();
     }
 } // End class
