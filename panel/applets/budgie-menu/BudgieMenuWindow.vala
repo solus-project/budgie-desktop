@@ -574,6 +574,7 @@ public class BudgieMenuWindow : Budgie.Popover
         categories.sensitive = true;
         Idle.add(()=> {
             /* grab focus when we're not busy, ensuring it works.. */
+            search_entry.grab_focus();
             return false;
         });
         base.show();
