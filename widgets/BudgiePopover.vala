@@ -9,19 +9,6 @@
  * (at your option) any later version.
  */
 
-#if ! HAVE_GTK311
-/* We make GtkPopover exist for styling reasons, one way or another. */
-namespace Gtk
-{
-    public class Popover : Gtk.Bin
-    {
-        public Popover(Gtk.Widget dud)
-        {
-        }
-    }
-}
-#endif
-
 namespace Budgie
 {
 
