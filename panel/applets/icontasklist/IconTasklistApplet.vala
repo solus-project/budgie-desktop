@@ -297,6 +297,12 @@ public class IconButton : Gtk.ToggleButton
         // Looks fine with 60hz. Might go nuts higher.
         var increment = 0.01;
 
+        if (window == null) {
+            urg_opacity = 0.0;
+            we_urgent = false;
+            return false;
+        }
+
         if (should_fade_in) {
             urg_opacity += increment;
         } else {
