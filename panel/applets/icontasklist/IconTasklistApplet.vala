@@ -67,6 +67,7 @@ public class DesktopHelper : Object
         simpletons = new Gee.HashMap<string?,string?>(null,null,null);
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
+        simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
 
 #if HAVE_GLIB240
         var monitor = AppInfoMonitor.get();
