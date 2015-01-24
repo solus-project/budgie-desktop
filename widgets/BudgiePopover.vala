@@ -324,15 +324,29 @@ public class Popover : Gtk.Window
     {
         if (!passive) {
             // Let's get grabbing
-            var manager = get_screen().get_display().get_device_manager();
-            var pointer = manager.get_client_pointer();
-            Gdk.EventMask mask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK |
+            Gdk.EventMask mask = 
                 Gdk.EventMask.SMOOTH_SCROLL_MASK | Gdk.EventMask.BUTTON_PRESS_MASK |
                 Gdk.EventMask.BUTTON_RELEASE_MASK |
                 Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
                 Gdk.EventMask.POINTER_MOTION_MASK;
-            pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
-            Gtk.device_grab_add(this, pointer, false);
+            Gdk.EventMask kmask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK;
+            Gdk.GrabStatus pst, kst;
+            kst = pst = Gdk.GrabStatus.SUCCESS;
+            var manager = get_screen().get_display().get_device_manager();
+            var pointer = manager.get_client_pointer();
+            if (pointer.associated_device != null) {
+                kst = pointer.associated_device.grab(get_window(), Gdk.GrabOwnership.NONE, true, kmask, null, Gdk.CURRENT_TIME);
+            }
+
+            pst = pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
+            if (pst != Gdk.GrabStatus.SUCCESS || (kst != pst || pointer.associated_device != null)) {
+                Timeout.add(150,()=> {
+                    do_grab();
+                    return false;
+                });
+            } else {
+                Gtk.device_grab_add(this, pointer, false);
+            }
         }
     }
 

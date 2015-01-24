@@ -332,6 +332,12 @@ public class BudgieMenuWindow : Budgie.Popover
             content.invalidate_filter();
         });
 
+        search_entry.set_can_default(true);
+        search_entry.grab_default();
+        this.set_default(search_entry);
+        search_entry.grab_focus();
+        this.set_focus_on_map(true);
+
         // Enabling activation by search entry
         search_entry.activate.connect(on_entry_activate);
         // sensible vertical height
@@ -568,7 +574,6 @@ public class BudgieMenuWindow : Budgie.Popover
         categories.sensitive = true;
         Idle.add(()=> {
             /* grab focus when we're not busy, ensuring it works.. */
-            search_entry.grab_focus();
             return false;
         });
         base.show();
