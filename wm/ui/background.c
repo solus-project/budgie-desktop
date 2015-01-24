@@ -26,7 +26,7 @@
 #define BACKGROUND_STYLE_KEY "picture-options"
 #define GNOME_COLOR_HACK "gnome-control-center/pixmaps/noise-texture-light.png"
 
-#define BACKGROUND_TIMEOUT 550
+#define BACKGROUND_TIMEOUT 650
 
 struct _BudgieBackgroundPrivate
 {
@@ -159,17 +159,10 @@ static void remove_old(ClutterActor *actor, BudgieBackground *self)
         self->priv->old_bg = NULL;
 }
 
-static void on_update(MetaBackground *background, BudgieBackground *self)
+static void begin_remove_old(ClutterActor *actor, BudgieBackground *self)
 {
-        /* Animate new fella in */
-        clutter_actor_save_easing_state(self->priv->bg);
-        clutter_actor_set_easing_mode(self->priv->bg, CLUTTER_EASE_OUT_SINE);
-        clutter_actor_set_easing_duration(self->priv->bg, BACKGROUND_TIMEOUT);
-        g_object_set(self->priv->bg, "opacity", 255, NULL);
-        clutter_actor_restore_easing_state(self->priv->bg);
-
         /* Animate old fella out. */
-        if (self->priv->old_bg) {
+        if (self->priv->old_bg && self->priv->old_bg != self->priv->bg) {
                 g_signal_connect(self->priv->old_bg, "transitions-completed", G_CALLBACK(remove_old), self);
                 clutter_actor_save_easing_state(self->priv->old_bg);
                 clutter_actor_set_easing_mode(self->priv->old_bg, CLUTTER_EASE_OUT_QUAD);
@@ -177,6 +170,17 @@ static void on_update(MetaBackground *background, BudgieBackground *self)
                 g_object_set(self->priv->old_bg, "opacity", 0, NULL);
                 clutter_actor_restore_easing_state(self->priv->old_bg);
         }
+}
+
+static void on_update(MetaBackground *background, BudgieBackground *self)
+{
+        /* Animate new fella in */
+        clutter_actor_save_easing_state(self->priv->bg);
+        g_signal_connect(self->priv->bg, "transitions-completed", G_CALLBACK(begin_remove_old), self);
+        clutter_actor_set_easing_mode(self->priv->bg, CLUTTER_EASE_IN_EXPO);
+        clutter_actor_set_easing_duration(self->priv->bg, BACKGROUND_TIMEOUT);
+        g_object_set(self->priv->bg, "opacity", 255, NULL);
+        clutter_actor_restore_easing_state(self->priv->bg);
 }
 /**
  * Actually update our appearance..
@@ -210,7 +214,7 @@ static void _update(BudgieBackground *self)
         g_object_set(actor, "opacity", 0, NULL);
         clutter_actor_show(actor);
 
-        clutter_actor_insert_child_at_index(CLUTTER_ACTOR(self), actor, 0);
+        clutter_actor_insert_child_at_index(CLUTTER_ACTOR(self), actor, -1);
         if (self->priv->bg) {
                 self->priv->old_bg = self->priv->bg;
         }
