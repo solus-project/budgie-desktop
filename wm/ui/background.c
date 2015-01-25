@@ -26,7 +26,7 @@
 #define BACKGROUND_STYLE_KEY "picture-options"
 #define GNOME_COLOR_HACK "gnome-control-center/pixmaps/noise-texture-light.png"
 
-#define BACKGROUND_TIMEOUT 650
+#define BACKGROUND_TIMEOUT 850
 
 struct _BudgieBackgroundPrivate
 {
