@@ -68,6 +68,7 @@ public class DesktopHelper : Object
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
         simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
+        simpletons["nautilus"] = "org.gnome.Nautilus";
 
 #if HAVE_GLIB240
         var monitor = AppInfoMonitor.get();
