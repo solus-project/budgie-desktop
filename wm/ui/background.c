@@ -253,7 +253,7 @@ static void _update(BudgieBackground *self)
                 bg_file = g_file_new_for_uri(bg_filename);
 
 #if META_MINOR_VERSION > 14
-                meta_background_set_file(background, style);
+                meta_background_set_file(background, bg_file, style);
 #else
                 char *filename = g_file_get_path(bg_file);
                 if (filename) {
