@@ -21,7 +21,9 @@ bin_PROGRAMS = budgie-session \
 	budgie-session-dialog
 
 EXTRA_DIST = \
-	org.freedesktop.login1.xml
+	org.freedesktop.login1.xml \
+	sessionconfig.h \
+	sessionconfig.vapi
 
 noinst_LTLIBRARIES = libsdloginproxy.la
 
@@ -41,7 +43,8 @@ budgie_session_SOURCES = \
 budgie_session_CFLAGS = \
 	$(GIO_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
-	$(GEE_CFLAGS)
+	$(GEE_CFLAGS) \
+	-DDATADIR=\"$(datadir)/\"
 
 budgie_session_LDADD = \
 	$(GIO_LIBS) \
@@ -51,7 +54,9 @@ budgie_session_LDADD = \
 budgie_session_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg gee-0.8 \
-	--pkg posix
+	--pkg posix \
+	--vapidir=. \
+	--pkg sessionconfig
 
 budgie_session_dialog_SOURCES = \
 	budgie-session-dialog-resources.h \

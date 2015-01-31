@@ -211,6 +211,9 @@ public class Session : GLib.Application
 
         /* Layered from left to right - user at the end can override all */
         var xdgdirs = Environment.get_system_config_dirs();
+        if (FileUtils.test(GNOME_XDG_DIR, FileTest.EXISTS)) {
+            xdgdirs += GNOME_XDG_DIR;
+        }
         xdgdirs += Environment.get_user_config_dir();
 
         foreach (var dir in xdgdirs) {
