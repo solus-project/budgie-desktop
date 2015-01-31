@@ -37,5 +37,12 @@ void minimize(MetaPlugin *plugin, MetaWindowActor *window_actor);
 void switch_windows(MetaDisplay *display, MetaScreen     *screen,
                      MetaWindow *window, ClutterKeyEvent *event,
                      MetaKeyBinding *binding, MetaPlugin *plugin);
+
+/** Initialise budgie key handling (via shell iface) */
+void budgie_keys_init(MetaDisplay *display);
+
+/** Cleanup the key handler */
+void budgie_keys_end(void);
+
 /** Perform cleanup */
 void tabs_clean(void);

@@ -92,6 +92,7 @@ static void budgie_wm_dispose(GObject *object)
 {
         /* Any stray lists the tab module might have */
         tabs_clean();
+        budgie_keys_end();
         G_OBJECT_CLASS(budgie_wm_parent_class)->dispose(object);
 }
 
@@ -140,6 +141,9 @@ static void budgie_wm_start(MetaPlugin *plugin)
                 (MetaKeyHandlerFunc)switch_windows, self, NULL);
         meta_keybindings_set_custom_handler("switch-applications",
                 (MetaKeyHandlerFunc)switch_windows, self, NULL);
+
+        /* Handle keys.. */
+        budgie_keys_init(meta_screen_get_display(screen));
 }
 
 /* Budgie specific callbacks */
