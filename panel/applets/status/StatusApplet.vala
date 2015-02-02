@@ -158,7 +158,10 @@ public class StatusAppletImpl : Budgie.Applet
         grid.attach(user_img, 0, row, 1, 1);
 
         /* clickable username.. change account options */
-        label = new Gtk.Button.with_label(Environment.get_user_name());
+        string? username = Environment.get_real_name();
+        if (username == "Unknown")
+            username = Environment.get_user_name();
+        label = new Gtk.Button.with_label(username);
         label.clicked.connect(()=> {
             popover.hide();
             try {
