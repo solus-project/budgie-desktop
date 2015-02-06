@@ -265,6 +265,7 @@ static void clicked(GtkWidget *button, gpointer userdata)
                         g_message("Unable to logout!");
                 }
         }
+        gtk_main_iteration();
         gtk_main_quit();
 }
 
