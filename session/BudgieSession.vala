@@ -41,7 +41,6 @@ public class Session : GLib.Application
 {
 
     bool running = false;
-    GLib.MainLoop loop = null;
     Gee.HashMap<string,WatchedProcess?> process_map;
     // xdg mapping
     Gee.HashMap<string,DesktopAppInfo>  mapping;
@@ -84,9 +83,6 @@ public class Session : GLib.Application
         launch_xdg("Applications", ref launched);
 
         launched = null;
-        loop.run();
-
-        release();
     }
 
     /**
@@ -170,7 +166,6 @@ public class Session : GLib.Application
                 if (p.cmd_line == WM_NAME || p.cmd_line == PANEL_NAME) {
                     critical("Critical desktop component %s exited with status code %d", p.cmd_line, status);
                     do_logout();
-                    loop.quit();
                 }
             } // otherwise it was a normal requested operation
             process_map.unset(p.cmd_line);
@@ -198,8 +193,7 @@ public class Session : GLib.Application
                 Process.close_pid(process.pid);
             }
         }
-        loop.quit();
-        release();
+        quit();
     }
 
     /**
@@ -372,7 +366,6 @@ public class Session : GLib.Application
     private Session()
     {
         Object (application_id: "com.evolve_os.BudgieSession", flags: 0);
-        loop = new MainLoop(null, false);
 
         var action = new SimpleAction("logout", null);
         action.activate.connect(()=> {
@@ -383,7 +376,7 @@ public class Session : GLib.Application
 
     static bool should_logout = false;
 
-	private const GLib.OptionEntry[] options = {
+    private const GLib.OptionEntry[] options = {
         { "logout", 0, 0, OptionArg.NONE, ref should_logout, "Logout", null },
         { null }
     };
