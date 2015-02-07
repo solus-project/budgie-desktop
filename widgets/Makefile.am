@@ -6,6 +6,7 @@ libbudgiewidgets_la_SOURCES = \
 	Animation.vala \
 	BudgiePopover.vala \
 	BudgieSidebar.vala \
+	InkManager.vala \
 	PaperButton.vala
 
 libbudgiewidgets_la_CFLAGS = \
