@@ -15,7 +15,7 @@ namespace Budgie {
 public delegate double TweenFunc(double factor);
 
 /** Callback for animation completion */
-public delegate void AnimCompletionFunc();
+public delegate void AnimCompletionFunc(Animation? src);
 
 /** Animate a GObject property */
 public struct PropChange {
@@ -28,89 +28,91 @@ public struct PropChange {
  * Utility to struct to enable easier animations
  * Inspired by Clutter. Not using Clutter as we use a Gtk desktop :p
  */
-public struct Animation {
-    int64 start_time;           /**<Start time (microseconds) of animation */
-    int64 length;               /**<Length of animation in microseconds */
-    unowned TweenFunc tween;    /**<Tween function to use for property changes */
-    PropChange[] changes;      /**<Group of properties to change in this animation */
-    unowned Gtk.Widget widget;/**<Rendering widget that owns the Gdk.FrameClock */
-    uint id;                    /**<Idle source ID */
+public class Animation : Object {
+    public int64 start_time;           /**<Start time (microseconds) of animation */
+    public int64 length;               /**<Length of animation in microseconds */
+    public unowned TweenFunc tween;    /**<Tween function to use for property changes */
+    public PropChange[] changes;      /**<Group of properties to change in this animation */
+    public unowned Gtk.Widget widget;/**<Rendering widget that owns the Gdk.FrameClock */
+    public GLib.Object? object;        /**<Widget to apply property changes to */
+    public uint id;                    /**<Idle source ID */
+    public bool can_anim;              /**<Whether we can animate ?*/
+    public int64 elapsed;             /**<Elapsed time */
+    public bool no_reset;             /**<Used sometimes for switching an animation*/
 
     /**
      * Syntatical abuse of Vala. Calls start_anim
      */
-    public void start(AnimCompletionFunc compl) {
-        start_anim(this, compl);
-    }
-
-    /**
-     * Further syntatical abuse of Vala. Calls stop anim
-     */
-    public void stop() {
-        stop_anim(this);
-    }
-}
-
-/**
- * Start the given animation. Note that currently all animatable properties
- * must be of type gdouble, otherwise things will explode rather rapidly.
- *
- * @param anim Animation information
- * @param compl A callback to execute when the animation is complete
- */
-public static void start_anim(Animation anim, AnimCompletionFunc compl)
-{
-        anim.start_time = get_monotonic_time();
-        anim.id = anim.widget.add_tick_callback((widget, frame)=> {
+    public void start(AnimCompletionFunc? compl) {
+        if (!no_reset) {
+            start_time = get_monotonic_time();
+        }
+        can_anim = true;
+        id = widget.add_tick_callback((widget, frame)=> {
             int64 time = frame.get_frame_time();
             float factor = 0.0f;
-            var elapsed = time - anim.start_time;
+            var elapsed = time - start_time;
 
             /* Bail out of the animation, set it to its maximum */
-            if (elapsed >= anim.length || anim.id == 0) {
-                foreach (var p in anim.changes) {
-                    widget.set_property(p.property, p.@new);
+            if (elapsed >= length || id == 0 || !can_anim) {
+                if (id > 0) {
+                    foreach (var p in changes) {
+                        if (object == null) {
+                            widget.set_property(p.property, p.@new);
+                        } else {
+                            object.set_property(p.property, p.@new);
+                        }
+                    }
                 }
-                anim.id = 0;
-                compl();
+                id = 0;
+                can_anim = false;
+                if (compl != null) {
+                    compl(this);
+                }
                 widget.queue_draw();
                 return false;
             }
 
-            factor = ((float)elapsed / anim.length).clamp(0, 1.0f);
-            foreach (var c in anim.changes) {
+            factor = ((float)elapsed / length).clamp(0, 1.0f);
+            foreach (var c in changes) {
                 var old = c.old.get_double();
                 var @new = c.@new.get_double();
 
-                if (anim.tween != null) {
+                if (tween != null) {
                     /* Drop precision here, start with double we loose it exponentially. */
-                    factor = (float)anim.tween((double)factor);
+                    factor = (float)tween((double)factor);
                 }
 
                 var delta = (@new-old) * factor;
                 var nprop = (double)(old + delta);
-                widget.set_property(c.property, nprop);
+                if (object == null) {
+                    widget.set_property(c.property, nprop);
+                } else {
+                    object.set_property(c.property, nprop);
+                }
             }
 
             widget.queue_draw();
-            return true;
+            return can_anim;
         });
-}
-
-/**
- * Stop a running animation
- *
- * @param anim A running animation
- */
-public static void stop_anim(Animation anim)
-{
-    if (anim.id == 0) {
-        return;
     }
-    anim.widget.remove_tick_callback(anim.id);
-    anim.id = 0;
-}
 
+
+    /**
+     * Stop a running animation
+     *
+     * @param anim A running animation
+     */
+    public void stop()
+    {
+        if (id == 0) {
+            return;
+        }
+        widget.remove_tick_callback(id);
+        can_anim = false;
+        id = 0;
+    }
+}
 /* These easing functions originally came from
  * https://github.com/warrenm/AHEasing/blob/master/AHEasing/easing.c
  * and are available under the terms of the WTFPL
