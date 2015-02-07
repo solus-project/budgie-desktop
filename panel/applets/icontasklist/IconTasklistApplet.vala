@@ -160,7 +160,7 @@ public class DesktopHelper : Object
     }
 }
 
-public class IconButton : Gtk.ToggleButton
+public class IconButton : PaperButton
 {
 
     public new Gtk.Image image;
@@ -353,6 +353,8 @@ public class IconButton : Gtk.ToggleButton
 
     public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
     {
+        Object(anim_above_content: true);
+
         image = new Gtk.Image();
         image.pixel_size = size;
         icon_size = size;
@@ -419,12 +421,14 @@ public class IconButton : Gtk.ToggleButton
     {
         var timestamp = Gtk.get_current_event_time();
 
-        if (this is /*Sparta*/ PinnedIconButton) {
-            unpinnage.show();
-            pinnage.hide();
-        } else {
-            unpinnage.hide();
-            pinnage.show();
+        if (window != null) {
+            if (this is /*Sparta*/ PinnedIconButton) {
+                unpinnage.show();
+                pinnage.hide();
+            } else {
+                unpinnage.hide();
+                pinnage.show();
+            }
         }
 
         if (ainfo == null) {
@@ -432,13 +436,18 @@ public class IconButton : Gtk.ToggleButton
             pinnage.hide();
             sep_item.hide();
         } else {
-            sep_item.show();
+            if (sep_item != null) {
+                sep_item.show();
+            }
         }
 
         // Right click, i.e. actions menu
         if (event.button == 3) {
             menu.popup(null, null, null, event.button, timestamp);
             return true;
+        }
+        if (window == null) {
+            return base.button_release_event(event);
         }
 
         // Normal left click, go handle the window
@@ -453,7 +462,7 @@ public class IconButton : Gtk.ToggleButton
             }
         }
 
-        return true;
+        return base.button_release_event(event);
     }
             
 }
@@ -509,7 +518,7 @@ public class PinnedIconButton : IconButton
                 /* Animate a UFAILED image? */
                 message(e.message);
             }
-            return true;
+            return base.on_button_release(event);
         } else {
             return base.on_button_release(event);
         }
@@ -783,11 +792,11 @@ public class IconTasklistAppletImpl : Budgie.Applet
         pin_buttons = new Gee.HashMap<string?,PinnedIconButton?>(null,null,null);
 
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
         main_layout.pack_start(pinned, false, false, 0);
         pinned.set_property("margin-right", 10);
 
-        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
         main_layout.pack_start(widget, false, false, 0);
 
         settings = new Settings("com.evolve-os.budgie.panel");
