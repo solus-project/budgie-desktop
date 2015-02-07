@@ -728,6 +728,10 @@ public class IconTasklistAppletImpl : Budgie.Applet
         }
 
         if (active_button != null) {
+            /* Sadly required, otherwise size allocations may not have happened... */
+            while (Gtk.events_pending()) {
+                Gtk.main_iteration();
+            }
             /* Transition time.. Eventually we'll want to recycle existing line
              * values in case we changed half way through a transition. */
             double ox, oy, owidth, oheight;
@@ -739,8 +743,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
             /* Implicit budgie animations */
             var anim = new Budgie.Animation();
             anim.widget = this;
-            anim.length = 170 * Budgie.MSECOND;
-            anim.tween = Budgie.quad_ease_in_out;
+            anim.length = 300 * Budgie.MSECOND;
+            anim.tween = Budgie.circ_ease_out;
             anim.changes = new Budgie.PropChange[] {
                 Budgie.PropChange() {
                     property = "line-x",

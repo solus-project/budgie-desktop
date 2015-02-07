@@ -148,6 +148,12 @@ public static double back_ease_in(double p)
     return p * p * p - p * Math.sin(p * Math.PI);
 }
 
+public static double back_ease_out(double p)
+{
+    double f = (1 - p);
+    return 1 - (f * f * f - f * Math.sin(f * Math.PI));
+}
+
 public static double expo_ease_in(double p)
 {
     return (p == 0.0) ? p : Math.pow(2, 10 * (p - 1));
@@ -171,6 +177,16 @@ public static double quad_ease_out(double p)
 public static double quad_ease_in_out(double p)
 {
     return p < 0.5 ? (2 * p * p) : (-2 * p * p) + (4 * p) - 1;
+}
+
+public static double circ_ease_in(double p)
+{
+    return 1 - Math.sqrt(1 - (p * p));
+}
+
+public static double circ_ease_out(double p)
+{
+    return Math.sqrt((2 - p) * p);
 }
 
 public static const int64 MSECOND = 1000;
