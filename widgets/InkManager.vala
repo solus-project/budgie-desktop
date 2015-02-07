@@ -108,7 +108,6 @@ public class InkManager : GLib.Object
         widget.queue_draw();
     }
 
-
     /**
      * Render the ripples clipped to the rectangle bounds specified
      *
