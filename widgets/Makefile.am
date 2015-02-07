@@ -3,6 +3,7 @@
 lib_LTLIBRARIES = libbudgiewidgets.la
 
 libbudgiewidgets_la_SOURCES = \
+	Animation.vala \
 	BudgiePopover.vala \
 	BudgieSidebar.vala
 
