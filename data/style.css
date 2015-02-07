@@ -81,19 +81,11 @@ PanelToplevel .launcher:hover {
     border: 2px solid alpha(white, 0.0);
     border-bottom: 2px solid alpha(white, 0.5);
 }
-.budgie-panel .launcher:active,
-PanelToplevel .launcher:active {
-    border: 2px solid alpha(white, 0.0);
-    border-bottom: 2px solid white;
-}
+
 /* Top launchers */
 .top .launcher:hover {
     border: 2px solid alpha(white, 0.0);
     border-top: 2px solid alpha(white, 0.5); 
-}
-.top .launcher:active {
-    border: 2px solid alpha(white, 0.0);
-    border-top: 2px solid white;
 }
 
 /* Left hand side launchers */
@@ -101,19 +93,11 @@ PanelToplevel .launcher:active {
     border: 2px solid alpha(white, 0.0);
     border-left: 2px solid alpha(white, 0.5);
 }
-.left .launcher:active {
-    border: 2px solid alpha(white, 0.0);
-    border-left: 2px solid white;
-}
 
 /* Right hand side launchers */
 .right .launcher:hover {
     border: 2px solid alpha(white, 0.0);
     border-right: 2px solid alpha(white, 0.5);
-}
-.right .launcher:active {
-    border: 2px solid alpha(white, 0.0);
-    border-right: 2px solid white;
 }
 
 .panel-applet {
@@ -126,6 +110,11 @@ PanelToplevel .launcher:active {
 .budgie-panel .menu-icon:active,
 .budgie-panel .menu-icon:hover {
     background-image: none;
+}
+
+/** Selected window highlight on icon tasklist */
+.budgie-icon-tasklist {
+    border-color: white;
 }
 
 .budgie-panel * {

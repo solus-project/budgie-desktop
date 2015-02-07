@@ -562,6 +562,55 @@ public class IconTasklistAppletImpl : Budgie.Applet
     protected Gdk.AppLaunchContext context;
     protected DesktopHelper helper;
 
+    private unowned IconButton? active_button;
+    Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
+
+    public override bool draw(Cairo.Context cr)
+    {
+        Gtk.Allocation alloc;
+        Gtk.Allocation our_alloc;
+        base.draw(cr);
+        if (active_button == null) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        get_allocation(out our_alloc);
+        active_button.get_allocation(out alloc);
+        var st = get_style_context();
+        var col = st.get_border_color(get_state_flags());
+
+        var height = 2;
+        var y = alloc.height - height;
+        var x = alloc.x - our_alloc.x;
+        var width = alloc.width;
+
+        switch (panel_position) {
+            case Budgie.PanelPosition.TOP:
+                y = 0;
+                break;
+            case Budgie.PanelPosition.LEFT:
+                x = 0;
+                y = alloc.y-our_alloc.y;
+                width = height;
+                height = alloc.height;
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                x = (our_alloc.x+alloc.width)-height;
+                y = alloc.y-our_alloc.y;
+                width = height;
+                height = alloc.height;
+                break;
+            default:
+                break;
+        }
+
+        cr.set_source_rgba(col.red, col.green, col.blue, col.alpha);
+        cr.rectangle(x, y, width, height);
+        cr.fill();
+
+        return Gdk.EVENT_PROPAGATE;
+    }
+
     protected void window_opened(Wnck.Window window)
     {
         // doesn't go on our list
@@ -645,6 +694,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
         }
         new_active = screen.get_active_window();
         if (new_active == null) {
+            active_button = null;
+            queue_draw();
             return;
         }
         if (!buttons.has_key(new_active)) {
@@ -652,6 +703,8 @@ public class IconTasklistAppletImpl : Budgie.Applet
         }
         btn = buttons[new_active];
         btn.set_active(true);
+        active_button = btn;
+        queue_draw();
     }
 
     public IconTasklistAppletImpl()
@@ -719,7 +772,11 @@ public class IconTasklistAppletImpl : Budgie.Applet
                     pinned.set_property("margin-right", 10);
                     break;
             }
+            panel_position = p;
+            queue_draw();
         });
+
+        get_style_context().add_class("budgie-icon-tasklist");
 
         add(main_layout);
         show_all();
