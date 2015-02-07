@@ -728,31 +728,30 @@ public class IconTasklistAppletImpl : Budgie.Applet
             button_position(active_button, out x, out y, out width, out height);
 
             /* Implicit budgie animations */
-            var anim = Budgie.Animation() {
-                widget = this,
-                length = 170 * Budgie.MSECOND,
-                tween = Budgie.quad_ease_in_out,
-                changes = new Budgie.PropChange[] {
-                    Budgie.PropChange() {
-                        property = "line-x",
-                        old = ox,
-                        @new = x
-                    },
-                    Budgie.PropChange() {
-                        property = "line-y",
-                        old = oy,
-                        @new = y
-                    },
-                    Budgie.PropChange() {
-                        property = "line-width",
-                        old = owidth,
-                        @new = width
-                    },
-                    Budgie.PropChange() {
-                        property = "line-height",
-                        old = oheight,
-                        @new = height
-                    }
+            var anim = new Budgie.Animation();
+            anim.widget = this;
+            anim.length = 170 * Budgie.MSECOND;
+            anim.tween = Budgie.quad_ease_in_out;
+            anim.changes = new Budgie.PropChange[] {
+                Budgie.PropChange() {
+                    property = "line-x",
+                    old = ox,
+                    @new = x
+                },
+                Budgie.PropChange() {
+                    property = "line-y",
+                    old = oy,
+                    @new = y
+                },
+                Budgie.PropChange() {
+                    property = "line-width",
+                    old = owidth,
+                    @new = width
+                },
+                Budgie.PropChange() {
+                    property = "line-height",
+                    old = oheight,
+                    @new = height
                 }
             };
             if (old_anim != null) {
