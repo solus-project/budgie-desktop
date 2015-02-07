@@ -31,6 +31,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgieWM, budgie_wm, META_TYPE_PLUGIN)
 
 static void budgie_wm_dispose(GObject *object);
 static void budgie_wm_start(MetaPlugin *plugin);
+static void overlay_cb(MetaDisplay *display, gpointer ud);
 
 /* Budgie specific callbacks */
 static void budgie_launch_menu(MetaDisplay *display,
@@ -144,6 +145,13 @@ static void budgie_wm_start(MetaPlugin *plugin)
 
         /* Handle keys.. */
         budgie_keys_init(meta_screen_get_display(screen));
+        g_signal_connect(meta_screen_get_display(screen), "overlay-key",
+            G_CALLBACK(overlay_cb), NULL);
+}
+
+static void overlay_cb(MetaDisplay *display, gpointer ud)
+{
+        g_spawn_command_line_async("budgie-panel --menu", NULL);
 }
 
 /* Budgie specific callbacks */
