@@ -41,7 +41,9 @@ public class Animation : Object {
     public bool no_reset;             /**<Used sometimes for switching an animation*/
 
     /**
-     * Syntatical abuse of Vala. Calls start_anim
+     * Start this animation by attaching ourselves to the GdkFrameClock
+     *
+     * @param compl A completion callback to execute when this animation completes
      */
     public void start(AnimCompletionFunc? compl) {
         if (!no_reset) {
@@ -100,8 +102,6 @@ public class Animation : Object {
 
     /**
      * Stop a running animation
-     *
-     * @param anim A running animation
      */
     public void stop()
     {
