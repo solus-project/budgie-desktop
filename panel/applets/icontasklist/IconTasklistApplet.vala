@@ -353,7 +353,7 @@ public class IconButton : PaperButton
 
     public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
     {
-        Object(anim_above_content: true);
+        Object(anim_above_content: false);
 
         image = new Gtk.Image();
         image.pixel_size = size;
