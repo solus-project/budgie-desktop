@@ -565,24 +565,24 @@ public class IconTasklistAppletImpl : Budgie.Applet
     private unowned IconButton? active_button;
     Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
-    public override bool draw(Cairo.Context cr)
+    public double line_x { public get ; public set; }
+    public double line_y { public get ; public set; }
+    public double line_width { public get ; public set; }
+    public double line_height { public get ; public set; }
+
+    Budgie.Animation? old_anim;
+
+    private void button_position(IconButton active, out double x, out double y, out double width, out double height)
     {
         Gtk.Allocation alloc;
         Gtk.Allocation our_alloc;
-        base.draw(cr);
-        if (active_button == null) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
         get_allocation(out our_alloc);
-        active_button.get_allocation(out alloc);
-        var st = get_style_context();
-        var col = st.get_border_color(get_state_flags());
-
-        var height = 2;
-        var y = alloc.height - height;
-        var x = alloc.x - our_alloc.x;
-        var width = alloc.width;
+        active.get_allocation(out alloc);
+    
+        height = 2;
+        y = alloc.height - height;
+        x = alloc.x - our_alloc.x;
+        width = alloc.width;
 
         switch (panel_position) {
             case Budgie.PanelPosition.TOP:
@@ -603,9 +603,22 @@ public class IconTasklistAppletImpl : Budgie.Applet
             default:
                 break;
         }
+    }
+
+    /** Simply draw le selection line. */
+    public override bool draw(Cairo.Context cr)
+    {
+        base.draw(cr);
+        if (active_button == null) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        var st = get_style_context();
+        var col = st.get_border_color(get_state_flags());
 
         cr.set_source_rgba(col.red, col.green, col.blue, col.alpha);
-        cr.rectangle(x, y, width, height);
+        cr.rectangle(line_x, line_y, line_width, line_height);
+
         cr.fill();
 
         return Gdk.EVENT_PROPAGATE;
@@ -693,16 +706,69 @@ public class IconTasklistAppletImpl : Budgie.Applet
             } 
         }
         new_active = screen.get_active_window();
-        if (new_active == null) {
+        if (new_active == null || !buttons.has_key(new_active)) {
             active_button = null;
             queue_draw();
             return;
         }
-        if (!buttons.has_key(new_active)) {
-            return;
-        }
         btn = buttons[new_active];
         btn.set_active(true);
+        if (!btn.get_realized()) {
+            btn.realize();
+            btn.queue_resize();
+        }
+
+        if (active_button != null) {
+            /* Transition time.. Eventually we'll want to recycle existing line
+             * values in case we changed half way through a transition. */
+            double ox, oy, owidth, oheight;
+            button_position(active_button, out ox, out oy, out owidth, out oheight);
+            double x, y, width, height;
+            active_button = btn;
+            button_position(active_button, out x, out y, out width, out height);
+
+            /* Implicit budgie animations */
+            var anim = Budgie.Animation() {
+                widget = this,
+                length = 170 * Budgie.MSECOND,
+                tween = Budgie.quad_ease_in_out,
+                changes = new Budgie.PropChange[] {
+                    Budgie.PropChange() {
+                        property = "line-x",
+                        old = ox,
+                        @new = x
+                    },
+                    Budgie.PropChange() {
+                        property = "line-y",
+                        old = oy,
+                        @new = y
+                    },
+                    Budgie.PropChange() {
+                        property = "line-width",
+                        old = owidth,
+                        @new = width
+                    },
+                    Budgie.PropChange() {
+                        property = "line-height",
+                        old = oheight,
+                        @new = height
+                    }
+                }
+            };
+            if (old_anim != null) {
+                old_anim.stop();
+            }
+            anim.start(()=> {
+                old_anim = null;
+            });
+            old_anim = anim;
+        } else {
+            double x, y, width, height;
+            active_button = btn;
+            button_position(active_button, out x, out y, out width, out height);
+            line_x = x; line_y = y; line_width = width; line_height = height;
+        }
+
         active_button = btn;
         queue_draw();
     }
