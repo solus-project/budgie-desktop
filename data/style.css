@@ -11,10 +11,6 @@
     transition: 100ms ease-out;
 }
 
-.budgie-button {
-    padding: 10px;
-}
-
 .max-budgie-panel  {
     background-color: alpha(black, 0.7);
     border-top: 1px solid alpha(white, 0.2);
