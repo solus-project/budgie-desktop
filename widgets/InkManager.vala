@@ -41,9 +41,13 @@ public class InkManager : GLib.Object
 
     static const double DEFAULT_RADIUS = 10.0;
 
+    private bool can_ink = false;
+
     public InkManager(Gtk.Widget? widget)
     {
         this.widget = widget;
+        var settings = new Settings("com.evolve-os.budgie.panel");
+        can_ink = settings.get_boolean("md-style");
     }
 
     double deg_to_rad(double deg)
@@ -53,6 +57,10 @@ public class InkManager : GLib.Object
 
     public void add_ripple(double x, double y)
     {
+        if (!can_ink) {
+            return;
+        }
+
         var radius =(double) widget.get_allocated_width();
         radius += (radius-x);
 

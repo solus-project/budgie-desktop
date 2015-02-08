@@ -59,6 +59,12 @@
       <description>Whether to use the dark theme variant globally</description>
     </key>
 
+    <key type="b" name="md-style">
+      <default>true</default>
+      <summary>Extra animations</summary>
+      <description>Whether to enable extra animations, such as the ripple effect, etc.</description>
+    </key>
+
     <key type="b" name="enable-shadow">
       <default>false</default>
       <summary>Enable panel shadow</summary>
