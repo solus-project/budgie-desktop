@@ -209,7 +209,6 @@ static void _update(BudgieBackground *self)
         meta_background_actor_set_background(META_BACKGROUND_ACTOR(actor), background);
 
         meta_screen_get_monitor_geometry(self->priv->screen, self->priv->index, &rect);
-        clutter_actor_set_position(actor, rect.x, rect.y);
         clutter_actor_set_size(actor, rect.width, rect.height);
         g_object_set(actor, "opacity", 0, NULL);
         clutter_actor_show(actor);
