@@ -253,8 +253,9 @@ public class NotificationsAppletImpl : Budgie.Applet
             y += buf_pad;
         }
 
+        win.realize();
         var width = win.get_allocated_width();
-        var x = (rect.width - width) - buf_pad;
+        var x = ((rect.x + rect.width) - width) - buf_pad;
         win.move(x, y);
         win.set_decorated(false);
         win.show_all();
