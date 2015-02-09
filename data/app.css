@@ -6,6 +6,7 @@
  * @note These overrides are for the main menu
  */
 
+@define-color wm_shadow alpha(black, 0.5);
 
 /* GtkSidebar */
 .sidebar {
@@ -17,6 +18,19 @@
 
 GtkWindow.budgie-notification {
     background-color: transparent;
+}
+
+NotificationWidget {
+    border: 1px solid alpha(@wm_shadow, 0.35);
+    box-shadow: 0 2px 5px 0 @wm_shadow;
+    border-radius: 2px;
+    background-color: @theme_bg_color;
+}
+NotificationWidget.dark {
+    border: 1px solid alpha(@wm_shadow, 0.98);
+    box-shadow: 0 2px 5px 0 @wm_shadow;
+    border-radius: 2px;
+    background-color: #212121;
 }
 
 GtkPopover GtkListBox {
