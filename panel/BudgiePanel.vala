@@ -951,6 +951,10 @@ public class Panel : Gtk.Window
             "left",
             "right"
         };
+
+        x = primary_monitor_rect.x;
+        y = primary_monitor_rect.y;
+
         string newclass;
         switch (position) {
             case PanelPosition.TOP:
