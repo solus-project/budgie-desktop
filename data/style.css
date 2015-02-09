@@ -122,14 +122,23 @@ PanelToplevel .launcher:hover {
     icon-shadow: 1px 1px alpha(black, 0.5);
 }
 
-.notification .priority.low {
-    background-color: lightblue;
+NotificationWidget {
+    border: 1px solid alpha(@wm_shadow, 0.35);
+    box-shadow: 0 2px 5px 0 @wm_shadow;
+    border-radius: 2px;
+    background-color: @theme_bg_color;
 }
-.notification .priority.high {
-    background-color: blue;
+NotificationWidget.dark {
+    border: 1px solid alpha(@wm_shadow, 0.98);
+    box-shadow: 0 2px 5px 0 @wm_shadow;
+    border-radius: 2px;
+    background-color: #212121;
 }
-.notification .priority.critical {
-    background-color: red;
+.dark .dim-label {
+    color: white;
+}
+.dark .notif-title {
+    color: #ffa726;
 }
 
 

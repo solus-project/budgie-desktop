@@ -15,6 +15,9 @@
     padding: 10px;
 }
 
+GtkWindow.budgie-notification {
+    background-color: transparent;
+}
 
 GtkPopover GtkListBox {
     background-image: none;
