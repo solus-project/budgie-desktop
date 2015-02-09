@@ -46,6 +46,7 @@ void map(MetaPlugin *plugin, MetaWindowActor *window_actor)
         switch (MWT(window_actor)) {
                 case META_WINDOW_POPUP_MENU:
                 case META_WINDOW_DROPDOWN_MENU:
+                case META_WINDOW_NOTIFICATION:
                         /* For menus we'll give em a nice fade in */
                         g_object_set(actor, "opacity", 0, NULL);
                         clutter_actor_show(actor);

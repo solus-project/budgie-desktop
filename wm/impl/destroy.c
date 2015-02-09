@@ -38,6 +38,7 @@ void destroy(MetaPlugin *plugin, MetaWindowActor *window_actor)
         clutter_actor_remove_all_transitions(actor);
 
         switch (MWT(window_actor)) {
+                case META_WINDOW_NOTIFICATION:
                 case META_WINDOW_NORMAL:
                 case META_WINDOW_DIALOG:
                 case META_WINDOW_MODAL_DIALOG:
