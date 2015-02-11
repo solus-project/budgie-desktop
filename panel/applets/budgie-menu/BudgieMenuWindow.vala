@@ -380,10 +380,15 @@ public class BudgieMenuWindow : Budgie.Popover
     {
         Gtk.ListBoxRow? selected = null;
 
-        foreach (var child in content.get_children()) {
-            if (child.get_visible() && child.get_child_visible()) {
-                selected = child as Gtk.ListBoxRow;
-                break;
+        var rows = content.get_selected_rows();
+        if (rows != null) {
+            selected = rows.data;
+        } else {
+            foreach (var child in content.get_children()) {
+                if (child.get_visible() && child.get_child_visible()) {
+                    selected = child as Gtk.ListBoxRow;
+                    break;
+                }
             }
         }
         if (selected == null) {
