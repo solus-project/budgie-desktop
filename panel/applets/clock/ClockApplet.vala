@@ -60,7 +60,7 @@ public class ClockAppletImpl : Budgie.Applet
         settings.changed.connect(on_settings_change);
         on_settings_change("clock-format");
         on_settings_change("clock-show-seconds");
-        on_settings_change("clock-show-data");
+        on_settings_change("clock-show-date");
         update_clock();
         add(widget);
         show_all();
@@ -120,7 +120,7 @@ public class ClockAppletImpl : Budgie.Applet
         }
         string ftime = " <big>%s</big> ".printf(format);
         if (show_date) {
-            ftime += " <small>%x</small>";
+            ftime += " <big>%x</big>";
         }
 
         var ctime = time.format(ftime);
