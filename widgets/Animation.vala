@@ -45,7 +45,8 @@ public class Animation : Object {
      *
      * @param compl A completion callback to execute when this animation completes
      */
-    public void start(AnimCompletionFunc? compl) {
+    public void start(AnimCompletionFunc? compl)
+    {
         if (!no_reset) {
             start_time = get_monotonic_time();
         }
