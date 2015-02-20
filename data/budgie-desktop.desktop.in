@@ -5,3 +5,4 @@ Exec=@prefix@/bin/budgie-session
 TryExec=@prefix@/bin/budgie-session
 Icon=
 Type=Application
+DesktopNames=Budgie;GNOME
