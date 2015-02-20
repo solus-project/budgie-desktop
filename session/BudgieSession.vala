@@ -41,20 +41,46 @@ public class Session : GLib.Application
 {
 
     bool running = false;
-    GLib.MainLoop loop = null;
     Gee.HashMap<string,WatchedProcess?> process_map;
     // xdg mapping
     Gee.HashMap<string,DesktopAppInfo>  mapping;
     bool relaunch = true;
 
-    /**
-     * We only ever want to be activated once (unique instance)
-     */
-    public override void activate()
+    public override int command_line (ApplicationCommandLine command_line)
     {
+        string[] args = command_line.get_arguments();
+
+        try {
+            var opt_context = new OptionContext("- Budgie Session");
+            opt_context.set_help_enabled(true);
+            opt_context.add_main_entries(options, null);
+            opt_context.parse_strv(ref args);
+        } catch (OptionError e) {
+            stdout.printf("Error: %s\nRun with --help to see valid options\n", e.message);
+            return 0;
+        }
+
+        if (!should_logout) {
+            if (Environment.get_variable("DBUS_SESSION_BUS_ADDRESS") == null) {
+                string[] cmd = { "dbus-launch", "--exit-with-session" };
+                foreach (var c in args) {
+                    cmd += c;
+                }
+                if (Posix.execvp("dbus-launch", cmd) != 0) {
+                    critical("Could not execvp for dbus session support");
+                }
+            }
+        }
+
+        if (should_logout) {
+            do_logout();
+            return 0;
+        }
+
+        // We only ever want to run once (unique instance)
         if (running) {
             stdout.printf("Session already running\n");
-            return;
+            return 0;
         }
 
         hold();
@@ -84,9 +110,8 @@ public class Session : GLib.Application
         launch_xdg("Applications", ref launched);
 
         launched = null;
-        loop.run();
 
-        release();
+        return 0;
     }
 
     /**
@@ -170,7 +195,6 @@ public class Session : GLib.Application
                 if (p.cmd_line == WM_NAME || p.cmd_line == PANEL_NAME) {
                     critical("Critical desktop component %s exited with status code %d", p.cmd_line, status);
                     do_logout();
-                    loop.quit();
                 }
             } // otherwise it was a normal requested operation
             process_map.unset(p.cmd_line);
@@ -187,7 +211,6 @@ public class Session : GLib.Application
             return;
         }
 
-        hold();
         // just in case sending SIGTERM results in some oddity in a watched
         // process
         relaunch = false;
@@ -198,8 +221,7 @@ public class Session : GLib.Application
                 Process.close_pid(process.pid);
             }
         }
-        loop.quit();
-        release();
+        quit();
     }
 
     /**
@@ -371,19 +393,13 @@ public class Session : GLib.Application
 
     private Session()
     {
-        Object (application_id: "com.evolve_os.BudgieSession", flags: 0);
-        loop = new MainLoop(null, false);
+        Object (application_id: "com.evolve_os.BudgieSession", flags: ApplicationFlags.HANDLES_COMMAND_LINE);
 
-        var action = new SimpleAction("logout", null);
-        action.activate.connect(()=> {
-            do_logout();
-        });
-        add_action(action);
     }
 
     static bool should_logout = false;
 
-	private const GLib.OptionEntry[] options = {
+    private const GLib.OptionEntry[] options = {
         { "logout", 0, 0, OptionArg.NONE, ref should_logout, "Logout", null },
         { null }
     };
@@ -393,42 +409,7 @@ public class Session : GLib.Application
      */
     public static int main(string[] args)
     {
-        Budgie.Session app;
-
-        try {
-            var opt_context = new OptionContext("- Budgie Session");
-            opt_context.set_help_enabled(true);
-            opt_context.add_main_entries(options, null);
-            opt_context.parse(ref args);
-        } catch (OptionError e) {
-            stdout.printf("Error: %s\nRun with --help to see valid options\n", e.message);
-            return 0;
-        }
-
-        if (!should_logout) {
-            if (Environment.get_variable("DBUS_SESSION_BUS_ADDRESS") == null) {
-                string[] cmd = { "dbus-launch", "--exit-with-session" };
-                foreach (var c in args) {
-                    cmd += c;
-                }
-                if (Posix.execvp("dbus-launch", cmd) != 0) {
-                    critical("Could not execvp for dbus session support");
-                }
-            }
-        }
-        app = new Budgie.Session();
-
-        if (should_logout) {
-            try {
-                app.register(null);
-                app.activate_action("logout", null);
-                Process.exit(0);
-            } catch (Error e) {
-                stderr.printf("Error activating logout: %s\n", e.message);
-                return 1;
-            }
-        }
-
+        var app = new Budgie.Session();
         return app.run(args);
     }
 } // End Session
