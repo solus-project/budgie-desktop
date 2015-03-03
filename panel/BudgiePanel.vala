@@ -1209,7 +1209,7 @@ class PanelMain : GLib.Application
     private static bool invoke_menu = false;
     private static bool invoke_prefs = false;
 
-	private const GLib.OptionEntry[] options = {
+    private const GLib.OptionEntry[] options = {
         { "menu", 0, 0, OptionArg.NONE, ref invoke_menu, "Invoke the panel menu", null },
         { "prefs", 0, 0, OptionArg.NONE, ref invoke_prefs, "Invoke the panel preferences", null },
         { null }
