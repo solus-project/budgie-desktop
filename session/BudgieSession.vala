@@ -72,6 +72,10 @@ public class Session : GLib.Application
             }
         }
 
+        if (Environment.get_variable("XDG_CURRENT_DESKTOP") == null) {
+            Environment.set_variable("XDG_CURRENT_DESKTOP", "gnome", true);
+        }
+
         if (should_logout) {
             do_logout();
             return 0;
