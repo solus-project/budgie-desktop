@@ -4,7 +4,7 @@ AM_CFLAGS =  -fstack-protector -Wall -pedantic \
         -Wformat -Wformat-security -Werror=format-security \
         -Wno-conversion \
         -Wunreachable-code \
-        -std=c99 -Werror \
+        -std=c99 \
         -DDATADIR=\"$(datadir)\"
 
 AM_CPPFLAGS += \
