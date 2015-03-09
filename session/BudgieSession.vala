@@ -72,8 +72,16 @@ public class Session : GLib.Application
             }
         }
 
+        // Make Qt, etc, happy
         if (Environment.get_variable("XDG_CURRENT_DESKTOP") == null) {
             Environment.set_variable("XDG_CURRENT_DESKTOP", "gnome", true);
+        }
+
+        /* Make Java, Google Chrome, and xdg-open happy.
+           Further more, whoever thought falling back to a web browser in xdg-open
+           was a good idea... MASSIVE ROUND OF APPLAUSE.... */
+        if (Environment.get_variable("GNOME_DESKTOP_SESSION_ID") == null) {
+            Environment.set_variable("GNOME_DESKTOP_SESSION_ID", "this-is-deprecated", true);
         }
 
         if (should_logout) {
