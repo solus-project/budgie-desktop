@@ -74,7 +74,7 @@ public class Session : GLib.Application
 
         // Make Qt, etc, happy
         if (Environment.get_variable("XDG_CURRENT_DESKTOP") == null) {
-            Environment.set_variable("XDG_CURRENT_DESKTOP", "gnome", true);
+            Environment.set_variable("XDG_CURRENT_DESKTOP", "GNOME", true);
         }
 
         /* Make Java, Google Chrome, and xdg-open happy.
