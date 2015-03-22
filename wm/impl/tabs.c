@@ -58,12 +58,7 @@ void switch_windows(MetaDisplay *display, MetaScreen     *screen,
         MetaWindow *win = NULL;
         guint32 cur_time = meta_display_get_current_time(display);
 
-        if (window) {
-                workspace = meta_window_get_workspace(window);
-        }
-        if (!workspace) {
-                workspace = meta_screen_get_active_workspace(screen);
-        }
+        workspace = meta_screen_get_active_workspace(screen);
 
         if (!g_object_get_data(G_OBJECT(workspace), "__flagged")) {
                 g_signal_connect(workspace, "window-added", G_CALLBACK(invalidate_tab), NULL);
