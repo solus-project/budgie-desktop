@@ -98,7 +98,7 @@ public class PowerIndicator : Gtk.Bin
         // Set a handy tooltip until we gain a menu in StatusApplet
         int hours = (int)battery.time_to_empty / (60 * 60);
         int minutes = (int)battery.time_to_empty / 60 - hours * 60;
-        string tip = "Battery remaining: %d%% (%d:%d)".printf((int)battery.percentage, hours, minutes);
+        string tip = "Battery remaining: %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
         set_tooltip_text(tip);
         margin = 2;
 
