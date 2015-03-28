@@ -207,6 +207,7 @@ public class Popover : Gtk.Window
     public new void present(Gtk.Widget? parent = null, bool reposition = false)
     {
         var toplevel = parent.get_toplevel();
+        set_transient_for(toplevel as Gtk.Window);
         int win_x, win_y;
         int trans_x, trans_y;
         this.parent_widg = parent;
@@ -363,7 +364,7 @@ public class Popover : Gtk.Window
 
     protected override bool grab_broken_event(Gdk.EventGrabBroken event)
     {
-        should_regrab = true;
+        //should_regrab = true;
         return false;
     }
 
