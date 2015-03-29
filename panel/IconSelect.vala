@@ -48,6 +48,7 @@ public class IconSelect : Gtk.Window
         set_titlebar(header);
 
         Gtk.Box main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+        main_box.border_width = 6;
         this.add(main_box);
 
         /**
@@ -95,14 +96,12 @@ public class IconSelect : Gtk.Window
         main_box.pack_start(file_chooser);
 
         // buttons (Ok, Cancel)
-        Gtk.Box button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
         Gtk.Button button_ok = new Gtk.Button.with_label("Ok");
+        button_ok.set_size_request(40, -1);
+        button_ok.get_style_context().add_class("suggested-action");
         Gtk.Button button_cancel = new Gtk.Button.with_label("Cancel");
-        button_ok.set_size_request(70, 30);
-        button_cancel.set_size_request(70, 30);
-        button_box.pack_end(button_ok, false, false);
-        button_box.pack_end(button_cancel, false, false);
-        main_box.pack_start(button_box, false, true);
+        header.pack_start(button_cancel);
+        header.pack_end(button_ok);
 
         /**
          * Callbacks
