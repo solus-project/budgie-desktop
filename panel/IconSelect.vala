@@ -2,6 +2,10 @@
  * IconSelect.vala
  *
  * Copyright 2014 Lara Maia <lara@craft.net.br>
+ * Copyright (c) 2011 by Simon Schneegans:
+ *
+ * Icon select window code used with kind permission of Simon Schneegans:
+ * https://github.com/evolve-os/budgie-desktop/pull/134#issuecomment-70007104
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
