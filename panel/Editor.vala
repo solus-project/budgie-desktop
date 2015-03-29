@@ -658,6 +658,7 @@ public class PanelEditor : Gtk.Window
 
         // menu label
         var entry = new Gtk.Entry();
+        entry.margin_end = 4;
         group.add_widget(entry);
         settings.bind("menu-label", entry, "text", SettingsBindFlags.DEFAULT);
         item = create_action_item("Menu label", null, entry);
@@ -665,20 +666,18 @@ public class PanelEditor : Gtk.Window
 
         // menu icon
         Gtk.Box menu_icon_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-
         this.menu_icon_entry = new Gtk.Entry();
-        group.add_widget(this.menu_icon_entry);
+        group.add_widget(menu_icon_box);
         settings.bind("menu-icon", this.menu_icon_entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu icon", "Set a icon to use for menu", this.menu_icon_entry);
-        menu_icon_box.pack_start(item, true, true, 5);
-
-        var button = new Gtk.Button.with_label("...");
+        item = create_action_item("Menu icon", "Set a icon to use for menu", menu_icon_box);
+        var button = new Gtk.Button.with_label("…");
         button.clicked.connect(()=> {
             on_icon_select_button_clicked();
         });
+        menu_icon_box.pack_start(menu_icon_entry, true, true, 0);
         menu_icon_box.pack_start(button, false, false, 0);
 
-        layout.pack_start(menu_icon_box, false, false, 0);
+        layout.pack_start(item, false, false, 0);
 
         return layout;
     }
