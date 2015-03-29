@@ -1,5 +1,6 @@
 -include $(top_srcdir)/common.mk
 
+if BUILD_SESSION
 dialog_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/session-dialog.gresource.xml)
 
 BUILT_SOURCES = \
@@ -98,3 +99,5 @@ CLEANFILES += \
 dist-hook:
 	cd $(distdir) && \
 	rm $(budgie_session_SOURCES:.vala=.c) budgie_session_vala.stamp
+
+endif

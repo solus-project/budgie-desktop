@@ -47,6 +47,13 @@ if test "x$enable_wm" = "xyes"; then
     PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.14.0])
 fi
 
+AC_ARG_ENABLE(session, AS_HELP_STRING([--enable-session], [enable session @<:@default=yes@:>@]),
+             [], [enable_session=yes])
+AS_IF([test "x$enable_session" = "xyes"],
+       [AC_DEFINE([BUILD_SESSION], [1], [Building session manager])],
+       [])
+AM_CONDITIONAL([BUILD_SESSION], [test x$enable_session = x"yes"])
+
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
 
@@ -137,4 +144,5 @@ AC_MSG_RESULT([
         ldflags:                ${LDFLAGS}
 
         wm:                     ${enable_wm}
+        session:                ${enable_session}
 ])
