@@ -673,7 +673,7 @@ public class PanelEditor : Gtk.Window
         this.menu_icon_entry = new Gtk.Entry();
         group.add_widget(menu_icon_box);
         settings.bind("menu-icon", this.menu_icon_entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu icon", "Set a icon to use for menu", menu_icon_box);
+        item = create_action_item("Menu icon", "Set an icon to use for menu", menu_icon_box);
         var button = new Gtk.Button.with_label("…");
         button.clicked.connect(()=> {
             on_icon_select_button_clicked();
