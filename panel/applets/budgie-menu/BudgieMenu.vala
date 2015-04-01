@@ -1,8 +1,8 @@
 /*
  * BudgieMenu.vala
- * 
+ *
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -104,7 +104,12 @@ public class BudgieMenuApplet : Budgie.Applet
         switch (key)
         {
             case "menu-icon":
-                img.set_from_icon_name(settings.get_string(key), Gtk.IconSize.INVALID);
+                if ("/" in settings.get_string(key)) {
+                    Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(settings.get_string(key));
+                    img.set_from_pixbuf(pixbuf.scale_simple(32, 32, Gdk.InterpType.BILINEAR));
+                } else {
+                    img.set_from_icon_name(settings.get_string(key), Gtk.IconSize.INVALID);
+                }
                 break;
             case "menu-label":
                 label.set_label(settings.get_string(key));
@@ -123,7 +128,7 @@ public class BudgieMenuApplet : Budgie.Applet
 } // End class
 
 [ModuleInit]
-public void peas_register_types(TypeModule module) 
+public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;

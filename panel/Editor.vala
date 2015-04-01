@@ -1,8 +1,8 @@
 /*
  * BudgiePanel.vala
- * 
+ *
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -57,9 +57,11 @@ public class PanelEditor : Gtk.Window
     unowned Budgie.Panel? panel;
 
     Gtk.ComboBox pack_type;
-    Gtk.CheckButton is_status;
+    Gtk.Switch is_status;
     Gtk.SpinButton pad_start;
     Gtk.SpinButton pad_end;
+
+    public Gtk.Entry menu_icon_entry;
 
     // Wrap everything in a stack
     Gtk.Stack book;
@@ -71,6 +73,8 @@ public class PanelEditor : Gtk.Window
 
     // Currently selected PluginInfo
     unowned Peas.PluginInfo? current_plugin;
+
+    private IconSelect? icon_select_dialog;
 
     protected Gtk.Button app_add_btn;
     protected Gtk.Button app_cancel_btn;
@@ -250,6 +254,25 @@ public class PanelEditor : Gtk.Window
         return strcmp(before_info.get_name(), after_info.get_name());
     }
 
+    public void on_icon_select_button_clicked()
+    {
+        if (icon_select_dialog != null && icon_select_dialog.get_visible()) {
+            icon_select_dialog.present();
+            return;
+        }
+        if(icon_select_dialog != null) {
+            icon_select_dialog.destroy();
+        }
+
+        icon_select_dialog = new IconSelect(this);
+
+        icon_select_dialog.show_all();
+        icon_select_dialog.present();
+
+        // {FIXME} Set initial window format
+        icon_select_dialog.on_category_select_box_changed();
+    }
+
     protected Gtk.Widget? create_applet_main_area()
     {
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -370,13 +393,13 @@ public class PanelEditor : Gtk.Window
 
         // Various options here for individual applets
         label = new Gtk.Label("Place in status area");
-        var is_status = new Gtk.CheckButton();
+        var is_status = new Gtk.Switch();
         this.is_status = is_status;
         is_status.halign = Gtk.Align.END;
         is_status.active = false;
         grid.attach(label, 0, 0, 1, 1);
         grid.attach(is_status, 1, 0, 1, 1);
-        is_status_id = is_status.clicked.connect(()=> {
+        is_status_id = is_status.state_flags_changed.connect((previous_state_flags)=> {
             if (current_info == null) {
                 return;
             }
@@ -551,13 +574,13 @@ public class PanelEditor : Gtk.Window
         layout.pack_start(sep, false, false, 0);
 
         // gnome panel theme integration
-        var check = new Gtk.CheckButton();
+        var check = new Gtk.Switch();
         settings.bind("gnome-panel-theme-integration", check, "active", SettingsBindFlags.DEFAULT);
         var item = create_action_item("GNOME Panel theme integration", "Enables a more traditional panel appearance", check);
         layout.pack_start(item, false, false, 0);
 
         // shadow for panel
-        check = new Gtk.CheckButton();
+        check = new Gtk.Switch();
         settings.bind("enable-shadow", check, "active", SettingsBindFlags.DEFAULT);
         item = create_action_item("Enable panel shadow", "Adds a shadow to the panels edge", check);
         layout.pack_start(item, false, false, 0);
@@ -609,19 +632,19 @@ public class PanelEditor : Gtk.Window
         layout.pack_start(sep, false, false, 0);
 
         // show menu label?
-        var check = new Gtk.CheckButton();
+        var check = new Gtk.Switch();
         settings.bind("enable-menu-label", check, "active", SettingsBindFlags.DEFAULT);
         var item = create_action_item("Menu label on panel", null, check);
         layout.pack_start(item, false, false, 0);
 
         // compact menu
-        check = new Gtk.CheckButton();
+        check = new Gtk.Switch();
         settings.bind("menu-compact", check, "active", SettingsBindFlags.DEFAULT);
         item = create_action_item("Compact menu", "Use a smaller menu with no category navigation", check);
         layout.pack_start(item, false, false, 0);
 
         // menu headers
-        check = new Gtk.CheckButton();
+        check = new Gtk.Switch();
         settings.bind("menu-headers", check, "active", SettingsBindFlags.DEFAULT);
         item = create_action_item("Category headers in menu", null, check);
         layout.pack_start(item, false, false, 0);
@@ -635,16 +658,25 @@ public class PanelEditor : Gtk.Window
 
         // menu label
         var entry = new Gtk.Entry();
+        entry.margin_end = 4;
         group.add_widget(entry);
         settings.bind("menu-label", entry, "text", SettingsBindFlags.DEFAULT);
         item = create_action_item("Menu label", null, entry);
         layout.pack_start(item, false, false, 0);
 
         // menu icon
-        entry = new Gtk.Entry();
-        group.add_widget(entry);
-        settings.bind("menu-icon", entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu icon", null, entry);
+        Gtk.Box menu_icon_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        this.menu_icon_entry = new Gtk.Entry();
+        group.add_widget(menu_icon_box);
+        settings.bind("menu-icon", this.menu_icon_entry, "text", SettingsBindFlags.DEFAULT);
+        item = create_action_item("Menu icon", "Set an icon to use for menu", menu_icon_box);
+        var button = new Gtk.Button.with_label("…");
+        button.clicked.connect(()=> {
+            on_icon_select_button_clicked();
+        });
+        menu_icon_box.pack_start(menu_icon_entry, true, true, 0);
+        menu_icon_box.pack_start(button, false, false, 0);
+
         layout.pack_start(item, false, false, 0);
 
         return layout;
@@ -702,7 +734,7 @@ public class PanelEditor : Gtk.Window
         sep.margin_bottom = 12;
         layout.pack_start(sep, false, false, 0);
 
-        var check = new Gtk.CheckButton();
+        var check = new Gtk.Switch();
         var item = create_action_item("Dark theme", "Activate the dark theme option for the Budgie desktop", check);
         settings.bind("dark-theme", check, "active", SettingsBindFlags.DEFAULT);
         layout.pack_start(item, false, false, 0);

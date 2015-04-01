@@ -1,8 +1,8 @@
 /*
  * PowerIndicator.vala
- * 
+ *
  * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -62,6 +62,7 @@ public class PowerIndicator : Gtk.Bin
             devices.foreach((device) => {
                 if (device.kind == Up.DeviceKind.BATTERY && battery == null) {
                     battery = device;
+                    battery.notify.connect(() => update_ui ());
                 }
             });
             if (battery == null) {
@@ -95,7 +96,9 @@ public class PowerIndicator : Gtk.Bin
         }
 
         // Set a handy tooltip until we gain a menu in StatusApplet
-        string tip = "Battery remaining: %d%%".printf((int)battery.percentage);
+        int hours = (int)battery.time_to_empty / (60 * 60);
+        int minutes = (int)battery.time_to_empty / 60 - hours * 60;
+        string tip = "Battery remaining: %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
         set_tooltip_text(tip);
         margin = 2;
 

@@ -1,5 +1,6 @@
 -include $(top_srcdir)/common.mk
 
+if BUILD_RUNDIALOG
 rundialog_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/rundialog.gresource.xml)
 
 BUILT_SOURCES = \
@@ -44,3 +45,5 @@ budgie_run_dialog_VALAFLAGS = \
 dist-hook:
 	cd $(distdir) && \
 	rm $(budgie_run_dialog_SOURCES:.vala=.c) budgie_run_dialog_vala.stamp
+
+endif

@@ -35,6 +35,7 @@ AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
 
 PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
 
+# bdugie-wm
 AC_ARG_ENABLE(wm, AS_HELP_STRING([--enable-wm], [enable wm @<:@default=yes@:>@]),
              [], [enable_wm=yes])
 AS_IF([test "x$enable_wm" = "xyes"],
@@ -46,6 +47,22 @@ if test "x$enable_wm" = "xyes"; then
     # Required for Window Manager component
     PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.14.0])
 fi
+
+# budgie-session
+AC_ARG_ENABLE(session, AS_HELP_STRING([--enable-session], [enable session @<:@default=yes@:>@]),
+             [], [enable_session=yes])
+AS_IF([test "x$enable_session" = "xyes"],
+       [AC_DEFINE([BUILD_SESSION], [1], [Building session manager])],
+       [])
+AM_CONDITIONAL([BUILD_SESSION], [test x$enable_session = x"yes"])
+
+# budgie-run-dialog
+AC_ARG_ENABLE(rundialog, AS_HELP_STRING([--enable-rundialog], [enable rundialog @<:@default=yes@:>@]),
+             [], [enable_rundialog=yes])
+AS_IF([test "x$enable_rundialog" = "xyes"],
+       [AC_DEFINE([BUILD_RUNDIALOG], [1], [Building rundialog])],
+       [])
+AM_CONDITIONAL([BUILD_RUNDIALOG], [test x$enable_rundialog = x"yes"])
 
 # Wnck required for budgie-panel
 PKG_CHECK_MODULES([WNCK3], [libwnck-3.0 >= 3.4.7])
@@ -137,4 +154,6 @@ AC_MSG_RESULT([
         ldflags:                ${LDFLAGS}
 
         wm:                     ${enable_wm}
+        session:                ${enable_session}
+        rundialog:              ${enable_rundialog}
 ])
