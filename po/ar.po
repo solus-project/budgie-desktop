@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# mehdi alouane <pro4medo@gmail.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-10 19:17+0100\n"
+"PO-Revision-Date: 2015-04-10 19:53+0000\n"
+"Last-Translator: mehdi alouane <pro4medo@gmail.com>\n"
+"Language-Team: Arabic (http://www.transifex.com/projects/p/budgie-desktop/language/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: ../panel/BudgiePanel.vala:360
+msgid "Preferences..."
+msgstr "الإعدادات..."
+
+#. resizable = false;
+#: ../panel/Editor.vala:95
+msgid "Panel preferences"
+msgstr "لوحة الإعدادات"
+
+#: ../panel/Editor.vala:126
+msgid "Appearance"
+msgstr "المظهر"
+
+#: ../panel/Editor.vala:130
+msgid "Applets"
+msgstr "التطبيقات"
+
+#: ../panel/Editor.vala:134
+msgid "Menu"
+msgstr "قائمة"
+
+#: ../panel/Editor.vala:138
+msgid "Panel"
+msgstr "الشريط"
+
+#: ../panel/Editor.vala:279
+#, c-format
+msgid "Panel applets"
+msgstr "شريط التطبيقات"
+
+#. Various options here for individual applets
+#: ../panel/Editor.vala:395
+msgid "Place in status area"
+msgstr "مكان في منطقة الحالة"
+
+#: ../panel/Editor.vala:419
+msgid "Start padding"
+msgstr "بدء الحشو"
+
+#: ../panel/Editor.vala:427
+msgid "End padding"
+msgstr "نهاية الحشو"
+
+#. pack type
+#: ../panel/Editor.vala:435
+msgid "Placement"
+msgstr "تحريك"
+
+#: ../panel/Editor.vala:502
+msgid "Add applet"
+msgstr "إضافة تطبيق"
+
+#: ../panel/Editor.vala:523
+msgid "Cancel"
+msgstr "الغاء الامر"
+
+#: ../panel/Editor.vala:531
+msgid "Add"
+msgstr "إضافة"
+
+#: ../panel/Editor.vala:565
+#, c-format
+msgid "Panel configuration"
+msgstr "إعدادات الشريط"
+
+#: ../panel/Editor.vala:579
+msgid "GNOME Panel theme integration"
+msgstr "تكامل الشريط مع سمة GNOME"
+
+#: ../panel/Editor.vala:579
+msgid "Enables a more traditional panel appearance"
+msgstr "تمكين ظهور سمة الشريط التقليدية"
+
+#: ../panel/Editor.vala:585
+msgid "Enable panel shadow"
+msgstr "تفعيل ظل الشريط"
+
+#: ../panel/Editor.vala:585
+msgid "Adds a shadow to the panels edge"
+msgstr "إضافة الظل إلى حافة الأشرطة"
+
+#: ../panel/Editor.vala:591
+msgid "Top"
+msgstr "أعلى"
+
+#: ../panel/Editor.vala:592
+msgid "Left"
+msgstr "يسار"
+
+#: ../panel/Editor.vala:593
+msgid "Right"
+msgstr "يمين"
+
+#: ../panel/Editor.vala:594
+msgid "Bottom"
+msgstr "أسفل"
+
+#: ../panel/Editor.vala:596
+msgid "Position on screen"
+msgstr "الموقع على الشاشة"
+
+#: ../panel/Editor.vala:609
+msgid "Never"
+msgstr "أبدا"
+
+#: ../panel/Editor.vala:610
+msgid "Automatic"
+msgstr "التشغيل الذاتي"
+
+#: ../panel/Editor.vala:612
+msgid "Autohide policy"
+msgstr "سياسة الإختفاء الأوتوماتيكي"
+
+#: ../panel/Editor.vala:623
+#, c-format
+msgid "Menu configuration"
+msgstr "إعدادات القائمة"
+
+#: ../panel/Editor.vala:637
+msgid "Menu label on panel"
+msgstr "إسم القائمة على الشريط"
+
+#: ../panel/Editor.vala:643
+msgid "Compact menu"
+msgstr "القائمة المدمجة"
+
+#: ../panel/Editor.vala:643
+msgid "Use a smaller menu with no category navigation"
+msgstr "استخدام قائمة أصغر بدون تصنيف القوائم"
+
+#: ../panel/Editor.vala:649
+msgid "Category headers in menu"
+msgstr "رؤوس التصنيفات في القائمة"
+
+#: ../panel/Editor.vala:656
+msgid "Icon size"
+msgstr "حجم الأيقونات"
+
+#: ../panel/Editor.vala:656
+msgid "Set a size to use for icons in the menu."
+msgstr "حدد حجم الأيقونات التي ستستعمل في القائمة"
+
+#: ../panel/Editor.vala:664
+msgid "Menu label"
+msgstr "تسمية القائمة"
+
+#: ../panel/Editor.vala:672
+msgid "Menu icon"
+msgstr "أيقونة القائمة"
+
+#: ../panel/Editor.vala:672
+msgid "Set an icon to use for menu"
+msgstr "حدد أيقونة تستعملها في القائمة"
+
+#: ../panel/Editor.vala:726
+#, c-format
+msgid "Personalise Budgie"
+msgstr "إضفاء الطابع الشخصي على Budgie"
+
+#: ../panel/Editor.vala:738
+msgid "Dark theme"
+msgstr "السمة الغامقة"
+
+#: ../panel/Editor.vala:738
+msgid "Activate the dark theme option for the Budgie desktop"
+msgstr "تفعيل خيار السمة الغامقة لسطح مكتب Budgie"
+
+#: ../panel/Editor.vala:746
+msgid "Widget theme"
+msgstr "سمة القطع"
+
+#: ../panel/Editor.vala:746
+msgid "Select a widget (GTK+) theme to use for applications"
+msgstr "إختيارسمة قطعة (GTK+) لاستخدامها في التطبيقات"
+
+#: ../panel/Editor.vala:753
+msgid "Window theme"
+msgstr "سمة النافذة"
+
+#: ../panel/Editor.vala:760
+msgid "Icon theme"
+msgstr "طقم أيقونات"
