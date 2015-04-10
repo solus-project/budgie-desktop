@@ -10,7 +10,7 @@
  * our own Screenshot and Record to integrate further with GNOME Settings
  * Daemon shortcuts (and besides, X11 screenies can invariably tear...)
  * 
- * Copyright 2015 Ikey Doherty <ikey@evolve-os.com>
+ * Copyright 2015 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

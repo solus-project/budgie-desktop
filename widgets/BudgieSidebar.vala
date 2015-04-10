@@ -21,7 +21,7 @@
  * Ported to Vala to ensure a form of GtkSidebar was available in older distributions
  * purely for the benefit of the Budgie Desktop
  *
- *  - Ikey Doherty <ikey@evolve-os.com>
+ *  - Ikey Doherty <ikey@solus-project.com>
  */
 
 namespace Budgie {

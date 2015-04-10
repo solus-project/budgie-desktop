@@ -256,7 +256,7 @@ public class MenubarAppletImpl : Budgie.Applet
         item.activate.connect(()=> {
             Gtk.License license = Gtk.License.GPL_2_0;
             string[] authors = {
-                "Ikey Doherty <ikey@evolve-os.com>",
+                "Ikey Doherty <ikey@solus-project.com>",
                 "Josh Klar <j@iv597.com>",
                 "Emanuel Fernandes <efernandes@tektorque.com>",
                 "Elias Aebi <user142@hotmail.com>",
@@ -265,7 +265,7 @@ public class MenubarAppletImpl : Budgie.Applet
                 "Matias Linares <matiaslina@gmail.com>"
             };
 
-            string comments = "Simple, yet elegant, desktop environment designed for Evolve OS";
+            string comments = "Simple, yet elegant, desktop environment designed for Solus Operating System";
             Gtk.show_about_dialog(null,
                 "program-name", "Budgie Desktop",
                 "copyright", "Copyright © 2014 Evolve OS",
@@ -275,7 +275,7 @@ public class MenubarAppletImpl : Budgie.Applet
                 "version", Budgie.VERSION,
                 "comments", comments,
                 "logo_icon_name", "help-about",
-                "website-label", "Evolve OS");
+                "website-label", "Solus Project");
         });
         ret.add(item);
 

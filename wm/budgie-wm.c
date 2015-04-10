@@ -2,7 +2,7 @@
  * budgie-wm.c - Budgie Window Manager (mutter based)
  * 
  * Copyright 2013 Ikey Doherty <ikey.doherty@gmail.com>
- * Copyright 2015 Ikey Doherty <ikey@evolve-os.com>
+ * Copyright 2015 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -2,7 +2,7 @@
  * NotificationsApplet.vala
  * 
  * Copyright 2014 Josh Klar <j@iv597.com>
- * Also Copyright 2014 Ikey Doherty <ikey@evolve-os.com>
+ * Also Copyright 2014 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class NotificationServer : Object
         out string spec_version) 
     {
         name = "budgie-panel";
-        vendor = "Evolve OS";
+        vendor = "Solus Project";
         version = "0.0.2";
         spec_version = "1";
     }
