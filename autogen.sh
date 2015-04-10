@@ -17,12 +17,15 @@ then
 fi
 git submodule update
 
+intltoolize --force
 AUTORECONF=`which autoreconf`
 if test -z $AUTORECONF;
 then
   echo "*** No autoreconf found, please install it ***"
   exit 1
 else
+  libtoolize -i || exit $?
+  intltoolize --force || exit $?
   autoreconf --force --install || exit $?
 fi
 

@@ -1260,6 +1260,11 @@ class PanelMain : GLib.Application
         Budgie.PanelMain app;
         Gtk.init(ref args);
 
+        Intl.setlocale(LocaleCategory.ALL, "");
+        Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+        Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+
         try {
             var opt_context = new OptionContext("- Budgie Panel");
             opt_context.set_help_enabled(true);

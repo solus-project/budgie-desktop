@@ -38,7 +38,9 @@ budgie_panel_CFLAGS = \
 	$(GEE_CFLAGS) \
 	-DMODULE_DIR=\"$(MODULEDIR)\" \
 	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
-	-DDATADIR=\"$(datadir)/budgie-desktop\"
+	-DDATADIR=\"$(datadir)/budgie-desktop\" \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\"
 
 budgie_panel_LDADD = \
 	$(GOBJECT_LIBS) \

@@ -112,7 +112,14 @@ fi
 
 AC_SUBST(VALAFLAGS)
 
+GETTEXT_PACKAGE=budgie-desktop
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext package to be used])
+
+IT_PROG_INTLTOOL([0.50.0])
+
 AC_CONFIG_FILES([Makefile
+                po/Makefile.in
                 data/Makefile
                 data/budgie-desktop.desktop
                 gvc/Makefile

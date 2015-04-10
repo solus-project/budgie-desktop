@@ -45,3 +45,5 @@ widgets/*.vapi
 *proxy*.h
 *resources*.c
 *resources*.h
+Makefile.in.in
+POTFILES

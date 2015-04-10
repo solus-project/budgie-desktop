@@ -28,7 +28,9 @@ libmenubarapplet_la_CFLAGS = \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
 	-DMODULE_DIR=\"$(MODULEDIR)\" \
 	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
-	-DDATADIR=\"$(datadir)/budgie-desktop\"
+	-DDATADIR=\"$(datadir)/budgie-desktop\" \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\"
 
 
 libmenubarapplet_la_LIBADD = \

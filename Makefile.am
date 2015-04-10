@@ -23,4 +23,5 @@ SUBDIRS = \
 	panel \
 	rundialog \
 	session \
-	wm
+	wm \
+	po
