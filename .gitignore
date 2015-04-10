@@ -47,3 +47,4 @@ widgets/*.vapi
 *resources*.h
 Makefile.in.in
 POTFILES
+po/budgie-desktop.pot

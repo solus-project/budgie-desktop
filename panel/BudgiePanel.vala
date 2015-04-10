@@ -357,7 +357,7 @@ public class Panel : Gtk.Window
 
         // Horrible, but all we can do for now.
         var menu = new Gtk.Menu();
-        var item = new Gtk.MenuItem.with_label("Preferences...");
+        var item = new Gtk.MenuItem.with_label(_("Preferences..."));
         item.activate.connect(()=> {
             invoke_prefs();
         });

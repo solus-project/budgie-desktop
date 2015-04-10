@@ -92,7 +92,7 @@ public class PanelEditor : Gtk.Window
     {
         this.panel = parent_panel;
         //resizable = false;
-        title = "Panel preferences";
+        title = _("Panel preferences");
         icon_name = "preferences-desktop";
         window_position = Gtk.WindowPosition.CENTER;
 
@@ -123,19 +123,19 @@ public class PanelEditor : Gtk.Window
         add(wrap);
 
         var child = create_personalize_page();
-        book.add_titled(child, "appearance", "Appearance");
+        book.add_titled(child, "appearance", _("Appearance"));
         book.child_set(child, "icon-name", "preferences-desktop-wallpaper-symbolic");
 
         child = create_applet_main_area();
-        book.add_titled(child, "applets", "Applets");
+        book.add_titled(child, "applets", _("Applets"));
         book.child_set(child, "icon-name", "install-symbolic");
 
         child = create_menu_area();
-        book.add_titled(child, "menu", "Menu");
+        book.add_titled(child, "menu", _("Menu"));
         book.child_set(child, "icon-name", "folder-documents-symbolic");
 
         child = create_panel_area();
-        book.add_titled(child, "panel", "Panel");
+        book.add_titled(child, "panel", _("Panel"));
         book.child_set(child, "icon-name", "user-home-symbolic");
 
         book.show_all();
@@ -276,7 +276,7 @@ public class PanelEditor : Gtk.Window
     protected Gtk.Widget? create_applet_main_area()
     {
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        var label = new Gtk.Label("<big>Panel applets</big>");
+        var label = new Gtk.Label("<big>%s</big>".printf(_("Panel applets")));
         label.halign = Gtk.Align.START;
         label.get_style_context().add_class("dim-label");
         label.set_use_markup(true);
@@ -392,7 +392,7 @@ public class PanelEditor : Gtk.Window
         grid.column_spacing = 4;
 
         // Various options here for individual applets
-        label = new Gtk.Label("Place in status area");
+        label = new Gtk.Label(_("Place in status area"));
         var is_status = new Gtk.Switch();
         this.is_status = is_status;
         is_status.halign = Gtk.Align.END;
@@ -416,7 +416,7 @@ public class PanelEditor : Gtk.Window
 
         // Padding start
         var spinner = new Gtk.SpinButton.with_range(0, 100, 1);
-        label = new Gtk.Label("Start padding");
+        label = new Gtk.Label(_("Start padding"));
         pad_start = spinner;
         label.set_halign(Gtk.Align.START);
         grid.attach(label, 0, 1, 1, 1);
@@ -424,7 +424,7 @@ public class PanelEditor : Gtk.Window
 
         // Padding end
         spinner = new Gtk.SpinButton.with_range(0, 100, 1);
-        label = new Gtk.Label("End padding");
+        label = new Gtk.Label(_("End padding"));
         pad_end = spinner;
         label.set_halign(Gtk.Align.START);
         grid.attach(label, 0, 2, 1, 1);
@@ -432,7 +432,7 @@ public class PanelEditor : Gtk.Window
         applet_config = grid;
 
         // pack type
-        label = new Gtk.Label("Placement");
+        label = new Gtk.Label(_("Placement"));
         label.set_halign(Gtk.Align.START);
         var combo = new Gtk.ComboBoxText();
         pack_type = combo;
@@ -499,7 +499,7 @@ public class PanelEditor : Gtk.Window
         Gtk.Dialog dialog = new Gtk.Dialog();
         dialog.set_transient_for(this);
         dialog.set_modal(true);
-        dialog.set_title("Add applet");
+        dialog.set_title(_("Add applet"));
         dialog.set_size_request(350, 350);
         dialog.get_content_area().pack_start(scroller, true, true, 0);
 
@@ -520,7 +520,7 @@ public class PanelEditor : Gtk.Window
             rows.add(row);
         }
 
-        var cancel_btn = new Gtk.Button.with_label("Cancel");
+        var cancel_btn = new Gtk.Button.with_label(_("Cancel"));
         dialog.add_action_widget(cancel_btn, Gtk.ResponseType.CANCEL);
         app_cancel_btn = cancel_btn;
         cancel_btn.visible = false;
@@ -528,7 +528,7 @@ public class PanelEditor : Gtk.Window
             dialog.hide();
         });
 
-        var add_btn = new Gtk.Button.with_label("Add");
+        var add_btn = new Gtk.Button.with_label(_("Add"));
         dialog.add_action_widget(add_btn, Gtk.ResponseType.OK);
         app_add_btn = add_btn;
         add_btn.visible = false;
@@ -562,7 +562,7 @@ public class PanelEditor : Gtk.Window
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
-        var label = new Gtk.Label("<big>Panel configuration</big>");
+        var label = new Gtk.Label("<big>%s</big>".printf(_("Panel configuration")));
         label.halign = Gtk.Align.START;
         label.get_style_context().add_class("dim-label");
         label.set_use_markup(true);
@@ -576,24 +576,24 @@ public class PanelEditor : Gtk.Window
         // gnome panel theme integration
         var check = new Gtk.Switch();
         settings.bind("gnome-panel-theme-integration", check, "active", SettingsBindFlags.DEFAULT);
-        var item = create_action_item("GNOME Panel theme integration", "Enables a more traditional panel appearance", check);
+        var item = create_action_item(_("GNOME Panel theme integration"), _("Enables a more traditional panel appearance"), check);
         layout.pack_start(item, false, false, 0);
 
         // shadow for panel
         check = new Gtk.Switch();
         settings.bind("enable-shadow", check, "active", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Enable panel shadow", "Adds a shadow to the panels edge", check);
+        item = create_action_item(_("Enable panel shadow"), _("Adds a shadow to the panels edge"), check);
         layout.pack_start(item, false, false, 0);
 
         // panel position
         var combo = new Gtk.ComboBoxText();
         group.add_widget(combo);
-        combo.insert(-1, "top", "Top");
-        combo.insert(-1, "left", "Left");
-        combo.insert(-1, "right", "Right");
-        combo.insert(-1, "bottom", "Bottom");
+        combo.insert(-1, "top", _("Top"));
+        combo.insert(-1, "left", _("Left"));
+        combo.insert(-1, "right", _("Right"));
+        combo.insert(-1, "bottom", _("Bottom"));
         settings.bind("location", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Position on screen", null, combo);
+        item = create_action_item(_("Position on screen"), null, combo);
         layout.pack_start(item, false, false, 0);
 
         // size
@@ -606,10 +606,10 @@ public class PanelEditor : Gtk.Window
         // can haz autohide plox?
         combo = new Gtk.ComboBoxText();
         group.add_widget(combo);
-        combo.insert(-1, "never", "Never");
-        combo.insert(-1, "automatic", "Automatic");
+        combo.insert(-1, "never", _("Never"));
+        combo.insert(-1, "automatic", _("Automatic"));
         settings.bind("hide-policy", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Autohide policy", null, combo);
+        item = create_action_item(_("Autohide policy"), null, combo);
         layout.pack_start(item, false, false, 0);
 
         return layout;
@@ -620,7 +620,7 @@ public class PanelEditor : Gtk.Window
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
-        var label = new Gtk.Label("<big>Menu configuration</big>");
+        var label = new Gtk.Label("<big>%s</big>".printf(_("Menu configuration")));
         label.halign = Gtk.Align.START;
         label.get_style_context().add_class("dim-label");
         label.set_use_markup(true);
@@ -634,26 +634,26 @@ public class PanelEditor : Gtk.Window
         // show menu label?
         var check = new Gtk.Switch();
         settings.bind("enable-menu-label", check, "active", SettingsBindFlags.DEFAULT);
-        var item = create_action_item("Menu label on panel", null, check);
+        var item = create_action_item(_("Menu label on panel"), null, check);
         layout.pack_start(item, false, false, 0);
 
         // compact menu
         check = new Gtk.Switch();
         settings.bind("menu-compact", check, "active", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Compact menu", "Use a smaller menu with no category navigation", check);
+        item = create_action_item(_("Compact menu"), _("Use a smaller menu with no category navigation"), check);
         layout.pack_start(item, false, false, 0);
 
         // menu headers
         check = new Gtk.Switch();
         settings.bind("menu-headers", check, "active", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Category headers in menu", null, check);
+        item = create_action_item(_("Category headers in menu"), null, check);
         layout.pack_start(item, false, false, 0);
 
         // size
         var spin = new Gtk.SpinButton.with_range(16, 96, 1);
         group.add_widget(spin);
         settings.bind("menu-icons-size", spin, "value", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Icon size", "Set a size to use for icons in the menu.", spin);
+        item = create_action_item(_("Icon size"), _("Set a size to use for icons in the menu."), spin);
         layout.pack_start(item, false, false, 0);
 
         // menu label
@@ -661,7 +661,7 @@ public class PanelEditor : Gtk.Window
         entry.margin_end = 4;
         group.add_widget(entry);
         settings.bind("menu-label", entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu label", null, entry);
+        item = create_action_item(_("Menu label"), null, entry);
         layout.pack_start(item, false, false, 0);
 
         // menu icon
@@ -669,7 +669,7 @@ public class PanelEditor : Gtk.Window
         this.menu_icon_entry = new Gtk.Entry();
         group.add_widget(menu_icon_box);
         settings.bind("menu-icon", this.menu_icon_entry, "text", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Menu icon", "Set an icon to use for menu", menu_icon_box);
+        item = create_action_item(_("Menu icon"), _("Set an icon to use for menu"), menu_icon_box);
         var button = new Gtk.Button.with_label("…");
         button.clicked.connect(()=> {
             on_icon_select_button_clicked();
@@ -723,7 +723,7 @@ public class PanelEditor : Gtk.Window
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
-        var label = new Gtk.Label("<big>Personalise Budgie</big>");
+        var label = new Gtk.Label("<big>%s</big>".printf(_("Personalise Budgie")));
         label.halign = Gtk.Align.START;
         label.get_style_context().add_class("dim-label");
         label.set_use_markup(true);
@@ -735,7 +735,7 @@ public class PanelEditor : Gtk.Window
         layout.pack_start(sep, false, false, 0);
 
         var check = new Gtk.Switch();
-        var item = create_action_item("Dark theme", "Activate the dark theme option for the Budgie desktop", check);
+        var item = create_action_item(_("Dark theme"), _("Activate the dark theme option for the Budgie desktop"), check);
         settings.bind("dark-theme", check, "active", SettingsBindFlags.DEFAULT);
         layout.pack_start(item, false, false, 0);
 
@@ -743,21 +743,21 @@ public class PanelEditor : Gtk.Window
         group.add_widget(combo);
         populate(ref combo, ThemeType.GTK_THEME);
         ui_settings.bind("gtk-theme", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Widget theme", "Select a widget (GTK+) theme to use for applications", combo);
+        item = create_action_item(_("Widget theme"), _("Select a widget (GTK+) theme to use for applications"), combo);
         layout.pack_start(item, false, false, 0);
 
         combo = new Gtk.ComboBoxText();
         group.add_widget(combo);
         populate(ref combo, ThemeType.WM_THEME);
         wm_settings.bind("theme", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Window theme", null, combo);
+        item = create_action_item(_("Window theme"), null, combo);
         layout.pack_start(item, false, false, 0);
 
         combo = new Gtk.ComboBoxText();
         group.add_widget(combo);
         populate(ref combo, ThemeType.ICON_THEME);
         ui_settings.bind("icon-theme", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item("Icon theme", null, combo);
+        item = create_action_item(_("Icon theme"), null, combo);
         layout.pack_start(item, false, false, 0);
 
         return layout;
