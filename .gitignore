@@ -48,3 +48,4 @@ widgets/*.vapi
 Makefile.in.in
 POTFILES
 po/budgie-desktop.pot
+*.gmo
