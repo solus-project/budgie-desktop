@@ -1,2 +1,3 @@
 panel/BudgiePanel.c
 panel/Editor.c
+gvc/gvc-mixer-control.c
