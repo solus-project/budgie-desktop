@@ -16,9 +16,9 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
 
 # Package requirements
-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.38.0])
-PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.38.0])
-PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.10.0])
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.40.0])
+PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.40.0])
+PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.14.0])
 
 PULSE_MIN_VERS=2.0
 
@@ -97,18 +97,6 @@ if test "x$have_upower0999" = "xyes" ; then
     VALAFLAGS="$VALAFLAGS --define HAVE_UPOWER0999"
 fi
 
-
-# Check for GTK3.13+ (Le World Blow Up)
-PKG_CHECK_MODULES(GTK313, [gtk+-3.0  >= 3.13], [have_gtk313=yes], [have_gtk313=no])
-if test "x$have_gtk313" = "xyes" ; then
-    VALAFLAGS="$VALAFLAGS --define HAVE_GTK313"
-fi
-
-# Check for glib >= 2.40 (GAppInfoMonitor introduction)
-PKG_CHECK_MODULES(GLIB240, [gio-2.0  >= 2.40], [have_glib240=yes], [have_glib240=no])
-if test "x$have_glib240" = "xyes" ; then
-    VALAFLAGS="$VALAFLAGS --define HAVE_GLIB240"
-fi
 
 AC_SUBST(VALAFLAGS)
 

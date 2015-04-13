@@ -13,7 +13,6 @@ EXTRA_DIST = \
 	dialog.css \
 	app.css \
 	style.css \
-	style_313.css \
 	layout.ini \
 	rundialog-style.css
 

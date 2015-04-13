@@ -2,7 +2,6 @@
 <gresources>
         <gresource prefix="/com/evolve-os/budgie/panel">
                 <file>style.css</file>
-                <file>style_313.css</file>
                 <file>app.css</file>
         </gresource>
 </gresources>

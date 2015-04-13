@@ -107,7 +107,7 @@ PanelToplevel .launcher:hover {
     border: solid alpha(white, 0.1) 1px;
 }
 .budgie-panel .menu-icon,
-.budgie-panel .menu-icon:active,
+.budgie-panel .menu-icon:checked,
 .budgie-panel .menu-icon:hover {
     background-image: none;
 }
@@ -128,7 +128,6 @@ PanelToplevel .launcher:hover {
 .dark .notif-title {
     color: #ffa726;
 }
-
 
 /* Fallback for 3.10 where popover theming is non existent.
  * Copyright Numix Project, gratefully stolen from them to

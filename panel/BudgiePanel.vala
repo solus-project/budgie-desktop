@@ -30,15 +30,9 @@ public class AppletHolder : Gtk.Bin
         gnome_mode = true;
     }
 
-#if HAVE_GTK313
     protected override Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
     {
         Gtk.WidgetPath path = base.get_path_for_child(child);
-#else
-    protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
-    {
-        unowned Gtk.WidgetPath path = base.get_path_for_child(child);
-#endif
         if (gnome_mode) {
             path.iter_set_object_type(0, typeof(PanelToplevel));
             for (int i=0; i<path.length(); i++) {
@@ -275,11 +269,7 @@ public class Panel : Gtk.Window
 
         /* Ensure to initialise styles */
         try {
-#if HAVE_GTK313
-            File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style_313.css");
-#else
             File ruri = File.new_for_uri("resource://com/evolve-os/budgie/panel/style.css");
-#endif
             var prov = new Gtk.CssProvider();
             prov.load_from_file(ruri);
             Gtk.StyleContext.add_provider_for_screen(screen, prov, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
@@ -413,15 +403,9 @@ public class Panel : Gtk.Window
         queue_resize();
     }
 
-#if HAVE_GTK313
     protected override Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
     {
         Gtk.WidgetPath path = base.get_path_for_child(child);
-#else
-    protected override weak Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
-    {
-        unowned Gtk.WidgetPath path = base.get_path_for_child(child);
-#endif
         if (gnome_mode) {
             path.iter_set_object_type(0, typeof(PanelToplevel));
         }
