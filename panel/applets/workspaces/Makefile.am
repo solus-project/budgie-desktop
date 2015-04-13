@@ -44,7 +44,3 @@ libworkspacesapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0
 
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libworkspacesapplet_la_SOURCES:.vala=.c) libworkspacesapplet_la_vala.stamp

@@ -20,8 +20,3 @@ libbudgiewidgets_la_VALAFLAGS = \
 	--vapi=BudgieWidgets.vapi \
 	$(VALAFLAGS) \
 	-H BudgieWidgets.h
-
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libbudgiewidgets_la_SOURCES:.vala=.c) libbudgiewidgets_la_vala.stamp

@@ -61,7 +61,3 @@ libstatusapplet_la_VALAFLAGS = \
 	--pkg upower-glib-1.0 \
 	--pkg gio-unix-2.0
 
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libstatusapplet_la_SOURCES:.vala=.c) libstatusapplet_la_vala.stamp

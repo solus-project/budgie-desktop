@@ -40,8 +40,3 @@ libtrayapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg natray-1.0
-
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libtrayapplet_la_SOURCES:.vala=.c) libtrayapplet_la_vala.stamp

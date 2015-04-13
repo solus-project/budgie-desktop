@@ -39,7 +39,3 @@ liblockkeysapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(liblockkeysapplet_la_SOURCES:.vala=.c) liblockkeysapplet_la_vala.stamp

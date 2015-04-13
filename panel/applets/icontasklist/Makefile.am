@@ -53,7 +53,3 @@ libicontasklistapplet_la_VALAFLAGS = \
 	$(VALAFLAGS) \
 	--pkg gee-0.8
 
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libicontasklist_la_SOURCES:.vala=.c) libicontasklistapplet_la_vala.stamp

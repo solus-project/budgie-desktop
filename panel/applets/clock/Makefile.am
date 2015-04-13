@@ -43,7 +43,3 @@ libclockapplet_la_VALAFLAGS = \
 	--pkg budgie-1.0 \
 	--pkg BudgieWidgets
 
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libclockapplet_la_SOURCES:.vala=.c) libclockapplet_la_vala.stamp

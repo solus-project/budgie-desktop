@@ -65,8 +65,3 @@ pkgconfigdir = \
 
 pkgconfig_DATA = \
 	budgie-1.0.pc
-
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libbudgie_plugin_la_SOURCES:.vala=.c) libbudgie_plugin_la_vala.stamp

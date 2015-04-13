@@ -57,7 +57,3 @@ libmenubarapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(libmenubarapplet_la_SOURCES:.vala=.c) libmenubarapplet_la_vala.stamp

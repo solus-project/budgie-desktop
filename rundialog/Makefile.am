@@ -41,9 +41,4 @@ budgie_run_dialog_VALAFLAGS = \
 	--pkg gee-0.8 \
 	--vapidir=..
 
-
-dist-hook:
-	cd $(distdir) && \
-	rm $(budgie_run_dialog_SOURCES:.vala=.c) budgie_run_dialog_vala.stamp
-
 endif
