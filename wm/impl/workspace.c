@@ -15,6 +15,9 @@
 /** Duration of switch animation */
 #define SWITCH_TIMEOUT 250
 
+/** g_signal_handlers_disconnect_by_func derp */
+#pragma GCC diagnostic ignored "-Wpedantic"
+
 void kill_switch_workspace(MetaPlugin *plugin)
 {
         BudgieWMPrivate *priv = BUDGIE_WM(plugin)->priv;
@@ -52,7 +55,7 @@ static void switch_workspace_done(ClutterActor *actor, gpointer user_data)
         }
 
         g_signal_handlers_disconnect_by_func(priv->out_group,
-                                             switch_workspace_done, user_data);
+                                             G_CALLBACK(switch_workspace_done), user_data);
         clutter_actor_remove_all_transitions(priv->out_group);
         clutter_actor_remove_all_transitions(priv->in_group);
         clutter_actor_destroy(priv->out_group);
