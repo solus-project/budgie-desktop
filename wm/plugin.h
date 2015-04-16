@@ -47,10 +47,9 @@ typedef struct _BudgieWMPrivate BudgieWMPrivate;
 struct _BudgieWMPrivate
 {
         /* Valid only when switch_workspace effect is in progress */
-        ClutterTimeline       *tml_switch_workspace1;
-        ClutterTimeline       *tml_switch_workspace2;
-        ClutterActor          *desktop1;
-        ClutterActor          *desktop2;
+        ClutterActor          *out_group;
+        ClutterActor          *in_group;
+
         ClutterActor          *background_group;
         MetaPluginInfo         info;
 };

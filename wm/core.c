@@ -64,13 +64,13 @@ static void budgie_wm_class_init(BudgieWMClass *klass)
         plugin_class->minimize         = minimize;
         plugin_class->destroy          = destroy;
         plugin_class->plugin_info      = budgie_plugin_info;
+        plugin_class->switch_workspace = switch_workspace;
+        plugin_class->kill_switch_workspace = kill_switch_workspace;
 
         /* Existing legacy code from old default plugin */
-        plugin_class->switch_workspace = switch_workspace;
         plugin_class->show_tile_preview = show_tile_preview;
         plugin_class->hide_tile_preview = hide_tile_preview;
         plugin_class->kill_window_effects   = kill_window_effects;
-        plugin_class->kill_switch_workspace = kill_switch_workspace;
         plugin_class->confirm_display_change = confirm_display_change;
 }
 
@@ -91,9 +91,22 @@ static void budgie_wm_init(BudgieWM *self)
 
 static void budgie_wm_dispose(GObject *object)
 {
+        BudgieWMPrivate *priv = BUDGIE_WM(object)->priv;
+
+        if (priv->out_group) {
+                clutter_actor_destroy(priv->out_group);
+                priv->out_group = NULL;
+        }
+
+        if (priv->in_group) {
+                clutter_actor_destroy(priv->in_group);
+                priv->in_group = NULL;
+        }
+
         /* Any stray lists the tab module might have */
         tabs_clean();
         budgie_keys_end();
+
         G_OBJECT_CLASS(budgie_wm_parent_class)->dispose(object);
 }
 

@@ -33,6 +33,11 @@ void destroy(MetaPlugin *plugin, MetaWindowActor *window_actor);
 /** Minimize handler.. */
 void minimize(MetaPlugin *plugin, MetaWindowActor *window_actor);
 
+/** Workspace switching */
+void switch_workspace(MetaPlugin *plugin, gint from, gint to,
+                      MetaMotionDirection direction);
+void kill_switch_workspace(MetaPlugin *plugin);
+
 /** ALT+Tab switching */
 void switch_windows(MetaDisplay *display, MetaScreen     *screen,
                      MetaWindow *window, ClutterKeyEvent *event,
