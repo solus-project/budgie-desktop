@@ -34,33 +34,52 @@ public class ClockAppletImpl : Budgie.Applet
     protected bool show_seconds = false;
     protected bool show_date = false;
 
-    private DateTime time;
-    private int day;
-
     protected Settings settings;
 
     public ClockAppletImpl()
     {
+        settings = new Settings("org.gnome.desktop.interface");
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
         cal = new Gtk.Calendar();
-        time = new DateTime.now_local();
         widget.add(clock);
-
-        // check current month
-        cal.month_changed.connect(() => {
-            if(cal.month+1 == time.get_month())
-                cal.mark_day(time.get_day_of_month());
-            else
-                cal.unmark_day(time.get_day_of_month());
-        });
 
         // Interesting part - calender in a popover :)
         pop = new Budgie.Popover();
 
+        /**
+         *  Clock Settings
+         */
+        Budgie.Popover settings_pop = new Budgie.Popover();
+        Gtk.Box settings_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+
+        Gtk.CheckButton 24hour = new Gtk.CheckButton.with_label("24-Hour format");
+        Gtk.CheckButton seconds = new Gtk.CheckButton.with_label("Show seconds");
+        Gtk.CheckButton date = new Gtk.CheckButton.with_label("Show date");
+        Gtk.Entry formatstring = new Gtk.Entry();
+
+        24hour.toggled.connect((check)=> {
+            if(check.get_active())
+                formatstring.set_text("24h");
+            else
+                formatstring.set_text("12h");
+        });
+
+        settings.bind("clock-format", formatstring, "text", SettingsBindFlags.DEFAULT);
+        settings.bind("clock-show-seconds", seconds, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("clock-show-date", date, "active", SettingsBindFlags.DEFAULT);
+
+        settings_box.pack_start(24hour, false, false, 0);
+        settings_box.pack_start(seconds, false, false, 0);
+        settings_box.pack_start(date, false, false, 0);
+        settings_pop.add(settings_box);
+
         widget.button_release_event.connect((e)=> {
             if (e.button == 1) {
                 pop.present(clock);
+                return true;
+            } else if (e.button == 3) {
+                settings_pop.present(clock);
                 return true;
             }
             return false;
@@ -68,7 +87,6 @@ public class ClockAppletImpl : Budgie.Applet
         pop.add(cal);
         Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
 
-        settings = new Settings("org.gnome.desktop.interface");
         settings.changed.connect(on_settings_change);
         on_settings_change("clock-format");
         on_settings_change("clock-show-seconds");
@@ -116,19 +134,8 @@ public class ClockAppletImpl : Budgie.Applet
      */
     protected bool update_clock()
     {
-        time = new DateTime.now_local();
-        int current_day = time.get_day_of_month();
-        int current_month = time.get_month();
-        int current_year = time.get_year();
+        DateTime time = new DateTime.now_local();
         string format;
-
-        // update calendar if day change
-        if(day != current_day) {
-            cal.unmark_day(day);
-            cal.select_month(current_month-1, current_year);
-            cal.mark_day(current_day);
-            day = current_day;
-        }
 
         if (ampm) {
             format = "%l:%M";
@@ -143,7 +150,7 @@ public class ClockAppletImpl : Budgie.Applet
         }
         string ftime = " <big>%s</big> ".printf(format);
         if (show_date) {
-            ftime += " <big>%x</big>";
+            ftime += " <small>%x</small>";
         }
 
         var ctime = time.format(ftime);
@@ -161,3 +168,4 @@ public void peas_register_types(TypeModule module)
     var objmodule = module as Peas.ObjectModule;
     objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(ClockApplet));
 }
+
