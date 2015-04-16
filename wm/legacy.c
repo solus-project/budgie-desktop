@@ -97,40 +97,6 @@ get_actor_private (MetaWindowActor *actor)
 }
 
 void
-on_switch_workspace_effect_complete (ClutterTimeline *timeline, gpointer data)
-{
-  MetaPlugin               *plugin  = META_PLUGIN (data);
-  BudgieWMPrivate *priv = BUDGIE_WM (plugin)->priv;
-  MetaScreen *screen = meta_plugin_get_screen (plugin);
-  GList *l = meta_get_window_actors (screen);
-
-  while (l)
-    {
-      ClutterActor *a = l->data;
-      MetaWindowActor *window_actor = META_WINDOW_ACTOR (a);
-      ActorPrivate *apriv = get_actor_private (window_actor);
-
-      if (apriv->orig_parent)
-        {
-          clutter_actor_reparent (a, apriv->orig_parent);
-          apriv->orig_parent = NULL;
-        }
-
-      l = l->next;
-    }
-
-  clutter_actor_destroy (priv->desktop1);
-  clutter_actor_destroy (priv->desktop2);
-
-  priv->tml_switch_workspace1 = NULL;
-  priv->tml_switch_workspace2 = NULL;
-  priv->desktop1 = NULL;
-  priv->desktop2 = NULL;
-
-  meta_plugin_switch_workspace_completed (plugin);
-}
-
-void
 on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin)
 {
@@ -146,104 +112,6 @@ on_monitors_changed (MetaScreen *screen,
       clutter_actor_add_child(self->priv->background_group, bg);
       clutter_actor_show(bg);
     }
-}
-
-void
-switch_workspace (MetaPlugin *plugin,
-                  gint from, gint to,
-                  MetaMotionDirection direction)
-{
-  MetaScreen *screen;
-  BudgieWMPrivate *priv = BUDGIE_WM (plugin)->priv;
-  GList        *l;
-  ClutterActor *workspace0  = clutter_group_new ();
-  ClutterActor *workspace1  = clutter_group_new ();
-  ClutterActor *stage;
-  int           screen_width, screen_height;
-  ClutterAnimation *animation;
-
-  screen = meta_plugin_get_screen (plugin);
-  stage = meta_get_stage_for_screen (screen);
-
-  meta_screen_get_size (screen,
-                        &screen_width,
-                        &screen_height);
-
-  clutter_actor_set_anchor_point (workspace1,
-                                  screen_width,
-                                  screen_height);
-  clutter_actor_set_position (workspace1,
-                              screen_width,
-                              screen_height);
-
-  clutter_actor_set_scale (workspace1, 0.0, 0.0);
-
-  clutter_container_add_actor (CLUTTER_CONTAINER (stage), workspace1);
-  clutter_container_add_actor (CLUTTER_CONTAINER (stage), workspace0);
-
-  if (from == to)
-    {
-      meta_plugin_switch_workspace_completed (plugin);
-      return;
-    }
-
-  l = g_list_last (meta_get_window_actors (screen));
-
-  while (l)
-    {
-      MetaWindowActor *window_actor = l->data;
-      ActorPrivate    *apriv        = get_actor_private (window_actor);
-      ClutterActor    *actor        = CLUTTER_ACTOR (window_actor);
-      MetaWorkspace   *workspace;
-      gint             win_workspace;
-
-      workspace = meta_window_get_workspace (meta_window_actor_get_meta_window (window_actor));
-      win_workspace = meta_workspace_index (workspace);
-
-      if (win_workspace == to || win_workspace == from)
-        {
-          apriv->orig_parent = clutter_actor_get_parent (actor);
-
-          clutter_actor_reparent (actor,
-                  win_workspace == to ? workspace1 : workspace0);
-          clutter_actor_show_all (actor);
-          clutter_actor_raise_top (actor);
-        }
-      else if (win_workspace < 0)
-        {
-          /* Sticky window */
-          apriv->orig_parent = NULL;
-        }
-      else
-        {
-          /* Window on some other desktop */
-          clutter_actor_hide (actor);
-          apriv->orig_parent = NULL;
-        }
-
-      l = l->prev;
-    }
-
-  priv->desktop1 = workspace0;
-  priv->desktop2 = workspace1;
-
-  animation = clutter_actor_animate (workspace0, CLUTTER_EASE_IN_SINE,
-                                     SWITCH_TIMEOUT,
-                                     "scale-x", 1.0,
-                                     "scale-y", 1.0,
-                                     NULL);
-  priv->tml_switch_workspace1 = clutter_animation_get_timeline (animation);
-  g_signal_connect (priv->tml_switch_workspace1,
-                    "completed",
-                    G_CALLBACK (on_switch_workspace_effect_complete),
-                    plugin);
-
-  animation = clutter_actor_animate (workspace1, CLUTTER_EASE_IN_SINE,
-                                     SWITCH_TIMEOUT,
-                                     "scale-x", 0.0,
-                                     "scale-y", 0.0,
-                                     NULL);
-  priv->tml_switch_workspace2 = clutter_animation_get_timeline (animation);
 }
 
 /*
@@ -320,19 +188,6 @@ hide_tile_preview (MetaPlugin *plugin)
   ScreenTilePreview *preview = get_screen_tile_preview (screen);
 
   clutter_actor_hide (preview->actor);
-}
-
-void
-kill_switch_workspace (MetaPlugin     *plugin)
-{
-  BudgieWMPrivate *priv = BUDGIE_WM (plugin)->priv;
-
-  if (priv->tml_switch_workspace1)
-    {
-      clutter_timeline_stop (priv->tml_switch_workspace1);
-      clutter_timeline_stop (priv->tml_switch_workspace2);
-      g_signal_emit_by_name (priv->tml_switch_workspace1, "completed", NULL);
-    }
 }
 
 void

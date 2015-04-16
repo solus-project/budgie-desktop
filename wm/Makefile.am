@@ -26,6 +26,7 @@ budgie_wm_SOURCES = \
 	impl/destroy.c \
 	impl/minimize.c \
 	impl/tabs.c \
+	impl/workspace.c \
 	ui/background.h \
 	ui/background.c \
 	budgie-wm.c

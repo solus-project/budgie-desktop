@@ -47,14 +47,8 @@ void
 on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin);
 
-void switch_workspace (MetaPlugin          *plugin,
-                              gint                 from,
-                              gint                 to,
-                              MetaMotionDirection  direction);
-
 void kill_window_effects   (MetaPlugin      *plugin,
                                    MetaWindowActor *actor);
-void kill_switch_workspace (MetaPlugin      *plugin);
 
 void show_tile_preview (MetaPlugin      *plugin,
                                MetaWindow      *window,
