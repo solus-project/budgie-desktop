@@ -27,10 +27,6 @@
 typedef struct _ActorPrivate
 {
   ClutterActor *orig_parent;
-
-  ClutterTimeline *tml_minimize;
-  ClutterTimeline *tml_destroy;
-  ClutterTimeline *tml_map;
 } ActorPrivate;
 
 /* callback data for when animations complete */
@@ -46,9 +42,6 @@ ActorPrivate *get_actor_private (MetaWindowActor *actor);
 void
 on_monitors_changed (MetaScreen *screen,
                      MetaPlugin *plugin);
-
-void kill_window_effects   (MetaPlugin      *plugin,
-                                   MetaWindowActor *actor);
 
 void show_tile_preview (MetaPlugin      *plugin,
                                MetaWindow      *window,

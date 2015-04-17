@@ -190,33 +190,6 @@ hide_tile_preview (MetaPlugin *plugin)
   clutter_actor_hide (preview->actor);
 }
 
-void
-kill_window_effects (MetaPlugin      *plugin,
-                     MetaWindowActor *window_actor)
-{
-  ActorPrivate *apriv;
-
-  apriv = get_actor_private (window_actor);
-
-  if (apriv->tml_minimize)
-    {
-      clutter_timeline_stop (apriv->tml_minimize);
-      g_signal_emit_by_name (apriv->tml_minimize, "completed", NULL);
-    }
-
-  if (apriv->tml_map)
-    {
-      clutter_timeline_stop (apriv->tml_map);
-      g_signal_emit_by_name (apriv->tml_map, "completed", NULL);
-    }
-
-  if (apriv->tml_destroy)
-    {
-      clutter_timeline_stop (apriv->tml_destroy);
-      g_signal_emit_by_name (apriv->tml_destroy, "completed", NULL);
-    }
-}
-
 static void
 on_dialog_closed (GPid     pid,
                   gint     status,
