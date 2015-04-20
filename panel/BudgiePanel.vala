@@ -910,22 +910,23 @@ public class Panel : Gtk.Window
                 };
                 break;
             case PanelPosition.LEFT:
-                struts = { panel_size, 0, 0, 0,
-                    primary_monitor_rect.y, primary_monitor_rect.y + primary_monitor_rect.height, 
+                struts = { primary_monitor_rect.x + panel_size, 0, 0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y + primary_monitor_rect.height - 1, 
                     0, 0, 0, 0, 0, 0
                 };
                 break;
             case PanelPosition.RIGHT:
-                struts = { 0, panel_size, 0, 0,
-                    0, 0,
-                    primary_monitor_rect.y, primary_monitor_rect.y + primary_monitor_rect.height,
+                struts = { 0,
+                    (screen.get_width() - primary_monitor_rect.width - primary_monitor_rect.x) + panel_size, 
+                    0, 0, 0, 0,
+                    primary_monitor_rect.y, primary_monitor_rect.y + primary_monitor_rect.height - 1,
                     0, 0, 0, 0
                 };
                 break;
             case PanelPosition.BOTTOM:
             default:
                 struts = { 0, 0, 0, 
-                    (screen.get_height() - primary_monitor_rect.height-primary_monitor_rect.y) + panel_size,
+                    (screen.get_height() - primary_monitor_rect.height - primary_monitor_rect.y) + panel_size,
                     0, 0, 0, 0, 0, 0, 
                     primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width - 1
                 };
