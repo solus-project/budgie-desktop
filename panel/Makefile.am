@@ -53,9 +53,9 @@ budgie_panel_LDADD = \
 	../widgets/libbudgiewidgets.la
 
 budgie_panel_VALAFLAGS = \
-	--vapidir=../budgie-plugin \
-	--vapidir=../widgets \
-	--vapidir=. \
+	--vapidir=${top_builddir}/budgie-plugin \
+	--vapidir=${top_builddir}/widgets \
+	--vapidir=${top_builddir}/panel \
 	--pkg panelconfig \
 	--pkg BudgieWidgets \
 	--pkg gtk+-3.0 \
