@@ -48,6 +48,9 @@ static void budgie_launch_rundialog(MetaDisplay *display,
                                      MetaKeyBinding *binding,
                                      gpointer user_data);
 
+static void kill_window_effects(MetaPlugin *plugin,
+                                MetaWindowActor *actor);
+
 static const MetaPluginInfo *budgie_plugin_info(MetaPlugin *plugin);
 
 static void budgie_wm_class_init(BudgieWMClass *klass)
@@ -66,11 +69,11 @@ static void budgie_wm_class_init(BudgieWMClass *klass)
         plugin_class->plugin_info      = budgie_plugin_info;
         plugin_class->switch_workspace = switch_workspace;
         plugin_class->kill_switch_workspace = kill_switch_workspace;
+        plugin_class->kill_window_effects = kill_window_effects;
 
         /* Existing legacy code from old default plugin */
         plugin_class->show_tile_preview = show_tile_preview;
         plugin_class->hide_tile_preview = hide_tile_preview;
-        plugin_class->kill_window_effects   = kill_window_effects;
         plugin_class->confirm_display_change = confirm_display_change;
 }
 
@@ -189,6 +192,13 @@ static void budgie_launch_rundialog(MetaDisplay *display,
         /* Run the budgie-run-dialog
         * TODO: Make this path customisable */
         g_spawn_command_line_async("budgie-run-dialog", NULL);
+}
+
+static void kill_window_effects(MetaPlugin *plugin,
+                                MetaWindowActor *actor)
+{
+        g_signal_emit_by_name(actor, "transitions-completed",
+                              actor, plugin, NULL);
 }
 
 static const MetaPluginInfo *budgie_plugin_info(MetaPlugin *plugin)

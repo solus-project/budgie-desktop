@@ -21,39 +21,14 @@
 
 #pragma once
 
-/*
- * Per actor private data we attach to each actor.
- */
-typedef struct _ActorPrivate
-{
-  ClutterActor *orig_parent;
-
-  ClutterTimeline *tml_minimize;
-  ClutterTimeline *tml_destroy;
-  ClutterTimeline *tml_map;
-} ActorPrivate;
-
-/* callback data for when animations complete */
-typedef struct
-{
-  ClutterActor *actor;
-  MetaPlugin *plugin;
-} EffectCompleteData;
-
-
-ActorPrivate *get_actor_private (MetaWindowActor *actor);
-
-void
-on_monitors_changed (MetaScreen *screen,
-                     MetaPlugin *plugin);
-
-void kill_window_effects   (MetaPlugin      *plugin,
-                                   MetaWindowActor *actor);
+void on_monitors_changed (MetaScreen *screen,
+                          MetaPlugin *plugin);
 
 void show_tile_preview (MetaPlugin      *plugin,
-                               MetaWindow      *window,
-                               MetaRectangle   *tile_rect,
-                               int              tile_monitor_number);
+                        MetaWindow      *window,
+                        MetaRectangle   *tile_rect,
+                        int              tile_monitor_number);
+
 void hide_tile_preview (MetaPlugin      *plugin);
 
 void confirm_display_change (MetaPlugin *plugin);
