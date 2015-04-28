@@ -41,6 +41,7 @@ public class ClockAppletImpl : Budgie.Applet
 
     public ClockAppletImpl()
     {
+        settings = new Settings("org.gnome.desktop.interface");
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
         cal = new Gtk.Calendar();
@@ -58,9 +59,39 @@ public class ClockAppletImpl : Budgie.Applet
         // Interesting part - calender in a popover :)
         pop = new Budgie.Popover();
 
+        /**
+         *  Clock Settings
+         */
+        Budgie.Popover settings_pop = new Budgie.Popover();
+        Gtk.Box settings_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+
+        Gtk.CheckButton 24hour = new Gtk.CheckButton.with_label("24-Hour format");
+        Gtk.CheckButton seconds = new Gtk.CheckButton.with_label("Show seconds");
+        Gtk.CheckButton date = new Gtk.CheckButton.with_label("Show date");
+        Gtk.Entry formatstring = new Gtk.Entry();
+
+        24hour.toggled.connect((check)=> {
+            if(check.get_active())
+                formatstring.set_text("24h");
+            else
+                formatstring.set_text("12h");
+        });
+
+        settings.bind("clock-format", formatstring, "text", SettingsBindFlags.DEFAULT);
+        settings.bind("clock-show-seconds", seconds, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("clock-show-date", date, "active", SettingsBindFlags.DEFAULT);
+
+        settings_box.pack_start(24hour, false, false, 0);
+        settings_box.pack_start(seconds, false, false, 0);
+        settings_box.pack_start(date, false, false, 0);
+        settings_pop.add(settings_box);
+
         widget.button_release_event.connect((e)=> {
             if (e.button == 1) {
                 pop.present(clock);
+                return true;
+            } else if (e.button == 3) {
+                settings_pop.present(clock);
                 return true;
             }
             return false;
@@ -68,7 +99,6 @@ public class ClockAppletImpl : Budgie.Applet
         pop.add(cal);
         Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
 
-        settings = new Settings("org.gnome.desktop.interface");
         settings.changed.connect(on_settings_change);
         on_settings_change("clock-format");
         on_settings_change("clock-show-seconds");
