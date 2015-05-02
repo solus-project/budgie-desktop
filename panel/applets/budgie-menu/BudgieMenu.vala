@@ -55,12 +55,16 @@ public class BudgieMenuApplet : Budgie.Applet
         st.add_class(BUDGIE_STYLE_MENU_ICON);
         popover = new BudgieMenuWindow();
 
-        widget.button_release_event.connect((e)=> {
-            if (e.button == 1) {
-                popover.present(img);
-                return true;
+        widget.button_press_event.connect((e)=> {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
             }
-            return false;
+            if (!popover.get_visible()) {
+                popover.present(img);
+            } else {
+                popover.hide();
+            }
+            return Gdk.EVENT_STOP;
         });
 
         // This enables us to respond to the "panel-main-menu" action

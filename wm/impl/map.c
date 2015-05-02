@@ -12,7 +12,7 @@
 #include "impl.h"
 
 /* For mapping normal windows */
-#define MAP_TIMEOUT     150
+#define MAP_TIMEOUT     120
 
 /* Initial scale (from 0.8 to 1.0) */
 #define MAP_SCALE       0.8f
