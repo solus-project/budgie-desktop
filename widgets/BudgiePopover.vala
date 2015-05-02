@@ -39,6 +39,7 @@ public class Popover : Gtk.Window
 
     public Popover(bool is_passive = false)
     {
+        Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.POPUP_MENU);
         passive = is_passive;
 
         set_visual(get_screen().get_rgba_visual());
