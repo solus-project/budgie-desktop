@@ -18,5 +18,5 @@ libbudgiewidgets_la_LIBADD = \
 libbudgiewidgets_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	-H BudgieWidgets.h \
-	--vapi=${top_builddir}/widgets/BudgieWidgets.vapi \
+	--vapi=${top_srcdir}/widgets/BudgieWidgets.vapi \
 	$(VALAFLAGS)

@@ -29,7 +29,7 @@ libbudgiemenuapplet_la_CFLAGS = \
 
 
 libbudgiemenuapplet_la_LIBADD = \
-	${top_builddir}/widgets/libbudgiewidgets.la \
+	${top_srcdir}/widgets/libbudgiewidgets.la \
 	${top_builddir}/budgie-plugin/libbudgie-plugin.la \
 	$(GTK3_LIBS) \
 	$(GMENU_LIBS) \
@@ -43,7 +43,7 @@ libbudgiemenuapplet_la_LDFLAGS = \
 
 libbudgiemenuapplet_la_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
-	--vapidir=${top_builddir}/widgets \
+	--vapidir=${top_srcdir}/widgets \
 	--pkg gtk+-3.0 \
 	--pkg libgnome-menu-3.0 \
 	--pkg gio-unix-2.0 \

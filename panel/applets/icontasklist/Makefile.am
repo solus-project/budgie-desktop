@@ -27,7 +27,7 @@ libicontasklistapplet_la_CFLAGS = \
 
 libicontasklistapplet_la_LIBADD = \
 	${top_builddir}/budgie-plugin/libbudgie-plugin.la \
-	${top_builddir}/widgets/libbudgiewidgets.la \
+	${top_srcdir}/widgets/libbudgiewidgets.la \
 	$(GTK3_LIBS) \
 	$(LIBPEAS_LIBS) \
 	$(WNCK3_LIBS) \
@@ -42,7 +42,7 @@ libicontasklistapplet_la_LDFLAGS = \
 libicontasklistapplet_la_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
 	--vapidir=${top_builddir}/ \
-	--vapidir=${top_builddir}/widgets \
+	--vapidir=${top_srcdir}/widgets \
 	--pkg gtk+-3.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
