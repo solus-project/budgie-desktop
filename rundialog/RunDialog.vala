@@ -75,7 +75,7 @@ public class RunDialogItem : Gtk.Button
 {
     public static int REQUEST_SIZE = 90;
 
-    public RunDialogItemImage image;
+    public new RunDialogItemImage image;
 
     public DesktopAppInfo app;
 
@@ -307,7 +307,8 @@ public class RunDialog : Gtk.Window
                                (int) this.border_width);
         box.margin_top = (int) this.border_width;
 
-        description.set_alignment (0, 0);
+        description.halign = Gtk.Align.START;
+        description.valign = Gtk.Align.START;
         description.set_line_wrap (true);
         description.set_ellipsize (Pango.EllipsizeMode.END);
         description.max_width_chars = 1;
@@ -320,7 +321,8 @@ public class RunDialog : Gtk.Window
         scrolled.add(grid);
         box.add(scrolled);
 
-        exec.set_alignment (0, 0);
+        exec.halign = Gtk.Align.START;
+        exec.valign = Gtk.Align.START;
         exec.set_line_wrap (true);
         exec.set_ellipsize (Pango.EllipsizeMode.END);
         exec.max_width_chars = 1;
