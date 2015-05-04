@@ -24,6 +24,7 @@
 #include "legacy.h"
 #include "impl.h"
 #include "background.h"
+
 #define SHOW_TIMEOUT 1000
 
 
@@ -106,9 +107,11 @@ static void budgie_wm_dispose(GObject *object)
         /* Any stray lists the tab module might have */
         tabs_clean();
         budgie_keys_end();
+        budgie_menus_end(BUDGIE_WM(object));
 
         G_OBJECT_CLASS(budgie_wm_parent_class)->dispose(object);
 }
+
 
 static void budgie_wm_start(MetaPlugin *plugin)
 {
@@ -118,12 +121,14 @@ static void budgie_wm_start(MetaPlugin *plugin)
 
         /* Init background */
         self->priv->background_group = meta_background_group_new();
+        clutter_actor_set_reactive(self->priv->background_group, TRUE);
         clutter_actor_insert_child_below(meta_get_window_group_for_screen(screen),
         self->priv->background_group, NULL);
 
         g_signal_connect(screen, "monitors-changed",
                 G_CALLBACK(on_monitors_changed), plugin);
         on_monitors_changed(screen, plugin);
+
 
         /* Now we're in action. */
         clutter_actor_show(meta_get_window_group_for_screen(screen));
@@ -158,6 +163,7 @@ static void budgie_wm_start(MetaPlugin *plugin)
 
         /* Handle keys.. */
         budgie_keys_init(meta_screen_get_display(screen));
+        budgie_menus_init(self);
         g_signal_connect(meta_screen_get_display(screen), "overlay-key",
             G_CALLBACK(overlay_cb), NULL);
 }

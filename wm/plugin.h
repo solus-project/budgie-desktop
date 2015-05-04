@@ -22,6 +22,10 @@
  * 
  */
 
+#pragma once
+
+#include <gtk/gtk.h>
+
 #define BUDGIE_TYPE_WM            (budgie_wm_get_type ())
 #define BUDGIE_WM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), BUDGIE_TYPE_WM, BudgieWM))
 #define BUDGIE_WM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  BUDGIE_TYPE_WM, BudgieWMClass))
@@ -52,6 +56,7 @@ struct _BudgieWMPrivate
 
         ClutterActor          *background_group;
         MetaPluginInfo         info;
+        GtkWidget            *menu;
 };
 
 struct _BudgieWM

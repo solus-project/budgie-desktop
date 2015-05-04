@@ -23,6 +23,7 @@ budgie_wm_SOURCES = \
 	impl.h \
 	impl/keys.c \
 	impl/map.c \
+	impl/menu.c \
 	impl/destroy.c \
 	impl/minimize.c \
 	impl/tabs.c \

@@ -25,6 +25,10 @@ int main(int argc, char **argv)
 {
         GOptionContext *ctx;
 
+        if (!gtk_init_check(&argc, &argv)) {
+            g_warning("GTK+ functionality is not available");
+        }
+
         /* Add default option context */
         ctx = meta_get_option_context();
         if (!g_option_context_parse(ctx, &argc, &argv, NULL)) {

@@ -14,6 +14,8 @@
 #include <meta/meta-plugin.h>
 #include <meta/window.h>
 
+#include "plugin.h"
+
 /**
  * Wrappers for long-to-type pita accessors. Just need to switch, dude.
  */
@@ -48,6 +50,12 @@ void budgie_keys_init(MetaDisplay *display);
 
 /** Cleanup the key handler */
 void budgie_keys_end(void);
+
+/** Initialise menus, root menus, etc */
+void budgie_menus_init(BudgieWM *self);
+
+/** Cleanup menu handler */
+void budgie_menus_end(BudgieWM *self);
 
 /** Perform cleanup */
 void tabs_clean(void);
