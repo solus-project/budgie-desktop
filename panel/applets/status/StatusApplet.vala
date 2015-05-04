@@ -26,10 +26,11 @@ public class StatusAppletImpl : Budgie.Applet
     /*protected MprisWidget mpris;*/
     protected AccountsUser? user;
     protected Gtk.Image user_img;
+    protected Gtk.EventBox wrap;
 
     public StatusAppletImpl()
     {
-        var wrap = new Gtk.EventBox();
+        wrap = new Gtk.EventBox();
         add(wrap);
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -94,7 +95,7 @@ public class StatusAppletImpl : Budgie.Applet
 
     protected void create_popover()
     {
-        popover = new Budgie.Popover();
+        popover = new Budgie.Popover(wrap);
 
         var grid = new Gtk.Grid();
         grid.set_border_width(6);
@@ -197,7 +198,7 @@ public class StatusAppletImpl : Budgie.Applet
     protected void show_popover()
     {
         popover.set_size_request(200, 150);
-        popover.present(this);
+        popover.show_all();
     }
 } // End class
 

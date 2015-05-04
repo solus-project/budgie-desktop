@@ -56,11 +56,11 @@ public class ClockAppletImpl : Budgie.Applet
         });
 
         // Interesting part - calender in a popover :)
-        pop = new Budgie.Popover();
+        pop = new Budgie.Popover(widget);
 
         widget.button_release_event.connect((e)=> {
             if (e.button == 1) {
-                pop.present(clock);
+                pop.show_all();
                 return true;
             }
             return false;

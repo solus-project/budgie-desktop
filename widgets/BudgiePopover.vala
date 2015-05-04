@@ -33,23 +33,19 @@ public class Popover : Gtk.Window
     private int screen_gap = 5;
 
     /* We simply steal the popovers stylecontext to trick css theming */
-    private Gtk.Widget theft;
+    private Gtk.Widget render_st;
 
-    private Gtk.Widget? parent_widg;
+    public Gtk.Widget? relative_to { construct set; public get; }
 
-    public Popover(bool is_passive = false)
-    {
-        Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.POPUP_MENU);
-        passive = is_passive;
+    construct {
 
         set_visual(get_screen().get_rgba_visual());
 
         /* For CSS */
-        theft = new Gtk.Popover(this);
-
-        set_decorated(false);
+        render_st = new Gtk.Popover(this);
         set_border_width(2);
         resizable = false;
+        decorated = false;
         notify.connect((s,p) => {
             if (p.name != "bottom-tail") {
                 return;
@@ -91,10 +87,16 @@ public class Popover : Gtk.Window
         size_allocate.connect((r)=> {
             our_width = r.width;
             our_height = r.height;
-            if (get_visible() && get_realized()) {
-                present(parent_widg, true);
-            }
         });
+
+        type = Gtk.WindowType.TOPLEVEL;
+        set_type_hint(Gdk.WindowTypeHint.MENU);
+    }
+
+    public Popover(Gtk.Widget? relative_to, bool is_passive = false)
+    {
+        Object(relative_to: relative_to);
+        passive = false;
     }
 
     public override bool draw(Cairo.Context ctx)
@@ -107,7 +109,8 @@ public class Popover : Gtk.Window
 
         ctx.set_operator(Cairo.Operator.OVER);
         ctx.set_antialias(Cairo.Antialias.SUBPIXEL);
-        var st = theft.get_style_context();
+
+        var st = render_st.get_style_context();
 
         // Currently reserved, in case we ever decide on more complex
         // borders, or whatnot.
@@ -205,21 +208,22 @@ public class Popover : Gtk.Window
         ctx.line_to(end_x, end_y);
     }
 
-    public new void present(Gtk.Widget? parent = null, bool reposition = false)
+    public void do_placement()
     {
-        var toplevel = parent.get_toplevel();
-        set_transient_for(toplevel as Gtk.Window);
+        Gtk.Widget parent = relative_to;
+        var toplevel = relative_to.get_toplevel() as Gtk.Window;
         int win_x, win_y;
         int trans_x, trans_y;
-        this.parent_widg = parent;
 
         our_x = 0;
         our_y = 0;
 
         get_child().show();
+        set_attached_to(toplevel);
         queue_resize_no_redraw();
 
         toplevel.get_window().get_position(out win_x, out win_y);
+        set_transient_for(toplevel);
 
         // find out where the widget is
         Gtk.Allocation widget_alloc;
@@ -232,13 +236,6 @@ public class Popover : Gtk.Window
         // trans_x and and trans_y are EXACTLY where the widget is.
         our_x = trans_x;
         our_y = trans_y;
-
-        if (!reposition) {
-            if (!get_realized()) {
-                realize();
-            }
-            get_window().set_focus_on_map(true);
-        }
 
         // Should we go with top or bottom ?
         var screen = parent.get_screen();
@@ -276,8 +273,6 @@ public class Popover : Gtk.Window
 
         // And now we go and position ourselves
         move(our_x, our_y);
-
-        show_all();
     }
 
     public override bool button_press_event(Gdk.EventButton event)
@@ -290,57 +285,50 @@ public class Popover : Gtk.Window
         if ((event.x_root < x || event.x_root > x+our_width) ||
             (event.y_root < y || event.y_root > y+our_height)) {
             // Outside of our zone, off we go.
-            return base.button_press_event(event);
+            hide();
+            return Gdk.EVENT_STOP;
         }
-        return true;
-    }
-
-    public override bool button_release_event(Gdk.EventButton event)
-    {
-        int x, y;
-
-        get_position(out x, out y);
-
-        if ((event.x_root < x || event.x_root > x+our_width) ||
-            (event.y_root < y || event.y_root > y+our_height)) {
-                    hide();
-                    return false;
-        }
-        return true;
+        return Gdk.EVENT_PROPAGATE;
     }
 
     protected void do_grab()
     {
-        if (!passive) {
-            // Let's get grabbing
-            Gdk.EventMask mask = 
-                Gdk.EventMask.SMOOTH_SCROLL_MASK | Gdk.EventMask.BUTTON_PRESS_MASK |
-                Gdk.EventMask.BUTTON_RELEASE_MASK |
-                Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
-                Gdk.EventMask.POINTER_MOTION_MASK;
-            Gdk.EventMask kmask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK;
-            Gdk.GrabStatus pst, kst;
-            kst = pst = Gdk.GrabStatus.SUCCESS;
-            var manager = get_screen().get_display().get_device_manager();
-            var pointer = manager.get_client_pointer();
-            if (pointer.associated_device != null) {
-                kst = pointer.associated_device.grab(get_window(), Gdk.GrabOwnership.NONE, true, kmask, null, Gdk.CURRENT_TIME);
-            }
+        if (passive) {
+            return;
+        }
+        // Let's get grabbing
+        Gdk.EventMask mask = 
+            Gdk.EventMask.SMOOTH_SCROLL_MASK | Gdk.EventMask.BUTTON_PRESS_MASK |
+            Gdk.EventMask.BUTTON_RELEASE_MASK |
+            Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK |
+            Gdk.EventMask.POINTER_MOTION_MASK;
+        Gdk.EventMask kmask = Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK;
+        Gdk.GrabStatus pst, kst;
+        kst = pst = Gdk.GrabStatus.SUCCESS;
+        var manager = get_screen().get_display().get_device_manager();
+        var pointer = manager.get_client_pointer();
+        if (pointer.associated_device != null) {
+            kst = pointer.associated_device.grab(get_window(), Gdk.GrabOwnership.NONE, true, kmask, null, Gdk.CURRENT_TIME);
+        }
 
-            pst = pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
-            if (pst != Gdk.GrabStatus.SUCCESS || (kst != pst || pointer.associated_device != null)) {
-                Timeout.add(150,()=> {
-                    do_grab();
-                    return false;
-                });
-            } else {
-                Gtk.device_grab_add(this, pointer, false);
-            }
+        this.grab_focus();
+        this.present();
+        pst = pointer.grab(get_window(), Gdk.GrabOwnership.NONE, true, mask, null, Gdk.CURRENT_TIME);
+        if (pst != Gdk.GrabStatus.SUCCESS) {
+            Timeout.add(150,()=> {
+                do_grab();
+                return false;
+            });
+        } else {
+            Gtk.device_grab_add(this, pointer, false);
         }
     }
 
     protected void do_ungrab()
     {
+        if (passive) {
+            return;
+        }
         var manager = get_screen().get_display().get_device_manager();
         var pointer = manager.get_client_pointer();
         Gtk.device_grab_remove(this, pointer);
@@ -348,24 +336,26 @@ public class Popover : Gtk.Window
         should_regrab = false;
     }
 
+
     protected override bool map_event(Gdk.EventAny event)
     {
-        base.map();
         do_grab();
-        return false;
+        do_placement();
+        get_window().set_focus_on_map(true);
+        show();
+        return Gdk.EVENT_PROPAGATE;
     }
 
     protected override void hide()
     {
-        base.hide();
-
         // Remove grabs - we done now
         do_ungrab();
+        base.hide();
     }
 
     protected override bool grab_broken_event(Gdk.EventGrabBroken event)
     {
-        //should_regrab = true;
+        should_regrab = true;
         return false;
     }
 
@@ -374,6 +364,7 @@ public class Popover : Gtk.Window
         /* If we've been focused again, then likely a popup menu on an
          * entry or such made us lose it - so we take it back */
         if (should_regrab) {
+            do_ungrab();
             do_grab();
         }
         return base.focus_in_event(focus);
@@ -384,7 +375,7 @@ public class Popover : Gtk.Window
     protected override Gtk.WidgetPath get_path_for_child(Gtk.Widget child)
     {
         Gtk.WidgetPath path = base.get_path_for_child(child);
-        path.iter_set_object_type(0, this.theft.get_type());
+        path.iter_set_object_type(0, this.render_st.get_type());
 
         return path;
     }

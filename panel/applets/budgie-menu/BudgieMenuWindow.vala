@@ -260,8 +260,9 @@ public class BudgieMenuWindow : Budgie.Popover
 
     }
 
-    public BudgieMenuWindow()
+    public BudgieMenuWindow(Gtk.Widget relative_to)
     {
+        Object(relative_to: relative_to);
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
 
