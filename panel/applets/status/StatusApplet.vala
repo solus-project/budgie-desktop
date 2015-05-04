@@ -56,11 +56,12 @@ public class StatusAppletImpl : Budgie.Applet
             widget.set_orientation(o);
         });
 
-        wrap.button_release_event.connect((e) => {
+        wrap.button_press_event.connect((e) => {
             if (e.button == 1) {
-                show_popover();
+                toggle_popover();
+                return Gdk.EVENT_STOP;
             }
-            return false;
+            return Gdk.EVENT_PROPAGATE;
         });
 
         icon_size_changed.connect((i,s)=> {
@@ -195,10 +196,14 @@ public class StatusAppletImpl : Budgie.Applet
         end_session.halign = Gtk.Align.END;
     }
 
-    protected void show_popover()
+    protected void toggle_popover()
     {
-        popover.set_size_request(200, 150);
-        popover.show_all();
+        if (!popover.get_visible()) {
+            popover.set_size_request(200, 150);
+            popover.show_all();
+        } else {
+            popover.hide();
+        }
     }
 } // End class
 

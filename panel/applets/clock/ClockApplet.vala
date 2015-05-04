@@ -58,12 +58,16 @@ public class ClockAppletImpl : Budgie.Applet
         // Interesting part - calender in a popover :)
         pop = new Budgie.Popover(widget);
 
-        widget.button_release_event.connect((e)=> {
+        widget.button_press_event.connect((e)=> {
             if (e.button == 1) {
-                pop.show_all();
-                return true;
+                if (!pop.get_visible()) {
+                    pop.show_all();
+                } else {
+                    pop.hide();
+                }
+                return Gdk.EVENT_STOP;
             }
-            return false;
+            return Gdk.EVENT_PROPAGATE;
         });
         pop.add(cal);
         Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
