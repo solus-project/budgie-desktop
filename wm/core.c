@@ -67,6 +67,7 @@ static void budgie_wm_class_init(BudgieWMClass *klass)
         plugin_class->plugin_info      = budgie_plugin_info;
         plugin_class->switch_workspace = switch_workspace;
         plugin_class->kill_switch_workspace = kill_switch_workspace;
+        plugin_class->show_window_menu = show_window_menu;
 
         /* Existing legacy code from old default plugin */
         plugin_class->show_tile_preview = show_tile_preview;

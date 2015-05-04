@@ -45,6 +45,10 @@ void switch_windows(MetaDisplay *display, MetaScreen     *screen,
                      MetaWindow *window, ClutterKeyEvent *event,
                      MetaKeyBinding *binding, MetaPlugin *plugin);
 
+void show_window_menu(MetaPlugin *plugin, MetaWindow *window,
+                      MetaWindowMenuType menu,
+                      int x, int y);
+
 /** Initialise budgie key handling (via shell iface) */
 void budgie_keys_init(MetaDisplay *display);
 

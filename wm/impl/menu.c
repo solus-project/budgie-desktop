@@ -10,12 +10,15 @@
  */
 
 #include <gtk/gtk.h>
+#include <clutter/clutter.h>
 
 #include <gio/gdesktopappinfo.h>
 
 #include "impl.h"
 #include "plugin.h"
+#include "windowmenu.h"
 
+static GtkWidget *wmenu = NULL;
 
 static gboolean launch_desktop(const gchar *name)
 {
@@ -86,6 +89,8 @@ void budgie_menus_init(BudgieWM *self)
 
         g_signal_connect(self->priv->background_group, "button-release-event",
             G_CALLBACK(on_button_press), self);
+
+        wmenu = budgie_window_menu_new();
 }
 
 void budgie_menus_end(BudgieWM *self)
@@ -94,4 +99,24 @@ void budgie_menus_end(BudgieWM *self)
                 gtk_widget_destroy(self->priv->menu);
                 self->priv->menu = NULL;
         }
+        if (wmenu) {
+                gtk_widget_destroy(wmenu);
+                wmenu = NULL;
+        }
 }
+
+gboolean expose_menu(gpointer userdata)
+{
+        g_object_set(wmenu, "window", userdata, NULL);
+        gtk_menu_popup(GTK_MENU(wmenu), NULL, NULL, NULL, NULL, 3, GDK_CURRENT_TIME);
+        return FALSE;
+}
+
+void show_window_menu(MetaPlugin *plugin, MetaWindow *window,
+                      MetaWindowMenuType menu,
+                      int x, int y)
+{
+        /* Bit evil but its enough to get us back out of mutter/clutter event */
+        g_timeout_add(100, expose_menu, window);
+}
+        

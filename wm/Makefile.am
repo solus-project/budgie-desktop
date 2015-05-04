@@ -30,6 +30,8 @@ budgie_wm_SOURCES = \
 	impl/workspace.c \
 	ui/background.h \
 	ui/background.c \
+	ui/windowmenu.h \
+	ui/windowmenu.c \
 	budgie-wm.c
 
 budgie_wm_CFLAGS = \
