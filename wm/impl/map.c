@@ -12,13 +12,13 @@
 #include "impl.h"
 
 /* For mapping normal windows */
-#define MAP_TIMEOUT     120
+#define MAP_TIMEOUT     170
 
 /* Initial scale (from 0.8 to 1.0) */
 #define MAP_SCALE       0.8f
 
 /* How long to fade in a menu */
-#define FADE_TIMEOUT    115
+#define FADE_TIMEOUT    165
 
 /* To be used in some normal sense somewhere else.. */
 static ClutterPoint PV_CENTER = { 0.5f, 0.5f };
@@ -47,6 +47,7 @@ void map(MetaPlugin *plugin, MetaWindowActor *window_actor)
                 case META_WINDOW_POPUP_MENU:
                 case META_WINDOW_DROPDOWN_MENU:
                 case META_WINDOW_NOTIFICATION:
+                case META_WINDOW_MENU:
                         /* For menus we'll give em a nice fade in */
                         g_object_set(actor, "opacity", 0, NULL);
                         clutter_actor_show(actor);

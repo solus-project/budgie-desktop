@@ -12,7 +12,7 @@
 #include "impl.h"
 
 /** Duration of destroy animation */
-#define DESTROY_TIMEOUT    130
+#define DESTROY_TIMEOUT    170
 
 /** What size to scale them to */
 #define DESTROY_SCALE      0.6
@@ -51,6 +51,17 @@ void destroy(MetaPlugin *plugin, MetaWindowActor *window_actor)
 
                         /* Now animate. */
                         g_object_set(actor, "scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0, NULL);
+                        clutter_actor_restore_easing_state(actor);
+                        break;
+                case META_WINDOW_MENU:
+                        /* Initialise animation */
+                        clutter_actor_save_easing_state(actor);
+                        clutter_actor_set_easing_mode(actor, CLUTTER_EASE_OUT_QUAD);
+                        clutter_actor_set_easing_duration(actor, DESTROY_TIMEOUT);
+                        g_signal_connect(actor, "transitions-completed", G_CALLBACK(destroy_done), plugin);
+
+                        /* Now animate. */
+                        g_object_set(actor, "opacity", 0, NULL);
                         clutter_actor_restore_easing_state(actor);
                         break;
                 default:
