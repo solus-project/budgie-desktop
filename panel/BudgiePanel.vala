@@ -502,8 +502,8 @@ public class Panel : Gtk.Window
             }
             // Deprecated in 3.12, use margin-start, margin-end in future
             if (position == PanelPosition.TOP || position == PanelPosition.BOTTOM) {
-                applet.margin_left = pad_start;
-                applet.margin_right = pad_end;
+                applet.margin_start = pad_start;
+                applet.margin_end = pad_end;
             } else {
                 applet.margin_top = pad_start;
                 applet.margin_bottom = pad_end;
@@ -568,14 +568,14 @@ public class Panel : Gtk.Window
 
         if (p.name == "pad-start") {
             if (position == PanelPosition.TOP || position == PanelPosition.BOTTOM) {
-                app_info.applet.margin_left = app_info.pad_start;
+                app_info.applet.margin_start = app_info.pad_start;
             } else {
                 app_info.applet.margin_top = app_info.pad_start;
             }
         }
         if (p.name == "pad-end") {
             if (position == PanelPosition.TOP || position == PanelPosition.BOTTOM) {
-                app_info.applet.margin_right = app_info.pad_end;
+                app_info.applet.margin_end = app_info.pad_end;
             } else {
                 app_info.applet.margin_bottom = app_info.pad_end;
             }
@@ -1001,8 +1001,8 @@ public class Panel : Gtk.Window
                         applet_info.applet.freeze_notify();
                         applet_info.applet.set_property("margin", 0);
                         if (position == PanelPosition.TOP || position == PanelPosition.BOTTOM) {
-                            applet_info.applet.margin_left = applet_info.pad_start;
-                            applet_info.applet.margin_right = applet_info.pad_end;
+                            applet_info.applet.margin_start = applet_info.pad_start;
+                            applet_info.applet.margin_end = applet_info.pad_end;
                         } else {
                             applet_info.applet.margin_top = applet_info.pad_start;
                             applet_info.applet.margin_bottom = applet_info.pad_end;

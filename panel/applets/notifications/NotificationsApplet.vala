@@ -111,8 +111,8 @@ public class NotificationsAppletImpl : Budgie.Applet
         st = new Settings("com.evolve-os.budgie.panel");
         st.bind("dark-theme", this, "use-dark-theme", SettingsBindFlags.DEFAULT);
         widget = new Gtk.EventBox();
-        widget.margin_left = 2;
-        widget.margin_right = 2;
+        widget.margin_start = 2;
+        widget.margin_end = 2;
         icon = new Gtk.Image.from_icon_name(NOTIFICATIONS_CLEAR_ICON, Gtk.IconSize.INVALID);
         widget.add(icon);;
 

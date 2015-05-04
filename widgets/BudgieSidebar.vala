@@ -37,7 +37,7 @@ class SidebarItem : Gtk.Box
         get_style_context().add_class("sidebar-item");
 
         image = new Gtk.Image();
-        image.margin_right = 10;
+        image.margin_end = 10;
         label = new Gtk.Label("");
         pack_start(image, false, false, 0);
         pack_start(label, true, true, 0);

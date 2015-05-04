@@ -35,8 +35,8 @@ public class StatusAppletImpl : Budgie.Applet
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         wrap.add(widget);
-        wrap.margin_left = 4;
-        wrap.margin_right = 2;
+        wrap.margin_start = 4;
+        wrap.margin_end = 2;
 
         power = new PowerIndicator();
         widget.pack_start(power, false, false, 0);
@@ -121,7 +121,7 @@ public class StatusAppletImpl : Budgie.Applet
         sound.status_widget.valign = Gtk.Align.END;
         sound.status_image.valign = Gtk.Align.CENTER;
         sound.status_image.margin_top = 6; /* Due to mark */
-        sound.status_widget.margin_left = 2; /* Due to button for settings */
+        sound.status_widget.margin_start = 2; /* Due to button for settings */
 
         var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         row += 1;

@@ -692,13 +692,13 @@ public class PanelEditor : Gtk.Window
         lab.set_use_markup(true);
 
         layout.pack_start(lab, true, true, 0);
-        lab.margin_right = 20;
+        lab.margin_end = 20;
         lab.valign = Gtk.Align.CENTER;
         lab.halign = Gtk.Align.START;
 
         if (subtitle != null) {
             lab = new Gtk.Label(@"<small>$subtitle</small>");
-            lab.margin_right = 40;
+            lab.margin_end = 40;
             lab.set_use_markup(true);
 
             layout.pack_start(lab, true, true, 0);
