@@ -54,7 +54,7 @@ budgie_panel_LDADD = \
 
 budgie_panel_VALAFLAGS = \
 	--vapidir=${top_builddir}/budgie-plugin \
-	--vapidir=${top_srcdir}/widgets \
+	--vapidir=${top_builddir}/widgets \
 	--vapidir=${top_builddir}/panel \
 	--pkg panelconfig \
 	--pkg BudgieWidgets \
