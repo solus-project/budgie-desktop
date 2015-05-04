@@ -40,7 +40,6 @@ rundialog/*.h
 *.typelib
 *.dirstamp
 widgets/*.h
-widgets/*.vapi
 *proxy*.c
 *proxy*.h
 *resources*.c
