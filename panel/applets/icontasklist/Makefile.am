@@ -50,6 +50,5 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg budgie-1.0 \
 	--pkg gio-unix-2.0 \
 	--pkg BudgieWidgets \
-	$(VALAFLAGS) \
-	--pkg gee-0.8
+	$(VALAFLAGS)
 
