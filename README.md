@@ -71,6 +71,7 @@ because of this.
 
 *Dependencies:*
 
+ * intltool
  * libpulse
  * libpulse-mainloop-glib
  * GTK3 (>= 3.14.0)
