@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Budgie Desktop Settings
+Icon=preferences-system
+Exec=budgie-panel --prefs
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;System;
+OnlyShowIn=Budgie;GNOME;
+Keywords=Preferences;Settings;

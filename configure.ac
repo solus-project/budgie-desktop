@@ -110,6 +110,7 @@ AC_CONFIG_FILES([Makefile
                 po/Makefile.in
                 data/Makefile
                 data/budgie-desktop.desktop
+                data/budgie-settings.desktop
                 gvc/Makefile
                 budgie-plugin/budgie-1.0.pc
                 budgie-plugin/Makefile

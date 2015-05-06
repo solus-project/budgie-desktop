@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	budgie-desktop.desktop.in \
 	com.evolve-os.budgie.panel.gschema.xml \
 	budgie-panel.gresource.xml \
+	budgie-settings.desktop.in \
 	rundialog.gresource.xml \
 	session-dialog.gresource.xml \
 	dialog.css \
@@ -24,3 +25,7 @@ xsession_DATA = \
 defaultsdir = $(datadir)/budgie-desktop
 defaults_DATA = \
 	layout.ini
+
+appdir = $(datadir)/applications
+app_DATA = \
+	budgie-settings.desktop
