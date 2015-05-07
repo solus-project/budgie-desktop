@@ -46,6 +46,14 @@ GtkPopover .trough {
     background-color: alpha(black, 0.0);
 }
 
+GtkPopover GtkLabel {
+    color: @theme_fg_color;
+}
+GtkPopover GtkImage {
+    color: @theme_fg_color;
+    icon-shadow: none;
+}
+
 GtkPopover .entry,
 GtkPopover .entry:focused,
 GtkPopover .entry:selected,
