@@ -32,6 +32,7 @@ namespace Budgie {
 		protected override bool grab_broken_event (Gdk.EventGrabBroken event);
 		protected override void hide ();
 		protected override bool map_event (Gdk.EventAny event);
+		public override void realize ();
 		protected bool bottom_tail { protected get; protected set; }
 		public Gtk.Widget? relative_to { get; set construct; }
 	}

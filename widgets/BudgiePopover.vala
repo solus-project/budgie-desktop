@@ -269,10 +269,9 @@ public class Popover : Gtk.Window
         // Center the tail itself.
         widg_x += ((their_width/2)-(tail_width/2));
 
-        queue_draw();
-
         // And now we go and position ourselves
         move(our_x, our_y);
+        queue_draw();
     }
 
     public override bool button_press_event(Gdk.EventButton event)
@@ -336,14 +335,17 @@ public class Popover : Gtk.Window
         should_regrab = false;
     }
 
+    public override void realize() {
+        base.realize();
+        get_window().set_focus_on_map(true);
+        do_placement();
+    }
 
     protected override bool map_event(Gdk.EventAny event)
     {
         do_grab();
-        do_placement();
-        get_window().set_focus_on_map(true);
         show();
-        return Gdk.EVENT_PROPAGATE;
+        return base.map_event(event);
     }
 
     protected override void hide()
