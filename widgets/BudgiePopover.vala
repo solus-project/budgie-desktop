@@ -29,6 +29,11 @@ public class Popover : Gtk.Window
     private bool should_regrab = false;
     public bool passive = false;
 
+    private int w_x;
+    private int w_y;
+    private int w_width;
+    private int w_height;
+
     /* Simply ensures we retain some gap from the screen edge */
     private int screen_gap = 5;
 
@@ -85,8 +90,29 @@ public class Popover : Gtk.Window
         our_height = -1;
 
         size_allocate.connect((r)=> {
+            bool place = false;
+            if (our_width != r.width || our_height != r.height) {
+                place = true;
+            }
             our_width = r.width;
             our_height = r.height;
+            if (place && get_realized()) {
+                do_placement();
+            }
+        });
+
+        relative_to.size_allocate.connect((r)=> {
+            bool place = false;
+            if (w_width != r.width || w_height != r.height || w_x != r.x || w_y != r.y) {
+                place = true;
+            }
+            w_width = r.width;
+            w_height = r.height;
+            w_x = r.x;
+            w_y = r.y;
+            if (place && get_realized()) {
+                do_placement();
+            }
         });
 
         type = Gtk.WindowType.TOPLEVEL;
@@ -338,7 +364,15 @@ public class Popover : Gtk.Window
     public override void realize() {
         base.realize();
         get_window().set_focus_on_map(true);
+    }
+
+    public override void show()
+    {
+        if (!get_realized()) {
+            realize();
+        }
         do_placement();
+        base.show();
     }
 
     protected override bool map_event(Gdk.EventAny event)

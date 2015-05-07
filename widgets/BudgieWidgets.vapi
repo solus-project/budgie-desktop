@@ -33,6 +33,7 @@ namespace Budgie {
 		protected override void hide ();
 		protected override bool map_event (Gdk.EventAny event);
 		public override void realize ();
+		public override void show ();
 		protected bool bottom_tail { protected get; protected set; }
 		public Gtk.Widget? relative_to { get; set construct; }
 	}
