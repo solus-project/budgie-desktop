@@ -268,7 +268,7 @@ public class MenubarAppletImpl : Budgie.Applet
             string comments = "Simple, yet elegant, desktop environment designed for Solus Operating System";
             Gtk.show_about_dialog(null,
                 "program-name", "Budgie Desktop",
-                "copyright", "Copyright © 2014 Evolve OS",
+                "copyright", "Copyright © 2014 Solus Project",
                 "website", Budgie.WEBSITE,
                 "license-type", license,
                 "authors", authors,
