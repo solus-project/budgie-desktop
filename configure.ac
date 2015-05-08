@@ -125,6 +125,7 @@ AC_CONFIG_FILES([Makefile
                 panel/applets/menubar/Makefile
                 panel/applets/tasklist/Makefile
                 panel/applets/status/Makefile
+                panel/applets/show-desktop/Makefile
                 panel/applets/workspaces/Makefile
                 panel/applets/tray/Makefile
                 panel/applets/notifications/Makefile
