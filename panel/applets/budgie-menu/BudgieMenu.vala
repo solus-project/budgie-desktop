@@ -53,7 +53,7 @@ public class BudgieMenuApplet : Budgie.Applet
         // Better styling to fit in with the budgie-panel
         var st = widget.get_style_context();
         st.add_class(BUDGIE_STYLE_MENU_ICON);
-        popover = new BudgieMenuWindow(widget);
+        popover = new BudgieMenuWindow(img);
 
         widget.button_press_event.connect((e)=> {
             if (e.button != 1) {
