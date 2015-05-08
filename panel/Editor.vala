@@ -88,6 +88,8 @@ public class PanelEditor : Gtk.Window
     ulong pad_start_id;
     ulong pad_end_id;
 
+    bool wm_enabled = true;
+
     public PanelEditor(Budgie.Panel parent_panel)
     {
         this.panel = parent_panel;
@@ -95,6 +97,10 @@ public class PanelEditor : Gtk.Window
         title = _("Panel preferences");
         icon_name = "preferences-desktop";
         window_position = Gtk.WindowPosition.CENTER;
+
+        if (Gtk.MAJOR_VERSION >= 3 && Gtk.MINOR_VERSION >= 16) {
+            wm_enabled = false;
+        }
 
         var header = new Gtk.HeaderBar();
         header.set_show_close_button(true);
@@ -746,12 +752,14 @@ public class PanelEditor : Gtk.Window
         item = create_action_item(_("Widget theme"), _("Select a widget (GTK+) theme to use for applications"), combo);
         layout.pack_start(item, false, false, 0);
 
-        combo = new Gtk.ComboBoxText();
-        group.add_widget(combo);
-        populate(ref combo, ThemeType.WM_THEME);
-        wm_settings.bind("theme", combo, "active-id", SettingsBindFlags.DEFAULT);
-        item = create_action_item(_("Window theme"), null, combo);
-        layout.pack_start(item, false, false, 0);
+        if (this.wm_enabled) {
+            combo = new Gtk.ComboBoxText();
+            group.add_widget(combo);
+            populate(ref combo, ThemeType.WM_THEME);
+            wm_settings.bind("theme", combo, "active-id", SettingsBindFlags.DEFAULT);
+            item = create_action_item(_("Window theme"), null, combo);
+            layout.pack_start(item, false, false, 0);
+        }
 
         combo = new Gtk.ComboBoxText();
         group.add_widget(combo);
