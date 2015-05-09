@@ -1,0 +1,201 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-10 19:17+0100\n"
+"PO-Revision-Date: 2015-04-14 13:39+0000\n"
+"Last-Translator: Demiray Muhterem <mdemiray@msn.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/budgie-desktop/language/tr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../panel/BudgiePanel.vala:360
+msgid "Preferences..."
+msgstr "Tercihler..."
+
+#. resizable = false;
+#: ../panel/Editor.vala:95
+msgid "Panel preferences"
+msgstr "Panel tercihleri"
+
+#: ../panel/Editor.vala:126
+msgid "Appearance"
+msgstr "Görünüm"
+
+#: ../panel/Editor.vala:130
+msgid "Applets"
+msgstr "Uygulamalar"
+
+#: ../panel/Editor.vala:134
+msgid "Menu"
+msgstr "Menü"
+
+#: ../panel/Editor.vala:138
+msgid "Panel"
+msgstr "Panel"
+
+#: ../panel/Editor.vala:279
+#, c-format
+msgid "Panel applets"
+msgstr "Panel uygulamaları"
+
+#. Various options here for individual applets
+#: ../panel/Editor.vala:395
+msgid "Place in status area"
+msgstr "Durum çubuğu konumu"
+
+#: ../panel/Editor.vala:419
+msgid "Start padding"
+msgstr "Başlangıç dolgusu"
+
+#: ../panel/Editor.vala:427
+msgid "End padding"
+msgstr "Bitiş dolgusu"
+
+#. pack type
+#: ../panel/Editor.vala:435
+msgid "Placement"
+msgstr "Yerleşim"
+
+#: ../panel/Editor.vala:502
+msgid "Add applet"
+msgstr "Uygulama ekle"
+
+#: ../panel/Editor.vala:523
+msgid "Cancel"
+msgstr "Vazgeç"
+
+#: ../panel/Editor.vala:531
+msgid "Add"
+msgstr "Ekle"
+
+#: ../panel/Editor.vala:565
+#, c-format
+msgid "Panel configuration"
+msgstr "Panel yapılandırması"
+
+#: ../panel/Editor.vala:579
+msgid "GNOME Panel theme integration"
+msgstr "GNOME Panel tema entegrasyonu"
+
+#: ../panel/Editor.vala:579
+msgid "Enables a more traditional panel appearance"
+msgstr "Klasik panel görünümünü etkinleştir"
+
+#: ../panel/Editor.vala:585
+msgid "Enable panel shadow"
+msgstr "Panel gölgesini etkinleştir"
+
+#: ../panel/Editor.vala:585
+msgid "Adds a shadow to the panels edge"
+msgstr "Panel kenarına gölge ekle"
+
+#: ../panel/Editor.vala:591
+msgid "Top"
+msgstr "Üst"
+
+#: ../panel/Editor.vala:592
+msgid "Left"
+msgstr "Sol"
+
+#: ../panel/Editor.vala:593
+msgid "Right"
+msgstr "Sağ"
+
+#: ../panel/Editor.vala:594
+msgid "Bottom"
+msgstr "Alt"
+
+#: ../panel/Editor.vala:596
+msgid "Position on screen"
+msgstr "Ekrandaki konumu"
+
+#: ../panel/Editor.vala:609
+msgid "Never"
+msgstr "Asla"
+
+#: ../panel/Editor.vala:610
+msgid "Automatic"
+msgstr "Otomatik"
+
+#: ../panel/Editor.vala:612
+msgid "Autohide policy"
+msgstr "Otomatik gizleme seçeneği"
+
+#: ../panel/Editor.vala:623
+#, c-format
+msgid "Menu configuration"
+msgstr "Menü yapılandırması"
+
+#: ../panel/Editor.vala:637
+msgid "Menu label on panel"
+msgstr "Panelde menü etiketi de kullan"
+
+#: ../panel/Editor.vala:643
+msgid "Compact menu"
+msgstr "Daraltılmış menü"
+
+#: ../panel/Editor.vala:643
+msgid "Use a smaller menu with no category navigation"
+msgstr "Kategorilendirme yapmayan klasik menü kullan"
+
+#: ../panel/Editor.vala:649
+msgid "Category headers in menu"
+msgstr "Menüde kategori başlıkları"
+
+#: ../panel/Editor.vala:656
+msgid "Icon size"
+msgstr "Simge boyutu"
+
+#: ../panel/Editor.vala:656
+msgid "Set a size to use for icons in the menu."
+msgstr "Menüdeki simge boyutunu ayarla."
+
+#: ../panel/Editor.vala:664
+msgid "Menu label"
+msgstr "Menü etiketi"
+
+#: ../panel/Editor.vala:672
+msgid "Menu icon"
+msgstr "Menü simgesi"
+
+#: ../panel/Editor.vala:672
+msgid "Set an icon to use for menu"
+msgstr "Menü için bir simge seç"
+
+#: ../panel/Editor.vala:726
+#, c-format
+msgid "Personalise Budgie"
+msgstr "Budgie Masaüstünü Kişiselleştir"
+
+#: ../panel/Editor.vala:738
+msgid "Dark theme"
+msgstr "Karanlık tema"
+
+#: ../panel/Editor.vala:738
+msgid "Activate the dark theme option for the Budgie desktop"
+msgstr "Budgie Masaüstü için karanlık tema seçeneğini aktifleştir"
+
+#: ../panel/Editor.vala:746
+msgid "Widget theme"
+msgstr "Gereç teması"
+
+#: ../panel/Editor.vala:746
+msgid "Select a widget (GTK+) theme to use for applications"
+msgstr "Uygulamalar için bir gereç teması (GTK+) seç"
+
+#: ../panel/Editor.vala:753
+msgid "Window theme"
+msgstr "Pencere teması"
+
+#: ../panel/Editor.vala:760
+msgid "Icon theme"
+msgstr "Simge teması"

@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Ville Kivelä <vkivela@hotmail.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-10 19:17+0100\n"
+"PO-Revision-Date: 2015-04-15 16:40+0000\n"
+"Last-Translator: Ville Kivelä <vkivela@hotmail.com>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/budgie-desktop/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../panel/BudgiePanel.vala:360
+msgid "Preferences..."
+msgstr "Asetukset..."
+
+#. resizable = false;
+#: ../panel/Editor.vala:95
+msgid "Panel preferences"
+msgstr "Paneelin asetukset"
+
+#: ../panel/Editor.vala:126
+msgid "Appearance"
+msgstr "Ulkonäkö"
+
+#: ../panel/Editor.vala:130
+msgid "Applets"
+msgstr "Sovellukset"
+
+#: ../panel/Editor.vala:134
+msgid "Menu"
+msgstr "Valikko"
+
+#: ../panel/Editor.vala:138
+msgid "Panel"
+msgstr "Paneeli"
+
+#: ../panel/Editor.vala:279
+#, c-format
+msgid "Panel applets"
+msgstr "Paneelin sovellukset"
+
+#. Various options here for individual applets
+#: ../panel/Editor.vala:395
+msgid "Place in status area"
+msgstr "Sijoita status alueelle"
+
+#: ../panel/Editor.vala:419
+msgid "Start padding"
+msgstr "Alun täyte"
+
+#: ../panel/Editor.vala:427
+msgid "End padding"
+msgstr "Lopun täyte"
+
+#. pack type
+#: ../panel/Editor.vala:435
+msgid "Placement"
+msgstr "Sijoittelu"
+
+#: ../panel/Editor.vala:502
+msgid "Add applet"
+msgstr "Lisää sovellus"
+
+#: ../panel/Editor.vala:523
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: ../panel/Editor.vala:531
+msgid "Add"
+msgstr "Lisää"
+
+#: ../panel/Editor.vala:565
+#, c-format
+msgid "Panel configuration"
+msgstr "Paneelin kokoonpano"
+
+#: ../panel/Editor.vala:579
+msgid "GNOME Panel theme integration"
+msgstr "GNOME Paneeli teeman integroiminen"
+
+#: ../panel/Editor.vala:579
+msgid "Enables a more traditional panel appearance"
+msgstr "Mahdollistaa perinteisemmän paneelin ulkonäön"
+
+#: ../panel/Editor.vala:585
+msgid "Enable panel shadow"
+msgstr "Ota käyttöön paneelin varjo"
+
+#: ../panel/Editor.vala:585
+msgid "Adds a shadow to the panels edge"
+msgstr "Lisää varjon paneelin reunaan"
+
+#: ../panel/Editor.vala:591
+msgid "Top"
+msgstr "Ylä"
+
+#: ../panel/Editor.vala:592
+msgid "Left"
+msgstr "Vasen"
+
+#: ../panel/Editor.vala:593
+msgid "Right"
+msgstr "Oikea"
+
+#: ../panel/Editor.vala:594
+msgid "Bottom"
+msgstr "Ala"
+
+#: ../panel/Editor.vala:596
+msgid "Position on screen"
+msgstr "Sijainti ruudulla"
+
+#: ../panel/Editor.vala:609
+msgid "Never"
+msgstr "Ei koskaan"
+
+#: ../panel/Editor.vala:610
+msgid "Automatic"
+msgstr "Automaattinen"
+
+#: ../panel/Editor.vala:612
+msgid "Autohide policy"
+msgstr "Automaattisen piilotuksen tapa"
+
+#: ../panel/Editor.vala:623
+#, c-format
+msgid "Menu configuration"
+msgstr "Valikon kokoonpano"
+
+#: ../panel/Editor.vala:637
+msgid "Menu label on panel"
+msgstr "Valikon teksti paneelissa"
+
+#: ../panel/Editor.vala:643
+msgid "Compact menu"
+msgstr "Tiivis valikko"
+
+#: ../panel/Editor.vala:643
+msgid "Use a smaller menu with no category navigation"
+msgstr "Käytä pienempää valikkoa ilman kategorioiden navigointia"
+
+#: ../panel/Editor.vala:649
+msgid "Category headers in menu"
+msgstr "Kategorioiden otsikot valikossa"
+
+#: ../panel/Editor.vala:656
+msgid "Icon size"
+msgstr "Ikonien koko"
+
+#: ../panel/Editor.vala:656
+msgid "Set a size to use for icons in the menu."
+msgstr "Aseta valikossa käytettävien ikonien koko "
+
+#: ../panel/Editor.vala:664
+msgid "Menu label"
+msgstr "Valikon teksti"
+
+#: ../panel/Editor.vala:672
+msgid "Menu icon"
+msgstr "Valikon ikoni"
+
+#: ../panel/Editor.vala:672
+msgid "Set an icon to use for menu"
+msgstr "Aseta valikossa käytettävä ikoni"
+
+#: ../panel/Editor.vala:726
+#, c-format
+msgid "Personalise Budgie"
+msgstr "Mukauta Budgieta"
+
+#: ../panel/Editor.vala:738
+msgid "Dark theme"
+msgstr "Tumma teema"
+
+#: ../panel/Editor.vala:738
+msgid "Activate the dark theme option for the Budgie desktop"
+msgstr "Ota käyttöön tumman teeman vaihtoehto Budgie-työpöydälle"
+
+#: ../panel/Editor.vala:746
+msgid "Widget theme"
+msgstr "Widgetti teema"
+
+#: ../panel/Editor.vala:746
+msgid "Select a widget (GTK+) theme to use for applications"
+msgstr "Valitse sovelluksien widgetti (GTK+) teema"
+
+#: ../panel/Editor.vala:753
+msgid "Window theme"
+msgstr "Ikkuna teema"
+
+#: ../panel/Editor.vala:760
+msgid "Icon theme"
+msgstr "Ikoni teema"

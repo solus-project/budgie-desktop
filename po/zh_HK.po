@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Christian Chung <alphachungys@gmail.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-10 19:17+0100\n"
+"PO-Revision-Date: 2015-04-17 15:37+0000\n"
+"Last-Translator: Christian Chung <alphachungys@gmail.com>\n"
+"Language-Team: Chinese (Hong Kong) (http://www.transifex.com/projects/p/budgie-desktop/language/zh_HK/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_HK\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../panel/BudgiePanel.vala:360
+msgid "Preferences..."
+msgstr "設定..."
+
+#. resizable = false;
+#: ../panel/Editor.vala:95
+msgid "Panel preferences"
+msgstr "面板設定"
+
+#: ../panel/Editor.vala:126
+msgid "Appearance"
+msgstr "外觀"
+
+#: ../panel/Editor.vala:130
+msgid "Applets"
+msgstr "小程序"
+
+#: ../panel/Editor.vala:134
+msgid "Menu"
+msgstr "程式功能表"
+
+#: ../panel/Editor.vala:138
+msgid "Panel"
+msgstr "面板"
+
+#: ../panel/Editor.vala:279
+#, c-format
+msgid "Panel applets"
+msgstr "面板小程序"
+
+#. Various options here for individual applets
+#: ../panel/Editor.vala:395
+msgid "Place in status area"
+msgstr "喺通知區入面顯示"
+
+#: ../panel/Editor.vala:419
+msgid "Start padding"
+msgstr "開端留空位"
+
+#: ../panel/Editor.vala:427
+msgid "End padding"
+msgstr "尾端留空位"
+
+#. pack type
+#: ../panel/Editor.vala:435
+msgid "Placement"
+msgstr "位置"
+
+#: ../panel/Editor.vala:502
+msgid "Add applet"
+msgstr "加入小程序"
+
+#: ../panel/Editor.vala:523
+msgid "Cancel"
+msgstr "取消"
+
+#: ../panel/Editor.vala:531
+msgid "Add"
+msgstr "加入"
+
+#: ../panel/Editor.vala:565
+#, c-format
+msgid "Panel configuration"
+msgstr "面板設定"
+
+#: ../panel/Editor.vala:579
+msgid "GNOME Panel theme integration"
+msgstr "GNOME面板主題配合"
+
+#: ../panel/Editor.vala:579
+msgid "Enables a more traditional panel appearance"
+msgstr "喺面版度用一個比較傳統嘅樣"
+
+#: ../panel/Editor.vala:585
+msgid "Enable panel shadow"
+msgstr "啟用面板陰影"
+
+#: ../panel/Editor.vala:585
+msgid "Adds a shadow to the panels edge"
+msgstr "喺面版後面打陰影"
+
+#: ../panel/Editor.vala:591
+msgid "Top"
+msgstr "上面"
+
+#: ../panel/Editor.vala:592
+msgid "Left"
+msgstr "左邊"
+
+#: ../panel/Editor.vala:593
+msgid "Right"
+msgstr "右邊"
+
+#: ../panel/Editor.vala:594
+msgid "Bottom"
+msgstr "下面"
+
+#: ../panel/Editor.vala:596
+msgid "Position on screen"
+msgstr "喺個熒幕上面嘅位置"
+
+#: ../panel/Editor.vala:609
+msgid "Never"
+msgstr "完全唔好"
+
+#: ../panel/Editor.vala:610
+msgid "Automatic"
+msgstr "自動"
+
+#: ../panel/Editor.vala:612
+msgid "Autohide policy"
+msgstr "自動隱藏特性"
+
+#: ../panel/Editor.vala:623
+#, c-format
+msgid "Menu configuration"
+msgstr "程式功能表設定"
+
+#: ../panel/Editor.vala:637
+msgid "Menu label on panel"
+msgstr "程式功能表字樣喺面板上面"
+
+#: ../panel/Editor.vala:643
+msgid "Compact menu"
+msgstr "簡潔程式功能表"
+
+#: ../panel/Editor.vala:643
+msgid "Use a smaller menu with no category navigation"
+msgstr "用一個冇分類嘅細版程式功能表"
+
+#: ../panel/Editor.vala:649
+msgid "Category headers in menu"
+msgstr "喺程式功能表入面顯示分類"
+
+#: ../panel/Editor.vala:656
+msgid "Icon size"
+msgstr "圖示大細"
+
+#: ../panel/Editor.vala:656
+msgid "Set a size to use for icons in the menu."
+msgstr "同程式功能表入面嘅圖示揀大細"
+
+#: ../panel/Editor.vala:664
+msgid "Menu label"
+msgstr "程式功能表字樣"
+
+#: ../panel/Editor.vala:672
+msgid "Menu icon"
+msgstr "程式功能表圖示"
+
+#: ../panel/Editor.vala:672
+msgid "Set an icon to use for menu"
+msgstr "同程式功能表搵一個圖示"
+
+#: ../panel/Editor.vala:726
+#, c-format
+msgid "Personalise Budgie"
+msgstr "個人化Budgie"
+
+#: ../panel/Editor.vala:738
+msgid "Dark theme"
+msgstr "深色主題"
+
+#: ../panel/Editor.vala:738
+msgid "Activate the dark theme option for the Budgie desktop"
+msgstr "喺Budgie桌面入面使用深色主題"
+
+#: ../panel/Editor.vala:746
+msgid "Widget theme"
+msgstr "界面主題"
+
+#: ../panel/Editor.vala:746
+msgid "Select a widget (GTK+) theme to use for applications"
+msgstr "揀一個喺程式入面用嘅界面(GTK+)主題"
+
+#: ../panel/Editor.vala:753
+msgid "Window theme"
+msgstr "窗口主題"
+
+#: ../panel/Editor.vala:760
+msgid "Icon theme"
+msgstr "圖示主題"
