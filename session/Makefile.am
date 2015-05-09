@@ -23,10 +23,13 @@ bin_PROGRAMS = budgie-session \
 
 EXTRA_DIST = \
 	org.freedesktop.login1.xml \
+	org.freedesktop.DisplayManager.Seat.xml \
 	sessionconfig.h \
 	sessionconfig.vapi
 
-noinst_LTLIBRARIES = libsdloginproxy.la
+noinst_LTLIBRARIES = \
+	libsdloginproxy.la \
+	libdmseat.la
 
 libsdloginproxy_la_SOURCES = \
 	sd_logind_proxy.c \
@@ -36,6 +39,16 @@ libsdloginproxy_la_CFLAGS = \
 	$(GIO_UNIX_CFLAGS)
 
 libsdloginproxy_la_LIBADD = \
+	$(GIO_UNIX_LIBS)
+
+libdmseat_la_SOURCES = \
+	dm_seat.c \
+	dm_seat.h
+
+libdmseat_la_CFLAGS = \
+	$(GIO_UNIX_CFLAGS)
+
+libdmseat_la_LIBADD = \
 	$(GIO_UNIX_LIBS)
 
 budgie_session_SOURCES = \
@@ -76,7 +89,8 @@ budgie_session_dialog_LDADD = \
 	$(GIO_LIBS) \
 	$(GIO_UNIX_LIBS) \
 	$(GTK3_LIBS) \
-	libsdloginproxy.la
+	libsdloginproxy.la \
+	libdmseat.la 
 
 sd_logind_proxy.h: org.freedesktop.login1.xml
 	gdbus-codegen --generate-c-code sd_logind_proxy \
@@ -87,13 +101,23 @@ sd_logind_proxy.h: org.freedesktop.login1.xml
 
 sd_logind_proxy.c:
 
+dm_seat.h: org.freedesktop.DisplayManager.Seat.xml
+	gdbus-codegen --generate-c-code dm_seat \
+	--c-namespace DmSeat \
+	--c-generate-object-manager \
+	--interface-prefix org.freedesktop.DisplayManager.Seat \
+	$<
+
+dm_seat.c:
+
 BUILT_SOURCES += \
 	sd_logind_proxy.h \
-	sd_logind_proxy.c
+	sd_logind_proxy.c \
+	dm_seat.h \
+	dm_seat.c
 
 CLEANFILES += \
-	$(BUILT_SOURCES) \
-	sd_logind_proxy.c
+	$(BUILT_SOURCES)
 
 
 endif

@@ -66,6 +66,9 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         autofree gchar *result = NULL;
         GtkWidget *header = NULL;
         SdResponse response;
+        const gchar *xdg;
+
+        gboolean can_lock = FALSE;
 
         init_styles(self);
 
@@ -83,6 +86,21 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
                 can_systemd = TRUE;
         }
 
+        xdg = g_getenv("XDG_SEAT_PATH");
+        if (xdg) {
+                self->seat_proxy = dm_seat__proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+                        G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
+                        "org.freedesktop.DisplayManager",
+                        xdg,
+                        NULL,
+                        NULL);
+                if (!error) {
+                       can_lock = TRUE;
+                }
+        }
+        if (!can_lock) {
+                g_warning("Lock screen unavailable");
+        }
         if (can_systemd) {
                 /* Can we reboot? */
                 if (!sd_login_manager_call_can_reboot_sync(self->proxy,
@@ -163,6 +181,12 @@ static void budgie_session_dialog_init(BudgieSessionDialog *self)
         gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
 
+        button = gtk_button_new_with_label("Lock");
+        g_object_set_data(G_OBJECT(button), "action", "lock");
+        g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
+        gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
+        gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+
         button = gtk_button_new_with_label("Suspend");
         g_object_set_data(G_OBJECT(button), "action", "suspend");
         g_signal_connect(button, "clicked", G_CALLBACK(clicked), self);
@@ -217,6 +241,10 @@ static void budgie_session_dialog_dispose(GObject *object)
                 g_object_unref(self->proxy);
                 self->proxy = NULL;
         }
+        if (self->seat_proxy) {
+                g_object_unref(self->seat_proxy);
+                self->seat_proxy = NULL;
+        }
         /* Destruct */
         G_OBJECT_CLASS (budgie_session_dialog_parent_class)->dispose (object);
 }
@@ -263,6 +291,12 @@ static void clicked(GtkWidget *button, gpointer userdata)
         } else if (g_str_equal(data, "logout")) {
                 if (!g_spawn_command_line_async("budgie-session --logout", NULL)) {
                         g_message("Unable to logout!");
+                }
+        } else if (g_str_equal(data, "lock")) {
+                dm_seat__call_lock_sync(self->seat_proxy, NULL, &error);
+                if (!error){
+                        g_printerr("Unable to lock screen");
+                        g_error_free(error);
                 }
         }
         while (gtk_events_pending()) {

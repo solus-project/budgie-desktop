@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 
 #include "sd_logind_proxy.h"
+#include "dm_seat.h"
 
 typedef struct _BudgieSessionDialog BudgieSessionDialog;
 typedef struct _BudgieSessionDialogClass   BudgieSessionDialogClass;
@@ -42,6 +43,7 @@ typedef struct _BudgieSessionDialogClass   BudgieSessionDialogClass;
 struct _BudgieSessionDialog {
         GtkWindow parent;
         SdLoginManager *proxy;
+        DmSeat *seat_proxy;
 };
 
 /* BudgieSessionDialog class definition */

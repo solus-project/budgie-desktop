@@ -42,6 +42,7 @@ rundialog/*.h
 widgets/*.h
 *proxy*.c
 *proxy*.h
+dm_seat.*
 *resources*.c
 *resources*.h
 Makefile.in.in
