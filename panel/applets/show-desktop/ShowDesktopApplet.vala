@@ -27,6 +27,9 @@ public class ShowDesktopAppletImpl : Budgie.Applet
     public ShowDesktopAppletImpl()
     {
         widget = new Gtk.ToggleButton();
+        widget.get_style_context().add_class("launcher");
+        widget.get_style_context().remove_class("button");
+        widget.relief = Gtk.ReliefStyle.NONE;
         widget.set_active(false);
         img = new Gtk.Image.from_icon_name("user-desktop", Gtk.IconSize.INVALID);
         img.pixel_size = 22;
