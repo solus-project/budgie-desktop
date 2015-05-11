@@ -12,7 +12,7 @@
 #include "impl.h"
 #include <meta/display.h>
 
-#define MAX_TAB_ELAPSE 500
+#define MAX_TAB_ELAPSE 2000
 
 static MetaWorkspace *cur_workspace = NULL;
 static GList *cur_tabs = NULL;
