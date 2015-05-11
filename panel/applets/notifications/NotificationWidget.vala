@@ -260,6 +260,7 @@ public class NotificationWidget : Gtk.Grid
         close.hexpand = true;
         close.halign = Gtk.Align.END;
         close.get_style_context().add_class("image-button");
+        close.set_can_focus(false);
         close.clicked.connect(()=> {
             this.dismiss();
         });
