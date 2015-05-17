@@ -71,7 +71,7 @@ public class Popover : Gtk.Window
 
         // Must die on Escape
         key_press_event.connect((k) => {
-            if (k.keyval == Gdk.Key.Escape) {
+            if (k.keyval == Gdk.Key.Escape || k.keyval == Gdk.Key.Super_L) {
                 hide();
                 return true;
             }

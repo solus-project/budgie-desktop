@@ -34,7 +34,7 @@ public class BudgieMenuApplet : Budgie.Applet
     public BudgieMenuApplet()
     {
         settings = new Settings("com.evolve-os.budgie.panel");
-        ksettings = new Settings("org.gnome.desktop.wm.keybindings");
+        ksettings = new Settings("org.gnome.mutter");
         settings.changed.connect(on_settings_changed);
         ksettings.changed.connect(on_settings_changed);
 
@@ -67,7 +67,7 @@ public class BudgieMenuApplet : Budgie.Applet
             return Gdk.EVENT_STOP;
         });
 
-        // This enables us to respond to the "panel-main-menu" action
+        // This enables us to respond to the "overlay-key" action
         action_invoked.connect((t) => {
             if (t != Budgie.ActionType.INVOKE_MAIN_MENU) {
                 return;
@@ -87,7 +87,7 @@ public class BudgieMenuApplet : Budgie.Applet
         on_settings_changed("enable-menu-label");
         on_settings_changed("menu-icon");
         on_settings_changed("menu-label");
-        on_settings_changed("panel-main-menu");
+        on_settings_changed("overlay-key");
 
         icon_size_changed.connect((i,s)=> {
             img.pixel_size = (int)i;
@@ -121,7 +121,7 @@ public class BudgieMenuApplet : Budgie.Applet
             case "enable-menu-label":
                 label.set_visible(settings.get_boolean(key));
                 break;
-            case "panel-main-menu":
+            case "overlay-key":
                 /* Reset modifiers.. */
                 modifiers = ksettings.get_strv(key);
                 break;
