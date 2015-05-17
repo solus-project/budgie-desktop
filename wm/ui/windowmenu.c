@@ -23,6 +23,7 @@ struct _BudgieWindowMenuPrivate
         GtkWidget *close;
         GtkWidget *move;
         GtkWidget *resize;
+        GtkWidget *above;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieWindowMenu, budgie_window_menu, GTK_TYPE_MENU)
@@ -126,6 +127,17 @@ static void resize_cb(BudgieWindowMenu *self, GtkWidget *item)
         meta_window_begin_grab_op(self->priv->window, META_GRAB_OP_KEYBOARD_RESIZING_UNKNOWN, TRUE, CLUTTER_CURRENT_TIME);
 }
 
+static void above_cb(BudgieWindowMenu *self, GtkWidget *item)
+{
+        g_object_freeze_notify(G_OBJECT(item));
+        if (meta_window_is_above(self->priv->window)) {
+                meta_window_unmake_above(self->priv->window);
+        } else {
+                meta_window_make_above(self->priv->window);
+        }
+        g_object_thaw_notify(G_OBJECT(item));
+}
+
 static void budgie_window_menu_init(BudgieWindowMenu *self)
 {
         GtkWidget *item = NULL;
@@ -157,6 +169,15 @@ static void budgie_window_menu_init(BudgieWindowMenu *self)
         item = gtk_menu_item_new_with_label("Resize");
         g_signal_connect_swapped(item, "activate", G_CALLBACK(resize_cb), self);
         self->priv->resize = item;
+        MAPPEND(item);
+
+        item = gtk_separator_menu_item_new();
+        MAPPEND(item);
+
+
+        item = gtk_menu_item_new_with_label("Always On Top");
+        g_signal_connect_swapped(item, "activate", G_CALLBACK(above_cb), self);
+        self->priv->above = item;
         MAPPEND(item);
 
         item = gtk_separator_menu_item_new();
