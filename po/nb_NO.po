@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Philippe Loctaux <stian@nanonical.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-17 20:26+0100\n"
+"PO-Revision-Date: 2015-06-17 20:26+0100\n"
+"Last-Translator: Stian Furu Øverbye <stian@nanonical.com>\n"
+"Language-Team: Norwegian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../panel/BudgiePanel.vala:360
+msgid "Preferences..."
+msgstr "Alternativer"
+
+#. resizable = false;
+#: ../panel/Editor.vala:95
+msgid "Panel preferences"
+msgstr "Panel alternativer"
+
+#: ../panel/Editor.vala:126
+msgid "Appearance"
+msgstr "Utseende"
+
+#: ../panel/Editor.vala:130
+msgid "Applets"
+msgstr "Applets"
+
+#: ../panel/Editor.vala:134
+msgid "Menu"
+msgstr "Menu"
+
+#: ../panel/Editor.vala:138
+msgid "Panel"
+msgstr "Panneau"
+
+#: ../panel/Editor.vala:279
+#, c-format
+msgid "Panel applets"
+msgstr "Panel applets"
+
+#. Various options here for individual applets
+#: ../panel/Editor.vala:395
+msgid "Place in status area"
+msgstr "Plasser i status område"
+
+#: ../panel/Editor.vala:419
+msgid "Start padding"
+msgstr "Start margin"
+
+#: ../panel/Editor.vala:427
+msgid "End padding"
+msgstr "Slutt margin"
+
+#. pack type
+#: ../panel/Editor.vala:435
+msgid "Placement"
+msgstr "Plassering"
+
+#: ../panel/Editor.vala:502
+msgid "Add applet"
+msgstr "Legg til applet"
+
+#: ../panel/Editor.vala:523
+msgid "Cancel"
+msgstr "Kanseller"
+
+#: ../panel/Editor.vala:531
+msgid "Add"
+msgstr "Legg til"
+
+#: ../panel/Editor.vala:565
+#, c-format
+msgid "Panel configuration"
+msgstr "Panel konfigurasjon"
+
+#: ../panel/Editor.vala:579
+msgid "GNOME Panel theme integration"
+msgstr "GNOME panel tema integrasjon"
+
+#: ../panel/Editor.vala:579
+msgid "Enables a more traditional panel appearance"
+msgstr "Gir et mer tradisjonelt panel utseende"
+
+#: ../panel/Editor.vala:585
+msgid "Enable panel shadow"
+msgstr "Skru på panel skygge"
+
+#: ../panel/Editor.vala:585
+msgid "Adds a shadow to the panels edge"
+msgstr "Legger til en skygge i panelets kant"
+
+#: ../panel/Editor.vala:591
+msgid "Top"
+msgstr "Topp"
+
+#: ../panel/Editor.vala:592
+msgid "Left"
+msgstr "Venstre"
+
+#: ../panel/Editor.vala:593
+msgid "Right"
+msgstr "Høyre"
+
+#: ../panel/Editor.vala:594
+msgid "Bottom"
+msgstr "Bunn"
+
+#: ../panel/Editor.vala:596
+msgid "Position on screen"
+msgstr "Posisjon på skjerm"
+
+#: ../panel/Editor.vala:609
+msgid "Never"
+msgstr "Aldri"
+
+#: ../panel/Editor.vala:610
+msgid "Automatic"
+msgstr "Automatisk"
+
+#: ../panel/Editor.vala:612
+msgid "Autohide policy"
+msgstr "Autoskjul regel"
+
+#: ../panel/Editor.vala:623
+#, c-format
+msgid "Menu configuration"
+msgstr "Meny konfigurasjon"
+
+#: ../panel/Editor.vala:637
+msgid "Menu label on panel"
+msgstr "Menu tekst på panelet"
+
+#: ../panel/Editor.vala:643
+msgid "Compact menu"
+msgstr "Kompakt meny"
+
+#: ../panel/Editor.vala:643
+msgid "Use a smaller menu with no category navigation"
+msgstr "Bruk en smalere meny med ingen kategori navigasjon"
+
+#: ../panel/Editor.vala:649
+msgid "Category headers in menu"
+msgstr "Kategori overskrifter i meny"
+
+#: ../panel/Editor.vala:656
+msgid "Icon size"
+msgstr "Ikon størrelse"
+
+#: ../panel/Editor.vala:656
+msgid "Set a size to use for icons in the menu."
+msgstr "Sett en størrelse for ikonene i menyen."
+
+#: ../panel/Editor.vala:664
+msgid "Menu label"
+msgstr "Meny tekst"
+
+#: ../panel/Editor.vala:672
+msgid "Menu icon"
+msgstr "Meny ikon"
+
+#: ../panel/Editor.vala:672
+msgid "Set an icon to use for menu"
+msgstr "Set et ikon for menyen"
+
+#: ../panel/Editor.vala:726
+#, c-format
+msgid "Personalise Budgie"
+msgstr "Personaliser Budgie"
+
+#: ../panel/Editor.vala:738
+msgid "Dark theme"
+msgstr "Mørkt tema"
+
+#: ../panel/Editor.vala:738
+msgid "Activate the dark theme option for the Budgie desktop"
+msgstr "Aktiver det mørke tema for Budgie"
+
+#: ../panel/Editor.vala:746
+msgid "Widget theme"
+msgstr "Widget tema"
+
+#: ../panel/Editor.vala:746
+msgid "Select a widget (GTK+) theme to use for applications"
+msgstr "Velg et widget (GTK+) tema for å bruke i applikasjoner"
+
+#: ../panel/Editor.vala:753
+msgid "Window theme"
+msgstr "Vindu tema"
+
+#: ../panel/Editor.vala:760
+msgid "Icon theme"
+msgstr "Ikon tema"
