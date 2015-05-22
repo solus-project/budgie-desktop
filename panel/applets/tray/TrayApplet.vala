@@ -37,24 +37,7 @@ public class TrayAppletImpl : Budgie.Applet
         orientation_changed.connect((o)=> {
             tray.set_orientation(o);
         });
-        icon_size_changed.connect((i,s)=> {
-            if (tray != null) {
-                icon_size = s > 16 ? 24 : 16;
-                /* Sucks but meh - only icon sizes possible really. */
-                tray.set_icon_size(icon_size);
-            }
-        });
         integrate_tray();
-        /*
-        // When we get parented, go add the tray
-        notify["parent"].connect(()=> {
-            if (get_parent() != null) {
-                Idle.add(()=> {
-                    integrate_tray();
-                    return false;
-                });
-            }
-        });*/
     }
 
     public override void get_preferred_height(out int m, out int n)
