@@ -29,7 +29,7 @@ public class BudgieMenuApplet : Budgie.Applet
     protected Settings ksettings;
     Gtk.Image img;
     Gtk.Label label;
-    private string[] modifiers;
+    private string modifier;
 
     public BudgieMenuApplet()
     {
@@ -95,7 +95,7 @@ public class BudgieMenuApplet : Budgie.Applet
 
         popover.key_release_event.connect((e)=> {
             var human = Gdk.keyval_name(e.keyval);
-            if (human in modifiers) {
+            if (human == modifier) {
                 popover.hide();
                 return Gdk.EVENT_STOP;
             }
@@ -123,7 +123,7 @@ public class BudgieMenuApplet : Budgie.Applet
                 break;
             case "overlay-key":
                 /* Reset modifiers.. */
-                modifiers = ksettings.get_strv(key);
+                modifier = ksettings.get_string(key);
                 break;
             default:
                 break;
