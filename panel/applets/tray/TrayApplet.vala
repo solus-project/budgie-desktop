@@ -19,8 +19,8 @@ public class TrayApplet : Budgie.Plugin, Peas.ExtensionBase
 
 public class TrayAppletImpl : Budgie.Applet
 {
-    protected Na.Tray? tray;
-    protected int icon_size = 22;
+    protected Na.Tray? tray = null;
+    protected int icon_size = 24;
     Gtk.EventBox box;
 
     public TrayAppletImpl()
@@ -29,29 +29,51 @@ public class TrayAppletImpl : Budgie.Applet
         box = new Gtk.EventBox();
         add(box);
 
+        valign = Gtk.Align.CENTER;
+        box.valign = Gtk.Align.CENTER;
+        box.vexpand = false;
+        vexpand = false;
+
         orientation_changed.connect((o)=> {
             tray.set_orientation(o);
         });
         icon_size_changed.connect((i,s)=> {
             if (tray != null) {
-                icon_size = (int)s;
+                icon_size = s > 16 ? 24 : 16;
+                /* Sucks but meh - only icon sizes possible really. */
                 tray.set_icon_size(icon_size);
             }
         });
+        integrate_tray();
+        /*
         // When we get parented, go add the tray
-        notify.connect((o,p)=> {
-            if (p.name == "parent") {
-                integrate_tray();
+        notify["parent"].connect(()=> {
+            if (get_parent() != null) {
+                Idle.add(()=> {
+                    integrate_tray();
+                    return false;
+                });
             }
-        });
+        });*/
+    }
 
-        // looks a bit weird otherwise.
-        set_property("margin-bottom", 1);
+    public override void get_preferred_height(out int m, out int n)
+    {
+        m = icon_size;
+        n = icon_size;
+    }
+
+    public override void get_preferred_height_for_width(int w, out int m, out int n)
+    {
+        m = icon_size;
+        n = icon_size;
     }
 
     protected void integrate_tray()
     {
-        set_size_request(-1, -1);
+        if (tray != null) {
+            return;
+        }
         tray = new Na.Tray.for_screen(get_screen(), Gtk.Orientation.HORIZONTAL);
         tray.set_icon_size(icon_size);
         tray.set_padding(5);
