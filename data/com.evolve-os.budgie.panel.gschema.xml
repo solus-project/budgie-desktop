@@ -60,7 +60,7 @@
     </key>
 
     <key type="b" name="md-style">
-      <default>true</default>
+      <default>false</default>
       <summary>Extra animations</summary>
       <description>Whether to enable extra animations, such as the ripple effect, etc.</description>
     </key>
