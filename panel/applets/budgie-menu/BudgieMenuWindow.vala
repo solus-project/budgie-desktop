@@ -106,6 +106,8 @@ public class BudgieMenuWindow : Budgie.Popover
 
     protected int icon_size = 22;
 
+    bool track_scores = false;
+
     /* Reload menus, essentially. */
     public void refresh_tree()
     {
@@ -178,11 +180,15 @@ public class BudgieMenuWindow : Budgie.Popover
                     var btn = new MenuButton(appinfo, tree_root, icon_size);
                     btn.clicked.connect(()=> {
                         hide();
-                        btn.score++;
+                        if (track_scores) {
+                            btn.score++;
+                        }
                         launch_app(btn.info);
                         content.invalidate_sort();
                         content.invalidate_headers();
-                        save_scores();
+                        if (track_scores) {
+                            save_scores();
+                        }
                     });
                     content.add(btn);
                 }
@@ -201,6 +207,9 @@ public class BudgieMenuWindow : Budgie.Popover
     /* Apply "scores" to enable usage-sorting */
     protected void apply_scores()
     {
+        if (!track_scores) {
+            return;
+        }
         var scores = settings.get_value("app-scores");
 
         HashTable<string,int> m = new HashTable<string,int>(str_hash, str_equal);
@@ -237,6 +246,9 @@ public class BudgieMenuWindow : Budgie.Popover
     /* Save "scores" (usage-sorting */
     protected void save_scores()
     {
+        if (!track_scores) {
+            return;
+        }
 
         Variant[] children = null;
 
