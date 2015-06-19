@@ -471,16 +471,14 @@ public class IconButton : PaperButton
 public class PinnedIconButton : IconButton
 {
     public DesktopAppInfo app_info;
-    protected unowned Gdk.AppLaunchContext? context;
     public string? id = null;
     private Gtk.Menu alt_menu;
 
-    public PinnedIconButton(DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
+    public PinnedIconButton(DesktopAppInfo info, int size)
     {
         base(null, size, info);
         this.app_info = info;
 
-        this.context = context;
         set_tooltip_text("Launch %s".printf(info.get_display_name()));
         image.set_from_gicon(info.get_icon(), Gtk.IconSize.INVALID);
 
@@ -510,11 +508,8 @@ public class PinnedIconButton : IconButton
             }
             /* Launch ourselves. */
             try {
-                context.set_screen(get_screen());
-                context.set_timestamp(event.time);
-                var id = context.get_startup_notify_id(app_info, null);
-                this.id = id;
-                app_info.launch(null, this.context);
+                var cmdline = app_info.get_commandline();
+                Process.spawn_command_line_async(cmdline);
             } catch (Error e) {
                 /* Animate a UFAILED image? */
                 message(e.message);
@@ -569,7 +564,6 @@ public class IconTasklistAppletImpl : Budgie.Applet
     protected int icon_size = 32;
     private Settings settings;
 
-    protected Gdk.AppLaunchContext context;
     protected DesktopHelper helper;
 
     private unowned IconButton? active_button;
@@ -790,8 +784,6 @@ public class IconTasklistAppletImpl : Budgie.Applet
 
     public IconTasklistAppletImpl()
     {
-        this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
-
         helper = new DesktopHelper();
 
         // Easy mapping :)
@@ -883,7 +875,7 @@ public class IconTasklistAppletImpl : Budgie.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(info, icon_size, ref this.context);
+            var button = new PinnedIconButton(info, icon_size);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button, false, false, 0);
 
