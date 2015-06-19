@@ -570,7 +570,7 @@ public class BudgieMenuWindow : Budgie.Popover
         // Do it on the idle thread to make sure we don't have focus wars
         Idle.add(()=> {
             try {
-                var cmdline = info.get_commandline();
+                var cmdline = info.get_executable();
                 Process.spawn_command_line_async(cmdline);
             } catch (Error e) {
                 stdout.printf("Error launching application: %s\n", e.message);
