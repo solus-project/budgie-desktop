@@ -508,8 +508,7 @@ public class PinnedIconButton : IconButton
             }
             /* Launch ourselves. */
             try {
-                var cmdline = app_info.get_executable();
-                Process.spawn_command_line_async(cmdline);
+                app_info.launch(null, null);
             } catch (Error e) {
                 /* Animate a UFAILED image? */
                 message(e.message);
