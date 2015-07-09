@@ -16,8 +16,7 @@
     </method>
     <signal name="AcceleratorActivated">
       <arg type="u" name="action"/>
-      <arg type="u" name="device"/>
-      <arg type="u" name="timestamp"/>
+      <arg type="a{sv}" name="parameters"/>
     </signal>
   </interface>
 </node>

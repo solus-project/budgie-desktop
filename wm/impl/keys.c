@@ -159,7 +159,19 @@ static gboolean on_ungrab_accelerator(ShellKeyGrabber *grab,
  */
 static void on_activated(MetaDisplay *display, guint action, guint device_id)
 {
-        shell_key_grabber_emit_accelerator_activated(skel, action, device_id, meta_display_get_current_time(display));
+        GVariantBuilder *builder = NULL;
+        GVariant *params = NULL;
+
+        /* Cheers, flashback guys */
+        builder = g_variant_builder_new(G_VARIANT_TYPE("a{sv}"));
+        g_variant_builder_add(builder, "{sv}", "device-id", g_variant_new_uint32(device_id));
+        g_variant_builder_add(builder, "{sv}", "timestamp", g_variant_new_uint32(0));
+        g_variant_builder_add(builder, "{sv}", "action-mode", g_variant_new_uint32(0));
+
+        params = g_variant_new("a{sv}", builder);
+        g_variant_builder_unref(builder);
+
+        shell_key_grabber_emit_accelerator_activated(skel, action, params);
 }
 
 /**
