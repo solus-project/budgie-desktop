@@ -146,7 +146,7 @@ msgstr "简洁程序列表"
 
 #: ../panel/Editor.vala:643
 msgid "Use a smaller menu with no category navigation"
-msgstr "用没有分类的小程序列表""
+msgstr "用没有分类的小程序列表"
 
 #: ../panel/Editor.vala:649
 msgid "Category headers in menu"
