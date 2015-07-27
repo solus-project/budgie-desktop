@@ -15,21 +15,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_HK\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../panel/BudgiePanel.vala:360
 msgid "Preferences..."
-msgstr "設定..."
+msgstr "设置..."
 
 #. resizable = false;
 #: ../panel/Editor.vala:95
 msgid "Panel preferences"
-msgstr "面板設定"
+msgstr "面板设置"
 
 #: ../panel/Editor.vala:126
 msgid "Appearance"
-msgstr "外觀"
+msgstr "外观"
 
 #: ../panel/Editor.vala:130
 msgid "Applets"
@@ -37,7 +37,7 @@ msgstr "小程序"
 
 #: ../panel/Editor.vala:134
 msgid "Menu"
-msgstr "程式功能表"
+msgstr "程序功能表"
 
 #: ../panel/Editor.vala:138
 msgid "Panel"
@@ -81,7 +81,7 @@ msgstr "加入"
 #: ../panel/Editor.vala:565
 #, c-format
 msgid "Panel configuration"
-msgstr "面板設定"
+msgstr "面板设置"
 
 #: ../panel/Editor.vala:579
 msgid "GNOME Panel theme integration"
@@ -93,7 +93,7 @@ msgstr "喺面版度用一個比較傳統嘅樣"
 
 #: ../panel/Editor.vala:585
 msgid "Enable panel shadow"
-msgstr "啟用面板陰影"
+msgstr "启用面板陰影"
 
 #: ../panel/Editor.vala:585
 msgid "Adds a shadow to the panels edge"
@@ -105,11 +105,11 @@ msgstr "上面"
 
 #: ../panel/Editor.vala:592
 msgid "Left"
-msgstr "左邊"
+msgstr "左边"
 
 #: ../panel/Editor.vala:593
 msgid "Right"
-msgstr "右邊"
+msgstr "右边"
 
 #: ../panel/Editor.vala:594
 msgid "Bottom"
@@ -125,20 +125,20 @@ msgstr "完全唔好"
 
 #: ../panel/Editor.vala:610
 msgid "Automatic"
-msgstr "自動"
+msgstr "自动"
 
 #: ../panel/Editor.vala:612
 msgid "Autohide policy"
-msgstr "自動隱藏特性"
+msgstr "自动隐藏特性"
 
 #: ../panel/Editor.vala:623
 #, c-format
 msgid "Menu configuration"
-msgstr "程式功能表設定"
+msgstr "程序功能表设置"
 
 #: ../panel/Editor.vala:637
 msgid "Menu label on panel"
-msgstr "程式功能表字樣喺面板上面"
+msgstr "程序功能表字样喺面板上面"
 
 #: ../panel/Editor.vala:643
 msgid "Compact menu"
@@ -162,15 +162,15 @@ msgstr "同程式功能表入面嘅圖示揀大細"
 
 #: ../panel/Editor.vala:664
 msgid "Menu label"
-msgstr "程式功能表字樣"
+msgstr "程序功能表字样"
 
 #: ../panel/Editor.vala:672
 msgid "Menu icon"
-msgstr "程式功能表圖示"
+msgstr "程序功能表图标"
 
 #: ../panel/Editor.vala:672
 msgid "Set an icon to use for menu"
-msgstr "同程式功能表搵一個圖示"
+msgstr "同程序功能表搵一個圖示"
 
 #: ../panel/Editor.vala:726
 #, c-format
@@ -179,24 +179,24 @@ msgstr "個人化Budgie"
 
 #: ../panel/Editor.vala:738
 msgid "Dark theme"
-msgstr "深色主題"
+msgstr "深色主题"
 
 #: ../panel/Editor.vala:738
 msgid "Activate the dark theme option for the Budgie desktop"
-msgstr "喺Budgie桌面入面使用深色主題"
+msgstr "喺Budgie桌面入面使用深色主题"
 
 #: ../panel/Editor.vala:746
 msgid "Widget theme"
-msgstr "界面主題"
+msgstr "界面主题"
 
 #: ../panel/Editor.vala:746
 msgid "Select a widget (GTK+) theme to use for applications"
-msgstr "揀一個喺程式入面用嘅界面(GTK+)主題"
+msgstr "揀一個喺程式入面用嘅界面(GTK+)主题"
 
 #: ../panel/Editor.vala:753
 msgid "Window theme"
-msgstr "窗口主題"
+msgstr "窗口主题"
 
 #: ../panel/Editor.vala:760
 msgid "Icon theme"
-msgstr "圖示主題"
+msgstr "图标主题"
