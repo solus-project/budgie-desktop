@@ -106,6 +106,7 @@ PanelToplevel .launcher:hover {
     border-radius: 6px;
     border: solid alpha(white, 0.1) 1px;
 }
+
 .budgie-panel .menu-icon,
 .budgie-panel .menu-icon:checked,
 .budgie-panel .menu-icon:hover {
@@ -118,8 +119,12 @@ PanelToplevel .launcher:hover {
 }
 
 .budgie-panel * {
-    color: white;
     icon-shadow: 1px 1px alpha(black, 0.5);
+}
+
+.budgie-panel .menu-icon *,
+.budgie-panel .message-area * {
+    color: white;
 }
 
 .dark .dim-label {
