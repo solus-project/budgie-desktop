@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="arc-panel">
+  <enum id="com.solus-project.arc-panel.Position">
+      <value nick="none" value="1" />
+      <value nick="bottom" value="2" />
+      <value nick="top" value="4" />
+      <value nick="left" value="16" />
+  </enum>
+
   <schema id="com.solus-project.arc-panel.panel">
-    <key type="s" name="location">
-      <choices>
-        <choice value='top'/>
-        <choice value='bottom'/>
-        <choice value='left'/>
-        <choice value='right'/>
-      </choices>
-      <default>'top'</default>
+    <key enum="com.solus-project.arc-panel.Position" name="location">
+      <default>'none'</default>
       <summary>Panel location</summary>
       <description>Which screen edge to place the panel on</description>
     </key>
