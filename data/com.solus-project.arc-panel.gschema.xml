@@ -6,6 +6,10 @@
       <value nick="top" value="4" />
       <value nick="left" value="16" />
   </enum>
+  <enum id="com.solus-project.arc-panel.PackType">
+      <value nick="start" value="1" />
+      <value nick="end" value="2" />
+  </enum>
 
   <schema id="com.solus-project.arc-panel.panel">
     <key enum="com.solus-project.arc-panel.Position" name="location">
@@ -27,8 +31,45 @@
     </key>
   </schema>
 
+  <schema id="com.solus-project.arc-panel.applet">
+    <key enum="com.solus-project.arc-panel.PackType" name="pack-type">
+      <default>'start'</default>
+      <summary>Pack type</summary>
+      <description>Where to pack the applet</description>
+    </key>
+
+    <key type="i" name="position">
+      <default>0</default>
+      <summary>Applet position</summary>
+      <description>Pack index for this applet</description>
+    </key>
+
+    <key type="i" name="padding-start">
+      <default>0</default>
+      <summary>Start padding</summary>
+      <description>Padding for the start edge of this applet</description>
+    </key>
+
+    <key type="i" name="padding-end">
+      <default>0</default>
+      <summary>End padding</summary>
+      <description>Padding for the end edge of this applet</description>
+    </key>
+
+    <key type="b" name="status-area">
+      <default>false</default>
+      <summary>Applet lives in status area</summary>
+      <description>Whether this applet lives in the status area</description>
+    </key>
+  </schema>
+
   <schema path="/com/solus-project/arc-panel/" id="com.solus-project.arc-panel">
     <key type="as" name="panels">
+      <default>[]</default>
+      <summary>Toplevel panels</summary>
+      <description>Toplevel panels</description>
+    </key>
+    <key type="as" name="applets">
       <default>[]</default>
       <summary>Toplevel panels</summary>
       <description>Toplevel panels</description>
