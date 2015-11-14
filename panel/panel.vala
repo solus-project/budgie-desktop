@@ -54,13 +54,16 @@ public class Panel : Gtk.Window
 
     public Arc.PanelPosition? position;
 
+    public Settings settings { construct set ; public get; }
+    public string uuid { construct set ; public get; }
+
     PopoverManager manager;
     bool expanded = true;
 
     Arc.ShadowBlock shadow;
 
     construct {
-        position = PanelPosition.BOTTOM;
+        position = PanelPosition.NONE;
     }
 
     /**
@@ -79,6 +82,9 @@ public class Panel : Gtk.Window
                 small.width = intended_height;
                 break;
         }
+        if (position != this.position) {
+            this.settings.set_enum(Arc.PANEL_KEY_POSITION, position);
+        }
         this.position = position;
         this.small_scr = small;
         this.orig_scr = screen;
@@ -94,9 +100,9 @@ public class Panel : Gtk.Window
         placement();
     }
 
-    public Panel()
+    public Panel(string? uuid, Settings? settings)
     {
-        Object(type_hint: Gdk.WindowTypeHint.DOCK);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, settings: settings, uuid: uuid);
 
 
         load_css();

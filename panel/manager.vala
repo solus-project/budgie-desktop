@@ -8,6 +8,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
+ 
+using LibUUID;
 
 namespace Arc
 {
@@ -33,7 +35,33 @@ struct Screen {
     Gdk.Rectangle area;
 }
 
-public static const uint MAX_SLOTS = 4;
+/**
+ * Maximum slots. 4 because that's generally how many sides a rectangle has..
+ */
+public static const uint MAX_SLOTS         = 4;
+
+/**
+ * Root prefix for fixed schema
+ */
+public static const string ROOT_SCHEMA     = "com.solus-project.arc-panel";
+
+/**
+ * Relocatable schema ID for toplevel panels
+ */
+public static const string TOPLEVEL_SCHEMA = "com.solus-project.arc-panel.panel";
+
+/**
+ * Prefix for all relocatable panel settings
+ */
+public static const string TOPLEVEL_PREFIX = "/com/solus-project/arc-panel/panels";
+
+/**
+ * Known panels
+ */
+public static const string ROOT_KEY_PANELS    = "panels";
+
+/** Panel position */
+public static const string PANEL_KEY_POSITION = "location";
 
 [DBus (name = "com.solus_project.arc.Panel")]
 public class PanelManagerIface
@@ -57,11 +85,17 @@ public class PanelManager
     HashTable<string,Arc.Panel?> panels;
 
     int primary_monitor = 0;
+    Settings settings;
 
     public PanelManager()
     {
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
         panels = new HashTable<string,Arc.Panel?>(str_hash, str_equal);
+    }
+
+    string create_panel_path(string uuid)
+    {
+        return "%s/{%s}/".printf(Arc.TOPLEVEL_PREFIX, uuid);
     }
 
     /**
@@ -122,7 +156,29 @@ public class PanelManager
     public void on_name_acquired(DBusConnection conn, string name)
     {
         this.setup = true;
-        create_panels();
+        /* Well, off we go to be a panel manager. */
+        do_setup();
+    }
+
+    /**
+     * Initial setup, once we've owned the dbus name
+     * i.e. no risk of dying
+     */
+    void do_setup()
+    {
+        var scr = Gdk.Screen.get_default();
+        primary_monitor = scr.get_primary_monitor();
+        scr.monitors_changed.connect(this.on_monitors_changed);
+
+        this.on_monitors_changed();
+
+        settings = new GLib.Settings(Arc.ROOT_SCHEMA);
+        if (!load_panels()) {
+            message("Creating default panel layout");
+            create_default();
+        } else {
+            message("Loading existing configuration");
+        }
     }
 
     /**
@@ -166,23 +222,173 @@ public class PanelManager
     }
 
     /**
-     * For now we're creating one hard-coded panel, in future we'll add
-     * all the known panels on screen
+     * Load a panel by the given UUID, and optionally configure it
      */
-    void create_panels()
+    void load_panel(string uuid, bool configure = false)
     {
-        var scr = Gdk.Screen.get_default();
-        primary_monitor = scr.get_primary_monitor();
-        scr.monitors_changed.connect(this.on_monitors_changed);
+        if (panels.contains(uuid)) {
+            return;
+        }
 
-        this.on_monitors_changed();
+        string path = this.create_panel_path(uuid);
+        PanelPosition position;
+
+        var settings = new GLib.Settings.with_path(Arc.TOPLEVEL_SCHEMA, path);
+        Arc.Panel? panel = new Arc.Panel(uuid, settings);
+        panels.insert(uuid, panel);
+
+        if (!configure) {
+            return;
+        }
+
+        position = (PanelPosition)settings.get_enum(Arc.PANEL_KEY_POSITION);
+        this.show_panel(uuid, position);
+    }
+
+    void show_panel(string uuid, PanelPosition position)
+    {
+        Arc.Panel? panel = panels.lookup(uuid);
+        Screen? scr;
+
+        if (panel == null) {
+            warning("Asked to show non-existent panel: %s", uuid);
+            return;
+        }
+
+        scr = screens.lookup(this.primary_monitor);
+        if ((scr.slots & position) != 0) {
+            scr.slots |= position;
+        }
+        this.set_placement(uuid, position);
+    }
+
+    /**
+     * Enforce panel placement
+     */
+    void set_placement(string uuid, PanelPosition position)
+    {
+        Arc.Panel? panel = panels.lookup(uuid);
+        string? key = null;
+        Arc.Panel? val = null;
+        Arc.Panel? conflict = null;
+
+        if (panel == null) {
+            warning("Trying to move non-existent panel: %s", uuid);
+            return;
+        }
         Screen? area = screens.lookup(primary_monitor);
 
-        panel = new Arc.Panel();
-        /* Demo, need to actually load from gsettings */
-        PanelPosition pos = get_first_position(this.primary_monitor);
-        panel.update_geometry(area.area, pos);
+        PanelPosition old = panel.position;
+
+        if (old == position) {
+            warning("Attempting to move panel to the same position it's already in");
+            return;
+        }
+
+        /* Attempt to find a conflicting position */
+        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        while (iter.next(out key, out val)) {
+            if (val.position == position) {
+                conflict = val;
+                break;
+            }
+        }
+
+        panel.hide();
+        if (conflict != null) {
+            conflict.hide();
+            conflict.update_geometry(area.area, old);
+            conflict.show();
+        } else {
+            area.slots ^= old;
+            area.slots |= position;
+            panel.update_geometry(area.area, position);
+        }
+
+        /* This does mean re-configuration a couple of times that could
+         * be avoided, but it's just to ensure proper functioning..
+         */
+        this.update_screen();
         panel.show();
+    }
+
+    /**
+     * Force update geometry for all panels
+     */
+    void update_screen()
+    {
+        string? key = null;
+        Arc.Panel? val = null;
+        Screen? area = screens.lookup(primary_monitor);
+        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        while (iter.next(out key, out val)) {
+            val.update_geometry(area.area, val.position);
+        }
+    }
+
+    /**
+     * Load all known panels
+     */
+    bool load_panels()
+    {
+        string[] panels = this.settings.get_strv(Arc.ROOT_KEY_PANELS);
+        if (panels.length == 0) {
+            return false;
+        }
+
+        foreach (string uuid in panels) {
+            this.load_panel(uuid, true);
+        }
+
+        this.update_screen();
+        return true;
+    }
+
+    void create_panel()
+    {
+        if (this.slots_available() < 1) {
+            warning("Asked to create panel with no slots available");
+            return;
+        }
+
+        var position = get_first_position(this.primary_monitor);
+        if (position == PanelPosition.NONE) {
+            critical("No slots available, this should not happen");
+            return;
+        }
+
+        var uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        load_panel(uuid, false);
+
+        set_panels();
+        show_panel(uuid, position);
+    }
+
+    /**
+     * Update our known panels
+     */
+    void set_panels()
+    {
+        unowned Arc.Panel? panel;
+        unowned string? key;
+        string[]? keys = null;
+
+        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        while (iter.next(out key, out panel)) {
+            keys += key;
+        }
+
+        this.settings.set_strv(Arc.ROOT_KEY_PANELS, keys);
+    }
+
+    /**
+     * Create new default panel layout
+     */
+    void create_default()
+    {
+        /* Eventually we'll do something fancy with defaults, when
+         * applet loading lands */
+        create_panel();
     }
 
     private void on_name_lost(DBusConnection conn, string name)
