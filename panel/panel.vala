@@ -66,6 +66,9 @@ public class Panel : Gtk.Window
         position = PanelPosition.NONE;
     }
 
+    /* Multiplier for strut operations on hi-dpi */
+    int scale = 1;
+
     /**
      * Force update the geometry
      */
@@ -104,7 +107,7 @@ public class Panel : Gtk.Window
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, settings: settings, uuid: uuid);
 
-
+        scale = get_scale_factor();
         load_css();
 
         manager = new PopoverManager(this);
@@ -204,7 +207,7 @@ public class Panel : Gtk.Window
 
     void placement()
     {
-        Arc.set_struts(this, position, intended_height - 5);
+        Arc.set_struts(this, position, (intended_height - 5)*this.scale);
         switch (position) {
             case Arc.PanelPosition.TOP:
                 move(orig_scr.x, orig_scr.y);
