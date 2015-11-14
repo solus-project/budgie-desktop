@@ -78,9 +78,6 @@ public class PanelManager
     private PanelManagerIface? iface;
     bool setup = false;
 
-    /* We'll fix this later on.. */
-    Arc.Panel? panel;
-
     HashTable<int,Screen?> screens;
     HashTable<string,Arc.Panel?> panels;
 
