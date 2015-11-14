@@ -6,6 +6,8 @@ bin_PROGRAMS = arc-panel
 
 arc_panel_SOURCES = \
 	main.vala \
+	panel.vala \
+	utils.vala \
 	manager.vala 
 
 arc_panel_CFLAGS = \

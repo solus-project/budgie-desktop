@@ -30,6 +30,9 @@ public class PanelManager
     private PanelManagerIface? iface;
     bool setup = false;
 
+    /* We'll fix this later on.. */
+    Arc.Panel? panel;
+
     public PanelManager()
     {
         /* TODO: Add init code */
@@ -46,8 +49,20 @@ public class PanelManager
         }
     }
 
-    public void on_name_acquired(DBusConnection conn, string name) {
+    public void on_name_acquired(DBusConnection conn, string name)
+    {
         this.setup = true;
+        create_panels();
+    }
+
+    /**
+     * For now we're creating one hard-coded panel, in future we'll add
+     * all the known panels on screen
+     */
+    void create_panels()
+    {
+        panel = new Arc.Panel();
+        panel.show();
     }
 
     private void on_name_lost(DBusConnection conn, string name)
