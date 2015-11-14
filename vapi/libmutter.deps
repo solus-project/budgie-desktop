@@ -1,0 +1,9 @@
+cairo
+clutter-1.0
+cogl-1.0
+gdesktopenums-3.0
+gdk-3.0
+gdk-pixbuf-2.0
+gtk+-3.0
+x11
+xfixes-4.0

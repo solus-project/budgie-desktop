@@ -1,0 +1,23 @@
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+compile
+config.*
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+*.stamp
+*.dirstamp
+.deps
+missing
+m4/
+*.o
+stamp-h*
+
+
+# panel
+/panel/arc-panel
+/panel/*.c
