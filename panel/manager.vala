@@ -78,6 +78,9 @@ public class PanelManager
 
         screens.remove_all();
 
+        /* When we eventually get monitor-specific panels we'll find the ones that
+         * were left stray and find new homes, or temporarily disable
+         * them */
         for (int i = 0; i < scr.get_n_monitors(); i++) {
             Gdk.Rectangle usable_area;
             scr.get_monitor_geometry(i, out usable_area);

@@ -222,6 +222,7 @@ public class Panel : Gtk.Window
         } else {
             this.scr = this.small_scr;
         }
+        queue_resize();
         placement();
     }
 
