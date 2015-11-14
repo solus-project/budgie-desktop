@@ -29,6 +29,13 @@
       <summary>Enable panel shadow</summary>
       <description>Whether to enable an aesthetic drop shadow for the panel</description>
     </key>
+
+    <key type="as" name="applets">
+      <default>[]</default>
+      <summary>Configured applets</summary>
+      <description>Configured applets for this toplevel</description>
+    </key>
+
   </schema>
 
   <schema id="com.solus-project.arc-panel.applet">
@@ -65,11 +72,6 @@
 
   <schema path="/com/solus-project/arc-panel/" id="com.solus-project.arc-panel">
     <key type="as" name="panels">
-      <default>[]</default>
-      <summary>Toplevel panels</summary>
-      <description>Toplevel panels</description>
-    </key>
-    <key type="as" name="applets">
       <default>[]</default>
       <summary>Toplevel panels</summary>
       <description>Toplevel panels</description>
