@@ -23,6 +23,7 @@ bin_PROGRAMS = arc-panel
 arc_panel_SOURCES = \
 	arc-panel-resources.h \
 	arc-panel-resources.c \
+	uuid.vala \
 	main.vala \
 	panel.vala \
 	utils.vala \
@@ -31,13 +32,17 @@ arc_panel_SOURCES = \
 arc_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
-	$(GIO_UNIX_CFLAGS)
+	$(GIO_UNIX_CFLAGS) \
+	$(UUID_CFLAGS)
 
 arc_panel_LDADD = \
 	$(GOBJECT_LIBS) \
-	$(GTK3_LIBS)
+	$(GTK3_LIBS) \
+	$(UUID_LIBS)
 
 arc_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
+	--pkg libuuid \
+	--vapidir=${top_srcdir}/vapi \
 	$(VALAFLAGS)
