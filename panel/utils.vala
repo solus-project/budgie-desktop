@@ -108,8 +108,6 @@ public class VShadowBlock : Gtk.EventBox
 
 /**
  * Alternative to a separator, gives a shadow effect :)
- *
- * @note Until we need otherwise, this is a vertical only widget..
  */
 public class HShadowBlock : Gtk.EventBox
 {
