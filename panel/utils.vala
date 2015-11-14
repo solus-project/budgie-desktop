@@ -12,15 +12,6 @@
 namespace Arc
 {
 
-    public enum PanelPosition
-    {
-        BOTTOM = 0,
-        TOP,
-        LEFT,
-        RIGHT
-    }
-
-
     public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)
     {
         Gdk.Atom atom;

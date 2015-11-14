@@ -186,15 +186,21 @@ public class Panel : Gtk.Window
     Gtk.Box layout;
     Gtk.Box main_layout;
 
-    public PanelPosition position = PanelPosition.BOTTOM;
+    public Arc.PanelPosition? position;
+
     PopoverManager manager;
     bool expanded = true;
 
     Arc.HShadowBlock shadow;
 
+    construct {
+        position = PanelPosition.BOTTOM;
+    }
+
     public Panel()
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK);
+
 
         load_css();
 
