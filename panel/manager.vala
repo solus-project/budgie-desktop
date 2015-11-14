@@ -170,8 +170,11 @@ public class PanelManager
         scr.monitors_changed.connect(this.on_monitors_changed);
 
         this.on_monitors_changed();
+        Screen? area = screens.lookup(primary_monitor);
 
         panel = new Arc.Panel();
+        /* Hacky, deal with this another time.. */
+        panel.update_geometry(area.area, PanelPosition.BOTTOM);
         panel.show();
     }
 

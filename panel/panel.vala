@@ -197,6 +197,34 @@ public class Panel : Gtk.Window
         position = PanelPosition.BOTTOM;
     }
 
+    /**
+     * Force update the geometry
+     */
+    public void update_geometry(Gdk.Rectangle screen, PanelPosition position)
+    {
+        Gdk.Rectangle small = screen;
+
+        switch (position) {
+            case PanelPosition.TOP:
+            case PanelPosition.BOTTOM:
+                small.height = intended_height;
+                break;
+            default:
+                small.width = intended_height;
+                break;
+        }
+        this.position = position;
+        this.small_scr = small;
+        this.orig_scr = screen;
+
+        if (this.expanded) {
+            this.scr = this.orig_scr;
+        } else {
+            this.scr = this.small_scr;
+        }
+        placement();
+    }
+
     public Panel()
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK);
@@ -216,16 +244,6 @@ public class Panel : Gtk.Window
         app_paintable = true;
         get_style_context().add_class("arc-container");
 
-        // TODO: Track
-        var mon = screen.get_primary_monitor();
-        screen.get_monitor_geometry(mon, out orig_scr);
-
-        /* Smaller.. */
-        small_scr = orig_scr;
-        small_scr.height = intended_height;
-
-        scr = small_scr;
-
         main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_layout);
 
@@ -244,10 +262,14 @@ public class Panel : Gtk.Window
         shadow.required_size = orig_scr.width;
         main_layout.pack_start(shadow, false, false, 0);
 
-        realize();
-        placement();
         get_child().show_all();
         set_expanded(false);
+    }
+
+    public override void map()
+    {
+        base.map();
+        placement();
     }
 
     void load_css()
