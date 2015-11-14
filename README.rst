@@ -2,7 +2,11 @@ arc-desktop
 -----------
 
 The Arc Desktop is the successor to the Budgie Desktop, with a focus
-on modern style and function, as well as Wayland compatibility.
+on modern style and function.
+
+Note that this work will be merged *back* into the Budgie Desktop
+repo on GitHub upon completion - the name-change is SOLELY to make
+it parallel installable and help me with debugging.
 
 License
 =======
