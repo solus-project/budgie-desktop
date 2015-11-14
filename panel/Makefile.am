@@ -5,7 +5,8 @@ EXTRA_DIST =
 bin_PROGRAMS = arc-panel
 
 arc_panel_SOURCES = \
-	main.vala
+	main.vala \
+	manager.vala 
 
 arc_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \

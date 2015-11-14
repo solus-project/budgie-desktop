@@ -9,7 +9,33 @@
  * (at your option) any later version.
  */
 
+static bool replace = false;
+
+const GLib.OptionEntry[] options = {
+    { "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" },
+    { null }
+};
+
 public static int main(string[] args)
 {
+    Gtk.init(ref args);
+    OptionContext ctx;
+
+    ctx = new OptionContext("- Arc Panel");
+    ctx.set_help_enabled(true);
+    ctx.add_main_entries(options, null);
+    ctx.add_group(Gtk.get_option_group(false));
+
+    try {
+        ctx.parse(ref args);
+    } catch (Error e) {
+        stderr.printf("Error: %s\n", e.message);
+        return 0;
+    }
+
+    var manager = new Arc.PanelManager();
+    manager.serve(replace);
+
+    Gtk.main();
     return 0;
 }
