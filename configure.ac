@@ -53,6 +53,7 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext package to be used])
 
 AC_CONFIG_FILES([Makefile
+                data/Makefile
                 gvc/Makefile
                 panel/Makefile])
 AC_OUTPUT

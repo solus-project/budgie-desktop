@@ -21,3 +21,4 @@ stamp-h*
 # panel
 /panel/arc-panel
 /panel/*.c
+arc-panel-resources.*

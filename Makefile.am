@@ -12,5 +12,6 @@ NULL =
 CLEANFILES =
 
 SUBDIRS = \
+	data \
 	gvc \
 	panel
