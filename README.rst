@@ -35,6 +35,15 @@ Note that it is intentional for the toplevel `ArcPanel` object to
 be transparent, as it contains the `ArcMainPanel` and `ArcShadowBlock`
 within a singular window.
 
+Testing
+=======
+
+As and when new features are implemented - it can be helpful to reset
+the configuration to the defaults to ensure everything is still working
+ok. To reset the entire configuration tree, issue::
+
+    dconf reset -f /com/solus-project/arc-panel/  
+
 Authors
 =======
 
