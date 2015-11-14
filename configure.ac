@@ -16,10 +16,10 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
 
 # Package requirements
-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.40.0])
-PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.40.0])
-PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.14.0])
-PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.38.0])
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.44.0])
+PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.44.0])
+PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.16.0])
+PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.44.0])
 PKG_CHECK_MODULES([UUID], [uuid])
 
 PULSE_MIN_VERS=2.0
@@ -41,10 +41,10 @@ AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
 AC_CONFIG_MACRO_DIR([m4])
 
-GOBJECT_INTROSPECTION_CHECK([1.38.0])
+GOBJECT_INTROSPECTION_CHECK([1.44.0])
 
 # Need Vala.
-AM_PROG_VALAC([0.30], [], [AC_MSG_ERROR([valac is required to build Arc Desktop])])
+AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Arc Desktop])])
 
 
 AC_SUBST(VALAFLAGS)
