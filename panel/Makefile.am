@@ -23,11 +23,12 @@ bin_PROGRAMS = arc-panel
 arc_panel_SOURCES = \
 	arc-panel-resources.h \
 	arc-panel-resources.c \
-	uuid.vala \
 	main.vala \
+	manager.vala \
 	panel.vala \
+	popovers.vala \
 	utils.vala \
-	manager.vala 
+	uuid.vala
 
 arc_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
