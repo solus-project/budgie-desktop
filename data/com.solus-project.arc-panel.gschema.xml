@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="arc-panel">
+  <schema id="com.solus-project.arc-panel.panel">
+    <key type="s" name="location">
+      <choices>
+        <choice value='top'/>
+        <choice value='bottom'/>
+        <choice value='left'/>
+        <choice value='right'/>
+      </choices>
+      <default>'top'</default>
+      <summary>Panel location</summary>
+      <description>Which screen edge to place the panel on</description>
+    </key>
+
+    <key type="i" name="size">
+      <default>42</default>
+      <summary>Panel size</summary>
+      <description>Height of panel if horizontal, or the width if it is vertical</description>
+    </key>
+
+    <key type="b" name="enable-shadow">
+      <default>true</default>
+      <summary>Enable panel shadow</summary>
+      <description>Whether to enable an aesthetic drop shadow for the panel</description>
+    </key>
+  </schema>
+
+  <schema path="/com/solus-project/arc-panel/" id="com.solus-project.arc-panel">
+    <key type="as" name="panels">
+      <default>[]</default>
+      <summary>Toplevel panels</summary>
+      <description>Toplevel panels</description>
+    </key>
+  </schema>
+</schemalist>

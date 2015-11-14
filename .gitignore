@@ -17,6 +17,8 @@ m4/
 *.o
 stamp-h*
 
+# data
+/data/*.valid
 
 # panel
 /panel/arc-panel
