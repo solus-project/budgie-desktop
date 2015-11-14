@@ -13,6 +13,28 @@ License
 
 arc-desktop is available under the terms of the GPL-2.0 license
 
+Theming
+=======
+
+Please look at ./data/default.css to override aspects of the default
+theming.
+
+Alternatively, you may invoke the panel with the GTK Inspector to
+analyse the structure::
+
+    arc-panel --gtk-debug=interactive --replace
+
+If you are validating changes from a git clone, then::
+
+    ./panel/arc-panel --gtk-debug=interactive --replace
+
+Note that for local changes, GSettings schemas and applets are expected
+to be installed first with `make install`.
+
+Note that it is intentional for the toplevel `ArcPanel` object to
+be transparent, as it contains the `ArcMainPanel` and `ArcShadowBlock`
+within a singular window.
+
 Authors
 =======
 
