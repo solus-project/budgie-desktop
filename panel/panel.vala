@@ -57,7 +57,7 @@ public class Panel : Gtk.Window
     PopoverManager manager;
     bool expanded = true;
 
-    Arc.HShadowBlock shadow;
+    Arc.ShadowBlock shadow;
 
     construct {
         position = PanelPosition.BOTTOM;
@@ -88,6 +88,8 @@ public class Panel : Gtk.Window
         } else {
             this.scr = this.small_scr;
         }
+        shadow.required_size = orig_scr.width;
+        this.shadow.position = position;
         queue_resize();
         placement();
     }
@@ -122,11 +124,10 @@ public class Panel : Gtk.Window
         main_layout.valign = Gtk.Align.START;
 
         /* Shadow.. */
-        shadow = new Arc.HShadowBlock();
+        shadow = new Arc.ShadowBlock(this.position);
         shadow.hexpand = false;
         shadow.halign = Gtk.Align.START;
         shadow.show_all();
-        shadow.required_size = orig_scr.width;
         main_layout.pack_start(shadow, false, false, 0);
 
         get_child().show_all();

@@ -18,6 +18,8 @@ public static const string DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
 /**
  * Available slots
  */
+
+[Flags]
 public enum PanelPosition {
     NONE        = 1 << 0,
     BOTTOM      = 1 << 1,

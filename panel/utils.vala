@@ -70,40 +70,42 @@ namespace Arc
             32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
-/**
- * Alternative to a separator, gives a shadow effect :)
- *
- * @note Until we need otherwise, this is a vertical only widget..
- */
-public class VShadowBlock : Gtk.EventBox
-{
-
-    public VShadowBlock()
+    public static string position_class_name(PanelPosition position)
     {
-        get_style_context().add_class("shadow-block");
-        get_style_context().add_class("vertical");
+        switch (position) {
+            case PanelPosition.TOP:
+                return "top";
+            case PanelPosition.BOTTOM:
+                return "bottom";
+            case PanelPosition.LEFT:
+                return "left";
+            case PanelPosition.RIGHT:
+                return "right";
+            default:
+                return "";
+        }
     }
-
-    public override void get_preferred_width(out int min, out int nat)
-    {
-        min = 5;
-        nat = 5;
-    }
-
-    public override void get_preferred_width_for_height(int height, out int min, out int nat)
-    {
-        min = 5;
-        nat = 5;
-    }
-}
 
 /**
  * Alternative to a separator, gives a shadow effect :)
  */
-public class HShadowBlock : Gtk.EventBox
+public class ShadowBlock : Gtk.EventBox
 {
 
     private int size;
+    private PanelPosition pos;
+    private bool horizontal = false;
+
+    public PanelPosition position {
+        public set {
+            var old = pos;
+            pos = value;
+            update_position(old);
+        }
+        public get {
+            return pos;
+        }
+    }
 
     public int required_size {
         public set {
@@ -115,34 +117,68 @@ public class HShadowBlock : Gtk.EventBox
         }
     }
 
-    public HShadowBlock()
+    void update_position(PanelPosition? old)
+    {
+        string? rm = Arc.position_class_name(old);
+        string? add = Arc.position_class_name(pos);
+        var style = get_style_context();
+
+        if (pos == PanelPosition.TOP || pos == PanelPosition.BOTTOM) {
+            horizontal = true;
+        } else {
+            horizontal = false;
+        }
+
+        style.remove_class(rm);
+        style.add_class(add);
+        queue_resize();
+    }
+
+    public ShadowBlock(PanelPosition position)
     {
         get_style_context().add_class("shadow-block");
-        get_style_context().add_class("horizontal");
+        get_style_context().remove_class("background");
+        this.position = position;
     }
 
     public override void get_preferred_height(out int min, out int nat)
     {
-        min = 5;
-        nat = 5;
+        if (horizontal) {
+            min = 5;
+            nat = 5;
+            return;
+        };
+        min = nat = required_size;
     }
 
     public override void get_preferred_height_for_width(int width, out int min, out int nat)
     {
-        min = 5;
-        nat = 5;
+        if (horizontal) {
+            min = 5;
+            nat = 5;
+            return;
+        }
+        min = nat = required_size;
     }
 
     public override void get_preferred_width(out int min, out int nat)
     {
-        min = required_size;
-        nat = required_size;
+        if (horizontal) {
+            min = required_size;
+            nat = required_size;
+            return;
+        }
+        min = nat = 5;
     }
 
     public override void get_preferred_width_for_height(int height, out int min, out int nat)
     {
-        min = required_size;
-        nat = required_size;
+        if (horizontal) {
+            min = required_size;
+            nat = required_size;
+            return;
+        }
+        min = nat = 5;
     }
 }
 
