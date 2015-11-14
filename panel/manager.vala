@@ -94,7 +94,8 @@ public class PanelManager
         iter = HashTableIter<string,Arc.Panel?>(panels);
         while (iter.next(out uuid, out panel)) {
             if (mon != this.primary_monitor) {
-                /* Force geometry change! */
+                /* Force existing panels to update to new primary display */
+                panel.update_geometry(primary.area, panel.position);
             }
             /* Re-take the position */
             primary.slots |= panel.position;
@@ -173,8 +174,9 @@ public class PanelManager
         Screen? area = screens.lookup(primary_monitor);
 
         panel = new Arc.Panel();
-        /* Hacky, deal with this another time.. */
-        panel.update_geometry(area.area, PanelPosition.BOTTOM);
+        /* Demo, need to actually load from gsettings */
+        PanelPosition pos = get_first_position(this.primary_monitor);
+        panel.update_geometry(area.area, pos);
         panel.show();
     }
 
