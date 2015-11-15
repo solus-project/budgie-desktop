@@ -63,7 +63,10 @@ GtkPopover GtkListBoxRow {
     background-image: none;
     background-color: transparent;
 }
-GtkPopover .trough {
+
+GtkPopover .scrollbar .trough {
     background-color: transparent;
+    background-image: none;
+    border-image: none;
 }
 
