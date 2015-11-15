@@ -30,6 +30,21 @@ public interface Plugin : GLib.Object
  */
 public class Applet : Gtk.Bin
 {
+
+    /**
+     * Let the owning panel know we need this popover registered
+     *
+     * @param widget Widget connected to the popover
+     * @param popover Popover to register
+     */
+    public signal void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
+
+    /**
+     * Let the owning panel know we'd like to unregister the popover
+     *
+     * @param widget Widget connected to the popover
+     */
+    public signal void unregister_popover(Gtk.Widget? widget);
 }
 
 }
