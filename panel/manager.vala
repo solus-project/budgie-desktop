@@ -401,8 +401,6 @@ public class PanelManager
         return info;
     }
 
-// /com/solus-project/arc-panel/applets/{e7b01cbe-8b5b-11e5-a026-b8aeed756bd3}/
-// /com/solus-project/arc-panel/applets/{e7afd93e-8b5b-11e5-a026-b8aeed756bd3}/
     /**
      * Attempt to create a fresh applet instance
      */
