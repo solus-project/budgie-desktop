@@ -428,10 +428,10 @@ public class PanelManager
         }
         Screen? screen = screens.lookup(monitor);
 
-        if ((screen.slots & PanelPosition.BOTTOM) == 0) {
-            return PanelPosition.BOTTOM;
-        } else if ((screen.slots & PanelPosition.TOP) == 0) {
+        if ((screen.slots & PanelPosition.TOP) == 0) {
             return PanelPosition.TOP;
+        } else if ((screen.slots & PanelPosition.BOTTOM) == 0) {
+            return PanelPosition.BOTTOM;
         } else if ((screen.slots & PanelPosition.LEFT) == 0) {
             return PanelPosition.LEFT;
         } else if ((screen.slots & PanelPosition.RIGHT) == 0) {

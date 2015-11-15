@@ -157,7 +157,6 @@ public class Panel : Gtk.Window
 
         this.manager.extension_loaded.connect_after(this.on_extension_loaded);
         load_applets();
-
     }
 
     void on_extension_loaded(string name)
@@ -403,6 +402,7 @@ public class Panel : Gtk.Window
             scr = orig_scr;
         }
         queue_resize();
+
         if (expanded) {
             present();
         }
