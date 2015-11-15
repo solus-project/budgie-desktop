@@ -49,3 +49,21 @@
                                       transparent
                                       );
 }
+
+GtkScrolledWindow {
+    background-color: transparent;
+}
+
+GtkPopover GtkListBox {
+    background-image: none;
+    background-color: transparent;
+}
+
+GtkPopover GtkListBoxRow {
+    background-image: none;
+    background-color: transparent;
+}
+GtkPopover .trough {
+    background-color: transparent;
+}
+
