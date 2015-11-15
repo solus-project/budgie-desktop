@@ -234,7 +234,8 @@ public class Panel : Gtk.Window
 
     void create_default_layout()
     {
-        message("[NOT] Creating default panel layout");
+        message("Creating default panel layout");
+        add_new("Budgie Menu Applet");
     }
 
     void set_applets()
@@ -253,9 +254,11 @@ public class Panel : Gtk.Window
 
     void add_applet(Arc.AppletInfo? info)
     {
-        message("[NOT] adding %s", info.uuid);
+        message("adding %s: %s", info.name, info.uuid);
         this.applets.insert(info.uuid, info);
-        this.set_applets();        
+        this.set_applets();
+
+        layout.pack_start(info.applet, false, false, 0);
     }
 
     void add_new(string plugin_name)

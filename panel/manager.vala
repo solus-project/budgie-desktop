@@ -79,7 +79,7 @@ public class AppletInfo : GLib.Object
     {
         this.applet = applet;
         icon = plugin_info.get_icon_name();
-        this.name = name;
+        this.name = plugin_info.get_name();
         plugin_name = plugin_info.get_name();
         this.uuid = uuid;
 

@@ -1,0 +1,8 @@
+[Plugin]
+Module=budgiemenuapplet.so
+Name=Budgie Menu Applet
+Description=Standard Budgie Menu
+Authors=Ikey Doherty
+Copyright=Copyright © 2014 Ikey Doherty
+Website=https://solus-project.com
+Icon=view-grid-symbolic

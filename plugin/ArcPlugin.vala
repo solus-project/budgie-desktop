@@ -32,6 +32,17 @@ public class Applet : Gtk.Bin
 {
 
     /**
+     * arc_applet_construct:
+     *
+     * Construct a new BudgieApplet
+     *
+     * Returns: (transfer full): A new BudgieApplet instance
+     */
+    public Applet() { }
+
+    /**
+     * arc_applet_register_popover:
+     *
      * Let the owning panel know we need this popover registered
      *
      * @param widget Widget connected to the popover
@@ -40,6 +51,8 @@ public class Applet : Gtk.Bin
     public signal void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
 
     /**
+     * arc_applet_unregister_popover
+     *
      * Let the owning panel know we'd like to unregister the popover
      *
      * @param widget Widget connected to the popover

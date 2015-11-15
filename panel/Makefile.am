@@ -4,6 +4,9 @@ EXTRA_DIST = \
 	panelconfig.h \
 	panelconfig.vapi
 
+SUBDIRS = \
+	applets
+
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/arc-panel.gresource.xml)
 
 BUILT_SOURCES = \

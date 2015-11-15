@@ -24,6 +24,9 @@ PKG_CHECK_MODULES([UUID], [uuid])
 # Required for panel applets
 PKG_CHECK_MODULES([LIBPEAS], [libpeas-gtk-1.0 >= 1.8.0])
 
+# Required for menu in the panel
+PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
+
 PULSE_MIN_VERS=2.0
 
 MODULEDIR=${libdir}/arc-desktop
@@ -59,7 +62,9 @@ AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
                 plugin/Makefile
-                panel/Makefile])
+                panel/Makefile
+                panel/applets/Makefile
+                panel/applets/budgie-menu/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([
