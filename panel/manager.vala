@@ -121,13 +121,16 @@ public static const string APPLET_PREFIX   = "/com/solus-project/arc-panel/apple
 /**
  * Known panels
  */
-public static const string ROOT_KEY_PANELS    = "panels";
+public static const string ROOT_KEY_PANELS     = "panels";
 
 /** Panel position */
-public static const string PANEL_KEY_POSITION = "location";
+public static const string PANEL_KEY_POSITION   = "location";
 
 /** Panel applets */
-public static const string PANEL_KEY_APPLETS  = "applets";
+public static const string PANEL_KEY_APPLETS    = "applets";
+
+/** Night mode/dark theme */
+public static const string PANEL_KEY_DARK_THEME = "dark-theme";
 
 /** Name of the plugin */
 public static const string APPLET_KEY_NAME    = "name";
@@ -253,11 +256,15 @@ public class PanelManager
         primary_monitor = scr.get_primary_monitor();
         scr.monitors_changed.connect(this.on_monitors_changed);
 
+        /* Set up dark mode across the desktop */
+        settings = new GLib.Settings(Arc.ROOT_SCHEMA);
+        var gtksettings = Gtk.Settings.get_default();
+        this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
+
         this.on_monitors_changed();
 
         setup_plugins();
 
-        settings = new GLib.Settings(Arc.ROOT_SCHEMA);
         if (!load_panels()) {
             message("Creating default panel layout");
             create_default();

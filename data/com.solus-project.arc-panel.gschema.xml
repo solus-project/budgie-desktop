@@ -82,5 +82,10 @@
       <summary>Toplevel panels</summary>
       <description>Toplevel panels</description>
     </key>
+    <key type="b" name="dark-theme">
+      <default>false</default>
+      <summary>Use dark theme within Arc Desktop</summary>
+      <description>Use the dark theme within Arc, aka night mode</description>
+    </key>
   </schema>
 </schemalist>
