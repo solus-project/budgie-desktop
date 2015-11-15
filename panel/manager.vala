@@ -333,10 +333,33 @@ public class PanelManager
      */
     public bool is_extension_valid(string name)
     {
-        if (engine.get_plugin_info(name) == null) {
+        if (this.get_plugin_info(name) == null) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * PeasEngine.get_plugin_info == completely broken
+     */
+    private unowned Peas.PluginInfo? get_plugin_info(string name)
+    {
+        foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
+            if (info.get_name() == name) {
+                return info;
+            }
+        }
+        return null;
+    }
+
+    public void modprobe(string name)
+    {
+        Peas.PluginInfo? i = this.get_plugin_info(name);
+        if (i == null) {
+            warning("arc_panel_modprobe called for non existent module: %s", name);
+            return;
+        }
+        this.engine.try_load_plugin(i);
     }
 
     /**
@@ -351,21 +374,19 @@ public class PanelManager
 
         /* Not yet loaded */
         if (pinfo == null) {
-            pinfo = engine.get_plugin_info(pname);
+            pinfo = this.get_plugin_info(pname);
             if (pinfo == null) {
-                warning("Trying to load invalid plugin: %s", pname);
+                warning("Trying to load invalid plugin: %s %s", pname, uuid);
                 name = null;
                 return null;
             }
             engine.try_load_plugin(pinfo);
-            message("Attempting load of: %s", pname);
             name = pname;
             return null;
         }
         var extension = extensions.get_extension(pinfo);
         if (extension == null) {
             name = pname;
-            message("NO EXTENSION???");
             return null;
         }
         name = null;
@@ -375,17 +396,21 @@ public class PanelManager
         return info;
     }
 
+// /com/solus-project/arc-panel/applets/{e7b01cbe-8b5b-11e5-a026-b8aeed756bd3}/
+// /com/solus-project/arc-panel/applets/{e7afd93e-8b5b-11e5-a026-b8aeed756bd3}/
     /**
      * Attempt to create a fresh applet instance
      */
-    public Arc.AppletInfo? create_new_applet(string name)
+    public Arc.AppletInfo? create_new_applet(string name, string uuid)
     {
         string? unused = null;
         if (!plugins.contains(name)) {
             return null;
         }
-        /* Fresh UUID */
-        var uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        var path = Arc.create_applet_path(uuid);
+        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+        settings.set_string(Arc.APPLET_KEY_NAME, name);
+        settings.apply();
         return this.load_applet_instance(uuid, out unused);
     }
 

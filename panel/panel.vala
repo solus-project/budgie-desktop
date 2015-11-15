@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+using LibUUID;
+
 namespace Arc
 {
 
@@ -65,6 +67,8 @@ public class Panel : Gtk.Window
     Arc.ShadowBlock shadow;
 
     HashTable<string,GLib.List<string>> pending = null;
+    HashTable<string,GLib.List<string>> creating = null;
+    HashTable<string,Arc.AppletInfo?> applets = null;
 
     construct {
         position = PanelPosition.NONE;
@@ -117,6 +121,9 @@ public class Panel : Gtk.Window
         load_css();
 
         popover_manager = new PopoverManager(this);
+        pending = new HashTable<string,GLib.List<string?>>(str_hash, str_equal);
+        creating = new HashTable<string,GLib.List<string?>>(str_hash, str_equal);
+        applets = new HashTable<string,Arc.AppletInfo?>(str_hash, str_equal);
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
@@ -148,7 +155,46 @@ public class Panel : Gtk.Window
         get_child().show_all();
         set_expanded(false);
 
+        this.manager.extension_loaded.connect_after(this.on_extension_loaded);
         load_applets();
+
+    }
+
+    void on_extension_loaded(string name)
+    {
+        unowned GLib.List<string?> todo = null;
+        todo = pending.lookup(name);
+        if (todo != null) {
+            for (uint i = 0; i < todo.length(); i++) {
+                string? uname = null;
+                string uuid = todo.nth_data(i);
+                Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out uname);
+                if (info == null) {
+                    critical("Failed to load applet when we know it exists: %s", uname);
+                    return;
+                }
+                this.add_applet(info);
+            }
+            pending.remove(name);
+        }
+
+        todo = null;
+
+        todo = creating.lookup(name);
+        if (todo != null) {
+            for (uint i = 0; i < todo.length(); i++) {
+                string? uname = null;
+                string uuid = todo.nth_data(i);
+                Arc.AppletInfo? info = this.manager.create_new_applet(name, uuid);
+                if (info == null) {
+                    critical("Failed to load applet when we know it exists");
+                    return;
+                }
+                this.add_applet(info);
+                /* this.configure_applet(info); */
+            }
+            creating.remove(name);
+        }
     }
 
     /**
@@ -170,11 +216,12 @@ public class Panel : Gtk.Window
             if (info == null) {
                 /* Faiiiil */
                 if (name == null) {
-                    message("Unable to load invalid applet: %s", uuid);
+                    message("Unable to load invalid applet: %s", applets[i]);
                     /* TODO: Trimmage */
                     continue;
                 }
-                this.add_pending(uuid, name);
+                this.add_pending(applets[i], name);
+                manager.modprobe(name);
                 continue;
             }
             /* um add this bro to the panel :o */
@@ -184,34 +231,105 @@ public class Panel : Gtk.Window
 
     void create_default_layout()
     {
-        message("Creating default panel layout");
+        message("[NOT] Creating default panel layout");
+    }
+
+    void set_applets()
+    {
+        string[]? uuids = null;
+        unowned string? uuid = null;
+        unowned Arc.AppletInfo? plugin = null;
+
+        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        while (iter.next(out uuid, out plugin)) {
+            uuids += uuid;
+        }
+
+        settings.set_strv(Arc.PANEL_KEY_APPLETS, uuids);
     }
 
     void add_applet(Arc.AppletInfo? info)
     {
         message("[NOT] adding %s", info.uuid);
+        this.applets.insert(info.uuid, info);
+        this.set_applets();        
+    }
+
+    void add_new(string plugin_name)
+    {
+        string? uuid = null;
+        string? rname = null;
+
+        if (!this.manager.is_extension_valid(plugin_name)) {
+            warning("Not loading invalid plugin: %s", plugin_name);
+            return;
+        }
+        uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+
+        if (!this.manager.is_extension_loaded(plugin_name)) {
+            /* Request a load of the new guy */
+            if (creating.contains(plugin_name)) {
+                unowned GLib.List<string?>? list = creating.lookup(uuid);
+                if (list.find_custom(uuid, strcmp) == null) {
+                    list.append(uuid);
+                }
+                return;
+            }
+            /* Seems bad - needs optimising */
+            creating.insert(plugin_name, new GLib.List<string?>());
+            unowned GLib.List<string?> list = creating.lookup(plugin_name);
+            list.append(uuid);
+            creating.insert(plugin_name, list.copy());
+            this.manager.modprobe(plugin_name);
+            return;
+        }
+        /* Already exists */
+        Arc.AppletInfo? info = this.manager.create_new_applet(plugin_name, uuid);
+        if (info == null) {
+            critical("Failed to load applet when we know it exists");
+            return;
+        }
+        this.add_applet(info);
     }
 
     void add_pending(string uuid, string plugin_name)
     {
+        string? rname = null;
+
         if (!this.manager.is_extension_valid(plugin_name)) {
             warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
             return;
         }
-        message("Pending load for: %s %s", uuid, plugin_name);
 
-        if (pending.contains(plugin_name)) {
-            unowned GLib.List<string?>? list = pending.lookup(uuid);
-            if (list.find_custom(uuid, strcmp) == null) {
-                list.append(uuid);
+        if (!this.manager.is_extension_loaded(plugin_name)) {
+            /* Request a load of the new guy */
+            if (pending.contains(plugin_name)) {
+                unowned GLib.List<string?>? list = pending.lookup(uuid);
+                if (list.find_custom(uuid, strcmp) == null) {
+                    list.append(uuid);
+                }
+                return;
             }
+            /* Seems bad - needs optimising */
+            pending.insert(plugin_name, new GLib.List<string?>());
+            unowned GLib.List<string?> list = pending.lookup(plugin_name);
+            list.append(uuid);
+            pending.insert(plugin_name, list.copy());
+            this.manager.modprobe(plugin_name);
             return;
         }
-        /* Seems bad - but avoids copies */
-        pending.insert(plugin_name, new GLib.List<string?>());
-        unowned GLib.List<string?> list = pending.lookup(plugin_name);
-        list.append(uuid);
 
+        var path = Arc.create_applet_path(uuid);
+        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+        var pname = settings.get_string(Arc.APPLET_KEY_NAME);
+
+        /* Already exists */
+        Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
+        if (info == null) {
+            critical("Failed to load applet when we know it exists");
+            return;
+        }
+        this.add_applet(info);
     }
 
     public override void map()
