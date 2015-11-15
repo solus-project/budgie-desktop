@@ -15,4 +15,5 @@ CLEANFILES =
 SUBDIRS = \
 	data \
 	gvc \
+	plugin \
 	panel

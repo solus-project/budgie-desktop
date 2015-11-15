@@ -21,6 +21,8 @@ PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.44.0])
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.16.0])
 PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.44.0])
 PKG_CHECK_MODULES([UUID], [uuid])
+# Required for panel applets
+PKG_CHECK_MODULES([LIBPEAS], [libpeas-gtk-1.0 >= 1.8.0])
 
 PULSE_MIN_VERS=2.0
 
@@ -56,6 +58,7 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext pa
 AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
+                plugin/Makefile
                 panel/Makefile])
 AC_OUTPUT
 

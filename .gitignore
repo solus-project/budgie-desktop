@@ -16,6 +16,7 @@ missing
 m4/
 *.o
 stamp-h*
+.libs
 
 # data
 /data/*.valid
@@ -24,3 +25,12 @@ stamp-h*
 /panel/arc-panel
 /panel/*.c
 arc-panel-resources.*
+
+# plugin
+*.gir
+*.typelib
+/plugin/*.c
+/plugin/*.h
+
+*.la
+*.lo

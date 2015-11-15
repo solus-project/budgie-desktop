@@ -33,17 +33,23 @@ arc_panel_SOURCES = \
 arc_panel_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(GTK3_CFLAGS) \
+	$(LIBPEAS_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
 	$(UUID_CFLAGS)
 
 arc_panel_LDADD = \
 	$(GOBJECT_LIBS) \
 	$(GTK3_LIBS) \
-	$(UUID_LIBS)
+	$(LIBPEAS_LIBS) \
+	$(UUID_LIBS) \
+	${top_builddir}/plugin/libarc-plugin.la
 
 arc_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg libuuid \
+	--pkg libpeas-gtk-1.0 \
+	--pkg arc-1.0 \
 	--vapidir=${top_srcdir}/vapi \
+	--vapidir=${top_srcdir}/plugin \
 	$(VALAFLAGS)

@@ -83,6 +83,8 @@ public class PanelManager
 
     int primary_monitor = 0;
     Settings settings;
+    Peas.Engine engine;
+    Peas.ExtensionSet extensions;
 
     public PanelManager()
     {
@@ -168,6 +170,10 @@ public class PanelManager
         scr.monitors_changed.connect(this.on_monitors_changed);
 
         this.on_monitors_changed();
+
+        engine = Peas.Engine.get_default();
+        //engine.add_search_path(module_directory, module_data_directory);
+        extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
 
         settings = new GLib.Settings(Arc.ROOT_SCHEMA);
         if (!load_panels()) {

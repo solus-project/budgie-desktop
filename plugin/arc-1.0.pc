@@ -1,0 +1,12 @@
+prefix=/usr
+exec_prefix=/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+datarootdir=${prefix}/share
+
+Name: Arc
+Description: Arc Plugin Library
+Version: 1
+Requires: gtk+-3.0 >= 3.16.0 libpeas-1.0 >= 1.8.0
+Libs: -L${libdir} -larc-plugin
+Cflags: -I${includedir}/

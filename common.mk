@@ -10,7 +10,8 @@ AM_CFLAGS =  -fstack-protector -Wall -Wno-pedantic \
 AM_CPPFLAGS += \
 	-I $(top_srcdir) \
 	-I $(top_srcdir)/gvc \
-	-I $(top_srcdir)/panel
+	-I $(top_srcdir)/panel \
+	-I $(top_srcdir)/plugin
 
 DECLARATIONS = \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
