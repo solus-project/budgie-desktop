@@ -15,7 +15,7 @@ namespace Arc
 /**
  * ArcPlugin
  */
-public interface Plugin : Peas.ExtensionBase
+public interface Plugin : GLib.Object
 {
     /**
      * arc_plugin_get_panel_widget:

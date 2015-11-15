@@ -36,6 +36,51 @@ struct Screen {
 }
 
 /**
+ * Used to track Applets in a sane way
+ */
+public class AppletInfo : GLib.Object
+{
+
+    /** Applet instance */
+    public Arc.Applet applet { public get; private set; }
+
+    /** Known icon name */
+    public string icon {  public get; protected set; }
+
+    /** Instance name */
+    public string name { public get; protected set; }
+
+    /** Plugin name providing the applet instance */
+    public string plugin_name { public get; private set; }
+
+    /** Packing type */
+    public Gtk.PackType pack_type { public get ; public set ; }
+
+    /** Whether to place in the status area or not */
+    public bool status_area { public get ; public set ; }
+
+    /** Start padding */
+    public int pad_start { public get ; public set ; }
+
+    /** End padding */
+    public int pad_end { public get ; public set; }
+
+    /** Position (packging index */
+    public int position { public get; public set; }
+
+    /**
+     * Construct a new AppletInfo. Simply a wrapper around applets
+     */
+    public AppletInfo(Peas.PluginInfo? plugin_info, Arc.Applet applet, string name)
+    {
+        this.applet = applet;
+        icon = plugin_info.get_icon_name();
+        this.name = name;
+        plugin_name = plugin_info.get_name();
+    }
+}
+
+/**
  * Maximum slots. 4 because that's generally how many sides a rectangle has..
  */
 public static const uint MAX_SLOTS         = 4;
@@ -171,9 +216,7 @@ public class PanelManager
 
         this.on_monitors_changed();
 
-        engine = Peas.Engine.get_default();
-        engine.add_search_path(Arc.MODULE_DIRECTORY, Arc.MODULE_DATA_DIRECTORY);
-        extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
+        setup_plugins();
 
         settings = new GLib.Settings(Arc.ROOT_SCHEMA);
         if (!load_panels()) {
@@ -182,6 +225,55 @@ public class PanelManager
         } else {
             message("Loading existing configuration");
         }
+    }
+
+    /**
+     * Initialise the plugin engine, paths, loaders, etc.
+     */
+    void setup_plugins()
+    {
+        engine = Peas.Engine.get_default();
+        engine.enable_loader("python3");
+
+        /* Ensure libpeas doesn't freak the hell out for Python extensions */
+        try {
+            var repo = GI.Repository.get_default();
+            repo.require("Peas", "1.0", 0);
+            repo.require("PeasGtk", "1.0", 0);
+            repo.require("Arc", "1.0", 0);
+        } catch (Error e) {
+            message("Error loading typelibs: %s", e.message);
+        }
+
+        /* System path */
+        var dir = Environment.get_user_data_dir();
+        engine.add_search_path(Arc.MODULE_DIRECTORY, Arc.MODULE_DATA_DIRECTORY);
+
+        /* User path */
+        var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "arc-desktop", "modules");
+        var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "arc-desktop", "data");
+
+        engine.add_search_path(hmod, hdata);
+
+        extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
+
+        extensions.extension_added.connect(on_extension_added);
+        engine.load_plugin.connect_after((i)=> {
+            Peas.Extension? e = extensions.get_extension(i);
+            if (e == null) {
+                critical("Failed to find extension for: %s", i.get_name());
+                return;
+            }
+            on_extension_added(i, e);
+        });
+    }
+
+    /**
+     * Handle extension loading
+     */
+    void on_extension_added(Peas.PluginInfo info, Object p)
+    {
+        message("%s loaded", info.get_name());
     }
 
     /**
