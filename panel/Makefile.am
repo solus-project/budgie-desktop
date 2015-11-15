@@ -1,6 +1,8 @@
 -include $(top_srcdir)/common.mk
 
-EXTRA_DIST =
+EXTRA_DIST = \
+	panelconfig.h \
+	panelconfig.vapi
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/arc-panel.gresource.xml)
 
@@ -35,7 +37,8 @@ arc_panel_CFLAGS = \
 	$(GTK3_CFLAGS) \
 	$(LIBPEAS_CFLAGS) \
 	$(GIO_UNIX_CFLAGS) \
-	$(UUID_CFLAGS)
+	$(UUID_CFLAGS) \
+	$(DECLARATIONS)
 
 arc_panel_LDADD = \
 	$(GOBJECT_LIBS) \
@@ -50,6 +53,8 @@ arc_panel_VALAFLAGS = \
 	--pkg libuuid \
 	--pkg libpeas-gtk-1.0 \
 	--pkg arc-1.0 \
+	--pkg panelconfig \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
+	--vapidir=${top_srcdir}/panel \
 	$(VALAFLAGS)

@@ -172,7 +172,7 @@ public class PanelManager
         this.on_monitors_changed();
 
         engine = Peas.Engine.get_default();
-        //engine.add_search_path(module_directory, module_data_directory);
+        engine.add_search_path(Arc.MODULE_DIRECTORY, Arc.MODULE_DATA_DIRECTORY);
         extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
 
         settings = new GLib.Settings(Arc.ROOT_SCHEMA);
