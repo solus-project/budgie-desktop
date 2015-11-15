@@ -69,7 +69,7 @@ public class PanelManagerIface
 
     public string get_version()
     {
-        return "1";
+        return Arc.VERSION;
     }
 }
 
