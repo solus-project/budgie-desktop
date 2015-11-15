@@ -35,6 +35,11 @@ struct Screen {
     Gdk.Rectangle area;
 }
 
+public static string create_applet_path(string uuid)
+{
+        return "%s/{%s}/".printf(Arc.APPLET_PREFIX, uuid);
+}
+
 /**
  * Used to track Applets in a sane way
  */
@@ -44,11 +49,15 @@ public class AppletInfo : GLib.Object
     /** Applet instance */
     public Arc.Applet applet { public get; private set; }
 
+    private unowned GLib.Settings? settings;
+
     /** Known icon name */
     public string icon {  public get; protected set; }
 
     /** Instance name */
     public string name { public get; protected set; }
+
+    public string uuid { public get; protected set; }
 
     /** Plugin name providing the applet instance */
     public string plugin_name { public get; private set; }
@@ -71,12 +80,15 @@ public class AppletInfo : GLib.Object
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets
      */
-    public AppletInfo(Peas.PluginInfo? plugin_info, Arc.Applet applet, string name)
+    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet applet, GLib.Settings settings)
     {
         this.applet = applet;
         icon = plugin_info.get_icon_name();
         this.name = name;
         plugin_name = plugin_info.get_name();
+        this.uuid = uuid;
+
+        this.settings = settings;
     }
 }
 
@@ -100,6 +112,17 @@ public static const string TOPLEVEL_SCHEMA = "com.solus-project.arc-panel.panel"
  */
 public static const string TOPLEVEL_PREFIX = "/com/solus-project/arc-panel/panels";
 
+
+/**
+ * Relocatable schema ID for applets
+ */
+public static const string APPLET_SCHEMA   = "com.solus-project.arc-panel.applet";
+
+/**
+ * Prefix for all relocatable applet settings
+ */
+public static const string APPLET_PREFIX   = "/com/solus-project/arc-panel/applets";
+
 /**
  * Known panels
  */
@@ -107,6 +130,13 @@ public static const string ROOT_KEY_PANELS    = "panels";
 
 /** Panel position */
 public static const string PANEL_KEY_POSITION = "location";
+
+/** Panel applets */
+public static const string PANEL_KEY_APPLETS  = "applets";
+
+/** Name of the plugin */
+public static const string APPLET_KEY_NAME    = "name";
+
 
 [DBus (name = "com.solus_project.arc.Panel")]
 public class PanelManagerIface
@@ -131,10 +161,18 @@ public class PanelManager
     Peas.Engine engine;
     Peas.ExtensionSet extensions;
 
+    HashTable<string, Peas.PluginInfo?> plugins;
+
     public PanelManager()
     {
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
         panels = new HashTable<string,Arc.Panel?>(str_hash, str_equal);
+        plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
+    }
+
+    public Arc.AppletInfo? get_applet(string key)
+    {
+        return null;
     }
 
     string create_panel_path(string uuid)
@@ -269,11 +307,75 @@ public class PanelManager
     }
 
     /**
+     * Indicate that a plugin that was being waited for, is now available
+     */
+    public signal void extension_loaded(string name);
+
+    /**
      * Handle extension loading
      */
-    void on_extension_added(Peas.PluginInfo info, Object p)
+    void on_extension_added(Peas.PluginInfo? info, Object p)
     {
-        message("%s loaded", info.get_name());
+        if (plugins.contains(info.get_name())) {
+            return;
+        }
+        plugins.insert(info.get_name(), info);
+        extension_loaded(info.get_name());
+    }
+
+    public bool is_extension_loaded(string name)
+    {
+        return plugins.contains(name);
+    }
+
+    /**
+     * Attempt to load plugin, will set the plugin-name on failure
+     */
+    public Arc.AppletInfo? load_applet_instance(string? uuid, out string name)
+    {
+        var path = Arc.create_applet_path(uuid);
+        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+        var pname = settings.get_string(Arc.APPLET_KEY_NAME);
+        Peas.PluginInfo? pinfo = plugins.lookup(pname);
+
+        /* Not yet loaded */
+        if (pinfo == null) {
+            pinfo = engine.get_plugin_info(pname);
+            if (pinfo == null) {
+                warning("Trying to load invalid plugin: %s", pname);
+                name = null;
+                return null;
+            }
+            engine.try_load_plugin(pinfo);
+            message("Attempting load of: %s", pname);
+            name = pname;
+            return null;
+        }
+        var extension = extensions.get_extension(pinfo);
+        if (extension == null) {
+            name = pname;
+            message("NO EXTENSION???");
+            return null;
+        }
+        name = null;
+        Arc.Applet applet = (extension as Arc.Plugin).get_panel_widget();
+        var info = new Arc.AppletInfo(pinfo, uuid, applet, settings);
+
+        return info;
+    }
+
+    /**
+     * Attempt to create a fresh applet instance
+     */
+    public Arc.AppletInfo? create_new_applet(string name)
+    {
+        string? unused = null;
+        if (!plugins.contains(name)) {
+            return null;
+        }
+        /* Fresh UUID */
+        var uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        return this.load_applet_instance(uuid, out unused);
     }
 
     /**
@@ -329,7 +431,7 @@ public class PanelManager
         PanelPosition position;
 
         var settings = new GLib.Settings.with_path(Arc.TOPLEVEL_SCHEMA, path);
-        Arc.Panel? panel = new Arc.Panel(uuid, settings);
+        Arc.Panel? panel = new Arc.Panel(this, uuid, settings);
         panels.insert(uuid, panel);
 
         if (!configure) {

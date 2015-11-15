@@ -68,6 +68,12 @@
       <summary>Applet lives in status area</summary>
       <description>Whether this applet lives in the status area</description>
     </key>
+
+    <key type="s" name="name">
+      <default>''</default>
+      <summary>Name of the provider plugin</summary>
+      <description>Name of the provider plugin</description>
+    </key>
   </schema>
 
   <schema path="/com/solus-project/arc-panel/" id="com.solus-project.arc-panel">
