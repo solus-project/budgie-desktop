@@ -259,6 +259,18 @@ public class Panel : Gtk.Window
         this.set_applets();
 
         layout.pack_start(info.applet, false, false, 0);
+
+        var table = info.applet.get_popovers();
+        if (table == null) {
+            return;
+        }
+        /* Hacky popover tests */
+        var iter = HashTableIter<Gtk.Widget?,Gtk.Popover?>(table);
+        unowned Gtk.Widget? widg = null;
+        unowned Gtk.Popover? pop = null;
+        while (iter.next(out widg, out pop)) {
+            this.popover_manager.register_popover(widg,pop);
+        }
     }
 
     void add_new(string plugin_name)

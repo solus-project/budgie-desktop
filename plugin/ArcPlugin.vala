@@ -40,24 +40,10 @@ public class Applet : Gtk.Bin
      */
     public Applet() { }
 
-    /**
-     * arc_applet_register_popover:
-     *
-     * Let the owning panel know we need this popover registered
-     *
-     * @param widget Widget connected to the popover
-     * @param popover Popover to register
-     */
-    public signal void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
-
-    /**
-     * arc_applet_unregister_popover
-     *
-     * Let the owning panel know we'd like to unregister the popover
-     *
-     * @param widget Widget connected to the popover
-     */
-    public signal void unregister_popover(Gtk.Widget? widget);
+    public virtual unowned GLib.HashTable<Gtk.Widget?,Gtk.Popover?>? get_popovers()
+    {
+        return null;
+    }
 }
 
 }

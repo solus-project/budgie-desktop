@@ -31,9 +31,13 @@ public class BudgieMenuApplet : Arc.Applet
     Gtk.Label label;
     private string modifier;
 
+    HashTable<Gtk.Widget?,Gtk.Popover> popovers;
+
     public BudgieMenuApplet()
     {
         Object();
+
+        popovers = new HashTable<Gtk.Widget?,Gtk.Popover>(direct_hash, direct_equal);
 
         settings = new Settings("com.evolve-os.budgie.panel");
         ksettings = new Settings("org.gnome.mutter");
@@ -55,7 +59,7 @@ public class BudgieMenuApplet : Arc.Applet
         // Better styling to fit in with the budgie-panel
         var st = widget.get_style_context();
         st.add_class(BUDGIE_STYLE_MENU_ICON);
-        popover = new BudgieMenuWindow(img);
+        popover = new BudgieMenuWindow(widget);
 
         widget.button_press_event.connect((e)=> {
             if (e.button != 1) {
@@ -68,6 +72,8 @@ public class BudgieMenuApplet : Arc.Applet
             }
             return Gdk.EVENT_STOP;
         });
+
+        popovers.insert(widget, popover);
 
         // This enables us to respond to the "overlay-key" action
         /*action_invoked.connect((t) => {
@@ -131,6 +137,12 @@ public class BudgieMenuApplet : Arc.Applet
                 break;
         }
     }
+
+    public override unowned HashTable<Gtk.Widget?,Gtk.Popover?>? get_popovers()
+    {
+        return popovers;
+    }
+
 } // End class
 
 [ModuleInit]

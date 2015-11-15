@@ -45,4 +45,5 @@ libbudgiemenuapplet_la_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
-	--pkg arc-1.0
+	--pkg arc-1.0 \
+	--vapidir=${top_srcdir}/plugin

@@ -35,3 +35,4 @@ arc-panel-resources.*
 *.la
 *.lo
 /panel/applets/*/*.c
+*.stamp*
