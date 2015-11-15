@@ -19,4 +19,4 @@ DECLARATIONS = \
 	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
 	-DDATADIR=\"$(datadir)/arc-desktop\" \
 	-DLOCALEDIR=\"$(localedir)\" \
-	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\"
