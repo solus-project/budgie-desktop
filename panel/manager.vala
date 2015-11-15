@@ -365,10 +365,15 @@ public class PanelManager
     /**
      * Attempt to load plugin, will set the plugin-name on failure
      */
-    public Arc.AppletInfo? load_applet_instance(string? uuid, out string name)
+    public Arc.AppletInfo? load_applet_instance(string? uuid, out string name, GLib.Settings? psettings = null)
     {
         var path = Arc.create_applet_path(uuid);
-        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+        GLib.Settings? settings = null;
+        if (psettings == null) {
+            settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+        } else {
+            settings = psettings;
+        }
         var pname = settings.get_string(Arc.APPLET_KEY_NAME);
         Peas.PluginInfo? pinfo = plugins.lookup(pname);
 
@@ -410,8 +415,7 @@ public class PanelManager
         var path = Arc.create_applet_path(uuid);
         var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
         settings.set_string(Arc.APPLET_KEY_NAME, name);
-        settings.apply();
-        return this.load_applet_instance(uuid, out unused);
+        return this.load_applet_instance(uuid, out unused, settings);
     }
 
     /**
