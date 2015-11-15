@@ -283,6 +283,7 @@ public class BudgieMenuWindow : Gtk.Popover
         // clickable categories
         categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         categories_scroll = new Gtk.ScrolledWindow(null, null);
+        categories_scroll.set_overlay_scrolling(false);
         categories_scroll.add(categories);
         categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         middle.pack_start(categories_scroll, false, false, 0);
@@ -305,6 +306,7 @@ public class BudgieMenuWindow : Gtk.Popover
         content = new Gtk.ListBox();
         content.row_activated.connect(on_row_activate);
         content_scroll = new Gtk.ScrolledWindow(null, null);
+        content_scroll.set_overlay_scrolling(false);
         content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         content_scroll.add(content);
         right_layout.pack_start(content_scroll, true, true, 0);
