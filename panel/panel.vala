@@ -322,10 +322,6 @@ public class Panel : Gtk.Window
             return;
         }
 
-        var path = Arc.create_applet_path(uuid);
-        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
-        var pname = settings.get_string(Arc.APPLET_KEY_NAME);
-
         /* Already exists */
         Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
         if (info == null) {

@@ -35,11 +35,6 @@ struct Screen {
     Gdk.Rectangle area;
 }
 
-public static string create_applet_path(string uuid)
-{
-        return "%s/{%s}/".printf(Arc.APPLET_PREFIX, uuid);
-}
-
 /**
  * Used to track Applets in a sane way
  */
@@ -178,6 +173,12 @@ public class PanelManager
     string create_panel_path(string uuid)
     {
         return "%s/{%s}/".printf(Arc.TOPLEVEL_PREFIX, uuid);
+    }
+
+    string create_applet_path(string uuid)
+    {
+        return "%s/{%s}/".printf(Arc.APPLET_PREFIX, uuid);
+
     }
 
     /**
@@ -367,7 +368,7 @@ public class PanelManager
      */
     public Arc.AppletInfo? load_applet_instance(string? uuid, out string name, GLib.Settings? psettings = null)
     {
-        var path = Arc.create_applet_path(uuid);
+        var path = this.create_applet_path(uuid);
         GLib.Settings? settings = null;
         if (psettings == null) {
             settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
@@ -410,7 +411,7 @@ public class PanelManager
         if (!plugins.contains(name)) {
             return null;
         }
-        var path = Arc.create_applet_path(uuid);
+        var path = this.create_applet_path(uuid);
         var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
         settings.set_string(Arc.APPLET_KEY_NAME, name);
         return this.load_applet_instance(uuid, out unused, settings);
