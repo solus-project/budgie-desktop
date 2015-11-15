@@ -11,7 +11,8 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir) \
 	-I $(top_srcdir)/gvc \
 	-I $(top_srcdir)/panel \
-	-I $(top_srcdir)/plugin
+	-I $(top_srcdir)/plugin \
+	-O2
 
 DECLARATIONS = \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
