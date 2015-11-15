@@ -55,12 +55,16 @@ public class Panel : Gtk.Window
     public Arc.PanelPosition? position;
 
     public Settings settings { construct set ; public get; }
+    private unowned Arc.PanelManager? manager;
+
     public string uuid { construct set ; public get; }
 
-    PopoverManager manager;
+    PopoverManager popover_manager;
     bool expanded = true;
 
     Arc.ShadowBlock shadow;
+
+    HashTable<string,GLib.List<string>> pending = null;
 
     construct {
         position = PanelPosition.NONE;
@@ -103,14 +107,16 @@ public class Panel : Gtk.Window
         placement();
     }
 
-    public Panel(string? uuid, Settings? settings)
+    public Panel(Arc.PanelManager? manager, string? uuid, Settings? settings)
     {
-        Object(type_hint: Gdk.WindowTypeHint.DOCK, settings: settings, uuid: uuid);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
+        this.manager = manager;
+    
         scale = get_scale_factor();
         load_css();
 
-        manager = new PopoverManager(this);
+        popover_manager = new PopoverManager(this);
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
@@ -141,6 +147,71 @@ public class Panel : Gtk.Window
 
         get_child().show_all();
         set_expanded(false);
+
+        load_applets();
+    }
+
+    /**
+     * Load all pre-configured applets
+     */
+    void load_applets()
+    {
+        string[]? applets = settings.get_strv(Arc.PANEL_KEY_APPLETS);
+        if (applets == null || applets.length == 0) {
+            message("No applets configured for panel %s", this.uuid);
+            create_default_layout();
+            return;
+        }
+
+        for (int i = 0; i < applets.length; i++) {
+            string? name = null;
+            Arc.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
+
+            if (info == null) {
+                /* Faiiiil */
+                if (name == null) {
+                    message("Unable to load invalid applet: %s", uuid);
+                    /* TODO: Trimmage */
+                    continue;
+                }
+                this.add_pending(uuid, name);
+                continue;
+            }
+            /* um add this bro to the panel :o */
+            this.add_applet(info);
+        }
+    }
+
+    void create_default_layout()
+    {
+        message("Creating default panel layout");
+    }
+
+    void add_applet(Arc.AppletInfo? info)
+    {
+        message("[NOT] adding %s", info.uuid);
+    }
+
+    void add_pending(string uuid, string plugin_name)
+    {
+        if (!this.manager.is_extension_valid(plugin_name)) {
+            warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
+            return;
+        }
+        message("Pending load for: %s %s", uuid, plugin_name);
+
+        if (pending.contains(plugin_name)) {
+            unowned GLib.List<string?>? list = pending.lookup(uuid);
+            if (list.find_custom(uuid, strcmp) == null) {
+                list.append(uuid);
+            }
+            return;
+        }
+        /* Seems bad - but avoids copies */
+        pending.insert(plugin_name, new GLib.List<string?>());
+        unowned GLib.List<string?> list = pending.lookup(plugin_name);
+        list.append(uuid);
+
     }
 
     public override void map()

@@ -261,7 +261,7 @@ public class PanelManager
             message("Creating default panel layout");
             create_default();
         } else {
-            message("Loading existing configuration");
+            message("Loaded existing configuration");
         }
     }
 
@@ -326,6 +326,17 @@ public class PanelManager
     public bool is_extension_loaded(string name)
     {
         return plugins.contains(name);
+    }
+
+    /**
+     * Determine if the extension is known to be valid
+     */
+    public bool is_extension_valid(string name)
+    {
+        if (engine.get_plugin_info(name) == null) {
+            return false;
+        }
+        return true;
     }
 
     /**
