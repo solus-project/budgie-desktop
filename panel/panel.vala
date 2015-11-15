@@ -66,8 +66,8 @@ public class Panel : Gtk.Window
 
     Arc.ShadowBlock shadow;
 
-    HashTable<string,GLib.List<string>> pending = null;
-    HashTable<string,GLib.List<string>> creating = null;
+    HashTable<string,HashTable<string,string>> pending = null;
+    HashTable<string,HashTable<string,string>> creating = null;
     HashTable<string,Arc.AppletInfo?> applets = null;
 
     construct {
@@ -121,8 +121,8 @@ public class Panel : Gtk.Window
         load_css();
 
         popover_manager = new PopoverManager(this);
-        pending = new HashTable<string,GLib.List<string?>>(str_hash, str_equal);
-        creating = new HashTable<string,GLib.List<string?>>(str_hash, str_equal);
+        pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
+        creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         applets = new HashTable<string,Arc.AppletInfo?>(str_hash, str_equal);
 
         var vis = screen.get_rgba_visual();
@@ -162,12 +162,14 @@ public class Panel : Gtk.Window
 
     void on_extension_loaded(string name)
     {
-        unowned GLib.List<string?> todo = null;
+        unowned HashTable<string,string>? todo = null;
         todo = pending.lookup(name);
         if (todo != null) {
-            for (uint i = 0; i < todo.length(); i++) {
+            var iter = HashTableIter<string,string>(todo);
+            string? uuid = null;
+
+            while (iter.next(out uuid, null)) {
                 string? uname = null;
-                string uuid = todo.nth_data(i);
                 Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out uname);
                 if (info == null) {
                     critical("Failed to load applet when we know it exists: %s", uname);
@@ -182,9 +184,10 @@ public class Panel : Gtk.Window
 
         todo = creating.lookup(name);
         if (todo != null) {
-            for (uint i = 0; i < todo.length(); i++) {
-                string? uname = null;
-                string uuid = todo.nth_data(i);
+            var iter = HashTableIter<string,string>(todo);
+            string? uuid = null;
+
+            while (iter.next(out uuid, null)) {
                 Arc.AppletInfo? info = this.manager.create_new_applet(name, uuid);
                 if (info == null) {
                     critical("Failed to load applet when we know it exists");
@@ -259,6 +262,7 @@ public class Panel : Gtk.Window
     {
         string? uuid = null;
         string? rname = null;
+        unowned HashTable<string,string>? table = null;
 
         if (!this.manager.is_extension_valid(plugin_name)) {
             warning("Not loading invalid plugin: %s", plugin_name);
@@ -268,18 +272,17 @@ public class Panel : Gtk.Window
 
         if (!this.manager.is_extension_loaded(plugin_name)) {
             /* Request a load of the new guy */
-            if (creating.contains(plugin_name)) {
-                unowned GLib.List<string?>? list = creating.lookup(uuid);
-                if (list.find_custom(uuid, strcmp) == null) {
-                    list.append(uuid);
+            table = creating.lookup(plugin_name);
+            if (table != null) {
+                if (!table.contains(uuid)) {
+                    table.insert(uuid, uuid);
                 }
                 return;
             }
-            /* Seems bad - needs optimising */
-            creating.insert(plugin_name, new GLib.List<string?>());
-            unowned GLib.List<string?> list = creating.lookup(plugin_name);
-            list.append(uuid);
-            creating.insert(plugin_name, list.copy());
+            /* Looks insane but avoids copies */
+            creating.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
+            table = creating.lookup(plugin_name);
+            table.insert(uuid, uuid);
             this.manager.modprobe(plugin_name);
             return;
         }
@@ -295,6 +298,7 @@ public class Panel : Gtk.Window
     void add_pending(string uuid, string plugin_name)
     {
         string? rname = null;
+        unowned HashTable<string,string>? table = null;
 
         if (!this.manager.is_extension_valid(plugin_name)) {
             warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
@@ -303,18 +307,17 @@ public class Panel : Gtk.Window
 
         if (!this.manager.is_extension_loaded(plugin_name)) {
             /* Request a load of the new guy */
-            if (pending.contains(plugin_name)) {
-                unowned GLib.List<string?>? list = pending.lookup(uuid);
-                if (list.find_custom(uuid, strcmp) == null) {
-                    list.append(uuid);
+            table = pending.lookup(plugin_name);
+            if (table != null) {
+                if (!table.contains(uuid)) {
+                    table.insert(uuid, uuid);
                 }
                 return;
             }
-            /* Seems bad - needs optimising */
-            pending.insert(plugin_name, new GLib.List<string?>());
-            unowned GLib.List<string?> list = pending.lookup(plugin_name);
-            list.append(uuid);
-            pending.insert(plugin_name, list.copy());
+            /* Looks insane but avoids copies */
+            pending.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
+            table = pending.lookup(plugin_name);
+            table.insert(uuid, uuid);
             this.manager.modprobe(plugin_name);
             return;
         }
