@@ -112,6 +112,10 @@ public class AppletInfo : GLib.Object
         settings.bind(Arc.APPLET_KEY_PACK, this, "pack-type", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_PAD_START, this, "pad-start", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_PAD_END, this, "pad-end", SettingsBindFlags.DEFAULT);
+
+        /* Automatically handle margins */
+        this.bind_property("pad-start", applet, "margin-start", BindingFlags.DEFAULT);
+        this.bind_property("pad-end", applet, "margin-end", BindingFlags.DEFAULT);
     }
 }
 
