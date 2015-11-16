@@ -29,6 +29,7 @@ Operating System, are given:
     - libpeas-gtk-1.0 >= 1.8.0
     - libgnome-menu-3.0 >= 3.10.1
     - gobject-introspection-1.0 >= 1.44.0
+    - libpulse >= 2
 
 And:
 
@@ -36,7 +37,7 @@ And:
 
 To install these on Solus::
 
-    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel vala libgnome-menus-devel
+    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel vala
     sudo eopkg it -c system.devel
 
 Clone the repository::
