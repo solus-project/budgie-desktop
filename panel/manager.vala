@@ -291,6 +291,7 @@ public class PanelManager
         this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
 
         this.on_monitors_changed();
+        this.load_css();
 
         setup_plugins();
 
@@ -299,6 +300,25 @@ public class PanelManager
             create_default();
         } else {
             message("Loaded existing configuration");
+        }
+    }
+
+    void load_css()
+    {
+        try {
+            var screen = Gdk.Screen.get_default();
+
+            var f = File.new_for_uri("resource://com/solus-project/arc/panel/default.css");
+            var css = new Gtk.CssProvider();
+            css.load_from_file(f);
+            Gtk.StyleContext.add_provider_for_screen(screen, css, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+            var f2 = File.new_for_uri("resource://com/solus-project/arc/panel/style.css");
+            var css2 = new Gtk.CssProvider();
+            css2.load_from_file(f2);
+            Gtk.StyleContext.add_provider_for_screen(screen, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        } catch (Error e) {
+            warning("CSS Missing: %s", e.message);
         }
     }
 
