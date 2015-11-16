@@ -30,4 +30,6 @@ namespace Arc {
         CENTER,
         END
     }
+    [CCode (cheader_filename = "ArcToplevel.h")]
+    public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size);
 }
