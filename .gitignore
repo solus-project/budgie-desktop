@@ -38,3 +38,4 @@ arc-panel-resources.*
 *.stamp*
 
 /raven/raven.c
+/raven/ArcRaven.h

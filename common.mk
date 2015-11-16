@@ -12,6 +12,7 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir)/gvc \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/plugin \
+	-I $(top_srcdir)/raven \
 	-O2
 
 DECLARATIONS = \

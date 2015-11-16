@@ -48,7 +48,8 @@ arc_panel_LDADD = \
 	$(GTK3_LIBS) \
 	$(LIBPEAS_LIBS) \
 	$(UUID_LIBS) \
-	${top_builddir}/plugin/libarc-plugin.la
+	${top_builddir}/plugin/libarc-plugin.la \
+	${top_builddir}/raven/libraven.la
 
 arc_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
@@ -57,7 +58,9 @@ arc_panel_VALAFLAGS = \
 	--pkg libpeas-gtk-1.0 \
 	--pkg arc-1.0 \
 	--pkg panelconfig \
+	--pkg raven \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/panel \
+	--vapidir=${top_srcdir}/raven \
 	$(VALAFLAGS)

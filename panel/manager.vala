@@ -190,6 +190,8 @@ public class PanelManager
 
     HashTable<string, Peas.PluginInfo?> plugins;
 
+    private Arc.Raven? raven = null;
+
     public PanelManager()
     {
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
@@ -289,6 +291,8 @@ public class PanelManager
         settings = new GLib.Settings(Arc.ROOT_SCHEMA);
         var gtksettings = Gtk.Settings.get_default();
         this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
+
+        raven = new Arc.Raven();
 
         this.on_monitors_changed();
         this.load_css();

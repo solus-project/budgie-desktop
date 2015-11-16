@@ -32,7 +32,6 @@ public class Raven : Gtk.Window
         skip_pager_hint = true;
         set_keep_above(true);
         set_decorated(false);
-        get_child().show_all();
     }
 }
 

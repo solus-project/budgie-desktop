@@ -1,5 +1,7 @@
 -include $(top_srcdir)/common.mk
 
+EXTRA_DIST = \
+	raven.vapi
 
 CLEANFILES = \
 	$(BUILT_SOURCES)
@@ -25,6 +27,10 @@ libraven_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg arc-1.0 \
+	-H ArcRaven.h \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	$(VALAFLAGS)
+
+nodist_include_HEADERS = \
+	ArcRaven.h
