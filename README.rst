@@ -13,10 +13,47 @@ License
 
 arc-desktop is available under the terms of the GPL-2.0 license
 
+Building
+========
+
+arc-desktop has a number of build dependencies that must be present
+before attempting configuration. The names are different depending on
+distribution, so the pkg-config names, and the names within the Solus
+Operating System, are given:
+
+    - gobject-2.0 >= 2.44.0
+    - gio-2.0 >= 2.44.0
+    - gtk+-3.0 >= 3.16.0
+    - gio-unix-2.0 >= 2.44.0
+    - uuid
+    - libpeas-gtk-1.0 >= 1.8.0
+    - libgnome-menu-3.0 >= 3.10.1
+    - gobject-introspection-1.0 >= 1.44.0
+
+And:
+
+    - vala >= 0.28
+
+To install these on Solus::
+
+    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel vala libgnome-menus-devel
+    sudo eopkg it -c system.devel
+
+Clone the repository::
+
+    git clone https://github.com/solus-project/arc-desktop.git
+
+Now build it (replace -j5 with your core count +1) ::
+
+    cd arc-desktop
+    ./autogen.sh --prefix=/usr
+    make -j5
+    sudo make install
+
 Theming
 =======
 
-Please look at ./data/default.css to override aspects of the default
+Please look at `./data/default.css` to override aspects of the default
 theming.
 
 Alternatively, you may invoke the panel with the GTK Inspector to
