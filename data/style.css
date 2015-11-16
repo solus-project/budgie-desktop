@@ -1,4 +1,22 @@
 /**
  * This file is used to force overrides on all GTK themes
  */
+GtkScrolledWindow {
+    background-color: transparent;
+}
 
+GtkPopover GtkListBox {
+    background-image: none;
+    background-color: transparent;
+}
+
+GtkPopover GtkListBoxRow {
+    background-image: none;
+    background-color: transparent;
+}
+
+GtkPopover .scrollbar .trough {
+    background-color: transparent;
+    background-image: none;
+    border-image: none;
+}
