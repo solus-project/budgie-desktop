@@ -47,7 +47,6 @@ public class Panel : Arc.Toplevel
 {
 
     Gdk.Rectangle scr;
-    int intended_height = 42 + 5;
     Gdk.Rectangle small_scr;
     Gdk.Rectangle orig_scr;
 
@@ -94,10 +93,10 @@ public class Panel : Arc.Toplevel
         switch (position) {
             case PanelPosition.TOP:
             case PanelPosition.BOTTOM:
-                small.height = intended_height;
+                small.height = intended_size;
                 break;
             default:
-                small.width = intended_height;
+                small.width = intended_size;
                 break;
         }
         if (position != this.position) {
@@ -122,6 +121,7 @@ public class Panel : Arc.Toplevel
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
+        intended_size = 42 + 5;
         this.manager = manager;
     
         scale = get_scale_factor();
@@ -145,7 +145,7 @@ public class Panel : Arc.Toplevel
         add(main_layout);
 
 
-        layout = new MainPanel(intended_height - 5);
+        layout = new MainPanel(intended_size - 5);
         layout.vexpand = false;
         vexpand = false;
         main_layout.pack_start(layout, false, false, 0);
@@ -471,14 +471,14 @@ public class Panel : Arc.Toplevel
 
     void placement()
     {
-        Arc.set_struts(this, position, (intended_height - 5)*this.scale);
+        Arc.set_struts(this, position, (intended_size - 5)*this.scale);
         switch (position) {
             case Arc.PanelPosition.TOP:
                 move(orig_scr.x, orig_scr.y);
                 break;
             default:
                 main_layout.valign = Gtk.Align.END;
-                move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_height));
+                move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
                 main_layout.reorder_child(shadow, 0);
                 shadow.get_style_context().add_class("bottom");
                 set_gravity(Gdk.Gravity.SOUTH);

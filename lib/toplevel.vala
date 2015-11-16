@@ -19,6 +19,11 @@ public abstract class Toplevel : Gtk.Window
      * Length of our shadow component, to enable Raven blending
      */
     public int shadow_width { public set ; public get; }
+
+    /**
+     * Our required size (height or width dependening on orientation
+     */
+    public int intended_size { public set ; public get; }
 }
 
 } /* End namespace */
