@@ -237,7 +237,7 @@ public class PanelManager
             scr.get_monitor_geometry(i, out usable_area);
             Arc.Screen? screen = Arc.Screen() {
                 area = usable_area,
-                slots = 0
+                slots = PanelPosition.NONE
             };
             screens.insert(i, screen);
         }
@@ -517,10 +517,25 @@ public class PanelManager
         this.show_panel(uuid, position);
     }
 
+    static string? pos_text(PanelPosition pos) {
+        switch (pos) {
+            case PanelPosition.TOP:
+                return "top";
+            case PanelPosition.BOTTOM:
+                return "bottom";
+            case PanelPosition.LEFT:
+                return "left";
+            case PanelPosition.RIGHT:
+                return "right";
+            default:
+                return "none";
+        }
+    }
+
     void show_panel(string uuid, PanelPosition position)
     {
         Arc.Panel? panel = panels.lookup(uuid);
-        Screen? scr;
+        unowned Screen? scr;
 
         if (panel == null) {
             warning("Asked to show non-existent panel: %s", uuid);
@@ -528,9 +543,7 @@ public class PanelManager
         }
 
         scr = screens.lookup(this.primary_monitor);
-        if ((scr.slots & position) != 0) {
-            scr.slots |= position;
-        }
+        scr.slots |= position;
         this.set_placement(uuid, position);
     }
 
@@ -553,7 +566,7 @@ public class PanelManager
         PanelPosition old = panel.position;
 
         if (old == position) {
-            warning("Attempting to move panel to the same position it's already in");
+            warning("Attempting to move panel to the same position it's already in: %s", uuid);
             return;
         }
 
