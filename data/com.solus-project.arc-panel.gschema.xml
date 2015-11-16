@@ -74,12 +74,6 @@
       <description>Padding for the end edge of this applet</description>
     </key>
 
-    <key type="b" name="status-area">
-      <default>false</default>
-      <summary>Applet lives in status area</summary>
-      <description>Whether this applet lives in the status area</description>
-    </key>
-
     <key type="s" name="name">
       <default>''</default>
       <summary>Name of the provider plugin</summary>

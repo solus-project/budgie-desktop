@@ -31,6 +31,12 @@ public enum PanelPosition {
 }
 
 [Flags]
+public enum AppletPackType {
+    START       = 1 << 0,
+    END         = 1 << 2
+}
+
+[Flags]
 public enum AppletAlignment {
     START       = 1 << 0,
     CENTER      = 1 << 1,
@@ -41,6 +47,15 @@ struct Screen {
     PanelPosition slots;
     Gdk.Rectangle area;
 }
+
+
+/** Name of the plugin */
+public static const string APPLET_KEY_NAME      = "name";
+public static const string APPLET_KEY_ALIGN     = "alignment";
+public static const string APPLET_KEY_PACK      = "pack-type";
+public static const string APPLET_KEY_POS       = "position";
+public static const string APPLET_KEY_PAD_START = "padding-start";
+public static const string APPLET_KEY_PAD_END   = "padding-end";
 
 /**
  * Used to track Applets in a sane way
@@ -61,14 +76,11 @@ public class AppletInfo : GLib.Object
 
     public string uuid { public get; protected set; }
 
-    /** Plugin name providing the applet instance */
-    public string plugin_name { public get; private set; }
-
     /** Packing type */
-    public Gtk.PackType pack_type { public get ; public set ; }
+    public string pack_type { public get ; public set ; }
 
     /** Whether to place in the status area or not */
-    public bool status_area { public get ; public set ; }
+    public string alignment { public get ; public set ; }
 
     /** Start padding */
     public int pad_start { public get ; public set ; }
@@ -87,10 +99,19 @@ public class AppletInfo : GLib.Object
         this.applet = applet;
         icon = plugin_info.get_icon_name();
         this.name = plugin_info.get_name();
-        plugin_name = plugin_info.get_name();
         this.uuid = uuid;
-
         this.settings = settings;
+        this.bind_settings();
+    }
+
+    void bind_settings()
+    {
+        settings.bind(Arc.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
+        settings.bind(Arc.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
+        settings.bind(Arc.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
+        settings.bind(Arc.APPLET_KEY_PACK, this, "pack-type", SettingsBindFlags.DEFAULT);
+        settings.bind(Arc.APPLET_KEY_PAD_START, this, "pad-start", SettingsBindFlags.DEFAULT);
+        settings.bind(Arc.APPLET_KEY_PAD_END, this, "pad-end", SettingsBindFlags.DEFAULT);
     }
 }
 
@@ -138,9 +159,6 @@ public static const string PANEL_KEY_APPLETS    = "applets";
 
 /** Night mode/dark theme */
 public static const string PANEL_KEY_DARK_THEME = "dark-theme";
-
-/** Name of the plugin */
-public static const string APPLET_KEY_NAME    = "name";
 
 
 [DBus (name = "com.solus_project.arc.Panel")]
