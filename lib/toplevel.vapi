@@ -3,5 +3,6 @@ namespace Arc {
     public abstract class Toplevel : Gtk.Window {
         public int shadow_width {  set ; get; }
         public int intended_size { set ; get; }
+        public int shadow_depth { set ;  get; }
     }
 }
