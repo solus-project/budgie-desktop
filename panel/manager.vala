@@ -30,6 +30,13 @@ public enum PanelPosition {
     RIGHT       = 1 << 4
 }
 
+[Flags]
+public enum AppletAlignment {
+    START       = 1 << 0,
+    CENTER      = 1 << 1,
+    END         = 1 << 2
+}
+
 struct Screen {
     PanelPosition slots;
     Gdk.Rectangle area;

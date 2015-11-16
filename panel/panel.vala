@@ -77,6 +77,13 @@ public class Panel : Gtk.Window
     /* Multiplier for strut operations on hi-dpi */
     int scale = 1;
 
+    /* Box for the start of the panel */
+    Gtk.Box? start_box;
+    /* Box for the center of the panel */
+    Gtk.Box? center_box;
+    /* Box for the end of the panel */
+    Gtk.Box? end_box;
+
     /**
      * Force update the geometry
      */
@@ -151,6 +158,14 @@ public class Panel : Gtk.Window
         shadow.halign = Gtk.Align.START;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
+
+        /* Assign our applet holder boxes */
+        start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.pack_start(start_box, true, true, 0);
+        center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.set_center_widget(center_box);
+        end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.pack_end(end_box, true, true, 0);
 
         get_child().show_all();
         set_expanded(false);
@@ -253,11 +268,27 @@ public class Panel : Gtk.Window
 
     void add_applet(Arc.AppletInfo? info)
     {
+        unowned Gtk.Box? pack_target = null;
+        AppletAlignment alignment = AppletAlignment.START;
+
         message("adding %s: %s", info.name, info.uuid);
+
+        switch (alignment) {
+            case AppletAlignment.START:
+                pack_target = start_box;
+                break;
+            case AppletAlignment.END:
+                pack_target = end_box;
+                break;
+            default:
+                pack_target = center_box;
+                break;
+        }
+
         this.applets.insert(info.uuid, info);
         this.set_applets();
 
-        layout.pack_start(info.applet, false, false, 0);
+        pack_target.pack_start(info.applet, false, false, 0);
 
         var table = info.applet.get_popovers();
         if (table == null) {
