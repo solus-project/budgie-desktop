@@ -16,4 +16,5 @@ SUBDIRS = \
 	data \
 	gvc \
 	plugin \
+	raven \
 	panel

@@ -62,6 +62,7 @@ AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
                 plugin/Makefile
+                raven/Makefile
                 panel/Makefile
                 panel/applets/Makefile
                 panel/applets/budgie-menu/Makefile])
