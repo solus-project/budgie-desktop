@@ -12,23 +12,24 @@
 namespace Arc
 {
 
-    public static string position_class_name(PanelPosition position)
-    {
-        switch (position) {
-            case PanelPosition.TOP:
-                return "top";
-            case PanelPosition.BOTTOM:
-                return "bottom";
-            case PanelPosition.LEFT:
-                return "left";
-            case PanelPosition.RIGHT:
-                return "right";
-            default:
-                return "";
-        }
+public static string position_class_name(PanelPosition position)
+{
+    switch (position) {
+        case PanelPosition.TOP:
+            return "top";
+        case PanelPosition.BOTTOM:
+            return "bottom";
+        case PanelPosition.LEFT:
+            return "left";
+        case PanelPosition.RIGHT:
+            return "right";
+        default:
+            return "";
     }
+}
+    
 /**
- * Alternative to a separator, gives a shadow effect :)
+ * Alternative to a separator, gives a shadow effect
  */
 public class ShadowBlock : Gtk.EventBox
 {
@@ -123,4 +124,4 @@ public class ShadowBlock : Gtk.EventBox
     }
 }
 
-} // End namespace
+}

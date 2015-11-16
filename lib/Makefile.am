@@ -6,7 +6,8 @@ EXTRA_DIST = \
 noinst_LTLIBRARIES = libtoplevel.la
 
 libtoplevel_la_SOURCES = \
-	toplevel.vala
+	toplevel.vala \
+	shadow.vala
 
 libtoplevel_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \

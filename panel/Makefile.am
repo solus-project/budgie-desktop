@@ -32,7 +32,6 @@ arc_panel_SOURCES = \
 	manager.vala \
 	panel.vala \
 	popovers.vala \
-	utils.vala \
 	uuid.vala
 
 arc_panel_CFLAGS = \
