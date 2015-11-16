@@ -11,14 +11,6 @@
     transition: 170ms ease-out;
 }
 
-/**
- * Container for both the "panel" area and the shadow. Wise to keep
- * this transparent..
- */
-.arc-container {
-    background-color: transparent;
-}
-
 /* Adapted from Numix - swapped directions */
 .shadow-block.bottom {
     background-color: transparent;

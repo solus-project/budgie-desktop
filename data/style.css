@@ -20,3 +20,12 @@ GtkPopover .scrollbar .trough {
     background-image: none;
     border-image: none;
 }
+
+
+/**
+ * Container for both the "panel" area and the shadow. Wise to keep
+ * this transparent..
+ */
+.arc-container {
+    background-color: transparent;
+}
