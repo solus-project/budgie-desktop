@@ -44,11 +44,11 @@ Clone the repository::
 
     git clone https://github.com/solus-project/arc-desktop.git
 
-Now build it (replace -j5 with your core count +1) ::
+Now build it ::
 
     cd arc-desktop
     ./autogen.sh --prefix=/usr
-    make -j5
+    make -j$(($(getconf _NPROCESSORS_ONLN)+1))
     sudo make install
 
 Theming
