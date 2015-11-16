@@ -31,4 +31,27 @@ public abstract class Toplevel : Gtk.Window
     public int intended_size { public set ; public get; }
 }
 
+
+[Flags]
+public enum PanelPosition {
+    NONE        = 1 << 0,
+    BOTTOM      = 1 << 1,
+    TOP         = 1 << 2,
+    LEFT        = 1 << 3,
+    RIGHT       = 1 << 4
+}
+
+[Flags]
+public enum AppletPackType {
+    START       = 1 << 0,
+    END         = 1 << 2
+}
+
+[Flags]
+public enum AppletAlignment {
+    START       = 1 << 0,
+    CENTER      = 1 << 1,
+    END         = 1 << 2
+}
+
 } /* End namespace */
