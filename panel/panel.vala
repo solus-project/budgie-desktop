@@ -309,6 +309,57 @@ public class Panel : Gtk.Window
         while (iter.next(out widg, out pop)) {
             this.popover_manager.register_popover(widg,pop);
         }
+
+        info.notify.connect(applet_updated);
+    }
+
+    void applet_updated(Object o, ParamSpec p)
+    {
+        unowned AppletInfo? info = o as AppletInfo;
+
+        if (p.name == "alignment") {
+            /* Handle being reparented. */
+            unowned Gtk.Box? new_parent = null;
+            switch (info.alignment) {
+                case "start":
+                    new_parent = this.start_box;
+                    break;
+                case "end":
+                    new_parent = this.end_box;
+                    break;
+                default:
+                    new_parent = this.center_box;
+                    break;
+            }
+            /* Don't needlessly reparent */
+            if (new_parent == info.applet.get_parent()) {
+                return;
+            }
+            int position = (int) new_parent.get_children().length() - 1;
+            if (position < 0) {
+                position = 0;
+            }
+            info.applet.reparent(new_parent);
+            /* Reset to "start" pack - might change in future */
+            info.pack_type = "start";
+            /* We need to be packed after all the other widgets */
+            info.position = position;
+            return;
+        } else if (p.name == "pack-type") {
+            /* Swap the pack type */
+            Gtk.PackType t;
+
+            switch (info.pack_type) {
+                case "start":
+                    t = Gtk.PackType.START;
+                    break;
+                default:
+                    t = Gtk.PackType.END;
+                    break;
+            }
+            info.applet.get_parent().child_set(info.applet, "pack-type", t);
+            return;
+        } /* TODO: Implement position knowledge */
     }
 
     void add_new(string plugin_name)
