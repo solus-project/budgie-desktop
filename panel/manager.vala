@@ -77,19 +77,19 @@ public class AppletInfo : GLib.Object
     public string uuid { public get; protected set; }
 
     /** Packing type */
-    public string pack_type { public get ; public set ; }
+    public string pack_type { public get ; public set ; default = "start"; }
 
     /** Whether to place in the status area or not */
-    public string alignment { public get ; public set ; }
+    public string alignment { public get ; public set ; default = "start"; }
 
     /** Start padding */
-    public int pad_start { public get ; public set ; }
+    public int pad_start { public get ; public set ; default = 0; }
 
     /** End padding */
-    public int pad_end { public get ; public set; }
+    public int pad_end { public get ; public set; default = 0; }
 
     /** Position (packging index */
-    public int position { public get; public set; }
+    public int position { public get; public set; default = 0; }
 
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets

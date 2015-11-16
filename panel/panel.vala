@@ -269,15 +269,15 @@ public class Panel : Gtk.Window
     void add_applet(Arc.AppletInfo? info)
     {
         unowned Gtk.Box? pack_target = null;
-        AppletAlignment alignment = AppletAlignment.START;
 
         message("adding %s: %s", info.name, info.uuid);
 
-        switch (alignment) {
-            case AppletAlignment.START:
+        /* figure out the alignment */
+        switch (info.alignment) {
+            case "start":
                 pack_target = start_box;
                 break;
-            case AppletAlignment.END:
+            case "end":
                 pack_target = end_box;
                 break;
             default:
@@ -288,7 +288,15 @@ public class Panel : Gtk.Window
         this.applets.insert(info.uuid, info);
         this.set_applets();
 
-        pack_target.pack_start(info.applet, false, false, 0);
+        /* Pack type */
+        switch (info.pack_type) {
+            case "start":
+                pack_target.pack_start(info.applet, false, false, 0);
+                break;
+            default:
+                pack_target.pack_end(info.applet, false, false, 0);
+                break;
+        }
 
         var table = info.applet.get_popovers();
         if (table == null) {
