@@ -43,7 +43,7 @@ public class MainPanel : Gtk.Box
 /**
  * The toplevel window for a panel
  */
-public class Panel : Gtk.Window
+public class Panel : Arc.Toplevel
 {
 
     Gdk.Rectangle scr;

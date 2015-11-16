@@ -626,13 +626,24 @@ public class PanelManager
      */
     void update_screen()
     {
+        Arc.Toplevel? top = null;
+        Arc.Toplevel? bottom = null;
+
         string? key = null;
         Arc.Panel? val = null;
         Screen? area = screens.lookup(primary_monitor);
         var iter = HashTableIter<string,Arc.Panel?>(panels);
         while (iter.next(out key, out val)) {
+            if (val.position == Arc.PanelPosition.TOP) {
+                top = val;
+            } else if (val.position == Arc.PanelPosition.BOTTOM) {
+                bottom = val;
+            }
             val.update_geometry(area.area, val.position);
         }
+
+        /* Let Raven update itself accordingly */
+        raven.update_geometry(area.area, top, bottom);
     }
 
     /**

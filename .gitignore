@@ -40,3 +40,6 @@ arc-panel-resources.*
 
 /raven/raven.c
 /raven/ArcRaven.h
+
+/lib/toplevel.c
+/lib/ArcToplevel.h

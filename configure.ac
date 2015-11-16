@@ -61,6 +61,7 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext pa
 AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
+                lib/Makefile
                 plugin/Makefile
                 plugin/arc-1.0.pc
                 raven/Makefile

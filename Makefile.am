@@ -15,6 +15,7 @@ CLEANFILES =
 SUBDIRS = \
 	data \
 	gvc \
+	lib \
 	plugin \
 	raven \
 	panel

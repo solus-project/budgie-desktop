@@ -33,6 +33,11 @@ public class Raven : Gtk.Window
         set_keep_above(true);
         set_decorated(false);
     }
+
+    public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
+    {
+        /* TODO: Implement */
+    }
 }
 
 } /* End namespace */

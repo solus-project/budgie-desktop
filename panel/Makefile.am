@@ -49,6 +49,7 @@ arc_panel_LDADD = \
 	$(LIBPEAS_LIBS) \
 	$(UUID_LIBS) \
 	${top_builddir}/plugin/libarc-plugin.la \
+	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/raven/libraven.la
 
 arc_panel_VALAFLAGS = \
@@ -59,8 +60,10 @@ arc_panel_VALAFLAGS = \
 	--pkg arc-1.0 \
 	--pkg panelconfig \
 	--pkg raven \
+	--pkg toplevel \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/panel \
 	--vapidir=${top_srcdir}/raven \
+	--vapidir=${top_srcdir}/lib \
 	$(VALAFLAGS)
