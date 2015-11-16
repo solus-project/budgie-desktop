@@ -21,6 +21,8 @@ public class Raven : Gtk.Window
     int our_width = 0;
     int our_height = 0;
 
+    private Arc.ShadowBlock? shadow;
+
     public Raven()
     {
         Object(type_hint: Gdk.WindowTypeHint.UTILITY, gravity : Gdk.Gravity.EAST);
@@ -32,6 +34,18 @@ public class Raven : Gtk.Window
         } else {
             set_visual(vis);
         }
+
+        /* Set up our main layout */
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        add(layout);
+
+        shadow = new Arc.ShadowBlock(PanelPosition.RIGHT);
+        layout.pack_start(shadow, false, false, 0);
+
+        /* Temporary */
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        layout.pack_start(box, true, true, 0);
+        box.get_style_context().add_class("arc-panel");
 
         resizable = true;
         skip_taskbar_hint = true;
