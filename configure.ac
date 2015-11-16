@@ -62,6 +62,7 @@ AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
                 plugin/Makefile
+                plugin/arc-1.0.pc
                 raven/Makefile
                 panel/Makefile
                 panel/applets/Makefile

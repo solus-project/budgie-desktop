@@ -31,6 +31,7 @@ arc-panel-resources.*
 *.typelib
 /plugin/*.c
 /plugin/*.h
+/plugin/arc-1.0.pc
 
 *.la
 *.lo
