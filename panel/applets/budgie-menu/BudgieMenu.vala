@@ -31,13 +31,9 @@ public class BudgieMenuApplet : Arc.Applet
     Gtk.Label label;
     private string modifier;
 
-    HashTable<Gtk.Widget?,Gtk.Popover> popovers;
-
     public BudgieMenuApplet()
     {
         Object();
-
-        popovers = new HashTable<Gtk.Widget?,Gtk.Popover>(direct_hash, direct_equal);
 
         settings = new Settings("com.evolve-os.budgie.panel");
         ksettings = new Settings("org.gnome.mutter");
@@ -72,8 +68,6 @@ public class BudgieMenuApplet : Arc.Applet
             }
             return Gdk.EVENT_STOP;
         });
-
-        popovers.insert(widget, popover);
 
         // This enables us to respond to the "overlay-key" action
         /*action_invoked.connect((t) => {
@@ -138,9 +132,9 @@ public class BudgieMenuApplet : Arc.Applet
         }
     }
 
-    public override unowned HashTable<Gtk.Widget?,Gtk.Popover?>? get_popovers()
+    public override void update_popovers(Arc.PopoverManager? manager)
     {
-        return popovers;
+        manager.register_popover(widget, popover);
     }
 
 } // End class

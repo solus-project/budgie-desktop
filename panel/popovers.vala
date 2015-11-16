@@ -12,7 +12,7 @@
 namespace Arc
 {
 
-public class PopoverManager : Object
+public class PopoverManagerImpl : PopoverManager, GLib.Object
 {
     HashTable<Gtk.Widget?,Gtk.Popover?> widgets;
 
@@ -23,7 +23,7 @@ public class PopoverManager : Object
     bool mousing = false;
 
 
-    public PopoverManager(Arc.Panel? owner)
+    public PopoverManagerImpl(Arc.Panel? owner)
     {
         this.owner = owner;
         widgets = new HashTable<Gtk.Widget?,Gtk.Popover?>(direct_hash, direct_equal);

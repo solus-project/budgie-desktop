@@ -12,6 +12,26 @@
 namespace Arc
 {
 
+public interface PopoverManager : GLib.Object
+{
+    /**
+     * arc_popover_manager_register_popover:
+     * @widget: Widget that the popover is associated with
+     * @popover: a #GtkPopover to assicate with @widget
+     * 
+     * Register a popover with this manager instance
+     */
+    public abstract void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
+
+    /**
+     * arc_popover_manager_unregister_popover:
+     * @widget: Widget that the popover is associated with
+     *
+     * Unregister a widget that was previously registered
+     */
+    public abstract void unregister_popover(Gtk.Widget? widget);
+}
+
 /**
  * ArcPlugin
  */
@@ -40,10 +60,14 @@ public class Applet : Gtk.Bin
      */
     public Applet() { }
 
-    public virtual unowned GLib.HashTable<Gtk.Widget?,Gtk.Popover?>? get_popovers()
-    {
-        return null;
-    }
+    /**
+     * arc_applet_update_popovers:
+     * @manager: a valid #ArcPopoverManager
+     *
+     * Inform the applet it needs to register it's popovers. The #PopoverManager
+     * is always valid
+     */
+    public virtual void update_popovers(Arc.PopoverManager? manager) { }
 }
 
 }

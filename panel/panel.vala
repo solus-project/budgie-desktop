@@ -61,7 +61,7 @@ public class Panel : Gtk.Window
 
     public string uuid { construct set ; public get; }
 
-    PopoverManager popover_manager;
+    PopoverManager? popover_manager;
     bool expanded = true;
 
     Arc.ShadowBlock shadow;
@@ -127,7 +127,7 @@ public class Panel : Gtk.Window
         scale = get_scale_factor();
         load_css();
 
-        popover_manager = new PopoverManager(this);
+        popover_manager = new PopoverManagerImpl(this);
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         applets = new HashTable<string,Arc.AppletInfo?>(str_hash, str_equal);
@@ -288,6 +288,8 @@ public class Panel : Gtk.Window
         this.applets.insert(info.uuid, info);
         this.set_applets();
 
+        info.applet.update_popovers(this.popover_manager);
+
         /* Pack type */
         switch (info.pack_type) {
             case "start":
@@ -297,19 +299,6 @@ public class Panel : Gtk.Window
                 pack_target.pack_end(info.applet, false, false, 0);
                 break;
         }
-
-        var table = info.applet.get_popovers();
-        if (table == null) {
-            return;
-        }
-        /* Hacky popover tests */
-        var iter = HashTableIter<Gtk.Widget?,Gtk.Popover?>(table);
-        unowned Gtk.Widget? widg = null;
-        unowned Gtk.Popover? pop = null;
-        while (iter.next(out widg, out pop)) {
-            this.popover_manager.register_popover(widg,pop);
-        }
-
         info.notify.connect(applet_updated);
     }
 
