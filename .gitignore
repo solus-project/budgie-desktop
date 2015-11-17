@@ -43,4 +43,5 @@ arc-panel-resources.*
 
 /lib/toplevel.c
 /lib/shadow.c
+/lib/animation.c
 /lib/ArcToplevel.h

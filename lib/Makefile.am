@@ -6,6 +6,7 @@ EXTRA_DIST = \
 noinst_LTLIBRARIES = libtoplevel.la
 
 libtoplevel_la_SOURCES = \
+	animation.vala \
 	toplevel.vala \
 	shadow.vala
 
