@@ -23,6 +23,25 @@ public class Raven : Gtk.Window
 
     private Arc.ShadowBlock? shadow;
 
+    private double scale = 0.0;
+
+    public int required_size { public get ; protected set; }
+
+    public double nscale {
+        public set {
+            scale = value;
+            if (nscale > 0.0 && nscale < 1.0) {
+                required_size = (int)(get_allocated_width() * nscale);
+            } else {
+                required_size = get_allocated_width();
+            }
+            queue_draw();
+        }
+        public get {
+            return scale;
+        }
+    }
+
     public Raven()
     {
         Object(type_hint: Gdk.WindowTypeHint.UTILITY, gravity : Gdk.Gravity.EAST);
@@ -116,6 +135,71 @@ public class Raven : Gtk.Window
     {
         m = our_height;
         n = our_height;
+    }
+
+    public override bool draw(Cairo.Context cr)
+    {
+        if (nscale == 0.0 || nscale == 1.0) {
+            return base.draw(cr);
+        }
+
+        Gtk.Allocation alloc;
+        get_allocation(out alloc);
+        var buffer = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
+        var cr2 = new Cairo.Context(buffer);
+
+        propagate_draw(get_child(), cr2);
+        var width = alloc.width * nscale;
+
+        cr.set_source_surface(buffer, alloc.width-width, 0);
+        cr.paint();
+
+        return Gdk.EVENT_STOP;
+    }
+
+    /**
+     * Slide Raven in or out of view
+     */
+    public void set_expanded(bool exp)
+    {
+        double old_op, new_op;
+        if (exp) {
+            old_op = 0.0;
+            new_op = 1.0;
+        } else {
+            old_op = 1.0;
+            new_op = 0.0;
+        }
+        nscale = old_op;
+
+        if (exp) {
+            show_all();
+        }
+
+        var anim = new Arc.Animation();
+        anim.widget = this;
+        anim.length = 270 * Arc.MSECOND;
+        anim.tween = Arc.sine_ease_in;
+        anim.changes = new Arc.PropChange[] {
+            Arc.PropChange() {
+                property = "nscale",
+                old = old_op,
+                @new = new_op
+            },
+            Arc.PropChange() {
+                property = "opacity",
+                old = old_op,
+                @new = new_op
+            }
+        };
+
+        anim.start((a)=> {
+            if ((a.widget as Arc.Raven).nscale == 0.0) {
+                a.widget.hide();
+            } else {
+                (a.widget as Gtk.Window).present();
+            }
+        });
     }
 }
 
