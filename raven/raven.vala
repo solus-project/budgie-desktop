@@ -95,7 +95,7 @@ public class Raven : Gtk.Window
 
     public Raven()
     {
-        Object(type_hint: Gdk.WindowTypeHint.UTILITY, gravity : Gdk.Gravity.EAST);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, gravity : Gdk.Gravity.EAST);
         get_style_context().add_class("arc-container");
 
         var vis = screen.get_rgba_visual();
@@ -125,19 +125,6 @@ public class Raven : Gtk.Window
         skip_pager_hint = true;
         set_keep_above(true);
         set_decorated(false);
-
-        shadow.realize.connect(()=> {
-            var win = shadow.get_window();
-            var disp = shadow.get_screen().get_display();
-            win.set_cursor(new Gdk.Cursor.for_display(disp, Gdk.CursorType.SB_H_DOUBLE_ARROW));
-        });
-        shadow.button_press_event.connect((w,e)=> {
-            if (e.button != 1) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            this.begin_resize_drag(Gdk.WindowEdge.WEST, (int)e.button,(int) e.x_root, (int)e.y_root, e.get_time());
-            return Gdk.EVENT_PROPAGATE;
-        });
 
         notify["visible"].connect(()=> {
             if (!get_visible()) {
