@@ -10,7 +10,8 @@ CLEANFILES = \
 lib_LTLIBRARIES = libraven.la
 
 libraven_la_SOURCES = \
-	raven.vala
+	raven.vala \
+	powerstrip.vala
 
 libraven_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \

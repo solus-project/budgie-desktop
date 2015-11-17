@@ -11,6 +11,17 @@
     transition: 170ms ease-out;
 }
 
+.raven {
+    background-image: linear-gradient(to bottom, rgba(37, 39, 45, 0.95));
+    transition: 170ms ease-out;
+}
+
+.raven .header-widget {
+    color: #A8ADB5;
+    font-size: 12pt;
+    background-color: darker(#3c4049);
+}
+
 /* Adapted from Numix - swapped directions */
 .shadow-block.bottom {
     background-color: transparent;

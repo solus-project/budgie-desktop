@@ -62,6 +62,8 @@ public class Raven : Gtk.Window
 
     public int required_size { public get ; protected set; }
 
+    private PowerStrip? strip = null;
+
     public double nscale {
         public set {
             scale = value;
@@ -110,7 +112,10 @@ public class Raven : Gtk.Window
         /* Temporary */
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         layout.pack_start(box, true, true, 0);
-        box.get_style_context().add_class("arc-panel");
+        box.get_style_context().add_class("raven");
+
+        strip = new PowerStrip();
+        box.pack_end(strip, false, false, 0);
 
         resizable = true;
         skip_taskbar_hint = true;
