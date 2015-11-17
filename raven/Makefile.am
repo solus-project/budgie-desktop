@@ -11,7 +11,10 @@ lib_LTLIBRARIES = libraven.la
 
 libraven_la_SOURCES = \
 	raven.vala \
-	powerstrip.vala
+	powerstrip.vala \
+	mpris/MprisClient.vala \
+	mpris/MprisGui.vala \
+	mpris/MprisWidget.vala
 
 libraven_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
