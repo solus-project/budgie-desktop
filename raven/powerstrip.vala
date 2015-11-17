@@ -51,6 +51,7 @@ public class PowerStrip : Gtk.EventBox
         btn.clicked.connect(()=> {
             lock_screen();
         });
+        var lock_btn = btn;
         btn.halign = Gtk.Align.START;
         btn.relief = Gtk.ReliefStyle.NONE;
         btn.margin_left = 20;
@@ -72,8 +73,8 @@ public class PowerStrip : Gtk.EventBox
 
         var path = Environment.get_variable("XDG_SEAT_PATH");
         if (path == null) {
-            btn.no_show_all = true;
-            btn.hide();
+            lock_btn.no_show_all = true;
+            lock_btn.hide();
         }
     }
 
