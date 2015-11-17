@@ -15,11 +15,15 @@ public class MprisWidget : Gtk.Box
 
     HashTable<string,ClientWidget> ifaces;
 
+    int our_width = 250;
+
     public MprisWidget()
     {
         Object (orientation: Gtk.Orientation.VERTICAL, spacing: 1);
 
         ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
+
+        get_style_context().add_class("raven-background");
 
         Idle.add(()=> {
             setup_dbus();
@@ -97,4 +101,17 @@ public class MprisWidget : Gtk.Box
             warning("Failed to initialise dbus: %s", e.message);
         }
     }
+
+    public override void get_preferred_width(out int m, out int n)
+    {
+        m = our_width;
+        n = our_width;
+    }
+
+    public override void get_preferred_width_for_height(int h, out int m, out int n)
+    {
+        m = our_width;
+        n = our_width;
+    }
+
 } // End class

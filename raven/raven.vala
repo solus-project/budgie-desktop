@@ -67,6 +67,9 @@ public class Raven : Gtk.Window
     unowned Arc.Toplevel? toplevel_top = null;
     unowned Arc.Toplevel? toplevel_bottom = null;
 
+    /* This is completely temporary. Shush */
+    private MprisWidget? mpris = null;
+
     public double nscale {
         public set {
             scale = value;
@@ -116,6 +119,10 @@ public class Raven : Gtk.Window
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         layout.pack_start(box, true, true, 0);
         box.get_style_context().add_class("raven");
+
+        mpris = new MprisWidget();
+        mpris.margin_top = 6;
+        box.pack_start(mpris, false, false, 0);
 
         strip = new PowerStrip(this);
         box.pack_end(strip, false, false, 0);
@@ -190,9 +197,15 @@ public class Raven : Gtk.Window
     public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
     {
         int width = (int) (rect.width * this.intended_size);
+        int n, m;
+        /* In future we'll actually probe all applets */
+        mpris.get_preferred_width(out m, out n);
+        int width = n;
+
         int x = (rect.x+rect.width)-width;
         int y = rect.y;
         int height = rect.height;
+
 
         if (top != this.toplevel_top) {
             unbind_panel_shadow(this.toplevel_top);

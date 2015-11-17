@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-const int BACKGROUND_SIZE = 160;
+const int BACKGROUND_SIZE = 250;
 
 /**
  * A fancier Gtk.Image, which forces a fade-effect across the bottom of the image
@@ -25,47 +25,6 @@ public class ClientImage : Gtk.Image
     public ClientImage.from_icon_name(string icon_name, Gtk.IconSize size)
     {
         Object(icon_name : icon_name, icon_size: size);
-    }
-
-    public override bool draw(Cairo.Context cr)
-    {
-        Gtk.Allocation alloc;
-        get_allocation(out alloc);
-
-        /* Render to new surface.. */
-        var surf = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
-        var cr2 = new Cairo.Context(surf);
-        base.draw(cr2);
-
-        var alpha = 1.0;
-        /* Just makes sure we fade out the bottom part of the image where we overlay
-         * controls. Inspiration: http://zetcode.com/gfx/pycairo/transparency/
-         *
-         * craqmonkies follow.
-         */
-
-        var start = (int)(alloc.height*0.40);
-        var step = ((1.0 / (alloc.height-start)))*1.35;
-
-        cr.rectangle(0, 0, alloc.width, start);
-        cr.save();
-        cr.clip();
-        cr.set_source_surface(surf, 0, 0);
-        cr.paint();
-        cr.restore();
-
-        for (int i = start; i < alloc.height; i++) {
-            cr.rectangle(0, i, alloc.width, 1);
-            cr.save();
-            cr.clip();
-            cr.set_source_surface(surf, 0, 0);
-            cr.paint_with_alpha(alpha);
-            cr.restore();
-
-            alpha -= step;
-        }
-
-        return true;
     }
 }
 
@@ -103,7 +62,7 @@ public class ClientWidget : Gtk.Box
 
         player_revealer = new Gtk.Revealer ();
         player_revealer.reveal_child = true;
-        var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
+        var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         Gtk.Widget? row = null;;
         string icon_name = "emblem-music-symbolic";
@@ -118,7 +77,9 @@ public class ClientWidget : Gtk.Box
         if (row == null) {
             row = create_row(client.player.identity, icon_name);
         }
-        row.margin_bottom = 3;
+
+        row.get_style_context().add_class("raven-expander");
+        row.margin_bottom = 0;
         pack_start(row, false, false, 0);
 
         if (client.player.can_quit) {
@@ -161,17 +122,27 @@ public class ClientWidget : Gtk.Box
 
 
         /* normal info */
-        row = create_row("Unknown Artist", "user-info-symbolic");
-        artist_label = row.get_data("label_item");
-        player_box.pack_start(row, false, false, 0);
-        row = create_row("Unknown Title", "emblem-music-symbolic");
-        title_label = row.get_data("label_item");
-        player_box.pack_start(row, false, false, 0);
-        row = create_row("Unknown Album", "media-optical-symbolic");
-        album_label = row.get_data("label_item");
-        player_box.pack_start(row, false, false, 0);
+        var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        top_box.valign = Gtk.Align.END;
+        top_box.get_style_context().add_class("raven-mpris");
+
 
         var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+        row = create_row("Unknown Artist", "user-info-symbolic");
+        row.margin_top = 6;
+        artist_label = row.get_data("label_item");
+        top_box.pack_start(row, false, false, 0);
+        row = create_row("Unknown Title", "emblem-music-symbolic");
+        title_label = row.get_data("label_item");
+        top_box.pack_start(row, false, false, 0);
+        row = create_row("Unknown Album", "media-optical-symbolic");
+        album_label = row.get_data("label_item");
+        top_box.pack_start(row, false, false, 0);
+
+        top_box.pack_start(controls, false, false, 0);
+        controls.margin_bottom = 6;
+
 
         var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
         btn.set_sensitive(false);
@@ -227,11 +198,11 @@ public class ClientWidget : Gtk.Box
         btn.set_relief(Gtk.ReliefStyle.NONE);
         controls.pack_start(btn, false, false, 0);
 
+
         controls.set_halign(Gtk.Align.CENTER);
         controls.set_valign(Gtk.Align.END);
-        controls.margin_bottom = (int) (200*0.10);
-
-        layout.add_overlay(controls);
+        controls.margin_bottom = 6;
+        layout.add_overlay(top_box);
 
         update_from_meta();
         update_play_status();
@@ -381,7 +352,7 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
     }
 
     img.margin_right = 8;
-    img.margin_left = 3;
+    img.margin_left = 8;
     box.pack_start(img, false, false, 0);
     var label = new Gtk.Label(name);
     label.set_line_wrap(true);
