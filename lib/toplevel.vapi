@@ -49,13 +49,14 @@ namespace Arc {
 
     [CCode (cheader_filename = "ArcToplevel.h")]
     public struct PropChange {
-        string property
-        Value old
-        Value @new;
+        string property;
+        GLib.Value old;
+        GLib.Value @new;
     }
 
     [CCode (cheader_filename = "ArcToplevel.h")]
-    public class Animation : Object {
+    public class Animation : GLib.Object {
+        public Animation();
         public int64 start_time;
         public int64 length;
         public unowned TweenFunc tween;
