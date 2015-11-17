@@ -64,6 +64,9 @@ public class Raven : Gtk.Window
 
     private PowerStrip? strip = null;
 
+    unowned Arc.Toplevel? toplevel_top = null;
+    unowned Arc.Toplevel? toplevel_bottom = null;
+
     public double nscale {
         public set {
             scale = value;
@@ -135,12 +138,53 @@ public class Raven : Gtk.Window
             this.begin_resize_drag(Gdk.WindowEdge.WEST, (int)e.button,(int) e.x_root, (int)e.y_root, e.get_time());
             return Gdk.EVENT_PROPAGATE;
         });
+
+        notify["visible"].connect(()=> {
+            if (!get_visible()) {
+                if (this.toplevel_top != null) {
+                    toplevel_top.reset_shadow();
+                }
+                if (this.toplevel_bottom != null) {
+                    toplevel_bottom.reset_shadow();
+                }
+            }
+        });
     }
 
     public void setup_dbus()
     {
         Bus.own_name(BusType.SESSION, Arc.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
             on_bus_acquired, ()=> {}, ()=> { warning("Raven could not take dbus!"); });
+    }
+
+    void bind_panel_shadow(Arc.Toplevel? toplevel)
+    {
+        weak Binding? b = bind_property("required-size", toplevel, "shadow-width", BindingFlags.DEFAULT, (b,v, ref v2)=> {
+            var d = v.get_int()-5;
+            v2 = Value(typeof(int));
+            v2.set_int(d);
+            return true;
+        });
+        toplevel.set_data("_binding_shadow", b);
+        toplevel.destroy.connect(()=> {
+            this.unbind_panel_shadow(toplevel);
+        });
+    }
+
+    void unbind_panel_shadow(Arc.Toplevel? top)
+    {
+        if (top == null) {
+            return;
+        }
+        weak Binding? b = top.get_data("_binding_shadow");
+        if (b != null) {
+            b.unbind();
+        }
+        if (this.toplevel_top == top) {
+            this.toplevel_top = null;
+        } else if (this.toplevel_bottom == top) {
+            this.toplevel_bottom = null;
+        }
     }
 
     /**
@@ -153,15 +197,28 @@ public class Raven : Gtk.Window
         int y = rect.y;
         int height = rect.height;
 
+        if (top != this.toplevel_top) {
+            unbind_panel_shadow(this.toplevel_top);
+        }
+        if (bottom != this.toplevel_bottom) {
+            unbind_panel_shadow(this.toplevel_bottom);
+        }
+
         if (top != null) {
             int size = top.intended_size - top.shadow_depth;
             height -= size;
             y += size;
+
+            this.toplevel_top = top;
+            this.bind_panel_shadow(top);
         }
 
         if (bottom != null) {
             height -= bottom.intended_size;
             height += bottom.shadow_depth;
+
+            this.toplevel_bottom = bottom;
+            this.bind_panel_shadow(bottom);
         }
 
         our_height = height;

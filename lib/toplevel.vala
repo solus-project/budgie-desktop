@@ -29,6 +29,8 @@ public abstract class Toplevel : Gtk.Window
      * Our required size (height or width dependening on orientation
      */
     public int intended_size { public set ; public get; }
+
+    public virtual void reset_shadow() { }
 }
 
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)

@@ -37,6 +37,7 @@ public class ShadowBlock : Gtk.EventBox
     private int size;
     private PanelPosition pos;
     private bool horizontal = false;
+    int rm = 0;
 
     public PanelPosition position {
         public set {
@@ -56,6 +57,16 @@ public class ShadowBlock : Gtk.EventBox
         }
         public get {
             return size;
+        }
+    }
+
+    public int removal {
+        public set {
+            rm = value;
+            queue_resize();
+        }
+        public get {
+            return rm;
         }
     }
 
@@ -90,7 +101,7 @@ public class ShadowBlock : Gtk.EventBox
             nat = 5;
             return;
         };
-        min = nat = required_size;
+        min = nat = required_size - rm;
     }
 
     public override void get_preferred_height_for_width(int width, out int min, out int nat)
@@ -100,14 +111,13 @@ public class ShadowBlock : Gtk.EventBox
             nat = 5;
             return;
         }
-        min = nat = required_size;
+        min = nat = required_size - rm;
     }
 
     public override void get_preferred_width(out int min, out int nat)
     {
         if (horizontal) {
-            min = required_size;
-            nat = required_size;
+            min = nat = required_size - rm;
             return;
         }
         min = nat = 5;
@@ -116,8 +126,7 @@ public class ShadowBlock : Gtk.EventBox
     public override void get_preferred_width_for_height(int height, out int min, out int nat)
     {
         if (horizontal) {
-            min = required_size;
-            nat = required_size;
+            min = nat = required_size - rm;
             return;
         }
         min = nat = 5;

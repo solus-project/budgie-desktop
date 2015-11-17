@@ -4,6 +4,8 @@ namespace Arc {
         public int shadow_width {  set ; get; }
         public int intended_size { set ; get; }
         public int shadow_depth { set ;  get; }
+
+        public virtual void reset_shadow();
     }
 
     [CCode (cheader_filename = "ArcToplevel.h")]
@@ -39,6 +41,7 @@ namespace Arc {
         public ShadowBlock(PanelPosition position);
         public PanelPosition position { set; get; }
         public int required_size { set; get; }
+        public int removal { set; get; }
     }
 
     [CCode (cheader_filename = "ArcToplevel.h")]

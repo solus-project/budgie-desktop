@@ -117,6 +117,13 @@ public class Panel : Arc.Toplevel
         placement();
     }
 
+    public override void reset_shadow()
+    {
+        this.shadow.required_size = this.orig_scr.width;
+        this.shadow.removal = 0;
+    }
+        
+
     public Panel(Arc.PanelManager? manager, string? uuid, Settings? settings)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
@@ -157,6 +164,8 @@ public class Panel : Arc.Toplevel
         shadow.halign = Gtk.Align.START;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
+
+        this.bind_property("shadow-width", shadow, "removal");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
