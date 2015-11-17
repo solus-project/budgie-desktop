@@ -45,3 +45,5 @@ arc-panel-resources.*
 /lib/shadow.c
 /lib/animation.c
 /lib/ArcToplevel.h
+
+*.ui~
