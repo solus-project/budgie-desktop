@@ -196,7 +196,6 @@ public class Raven : Gtk.Window
      * need to be on */
     public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
     {
-        int width = (int) (rect.width * this.intended_size);
         int n, m;
         /* In future we'll actually probe all applets */
         mpris.get_preferred_width(out m, out n);
