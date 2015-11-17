@@ -151,6 +151,16 @@ public class Raven : Gtk.Window
         });
     }
 
+    public override void size_allocate(Gtk.Allocation rect)
+    {
+        int w = 0;
+
+        base.size_allocate(rect);
+        if ((w = get_allocated_width()) != this.required_size) {
+            this.required_size = w;
+        }
+    }
+
     public void setup_dbus()
     {
         Bus.own_name(BusType.SESSION, Arc.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
