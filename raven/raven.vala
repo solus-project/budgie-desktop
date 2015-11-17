@@ -12,6 +12,39 @@
 namespace Arc
 {
 
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+
+[DBus (name = "com.solus_project.arc.Raven")]
+public class RavenIface
+{
+
+    private Raven? parent = null;
+
+    public RavenIface(Raven? parent)
+    {
+        this.parent = parent;
+    }
+
+    public bool is_expanded {
+        public set {
+            parent.set_expanded(value);
+        }
+        public get {
+            return parent.get_expanded();
+        }
+    }
+
+    public void SetExpanded(bool b) {
+        this.is_expanded = b;
+    }
+
+    public string get_version()
+    {
+        return "1";
+    }
+}
+
 public class Raven : Gtk.Window
 {
 
@@ -22,6 +55,8 @@ public class Raven : Gtk.Window
     int our_height = 0;
 
     private Arc.ShadowBlock? shadow;
+    private RavenIface? iface = null;
+    bool expanded = false;
 
     private double scale = 0.0;
 
@@ -39,6 +74,17 @@ public class Raven : Gtk.Window
         }
         public get {
             return scale;
+        }
+    }
+
+    private void on_bus_acquired(DBusConnection conn)
+    {
+        try {
+            iface = new RavenIface(this);
+            conn.register_object(Arc.RAVEN_DBUS_OBJECT_PATH, iface);
+        } catch (Error e) {
+            stderr.printf("Error registering Raven: %s\n", e.message);
+            Process.exit(1);
         }
     }
 
@@ -84,6 +130,12 @@ public class Raven : Gtk.Window
             this.begin_resize_drag(Gdk.WindowEdge.WEST, (int)e.button,(int) e.x_root, (int)e.y_root, e.get_time());
             return Gdk.EVENT_PROPAGATE;
         });
+    }
+
+    public void setup_dbus()
+    {
+        Bus.own_name(BusType.SESSION, Arc.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+            on_bus_acquired, ()=> {}, ()=> { warning("Raven could not take dbus!"); });
     }
 
     /**
@@ -162,6 +214,9 @@ public class Raven : Gtk.Window
      */
     public void set_expanded(bool exp)
     {
+        if (exp == this.expanded) {
+            return;
+        }
         double old_op, new_op;
         if (exp) {
             old_op = 0.0;
@@ -175,6 +230,8 @@ public class Raven : Gtk.Window
         if (exp) {
             show_all();
         }
+
+        this.expanded = exp;
 
         var anim = new Arc.Animation();
         anim.widget = this;
@@ -200,6 +257,10 @@ public class Raven : Gtk.Window
                 (a.widget as Gtk.Window).present();
             }
         });
+    }
+
+    public bool get_expanded() {
+        return this.expanded;
     }
 }
 

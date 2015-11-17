@@ -17,6 +17,7 @@ namespace Arc
 public static const string DBUS_NAME        = "com.solus_project.arc.Panel";
 public static const string DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
 
+
 /**
  * Available slots
  */
@@ -273,6 +274,9 @@ public class PanelManager
 
         this.on_monitors_changed();
         this.load_css();
+
+        /* Some applets might want raven */
+        raven.setup_dbus();
 
         setup_plugins();
 
