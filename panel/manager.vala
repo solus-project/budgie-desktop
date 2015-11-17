@@ -206,6 +206,8 @@ public class PanelManager
         unowned string uuid;
         unowned Arc.Panel panel;
         unowned Screen? primary;
+        unowned Arc.Panel? top = null;
+        unowned Arc.Panel? bottom = null;
 
         screens.remove_all();
 
@@ -231,10 +233,17 @@ public class PanelManager
                 /* Force existing panels to update to new primary display */
                 panel.update_geometry(primary.area, panel.position);
             }
+            if (panel.position == Arc.PanelPosition.TOP) {
+                top = panel;
+            } else if (panel.position == Arc.PanelPosition.BOTTOM) {
+                bottom = panel;
+            }
             /* Re-take the position */
             primary.slots |= panel.position;
         }
         this.primary_monitor = mon;
+
+        this.raven.update_geometry(primary.area, top, bottom);
     }
 
     private void on_bus_acquired(DBusConnection conn)
