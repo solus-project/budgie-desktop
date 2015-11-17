@@ -23,7 +23,7 @@ public class PowerStrip : Gtk.EventBox
 
     private DMSeat? proxy = null;
 
-    public PowerStrip()
+    public PowerStrip(Arc.Raven? raven)
     {
         Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
@@ -37,6 +37,7 @@ public class PowerStrip : Gtk.EventBox
         var btn = new Gtk.Button.from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.clicked.connect(()=> {
             try {
+                raven.set_expanded(false);
                 Process.spawn_command_line_async("gnome-control-center");
             } catch (Error e) {
                 message("Error invoking gnome-control-center: %s", e.message);
@@ -49,6 +50,7 @@ public class PowerStrip : Gtk.EventBox
 
         btn = new Gtk.Button.from_icon_name("system-lock-screen-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.clicked.connect(()=> {
+            raven.set_expanded(false);
             lock_screen();
         });
         var lock_btn = btn;
@@ -60,6 +62,7 @@ public class PowerStrip : Gtk.EventBox
         btn = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.clicked.connect(()=> {
             try {
+                raven.set_expanded(false);
                 /* TODO: Swap this out for gnome-session stuff */
                 Process.spawn_command_line_async("budgie-session-dialog");
             } catch (Error e) {

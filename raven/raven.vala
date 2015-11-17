@@ -117,7 +117,7 @@ public class Raven : Gtk.Window
         layout.pack_start(box, true, true, 0);
         box.get_style_context().add_class("raven");
 
-        strip = new PowerStrip();
+        strip = new PowerStrip(this);
         box.pack_end(strip, false, false, 0);
 
         resizable = true;
