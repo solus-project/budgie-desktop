@@ -14,6 +14,7 @@ public class SoundWidget : Gtk.Box
 
     private Gtk.Revealer? revealer = null;
     private Gtk.Scale? scale = null;
+    private ulong scale_id = 0;
 
     private Gvc.MixerControl? mixer = null;
 
@@ -51,6 +52,7 @@ public class SoundWidget : Gtk.Box
         /* TODO: Fix icon */
         scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
         scale.set_draw_value(false);
+        scale.value_changed.connect(on_output_scale_change);
         header = new Arc.HeaderWidget("", "audio-volume-muted-symbolic", false, scale);
         pack_start(header, false, false);
 
@@ -110,6 +112,19 @@ public class SoundWidget : Gtk.Box
         expanded = true;
 
         mixer.open();
+    }
+
+    /**
+     * New volume from our scale
+     */
+    void on_output_scale_change()
+    {
+        if (output_stream == null) {
+            return;
+        }
+        if (output_stream.set_volume((uint32)scale.get_value())) {
+            Gvc.push_volume(output_stream);
+        }
     }
 
     /* Somewhere new for where to put sound to */
@@ -178,9 +193,11 @@ public class SoundWidget : Gtk.Box
 
         /* Each scroll increments by 5%, much better than units..*/
         var step_size = vol_max / 20;
+        SignalHandler.block(scale, scale_id);
         scale.set_range(0, vol_max);
         scale.set_value(vol);
         scale.set_increments(step_size, step_size);
+        SignalHandler.unblock(scale, scale_id);
     }
 
     /* New available output */
