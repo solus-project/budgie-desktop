@@ -19,6 +19,7 @@ public class SoundWidget : Gtk.Box
     private Gvc.MixerControl? mixer = null;
 
     private Gtk.Switch? output_switch = null;
+    private ulong output_switch_id = 0;
     private Gtk.Box? output_box = null;
     private Gtk.RadioButton? output_leader = null;
     private HashTable<uint,Gtk.RadioButton?> outputs;
@@ -87,6 +88,8 @@ public class SoundWidget : Gtk.Box
 
         output_switch = new Gtk.Switch();
         output_switch.active = false;
+        output_switch_id = output_switch.notify["active"].connect(on_output_mute_changed);
+
         row.pack_end(output_switch, false, false, 0);
         main_layout.pack_start(row, false, false, 0);
         output_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -127,6 +130,17 @@ public class SoundWidget : Gtk.Box
         }
     }
 
+    /**
+     * Allow users to mute
+     */
+    void on_output_mute_changed()
+    {
+        if (output_stream == null) {
+            return;
+        }
+        output_stream.change_is_muted(!output_switch.active);
+    }
+
     /* Somewhere new for where to put sound to */
     void on_sink_changed(uint id)
     {
@@ -162,7 +176,13 @@ public class SoundWidget : Gtk.Box
 
     void update_volume()
     {
-        output_switch.active = !output_stream.is_muted;
+        if (output_switch_id > 0) {
+            SignalHandler.block(output_switch, output_switch_id);
+            output_switch.active = !output_stream.is_muted;
+            SignalHandler.unblock(output_switch, output_switch_id);
+        } else {
+            output_switch.active = !output_stream.is_muted;
+        }
 
         var vol_norm = mixer.get_vol_max_norm();
         var vol = output_stream.get_volume();
@@ -193,11 +213,15 @@ public class SoundWidget : Gtk.Box
 
         /* Each scroll increments by 5%, much better than units..*/
         var step_size = vol_max / 20;
-        SignalHandler.block(scale, scale_id);
+        if (scale_id > 0) {
+            SignalHandler.block(scale, scale_id);
+        }
         scale.set_range(0, vol_max);
         scale.set_value(vol);
         scale.set_increments(step_size, step_size);
-        SignalHandler.unblock(scale, scale_id);
+        if (scale_id > 0) {
+            SignalHandler.unblock(scale, scale_id);
+        }
     }
 
     /* New available output */
