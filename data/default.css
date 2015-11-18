@@ -86,7 +86,8 @@
     transition: 170ms ease-out;
 }
 
-.raven .primary-control *{
+.raven .primary-control *,
+.arc-panel .primary-control * {
     color: #FFFFFF;
 }
 

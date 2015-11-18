@@ -9,7 +9,6 @@
  * (at your option) any later version.
  */
 
-const string BUDGIE_STYLE_MENU_ICON = "menu-icon";
 const int icon_size = 32;
 
 public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
@@ -53,8 +52,8 @@ public class BudgieMenuApplet : Arc.Applet
         widget.add(layout);
 
         // Better styling to fit in with the budgie-panel
-        var st = widget.get_style_context();
-        st.add_class(BUDGIE_STYLE_MENU_ICON);
+        var st = img.get_style_context();
+        st.add_class("primary-control");
         popover = new BudgieMenuWindow(widget);
 
         widget.button_press_event.connect((e)=> {
