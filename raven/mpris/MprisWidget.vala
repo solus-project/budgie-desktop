@@ -45,6 +45,10 @@ public class MprisWidget : Gtk.Box
         widg.show_all();
         pack_start(widg, false, false, 0);
         ifaces.insert(name, widg);
+
+        this.queue_draw();
+
+        get_toplevel().queue_draw();
     }
 
     /**
@@ -59,6 +63,8 @@ public class MprisWidget : Gtk.Box
             remove(widg);
             ifaces.remove(name);
         }
+        this.queue_draw();
+        get_toplevel().queue_draw();
     }
 
     /**
