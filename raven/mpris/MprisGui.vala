@@ -45,12 +45,18 @@ public class ClientWidget : Gtk.Box
     Gtk.Button prev_btn;
     Gtk.Button play_btn;
     Gtk.Button next_btn;
-    Gtk.Button collapse_btn;
 
-    Gtk.Label? client_label;
-    Gtk.Image? client_img;
+    public bool expanded {
+        public set {
+            this.player_revealer.set_reveal_child(value);
+        }
+        public get {
+            return this.player_revealer.get_reveal_child();
+        }
+        default = true;
+    }
 
-    bool collapsed = false;
+    Arc.HeaderWidget? header = null;
 
     /**
      * Create a new ClientWidget
@@ -60,6 +66,7 @@ public class ClientWidget : Gtk.Box
     public ClientWidget(MprisClient client)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+        Gtk.Widget? row = null;
 
         this.client = client;
 
@@ -67,51 +74,28 @@ public class ClientWidget : Gtk.Box
         player_revealer.reveal_child = true;
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-        Gtk.Widget? row = null;;
 
-        row = create_row(client.player.identity, "media-playback-pause-symbolic");
-        client_label = row.get_data("label_item");
-        client_img = row.get_data("image_item");
-
-
-        row.get_style_context().add_class("raven-expander");
-        row.margin_bottom = 0;
-        pack_start(row, false, false, 0);
-
-        collapse_btn = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
-        collapse_btn.clicked.connect(()=> {
-            // toggle the collapsed state
-            this.collapse(!collapsed);
-            string icon = "";
-            if (!collapsed) {
-                icon = "go-down-symbolic";
-            } else {
-                icon = "go-next-symbolic";
-            }
-            (collapse_btn.get_image() as Gtk.Image).set_from_icon_name(icon, Gtk.IconSize.MENU);
-        });
-        collapse_btn.set_relief(Gtk.ReliefStyle.NONE);
-        (row as Gtk.Box).pack_end(collapse_btn, false, false, 0);
-
-        if (client.player.can_quit) {
-            var qbtn = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
-            qbtn.get_style_context().add_class("primary-control");
-            qbtn.clicked.connect(()=> {
-                Idle.add(()=>{
-                    try {
+        header = new Arc.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
+        header.closed.connect(()=> {
+            Idle.add(()=> {
+                try {
+                    if (client.player.can_quit) {
                         client.player.quit();
-                    } catch (Error e) {
-                        warning("Could not quit player: %s", e.message);
                     }
-                    return false;
-                });
+                } catch (Error e) {
+                    warning("Error closing %s: %s", client.player.identity, e.message);
+                }
+                return false;
             });
-            qbtn.set_relief(Gtk.ReliefStyle.NONE);
-            (row as Gtk.Box).pack_end(qbtn, false, false, 0);
+        });
+        pack_start(header, false, false, 0);
+
+        header.bind_property("expanded", this, "expanded");
+        header.can_close = client.player.can_quit;
+        if (!header.can_close) {
+            expanded = false;
         } else {
-            // if not closable it remains in the pane permanently
-            // therefore it is desired to collapse by default for saving space
-            this.collapse (true);
+            expanded = true;
         }
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
@@ -121,7 +105,6 @@ public class ClientWidget : Gtk.Box
         player_box.pack_start(layout, true, true, 0);
 
         layout.add(background);
-
 
         /* normal info */
         var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -238,20 +221,8 @@ public class ClientWidget : Gtk.Box
 
         player_revealer.add(player_box);
         pack_start(player_revealer);
-    }
 
-    void collapse(bool collapse)
-    {
-        player_revealer.reveal_child = !collapse;
-
-        if (collapse)
-        {
-            (collapse_btn.get_image () as Gtk.Image).set_from_icon_name("window-maximize-symbolic", Gtk.IconSize.MENU);
-        } else {
-            (collapse_btn.get_image () as Gtk.Image).set_from_icon_name("window-minimize-symbolic", Gtk.IconSize.MENU);
-        }
-
-        collapsed = collapse;
+        this.expanded = true;
     }
 
     /**
@@ -261,19 +232,18 @@ public class ClientWidget : Gtk.Box
     {
         switch (client.player.playback_status) {
             case "Playing":
-                client_img.set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.MENU);
-                client_label.set_label("%s - Playing".printf(client.player.identity));
+                header.icon_name = "media-playback-start-symbolic";
+                header.text = "%s - Playing".printf(client.player.identity);
                 (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 break;
             case "Paused":
-                client_img.set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.MENU);
-                client_label.set_label("%s - Paused".printf(client.player.identity));
+                header.icon_name = "media-playback-pause-symbolic";
+                header.text = "%s - Paused".printf(client.player.identity);
                 (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 break;
             default:
-                /* Stopped, Paused */
-                client_label.set_label(client.player.identity);
-                client_img.set_from_icon_name("media-playback-stop-symbolic", Gtk.IconSize.MENU);
+                header.text = client.player.identity;
+                header.icon_name = "media-playback-stop-symbolic";
                 (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 break;
         }

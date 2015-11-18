@@ -12,6 +12,7 @@ lib_LTLIBRARIES = libraven.la
 libraven_la_SOURCES = \
 	raven.vala \
 	powerstrip.vala \
+	headerwidget.vala \
 	mpris/MprisClient.vala \
 	mpris/MprisGui.vala \
 	mpris/MprisWidget.vala
