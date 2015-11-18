@@ -234,6 +234,7 @@ public class SoundWidget : Gtk.Box
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.output_leader, device.description);
         output_box.pack_start(check, false, false, 0);
+        check.show_all();
 
         if (this.output_leader == null) {
             this.output_leader = check;
@@ -253,6 +254,7 @@ public class SoundWidget : Gtk.Box
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.input_leader, device.description);
         input_box.pack_start(check, false, false, 0);
+        check.show_all();
 
         if (this.input_leader == null) {
             this.input_leader = check;
