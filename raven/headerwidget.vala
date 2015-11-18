@@ -75,14 +75,14 @@ public class HeaderWidget : Gtk.Box
         label.halign = Gtk.Align.START;
         pack_start(label, true, true, 0);
 
-        exp_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
+        exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
         exp_button.set_relief(Gtk.ReliefStyle.NONE);
         exp_button.clicked.connect(()=> {
             this.expanded = !this.expanded;
             if (!this.expanded) {
-                (exp_button.get_image() as Gtk.Image).icon_name = "go-next-symbolic";
+                (exp_button.get_image() as Gtk.Image).icon_name = "pan-end-symbolic";
             } else {
-                (exp_button.get_image() as Gtk.Image).icon_name = "go-down-symbolic";
+                (exp_button.get_image() as Gtk.Image).icon_name = "pan-down-symbolic";
             }
         });
         pack_end(exp_button, false, false, 0);
