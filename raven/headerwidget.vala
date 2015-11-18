@@ -82,7 +82,7 @@ public class HeaderWidget : Gtk.Box
             if (!this.expanded) {
                 (exp_button.get_image() as Gtk.Image).icon_name = "go-next-symbolic";
             } else {
-                (exp_button.get_image() as Gtk.Image).icon_name = "go-up-symbolic";
+                (exp_button.get_image() as Gtk.Image).icon_name = "go-down-symbolic";
             }
         });
         pack_end(exp_button, false, false, 0);
