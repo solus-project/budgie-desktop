@@ -14,6 +14,7 @@ libraven_la_SOURCES = \
 	powerstrip.vala \
 	headerwidget.vala \
 	calender.vala \
+	sound.vala \
 	mpris/MprisClient.vala \
 	mpris/MprisGui.vala \
 	mpris/MprisWidget.vala

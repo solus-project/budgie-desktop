@@ -70,6 +70,7 @@ public class Raven : Gtk.Window
     /* This is completely temporary. Shush */
     private MprisWidget? mpris = null;
     private CalendarWidget? cal = null;
+    private SoundWidget? sound = null;
 
     public double nscale {
         public set {
@@ -126,6 +127,10 @@ public class Raven : Gtk.Window
         cal = new CalendarWidget();
         cal.margin_top = 6;
         box.pack_start(cal, false, false, 0);
+
+        sound = new SoundWidget();
+        sound.margin_top = 6;
+        box.pack_start(sound, false, false, 0);
 
         mpris = new MprisWidget();
         mpris.margin_top = 6;
