@@ -115,6 +115,8 @@ public class Raven : Gtk.Window
 
         shadow = new Arc.ShadowBlock(PanelPosition.RIGHT);
         layout.pack_start(shadow, false, false, 0);
+        /* For now Raven is always on the right */
+        this.get_style_context().add_class(Arc.position_class_name(PanelPosition.RIGHT));
 
         /* Temporary */
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);

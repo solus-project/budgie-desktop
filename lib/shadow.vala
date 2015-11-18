@@ -56,18 +56,11 @@ public class ShadowBlock : Gtk.EventBox
 
     void update_position(PanelPosition? old)
     {
-        string? rm = Arc.position_class_name(old);
-        string? add = Arc.position_class_name(pos);
-        var style = get_style_context();
-
         if (pos == PanelPosition.TOP || pos == PanelPosition.BOTTOM) {
             horizontal = true;
         } else {
             horizontal = false;
         }
-
-        style.remove_class(rm);
-        style.add_class(add);
         queue_resize();
     }
 

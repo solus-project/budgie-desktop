@@ -89,6 +89,12 @@ public class Panel : Arc.Toplevel
     public void update_geometry(Gdk.Rectangle screen, PanelPosition position)
     {
         Gdk.Rectangle small = screen;
+        string old_class = Arc.position_class_name(this.position);
+        if (old_class != "") {
+            this.get_style_context().remove_class(old_class);
+        }
+
+        this.get_style_context().add_class(Arc.position_class_name(position));
 
         switch (position) {
             case PanelPosition.TOP:
@@ -489,7 +495,6 @@ public class Panel : Arc.Toplevel
                 main_layout.valign = Gtk.Align.END;
                 move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
                 main_layout.reorder_child(shadow, 0);
-                shadow.get_style_context().add_class("bottom");
                 set_gravity(Gdk.Gravity.SOUTH);
                 break;
         }
