@@ -47,6 +47,9 @@ public class ClientWidget : Gtk.Box
     Gtk.Button next_btn;
     Gtk.Button collapse_btn;
 
+    Gtk.Label? client_label;
+    Gtk.Image? client_img;
+
     bool collapsed = false;
 
     /**
@@ -65,25 +68,34 @@ public class ClientWidget : Gtk.Box
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         Gtk.Widget? row = null;;
-        string icon_name = "emblem-music-symbolic";
 
-        if (client.player.desktop_entry != "") {
-            var ainfo = new DesktopAppInfo(client.player.desktop_entry + ".desktop");
-            if (ainfo != null) {
-                var icon = ainfo.get_icon();
-                row = create_row(ainfo.get_display_name(), null, icon);
-            }
-        }
-        if (row == null) {
-            row = create_row(client.player.identity, icon_name);
-        }
+        row = create_row(client.player.identity, "media-playback-pause-symbolic");
+        client_label = row.get_data("label_item");
+        client_img = row.get_data("image_item");
+
 
         row.get_style_context().add_class("raven-expander");
         row.margin_bottom = 0;
         pack_start(row, false, false, 0);
 
+        collapse_btn = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
+        collapse_btn.clicked.connect(()=> {
+            // toggle the collapsed state
+            this.collapse(!collapsed);
+            string icon = "";
+            if (!collapsed) {
+                icon = "go-down-symbolic";
+            } else {
+                icon = "go-up-symbolic";
+            }
+            (collapse_btn.get_image() as Gtk.Image).set_from_icon_name(icon, Gtk.IconSize.MENU);
+        });
+        collapse_btn.set_relief(Gtk.ReliefStyle.NONE);
+        (row as Gtk.Box).pack_end(collapse_btn, false, false, 0);
+
         if (client.player.can_quit) {
             var qbtn = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
+            qbtn.get_style_context().add_class("primary-control");
             qbtn.clicked.connect(()=> {
                 Idle.add(()=>{
                     try {
@@ -101,16 +113,6 @@ public class ClientWidget : Gtk.Box
             // therefore it is desired to collapse by default for saving space
             this.collapse (true);
         }
-
-
-        collapse_btn = new Gtk.Button.from_icon_name("window-minimize-symbolic", Gtk.IconSize.MENU);
-        collapse_btn.clicked.connect(()=> {
-            // toggle the collapsed state
-            this.collapse(!collapsed);
-        });
-        collapse_btn.set_relief(Gtk.ReliefStyle.NONE);
-        (row as Gtk.Box).pack_end(collapse_btn, false, false, 0);
-
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = BACKGROUND_SIZE;
@@ -257,10 +259,19 @@ public class ClientWidget : Gtk.Box
     {
         switch (client.player.playback_status) {
             case "Playing":
+                client_img.set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.MENU);
+                client_label.set_label("%s - Playing".printf(client.player.identity));
                 (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                break;
+            case "Paused":
+                client_img.set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.MENU);
+                client_label.set_label("%s - Paused".printf(client.player.identity));
+                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 break;
             default:
                 /* Stopped, Paused */
+                client_label.set_label(client.player.identity);
+                client_img.set_from_icon_name("media-playback-stop-symbolic", Gtk.IconSize.MENU);
                 (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 break;
         }
@@ -361,6 +372,7 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
     box.pack_start(label, true, true, 0);
 
     box.set_data("label_item", label);
+    box.set_data("image_item", img);
 
     return box;
 }

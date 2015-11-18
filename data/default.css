@@ -85,6 +85,10 @@
     transition: 170ms ease-out;
 }
 
+.raven .primary-control *{
+    color: #FFFFFF;
+}
+
 /*
 Raven background: rgba(47,52,63,0.9)
 Raven border: rgba(16,19,24,0.77)
