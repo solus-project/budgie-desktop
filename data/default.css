@@ -22,7 +22,7 @@
 }
 
 /* Top panel, bottom shadow */
-ArcPanel.top .shadow-block {
+.top .shadow-block {
     background-color: transparent;
     background-image: linear-gradient(to bottom,
                                       rgba(0, 0, 0, 0.3),
@@ -31,7 +31,7 @@ ArcPanel.top .shadow-block {
 }
 
 /* Bottom panel, top shadow */
-ArcPanel.bottom .shadow-block {
+.bottom .shadow-block {
     background-color: transparent;
     background-image: linear-gradient(to top,
                                       rgba(0, 0, 0, 0.3),
@@ -40,7 +40,7 @@ ArcPanel.bottom .shadow-block {
 }
 
 /* Left panel, right shadow */
-ArcPanel.right .shadow-block {
+.right .shadow-block {
     background-color: transparent;
     background-image: linear-gradient(to left,
                                       rgba(0, 0, 0, 0.3),
@@ -49,25 +49,7 @@ ArcPanel.right .shadow-block {
 }
 
 /* Right panel, left shadow */
-ArcPanel.left .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to right,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Right hand side Raven, left shadow */
-ArcRaven.right .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to left,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Left hand side Raven, right shadow */
-ArcRaven.left .shadow-block {
+.left .shadow-block {
     background-color: transparent;
     background-image: linear-gradient(to right,
                                       rgba(0, 0, 0, 0.3),
