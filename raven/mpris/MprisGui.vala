@@ -86,7 +86,7 @@ public class ClientWidget : Gtk.Box
             if (!collapsed) {
                 icon = "go-down-symbolic";
             } else {
-                icon = "go-up-symbolic";
+                icon = "go-next-symbolic";
             }
             (collapse_btn.get_image() as Gtk.Image).set_from_icon_name(icon, Gtk.IconSize.MENU);
         });
