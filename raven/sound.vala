@@ -21,11 +21,14 @@ public class SoundWidget : Gtk.Box
     private Gtk.Box? output_box = null;
     private Gtk.RadioButton? output_leader = null;
     private HashTable<uint,Gtk.RadioButton?> outputs;
+    private Gvc.MixerStream? output_stream;
+    private ulong output_notify_id = 0;
 
     private Gtk.Switch? input_switch = null;
     private Gtk.Box? input_box = null;
     private Gtk.RadioButton? input_leader = null;
     private HashTable<uint,Gtk.RadioButton?> inputs;
+    private ulong input_notify_id = 0;
 
     public bool expanded {
         public set {
@@ -66,6 +69,7 @@ public class SoundWidget : Gtk.Box
         mixer.output_removed.connect(on_output_removed);
         mixer.input_added.connect(on_input_added);
         mixer.input_removed.connect(on_input_removed);
+        mixer.default_sink_changed.connect(on_sink_changed);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.margin = 6;
@@ -108,6 +112,77 @@ public class SoundWidget : Gtk.Box
         mixer.open();
     }
 
+    /* Somewhere new for where to put sound to */
+    void on_sink_changed(uint id)
+    {
+        var stream = mixer.lookup_stream_id(id);
+        if (stream == this.output_stream) {
+            return;
+        }
+
+        var device = mixer.lookup_device_from_stream(stream);
+        var did = device.get_id();
+        var check = outputs.lookup(did);
+
+        if (check == null) {
+            warning("Device %s (%u) not found in device table!", device.description, did);
+            return;
+        }
+        check.active = true;
+
+        if (this.output_stream != null) {
+            this.output_stream.disconnect(this.output_notify_id);
+            output_notify_id = 0;
+        }
+        output_notify_id = stream.notify.connect((n,p)=> {
+            if (p.name == "volume" || p.name == "is-muted") {
+                update_volume();
+            }
+        });
+
+        this.output_stream = stream;
+
+        update_volume();
+    }
+
+    void update_volume()
+    {
+        output_switch.active = !output_stream.is_muted;
+
+        var vol_norm = mixer.get_vol_max_norm();
+        var vol = output_stream.get_volume();
+
+        /* Same maths as computed by volume.js in gnome-shell, carried over
+         * from C->Vala port of budgie-panel */
+        int n = (int) Math.floor(3*vol/vol_norm)+1;
+        string image_name;
+
+        // Work out an icon
+        if (output_stream.get_is_muted() || vol <= 0) {
+            image_name = "audio-volume-muted-symbolic";
+        } else {
+            switch (n) {
+                case 1:
+                    image_name = "audio-volume-low-symbolic";
+                    break;
+                case 2:
+                    image_name = "audio-volume-medium-symbolic";
+                    break;
+                default:
+                    image_name = "audio-volume-high-symbolic";
+                    break;
+            }
+        }
+        header.icon_name = image_name;
+        var vol_max = mixer.get_vol_max_norm();
+
+        /* Each scroll increments by 5%, much better than units..*/
+        var step_size = vol_max / 20;
+        scale.set_range(0, vol_max);
+        scale.set_value(vol);
+        scale.set_increments(step_size, step_size);
+    }
+
     /* New available output */
     void on_output_added(uint id)
     {
@@ -115,7 +190,6 @@ public class SoundWidget : Gtk.Box
             return;
         }
         var device = this.mixer.lookup_output_id(id);
-        message("Added output: %s", device.description);
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.output_leader, device.description);
         output_box.pack_start(check, false, false, 0);
@@ -135,7 +209,6 @@ public class SoundWidget : Gtk.Box
             return;
         }
         var device = this.mixer.lookup_input_id(id);
-        message("Added input: %s", device.description);
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.input_leader, device.description);
         input_box.pack_start(check, false, false, 0);
