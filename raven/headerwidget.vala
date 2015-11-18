@@ -58,7 +58,7 @@ public class HeaderWidget : Gtk.Box
      */
     public signal void closed();
             
-    public HeaderWidget(string text, string icon_name, bool can_close)
+    public HeaderWidget(string text, string icon_name, bool can_close, Gtk.Widget? custom_widget = null)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
 
@@ -73,7 +73,11 @@ public class HeaderWidget : Gtk.Box
         label.set_line_wrap(true);
         label.set_line_wrap_mode(Pango.WrapMode.WORD);
         label.halign = Gtk.Align.START;
-        pack_start(label, true, true, 0);
+        if (custom_widget != null) {
+            pack_start(custom_widget, true, true, 0);
+        } else {
+            pack_start(label, true, true, 0);
+        }
 
         exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
         exp_button.set_relief(Gtk.ReliefStyle.NONE);

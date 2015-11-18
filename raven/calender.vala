@@ -42,7 +42,10 @@ public class CalendarWidget : Gtk.Box
 
         cal = new Gtk.Calendar();
         cal.get_style_context().add_class("raven-calendar");
-        revealer.add(cal);
+        var ebox = new Gtk.EventBox();
+        ebox.add(cal);
+        ebox.get_style_context().add_class("raven-background");
+        revealer.add(ebox);
 
         header.bind_property("expanded", this, "expanded");
         expanded = true;
