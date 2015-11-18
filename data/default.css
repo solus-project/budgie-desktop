@@ -46,6 +46,11 @@
     border-right: 1px solid @arc_panel_border;
 }
 
+.raven .heading {
+    color: alpha(@raven_expander_fg, 0.59);
+    font-size: 10pt;
+}
+
 /**
  * Shadows
  */
