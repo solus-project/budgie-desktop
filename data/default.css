@@ -3,93 +3,113 @@
  * be overriden by themes
  */
 
-/**
- * The main panel area
- */
-/*.arc-panel {
-    background-image: linear-gradient(to bottom, rgba(37, 39, 45, 0.95));
-    transition: 170ms ease-out;
-}*/
+@define-color arc_shadow_bg alpha(black, 0.3);
 
+@define-color arc_panel_bg alpha(#21242c, 0.9);
+@define-color arc_panel_fg white;
+@define-color arc_panel_border alpha(#101318, 0.82);
+
+@define-color raven_bg alpha(#2f343f, 0.9);
+@define-color raven_border alpha(#101318, 0.77);
+
+@define-color raven_expander_bg alpha(#252731, 0.75);
+@define-color raven_expander_fg white;
+@define-color raven_expander_border alpha(#171b25, 0.7);
+
+@define-color mpris_overlay_bg alpha(#111215, 0.9);
+@define-color mpris_overlay_fg white;
+@define-color mpris_overlay_border alpha(#06070a, 0.95);
+
+/**
+ * Panel
+ */
 .arc-panel {
-    background-color: rgba(33,36,44,0.9);
+    color: @arc_panel_fg;
+    background-color: @arc_panel_bg;
+/*    background-image: linear-gradient(to bottom, rgba(37, 39, 45, 0.95));
+    transition: 170ms ease-out; */
+}
+
+.top .arc-panel {
+    border-bottom: 1px solid @arc_panel_border;
+}
+
+.bottom .arc-panel {
+    border-top: 1px solid @arc_panel_border;
+}
+
+.right .arc-panel {
+    border-left: 1px solid @arc_panel_border;
+}
+
+.left .arc-panel {
+    border-right: 1px solid @arc_panel_border;
+}
+
+/**
+ * Shadows
+ */
+/* Bottom shadow */
+.top .shadow-block {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom,
+                                      @arc_shadow_bg,
+                                      transparent
+                                      );
+}
+
+/* Top shadow */
+.bottom .shadow-block {
+    background-color: transparent;
+    background-image: linear-gradient(to top,
+                                      @arc_shadow_bg,
+                                      transparent
+                                      );
+}
+
+/* Left shadow */
+.right .shadow-block {
+    background-color: transparent;
+    background-image: linear-gradient(to left,
+                                      @arc_shadow_bg,
+                                      transparent
+                                      );
+}
+
+/* Right shadow */
+.left .shadow-block {
+    background-color: transparent;
+    background-image: linear-gradient(to right,
+                                      @arc_shadow_bg,
+                                      transparent
+                                      );
+}
+
+/**
+ * Raven
+ */
+.raven {
+    background-color: @raven_bg;
+    transition: 170ms ease-out;
+}
+
+.right .raven {
+    border-left: 1px solid @raven_border;
+}
+.left .raven {
+    border-right: 1px solid @raven_border;
+}
+
+.raven-expander,
+.raven .header-widget {
+    color: @raven_expander_fg;
+    border: solid @raven_expander_border;
+    border-width: 1px 0;
+    background-color: @raven_expander_bg;
 }
 
 .raven .header-widget {
-    color: #A8ADB5;
-    font-size: 12pt;
-    background-color: darker(#3c4049);
-}
-
-/* Top panel, bottom shadow */
-ArcPanel.top .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to bottom,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Bottom panel, top shadow */
-ArcPanel.bottom .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to top,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Left panel, right shadow */
-ArcPanel.right .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to left,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Right panel, left shadow */
-ArcPanel.left .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to right,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Right hand side Raven, left shadow */
-ArcRaven.right .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to left,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-/* Left hand side Raven, right shadow */
-ArcRaven.left .shadow-block {
-    background-color: transparent;
-    background-image: linear-gradient(to right,
-                                      rgba(0, 0, 0, 0.3),
-                                      transparent
-                                      );
-}
-
-.raven-mpris {
-    background-color: alpha(black, 0.8);
-    border-bottom: 1px solid rgba(16,19,24,0.77);
-}
-
-.raven-mpris GtkLabel,
-.raven-mpris GtkImage {
-    color: alpha(white, 0.86);
-    color: #FFFFFF;
-}
-
-.raven-expander {
-    color: #FFFFFF;
-    border: 1px solid rgba(16,19,24,0.77);
-    background-color: rgba(37,39,49,0.75);
+    border-bottom-width: 0;
 }
 
 .raven-background {
@@ -97,22 +117,19 @@ ArcRaven.left .shadow-block {
     border-bottom: 1px solid rgba(16,19,24,0.77);
 }
 
-.raven {
-    background-color: rgba(47,52,63,0.9);
-    border-top: 1px solid rgba(16,19,24,0.77);
-    border-bottom: 1px solid rgba(16,19,24,0.77);
-    transition: 170ms ease-out;
+/* MPRIS Applet */
+.raven-mpris {
+    background-color: @mpris_overlay_bg;
+    border: solid @mpris_overlay_border;
+    border-width: 1px 0;
+}
+
+.raven-mpris GtkLabel,
+.raven-mpris GtkImage {
+    color: @mpris_overlay_fg;
 }
 
 .raven .primary-control *,
 .arc-panel .primary-control * {
     color: #FFFFFF;
 }
-
-/*
-Raven background: rgba(47,52,63,0.9)
-Raven border: rgba(16,19,24,0.77)
-Applet header: rgba(37,39,49,0.75)
-Applet header border: rgba(23,27,37,0.7)
-Applet body: rgba(37,39,49,0.6)
-*/
