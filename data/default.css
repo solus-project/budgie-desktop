@@ -60,6 +60,7 @@
 
 .raven-mpris {
     background-color: alpha(black, 0.8);
+    border-bottom: 1px solid rgba(16,19,24,0.77);
 }
 
 .raven-mpris GtkLabel,

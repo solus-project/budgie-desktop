@@ -34,6 +34,8 @@ public class PowerStrip : Gtk.EventBox
         margin_bottom = 40;
         add(bottom);
 
+        get_style_context().add_class("primary-control");
+
         var btn = new Gtk.Button.from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.clicked.connect(()=> {
             try {

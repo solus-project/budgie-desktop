@@ -59,7 +59,7 @@ public class ClientWidget : Gtk.Box
      */
     public ClientWidget(MprisClient client)
     {
-        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 3);
+        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
         this.client = client;
 
