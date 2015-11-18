@@ -36,6 +36,9 @@ namespace Arc {
     public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size);
 
     [CCode (cheader_filename = "ArcToplevel.h")]
+    public static string position_class_name(PanelPosition position);
+
+    [CCode (cheader_filename = "ArcToplevel.h")]
     public class ShadowBlock : Gtk.EventBox
     {
         public ShadowBlock(PanelPosition position);

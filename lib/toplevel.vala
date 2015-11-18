@@ -113,4 +113,20 @@ public enum AppletAlignment {
     END         = 1 << 2
 }
 
+public static string position_class_name(PanelPosition position)
+{
+    switch (position) {
+        case PanelPosition.TOP:
+            return "top";
+        case PanelPosition.BOTTOM:
+            return "bottom";
+        case PanelPosition.LEFT:
+            return "left";
+        case PanelPosition.RIGHT:
+            return "right";
+        default:
+            return "";
+    }
+}
+
 } /* End namespace */
