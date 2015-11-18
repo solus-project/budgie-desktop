@@ -134,8 +134,10 @@ public class ClientWidget : Gtk.Box
         row = create_row("Unknown Artist", "user-info-symbolic");
         row.margin_top = 6;
         artist_label = row.get_data("label_item");
+        row.margin_bottom = 3;
         top_box.pack_start(row, false, false, 0);
         row = create_row("Unknown Title", "emblem-music-symbolic");
+        row.margin_bottom = 3;
         title_label = row.get_data("label_item");
         top_box.pack_start(row, false, false, 0);
         row = create_row("Unknown Album", "media-optical-symbolic");
