@@ -13,6 +13,7 @@ libraven_la_SOURCES = \
 	raven.vala \
 	powerstrip.vala \
 	headerwidget.vala \
+	calender.vala \
 	mpris/MprisClient.vala \
 	mpris/MprisGui.vala \
 	mpris/MprisWidget.vala

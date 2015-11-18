@@ -69,6 +69,7 @@ public class Raven : Gtk.Window
 
     /* This is completely temporary. Shush */
     private MprisWidget? mpris = null;
+    private CalendarWidget? cal = null;
 
     public double nscale {
         public set {
@@ -119,6 +120,10 @@ public class Raven : Gtk.Window
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         layout.pack_start(box, true, true, 0);
         box.get_style_context().add_class("raven");
+
+        cal = new CalendarWidget();
+        cal.margin_top = 6;
+        box.pack_start(cal, false, false, 0);
 
         mpris = new MprisWidget();
         mpris.margin_top = 6;

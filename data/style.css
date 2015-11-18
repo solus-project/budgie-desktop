@@ -29,3 +29,10 @@ GtkPopover .scrollbar .trough {
 .arc-container {
     background-color: transparent;
 }
+
+GtkCalendar.raven-calendar {
+    background-image: none;
+    border-image: none;
+    background-color: transparent;
+    border: none;
+}
