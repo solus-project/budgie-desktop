@@ -1,24 +1,26 @@
 /**
  * This file is used to force overrides on all GTK themes
  */
-GtkScrolledWindow {
-    background-color: transparent;
-}
-
-GtkPopover GtkListBox {
-    background-image: none;
-    background-color: transparent;
-}
-
-GtkPopover GtkListBoxRow {
-    background-image: none;
-    background-color: transparent;
-}
-
-GtkPopover .scrollbar .trough {
+GtkScrolledWindow,
+GtkPopover GtkListBox,
+GtkPopover GtkListBoxRow,
+GtkPopover .scrollbar .trough,
+GtkCalendar.raven-calendar,
+.raven .button,
+.raven GtkSwitch.trough,
+.raven GtkSwitch.slider,
+.raven .scale,
+.raven .scale.slider,
+.raven .scale.trough,
+.raven .radio {
     background-color: transparent;
     background-image: none;
+    border-color: transparent;
     border-image: none;
+    border-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
 }
 
 /**
@@ -32,10 +34,6 @@ GtkPopover .scrollbar .trough {
 
 /* Calendar */
 GtkCalendar.raven-calendar {
-    background-image: none;
-    border-image: none;
-    background-color: transparent;
-    border: none;
     color: white;
 }
 
@@ -61,7 +59,7 @@ GtkCalendar.raven-calendar:inconsistent {
 }
 
 GtkCalendar.raven-calendar:selected {
-    color: @selected_bg_color;
+    color: @theme_selected_bg_color;
 }
 
 
@@ -70,13 +68,14 @@ GtkCalendar.raven-calendar:selected {
 .arc-panel .scale {
   -GtkScale-slider-length: 9;
   -GtkRange-slider-width: 5;
+  -GtkRange-trough-border: 0;
 }
 
 .raven .scale.slider,
 .arc-panel.scale.slider {
-    background-color: @selected_bg_color;
-    border-color: @selected_bg_color;
-    background-image: none;
+    border-radius: 2.5px;
+    background-color: @theme_selected_bg_color;
+    border-color: @theme_selected_bg_color;
 }
 
 .raven .scale.slider:hover,
@@ -84,11 +83,16 @@ GtkCalendar.raven-calendar:selected {
     opacity: 1;
 }
 
-.raven .scale.trough:not(.highlight),
-.arc-panel.scale.trough:not(.highlight) {
+.raven .scale.trough,
+.arc-panel.scale.trough {
     background-color: alpha(#788199, 0.32);
     background-image: none;
     margin: 0;
+}
+
+.raven .scale.trough.highlight,
+.arc-panel.scale.trough.highlight {
+    background-color: @theme_selected_bg_color;
 }
 
 
@@ -97,7 +101,7 @@ GtkCalendar.raven-calendar:selected {
     background-clip: padding-box;
     color: white;
     background-color: alpha(#788199, 0.18);
-    border-color: alpha(#171b25, 0.59);
+    border: 1px solid alpha(#171b25, 0.59);
 }
 
 .raven .button.flat {
@@ -113,16 +117,18 @@ GtkCalendar.raven-calendar:selected {
     color: alpha(currentColor, 0.5);
 }
 
-.raven .button:hover {
+.raven .button:hover,
+.raven .button.flat:hover {
     color: white;
     background-color: shade(alpha(#788199, 0.18), 1.1);
     border-color: alpha(#171b25, 0.59);
 }
 
-.raven .button:active {
+.raven .button:active,
+.raven .button.flat:active {
     background-clip: padding-box;
     color: @selected_fg_color;
-    background-color: @selected_bg_color;
+    background-color: @theme_selected_bg_color;
 }
 
 /* Radio Items */
@@ -149,10 +155,6 @@ GtkCalendar.raven-calendar:selected {
     background-repeat: no-repeat;
     background-position: right center;
     color: transparent;
-    border-color: transparent;
-    border-image: none;
-    border-style: none;
-    box-shadow: none;
 }
 
 .raven GtkSwitch.trough:dir(rtl),
