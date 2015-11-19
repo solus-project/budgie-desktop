@@ -41,7 +41,7 @@ public class CategoryButton : Gtk.RadioButton
         layout.pack_start(lab, true, true, 0);
         add(layout);
 
-        relief = Gtk.ReliefStyle.NONE;
+        get_style_context().add_class("flat");
         // Makes us look like a normal button :)
         set_property("draw-indicator", false);
         set_can_focus(false);
@@ -78,7 +78,7 @@ public class MenuButton : Gtk.Button
 
         score = 0;
 
-        relief = Gtk.ReliefStyle.NONE;
+        get_style_context().add_class("flat");
     }
 }
 
