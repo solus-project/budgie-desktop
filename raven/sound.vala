@@ -23,13 +23,15 @@ public class SoundWidget : Gtk.Box
     private Gtk.Box? output_box = null;
     private Gtk.RadioButton? output_leader = null;
     private HashTable<uint,Gtk.RadioButton?> outputs;
-    private Gvc.MixerStream? output_stream;
+    private Gvc.MixerStream? output_stream = null;
     private ulong output_notify_id = 0;
 
     private Gtk.Switch? input_switch = null;
+    private ulong input_switch_id = 0;
     private Gtk.Box? input_box = null;
     private Gtk.RadioButton? input_leader = null;
     private HashTable<uint,Gtk.RadioButton?> inputs;
+    private Gvc.MixerStream? input_stream = null;
     private ulong input_notify_id = 0;
 
     public bool expanded {
@@ -73,6 +75,7 @@ public class SoundWidget : Gtk.Box
         mixer.input_added.connect(on_input_added);
         mixer.input_removed.connect(on_input_removed);
         mixer.default_sink_changed.connect(on_sink_changed);
+        mixer.default_source_changed.connect(on_source_changed);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.margin = 6;
@@ -105,6 +108,8 @@ public class SoundWidget : Gtk.Box
 
         input_switch = new Gtk.Switch();
         input_switch.active = false;
+        input_switch_id = input_switch.notify["active"].connect(on_input_mute_changed);
+
         row.pack_end(input_switch, false, false, 0);
         main_layout.pack_start(row, false, false, 0);
         input_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -141,23 +146,82 @@ public class SoundWidget : Gtk.Box
         output_stream.change_is_muted(!output_switch.active);
     }
 
+    /**
+     * Allow users to mute mic
+     */
+    void on_input_mute_changed()
+    {
+        if (input_stream == null) {
+            return;
+        }
+        input_stream.change_is_muted(!input_switch.active);
+    }
+
+    /* Microphone changed */
+    void on_source_changed(uint id)
+    {
+        var stream = mixer.get_default_source();
+        if (stream == this.input_stream) {
+            return;
+        }
+        {
+            var device = mixer.lookup_device_from_stream(stream);
+            var did = device.get_id();
+            var check = inputs.lookup(did);
+
+            if (check != null) {
+                check.active = true;
+            }
+        }
+
+        if (this.input_stream != null) {
+            this.input_stream.disconnect(this.input_notify_id);
+            input_notify_id = 0;
+        }
+        input_notify_id = stream.notify.connect((n,p)=> {
+            if (p.name == "is-muted") {
+                update_input();
+            }
+        });
+
+        this.input_stream = stream;
+
+        update_input();
+    }
+
+    /** Update mute status on input stream */
+    void update_input()
+    {
+        if (this.input_stream == null) {
+            return;
+        }
+
+        if (input_switch_id > 0) {
+            SignalHandler.block(input_switch, input_switch_id);
+            input_switch.active = !input_stream.is_muted;
+            SignalHandler.unblock(input_switch, input_switch_id);
+        } else {
+            input_switch.active = !input_stream.is_muted;
+        }
+    }
+
     /* Somewhere new for where to put sound to */
     void on_sink_changed(uint id)
     {
-        var stream = mixer.lookup_stream_id(id);
+        var stream = mixer.get_default_sink();
         if (stream == this.output_stream) {
             return;
         }
 
-        var device = mixer.lookup_device_from_stream(stream);
-        var did = device.get_id();
-        var check = outputs.lookup(did);
+        {
+            var device = mixer.lookup_device_from_stream(stream);
+            var did = device.get_id();
+            var check = outputs.lookup(did);
 
-        if (check == null) {
-            warning("Device %s (%u) not found in device table!", device.description, did);
-            return;
+            if (check != null) {
+                check.active = true;
+            }
         }
-        check.active = true;
 
         if (this.output_stream != null) {
             this.output_stream.disconnect(this.output_notify_id);
