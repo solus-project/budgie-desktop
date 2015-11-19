@@ -111,27 +111,28 @@ public class ClientWidget : Gtk.Box
         top_box.valign = Gtk.Align.END;
         top_box.get_style_context().add_class("raven-mpris");
 
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
+        box.margin = 6;
+        box.margin_top =12;
+        top_box.pack_start(box, true, true, 0);
+
 
         var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
         row = create_row("Unknown Artist", "user-info-symbolic");
-        row.margin_top = 6;
         artist_label = row.get_data("label_item");
-        row.margin_bottom = 3;
-        top_box.pack_start(row, false, false, 0);
+        box.pack_start(row, false, false, 0);
         row = create_row("Unknown Title", "emblem-music-symbolic");
-        row.margin_bottom = 3;
         title_label = row.get_data("label_item");
-        top_box.pack_start(row, false, false, 0);
+        box.pack_start(row, false, false, 0);
         row = create_row("Unknown Album", "media-optical-symbolic");
         album_label = row.get_data("label_item");
-        top_box.pack_start(row, false, false, 0);
+        box.pack_start(row, false, false, 0);
 
-        top_box.pack_start(controls, false, false, 0);
-        controls.margin_bottom = 6;
+        box.pack_start(controls, false, false, 0);
 
 
-        var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+        var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.set_sensitive(false);
         btn.set_can_focus(false);
         prev_btn = btn;
@@ -150,7 +151,7 @@ public class ClientWidget : Gtk.Box
         btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
 
-        btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+        btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         play_btn = btn;
         btn.set_can_focus(false);
         btn.clicked.connect(()=> {
@@ -166,7 +167,7 @@ public class ClientWidget : Gtk.Box
         btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
 
-        btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+        btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.set_sensitive(false);
         btn.set_can_focus(false);
         next_btn = btn;
@@ -188,7 +189,6 @@ public class ClientWidget : Gtk.Box
 
         controls.set_halign(Gtk.Align.CENTER);
         controls.set_valign(Gtk.Align.END);
-        controls.margin_bottom = 6;
         layout.add_overlay(top_box);
 
         update_from_meta();
@@ -234,17 +234,17 @@ public class ClientWidget : Gtk.Box
             case "Playing":
                 header.icon_name = "media-playback-start-symbolic";
                 header.text = "%s - Playing".printf(client.player.identity);
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 break;
             case "Paused":
                 header.icon_name = "media-playback-pause-symbolic";
                 header.text = "%s - Paused".printf(client.player.identity);
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 break;
             default:
                 header.text = client.player.identity;
                 header.icon_name = "media-playback-stop-symbolic";
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 break;
         }
     }
