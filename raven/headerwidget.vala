@@ -70,8 +70,8 @@ public class HeaderWidget : Gtk.Box
         pack_start(header_box, true, true, 0);
 
         image = new Gtk.Image();
-        image.margin_left = 8;
-        image.margin_right = 8;
+        image.margin_start = 8;
+        image.margin_end = 8;
         header_box.pack_start(image, false, false, 0);
 
         label = new Gtk.Label(text);

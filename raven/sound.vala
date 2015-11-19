@@ -80,8 +80,8 @@ public class SoundWidget : Gtk.Box
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.margin_top = 6;
         main_layout.margin_bottom = 6;
-        main_layout.margin_left = 12;
-        main_layout.margin_right = 12;
+        main_layout.margin_start = 12;
+        main_layout.margin_end = 12;
 
         ebox.add(main_layout);
 

@@ -334,8 +334,8 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
         img = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU);
     }
 
-    img.margin_right = 8;
-    img.margin_left = 8;
+    img.margin_start = 8;
+    img.margin_end = 8;
     box.pack_start(img, false, false, 0);
     var label = new Gtk.Label(name);
     label.set_line_wrap(true);
