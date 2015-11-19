@@ -147,7 +147,7 @@ public class ClientWidget : Gtk.Box
                 return false;
             });
         });
-        btn.set_relief(Gtk.ReliefStyle.NONE);
+        btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
 
         btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
@@ -163,7 +163,7 @@ public class ClientWidget : Gtk.Box
                 return false;
             });
         });
-        btn.set_relief(Gtk.ReliefStyle.NONE);
+        btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
 
         btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
@@ -182,7 +182,7 @@ public class ClientWidget : Gtk.Box
                 return false;
             });
         });
-        btn.set_relief(Gtk.ReliefStyle.NONE);
+        btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
 
 

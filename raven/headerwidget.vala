@@ -80,7 +80,7 @@ public class HeaderWidget : Gtk.Box
         }
 
         exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-        exp_button.set_relief(Gtk.ReliefStyle.NONE);
+        exp_button.get_style_context().add_class("flat");
         exp_button.clicked.connect(()=> {
             this.expanded = !this.expanded;
             if (!this.expanded) {
@@ -94,7 +94,7 @@ public class HeaderWidget : Gtk.Box
         show_all();
 
         close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
-        close_button.set_relief(Gtk.ReliefStyle.NONE);
+        close_button.get_style_context().add_class("flat");
         close_button.get_style_context().add_class("primary-control");
         close_button.no_show_all = true;
         close_button.get_child().show();

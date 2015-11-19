@@ -46,7 +46,7 @@ public class PowerStrip : Gtk.EventBox
             }
         });
         btn.halign = Gtk.Align.START;
-        btn.relief = Gtk.ReliefStyle.NONE;
+        btn.get_style_context().add_class("flat");
         btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
@@ -57,7 +57,7 @@ public class PowerStrip : Gtk.EventBox
         });
         var lock_btn = btn;
         btn.halign = Gtk.Align.START;
-        btn.relief = Gtk.ReliefStyle.NONE;
+        btn.get_style_context().add_class("flat");
         btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
@@ -72,7 +72,7 @@ public class PowerStrip : Gtk.EventBox
             }
         });
         btn.halign = Gtk.Align.START;
-        btn.relief = Gtk.ReliefStyle.NONE;
+        btn.get_style_context().add_class("flat");
         btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
