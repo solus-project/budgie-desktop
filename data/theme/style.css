@@ -109,11 +109,9 @@ GtkCalendar.raven-calendar:selected {
     padding: 4px;
 }
 
-
 .raven-expander .button.flat {
     color: alpha(currentColor, 0.5);
 }
-
 
 .raven .button:hover {
     color: white;
@@ -125,4 +123,52 @@ GtkCalendar.raven-calendar:selected {
     background-clip: padding-box;
     color: @selected_fg_color;
     background-color: @selected_bg_color;
+}
+
+/* Radio Items */
+.raven .radio {
+    opacity: 0.17;
+    -gtk-icon-source: url("radio.svg");
+}
+
+.raven .radio:checked {
+    opacity: 1;
+}
+
+/* Switch */
+.raven GtkSwitch {
+    font: 1;
+    -GtkSwitch-slider-width: 41;
+    -GtkSwitch-slider-height: 17;
+    outline-color: transparent;
+}
+
+.raven GtkSwitch.trough,
+.raven GtkSwitch.slider {
+    background-size: 41px 17px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    color: transparent;
+    border-color: transparent;
+    border-image: none;
+    border-style: none;
+    box-shadow: none;
+}
+
+.raven GtkSwitch.trough:dir(rtl),
+.raven GtkSwitch.slider:dir(rtl) {
+    background-position: left center;
+}
+
+.raven GtkSwitch.trough {
+  background-image: url("switch.svg");
+}
+
+.raven GtkSwitch.trough:active {
+  background-image: url("switch-active.svg");
+}
+
+.raven GtkSwitch.trough:insensitive
+.raven GtkSwitch.trough:active:insensitive {
+    opacity: 0.4;
 }

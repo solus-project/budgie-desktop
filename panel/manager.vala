@@ -302,12 +302,12 @@ public class PanelManager
         try {
             var screen = Gdk.Screen.get_default();
 
-            var f = File.new_for_uri("resource://com/solus-project/arc/panel/default.css");
+            var f = File.new_for_uri("resource://com/solus-project/arc/panel/theme/default.css");
             var css = new Gtk.CssProvider();
             css.load_from_file(f);
             Gtk.StyleContext.add_provider_for_screen(screen, css, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
 
-            var f2 = File.new_for_uri("resource://com/solus-project/arc/panel/style.css");
+            var f2 = File.new_for_uri("resource://com/solus-project/arc/panel/theme/style.css");
             var css2 = new Gtk.CssProvider();
             css2.load_from_file(f2);
             Gtk.StyleContext.add_provider_for_screen(screen, css2, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);

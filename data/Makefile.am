@@ -1,8 +1,11 @@
 EXTRA_DIST = \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
-	default.css \
-	style.css
+	theme/style.css \
+	theme/default.css \
+	theme/radio.svg \
+	theme/switch.svg \
+	theme/switch-active.svg
 
 gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 @GSETTINGS_RULES@
