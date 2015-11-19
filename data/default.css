@@ -10,6 +10,7 @@
 @define-color arc_panel_border alpha(#101318, 0.82);
 
 @define-color raven_bg alpha(#2f343f, 0.9);
+@define-color raven_fg white;
 @define-color raven_border alpha(#101318, 0.77);
 
 @define-color raven_expander_bg alpha(#252731, 0.75);
@@ -48,7 +49,7 @@
 
 .raven .heading {
     color: alpha(@raven_expander_fg, 0.59);
-    font-size: 10pt;
+    font-size: 110%;
 }
 
 /**
@@ -94,6 +95,7 @@
  * Raven
  */
 .raven {
+    color: @raven_fg;
     background-color: @raven_bg;
     transition: 170ms ease-out;
 }

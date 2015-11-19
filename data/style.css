@@ -21,7 +21,6 @@ GtkPopover .scrollbar .trough {
     border-image: none;
 }
 
-
 /**
  * Container for both the "panel" area and the shadow. Wise to keep
  * this transparent..
@@ -30,9 +29,100 @@ GtkPopover .scrollbar .trough {
     background-color: transparent;
 }
 
+
+/* Calendar */
 GtkCalendar.raven-calendar {
     background-image: none;
     border-image: none;
     background-color: transparent;
     border: none;
+    color: white;
+}
+
+GtkCalendar.raven-calendar.header {
+    color: white;
+    border: none;
+    border-radius: 0;
+}
+
+GtkCalendar.raven-calendar.button,
+GtkCalendar.raven-calendar.button:focus {
+    color: alpha(currentColor,0.5);
+    background-color: transparent;
+}
+
+GtkCalendar.raven-calendar.button:hover {
+    color: white;
+    background-color: transparent;
+}
+
+GtkCalendar.raven-calendar:inconsistent {
+    color: alpha(currentColor,0.3);
+}
+
+GtkCalendar.raven-calendar:selected {
+    color: @selected_bg_color;
+}
+
+
+/* Scale */
+.raven .scale,
+.arc-panel .scale {
+  -GtkScale-slider-length: 9;
+  -GtkRange-slider-width: 5;
+}
+
+.raven .scale.slider,
+.arc-panel.scale.slider {
+    background-color: @selected_bg_color;
+    border-color: @selected_bg_color;
+    background-image: none;
+}
+
+.raven .scale.slider:hover,
+.arc-panel.scale.slider:hover {
+    opacity: 1;
+}
+
+.raven .scale.trough:not(.highlight),
+.arc-panel.scale.trough:not(.highlight) {
+    background-color: alpha(#788199, 0.32);
+    background-image: none;
+    margin: 0;
+}
+
+
+/* Buttons */
+.raven .button {
+    background-clip: padding-box;
+    color: white;
+    background-color: alpha(#788199, 0.18);
+    border-color: alpha(#171b25, 0.59);
+}
+
+.raven .button.flat {
+    background-color: alpha(#788199, 0);
+    border-color: transparent;
+}
+
+.raven-expander .button {
+    padding: 4px;
+}
+
+
+.raven-expander .button.flat {
+    color: alpha(currentColor, 0.5);
+}
+
+
+.raven .button:hover {
+    color: white;
+    background-color: shade(alpha(#788199, 0.18), 1.1);
+    border-color: alpha(#171b25, 0.59);
+}
+
+.raven .button:active {
+    background-clip: padding-box;
+    color: @selected_fg_color;
+    background-color: @selected_bg_color;
 }
