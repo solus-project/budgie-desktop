@@ -78,7 +78,10 @@ public class SoundWidget : Gtk.Box
         mixer.default_source_changed.connect(on_source_changed);
 
         var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        main_layout.margin = 6;
+        main_layout.margin_top = 6;
+        main_layout.margin_bottom = 6;
+        main_layout.margin_left = 12;
+        main_layout.margin_right = 12;
 
         ebox.add(main_layout);
 
