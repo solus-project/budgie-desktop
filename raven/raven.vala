@@ -119,10 +119,17 @@ public class Raven : Gtk.Window
         /* For now Raven is always on the right */
         this.get_style_context().add_class(Arc.position_class_name(PanelPosition.RIGHT));
 
+        var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        layout.pack_start(main_box, true, true, 0);
+
+        var scroller = new Gtk.ScrolledWindow(null, null);
+        scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        main_box.pack_start(scroller, true, true, 0);
+
         /* Temporary */
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        layout.pack_start(box, true, true, 0);
-        box.get_style_context().add_class("raven");
+        scroller.add(box);
+        main_box.get_style_context().add_class("raven");
 
         cal = new CalendarWidget();
         cal.margin_top = 6;
@@ -137,7 +144,7 @@ public class Raven : Gtk.Window
         box.pack_start(mpris, false, false, 0);
 
         strip = new PowerStrip(this);
-        box.pack_end(strip, false, false, 0);
+        main_box.pack_end(strip, false, false, 0);
 
         resizable = true;
         skip_taskbar_hint = true;
