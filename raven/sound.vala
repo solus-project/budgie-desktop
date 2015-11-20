@@ -173,7 +173,9 @@ public class SoundWidget : Gtk.Box
             var check = inputs.lookup(did);
 
             if (check != null) {
+                SignalHandler.block_by_func((void*)check, (void*)on_input_selected, this);
                 check.active = true;
+                SignalHandler.unblock_by_func((void*)check, (void*)on_input_selected, this);
             }
         }
 
@@ -222,7 +224,9 @@ public class SoundWidget : Gtk.Box
             var check = outputs.lookup(did);
 
             if (check != null) {
+                SignalHandler.unblock_by_func((void*)check, (void*)on_output_selected, this);
                 check.active = true;
+                SignalHandler.unblock_by_func((void*)check, (void*)on_output_selected, this);
             }
         }
 
@@ -291,6 +295,34 @@ public class SoundWidget : Gtk.Box
         }
     }
 
+    void on_output_selected(Gtk.ToggleButton? btn)
+    {
+        if (!btn.get_active()) {
+            return;
+        }
+        uint id = btn.get_data("output_id");
+        var device = mixer.lookup_output_id(id);
+        if (device == null) {
+            warning("Output selected does not exist! %u", id);
+            return;
+        }
+        mixer.change_output(device);
+    }
+
+    void on_input_selected(Gtk.ToggleButton? btn)
+    {
+        if (!btn.get_active()) {
+            return;
+        }
+        uint id = btn.get_data("input_id");
+        var device = mixer.lookup_input_id(id);
+        if (device == null) {
+            warning("Input selected does not exist! %u", id);
+            return;
+        }
+        mixer.change_input(device);
+    }
+
     /* New available output */
     void on_output_added(uint id)
     {
@@ -300,6 +332,8 @@ public class SoundWidget : Gtk.Box
         var device = this.mixer.lookup_output_id(id);
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.output_leader, device.description);
+        check.set_data("output_id", id);
+        check.toggled.connect(on_output_selected);
         output_box.pack_start(check, false, false, 0);
         check.show_all();
 
@@ -320,6 +354,8 @@ public class SoundWidget : Gtk.Box
         var device = this.mixer.lookup_input_id(id);
 
         var check = new Gtk.RadioButton.with_label_from_widget(this.input_leader, device.description);
+        check.set_data("input_id", id);
+        check.toggled.connect(on_input_selected);
         input_box.pack_start(check, false, false, 0);
         check.show_all();
 
