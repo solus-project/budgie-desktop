@@ -170,7 +170,6 @@ GtkCalendar.raven-calendar:selected {
   background-image: url("switch-active.svg");
 }
 
-.raven GtkSwitch.trough:insensitive
-.raven GtkSwitch.trough:active:insensitive {
+.raven GtkSwitch:insensitive {
     opacity: 0.4;
 }
