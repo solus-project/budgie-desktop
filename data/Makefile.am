@@ -4,6 +4,7 @@ EXTRA_DIST = \
 	theme/style.css \
 	theme/default.css \
 	theme/radio.svg \
+	theme/radio-active.svg \
 	theme/switch.svg \
 	theme/switch-active.svg
 

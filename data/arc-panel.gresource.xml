@@ -4,6 +4,7 @@
                 <file>theme/default.css</file>
                 <file>theme/style.css</file>
                 <file>theme/radio.svg</file>
+                <file>theme/radio-active.svg</file>
                 <file>theme/switch.svg</file>
                 <file>theme/switch-active.svg</file>
         </gresource>

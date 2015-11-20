@@ -133,12 +133,11 @@ GtkCalendar.raven-calendar:selected {
 
 /* Radio Items */
 .raven .radio {
-    opacity: 0.17;
     -gtk-icon-source: url("radio.svg");
 }
 
 .raven .radio:checked {
-    opacity: 1;
+    -gtk-icon-source: url("radio-active.svg");
 }
 
 /* Switch */
