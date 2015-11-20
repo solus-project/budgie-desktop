@@ -25,13 +25,13 @@ public class PowerStrip : Gtk.EventBox
 
     public PowerStrip(Arc.Raven? raven)
     {
-        Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 20);
 
         margin_top = 10;
-        margin_bottom = 10;
         get_style_context().add_class("header-widget");
         bottom.halign = Gtk.Align.CENTER;
-        margin_bottom = 40;
+        bottom.margin_top = 5;
+        bottom.margin_bottom = 5;
         add(bottom);
 
         get_style_context().add_class("primary-control");
@@ -47,7 +47,6 @@ public class PowerStrip : Gtk.EventBox
         });
         btn.halign = Gtk.Align.START;
         btn.get_style_context().add_class("flat");
-        btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
         btn = new Gtk.Button.from_icon_name("system-lock-screen-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
@@ -58,7 +57,6 @@ public class PowerStrip : Gtk.EventBox
         var lock_btn = btn;
         btn.halign = Gtk.Align.START;
         btn.get_style_context().add_class("flat");
-        btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
         btn = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
@@ -73,7 +71,6 @@ public class PowerStrip : Gtk.EventBox
         });
         btn.halign = Gtk.Align.START;
         btn.get_style_context().add_class("flat");
-        btn.margin_left = 20;
         bottom.pack_start(btn, false, false, 0);
 
         var path = Environment.get_variable("XDG_SEAT_PATH");

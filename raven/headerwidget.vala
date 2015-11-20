@@ -19,6 +19,7 @@ public class HeaderWidget : Gtk.Box
     private Gtk.Label? label = null;
     private Gtk.Button? exp_button = null;
     private Gtk.Button? close_button = null;
+    private Gtk.Box? header_box = null;
 
     public string? text {
         public set {
@@ -64,19 +65,23 @@ public class HeaderWidget : Gtk.Box
 
         get_style_context().add_class("raven-expander");
 
+        header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 3);
+        header_box.margin = 3;
+        pack_start(header_box, true, true, 0);
+
         image = new Gtk.Image();
-        image.margin_left = 8;
-        image.margin_right = 8;
-        pack_start(image, false, false, 0);
+        image.margin_start = 8;
+        image.margin_end = 8;
+        header_box.pack_start(image, false, false, 0);
 
         label = new Gtk.Label(text);
         label.set_line_wrap(true);
         label.set_line_wrap_mode(Pango.WrapMode.WORD);
         label.halign = Gtk.Align.START;
         if (custom_widget != null) {
-            pack_start(custom_widget, true, true, 0);
+            header_box.pack_start(custom_widget, true, true, 0);
         } else {
-            pack_start(label, true, true, 0);
+            header_box.pack_start(label, true, true, 0);
         }
 
         exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
@@ -89,7 +94,7 @@ public class HeaderWidget : Gtk.Box
                 (exp_button.get_image() as Gtk.Image).icon_name = "pan-down-symbolic";
             }
         });
-        pack_end(exp_button, false, false, 0);
+        header_box.pack_end(exp_button, false, false, 0);
 
         show_all();
 
@@ -98,7 +103,7 @@ public class HeaderWidget : Gtk.Box
         close_button.get_style_context().add_class("primary-control");
         close_button.no_show_all = true;
         close_button.get_child().show();
-        pack_start(close_button, false, false, 0);
+        header_box.pack_start(close_button, false, false, 0);
 
         close_button.clicked.connect(()=> {
             this.closed();

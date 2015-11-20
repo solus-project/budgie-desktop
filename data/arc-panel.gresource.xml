@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
         <gresource prefix="/com/solus-project/arc/panel">
-                <file>default.css</file>
-                <file>style.css</file>
+                <file>theme/default.css</file>
+                <file>theme/style.css</file>
+                <file>theme/radio.svg</file>
+                <file>theme/radio-active.svg</file>
+                <file>theme/switch.svg</file>
+                <file>theme/switch-active.svg</file>
         </gresource>
 </gresources>
