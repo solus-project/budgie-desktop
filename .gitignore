@@ -20,6 +20,7 @@ stamp-h*
 
 # data
 /data/*.valid
+/data/arc-panel.desktop
 
 # panel
 /panel/arc-panel

@@ -1,4 +1,5 @@
 EXTRA_DIST = \
+	arc-panel.desktop.in \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
 	theme/style.css \
@@ -10,3 +11,8 @@ EXTRA_DIST = \
 
 gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 @GSETTINGS_RULES@
+
+appdir = $(datadir)/applications
+
+app_DATA = \
+        arc-panel.desktop

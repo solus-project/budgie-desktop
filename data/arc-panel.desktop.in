@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Arc Panel
+Comment=Core part of the Arc Desktop, providing the panels and Raven sidebar
+Exec=arc-panel
+Terminal=false
+Categories=GNOME;GTK;System;Core;
+NoDisplay=true
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=true
+X-GNOME-Autostart-Phase=Panel
+X-GNOME-Provides=panel
