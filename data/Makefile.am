@@ -5,9 +5,13 @@ EXTRA_DIST = \
 	theme/style.css \
 	theme/default.css \
 	theme/radio.svg \
+	theme/radio@2.svg \
 	theme/radio-active.svg \
+	theme/radio-active@2.svg \
 	theme/switch.svg \
-	theme/switch-active.svg
+	theme/switch@2.svg \
+	theme/switch-active.svg \
+	theme/switch-active@2.svg
 
 gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 @GSETTINGS_RULES@

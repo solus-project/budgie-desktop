@@ -133,11 +133,11 @@ GtkCalendar.raven-calendar:selected {
 
 /* Radio Items */
 .raven .radio {
-    -gtk-icon-source: url("radio.svg");
+    -gtk-icon-source: -gtk-scaled(url("radio.svg"),url("radio@2.svg"));
 }
 
 .raven .radio:checked {
-    -gtk-icon-source: url("radio-active.svg");
+    -gtk-icon-source: -gtk-scaled(url("radio-active.svg"),url("radio-active@2.svg"));
 }
 
 /* Switch */
@@ -162,11 +162,11 @@ GtkCalendar.raven-calendar:selected {
 }
 
 .raven GtkSwitch.trough {
-  background-image: url("switch.svg");
+  background-image: -gtk-scaled(url("switch.svg"),url("switch@2.svg"));
 }
 
 .raven GtkSwitch.trough:active {
-  background-image: url("switch-active.svg");
+  background-image: -gtk-scaled(url("switch-active.svg"),url("switch-active@2.svg"));
 }
 
 .raven GtkSwitch:insensitive {
