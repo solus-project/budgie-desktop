@@ -4,8 +4,12 @@
                 <file>theme/default.css</file>
                 <file>theme/style.css</file>
                 <file>theme/radio.svg</file>
+                <file>theme/radio@2.svg</file>
                 <file>theme/radio-active.svg</file>
+                <file>theme/radio-active@2.svg</file>
                 <file>theme/switch.svg</file>
+                <file>theme/switch@2.svg</file>
                 <file>theme/switch-active.svg</file>
+                <file>theme/switch-active@2.svg</file>
         </gresource>
 </gresources>
