@@ -74,7 +74,9 @@ public class ClientWidget : Gtk.Box
         player_revealer.reveal_child = true;
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-
+        player_revealer.notify["child-revealed"].connect(()=> {
+            this.get_toplevel().queue_draw();
+        });
         header = new Arc.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
         header.closed.connect(()=> {
             Idle.add(()=> {
