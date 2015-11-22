@@ -11,7 +11,17 @@ it parallel installable and help me with debugging.
 License
 =======
 
-arc-desktop is available under the terms of the GPL-2.0 license
+arc-desktop is available under a split license model. This enables
+developers to link against the libraries of arc-desktop without
+affecting their choice of license and distribution.
+
+The shared libraries are available under the terms of the LGPL-2.1,
+allowing developers to link against the API without any issue, and
+to use all exposed APIs without affecting their project license.
+
+The remainder of the project (i.e. installed binaries) is available
+under the terms of the GPL 2.0 license. This is clarified in the headers
+of each source file.
 
 Building
 ========

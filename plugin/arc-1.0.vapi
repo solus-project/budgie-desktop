@@ -1,3 +1,14 @@
+/*
+ * This file is part of arc-desktop.
+ *
+ * Copyright (C) 2015 Ikey Doherty
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ */
+
 namespace Arc {
     [CCode (cheader_filename = "ArcPlugin.h")]
     public interface PopoverManager : GLib.Object
