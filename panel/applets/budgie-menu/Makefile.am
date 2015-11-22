@@ -2,7 +2,7 @@
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
-plugindir = $(libdir)/arc-desktop
+plugindir = $(MODULEDIR)
 plugin_DATA =
 
 
@@ -12,7 +12,7 @@ plugin_DATA += \
 EXTRA_DIST += \
 	$(plugin_DATA)
 
-pkglib_LTLIBRARIES += libbudgiemenuapplet.la
+plugin_LTLIBRARIES = libbudgiemenuapplet.la
 
 libbudgiemenuapplet_la_SOURCES = \
 	BudgieMenu.vala \
@@ -35,8 +35,7 @@ libbudgiemenuapplet_la_LIBADD = \
 	$(LIBPEAS_LIBS)
 
 libbudgiemenuapplet_la_LDFLAGS = \
-	-module \
-	-avoid-version \
+	$(MODULE_FLAGS) \
 	$(AM_LDFLAGS)
 
 libbudgiemenuapplet_la_VALAFLAGS = \

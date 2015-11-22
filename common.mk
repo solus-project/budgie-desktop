@@ -22,3 +22,8 @@ DECLARATIONS = \
 	-DDATADIR=\"$(datadir)/arc-desktop\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\"
+
+MODULE_FLAGS = \
+	-module \
+	-avoid-version \
+	-shared

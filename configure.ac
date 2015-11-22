@@ -29,13 +29,13 @@ PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
 PULSE_MIN_VERS=2.0
 
-MODULEDIR=${libdir}/arc-desktop
+MODULEDIR="${libdir}/arc-desktop/plugins"
 AC_SUBST(MODULEDIR)
 AC_DEFINE_UNQUOTED(MODULEDIR, "$MODULEDIR",
                    [Installation directory for Arc plugins])
 
 # Technically unused right now but might be used in the future
-MODULE_DATA_DIR=${datadir}/arc-desktop/plugins
+MODULE_DATA_DIR="${datadir}/share/arc-desktop/plugins"
 AC_SUBST(MODULE_DATA_DIR)
 AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
                    [Installation directory for Arc plugin data])
