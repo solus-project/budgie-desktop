@@ -122,7 +122,7 @@ public class SoundWidget : Gtk.Box
         header.bind_property("expanded", this, "expanded");
         expanded = true;
 
-        revealer.notify["child-revealed"].connect(()=> {
+        revealer.notify["child-revealed"].connect_after(()=> {
             this.get_toplevel().queue_draw();
         });
 

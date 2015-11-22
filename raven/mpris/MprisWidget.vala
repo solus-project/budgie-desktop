@@ -23,8 +23,6 @@ public class MprisWidget : Gtk.Box
 
         ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
 
-        get_style_context().add_class("raven-background");
-
         Idle.add(()=> {
             setup_dbus();
             return false;

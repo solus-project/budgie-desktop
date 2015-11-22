@@ -73,8 +73,9 @@ public class ClientWidget : Gtk.Box
         player_revealer = new Gtk.Revealer ();
         player_revealer.reveal_child = true;
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        get_style_context().add_class("raven-background");
 
-        player_revealer.notify["child-revealed"].connect(()=> {
+        player_revealer.notify["child-revealed"].connect_after(()=> {
             this.get_toplevel().queue_draw();
         });
         header = new Arc.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
