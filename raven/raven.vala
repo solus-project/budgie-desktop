@@ -67,10 +67,7 @@ public class Raven : Gtk.Window
     unowned Arc.Toplevel? toplevel_top = null;
     unowned Arc.Toplevel? toplevel_bottom = null;
 
-    /* This is completely temporary. Shush */
-    private MprisWidget? mpris = null;
-    private CalendarWidget? cal = null;
-    private SoundWidget? sound = null;
+    private Arc.MainView? main_view = null;
 
     public double nscale {
         public set {
@@ -120,28 +117,12 @@ public class Raven : Gtk.Window
         this.get_style_context().add_class(Arc.position_class_name(PanelPosition.RIGHT));
 
         var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        main_box.get_style_context().add_class("raven");
         layout.pack_start(main_box, true, true, 0);
 
-        var scroller = new Gtk.ScrolledWindow(null, null);
-        scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        main_box.pack_start(scroller, true, true, 0);
-
-        /* Temporary */
-        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        scroller.add(box);
-        main_box.get_style_context().add_class("raven");
-
-        cal = new CalendarWidget();
-        cal.margin_top = 6;
-        box.pack_start(cal, false, false, 0);
-
-        sound = new SoundWidget();
-        sound.margin_top = 6;
-        box.pack_start(sound, false, false, 0);
-
-        mpris = new MprisWidget();
-        mpris.margin_top = 6;
-        box.pack_start(mpris, false, false, 0);
+        /* "Main" view */
+        main_view = new Arc.MainView();
+        main_box.pack_start(main_view, true, true, 0);
 
         strip = new PowerStrip(this);
         main_box.pack_end(strip, false, false, 0);
@@ -217,7 +198,7 @@ public class Raven : Gtk.Window
     {
         int n, m;
         /* In future we'll actually probe all applets */
-        mpris.get_preferred_width(out m, out n);
+        main_view.get_preferred_width(out m, out n);
         int width = n;
 
         int x = (rect.x+rect.width)-width;

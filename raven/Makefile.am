@@ -11,6 +11,7 @@ lib_LTLIBRARIES = libraven.la
 
 libraven_la_SOURCES = \
 	raven.vala \
+	main_view.vala \
 	powerstrip.vala \
 	headerwidget.vala \
 	calender.vala \
