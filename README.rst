@@ -8,6 +8,10 @@ Note that this work will be merged *back* into the Budgie Desktop
 repo on GitHub upon completion - the name-change is SOLELY to make
 it parallel installable and help me with debugging.
 
+Enormous thanks go to horst3180 for all the design work, contributions
+and overseeing of the project to ensure it meets his mockups. The
+project would not be possible without him.
+
 License
 =======
 
