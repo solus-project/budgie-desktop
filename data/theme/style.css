@@ -113,6 +113,10 @@ GtkCalendar.raven-calendar:selected {
     padding: 4px;
 }
 
+.raven-switcher .button {
+    padding: 2px;
+}
+
 .raven-expander .button.flat {
     color: alpha(currentColor, 0.5);
 }
@@ -125,7 +129,9 @@ GtkCalendar.raven-calendar:selected {
 }
 
 .raven .button:active,
-.raven .button.flat:active {
+.raven .button.flat:active,
+.raven .button:checked,
+.raven .button.flat:checked {
     background-clip: padding-box;
     color: @selected_fg_color;
     background-color: @theme_selected_bg_color;
