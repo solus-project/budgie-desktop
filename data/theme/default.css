@@ -108,6 +108,7 @@
 }
 
 .raven-expander,
+.raven-switcher,
 .raven .header-widget {
     color: @raven_expander_fg;
     border: solid @raven_expander_border;

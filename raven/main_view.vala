@@ -12,7 +12,7 @@
 namespace Arc
 {
 
-public class MainView : Gtk.ScrolledWindow
+public class MainView : Gtk.Box
 {
 
     /* This is completely temporary. Shush */
@@ -20,14 +20,50 @@ public class MainView : Gtk.ScrolledWindow
     private CalendarWidget? cal = null;
     private SoundWidget? sound = null;
 
+    private Gtk.Stack? main_stack = null;
+    private Gtk.StackSwitcher? switcher = null;
+
     public MainView()
     {
-        Object();
-        set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+
+        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.VERTICAL);
+
+        var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        header.get_style_context().add_class("raven-switcher");
+        main_stack = new Gtk.Stack();
+        pack_start(header, false, false, 0);
+
+        var settings = new Gtk.Button.from_icon_name("applications-system-symbolic", Gtk.IconSize.BUTTON);
+        settings.margin_top = 4;
+        settings.margin_bottom = 4;
+        settings.margin_right = 4;
+        header.pack_end(settings, false, false, 0);
+        settings.valign = Gtk.Align.CENTER;
+
+        switcher = new Gtk.StackSwitcher();
+        group.add_widget(switcher);
+        group.add_widget(settings);
+
+        switcher.valign = Gtk.Align.CENTER;
+        switcher.margin_top = 4;
+        switcher.margin_bottom = 4;
+        switcher.set_halign(Gtk.Align.CENTER);
+        switcher.set_stack(main_stack);
+        header.pack_start(switcher, true, true, 0);
+
+        pack_start(main_stack, true, true, 0);
+
+        var scroll = new Gtk.ScrolledWindow(null, null);
+        main_stack.add_titled(scroll, "applets", "Applets");
+        /* Dummy - no notifications right now */
+        main_stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "notifications", "Notifications");
+
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
         /* Eventually these guys get dynamically loaded */
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        add(box);
+        scroll.add(box);
 
         cal = new CalendarWidget();
         cal.margin_top = 6;

@@ -68,6 +68,7 @@ public class Raven : Gtk.Window
     unowned Arc.Toplevel? toplevel_bottom = null;
 
     private Arc.MainView? main_view = null;
+    private Gtk.Stack? main_stack;
 
     public double nscale {
         public set {
@@ -120,9 +121,13 @@ public class Raven : Gtk.Window
         main_box.get_style_context().add_class("raven");
         layout.pack_start(main_box, true, true, 0);
 
-        /* "Main" view */
+        /* "Main" switcher */
+        main_stack = new Gtk.Stack();
+        main_box.pack_start(main_stack, true, true, 0);
+
+        /* Applets */
         main_view = new Arc.MainView();
-        main_box.pack_start(main_view, true, true, 0);
+        main_stack.add_named(main_view, "applets");
 
         strip = new PowerStrip(this);
         main_box.pack_end(strip, false, false, 0);
