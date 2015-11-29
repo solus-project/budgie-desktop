@@ -21,9 +21,6 @@ arc-raven-resources.h: $(top_srcdir)/raven/ui/arc-raven.gresource.xml $(raven_re
 arc-raven-resources.c: $(top_srcdir)/raven/ui/arc-raven.gresource.xml $(raven_resources)
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/raven/ui --generate-source --c-name arc_raven $<
 
-CLEANFILES = \
-	$(BUILT_SOURCES)
-
 
 lib_LTLIBRARIES = libraven.la
 

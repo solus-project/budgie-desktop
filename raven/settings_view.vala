@@ -17,9 +17,6 @@ public class SettingsHeader : Gtk.Box
 {
     private SettingsView? view = null;
 
-    [GtkChild]
-    private Gtk.Button exit_button;
-
     [GtkCallback]
     private void exit_clicked()
     {
