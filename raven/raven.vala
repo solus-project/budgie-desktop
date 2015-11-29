@@ -68,6 +68,7 @@ public class Raven : Gtk.Window
     unowned Arc.Toplevel? toplevel_bottom = null;
 
     private Arc.MainView? main_view = null;
+    private Arc.SettingsView? settings_view = null;
     private Gtk.Stack? main_stack;
 
     public double nscale {
@@ -123,11 +124,18 @@ public class Raven : Gtk.Window
 
         /* "Main" switcher */
         main_stack = new Gtk.Stack();
+        main_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         main_box.pack_start(main_stack, true, true, 0);
 
         /* Applets */
         main_view = new Arc.MainView();
-        main_stack.add_named(main_view, "applets");
+        main_view.view_switch.connect(on_view_switch);
+        main_stack.add_named(main_view, "main");
+
+        /* Settings */
+        settings_view = new Arc.SettingsView();
+        settings_view.view_switch.connect(on_view_switch);
+        main_stack.add_named(settings_view, "settings");
 
         strip = new PowerStrip(this);
         main_box.pack_end(strip, false, false, 0);
@@ -148,6 +156,19 @@ public class Raven : Gtk.Window
                 }
             }
         });
+    }
+
+    void on_view_switch(Gtk.Widget? widget)
+    {
+        string? name = "";
+
+        if (widget == this.main_view) {
+            name = "settings";
+        } else {
+            name = "main";
+        }
+
+        this.main_stack.set_visible_child_name(name);
     }
 
     public override void size_allocate(Gtk.Allocation rect)

@@ -23,6 +23,8 @@ public class MainView : Gtk.Box
     private Gtk.Stack? main_stack = null;
     private Gtk.StackSwitcher? switcher = null;
 
+    public signal void view_switch();
+
     public MainView()
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
@@ -38,6 +40,9 @@ public class MainView : Gtk.Box
         main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
 
         var settings = new Gtk.Button.from_icon_name("applications-system-symbolic", Gtk.IconSize.BUTTON);
+        settings.clicked.connect(()=> {
+            this.view_switch();
+        });
         settings.margin_top = 4;
         settings.margin_bottom = 4;
         settings.margin_right = 4;
