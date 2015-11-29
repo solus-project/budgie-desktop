@@ -34,6 +34,9 @@ public class MainView : Gtk.Box
         main_stack = new Gtk.Stack();
         pack_start(header, false, false, 0);
 
+        /* Anim */
+        main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+
         var settings = new Gtk.Button.from_icon_name("applications-system-symbolic", Gtk.IconSize.BUTTON);
         settings.margin_top = 4;
         settings.margin_bottom = 4;
