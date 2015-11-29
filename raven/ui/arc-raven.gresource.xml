@@ -2,5 +2,6 @@
 <gresources>
         <gresource prefix="/com/solus-project/arc/raven">
                 <file>settings.ui</file>
+                <file>appearance.ui</file>
         </gresource>
 </gresources>

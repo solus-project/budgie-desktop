@@ -29,10 +29,18 @@ public class SettingsHeader : Gtk.Box
     }
 }
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/appearance.ui")]
+public class AppearanceSettings : Gtk.Box
+{
+}
+
 public class SettingsView : Gtk.Box
 {
 
     public signal void view_switch();
+
+    private Gtk.Stack? stack = null;
+    private Gtk.StackSwitcher? switcher = null;
 
     public SettingsView()
     {
@@ -40,6 +48,26 @@ public class SettingsView : Gtk.Box
 
         var header = new SettingsHeader(this);
         pack_start(header, false, false, 0);
+
+        stack = new Gtk.Stack();
+        stack.margin_top = 6;
+
+        switcher = new Gtk.StackSwitcher();
+        switcher.halign = Gtk.Align.CENTER;
+        switcher.valign = Gtk.Align.CENTER;
+        switcher.margin_top = 4;
+        switcher.margin_bottom = 4;
+        switcher.set_stack(stack);
+        var sbox = new Gtk.EventBox();
+        sbox.add(switcher);
+        pack_start(sbox, false, false, 0);
+        sbox.get_style_context().add_class("raven-switcher");
+
+        pack_start(stack, true, true, 0);
+
+        var appearance = new AppearanceSettings();
+        stack.add_titled(appearance, "appearance", "General");
+        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "panel", "Panel");
 
         show_all();
     }
