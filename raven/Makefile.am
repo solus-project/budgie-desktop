@@ -1,7 +1,25 @@
 -include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
-	raven.vapi
+	raven.vapi \
+	ui/arc-raven.gresource.xml \
+	ui/settings.ui
+
+raven_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/raven/ui --generate-dependencies $(top_srcdir)/raven/ui/arc-raven.gresource.xml)
+
+BUILT_SOURCES = \
+	arc-raven-resources.h \
+	arc-raven-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
+
+# resources
+arc-raven-resources.h: $(top_srcdir)/raven/ui/arc-raven.gresource.xml $(raven_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/raven/ui --generate-header --c-name arc_raven $<
+
+arc-raven-resources.c: $(top_srcdir)/raven/ui/arc-raven.gresource.xml $(raven_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/raven/ui --generate-source --c-name arc_raven $<
 
 CLEANFILES = \
 	$(BUILT_SOURCES)
@@ -10,6 +28,8 @@ CLEANFILES = \
 lib_LTLIBRARIES = libraven.la
 
 libraven_la_SOURCES = \
+	arc-raven-resources.h \
+	arc-raven-resources.c \
 	raven.vala \
 	main_view.vala \
 	settings_view.vala \
@@ -46,6 +66,8 @@ libraven_la_VALAFLAGS = \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/lib \
+	--target-glib=2.38 \
+	--gresources=${top_srcdir}/raven/ui/arc-raven.gresource.xml \
 	$(VALAFLAGS)
 
 nodist_include_HEADERS = \

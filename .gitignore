@@ -42,6 +42,7 @@ arc-panel-resources.*
 /raven/*.c
 /raven/ArcRaven.h
 /raven/mpris/*.c
+/raven/*.h
 
 /lib/toplevel.c
 /lib/shadow.c
