@@ -134,7 +134,7 @@ public class Panel : Arc.Toplevel
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
-        intended_size = 42 + 5;
+        intended_size = 37 + 5;
         this.manager = manager;
     
         scale = get_scale_factor();
