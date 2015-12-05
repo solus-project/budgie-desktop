@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
