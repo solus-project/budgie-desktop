@@ -58,6 +58,8 @@ public class Raven : Gtk.Window
     private RavenIface? iface = null;
     bool expanded = false;
 
+    Gdk.Rectangle old_rect;
+
     private double scale = 0.0;
 
     public int required_size { public get ; protected set; }
@@ -146,6 +148,10 @@ public class Raven : Gtk.Window
         set_keep_above(true);
         set_decorated(false);
 
+        if (!this.get_realized()) {
+            this.realize();
+        }
+
         notify["visible"].connect(()=> {
             if (!get_visible()) {
                 if (this.toplevel_top != null) {
@@ -156,7 +162,10 @@ public class Raven : Gtk.Window
                 }
             }
         });
+
+        this.get_child().show_all();
     }
+
 
     void on_view_switch(Gtk.Widget? widget)
     {
@@ -223,13 +232,14 @@ public class Raven : Gtk.Window
     public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
     {
         int n, m;
-        /* In future we'll actually probe all applets */
-        main_view.get_preferred_width(out m, out n);
-        int width = n;
+        this.get_preferred_width(out m, out n);
+        int width = m;
 
         int x = (rect.x+rect.width)-width;
         int y = rect.y;
         int height = rect.height;
+
+        this.old_rect = rect;
 
 
         if (top != this.toplevel_top) {
@@ -244,34 +254,26 @@ public class Raven : Gtk.Window
             height -= size;
             y += size;
 
-            this.toplevel_top = top;
-            this.bind_panel_shadow(top);
+            if (this.toplevel_top != top) {
+                this.toplevel_top = top;
+                this.bind_panel_shadow(top);
+            }
         }
 
         if (bottom != null) {
             height -= bottom.intended_size;
             height += bottom.shadow_depth;
 
-            this.toplevel_bottom = bottom;
-            this.bind_panel_shadow(bottom);
+            if (this.toplevel_bottom != bottom) {
+                this.toplevel_bottom = bottom;
+                this.bind_panel_shadow(bottom);
+            }
         }
 
         our_height = height;
         our_width = width;
         move(x, y);
         queue_resize();
-    }
-
-    public override void get_preferred_width(out int m, out int n)
-    {
-        m = our_width;
-        n = our_width;
-    }
-
-    public override void get_preferred_width_for_height(int h, out int m, out int n)
-    {
-        m = our_width;
-        n = our_width;
     }
 
     public override void get_preferred_height(out int m, out int n)
@@ -316,6 +318,7 @@ public class Raven : Gtk.Window
         }
         double old_op, new_op;
         if (exp) {
+            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
             old_op = 0.0;
             new_op = 1.0;
         } else {

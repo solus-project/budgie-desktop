@@ -45,6 +45,9 @@ public class ClientWidget : Gtk.Box
     Gtk.Button prev_btn;
     Gtk.Button play_btn;
     Gtk.Button next_btn;
+    string filename = "";
+
+    int our_width = BACKGROUND_SIZE;
 
     public bool expanded {
         public set {
@@ -102,7 +105,7 @@ public class ClientWidget : Gtk.Box
         }
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-        background.pixel_size = BACKGROUND_SIZE;
+        background.pixel_size = our_width;
 
         var layout = new Gtk.Overlay();
         player_box.pack_start(layout, true, true, 0);
@@ -268,12 +271,13 @@ public class ClientWidget : Gtk.Box
     {
         if (!uri.has_prefix("file://")) {
             background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-            background.pixel_size = BACKGROUND_SIZE;
+            background.pixel_size = this.our_width;
             return;
         }
         string fname = uri.split("file://")[1];
         try {
-            var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, BACKGROUND_SIZE, BACKGROUND_SIZE);
+            this.filename = fname;
+            var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
             background.set_from_pixbuf(pbuf);
         } catch (Error e) {
             background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);

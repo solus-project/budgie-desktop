@@ -68,6 +68,7 @@ public class SettingsView : Gtk.Box
         var appearance = new AppearanceSettings();
         stack.add_titled(appearance, "appearance", "General");
         stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "panel", "Panel");
+        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", "Sidebar");
 
         show_all();
     }
