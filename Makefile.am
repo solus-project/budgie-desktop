@@ -20,4 +20,5 @@ SUBDIRS = \
 	lib \
 	plugin \
 	raven \
-	panel
+	panel \
+	session

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Arc Desktop
+Comment=This session logs you into the new Budgie Desktop
+Exec=@prefix@/bin/arc-desktop
+TryExec=@prefix@/bin/arc-desktop
+Icon=
+Type=Application
+DesktopNames=GNOME;Arc

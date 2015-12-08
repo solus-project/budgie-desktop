@@ -2,10 +2,15 @@
 
 EXTRA_DIST = \
 	panelconfig.h \
-	panelconfig.vapi
+	panelconfig.vapi \
+	arc-panel.desktop.in
 
 SUBDIRS = \
 	applets
+
+applicationsdir = $(datadir)/applications
+applications_DATA = \
+	arc-panel.desktop
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/arc-panel.gresource.xml)
 

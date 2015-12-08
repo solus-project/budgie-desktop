@@ -26,6 +26,7 @@ stamp-h*
 /panel/arc-panel
 /panel/*.c
 arc-panel-resources.*
+/panel/arc-panel.desktop
 
 # plugin
 *.gir
@@ -50,3 +51,7 @@ arc-panel-resources.*
 /lib/ArcToplevel.h
 
 *.ui~
+
+/session/arc-desktop
+/session/arc-desktop.desktop
+/session/arc-desktop.session

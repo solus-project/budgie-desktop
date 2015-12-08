@@ -66,9 +66,14 @@ AC_CONFIG_FILES([Makefile
                 plugin/Makefile
                 plugin/arc-1.0.pc
                 raven/Makefile
+                panel/arc-panel.desktop
                 panel/Makefile
                 panel/applets/Makefile
-                panel/applets/budgie-menu/Makefile])
+                panel/applets/budgie-menu/Makefile
+                session/arc-desktop.desktop
+                session/arc-desktop.session
+                session/arc-desktop
+                session/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([
