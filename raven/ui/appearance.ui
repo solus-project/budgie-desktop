@@ -71,7 +71,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSwitch" id="switch1">
+          <object class="GtkSwitch" id="switch_dark">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="halign">end</property>

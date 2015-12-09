@@ -46,7 +46,11 @@ public class AppearanceSettings : Gtk.Box
     [GtkChild]
     private Gtk.ComboBox? combobox_icon;
 
+    [GtkChild]
+    private Gtk.Switch? switch_dark;
+
     private GLib.Settings ui_settings;
+    private GLib.Settings arc_settings;
 
     construct {
         var render = new Gtk.CellRendererText();
@@ -57,6 +61,8 @@ public class AppearanceSettings : Gtk.Box
         combobox_icon.add_attribute(render, "text", 0);
 
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
+        arc_settings = new GLib.Settings("com.solus-project.arc-panel");
+        arc_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
     }
 
     public void load_themes()
