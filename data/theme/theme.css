@@ -1,4 +1,5 @@
-.raven .entry,
+.raven .dim-label,
+.arc-panel .dim-label, .raven .entry,
 .arc-panel .entry, .raven .button,
 .arc-panel .button, .raven .scale,
 .arc-panel .scale, .raven .radio,
@@ -21,6 +22,10 @@ GtkPopover .scrollbar .trough {
 
 .arc-container {
   background-color: transparent; }
+
+.raven .dim-label,
+.arc-panel .dim-label {
+  opacity: 0.55; }
 
 .raven .entry,
 .arc-panel .entry {
@@ -338,6 +343,8 @@ GtkPopover .scrollbar .trough {
   .raven .raven-background {
     background-color: rgba(37, 39, 49, 0.6);
     border-bottom: 1px solid rgba(16, 19, 24, 0.77); }
+  .raven .option-subtitle {
+    font-size: smaller; }
 
 .raven-mpris {
   background-color: rgba(17, 18, 21, 0.9);

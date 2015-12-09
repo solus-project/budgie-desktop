@@ -63,6 +63,7 @@
             <property name="label" translatable="yes">Use the dark theme</property>
             <style>
               <class name="dim-label"/>
+              <class name="option-subtitle"/>
             </style>
           </object>
           <packing>
@@ -110,6 +111,7 @@
             <property name="label" translatable="yes">Select a GTK+ theme</property>
             <style>
               <class name="dim-label"/>
+              <class name="option-subtitle"/>
             </style>
           </object>
           <packing>
@@ -144,6 +146,7 @@
             <property name="label" translatable="yes">Select an icon theme</property>
             <style>
               <class name="dim-label"/>
+              <class name="option-subtitle"/>
             </style>
           </object>
           <packing>

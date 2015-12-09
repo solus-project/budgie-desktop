@@ -28,6 +28,11 @@ GtkPopover .scrollbar .trough, {
 .raven,
 .arc-panel {
 
+    .dim-label {
+        @extend %reset_style;
+        opacity: 0.55;
+    }
+
     // Entries
     .entry {
         @extend %reset_style;
@@ -276,6 +281,9 @@ GtkPopover .scrollbar .trough, {
     .raven-background {
         background-color: rgba(37,39,49,0.6);
         border-bottom: 1px solid rgba(16,19,24,0.77);
+    }
+    .option-subtitle {
+        font-size: smaller;
     }
 }
 
