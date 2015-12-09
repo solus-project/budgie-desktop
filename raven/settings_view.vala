@@ -19,6 +19,12 @@ public enum ThemeType {
     CURSOR_THEME
 }
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/panel.ui")]
+public class PanelEditor : Gtk.Box
+{
+
+}
+
 [GtkTemplate (ui = "/com/solus-project/arc/raven/settings.ui")]
 public class SettingsHeader : Gtk.Box
 {
@@ -201,7 +207,9 @@ public class SettingsView : Gtk.Box
 
         var appearance = new AppearanceSettings();
         stack.add_titled(appearance, "appearance", "General");
-        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "panel", "Panel");
+
+        var panel = new PanelEditor();
+        stack.add_titled(panel, "panel", "Panel");
         stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", "Sidebar");
 
         appearance.load_themes();
