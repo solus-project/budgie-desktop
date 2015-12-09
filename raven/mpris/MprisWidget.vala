@@ -15,6 +15,8 @@ public class MprisWidget : Gtk.Box
 
     HashTable<string,ClientWidget> ifaces;
 
+    int our_width = 250;
+
     public MprisWidget()
     {
         Object (orientation: Gtk.Orientation.VERTICAL, spacing: 1);
@@ -25,7 +27,16 @@ public class MprisWidget : Gtk.Box
             setup_dbus();
             return false;
         });
+        size_allocate.connect(on_size_allocate);
         show_all();
+    }
+
+    void on_size_allocate()
+    {
+        int w = get_allocated_width();
+        if (w > our_width) {
+            our_width = w;
+        }
     }
 
     /**
@@ -36,7 +47,7 @@ public class MprisWidget : Gtk.Box
      */
     void add_iface(string name, MprisClient iface)
     {
-        ClientWidget widg = new ClientWidget(iface);
+        ClientWidget widg = new ClientWidget(iface, our_width);
         widg.show_all();
         pack_start(widg, false, false, 0);
         ifaces.insert(name, widg);

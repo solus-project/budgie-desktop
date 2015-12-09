@@ -66,10 +66,12 @@ public class ClientWidget : Gtk.Box
      *
      * @param client The underlying MprisClient instance to use
      */
-    public ClientWidget(MprisClient client)
+    public ClientWidget(MprisClient client, int width)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
         Gtk.Widget? row = null;
+
+        our_width = width;
 
         this.client = client;
 
