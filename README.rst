@@ -53,7 +53,7 @@ And:
 
 To install these on Solus::
 
-    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel vala
+    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel mutter-devel vala
     sudo eopkg it -c system.devel
 
 Clone the repository::
