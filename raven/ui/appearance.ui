@@ -152,7 +152,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="combobox1">
+          <object class="GtkComboBox" id="combobox_gtk">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_right">6</property>
@@ -167,7 +167,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="combobox2">
+          <object class="GtkComboBox" id="combobox_icon">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_right">6</property>
@@ -200,7 +200,7 @@
   </template>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
-      <widget name="combobox2"/>
+      <widget name="combobox_icon"/>
     </widgets>
   </object>
 </interface>
