@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
         <gresource prefix="/com/solus-project/arc/panel">
-                <file>theme/default.css</file>
-                <file>theme/style.css</file>
-                <file>theme/radio.svg</file>
-                <file>theme/radio@2.svg</file>
-                <file>theme/radio-active.svg</file>
-                <file>theme/radio-active@2.svg</file>
-                <file>theme/switch.svg</file>
-                <file>theme/switch@2.svg</file>
-                <file>theme/switch-active.svg</file>
-                <file>theme/switch-active@2.svg</file>
+                <file>theme/theme.css</file>
+                <file>theme/assets/radio.svg</file>
+                <file>theme/assets/radio@2.svg</file>
+                <file>theme/assets/radio-active.svg</file>
+                <file>theme/assets/radio-active@2.svg</file>
+                <file>theme/assets/switch.svg</file>
+                <file>theme/assets/switch@2.svg</file>
+                <file>theme/assets/switch-active.svg</file>
+                <file>theme/assets/switch-active@2.svg</file>
         </gresource>
 </gresources>

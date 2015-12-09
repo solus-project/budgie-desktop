@@ -2,16 +2,22 @@ EXTRA_DIST = \
 	arc-panel.desktop.in \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
-	theme/style.css \
-	theme/default.css \
-	theme/radio.svg \
-	theme/radio@2.svg \
-	theme/radio-active.svg \
-	theme/radio-active@2.svg \
-	theme/switch.svg \
-	theme/switch@2.svg \
-	theme/switch-active.svg \
-	theme/switch-active@2.svg
+	theme/.nvmrc \
+	theme/gulpfile.js \
+	theme/package.json \
+	theme/theme.css \
+	theme/assets/radio.svg \
+	theme/assets/radio@2.svg \
+	theme/assets/radio-active.svg \
+	theme/assets/radio-active@2.svg \
+	theme/assets/switch.svg \
+	theme/assets/switch@2.svg \
+	theme/assets/switch-active.svg \
+	theme/assets/switch-active@2.svg \
+	theme/sass/_colors.scss \
+	theme/sass/_drawing.scss \
+	theme/sass/_main.scss \
+	theme/sass/style.scss
 
 gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 @GSETTINGS_RULES@

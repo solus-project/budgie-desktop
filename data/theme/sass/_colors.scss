@@ -1,0 +1,35 @@
+$fg_color: white;
+
+$selected_bg_color: #5294E2;
+$selected_fg_color: white;
+
+$warning_color: #F27835;
+$error_color: #FC4138;
+$success_color: #73d216;
+$destructive_color: #F04A50;
+$suggested_color: #4DADD4;
+
+$button_bg: transparentize(#788199, 0.82);
+$button_fg: $fg_color;
+$button_border: transparentize(#171b25, 0.41);
+
+$entry_bg: $button_bg;
+$entry_fg: $button_fg;
+$entry_border: $button_border;
+
+$trough_bg: transparentize(#788199, 0.68);
+
+$panel_bg: transparentize(#21242c, 0.1);
+$panel_border: transparentize(#101318, 0.18);
+$panel_shadow: transparentize(black, 0.7);
+
+$raven_bg: transparentize(#2f343f, 0.1);
+$raven_border: transparentize(#101318, 0.23);
+
+$raven_expander_bg: transparentize(#252731, 0.25);
+$raven_expander_fg: $fg_color;
+$raven_expander_border: transparentize(#171b25, 0.3);
+
+$mpris_overlay_bg: transparentize(#111215, 0.1);
+$mpris_overlay_fg: $fg_color;
+$mpris_overlay_border: transparentize(#06070a, 0.05);

@@ -1,0 +1,290 @@
+@function gtkalpha($c,$a) {
+    @return unquote("alpha(#{$c},#{$a})");
+}
+
+$roundness: 3px;
+
+// Used to reset all style properties set by the gtk theme
+%reset_style,
+GtkScrolledWindow,
+GtkPopover GtkListBox,
+GtkPopover GtkListBoxRow,
+GtkPopover .scrollbar .trough, {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+    border-image: none;
+    border-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
+    opacity: 1;
+}
+
+// Container for both the "panel" area and the shadow. Wise to keep
+// this transparent..
+.arc-container { background-color: transparent; }
+
+.raven,
+.arc-panel {
+
+    // Entries
+    .entry {
+        @extend %reset_style;
+
+        padding: 4px 8px;
+        border: 1px solid;
+        border-radius: $roundness;
+
+        @include entry(normal);
+
+        &:focus {
+            @include entry(focus);
+        }
+        &:insensitive {
+            @include entry(insensitive);
+        }
+        &:selected,
+        &:selected:focus {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+        }
+    }
+
+    // Buttons
+    .button {
+        @extend %reset_style;
+
+        background-clip: padding-box;
+        padding: 4px 8px;
+        border: 1px solid;
+        border-radius: $roundness;
+
+        @include button(normal);
+
+        &.flat:not(:hover):not(:active):not(:checked) {
+            &, &:insensitive {
+                @include button(flat);
+            }
+        }
+        &:hover { @include button(hover); }
+        &:active, &:checked { @include button(active); }
+        &:insensitive {
+            @include button(insensitive);
+            &:active, &:checked {
+                @include button(insensitive-active);
+            }
+        }
+
+        // Destructive and Sugggested action buttons
+        @each $b_type, $b_color in (suggested-action, $suggested_color),
+                                   (destructive-action, $destructive_color) {
+            &.#{$b_type} {
+                @include button(normal, $b_color, $selected_fg_color);
+                &:hover { @include button(hover, $b_color, $selected_fg_color); }
+                &:active, &:checked { @include button(active, $active_bg:darken($b_color, 10%)); }
+                &:insensitive { opacity: 0.5; }
+            }
+        }
+
+        &.text-button { padding: 4px 12px; }
+        &.image-button { padding: 4px; }
+    }
+
+    // Linked Widgets
+    .linked {
+        > .entry,
+        > .button { @extend %linked; }
+
+        // linked square buttons look weird
+        .button.image-button { padding: 4px 7px; }
+    }
+
+    %linked_middle {
+        border-radius: 0;
+        border-right-style: none;
+    }
+    %linked {
+        @extend %linked_middle;
+        &:first-child {
+            border-top-left-radius: $roundness;
+            border-bottom-left-radius: $roundness;
+        }
+        &:last-child {
+            border-top-right-radius: $roundness;
+            border-bottom-right-radius: $roundness;
+            border-right-style: solid;
+        }
+        &:only-child {
+            border-radius: $roundness;
+            border-style: solid;
+        }
+    }
+
+    // Spinbuttons
+    .spinbutton {
+        border-radius: $roundness;
+
+        .button {
+            border-color: transparentize($button_border, 0.3);
+            border-style: none none none solid;
+            border-radius: 0;
+
+            &:dir(rtl) { border-style: none solid none none; }
+        }
+    }
+
+    // Scale
+    .scale {
+        @extend %reset_style;
+
+        -GtkScale-slider-length: 9;
+        -GtkRange-slider-width: 5;
+        -GtkRange-trough-border: 0;
+        outline-offset: -1px;
+        outline-radius: 2px;
+
+        color: gtkalpha(currentColor, 0.7);
+
+        &.slider {
+            border-radius: 2.5px;
+            background-color: $selected_bg_color;
+            border-color: $selected_fg_color;
+
+            &:hover { opacity: 1; }
+
+            &:insensitive {}
+        }
+        &.trough {
+            margin: 0;
+            background-color: $trough_bg;
+            //background-image: none;
+            border-radius: 2.5px;
+
+            &.highlight {
+                background-color: $selected_bg_color;
+
+                &:insensitive {}
+            }
+            &:insensitive {}
+        }
+    }
+
+    // Radio Items
+    .radio {
+        @extend %reset_style;
+
+        -gtk-icon-source: -gtk-scaled(url("assets/radio.svg"),url("assets/radio@2.svg"));
+
+        &:checked { -gtk-icon-source: -gtk-scaled(url("assets/radio-active.svg"),url("assets/radio-active@2.svg")); }
+    }
+
+    // Switches
+    GtkSwitch {
+        @extend %reset_style;
+
+        font: 1;
+        -GtkSwitch-slider-width: 41;
+        -GtkSwitch-slider-height: 17;
+        outline-color: transparent;
+
+        @extend %reset_style;
+
+        &:insensitive { opacity: 0.4; }
+
+        &.trough, &.slider {
+            color: transparent;
+            background-size: 41px 17px;
+            background-repeat: no-repeat;
+            background-position: right center;
+
+            &:dir(rtl) { background-position: left center; }
+        }
+        &.trough {
+            background-image: -gtk-scaled(url("assets/switch.svg"),url("assets/switch@2.svg"));
+
+            &:active { background-image: -gtk-scaled(url("assets/switch-active.svg"),url("assets/switch-active@2.svg")); }
+        }
+    }
+
+    // Calendar
+    GtkCalendar.raven-calendar {
+        @extend %reset_style;
+
+        color: $fg_color;
+
+        &:inconsistent { color: gtkalpha(currentColor,0.3); }
+        &:selected { color: $selected_bg_color; }
+
+        &.header {
+            color: $fg_color;
+            border: none;
+            border-radius: 0;
+        }
+        &.button, &.button:focus {
+            color: gtkalpha(currentColor,0.5);
+            background-color: transparent;
+
+            &:hover {
+                color: white;
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+// Panel
+.arc-panel {
+    color: $fg_color;
+    background-color: $panel_bg;
+}
+
+@each $pos, $b_pos in (top, bottom),(bottom,top),(left,right),(right,left) {
+
+    // Panel borders
+    .#{$pos} .arc-panel { border-#{$b_pos}: 1px solid $panel_border; }
+
+    // Raven borders
+    .#{$pos} .raven { border-#{$b_pos}: 1px solid $raven_border; }
+
+    // Shadows
+    .#{$pos} .shadow-block {
+        background-color: transparent;
+        background-image: linear-gradient(to $b_pos,
+                                          $panel_shadow,
+                                          transparent);
+    }
+}
+
+// Raven
+.raven {
+    color: $fg_color;
+    background-color: $raven_bg;
+    transition: 170ms ease-out;
+
+    .raven-expander,
+    .raven-switcher,
+    .header-widget {
+        color: $fg_color;
+        border: solid $raven_expander_border;
+        border-width: 1px 0;
+        background-color: $raven_expander_bg;
+    }
+    .header-widget {
+        border-bottom-width: 0;
+    }
+    .raven-background {
+        background-color: rgba(37,39,49,0.6);
+        border-bottom: 1px solid rgba(16,19,24,0.77);
+    }
+}
+
+// MPRIS Applet
+.raven-mpris {
+    background-color: $mpris_overlay_bg;
+    border: solid $mpris_overlay_border;
+    border-width: 1px 0;
+
+    .button { padding: 8px; }
+    GtkLabel, GtkImage { color: $mpris_overlay_fg; }
+}
