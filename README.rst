@@ -44,6 +44,8 @@ Operating System, are given:
     - libgnome-menu-3.0 >= 3.10.1
     - gobject-introspection-1.0 >= 1.44.0
     - libpulse >= 2
+    - mutter >= 3.18.0
+    - gnome-desktop-3.0 >= 3.18.0
 
 And:
 
@@ -51,7 +53,7 @@ And:
 
 To install these on Solus::
 
-    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel vala
+    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel vala
     sudo eopkg it -c system.devel
 
 Clone the repository::
