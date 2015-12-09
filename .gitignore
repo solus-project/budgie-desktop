@@ -55,3 +55,7 @@ arc-panel-resources.*
 /session/arc-desktop
 /session/arc-desktop.desktop
 /session/arc-desktop.session
+
+/wm/arc-wm
+/wm/arc-wm.desktop
+/wm/*.c

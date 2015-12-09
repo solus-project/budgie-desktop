@@ -27,6 +27,13 @@ PKG_CHECK_MODULES([LIBPEAS], [libpeas-gtk-1.0 >= 1.8.0])
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
+# Because window management is kinda critical to a desktop. Who knew
+PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.18.0])
+
+# Right now this is just for the mutter vapi, but we'll actually use it
+# in future for XML backgrounds (slideshows)
+PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 3.18.0])
+
 PULSE_MIN_VERS=2.0
 
 MODULEDIR="${libdir}/arc-desktop/plugins"
@@ -73,7 +80,9 @@ AC_CONFIG_FILES([Makefile
                 session/arc-desktop.desktop
                 session/arc-desktop.session
                 session/arc-desktop
-                session/Makefile])
+                session/Makefile
+                wm/arc-wm.desktop
+                wm/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([

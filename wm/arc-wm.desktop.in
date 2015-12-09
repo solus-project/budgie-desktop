@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Arc Window Manager
+Exec=arc-wm
+NoDisplay=true
+X-GNOME-WMSettingsModule=metacity
+X-GNOME-WMName=Arc
+X-GnomeWMSettingsLibrary=metacity
+X-GNOME-Autostart-Phase=WindowManager
+X-GNOME-Provides=windowmanager
+X-GNOME-Autostart-Notify=true
