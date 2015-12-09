@@ -36,6 +36,26 @@ public static const string APPLET_KEY_PAD_START = "padding-start";
 public static const string APPLET_KEY_PAD_END   = "padding-end";
 
 /**
+ * Proxy for gnome-session
+ */
+[DBus (name="org.gnome.SessionManager")]
+public interface Gnome.SessionManager : Object
+{
+    public abstract ObjectPath RegisterClient(string app_id, string client_start_id) throws IOError;
+}
+
+[DBus (name="org.gnome.SessionManager.ClientPrivate")]
+public interface Gnome.SessionClient : Object
+{
+    public abstract void EndSessionResponse(bool is_ok, string reason) throws IOError;
+
+    public signal void Stop() ;
+    public signal void QueryEndSession(uint flags);
+    public signal void EndSession(uint flags);
+    public signal void CancelEndSession();
+}
+
+/**
  * Used to track Applets in a sane way
  */
 public class AppletInfo : GLib.Object
@@ -158,6 +178,10 @@ public class PanelManager
     private PanelManagerIface? iface;
     bool setup = false;
 
+    /* Keep track of our SessionManager */
+    private Gnome.SessionManager? session;
+    private Gnome.SessionClient? sclient;
+
     HashTable<int,Screen?> screens;
     HashTable<string,Arc.Panel?> panels;
 
@@ -169,6 +193,69 @@ public class PanelManager
     HashTable<string, Peas.PluginInfo?> plugins;
 
     private Arc.Raven? raven = null;
+
+    private void end_session(bool quit)
+    {
+        if (quit) {
+            Gtk.main_quit();
+            return;
+        }
+        try {
+            sclient.EndSessionResponse(true, "");
+        } catch (Error e) {
+            warning("Unable to respond to session manager! %s", e.message);
+        }
+    }
+
+    private void register_with_session()
+    {
+        ObjectPath? path = null;
+        string? msg = null;
+        string? start_id = null;
+
+        start_id = Environment.get_variable("DESKTOP_AUTOSTART_ID");
+        if (start_id != null) {
+            Environment.unset_variable("DESKTOP_AUTOSTART_ID");
+        } else {
+            start_id = "";
+        }
+
+        try {
+            session = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SessionManager", "/org/gnome/SessionManager");
+        } catch (Error e) {
+            warning("Unable to connect to session manager: %s", e.message);
+            session = null;
+            return;
+        }
+        /* now we need to gain Moar.. */
+        try {
+            path = session.RegisterClient("arc-panel", start_id);
+        } catch (Error e) {
+            msg = e.message;
+            path = null;
+        }
+        if (path == null) {
+            warning("Error registering with session manager%s", msg != null ? ": %s".printf(msg) : "");
+            return;
+        }
+
+        try {
+            sclient = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SessionManager", path);
+        } catch (Error e) {
+            warning("Unable to get Private Client proxy: %s", e.message);
+            return;
+        }
+
+        sclient.QueryEndSession.connect(()=> {
+            end_session(false);
+        });
+        sclient.EndSession.connect(()=> {
+            end_session(false);
+        });
+        sclient.Stop.connect(()=> {
+            end_session(true);
+        });
+    }
 
     public PanelManager()
     {
@@ -295,6 +382,8 @@ public class PanelManager
         } else {
             message("Loaded existing configuration");
         }
+
+        register_with_session();
     }
 
     void load_css()
