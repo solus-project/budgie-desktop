@@ -54,7 +54,8 @@
       </packing>
     </child>
     <style>
-      <class name="raven-expander"/>
+      <class name="raven-header"/>
+      <class name="top"/>
     </style>
   </template>
   <object class="GtkSizeGroup" id="sizegroup1">

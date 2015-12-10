@@ -17,6 +17,7 @@ m4/
 *.o
 stamp-h*
 .libs
+node_modules/
 
 # data
 /data/*.valid

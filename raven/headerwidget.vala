@@ -63,7 +63,7 @@ public class HeaderWidget : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
 
-        get_style_context().add_class("raven-expander");
+        get_style_context().add_class("raven-header");
 
         header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 3);
         header_box.margin = 3;
@@ -86,6 +86,7 @@ public class HeaderWidget : Gtk.Box
 
         exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
         exp_button.get_style_context().add_class("flat");
+        exp_button.get_style_context().add_class("expander-button");
         exp_button.clicked.connect(()=> {
             this.expanded = !this.expanded;
             if (!this.expanded) {

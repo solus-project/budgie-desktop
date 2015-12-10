@@ -201,7 +201,7 @@ public class SettingsView : Gtk.Box
         var sbox = new Gtk.EventBox();
         sbox.add(switcher);
         pack_start(sbox, false, false, 0);
-        sbox.get_style_context().add_class("raven-switcher");
+        sbox.get_style_context().add_class("raven-background");
 
         pack_start(stack, true, true, 0);
 

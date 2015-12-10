@@ -2,5 +2,4 @@
  * This loads all the styles for the project so you have
  * a better method for testing in Glade
  */
-@import url('theme/default.css');
-@import url('theme/style.css');
+@import url('theme/style_sass.css');
