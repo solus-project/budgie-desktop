@@ -24,7 +24,7 @@
           </object>
         </child>
         <style>
-          <class name="raven-expander"/>
+          <class name="raven-header"/>
         </style>
       </object>
       <packing>

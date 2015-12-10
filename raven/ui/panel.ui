@@ -142,7 +142,7 @@
           </object>
         </child>
         <style>
-          <class name="raven-expander"/>
+          <class name="raven-header"/>
         </style>
       </object>
       <packing>
@@ -332,7 +332,7 @@
           </packing>
         </child>
         <style>
-          <class name="raven-expander"/>
+          <class name="raven-header"/>
         </style>
       </object>
       <packing>
@@ -406,7 +406,7 @@
           </object>
         </child>
         <style>
-          <class name="raven-expander"/>
+          <class name="raven-header"/>
         </style>
       </object>
       <packing>

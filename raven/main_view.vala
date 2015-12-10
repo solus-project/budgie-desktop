@@ -32,7 +32,8 @@ public class MainView : Gtk.Box
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.VERTICAL);
 
         var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        header.get_style_context().add_class("raven-switcher");
+        header.get_style_context().add_class("raven-header");
+        header.get_style_context().add_class("top");
         main_stack = new Gtk.Stack();
         pack_start(header, false, false, 0);
 

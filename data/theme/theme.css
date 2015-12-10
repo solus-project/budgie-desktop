@@ -331,18 +331,22 @@ GtkPopover .scrollbar .trough {
   color: white;
   background-color: rgba(47, 52, 63, 0.9);
   transition: 170ms ease-out; }
-  .raven .raven-expander,
-  .raven .raven-switcher,
-  .raven .header-widget {
+  .raven .raven-header {
     color: white;
     border: solid rgba(23, 27, 37, 0.7);
     border-width: 1px 0;
     background-color: rgba(37, 39, 49, 0.75); }
-  .raven .header-widget {
-    border-bottom-width: 0; }
+    .raven .raven-header.top {
+      border-top-style: none; }
+    .raven .raven-header.bottom {
+      border-bottom-style: none; }
+  .raven .expander-button {
+    color: alpha(currentColor,0.5); }
   .raven .raven-background {
     background-color: rgba(37, 39, 49, 0.6);
     border-bottom: 1px solid rgba(16, 19, 24, 0.77); }
+  .raven .powerstrip .button {
+    padding: 10px; }
   .raven .option-subtitle {
     font-size: smaller; }
 

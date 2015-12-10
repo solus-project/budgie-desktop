@@ -28,7 +28,9 @@ public class PowerStrip : Gtk.EventBox
         Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 20);
 
         margin_top = 10;
-        get_style_context().add_class("header-widget");
+        get_style_context().add_class("raven-header");
+        get_style_context().add_class("powerstrip");
+        get_style_context().add_class("bottom");
         bottom.halign = Gtk.Align.CENTER;
         bottom.margin_top = 5;
         bottom.margin_bottom = 5;
