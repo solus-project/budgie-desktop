@@ -297,6 +297,6 @@ GtkPopover .scrollbar .trough, {
     border: solid $mpris_overlay_border;
     border-width: 1px 0;
 
-    .button { padding: 8px; }
+    .button.image-button { padding: 8px; }
     GtkLabel, GtkImage { color: $mpris_overlay_fg; }
 }

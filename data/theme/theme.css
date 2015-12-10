@@ -354,7 +354,7 @@ GtkPopover .scrollbar .trough {
   background-color: rgba(17, 18, 21, 0.9);
   border: solid rgba(6, 7, 10, 0.95);
   border-width: 1px 0; }
-  .raven-mpris .button {
+  .raven-mpris .button.image-button {
     padding: 8px; }
   .raven-mpris GtkLabel, .raven-mpris GtkImage {
     color: white; }

@@ -17,7 +17,7 @@ EXTRA_DIST = \
 	theme/sass/_colors.scss \
 	theme/sass/_drawing.scss \
 	theme/sass/_main.scss \
-	theme/sass/style.scss
+	theme/sass/theme.scss
 
 gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 @GSETTINGS_RULES@
