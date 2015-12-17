@@ -286,10 +286,10 @@ public class AppearanceSettings : Gtk.Box
     construct {
         var render = new Gtk.CellRendererText();
         combobox_gtk.pack_start(render, true);
-        combobox_gtk.add_attribute(render, "text", 1);
+        combobox_gtk.add_attribute(render, "text", 0);
     
         combobox_icon.pack_start(render, true);
-        combobox_icon.add_attribute(render, "text", 1);
+        combobox_icon.add_attribute(render, "text", 0);
 
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
         arc_settings = new GLib.Settings("com.solus-project.arc-panel");
@@ -355,7 +355,7 @@ public class AppearanceSettings : Gtk.Box
             return false;
         }
 
-        model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        model = new Gtk.ListStore(1, typeof(string));
 
         foreach (var dir in spc) {
             // Not making FS assumptions ftw.
@@ -380,15 +380,11 @@ public class AppearanceSettings : Gtk.Box
                     }
                     foreach (var file in files) {
                         var display_name = file.get_display_name();
-                        var display_name_trunc = display_name;
-                        if (display_name_trunc.length > 15) {
-                            display_name_trunc = "%s\u2026".printf(display_name.substring(0, 15));
-                        }
                         var test_path = dir + Path.DIR_SEPARATOR_S + display_name + Path.DIR_SEPARATOR_S + suffix;
-                        if (!(display_name_trunc in results) && FileUtils.test(test_path, test_type)) {
-                            results += display_name_trunc;
+                        if (!(display_name in results) && FileUtils.test(test_path, test_type)) {
+                            results += display_name;
                             model.append(out iter);
-                            model.set(iter, 0, display_name, 1, display_name_trunc, -1);
+                            model.set(iter, 0, display_name, -1);
                         }
                     }
                 }
@@ -397,7 +393,7 @@ public class AppearanceSettings : Gtk.Box
             }
         }
         target.set_id_column(0);
-        model.set_sort_column_id(1, Gtk.SortType.ASCENDING);
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
         target.set_model(model);
         return true;
     }
