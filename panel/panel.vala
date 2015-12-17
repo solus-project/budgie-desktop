@@ -19,7 +19,7 @@ namespace Arc
  */
 public class MainPanel : Gtk.Box
 {
-    public int intended_size;
+    public int intended_size { public get ; public set ; }
 
     public MainPanel(int size)
     {
@@ -30,13 +30,13 @@ public class MainPanel : Gtk.Box
 
     public override void get_preferred_height(out int m, out int n)
     {
-        m = intended_size;
-        n = intended_size;
+        m = intended_size - 5;
+        n = intended_size - 5;
     }
     public override void get_preferred_height_for_width(int w, out int m, out int n)
     {
-        m = intended_size;
-        n = intended_size;
+        m = intended_size - 5;
+        n = intended_size - 5;
     }
 }
 
@@ -94,9 +94,7 @@ public class Panel : Arc.Toplevel
             size = intended_size;
         }
 
-        if (size != intended_size) {
-            this.settings.set_int(Arc.PANEL_KEY_SIZE, size);
-        }
+        this.settings.set_int(Arc.PANEL_KEY_SIZE, size);
 
         this.intended_size = size;
 
@@ -140,7 +138,7 @@ public class Panel : Arc.Toplevel
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
-        intended_size = 37 + 5;
+        intended_size = settings.get_int(Arc.PANEL_KEY_SIZE);
         this.manager = manager;
     
         scale = get_scale_factor();
@@ -164,7 +162,7 @@ public class Panel : Arc.Toplevel
         add(main_layout);
 
 
-        layout = new MainPanel(intended_size - 5);
+        layout = new MainPanel(intended_size);
         layout.vexpand = false;
         vexpand = false;
         main_layout.pack_start(layout, false, false, 0);
@@ -178,6 +176,7 @@ public class Panel : Arc.Toplevel
         main_layout.pack_start(shadow, false, false, 0);
 
         this.bind_property("shadow-width", shadow, "removal");
+        this.bind_property("intended-size", main_layout, "intended_size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
