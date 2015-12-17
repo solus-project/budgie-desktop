@@ -579,7 +579,7 @@ public class PanelManager : DesktopManager
     /**
      * Determine how many slots are available
      */
-    public uint slots_available()
+    public override uint slots_available()
     {
         return MAX_SLOTS - panels.size();
     }
@@ -587,7 +587,7 @@ public class PanelManager : DesktopManager
     /**
      * Determine how many slots have been used
      */
-    public uint slots_used()
+    public override uint slots_used()
     {
         return panels.size();
     }

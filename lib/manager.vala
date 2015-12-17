@@ -21,6 +21,9 @@ public abstract class DesktopManager : GLib.Object
     {
         return new GLib.List<Arc.Toplevel>();
     }
+
+    public abstract uint slots_available();
+    public abstract uint slots_used();
 }
 
 

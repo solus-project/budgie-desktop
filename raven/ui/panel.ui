@@ -78,7 +78,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="combobox1">
+              <object class="GtkComboBox" id="combobox_panels">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">6</property>
@@ -98,7 +98,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkButton" id="button1">
+                  <object class="GtkButton" id="button_add_panel">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -115,7 +115,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button2">
+                  <object class="GtkButton" id="button_remove_panel">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -200,7 +200,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="spinbutton1">
+          <object class="GtkSpinButton" id="spinbutton_size">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="caps_lock_warning">False</property>
@@ -214,7 +214,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSwitch" id="switch1">
+          <object class="GtkSwitch" id="switch_shadow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
@@ -419,8 +419,8 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">vertical</property>
     <widgets>
-      <widget name="combobox1"/>
-      <widget name="button2"/>
+      <widget name="combobox_panels"/>
+      <widget name="button_remove_panel"/>
       <widget name="button3"/>
     </widgets>
   </object>

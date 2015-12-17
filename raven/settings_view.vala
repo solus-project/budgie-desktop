@@ -25,12 +25,38 @@ public class PanelEditor : Gtk.Box
 
     public Arc.DesktopManager? manager { public set ; public get ; }
 
+    [GtkChild]
+    private Gtk.ComboBox? combobox_panels;
+
+    [GtkChild]
+    private Gtk.Button? button_add_panel;
+
+    [GtkChild]
+    private Gtk.Button? button_remove_panel;
+
+    [GtkChild]
+    private Gtk.ComboBox? combobox_position;
+
+    [GtkChild]
+    private Gtk.SpinButton? spinbutton_size;
+
+    [GtkChild]
+    private Gtk.ComboBox? combobox_policy;
+
+    [GtkChild]
+    private Gtk.Switch? switch_shadow;
+
     public PanelEditor(Arc.DesktopManager? manager)
     {
         Object(manager: manager);
+
+        manager.panels_changed.connect(on_panels_changed);
     }
 
-    construct {
+    public void on_panels_changed()
+    {
+        button_add_panel.set_sensitive(manager.slots_available() >= 1);
+        button_remove_panel.set_sensitive(manager.slots_used() >= 1);
     }
 }
 
@@ -196,9 +222,7 @@ public class SettingsView : Gtk.Box
     public SettingsView(Arc.DesktopManager? manager)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0, manager: manager);
-    }
 
-    construct {
         var header = new SettingsHeader(this);
         pack_start(header, false, false, 0);
 
