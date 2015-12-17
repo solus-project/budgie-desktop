@@ -195,7 +195,11 @@ public class PanelManager : DesktopManager
 
     HashTable<string, Peas.PluginInfo?> plugins;
 
+    private Gtk.CssProvider? css_provider = null;
+
     private Arc.Raven? raven = null;
+
+    private string current_theme_uri;
 
     private void end_session(bool quit)
     {
@@ -373,7 +377,10 @@ public class PanelManager : DesktopManager
         raven = new Arc.Raven(this);
 
         this.on_monitors_changed();
-        this.load_css();
+        this.current_theme_uri = "resource://com/solus-project/arc/panel/theme/theme.css";
+
+        gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
+        on_theme_changed();
 
         /* Some applets might want raven */
         raven.setup_dbus();
@@ -390,17 +397,40 @@ public class PanelManager : DesktopManager
         register_with_session();
     }
 
-    void load_css()
+    void set_css_from_uri(string uri)
     {
-        try {
-            var screen = Gdk.Screen.get_default();
+        var screen = Gdk.Screen.get_default();
+        Gtk.CssProvider? new_provider = null;
 
-            var f = File.new_for_uri("resource://com/solus-project/arc/panel/theme/theme.css");
-            var css = new Gtk.CssProvider();
-            css.load_from_file(f);
-            Gtk.StyleContext.add_provider_for_screen(screen, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        try {
+            var f = File.new_for_uri(uri);
+            new_provider = new Gtk.CssProvider();
+            new_provider.load_from_file(f);
         } catch (Error e) {
-            warning("CSS Missing: %s", e.message);
+            warning("Error loading theme: %s", e.message);
+            new_provider = null;
+            return;
+        }
+
+        if (css_provider != null) {
+            Gtk.StyleContext.remove_provider_for_screen(screen, css_provider);
+            css_provider = null;
+        }
+
+        css_provider = new_provider;
+
+        Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    void on_theme_changed()
+    {
+        var gtksettings = Gtk.Settings.get_default();
+
+        if (gtksettings.gtk_theme_name == "HighContrast") {
+            set_css_from_uri("resource://com/solus-project/arc/panel/theme/theme_hc.css");
+        } else {
+            /* In future we'll actually support custom themes.. */
+            set_css_from_uri(this.current_theme_uri);
         }
     }
 
