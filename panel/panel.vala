@@ -248,7 +248,6 @@ public class Panel : Arc.Toplevel
         string[]? applets = settings.get_strv(Arc.PANEL_KEY_APPLETS);
         if (applets == null || applets.length == 0) {
             message("No applets configured for panel %s", this.uuid);
-            create_default_layout();
             return;
         }
 
@@ -272,7 +271,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    void create_default_layout()
+    public void create_default_layout()
     {
         message("Creating default panel layout");
         add_new("Budgie Menu Applet");

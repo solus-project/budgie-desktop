@@ -33,6 +33,7 @@ public class PanelEditor : Gtk.Box
 
     [GtkChild]
     private Gtk.ComboBox? combobox_panels;
+    private ulong panels_id;
 
     [GtkChild]
     private Gtk.Button? button_add_panel;
@@ -65,9 +66,9 @@ public class PanelEditor : Gtk.Box
 
         manager.panels_changed.connect(on_panels_changed);
 
-        /*button_add_panel.clicked.connect(()=> {
-            this.manager.create_panel();
-        });
+        button_add_panel.clicked.connect(()=> {
+            this.manager.create_new_panel();
+        });/*
         button_remove_panel.clicked.connect(()=> {
             this.manager.remove_panel(active_panel);
         });*/
@@ -101,6 +102,14 @@ public class PanelEditor : Gtk.Box
         spinbutton_size.set_numeric(true);
 
         shadow_id = switch_shadow.notify["active"].connect(on_shadow_changed);
+
+        panels_id = combobox_panels.changed.connect(on_panel_changed);
+    }
+
+    void on_panel_changed()
+    {
+        var id = combobox_panels.get_active_id();
+        set_active_panel(id);
     }
 
     void on_shadow_changed()
@@ -170,7 +179,7 @@ public class PanelEditor : Gtk.Box
             if (uuid == null) {
                 uuid = panel.uuid;
             }
-            this.panels.insert(uuid, panel);
+            this.panels.insert(panel.uuid, panel);
             message("Appending: %s %s", panel.uuid, pos);
             model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
         }
@@ -193,9 +202,11 @@ public class PanelEditor : Gtk.Box
     void set_active_panel(string uuid)
     {
         unowned Arc.Toplevel? panel = panels.lookup(uuid);
+        SignalHandler.block(combobox_panels, panels_id);
         combobox_panels.set_active_id(uuid);
+        SignalHandler.unblock(combobox_panels, panels_id);
 
-        if (panel == this.current_panel) {
+        if (panel == null || panel == this.current_panel) {
             return;
         }
 

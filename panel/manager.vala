@@ -118,9 +118,9 @@ public class AppletInfo : GLib.Object
 }
 
 /**
- * Maximum slots. 4 because that's generally how many sides a rectangle has..
+ * Maximum slots set to 2 because Raven has a side in this.
  */
-public static const uint MAX_SLOTS         = 4;
+public static const uint MAX_SLOTS         = 2;
 
 /**
  * Root prefix for fixed schema
@@ -795,7 +795,12 @@ public class PanelManager : DesktopManager
         return true;
     }
 
-    void create_panel()
+    public override void create_new_panel()
+    {
+        create_panel(false);
+    }
+
+    void create_panel(bool new_defaults = false)
     {
         if (this.slots_available() < 1) {
             warning("Asked to create panel with no slots available");
@@ -813,6 +818,13 @@ public class PanelManager : DesktopManager
 
         set_panels();
         show_panel(uuid, position);
+
+        if (!new_defaults) {
+            return;
+        }
+
+        var panel = panels.lookup(uuid);
+        panel.create_default_layout();
     }
 
     /**
@@ -839,7 +851,7 @@ public class PanelManager : DesktopManager
     {
         /* Eventually we'll do something fancy with defaults, when
          * applet loading lands */
-        create_panel();
+        create_panel(true);
     }
 
     private void on_name_lost(DBusConnection conn, string name)
