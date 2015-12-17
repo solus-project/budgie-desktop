@@ -184,7 +184,7 @@ public class PanelEditor : Gtk.Box
             model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
         }
 
-        model.set_sort_column_id(PanelColumn.DESCRIPTION, Gtk.SortType.ASCENDING);
+        model.set_sort_column_id(PanelColumn.DESCRIPTION, Gtk.SortType.DESCENDING);
         combobox_panels.set_model(model);
         combobox_panels.set_id_column(PanelColumn.UUID);
 
