@@ -184,10 +184,10 @@ public class PanelEditor : Gtk.Box
     {
         var panel = o as Arc.Toplevel;
 
+        /* Update position */
         if (p.name == "position") {
             var pos = this.positition_to_id(panel.position);
             combobox_position.set_active_id(pos);
-
         }
     }
 }
