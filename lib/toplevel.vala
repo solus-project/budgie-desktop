@@ -30,6 +30,13 @@ public abstract class Toplevel : Gtk.Window
      */
     public int intended_size { public set ; public get; }
 
+    /**
+     * Unique identifier for this panel
+     */
+    public string uuid { public set ; public get; }
+
+    public Arc.PanelPosition position { public set; public get; default = Arc.PanelPosition.BOTTOM; }
+
     public virtual void reset_shadow() { }
 }
 

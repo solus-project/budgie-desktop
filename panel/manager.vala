@@ -807,6 +807,18 @@ public class PanelManager : DesktopManager
         Bus.own_name(BusType.SESSION, Arc.DBUS_NAME, flags,
             on_bus_acquired, on_name_acquired, on_name_lost);
     }
+
+    public override GLib.List<Arc.Toplevel?> get_panels()
+    {
+        var list = new GLib.List<Arc.Toplevel?>();
+        unowned string? key;
+        unowned Arc.Panel? panel;
+        var iter = HashTableIter<string?,Arc.Panel?>(panels);
+        while (iter.next(out key, out panel)) {
+            list.append((Arc.Toplevel)panel);
+        }
+        return list;
+    }
 }
 
 } /* End namespace */

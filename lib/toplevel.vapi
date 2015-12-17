@@ -15,6 +15,9 @@ namespace Arc {
         public int shadow_width {  set ; get; }
         public int intended_size { set ; get; }
         public int shadow_depth { set ;  get; }
+        public string uuid {  set ; get; }
+
+        public Arc.PanelPosition position { set; get; default = Arc.PanelPosition.BOTTOM; }
 
         public virtual void reset_shadow();
     }
@@ -140,7 +143,7 @@ namespace Arc {
 
         public signal void panels_changed();
 
-        public virtual GLib.List<Arc.Toplevel> get_panels();
+        public virtual GLib.List<Arc.Toplevel?> get_panels();
         public abstract uint slots_available();
         public abstract uint slots_used();
     }

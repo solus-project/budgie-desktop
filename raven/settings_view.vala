@@ -19,6 +19,12 @@ public enum ThemeType {
     CURSOR_THEME
 }
 
+public enum PanelColumn {
+    UUID = 0,
+    DESCRIPTION = 1,
+    N_COLUMNS = 2,
+}
+
 [GtkTemplate (ui = "/com/solus-project/arc/raven/panel.ui")]
 public class PanelEditor : Gtk.Box
 {
@@ -51,12 +57,63 @@ public class PanelEditor : Gtk.Box
         Object(manager: manager);
 
         manager.panels_changed.connect(on_panels_changed);
+
+        /*button_add_panel.clicked.connect(()=> {
+            this.manager.create_panel();
+        });
+        button_remove_panel.clicked.connect(()=> {
+            this.manager.remove_panel(active_panel);
+        });*/
+
+    }
+
+    string get_panel_id(Arc.Toplevel? panel)
+    {
+        switch (panel.position) {
+            case PanelPosition.TOP:
+                return "Top Panel";
+            case PanelPosition.RIGHT:
+                return "Right Panel";
+            case PanelPosition.LEFT:
+                return "Left Panel";
+            default:
+                return "Bottom Panel";
+        }
     }
 
     public void on_panels_changed()
     {
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
         button_remove_panel.set_sensitive(manager.slots_used() >= 1);
+        string? uuid = null;
+
+        var panels = manager.get_panels();
+        if (panels == null || panels.length() < 1) {
+            message("TODO: Implement panel integration!!");
+            return;
+        }
+
+        var model = new Gtk.ListStore(PanelColumn.N_COLUMNS, typeof(string), typeof(string));
+        Gtk.TreeIter iter;
+        foreach (var panel in panels) {
+            string? pos = this.get_panel_id(panel);
+            model.append(out iter);
+            if (uuid == null) {
+                uuid = panel.uuid;
+            }
+            model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
+        }
+
+        model.set_sort_column_id(PanelColumn.DESCRIPTION, Gtk.SortType.ASCENDING);
+        combobox_panels.set_model(model);
+        combobox_panels.set_id_column(PanelColumn.UUID);
+
+        var render = new Gtk.CellRendererText();
+        combobox_panels.pack_start(render, true);
+        combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
+
+        /* In future check we haven't got one selected already.. */
+        combobox_panels.set_active_id(uuid);
     }
 }
 

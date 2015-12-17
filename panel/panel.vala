@@ -53,12 +53,8 @@ public class Panel : Arc.Toplevel
     Gtk.Box layout;
     Gtk.Box main_layout;
 
-    public Arc.PanelPosition? position;
-
     public Settings settings { construct set ; public get; }
     private unowned Arc.PanelManager? manager;
-
-    public string uuid { construct set ; public get; }
 
     PopoverManager? popover_manager;
     bool expanded = true;

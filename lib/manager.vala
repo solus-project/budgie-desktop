@@ -17,9 +17,9 @@ public abstract class DesktopManager : GLib.Object
 
     public signal void panels_changed();
 
-    public virtual GLib.List<Arc.Toplevel> get_panels()
+    public virtual GLib.List<Arc.Toplevel?> get_panels()
     {
-        return new GLib.List<Arc.Toplevel>();
+        return new GLib.List<Arc.Toplevel?>();
     }
 
     public abstract uint slots_available();
