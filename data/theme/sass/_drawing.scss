@@ -9,11 +9,14 @@
     @else if $t==focus {
         color: $entry_fg;
         background-color: $entry_bg;
-        border-color: $button_border;
-        box-shadow: inset 1px 0 $selected_bg_color,
-                    inset -1px 0 $selected_bg_color,
-                    inset 0 1px $selected_bg_color,
-                    inset 0 -1px $selected_bg_color;
+        border-color: if($variant == 'default', $button_border, $selected_bg_color);
+
+        @if $variant == 'default' {
+            box-shadow: inset 1px 0 $selected_bg_color,
+                        inset -1px 0 $selected_bg_color,
+                        inset 0 1px $selected_bg_color,
+                        inset 0 -1px $selected_bg_color;
+        }
     }
     @else if $t==insensitive {
         color: transparentize($entry_fg, 0.65);
@@ -46,6 +49,8 @@
         color: transparentize($fg, 0.65);
         background-color: transparentize($bg, 0.1);
         border-color: transparentize($border, 0.2);
+
+        > .label { color: inherit; }
     }
     @else if $t==insensitive-active {
         opacity: 0.5;
