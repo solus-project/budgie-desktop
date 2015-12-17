@@ -68,10 +68,10 @@ public class PanelEditor : Gtk.Box
 
         button_add_panel.clicked.connect(()=> {
             this.manager.create_new_panel();
-        });/*
+        });
         button_remove_panel.clicked.connect(()=> {
-            this.manager.remove_panel(active_panel);
-        });*/
+            this.manager.delete_panel(current_panel.uuid);
+        });
 
         /* PanelPosition */
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));

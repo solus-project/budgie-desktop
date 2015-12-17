@@ -64,7 +64,7 @@ public class AppletInfo : GLib.Object
     /** Applet instance */
     public Arc.Applet applet { public get; private set; }
 
-    private unowned GLib.Settings? settings;
+    public unowned GLib.Settings? settings;
 
     /** Known icon name */
     public string icon {  public get; protected set; }
@@ -801,6 +801,28 @@ public class PanelManager : DesktopManager
     public override void create_new_panel()
     {
         create_panel(false);
+    }
+
+    public override void delete_panel(string uuid)
+    {
+        unowned Arc.Panel? panel = panels.lookup(uuid);
+        if (panel == null) {
+            warning("Asked to delete non-existent panel: %s", uuid);
+            return;
+        }
+        Screen? area = screens.lookup(primary_monitor);
+        area.slots ^= panel.position;
+
+        var spath = this.create_panel_path(panel.uuid);
+        panel.destroy_children();
+        panels.remove(panel.uuid);
+        set_panels();
+        panel.destroy();
+        update_screen();
+
+
+        var psettings = new Settings.with_path(Arc.TOPLEVEL_SCHEMA, spath);
+        psettings.reset(null);
     }
 
     void create_panel(bool new_defaults = false)

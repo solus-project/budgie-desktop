@@ -28,6 +28,7 @@ public abstract class DesktopManager : GLib.Object
     public abstract void set_size(string uuid, int size);
 
     public abstract void create_new_panel();
+    public abstract void delete_panel(string uuid);
 }
 
 

@@ -200,6 +200,17 @@ public class Panel : Arc.Toplevel
         load_applets();
     }
 
+    public void destroy_children()
+    {
+        unowned string key;
+        unowned AppletInfo? info;
+
+        var iter = HashTableIter<string?,AppletInfo?>(applets);
+        while (iter.next(out key, out info)) {
+            info.settings.reset(null);
+        }
+    }
+
     void on_extension_loaded(string name)
     {
         unowned HashTable<string,string>? todo = null;
