@@ -173,7 +173,7 @@ public class PanelManagerIface
     }
 }
 
-public class PanelManager
+public class PanelManager : DesktopManager
 {
     private PanelManagerIface? iface;
     bool setup = false;
@@ -259,6 +259,7 @@ public class PanelManager
 
     public PanelManager()
     {
+        Object();
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
         panels = new HashTable<string,Arc.Panel?>(str_hash, str_equal);
         plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
@@ -366,7 +367,7 @@ public class PanelManager
         var gtksettings = Gtk.Settings.get_default();
         this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
 
-        raven = new Arc.Raven();
+        raven = new Arc.Raven(this);
 
         this.on_monitors_changed();
         this.load_css();

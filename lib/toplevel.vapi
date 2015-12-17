@@ -133,4 +133,14 @@ namespace Arc {
 
     [CCode (cheader_filename = "ArcToplevel.h")]
     public static const int64 MSECOND;
+
+    [CCode (cheader_filename = "ArcToplevel.h")]
+    public abstract class DesktopManager : GLib.Object
+    {
+
+        public signal void panels_changed();
+
+        public virtual GLib.List<Arc.Toplevel> get_panels();
+    }
+
 }

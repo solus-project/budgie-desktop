@@ -73,6 +73,8 @@ public class Raven : Gtk.Window
     private Arc.SettingsView? settings_view = null;
     private Gtk.Stack? main_stack;
 
+    public Arc.DesktopManager? manager { public set; public get; }
+
     public double nscale {
         public set {
             scale = value;
@@ -99,9 +101,9 @@ public class Raven : Gtk.Window
         }
     }
 
-    public Raven()
+    public Raven(Arc.DesktopManager? manager)
     {
-        Object(type_hint: Gdk.WindowTypeHint.DOCK, gravity : Gdk.Gravity.EAST);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, gravity : Gdk.Gravity.EAST, manager: manager);
         get_style_context().add_class("arc-container");
 
         var vis = screen.get_rgba_visual();

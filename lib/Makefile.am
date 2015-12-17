@@ -8,7 +8,8 @@ noinst_LTLIBRARIES = libtoplevel.la
 libtoplevel_la_SOURCES = \
 	animation.vala \
 	toplevel.vala \
-	shadow.vala
+	shadow.vala \
+	manager.vala
 
 libtoplevel_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
