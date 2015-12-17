@@ -171,10 +171,16 @@ public class Panel : Arc.Toplevel
 
         /* Shadow.. */
         shadow = new Arc.ShadowBlock(this.position);
+        shadow.no_show_all = true;
         shadow.hexpand = false;
         shadow.halign = Gtk.Align.START;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
+
+        this.settings.bind(Arc.PANEL_KEY_SHADOW, shadow, "visible", SettingsBindFlags.GET);
+
+        shadow_visible = this.settings.get_boolean(Arc.PANEL_KEY_SHADOW);
+        this.settings.bind(Arc.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
         this.bind_property("shadow-width", shadow, "removal");
         this.bind_property("intended-size", layout, "intended-size");

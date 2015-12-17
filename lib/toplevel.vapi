@@ -15,6 +15,7 @@ namespace Arc {
         public int shadow_width {  set ; get; }
         public int intended_size { set ; get; }
         public int shadow_depth { set ;  get; }
+        public bool shadow_visible { set ; get; }
         public string uuid {  set ; get; }
 
         public Arc.PanelPosition position { set; get; default = Arc.PanelPosition.BOTTOM; }

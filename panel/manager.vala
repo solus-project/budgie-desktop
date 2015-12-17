@@ -165,6 +165,9 @@ public static const string PANEL_KEY_DARK_THEME = "dark-theme";
 /** Panel size */
 public static const string PANEL_KEY_SIZE       = "size";
 
+/** Shadow */
+public static const string PANEL_KEY_SHADOW     = "enable-shadow";
+
 
 [DBus (name = "com.solus_project.arc.Panel")]
 public class PanelManagerIface

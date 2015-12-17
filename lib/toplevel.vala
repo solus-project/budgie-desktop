@@ -30,6 +30,8 @@ public abstract class Toplevel : Gtk.Window
      */
     public int intended_size { public set ; public get; }
 
+    public bool shadow_visible { public set ; public get; }
+
     /**
      * Unique identifier for this panel
      */

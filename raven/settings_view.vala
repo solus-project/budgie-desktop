@@ -53,6 +53,7 @@ public class PanelEditor : Gtk.Box
 
     [GtkChild]
     private Gtk.Switch? switch_shadow;
+    private ulong shadow_id;
 
     HashTable<string?,Arc.Toplevel?> panels;
     unowned Arc.Toplevel? current_panel = null;
@@ -98,6 +99,13 @@ public class PanelEditor : Gtk.Box
 
         spinbutton_size.set_range(16, 200);
         spinbutton_size.set_numeric(true);
+
+        shadow_id = switch_shadow.notify["active"].connect(on_shadow_changed);
+    }
+
+    void on_shadow_changed()
+    {
+        current_panel.shadow_visible = this.switch_shadow.active;
     }
 
     void on_size_changed()
@@ -207,6 +215,8 @@ public class PanelEditor : Gtk.Box
         SignalHandler.block(spinbutton_size, spin_id);
         spinbutton_size.set_value(panel.intended_size);
         SignalHandler.unblock(spinbutton_size, spin_id);
+
+        switch_shadow.set_active(panel.shadow_visible);
     }
 
     /* Handle updates to the current panel
@@ -225,6 +235,10 @@ public class PanelEditor : Gtk.Box
             SignalHandler.block(spinbutton_size, spin_id);
             spinbutton_size.set_value(panel.intended_size);
             SignalHandler.unblock(spinbutton_size, spin_id);
+        } else if (p.name == "shadow-visible") {
+            SignalHandler.block(switch_shadow, shadow_id);
+            switch_shadow.set_active(panel.shadow_visible);
+            SignalHandler.unblock(switch_shadow, shadow_id);
         }
     }
 
