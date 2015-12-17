@@ -147,6 +147,7 @@ namespace Arc {
         public abstract uint slots_available();
         public abstract uint slots_used();
         public abstract void set_placement(string uuid, Arc.PanelPosition position);
+        public abstract void set_size(string uuid, int size);
     }
 
 }

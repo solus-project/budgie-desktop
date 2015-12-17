@@ -46,6 +46,7 @@ public class PanelEditor : Gtk.Box
 
     [GtkChild]
     private Gtk.SpinButton? spinbutton_size;
+    private ulong spin_id;
 
     [GtkChild]
     private Gtk.ComboBox? combobox_policy;
@@ -93,7 +94,13 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_id_column(PanelColumn.UUID);
 
         position_id = combobox_position.changed.connect(on_position_changed);
+        spin_id = spinbutton_size.changed.connect(on_size_changed);
 
+    }
+
+    void on_size_changed()
+    {
+        spinbutton_size.set_value(current_panel.intended_size);
     }
 
     string get_panel_id(Arc.Toplevel? panel)
@@ -194,6 +201,10 @@ public class PanelEditor : Gtk.Box
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
         SignalHandler.unblock(combobox_position, position_id);
+
+        SignalHandler.block(spinbutton_size, spin_id);
+        spinbutton_size.set_value(panel.intended_size);
+        SignalHandler.unblock(spinbutton_size, spin_id);
     }
 
     /* Handle updates to the current panel
@@ -208,6 +219,10 @@ public class PanelEditor : Gtk.Box
             SignalHandler.block(combobox_position, position_id);
             combobox_position.set_active_id(pos);
             SignalHandler.unblock(combobox_position, position_id);
+        } else if (p.name == "intended-size") {
+            SignalHandler.block(spinbutton_size, spin_id);
+            spinbutton_size.set_value(panel.intended_size);
+            SignalHandler.unblock(spinbutton_size, spin_id);
         }
     }
 

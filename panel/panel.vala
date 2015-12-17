@@ -82,13 +82,23 @@ public class Panel : Arc.Toplevel
     /**
      * Force update the geometry
      */
-    public void update_geometry(Gdk.Rectangle screen, PanelPosition position)
+    public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int size = 0)
     {
         Gdk.Rectangle small = screen;
         string old_class = Arc.position_class_name(this.position);
         if (old_class != "") {
             this.get_style_context().remove_class(old_class);
         }
+
+        if (size == 0) {
+            size = intended_size;
+        }
+
+        if (size != intended_size) {
+            this.settings.set_int(Arc.PANEL_KEY_SIZE, size);
+        }
+
+        this.intended_size = size;
 
         this.get_style_context().add_class(Arc.position_class_name(position));
 

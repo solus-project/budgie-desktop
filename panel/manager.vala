@@ -162,6 +162,9 @@ public static const string PANEL_KEY_APPLETS    = "applets";
 /** Night mode/dark theme */
 public static const string PANEL_KEY_DARK_THEME = "dark-theme";
 
+/** Panel size */
+public static const string PANEL_KEY_SIZE       = "size";
+
 
 [DBus (name = "com.solus_project.arc.Panel")]
 public class PanelManagerIface
@@ -603,6 +606,7 @@ public class PanelManager : DesktopManager
 
         string path = this.create_panel_path(uuid);
         PanelPosition position;
+        int size;
 
         var settings = new GLib.Settings.with_path(Arc.TOPLEVEL_SCHEMA, path);
         Arc.Panel? panel = new Arc.Panel(this, uuid, settings);
@@ -613,6 +617,8 @@ public class PanelManager : DesktopManager
         }
 
         position = (PanelPosition)settings.get_enum(Arc.PANEL_KEY_POSITION);
+        size = settings.get_int(Arc.PANEL_KEY_SIZE);
+        panel.intended_size = (int)size;
         this.show_panel(uuid, position);
     }
 
@@ -644,6 +650,22 @@ public class PanelManager : DesktopManager
         scr = screens.lookup(this.primary_monitor);
         scr.slots |= position;
         this.set_placement(uuid, position);
+    }
+
+    /**
+     * Set size of the given panel
+     */
+    public override void set_size(string uuid, int size)
+    {
+        Arc.Panel? panel = panels.lookup(uuid);
+
+        if (panel == null) {
+            warning("Asked to resize non-existent panel: %s", uuid);
+            return;
+        }
+
+        panel.intended_size = size;
+        this.update_screen();
     }
 
     /**
@@ -714,7 +736,7 @@ public class PanelManager : DesktopManager
             } else if (val.position == Arc.PanelPosition.BOTTOM) {
                 bottom = val;
             }
-            val.update_geometry(area.area, val.position);
+            val.update_geometry(area.area, val.position, val.intended_size);
         }
 
         /* Let Raven update itself accordingly */
