@@ -122,9 +122,13 @@ public class Raven : Gtk.Window
         /* For now Raven is always on the right */
         this.get_style_context().add_class(Arc.position_class_name(PanelPosition.RIGHT));
 
+        var frame = new Gtk.Frame(null);
+        frame.get_style_context().add_class("raven-frame");
+        layout.pack_start(frame, true, true, 0);
+
         var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_box.get_style_context().add_class("raven");
-        layout.pack_start(main_box, true, true, 0);
+        frame.add(main_box);
 
         /* "Main" switcher */
         main_stack = new Gtk.Stack();
