@@ -90,6 +90,7 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_model(model);
         combobox_panels.pack_start(render, true);
         combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
+        combobox_panels.set_id_column(PanelColumn.UUID);
 
         position_id = combobox_position.changed.connect(on_position_changed);
 
@@ -125,9 +126,16 @@ public class PanelEditor : Gtk.Box
 
     public void on_panels_changed()
     {
+        message("Panels changed!");
+
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
         button_remove_panel.set_sensitive(manager.slots_used() > 1);
         string? uuid = null;
+        string? old_uuid = null;
+
+        if (current_panel != null) {
+            old_uuid = current_panel.uuid;
+        }
 
         panels = new HashTable<string?,Arc.Toplevel?>(str_hash, str_equal);
 
@@ -146,6 +154,7 @@ public class PanelEditor : Gtk.Box
                 uuid = panel.uuid;
             }
             this.panels.insert(uuid, panel);
+            message("Appending: %s %s", panel.uuid, pos);
             model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
         }
 
@@ -154,7 +163,11 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_id_column(PanelColumn.UUID);
 
         /* In future check we haven't got one selected already.. */
-        set_active_panel(uuid);
+        if (old_uuid != null && this.panels.contains(old_uuid)) {
+            set_active_panel(old_uuid);
+        } else {
+            set_active_panel(uuid);
+        }
     }
 
     /*
@@ -177,6 +190,7 @@ public class PanelEditor : Gtk.Box
         /* Bind position.. ? */
         notify_id = panel.notify.connect(on_panel_update);
 
+        message("Setting active UUID: %s", uuid);
         combobox_panels.set_active_id(uuid);
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
