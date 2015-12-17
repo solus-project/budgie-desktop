@@ -53,6 +53,8 @@ public class PanelEditor : Gtk.Box
     private Gtk.Switch? switch_shadow;
 
     HashTable<string?,Arc.Toplevel?> panels;
+    unowned Arc.Toplevel? current_panel = null;
+    private ulong notify_id;
 
     public PanelEditor(Arc.DesktopManager? manager)
     {
@@ -79,6 +81,7 @@ public class PanelEditor : Gtk.Box
         var render = new Gtk.CellRendererText();
         combobox_position.pack_start(render, true);
         combobox_position.add_attribute(render, "text", 1);
+        combobox_position.set_id_column(0);
 
 
         model = new Gtk.ListStore(2, typeof(string), typeof(string));
@@ -158,8 +161,34 @@ public class PanelEditor : Gtk.Box
     {
         unowned Arc.Toplevel? panel = panels.lookup(uuid);
 
+        if (panel == this.current_panel) {
+            return;
+        }
+
+        /* Unbind old panel?! */
+        if (current_panel != null) {
+            SignalHandler.disconnect(current_panel, notify_id);
+        }
+        current_panel = panel;
+
+        /* Bind position.. ? */
+        notify_id = panel.notify.connect(on_panel_update);
+
         combobox_panels.set_active_id(uuid);
         combobox_position.set_active_id(positition_to_id(panel.position));
+    }
+
+    /* Handle updates to the current panel
+     */
+    void on_panel_update(Object o, ParamSpec p)
+    {
+        var panel = o as Arc.Toplevel;
+
+        if (p.name == "position") {
+            var pos = this.positition_to_id(panel.position);
+            combobox_position.set_active_id(pos);
+
+        }
     }
 }
 
