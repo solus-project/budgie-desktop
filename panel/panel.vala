@@ -486,11 +486,13 @@ public class Panel : Arc.Toplevel
         switch (position) {
             case Arc.PanelPosition.TOP:
                 move(orig_scr.x, orig_scr.y);
+                main_layout.child_set(shadow, "position", 1);
+                set_gravity(Gdk.Gravity.NORTH);
                 break;
             default:
                 main_layout.valign = Gtk.Align.END;
                 move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
-                main_layout.reorder_child(shadow, 0);
+                main_layout.child_set(shadow, "position", 0);
                 set_gravity(Gdk.Gravity.SOUTH);
                 break;
         }

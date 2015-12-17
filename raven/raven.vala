@@ -236,13 +236,16 @@ public class Raven : Gtk.Window
         int n, m;
         this.get_preferred_width(out m, out n);
         int width = m;
+        /* Don't width update unless necessary! */
+        if (get_visible()) {
+            width = our_width;
+        }
 
         int x = (rect.x+rect.width)-width;
         int y = rect.y;
         int height = rect.height;
 
         this.old_rect = rect;
-
 
         if (top != this.toplevel_top) {
             unbind_panel_shadow(this.toplevel_top);
@@ -275,7 +278,9 @@ public class Raven : Gtk.Window
         our_height = height;
         our_width = width;
         move(x, y);
-        queue_resize();
+        if (!get_visible()) {
+            queue_resize();
+        }
     }
 
     public override void get_preferred_height(out int m, out int n)
