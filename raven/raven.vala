@@ -362,6 +362,7 @@ public class Raven : Gtk.Window
                 a.widget.hide();
             } else {
                 (a.widget as Gtk.Window).present();
+                (a.widget as Gtk.Window).grab_focus();
             }
         });
     }

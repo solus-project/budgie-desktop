@@ -123,6 +123,7 @@ public class Panel : Arc.Toplevel
         }
         shadow.required_size = orig_scr.width;
         this.shadow.position = position;
+        this.layout.queue_resize();
         queue_resize();
         placement();
     }
@@ -176,7 +177,7 @@ public class Panel : Arc.Toplevel
         main_layout.pack_start(shadow, false, false, 0);
 
         this.bind_property("shadow-width", shadow, "removal");
-        this.bind_property("intended-size", main_layout, "intended_size");
+        this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);

@@ -94,13 +94,15 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_id_column(PanelColumn.UUID);
 
         position_id = combobox_position.changed.connect(on_position_changed);
-        spin_id = spinbutton_size.changed.connect(on_size_changed);
+        spin_id = spinbutton_size.value_changed.connect(on_size_changed);
 
+        spinbutton_size.set_range(16, 200);
+        spinbutton_size.set_numeric(true);
     }
 
     void on_size_changed()
     {
-        spinbutton_size.set_value(current_panel.intended_size);
+        manager.set_size(current_panel.uuid, (int)spinbutton_size.get_value());
     }
 
     string get_panel_id(Arc.Toplevel? panel)
@@ -430,6 +432,7 @@ public class SettingsView : Gtk.Box
 
         pack_start(stack, true, true, 0);
 
+        stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         var appearance = new AppearanceSettings();
         stack.add_titled(appearance, "appearance", "General");
 
