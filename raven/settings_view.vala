@@ -84,7 +84,7 @@ public class PanelEditor : Gtk.Box
     public void on_panels_changed()
     {
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
-        button_remove_panel.set_sensitive(manager.slots_used() >= 1);
+        button_remove_panel.set_sensitive(manager.slots_used() > 1);
         string? uuid = null;
 
         var panels = manager.get_panels();
