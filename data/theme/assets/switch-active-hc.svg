@@ -15,7 +15,7 @@
    id="svg5134"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="switch-active.svg">
+   sodipodi:docname="switch-active-hc.svg">
   <defs
      id="defs5136" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.313708"
-     inkscape:cx="27.357483"
-     inkscape:cy="5.2831578"
+     inkscape:cx="24.529056"
+     inkscape:cy="-1.7879103"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -102,7 +102,7 @@
          transform="translate(-60,-518)" />
     </g>
     <path
-       style="opacity:1;fill:#5294e2;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m 10,1 c -4.9859957,0 -9,4.0140007 -9,9 0,4.985999 4.0140043,9 9,9 l 26,0 c 4.985996,0 9,-4.014001 9,-9 0,-4.9859993 -4.014004,-9 -9,-9 z m 26,1 c 4.418278,-3.4e-6 8.000001,3.5817199 8,8 10e-7,4.41828 -3.581722,8.000003 -8,8 -4.418278,3e-6 -8.000001,-3.58172 -8,-8 -1e-6,-4.4182801 3.581722,-8.0000034 8,-8 z M 13.044922,6.4648438 14.458984,7.8789062 9.7480469,12.589844 c -0.00131,0.0013 -0.00258,0.0026 -0.00391,0.0039 L 9.2675781,13.068359 8.8007812,13.535156 8.3300781,13.064453 7.3867188,12.121094 5.7382812,10.470703 c -0.2611557,-0.261156 -0.2611557,-0.6802504 0,-0.9414061 L 6.2089844,9.0566406 c 0.2611558,-0.2611557 0.6822035,-0.2611557 0.9433594,0 l 1.6484374,1.6503904 z"
        transform="translate(465.71429,435.64792)"
        id="rect4153"

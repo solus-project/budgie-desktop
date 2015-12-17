@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="45"
-   height="19"
-   viewBox="0 0 45.000001 19.000001"
+   width="90"
+   height="38"
+   viewBox="0 0 90.000002 38.000002"
    id="svg5134"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="switch.svg">
+   sodipodi:docname="switch-hc@2.svg">
   <defs
      id="defs5136" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="14.228207"
-     inkscape:cy="11.300817"
+     inkscape:cx="34.523407"
+     inkscape:cy="11.434204"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -65,10 +65,10 @@
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-465.71429,-435.64792)">
+     transform="translate(-465.71429,-416.64792)">
     <g
        id="g4245"
-       transform="translate(489.71429,438.59332)">
+       transform="matrix(2.0000003,0,0,2.0000003,513.7143,422.53872)">
       <g
          style="display:inline"
          id="layer9"
@@ -101,15 +101,24 @@
          id="layer15"
          transform="translate(-60,-518)" />
     </g>
+    <rect
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4175"
+       width="86.800018"
+       height="34.800007"
+       x="468.31427"
+       y="419.24789"
+       ry="17.4"
+       rx="17.4" />
     <path
-       style="opacity:1;fill:#5b627b;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 475.71429,436.64792 c -4.98601,0 -9,4.014 -9,9 0,4.986 4.01399,9 9,9 l 26,0 c 4.986,0 9,-4.014 9,-9 0,-4.986 -4.014,-9 -9,-9 z m 0,1 c 4.41827,0 8,3.58172 8,8 0,4.41828 -3.58173,8 -8,8 -4.41828,0 -8,-3.58172 -8,-8 0,-4.41828 3.58172,-8 8,-8 z m 23.00195,5 0.75,0 c 0.008,-9e-5 0.0156,-3.5e-4 0.0234,0 0.19122,0.008 0.38241,0.0964 0.51563,0.23437 l 1.71093,1.71094 1.73438,-1.71094 c 0.19922,-0.17287 0.335,-0.22912 0.51562,-0.23437 l 0.75,0 0,0.75 c 0,0.21485 -0.0258,0.41299 -0.1875,0.5625 l -1.71093,1.71094 1.6875,1.6875 c 0.14114,0.14112 0.21093,0.34008 0.21093,0.53906 l 0,0.75 -0.75,0 c -0.19897,-10e-6 -0.39794,-0.0698 -0.53906,-0.21094 l -1.71094,-1.71094 -1.71093,1.71094 c -0.14113,0.14114 -0.3401,0.21094 -0.53907,0.21094 l -0.75,0 0,-0.75 c 0,-0.19897 0.0698,-0.39794 0.21094,-0.53906 l 1.71094,-1.6875 -1.71094,-1.71094 c -0.15806,-0.14597 -0.22737,-0.35194 -0.21094,-0.5625 z"
+       style="opacity:1;fill:#a6a6a6;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 485.71429,418.64792 c -9.97202,0 -18,8.028 -18,18 0,9.97201 8.02798,18.00001 18,18.00001 l 52.00001,0 c 9.972,0 18,-8.028 18,-18.00001 0,-9.972 -8.028,-18 -18,-18 z m 0,2 c 8.83654,0 16.00001,7.16344 16.00001,16 0,8.83657 -7.16347,16.00001 -16.00001,16.00001 -8.83656,0 -16,-7.16344 -16,-16.00001 0,-8.83656 7.16344,-16 16,-16 z m 46.00391,10 1.5,0 c 0.016,-1.8e-4 0.0312,-7e-4 0.0468,0 0.38244,0.016 0.76482,0.1928 1.03126,0.46874 l 3.42186,3.42188 3.46876,-3.42188 c 0.39844,-0.34574 0.67,-0.45824 1.03124,-0.46874 l 1.5,0 0,1.5 c 0,0.4297 -0.0516,0.82598 -0.375,1.125 l -3.42186,3.42188 3.375,3.375 c 0.28228,0.28224 0.42186,0.68016 0.42186,1.07812 l 0,1.5 -1.5,0 c -0.39794,-2e-5 -0.79588,-0.1396 -1.07812,-0.42188 l -3.42188,-3.42188 -3.42186,3.42188 c -0.28226,0.28228 -0.6802,0.42188 -1.07814,0.42188 l -1.5,0 0,-1.5 c 0,-0.39794 0.1396,-0.79588 0.42188,-1.07812 l 3.42188,-3.375 -3.42188,-3.42188 c -0.31612,-0.29194 -0.45474,-0.70388 -0.42188,-1.125 z"
        id="rect4153"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssssssssssccccccccscccccccccsccccccc" />
     <g
        id="g4255"
-       transform="translate(491.71547,437.59341)"
+       transform="matrix(2.0000003,0,0,2.0000003,517.71666,420.5389)"
        style="fill:#ffffff;fill-opacity:1">
       <g
          style="display:inline;fill:#ffffff;fill-opacity:1"

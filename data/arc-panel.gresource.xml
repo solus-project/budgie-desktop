@@ -2,6 +2,11 @@
 <gresources>
         <gresource prefix="/com/solus-project/arc/panel">
                 <file>theme/theme.css</file>
+                <file>theme/theme_hc.css</file>
+                <file>theme/assets/checkbox.svg</file>
+                <file>theme/assets/checkbox@2.svg</file>
+                <file>theme/assets/checkbox-active.svg</file>
+                <file>theme/assets/checkbox-active@2.svg</file>
                 <file>theme/assets/radio.svg</file>
                 <file>theme/assets/radio@2.svg</file>
                 <file>theme/assets/radio-active.svg</file>
@@ -10,5 +15,9 @@
                 <file>theme/assets/switch@2.svg</file>
                 <file>theme/assets/switch-active.svg</file>
                 <file>theme/assets/switch-active@2.svg</file>
+                <file>theme/assets/switch-hc.svg</file>
+                <file>theme/assets/switch-hc@2.svg</file>
+                <file>theme/assets/switch-active-hc.svg</file>
+                <file>theme/assets/switch-active-hc@2.svg</file>
         </gresource>
 </gresources>
