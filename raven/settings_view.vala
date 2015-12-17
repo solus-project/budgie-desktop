@@ -80,6 +80,13 @@ public class PanelEditor : Gtk.Box
         combobox_position.pack_start(render, true);
         combobox_position.add_attribute(render, "text", 1);
 
+
+        model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        render = new Gtk.CellRendererText();
+        combobox_panels.set_model(model);
+        combobox_panels.pack_start(render, true);
+        combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
+
     }
 
     string get_panel_id(Arc.Toplevel? panel)
@@ -139,10 +146,6 @@ public class PanelEditor : Gtk.Box
         model.set_sort_column_id(PanelColumn.DESCRIPTION, Gtk.SortType.ASCENDING);
         combobox_panels.set_model(model);
         combobox_panels.set_id_column(PanelColumn.UUID);
-
-        var render = new Gtk.CellRendererText();
-        combobox_panels.pack_start(render, true);
-        combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
 
         /* In future check we haven't got one selected already.. */
         set_active_panel(uuid);

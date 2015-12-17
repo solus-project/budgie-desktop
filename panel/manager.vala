@@ -608,8 +608,6 @@ public class PanelManager : DesktopManager
         Arc.Panel? panel = new Arc.Panel(this, uuid, settings);
         panels.insert(uuid, panel);
 
-        this.panels_changed();
-
         if (!configure) {
             return;
         }
@@ -721,6 +719,7 @@ public class PanelManager : DesktopManager
 
         /* Let Raven update itself accordingly */
         raven.update_geometry(area.area, top, bottom);
+        this.panels_changed();
     }
 
     /**
