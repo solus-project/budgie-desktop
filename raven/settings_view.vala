@@ -271,6 +271,7 @@ public class PanelEditor : Gtk.Box
                 pos = PanelPosition.BOTTOM;
                 break;
         }
+
         manager.set_placement(current_panel.uuid, pos);
     }
 }

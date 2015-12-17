@@ -738,6 +738,9 @@ public class PanelManager : DesktopManager
             conflict.hide();
             conflict.update_geometry(area.area, old);
             conflict.show();
+            panel.hide();
+            panel.update_geometry(area.area, position);
+            panel.show();
         } else {
             area.slots ^= old;
             area.slots |= position;
