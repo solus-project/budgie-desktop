@@ -286,6 +286,7 @@ public class Panel : Arc.Toplevel
     {
         message("Creating default panel layout");
         add_new("Budgie Menu Applet");
+        add_new("Task List");
     }
 
     void set_applets()
@@ -335,7 +336,6 @@ public class Panel : Arc.Toplevel
                 pack_target.pack_end(info.applet, false, false, 0);
                 break;
         }
-        info.applet.valign = Gtk.Align.START;
         info.notify.connect(applet_updated);
     }
 

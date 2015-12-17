@@ -1,4 +1,3 @@
 SUBDIRS = \
-	budgie-menu
-
-
+	budgie-menu \
+	tasklist

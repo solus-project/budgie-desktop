@@ -463,6 +463,7 @@ public class PanelManager : DesktopManager
         var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "arc-desktop", "data");
 
         engine.add_search_path(hmod, hdata);
+        engine.rescan_plugins();
 
         extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
 

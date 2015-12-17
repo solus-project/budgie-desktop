@@ -2,11 +2,9 @@ AC_INIT([Arc Desktop], 1, [ikey@solus-project.com], [arc-desktop], [https://solu
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC
-LT_PREREQ(2.2)
 AC_CONFIG_HEADERS([config.h])
 AC_PREFIX_DEFAULT(/usr/local)
 AM_SILENT_RULES([yes])
-LT_INIT([disable-static])
 
 GLIB_GSETTINGS
 
@@ -65,6 +63,12 @@ GETTEXT_PACKAGE=arc-desktop
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext package to be used])
 
+# Got this idea from gnome-builder :)
+m4_include([panel/applets/tasklist/configure.ac])
+
+LT_PREREQ(2.2)
+LT_INIT([disable-static])
+
 AC_CONFIG_FILES([Makefile
                 data/arc-panel.desktop
                 data/Makefile
@@ -99,4 +103,9 @@ AC_MSG_RESULT([
         compiler:               ${CC}
         cflags:                 ${CFLAGS}
         ldflags:                ${LDFLAGS}
+
+        Plugins:
+        =======
+
+        tasklist:               ${have_wnck}
 ])
