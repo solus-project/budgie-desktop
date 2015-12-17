@@ -52,6 +52,8 @@ public class PanelEditor : Gtk.Box
     [GtkChild]
     private Gtk.Switch? switch_shadow;
 
+    HashTable<string?,Arc.Toplevel?> panels;
+
     public PanelEditor(Arc.DesktopManager? manager)
     {
         Object(manager: manager);
@@ -64,6 +66,19 @@ public class PanelEditor : Gtk.Box
         button_remove_panel.clicked.connect(()=> {
             this.manager.remove_panel(active_panel);
         });*/
+
+        /* PanelPosition */
+        var model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        Gtk.TreeIter iter;
+        model.append(out iter);
+        model.set(iter, 0, "top", 1, "Top", -1);
+        model.append(out iter);
+        model.set(iter, 0, "bottom", 1, "Bottom", -1);
+        combobox_position.set_model(model);
+        combobox_position.set_id_column(0);
+        var render = new Gtk.CellRendererText();
+        combobox_position.pack_start(render, true);
+        combobox_position.add_attribute(render, "text", 1);
 
     }
 
@@ -81,11 +96,27 @@ public class PanelEditor : Gtk.Box
         }
     }
 
+    string positition_to_id(PanelPosition pos)
+    {
+        switch (pos) {
+            case PanelPosition.TOP:
+                return "top";
+            case PanelPosition.LEFT:
+                return "left";
+            case PanelPosition.RIGHT:
+                return "right";
+            default:
+                return "bottom";
+        }
+    }
+
     public void on_panels_changed()
     {
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
         button_remove_panel.set_sensitive(manager.slots_used() > 1);
         string? uuid = null;
+
+        panels = new HashTable<string?,Arc.Toplevel?>(str_hash, str_equal);
 
         var panels = manager.get_panels();
         if (panels == null || panels.length() < 1) {
@@ -101,6 +132,7 @@ public class PanelEditor : Gtk.Box
             if (uuid == null) {
                 uuid = panel.uuid;
             }
+            this.panels.insert(uuid, panel);
             model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
         }
 
@@ -113,7 +145,18 @@ public class PanelEditor : Gtk.Box
         combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
 
         /* In future check we haven't got one selected already.. */
+        set_active_panel(uuid);
+    }
+
+    /*
+     * Hook up our current UI to this toplevel
+     */
+    void set_active_panel(string uuid)
+    {
+        unowned Arc.Toplevel? panel = panels.lookup(uuid);
+
         combobox_panels.set_active_id(uuid);
+        combobox_position.set_active_id(positition_to_id(panel.position));
     }
 }
 
