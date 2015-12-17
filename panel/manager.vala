@@ -608,6 +608,8 @@ public class PanelManager : DesktopManager
         Arc.Panel? panel = new Arc.Panel(this, uuid, settings);
         panels.insert(uuid, panel);
 
+        this.panels_changed();
+
         if (!configure) {
             return;
         }

@@ -23,6 +23,15 @@ public enum ThemeType {
 public class PanelEditor : Gtk.Box
 {
 
+    public Arc.DesktopManager? manager { public set ; public get ; }
+
+    public PanelEditor(Arc.DesktopManager? manager)
+    {
+        Object(manager: manager);
+    }
+
+    construct {
+    }
 }
 
 [GtkTemplate (ui = "/com/solus-project/arc/raven/settings.ui")]
@@ -182,10 +191,14 @@ public class SettingsView : Gtk.Box
     private Gtk.Stack? stack = null;
     private Gtk.StackSwitcher? switcher = null;
 
-    public SettingsView()
-    {
-        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+    public Arc.DesktopManager? manager { public set ; public get ; }
 
+    public SettingsView(Arc.DesktopManager? manager)
+    {
+        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0, manager: manager);
+    }
+
+    construct {
         var header = new SettingsHeader(this);
         pack_start(header, false, false, 0);
 
@@ -208,7 +221,7 @@ public class SettingsView : Gtk.Box
         var appearance = new AppearanceSettings();
         stack.add_titled(appearance, "appearance", "General");
 
-        var panel = new PanelEditor();
+        var panel = new PanelEditor(manager);
         stack.add_titled(panel, "panel", "Panel");
         stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", "Sidebar");
 

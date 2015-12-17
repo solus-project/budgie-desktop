@@ -137,7 +137,7 @@ public class Raven : Gtk.Window
         main_stack.add_named(main_view, "main");
 
         /* Settings */
-        settings_view = new Arc.SettingsView();
+        settings_view = new Arc.SettingsView(manager);
         settings_view.view_switch.connect(on_view_switch);
         main_stack.add_named(settings_view, "settings");
 
