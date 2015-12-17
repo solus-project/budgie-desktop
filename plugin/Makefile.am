@@ -14,13 +14,12 @@ libarc_plugin_la_SOURCES = \
 	ArcPlugin.vala
 
 libarc_plugin_la_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(LIBPEAS_CFLAGS) \
-	$(GTK3_CFLAGS)
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS)
 
 libarc_plugin_la_LIBADD = \
-	$(LIBPEAS_LIBS) \
-	$(GTK3_LIBS)
+	$(ARC_BASE_LIBS) \
+	$(ARC_PLUGIN_LIBS)
 
 libarc_plugin_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \

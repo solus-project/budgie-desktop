@@ -12,14 +12,11 @@ libtoplevel_la_SOURCES = \
 	manager.vala
 
 libtoplevel_la_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(GTK3_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
 	$(DECLARATIONS)
 
 libtoplevel_la_LIBADD = \
-	$(GOBJECT_LIBS) \
-	$(GTK3_LIBS)
+	$(ARC_BASE_LIBS)
 
 libtoplevel_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \

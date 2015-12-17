@@ -19,20 +19,17 @@ libbudgiemenuapplet_la_SOURCES = \
 	BudgieMenuWindow.vala
 
 libbudgiemenuapplet_la_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(GTK3_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
 	$(GMENU_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
-	$(LIBPEAS_CFLAGS) \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
 	$(DECLARATIONS)
 
 libbudgiemenuapplet_la_LIBADD = \
 	${top_builddir}/plugin/libarc-plugin.la \
-	$(GTK3_LIBS) \
-	$(GMENU_LIBS) \
-	$(GIO_UNIX_LIBS) \
-	$(LIBPEAS_LIBS)
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
+	$(GMENU_LIBS)
 
 libbudgiemenuapplet_la_LDFLAGS = \
 	$(MODULE_FLAGS) \

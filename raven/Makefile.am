@@ -39,16 +39,15 @@ libraven_la_SOURCES = \
 	mpris/MprisWidget.vala
 
 libraven_la_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(GTK3_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
 	$(GVC_CFLAGS) \
 	$(DECLARATIONS)
 
 libraven_la_LIBADD = \
-	$(GOBJECT_LIBS) \
-	$(GTK3_LIBS) \
-	$(GCC_LIBS) \
+	$(ARC_BASE_LIBS) \
+	$(ARC_PLUGIN_LIBS) \
+	$(GVC_LIBS) \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/plugin/libarc-plugin.la \
 	${top_builddir}/gvc/libgvc.la

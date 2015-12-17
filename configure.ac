@@ -13,24 +13,48 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
 
+
+m4_define([mutter_required_version], [3.18.0])
+m4_define([glib_required_version], [2.44.0])
+m4_define([gtk_required_version], [3.16.0])
+m4_define([peas_required_version], [1.8.0])
+m4_define([gdesktop_required_version], [3.18.0])
+
 # Package requirements
-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.44.0])
-PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.44.0])
-PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.16.0])
-PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= 2.44.0])
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= glib_required_version])
+PKG_CHECK_MODULES([GIO], [gio-2.0 >= glib_required_version])
+PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= glib_required_version])
 PKG_CHECK_MODULES([UUID], [uuid])
-# Required for panel applets
-PKG_CHECK_MODULES([LIBPEAS], [libpeas-gtk-1.0 >= 1.8.0])
+
+
+PKG_CHECK_MODULES([ARC_BASE],
+                [
+                 gobject-2.0 >= glib_required_version,
+                 gio-2.0 >= glib_required_version,
+                 gio-unix-2.0 >= glib_required_version,
+                 gtk+-3.0 >= gtk_required_version
+                ]
+)
+
+PKG_CHECK_MODULES([ARC_PLUGIN],
+                 [
+                  libpeas-gtk-1.0 >= peas_required_version
+                 ]
+)
+
 
 # Required for menu in the panel
 PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
 
-# Because window management is kinda critical to a desktop. Who knew
-PKG_CHECK_MODULES([MUTTER], [libmutter >= 3.18.0])
 
-# Right now this is just for the mutter vapi, but we'll actually use it
-# in future for XML backgrounds (slideshows)
-PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 3.18.0])
+PKG_CHECK_MODULES([ARC_WM],
+                [
+                 libmutter >= mutter_required_version,
+                 gnome-desktop-3.0 >= gdesktop_required_version
+                ]
+)
+
 
 PULSE_MIN_VERS=2.0
 

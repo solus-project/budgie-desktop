@@ -20,20 +20,17 @@ libtasklistapplet_la_SOURCES = \
 	TasklistApplet.vala
 
 libtasklistapplet_la_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(GTK3_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
 	$(TASKLIST_PLUGIN_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
-	$(LIBPEAS_CFLAGS) \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
 	$(DECLARATIONS)
 
 libtasklistapplet_la_LIBADD = \
 	${top_builddir}/plugin/libarc-plugin.la \
-	$(GTK3_LIBS) \
-	$(TASKLIST_PLUGIN_LIBS) \
-	$(GIO_UNIX_LIBS) \
-	$(LIBPEAS_LIBS)
+	$(ARC_BASE_LIBS) \
+	$(ARC_PLUGIN_LIBS) \
+	$(TASKLIST_PLUGIN_LIBS)
 
 libtasklistapplet_la_LDFLAGS = \
 	$(MODULE_FLAGS) \

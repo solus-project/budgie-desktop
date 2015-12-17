@@ -13,13 +13,13 @@ arc_wm_SOURCES = \
 	main.vala
 
 arc_wm_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(MUTTER_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_WM_CFLAGS) \
 	$(DECLARATIONS)
 
 arc_wm_LDADD = \
-	$(GOBJECT_LIBS) \
-	$(MUTTER_LIBS)
+	$(ARC_BASE_LIBS) \
+	$(ARC_WM_LIBS)
 
 arc_wm_VALAFLAGS = \
 	--pkg gio-unix-2.0 \

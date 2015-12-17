@@ -40,17 +40,14 @@ arc_panel_SOURCES = \
 	uuid.vala
 
 arc_panel_CFLAGS = \
-	$(GOBJECT_CFLAGS) \
-	$(GTK3_CFLAGS) \
-	$(LIBPEAS_CFLAGS) \
-	$(GIO_UNIX_CFLAGS) \
+	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
 	$(UUID_CFLAGS) \
 	$(DECLARATIONS)
 
 arc_panel_LDADD = \
-	$(GOBJECT_LIBS) \
-	$(GTK3_LIBS) \
-	$(LIBPEAS_LIBS) \
+	$(ARC_BASE_LIBS) \
+	$(ARC_PLUGIN_LIBS) \
 	$(UUID_LIBS) \
 	${top_builddir}/plugin/libarc-plugin.la \
 	${top_builddir}/lib/libtoplevel.la \
