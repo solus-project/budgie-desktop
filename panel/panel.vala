@@ -485,15 +485,20 @@ public class Panel : Arc.Toplevel
         Arc.set_struts(this, position, (intended_size - 5)*this.scale);
         switch (position) {
             case Arc.PanelPosition.TOP:
+                if (main_layout.valign != Gtk.Align.START) {
+                    main_layout.valign = Gtk.Align.START;
+                }
+                set_gravity(Gdk.Gravity.NORTH_WEST);
                 move(orig_scr.x, orig_scr.y);
                 main_layout.child_set(shadow, "position", 1);
-                set_gravity(Gdk.Gravity.NORTH);
                 break;
             default:
-                main_layout.valign = Gtk.Align.END;
+                if (main_layout.valign != Gtk.Align.END) {
+                    main_layout.valign = Gtk.Align.END;
+                }
+                set_gravity(Gdk.Gravity.SOUTH_WEST);
                 move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
                 main_layout.child_set(shadow, "position", 0);
-                set_gravity(Gdk.Gravity.SOUTH);
                 break;
         }
     }
