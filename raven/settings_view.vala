@@ -152,8 +152,6 @@ public class PanelEditor : Gtk.Box
 
     public void on_panels_changed()
     {
-        message("Panels changed!");
-
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
         button_remove_panel.set_sensitive(manager.slots_used() > 1);
         string? uuid = null;
@@ -167,7 +165,6 @@ public class PanelEditor : Gtk.Box
 
         var panels = manager.get_panels();
         if (panels == null || panels.length() < 1) {
-            message("TODO: Implement panel integration!!");
             return;
         }
 
@@ -180,7 +177,6 @@ public class PanelEditor : Gtk.Box
                 uuid = panel.uuid;
             }
             this.panels.insert(panel.uuid, panel);
-            message("Appending: %s %s", panel.uuid, pos);
             model.set(iter, PanelColumn.UUID, panel.uuid, PanelColumn.DESCRIPTION, pos, -1);
         }
 
