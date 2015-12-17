@@ -21,9 +21,9 @@ public static const string DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
 /**
  * Available slots
  */
-struct Screen {
-    PanelPosition slots;
-    Gdk.Rectangle area;
+class Screen : Object {
+    public PanelPosition slots;
+    public Gdk.Rectangle area;
 }
 
 
@@ -315,10 +315,9 @@ public class PanelManager : DesktopManager
         for (int i = 0; i < scr.get_n_monitors(); i++) {
             Gdk.Rectangle usable_area;
             scr.get_monitor_geometry(i, out usable_area);
-            Arc.Screen? screen = Arc.Screen() {
-                area = usable_area,
-                slots = PanelPosition.NONE
-            };
+            Arc.Screen? screen = new Arc.Screen();
+            screen.area = usable_area;
+            screen.slots = PanelPosition.NONE;
             screens.insert(i, screen);
         }
 
