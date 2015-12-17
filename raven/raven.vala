@@ -211,9 +211,6 @@ public class Raven : Gtk.Window
             return true;
         });
         toplevel.set_data("_binding_shadow", b);
-        toplevel.destroy.connect(()=> {
-            this.unbind_panel_shadow(toplevel);
-        });
     }
 
     void unbind_panel_shadow(Arc.Toplevel? top)

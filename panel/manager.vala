@@ -813,11 +813,10 @@ public class PanelManager : DesktopManager
         area.slots ^= panel.position;
 
         var spath = this.create_panel_path(panel.uuid);
-        panel.destroy_children();
-        panels.remove(panel.uuid);
+        panels.steal(panel.uuid);
         set_panels();
-        panel.destroy();
         update_screen();
+        panel.destroy();
 
 
         var psettings = new Settings.with_path(Arc.TOPLEVEL_SCHEMA, spath);
