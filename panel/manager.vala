@@ -649,7 +649,7 @@ public class PanelManager : DesktopManager
     /**
      * Enforce panel placement
      */
-    void set_placement(string uuid, PanelPosition position)
+    public override void set_placement(string uuid, PanelPosition position)
     {
         Arc.Panel? panel = panels.lookup(uuid);
         string? key = null;

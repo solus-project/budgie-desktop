@@ -42,6 +42,7 @@ public class PanelEditor : Gtk.Box
 
     [GtkChild]
     private Gtk.ComboBox? combobox_position;
+    private ulong position_id;
 
     [GtkChild]
     private Gtk.SpinButton? spinbutton_size;
@@ -89,6 +90,8 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_model(model);
         combobox_panels.pack_start(render, true);
         combobox_panels.add_attribute(render, "text", PanelColumn.DESCRIPTION);
+
+        position_id = combobox_position.changed.connect(on_position_changed);
 
     }
 
@@ -175,7 +178,9 @@ public class PanelEditor : Gtk.Box
         notify_id = panel.notify.connect(on_panel_update);
 
         combobox_panels.set_active_id(uuid);
+        SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
+        SignalHandler.unblock(combobox_position, position_id);
     }
 
     /* Handle updates to the current panel
@@ -187,8 +192,31 @@ public class PanelEditor : Gtk.Box
         /* Update position */
         if (p.name == "position") {
             var pos = this.positition_to_id(panel.position);
+            SignalHandler.block(combobox_position, position_id);
             combobox_position.set_active_id(pos);
+            SignalHandler.unblock(combobox_position, position_id);
         }
+    }
+
+    void on_position_changed()
+    {
+        var id = combobox_position.active_id;
+        PanelPosition pos;
+        switch (id) {
+            case "top":
+                pos = PanelPosition.TOP;
+                break;
+            case "left":
+                pos = PanelPosition.LEFT;
+                break;
+            case "right":
+                pos = PanelPosition.RIGHT;
+                break;
+            default:
+                pos = PanelPosition.BOTTOM;
+                break;
+        }
+        manager.set_placement(current_panel.uuid, pos);
     }
 }
 
