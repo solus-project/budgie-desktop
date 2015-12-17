@@ -165,7 +165,9 @@ public class PanelEditor : Gtk.Box
         /* In future check we haven't got one selected already.. */
         if (old_uuid != null && this.panels.contains(old_uuid)) {
             set_active_panel(old_uuid);
+            combobox_panels.set_active_id(old_uuid);
         } else {
+            combobox_panels.set_active_id(uuid);
             set_active_panel(uuid);
         }
     }
