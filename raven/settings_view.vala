@@ -165,9 +165,7 @@ public class PanelEditor : Gtk.Box
         /* In future check we haven't got one selected already.. */
         if (old_uuid != null && this.panels.contains(old_uuid)) {
             set_active_panel(old_uuid);
-            combobox_panels.set_active_id(old_uuid);
         } else {
-            combobox_panels.set_active_id(uuid);
             set_active_panel(uuid);
         }
     }
@@ -178,6 +176,7 @@ public class PanelEditor : Gtk.Box
     void set_active_panel(string uuid)
     {
         unowned Arc.Toplevel? panel = panels.lookup(uuid);
+        combobox_panels.set_active_id(uuid);
 
         if (panel == this.current_panel) {
             return;
@@ -192,8 +191,6 @@ public class PanelEditor : Gtk.Box
         /* Bind position.. ? */
         notify_id = panel.notify.connect(on_panel_update);
 
-        message("Setting active UUID: %s", uuid);
-        combobox_panels.set_active_id(uuid);
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
         SignalHandler.unblock(combobox_position, position_id);
