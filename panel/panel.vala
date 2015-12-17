@@ -319,6 +319,7 @@ public class Panel : Arc.Toplevel
                 pack_target.pack_end(info.applet, false, false, 0);
                 break;
         }
+        info.applet.valign = Gtk.Align.START;
         info.notify.connect(applet_updated);
     }
 
