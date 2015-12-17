@@ -148,12 +148,13 @@ public class Raven : Gtk.Window
         strip = new PowerStrip(this);
         main_box.pack_end(strip, false, false, 0);
 
-        resizable = true;
+        resizable = false;
         skip_taskbar_hint = true;
         skip_pager_hint = true;
         set_keep_above(true);
         set_decorated(false);
 
+        set_size_request(-1, -1);
         if (!this.get_realized()) {
             this.realize();
         }
@@ -193,6 +194,7 @@ public class Raven : Gtk.Window
         base.size_allocate(rect);
         if ((w = get_allocated_width()) != this.required_size) {
             this.required_size = w;
+            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
         }
     }
 
@@ -234,13 +236,7 @@ public class Raven : Gtk.Window
      * need to be on */
     public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
     {
-        int n, m;
-        this.get_preferred_width(out m, out n);
-        int width = m;
-        /* Don't width update unless necessary! */
-        if (get_visible()) {
-            width = our_width;
-        }
+        int width = required_size;
 
         int x = (rect.x+rect.width)-width;
         int y = rect.y;
