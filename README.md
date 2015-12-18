@@ -60,6 +60,7 @@ And:
 To install these on Solus:
 
 ```bash
+
     sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel mutter-devel libwnck-devel vala
     sudo eopkg it -c system.devel
 ```
@@ -67,6 +68,7 @@ To install these on Solus:
 Clone the repository:
 
 ```bash
+
     git clone https://github.com/solus-project/arc-desktop.git
 ```
 
@@ -89,12 +91,14 @@ Alternatively, you may invoke the panel with the GTK Inspector to
 analyse the structure::
 
 ```bash
+
     arc-panel --gtk-debug=interactive --replace
 ```
 
 If you are validating changes from a git clone, then::
 
 ```bash
+
     ./panel/arc-panel --gtk-debug=interactive --replace
 ```
 
@@ -119,6 +123,7 @@ the configuration to the defaults to ensure everything is still working
 ok. To reset the entire configuration tree, issue::
 
 ```bash
+
     dconf reset -f /com/solus-project/arc-panel/  
 ```
 
@@ -130,6 +135,7 @@ If using a tarball, note that the distributed tarball includes the generated
 combat this, simply issue the following before doing any configure::
 
 ```bash
+
     make maintainer-clean
 ```
 
