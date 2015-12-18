@@ -12,6 +12,11 @@ Enormous thanks go to horst3180 for all the design work, contributions
 and overseeing of the project to ensure it meets his mockups. The
 project would not be possible without him.
 
+
+![screenshot1](https://raw.githubusercontent.com/solus-project/arc-desktop/master/screenshots/Raven_Main.png)
+
+![screenshot2](https://raw.githubusercontent.com/solus-project/arc-desktop/master/screenshots/Raven_Settings.png)
+
 License
 =======
 
@@ -127,16 +132,16 @@ let's be fair, it does kinda look better up top.
 TODO
 ====
 
- - Fix Raven glitch when adding a new panel
- - Add applet manipulation
- - Port old applets into tree
- - Convert Raven modules into actual modules
- - Complete WM
- - Add defaults file for vendors to specify default configuration.
- - Merge into Budgie (preserving git history)
- - Tag release
- - Get translations in order
- - Second release
+ - [ ] Fix Raven glitch when adding a new panel
+ - [ ] Add applet manipulation
+ - [ ] Port old applets into tree
+ - [ ] Convert Raven modules into actual modules
+ - [ ] Complete WM
+ - [ ] Add defaults file for vendors to specify default configuration.
+ - [ ] Merge into Budgie (preserving git history)
+ - [ ] Tag release
+ - [ ] Get translations in order
+ - [ ] Second release
 
 Authors
 =======
