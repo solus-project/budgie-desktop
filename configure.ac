@@ -2,17 +2,11 @@ AC_INIT([Arc Desktop], 1, [ikey@solus-project.com], [arc-desktop], [https://solu
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC
-AC_CONFIG_HEADERS([config.h])
+
 AC_PREFIX_DEFAULT(/usr/local)
 AM_SILENT_RULES([yes])
 
 GLIB_GSETTINGS
-
-GETTEXT_PACKAGE=arc-desktop
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
-                   [The prefix for our gettext translation domains.])
-
 
 m4_define([mutter_required_version], [3.18.0])
 m4_define([glib_required_version], [2.44.0])
@@ -85,6 +79,11 @@ m4_include([panel/applets/tasklist/configure.ac])
 LT_PREREQ(2.2)
 LT_INIT([disable-static])
 
+AH_TOP([#ifndef CONFIG_H_INCLUDED
+	#define CONFIG_H_INCLUDED 1])
+AH_BOTTOM([#endif])
+AC_CONFIG_HEADERS([config.h])
+
 AC_CONFIG_FILES([Makefile
                 data/arc-panel.desktop
                 data/Makefile
@@ -101,9 +100,18 @@ AC_CONFIG_FILES([Makefile
                 session/arc-desktop
                 session/Makefile
                 wm/arc-wm.desktop
-                wm/Makefile])
+                wm/Makefile
+                po/Makefile.in])
+
+IT_PROG_INTLTOOL([0.50.0])
+GETTEXT_PACKAGE=arc-desktop
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+                   [The prefix for our gettext translation domains.])
+
 AC_OUTPUT
 
+AM_GLIB_GNU_GETTEXT
 AC_MSG_RESULT([
         arc-desktop $VERSION
         ========

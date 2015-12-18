@@ -61,3 +61,7 @@ arc-panel-resources.*
 /wm/arc-wm
 /wm/arc-wm.desktop
 /wm/*.c
+
+/po/POTFILES
+/po/Makefile.in.in
+/po/stamp-it

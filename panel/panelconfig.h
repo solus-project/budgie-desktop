@@ -1,20 +1,25 @@
+#ifndef CONFIG_H_INCLUDED
 #include "config.h"
+#endif
 
-#pragma once
+#ifndef PANEL_CONFIG_H
+#define PANEL_CONFIG_H
 
 /* i.e. /usr/lib/arc-desktop */
-const char *ARC_MODULE_DIRECTORY = MODULE_DIR;
+static const char *ARC_MODULE_DIRECTORY = MODULE_DIR;
 
 /* i.e. /usr/share/arc-desktop/plugins */
-const char *ARC_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+static const char *ARC_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
 
 /* i.e. /usr/share/arc-desktop */
-const char *ARC_DATADIR = DATADIR;
+static const char *ARC_DATADIR = DATADIR;
 
-const char *ARC_VERSION = PACKAGE_VERSION;
+static const char *ARC_VERSION = PACKAGE_VERSION;
 
-const char *ARC_WEBSITE = PACKAGE_URL;
+static const char *ARC_WEBSITE = PACKAGE_URL;
 
-const char *ARC_LOCALEDIR = LOCALEDIR;
+static const char *ARC_LOCALEDIR = LOCALEDIR;
 
-const char *ARC_GETTEXT_PACKAGE = GETTEXT_PACKAGE;
+static const char *ARC_GETTEXT_PACKAGE = GETTEXT_PACKAGE;
+
+#endif

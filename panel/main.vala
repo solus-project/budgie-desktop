@@ -21,6 +21,11 @@ public static int main(string[] args)
     Gtk.init(ref args);
     OptionContext ctx;
 
+    Intl.setlocale(LocaleCategory.ALL, "");
+    Intl.bindtextdomain(Arc.GETTEXT_PACKAGE, Arc.LOCALEDIR);
+    Intl.bind_textdomain_codeset(Arc.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain(Arc.GETTEXT_PACKAGE);
+
     ctx = new OptionContext("- Arc Panel");
     ctx.set_help_enabled(true);
     ctx.add_main_entries(options, null);

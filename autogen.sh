@@ -17,6 +17,7 @@ then
 fi
 git submodule update
 
+intltoolize --force
 AUTORECONF=`which autoreconf`
 if test -z $AUTORECONF;
 then
