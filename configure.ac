@@ -43,11 +43,6 @@ PKG_CHECK_MODULES([ARC_PLUGIN],
                  ]
 )
 
-
-# Required for menu in the panel
-PKG_CHECK_MODULES([GMENU], [libgnome-menu-3.0 >= 3.10.1])
-
-
 PKG_CHECK_MODULES([ARC_WM],
                 [
                  libmutter >= mutter_required_version,
@@ -79,15 +74,12 @@ GOBJECT_INTROSPECTION_CHECK([1.44.0])
 
 # Need Vala.
 AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Arc Desktop])])
-
-
 AC_SUBST(VALAFLAGS)
 
-GETTEXT_PACKAGE=arc-desktop
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext package to be used])
 
 # Got this idea from gnome-builder :)
+dnl Plugins
+m4_include([panel/applets/budgie-menu/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 
 LT_PREREQ(2.2)
@@ -104,7 +96,6 @@ AC_CONFIG_FILES([Makefile
                 panel/arc-panel.desktop
                 panel/Makefile
                 panel/applets/Makefile
-                panel/applets/budgie-menu/Makefile
                 session/arc-desktop.desktop
                 session/arc-desktop.session
                 session/arc-desktop
@@ -131,5 +122,6 @@ AC_MSG_RESULT([
         Plugins:
         =======
 
+        budgie-menu:            always
         tasklist:               ${have_wnck}
 ])
