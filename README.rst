@@ -71,7 +71,7 @@ Now build it ::
 Theming
 =======
 
-Please look at `./data/default.css` to override aspects of the default
+Please look at `./data/theme/theme.css` to override aspects of the default
 theming.
 
 Alternatively, you may invoke the panel with the GTK Inspector to
@@ -89,6 +89,12 @@ to be installed first with `make install`.
 Note that it is intentional for the toplevel `ArcPanel` object to
 be transparent, as it contains the `ArcMainPanel` and `ArcShadowBlock`
 within a singular window.
+
+Also note that by default Arc overrides all theming with the stylesheet,
+and in future we'll also make it possible for you to set a custom theme.
+To do this, test your changes in tree first. When you have a reasonable
+theme put together, please open an issue and we'll enable setting of
+a custom theme (no point until they exist.)
 
 Testing
 =======
@@ -117,6 +123,20 @@ Known Issues
 Currently the GtkPopover can *randomly* glitch when the panel is at the
 bottom of the screen. It is expected to be fixed in a later commit, however
 let's be fair, it does kinda look better up top.
+
+TODO
+====
+
+ - Fix Raven glitch when adding a new panel
+ - Add applet manipulation
+ - Port old applets into tree
+ - Convert Raven modules into actual modules
+ - Complete WM
+ - Add defaults file for vendors to specify default configuration.
+ - Merge into Budgie (preserving git history)
+ - Tag release
+ - Get translations in order
+ - Second release
 
 Authors
 =======
