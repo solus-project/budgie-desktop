@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
         <gresource prefix="/com/solus-project/arc/raven">
-                <file>settings.ui</file>
-                <file>appearance.ui</file>
-                <file>panel.ui</file>
+                <file>settings.glade</file>
+                <file>appearance.glade</file>
+                <file>panel.glade</file>
         </gresource>
 </gresources>

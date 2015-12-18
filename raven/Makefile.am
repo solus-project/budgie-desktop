@@ -3,7 +3,9 @@
 EXTRA_DIST = \
 	raven.vapi \
 	ui/arc-raven.gresource.xml \
-	ui/settings.ui
+	ui/settings.glade \
+	ui/panel.glade \
+	ui/appearance.glade
 
 raven_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/raven/ui --generate-dependencies $(top_srcdir)/raven/ui/arc-raven.gresource.xml)
 

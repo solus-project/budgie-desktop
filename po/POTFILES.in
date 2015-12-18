@@ -1,1 +1,3 @@
 panel/main.vala
+raven/ui/appearance.glade
+raven/ui/panel.glade
