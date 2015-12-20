@@ -6,3 +6,4 @@ raven/settings_view.vala
 raven/sound.vala
 session/arc-desktop.desktop.in.in
 [type: gettext/keys]session/arc-desktop.session.in.in
+panel/applets/clock/ClockApplet.vala

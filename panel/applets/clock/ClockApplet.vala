@@ -50,8 +50,8 @@ public class ClockApplet : Arc.Applet
 
 
         var menu = new GLib.Menu();
-        menu.append("Time and date settings", "clock.time_and_date");
-        menu.append("Calendar", "clock.calendar");
+        menu.append(_("Time and date settings"), "clock.time_and_date");
+        menu.append(_("Calendar"), "clock.calendar");
         popover = new Gtk.Popover.from_model(widget, menu);
 
         popover.get_child().show_all();

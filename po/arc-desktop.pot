@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-20 11:25+0000\n"
+"POT-Creation-Date: 2015-12-20 16:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,4 +141,12 @@ msgstr ""
 
 #: ../session/arc-desktop.desktop.in.in.h:2
 msgid "This session logs you into the new Budgie Desktop"
+msgstr ""
+
+#: ../panel/applets/clock/ClockApplet.vala:53
+msgid "Time and date settings"
+msgstr ""
+
+#: ../panel/applets/clock/ClockApplet.vala:54
+msgid "Calendar"
 msgstr ""
