@@ -132,5 +132,6 @@ AC_MSG_RESULT([
         =======
 
         budgie-menu:            always
+        clock:                  always
         tasklist:               ${have_wnck}
 ])
