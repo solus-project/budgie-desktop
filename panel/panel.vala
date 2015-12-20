@@ -65,6 +65,8 @@ public class Panel : Arc.Toplevel
     HashTable<string,HashTable<string,string>> creating = null;
     HashTable<string,Arc.AppletInfo?> applets = null;
 
+    HashTable<string,Arc.AppletInfo?> initial_config = null;
+
     construct {
         position = PanelPosition.NONE;
     }
@@ -138,6 +140,8 @@ public class Panel : Arc.Toplevel
     public Panel(Arc.PanelManager? manager, string? uuid, Settings? settings)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
+
+        initial_config = new HashTable<string,Arc.AppletInfo>(str_hash, str_equal);
 
         intended_size = settings.get_int(Arc.PANEL_KEY_SIZE);
         this.manager = manager;
@@ -282,11 +286,77 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    public void create_default_layout()
+    public void create_default_layout(string name, KeyFile config)
     {
-        message("Creating default panel layout");
-        add_new("Budgie Menu Applet");
-        add_new("Task List");
+        int s_index = -1;
+        int c_index = -1;
+        int e_index = -1;
+        int index = 0;
+
+        message("Creating default panel layout from config name: %s", name);
+
+        try {
+            if (!config.has_key(name, "Children")) {
+                warning("Config for panel %s does not specify applets", name);
+                return;
+            }
+            string[] applets = config.get_string_list(name, "Children");
+            foreach (string appl in applets) {
+                AppletInfo? info = null;
+                string? uuid = null;
+                appl = appl.strip();
+                string pack_type = "start"; /*  end */
+                string alignment = "start"; /* center, end */
+
+                if (!config.has_group(appl)) {
+                    warning("Panel applet %s missing from config", appl);
+                    continue;
+                }
+
+                if (!config.has_key(appl, "ID")) {
+                    warning("Applet %s is missing ID", appl);
+                    continue;
+                }
+
+                uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+
+                var id = config.get_string(appl, "ID").strip();
+                if (uuid == null || uuid.strip() == "") {
+                    warning("Could not add new applet %s from config %s", id, name);
+                    continue;
+                }
+
+                info = new AppletInfo(null, uuid, null, null);
+                if (config.has_key(appl, "PackType")) {
+                    pack_type = config.get_string("appl", "PackType").strip();
+                }
+                if (config.has_key(appl, "Alignment")) {
+                    alignment = config.get_string("appl", "Alignment").strip();
+                }
+
+                switch (alignment) {
+                    case "center":
+                        index = ++c_index;
+                        break;
+                    case "end":
+                        index = ++e_index;
+                        break;
+                    default:
+                        index = ++s_index;
+                        break;
+                }
+                info.pack_type = pack_type;
+                info.alignment = alignment;
+                info.position = index;
+
+                initial_config.insert(uuid, info);
+                add_new(id, uuid);
+            }
+        } catch (Error e) {
+            warning("Error loading default config: %s", e.message);
+        }
+        //add_new("Budgie Menu Applet");
+        //add_new("Task List");
     }
 
     void set_applets()
@@ -306,8 +376,18 @@ public class Panel : Arc.Toplevel
     void add_applet(Arc.AppletInfo? info)
     {
         unowned Gtk.Box? pack_target = null;
+        Arc.AppletInfo? initial_info = null;
 
         message("adding %s: %s", info.name, info.uuid);
+
+        initial_info = initial_config.lookup(info.uuid);
+        if (initial_info != null) {
+            message("Preconfiguring applet %s", info.uuid);
+            info.alignment = initial_info.alignment;
+            info.pack_type = initial_info.pack_type;
+            info.position = initial_info.position;
+            initial_config.remove(info.uuid);
+        }
 
         /* figure out the alignment */
         switch (info.alignment) {
@@ -385,10 +465,12 @@ public class Panel : Arc.Toplevel
             }
             info.applet.get_parent().child_set(info.applet, "pack-type", t);
             return;
+        } else if (p.name == "position") {
+            info.applet.get_parent().child_set(info.applet, "position", info.position);
         } /* TODO: Implement position knowledge */
     }
 
-    void add_new(string plugin_name)
+    void add_new(string plugin_name, string? initial_uuid = null)
     {
         string? uuid = null;
         string? rname = null;
@@ -398,7 +480,11 @@ public class Panel : Arc.Toplevel
             warning("Not loading invalid plugin: %s", plugin_name);
             return;
         }
-        uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        if (initial_uuid == null) {
+            uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        } else {
+            uuid = initial_uuid;
+        }
 
         if (!this.manager.is_extension_loaded(plugin_name)) {
             /* Request a load of the new guy */
@@ -423,6 +509,7 @@ public class Panel : Arc.Toplevel
             return;
         }
         this.add_applet(info);
+        return;
     }
 
     void add_pending(string uuid, string plugin_name)

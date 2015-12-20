@@ -94,14 +94,20 @@ public class AppletInfo : GLib.Object
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets
      */
-    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet applet, GLib.Settings settings)
+    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet? applet, GLib.Settings? settings)
     {
-        this.applet = applet;
-        icon = plugin_info.get_icon_name();
-        this.name = plugin_info.get_name();
+        if (applet != null) {
+            this.applet = applet;
+        }
+        if (plugin_info != null) {
+            icon = plugin_info.get_icon_name();
+            this.name = plugin_info.get_name();
+        }
         this.uuid = uuid;
-        this.settings = settings;
-        this.bind_settings();
+        if (settings != null) {
+            this.settings = settings;
+            this.bind_settings();
+        }
     }
 
     void bind_settings()
@@ -888,7 +894,7 @@ public class PanelManager : DesktopManager
 
         var panel = panels.lookup(uuid);
         /* TODO: Pass off the configuration here.. */
-        panel.create_default_layout();
+        panel.create_default_layout(name, new_defaults);
     }
 
     /**
