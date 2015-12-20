@@ -16,7 +16,10 @@ public static int main(string[] args)
 
     ctx = Meta.get_option_context();
 
-    if (!Gtk.init_check(ref args)) {
+    if ("--wayland" in args) {
+        warning("Running under Wayland, GTK+ functionality not available");
+        Arc.ArcWM.gtk_available = false;
+    } else if (!Gtk.init_check(ref args)) {
         warning("GTK+ functionality not available");
         Arc.ArcWM.gtk_available = false;
     }
