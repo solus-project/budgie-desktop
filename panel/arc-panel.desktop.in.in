@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Arc Panel
-Comment=Launch other applications and provide various utilities to manage windows, show the time, etc.
+_Name=Arc Panel
+_Comment=Launch other applications and provide various utilities to manage windows, show the time, etc.
 Exec=arc-panel
 Terminal=false
 Categories=GNOME;GTK;System;Core;

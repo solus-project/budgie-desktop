@@ -92,7 +92,7 @@ AC_CONFIG_FILES([Makefile
                 plugin/Makefile
                 plugin/arc-1.0.pc
                 raven/Makefile
-                panel/arc-panel.desktop
+                panel/arc-panel.desktop.in
                 panel/Makefile
                 panel/applets/Makefile
                 session/arc-desktop.desktop.in

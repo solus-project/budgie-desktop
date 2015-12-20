@@ -34,6 +34,7 @@ m4/lt~obsolete.m4
 /panel/*.c
 arc-panel-resources.*
 /panel/arc-panel.desktop
+/panel/arc-panel.desktop.in
 
 # plugin
 *.gir

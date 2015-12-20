@@ -1,9 +1,17 @@
 -include $(top_srcdir)/common.mk
 
+%.desktop: %.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po)
+	$(AM_V_GEN) \
+	$(MKDIR_P) "$(dir $@)"; \
+	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
 EXTRA_DIST = \
 	panelconfig.h \
 	panelconfig.vapi \
-	arc-panel.desktop.in
+	arc-panel.desktop.in.in
+
+@INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_XML_NOMERGE_RULE@
 
 SUBDIRS = \
 	applets
