@@ -20,6 +20,10 @@ public class ArcWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
 
+    public bool animations { public set ; public get ; default = true; }
+
+    public static bool gtk_available = true;
+
     static construct
     {
         info = Meta.PluginInfo() {
@@ -36,10 +40,37 @@ public class ArcWM : Meta.Plugin
     {
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
+
+        /* Follow GTK's policy on animations */
+        if (gtk_available) {
+            var settings = Gtk.Settings.get_default();
+            settings.bind_property("gtk-enable-animations", this, "use-animations");
+        } 
     }
 
     public override unowned Meta.PluginInfo? plugin_info() {
         return info;
+    }
+
+    public override void start()
+    {
+        /* TODO: Add backgrounds, monitor handling, etc. */
+    }
+
+    public override void map(Meta.WindowActor actor)
+    {
+        /* Map a window */
+        this.map_completed(actor);
+    }
+
+    public override void destroy(Meta.WindowActor actor)
+    {
+        this.destroy_completed(actor);
+    }
+
+    public override void minimize(Meta.WindowActor actor)
+    {
+        this.minimize_completed(actor);
     }
 }
 

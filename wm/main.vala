@@ -16,6 +16,11 @@ public static int main(string[] args)
 
     ctx = Meta.get_option_context();
 
+    if (!Gtk.init_check(ref args)) {
+        warning("GTK+ functionality not available");
+        Arc.ArcWM.gtk_available = false;
+    }
+
     try {
         if (!ctx.parse(ref args)) {
             return Meta.ExitCode.ERROR;
