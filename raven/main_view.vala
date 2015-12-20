@@ -64,7 +64,7 @@ public class MainView : Gtk.Box
         pack_start(main_stack, true, true, 0);
 
         var scroll = new Gtk.ScrolledWindow(null, null);
-        main_stack.add_titled(scroll, "applets", "Applets");
+        main_stack.add_titled(scroll, "applets", _("Applets"));
         /* Dummy - no notifications right now */
         main_stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "notifications", "Notifications");
 

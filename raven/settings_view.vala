@@ -126,13 +126,13 @@ public class PanelEditor : Gtk.Box
     {
         switch (panel.position) {
             case PanelPosition.TOP:
-                return "Top Panel";
+                return _("Top Panel");
             case PanelPosition.RIGHT:
-                return "Right Panel";
+                return _("Right Panel");
             case PanelPosition.LEFT:
-                return "Left Panel";
+                return _("Left Panel");
             default:
-                return "Bottom Panel";
+                return _("Bottom Panel");
         }
     }
 
@@ -456,11 +456,11 @@ public class SettingsView : Gtk.Box
 
         stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         var appearance = new AppearanceSettings();
-        stack.add_titled(appearance, "appearance", "General");
+        stack.add_titled(appearance, "appearance", _("General"));
 
         var panel = new PanelEditor(manager);
-        stack.add_titled(panel, "panel", "Panel");
-        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", "Sidebar");
+        stack.add_titled(panel, "panel", _("Panel"));
+        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", _("Sidebar"));
 
         appearance.load_themes();
 

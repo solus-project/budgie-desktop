@@ -87,7 +87,7 @@ public class SoundWidget : Gtk.Box
 
         /* Output row */
         var row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        var label = new Gtk.Label("Output");
+        var label = new Gtk.Label(_("Output"));
         label.get_style_context().add_class("heading");
         row.pack_start(label, true, true, 0);
         label.halign = Gtk.Align.START;
@@ -104,7 +104,7 @@ public class SoundWidget : Gtk.Box
 
         /* Input row */
         row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        label = new Gtk.Label("Input");
+        label = new Gtk.Label(_("Input"));
         label.get_style_context().add_class("heading");
         row.pack_start(label, true, true, 0);
         label.halign = Gtk.Align.START;
