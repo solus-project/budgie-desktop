@@ -16,6 +16,10 @@ public static const string MUTTER_EDGE_TILING  = "edge-tiling";
 public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialog";
 public static const string WM_SCHEMA           = "com.solus-project.arc.wm";
 
+public static const bool CLUTTER_EVENT_PROPAGATE = false;
+public static const bool CLUTTER_EVENT_STOP      = true;
+
+
 public class ArcWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
@@ -28,6 +32,10 @@ public class ArcWM : Meta.Plugin
 
     static Clutter.Point PV_CENTER;
     static Clutter.Point PV_NORM;
+
+    private Meta.BackgroundGroup? background_group;
+
+    private Gtk.Menu? menu = null;
 
     static construct
     {
@@ -71,6 +79,11 @@ public class ArcWM : Meta.Plugin
 
         /* TODO: Add backgrounds, monitor handling, etc. */
 
+        background_group = new Meta.BackgroundGroup();
+        background_group.set_reactive(true);
+        screen_group.insert_child_below(background_group, null);
+
+        background_group.show();
         screen_group.show();
         stage.show();
 
@@ -83,8 +96,42 @@ public class ArcWM : Meta.Plugin
                 message("Still no GTK+");
             }
         }
+
+        if (ArcWM.gtk_available) {
+            init_menu();
+        }
     }
 
+    bool on_button_press(Clutter.ButtonEvent? event)
+    {
+        if (event.button != 3) {
+            return CLUTTER_EVENT_PROPAGATE;
+        }
+        if (menu.get_visible()) {
+            menu.hide();
+        } else {
+            menu.popup( null, null, null, event.button, event.time);
+        }
+        return CLUTTER_EVENT_STOP;
+    }
+
+    void init_menu()
+    {
+        menu = new Gtk.Menu();
+        var item = new Gtk.MenuItem.with_label(_("Change background\u2026"));
+        item.show();
+        menu.append(item);
+
+        var sep = new Gtk.SeparatorMenuItem();
+        sep.show();
+        menu.append(sep);
+
+        item = new Gtk.MenuItem.with_label(_("Settings"));
+        item.show();
+        menu.append(item);
+
+        this.background_group.button_press_event.connect(on_button_press);
+    }
 
     static const int MAP_TIMEOUT  = 170;
     static const float MAP_SCALE  = 0.8f;
