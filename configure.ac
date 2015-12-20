@@ -15,6 +15,7 @@ m4_define([gtk_required_version], [3.16.0])
 m4_define([peas_required_version], [1.8.0])
 m4_define([gdesktop_required_version], [3.18.0])
 m4_define([pulse_required_version], [2.0])
+m4_define([gsettings_required_version], [3.18.0])
 
 GOBJECT_INTROSPECTION_CHECK([1.44.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
@@ -54,7 +55,8 @@ PKG_CHECK_MODULES([ARC_PLUGIN],
 PKG_CHECK_MODULES([ARC_WM],
                 [
                  libmutter >= mutter_required_version,
-                 gnome-desktop-3.0 >= gdesktop_required_version
+                 gnome-desktop-3.0 >= gdesktop_required_version,
+                 gsettings-desktop-schemas >= gsettings_required_version
                 ]
 )
 

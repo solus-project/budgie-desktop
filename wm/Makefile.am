@@ -14,6 +14,7 @@ applications_DATA = \
 bin_PROGRAMS = arc-wm
 
 arc_wm_SOURCES = \
+	background.vala \
 	main.vala \
 	wm.vala
 
@@ -29,5 +30,6 @@ arc_wm_LDADD = \
 arc_wm_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libmutter \
+	--pkg gsettings-desktop-schemas \
 	--vapidir=${top_srcdir}/vapi \
 	$(VALAFLAGS)

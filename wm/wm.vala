@@ -83,6 +83,9 @@ public class ArcWM : Meta.Plugin
         background_group.set_reactive(true);
         screen_group.insert_child_below(background_group, null);
 
+        screen.monitors_changed.connect(on_monitors_changed);
+        on_monitors_changed(screen);
+
         background_group.show();
         screen_group.show();
         stage.show();
@@ -114,6 +117,17 @@ public class ArcWM : Meta.Plugin
         }
         return CLUTTER_EVENT_STOP;
     }
+
+    void on_monitors_changed(Meta.Screen? screen)
+    {
+        background_group.destroy_all_children();
+
+        for (int i = 0; i < screen.get_n_monitors(); i++) {
+            var actor = new ArcBackground(screen, i);
+            background_group.add_child(actor);
+        }
+    }
+
 
     void init_menu()
     {
