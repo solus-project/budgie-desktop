@@ -130,9 +130,44 @@ public class ArcWM : Meta.Plugin
         this.destroy_completed(actor);
     }
 
+    void minimize_done(Clutter.Actor? actor)
+    {
+        actor.remove_all_transitions();
+        SignalHandler.disconnect_by_func(actor, (void*)minimize_done, this);
+        actor.set("pivot-point", PV_NORM, "opacity", 255, "scale-x", 1.0, "scale-y", 1.0);
+        actor.hide();
+        this.minimize_completed(actor as Meta.WindowActor);
+    }
+
+    static const int MINIMIZE_TIMEOUT = 200;
+
     public override void minimize(Meta.WindowActor actor)
     {
-        this.minimize_completed(actor);
+        if (!this.use_animations) {
+            this.minimize_completed(actor);
+            return;
+        }
+        Meta.Rectangle icon;
+        Meta.Window? window = actor.get_meta_window();
+
+        if (window.get_window_type() != Meta.WindowType.NORMAL) {
+            this.minimize_completed(actor);
+            return;
+        }
+
+        if (!window.get_icon_geometry(out icon)) {
+            icon.x = 0;
+            icon.y = 0;
+        }
+
+        actor.set("pivot-point", PV_CENTER);
+        actor.save_easing_state();
+        actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
+        actor.set_easing_duration(MINIMIZE_TIMEOUT);
+        actor.transitions_completed.connect(minimize_done);
+
+        actor.set("opacity", 0, "x", (double)icon.x, "y", (double)icon.y, "scale-x", 0.0, "scale-y", 0.0);
+        actor.restore_easing_state();
     }
 }
 
