@@ -71,6 +71,26 @@ public class MprisWidget : Gtk.Box
         get_toplevel().queue_draw();
     }
 
+    void on_name_owner_changed(string? n, string? o, string? ne)
+    {
+        if (!n.has_prefix("org.mpris.MediaPlayer2.")) {
+            return;
+        }
+        if (o == "") {
+            new_iface.begin(n, (o,r) => {
+                var iface = new_iface.end(r);
+                if (iface != null) {
+                    add_iface(n, iface);
+                }
+            });
+        } else {
+            Idle.add(()=> {
+                destroy_iface(n);
+                return false;
+            });
+        }
+    }
+
     /**
      * Do basic dbus initialisation
      */
@@ -83,7 +103,7 @@ public class MprisWidget : Gtk.Box
             /* Search for existing players (launched prior to our start) */
             foreach (var name in names) {
                 if (name.has_prefix("org.mpris.MediaPlayer2.")) {
-                    var iface = new_iface(name);
+                    var iface = yield new_iface(name);
                     if (iface != null) {
                         add_iface(name, iface);
                     }
@@ -91,22 +111,7 @@ public class MprisWidget : Gtk.Box
             }
 
             /* Also check for new mpris clients coming up while we're up */
-            impl.name_owner_changed.connect((n,o,ne)=> {
-                /* Separate.. */
-                if (n.has_prefix("org.mpris.MediaPlayer2.")) {
-                    if (o == "") {
-                        var iface = new_iface(n);
-                        if (iface != null) {
-                            add_iface(n,iface);
-                        }
-                    } else {
-                        Idle.add(()=> {
-                            destroy_iface(n);
-                            return false;
-                        });
-                    }
-                }
-            });
+            impl.name_owner_changed.connect(on_name_owner_changed);
         } catch (Error e) {
             warning("Failed to initialise dbus: %s", e.message);
         }

@@ -110,20 +110,20 @@ public interface PlayerIface : MprisIface
  * @param busname The busname to instaniate ifaces from
  * @return a new MprisClient, or null if errors occurred.
  */
-public MprisClient? new_iface(string busname)
+public async MprisClient? new_iface(string busname)
 {
     PlayerIface? play = null;
     MprisClient? cl = null;
     DbusPropIface? prop = null;
 
     try {
-        play = Bus.get_proxy_sync(BusType.SESSION, busname, "/org/mpris/MediaPlayer2");
+        play = yield Bus.get_proxy(BusType.SESSION, busname, "/org/mpris/MediaPlayer2");
     } catch (Error e) {
         message(e.message);
         return null;
     }
     try {
-        prop = Bus.get_proxy_sync(BusType.SESSION, busname, "/org/mpris/MediaPlayer2");
+        prop = yield Bus.get_proxy(BusType.SESSION, busname, "/org/mpris/MediaPlayer2");
     } catch (Error e) {
         message(e.message);
         return null;
