@@ -3,7 +3,7 @@ AM_CFLAGS =
 
 EXTRA_DIST = \
 	${top_srcdir}/common.mk \
-	${top_srcdir}/README.rst \
+	${top_srcdir}/README.md \
 	${top_srcdir}/LICENSE \
 	${top_srcdir}/LICENSE.LGPL2.1 \
 	${top_srcdir}/vapi/gvc-1.0.vapi \
