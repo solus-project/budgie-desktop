@@ -123,7 +123,6 @@ public class ClockApplet : Arc.Applet
 
     public override void update_popovers(Arc.PopoverManager? manager)
     {
-        message("Registered popover!!");
         manager.register_popover(widget, popover);
     }
 
