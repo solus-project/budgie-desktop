@@ -39,6 +39,11 @@ public class RavenIface
         this.is_expanded = b;
     }
 
+    public void Toggle()
+    {
+        this.is_expanded = !this.is_expanded;
+    }
+
     public string get_version()
     {
         return "1";
