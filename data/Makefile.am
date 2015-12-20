@@ -2,6 +2,7 @@ EXTRA_DIST = \
 	arc-panel.desktop.in \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
+	panel.ini \
 	theme/.nvmrc \
 	theme/gulpfile.js \
 	theme/package.json \

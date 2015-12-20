@@ -19,5 +19,6 @@
                 <file preprocess="xml-stripblanks">theme/assets/switch-hc@2.svg</file>
                 <file preprocess="xml-stripblanks">theme/assets/switch-active-hc.svg</file>
                 <file preprocess="xml-stripblanks">theme/assets/switch-active-hc@2.svg</file>
+                <file>panel.ini</file>
         </gresource>
 </gresources>
