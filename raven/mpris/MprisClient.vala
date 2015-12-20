@@ -29,7 +29,7 @@ public class MprisClient : Object
 [DBus (name="org.freedesktop.DBus")]
 public interface DBusImpl : Object
 {
-    public abstract string[] list_names() throws IOError;
+    public abstract async string[] list_names() throws IOError;
     public signal void name_owner_changed(string name, string old_owner, string new_owner);
     public signal void name_acquired(string name);
 }

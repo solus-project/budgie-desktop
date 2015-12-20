@@ -23,10 +23,8 @@ public class MprisWidget : Gtk.Box
 
         ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
 
-        Idle.add(()=> {
-            setup_dbus();
-            return false;
-        });
+        setup_dbus.begin();
+
         size_allocate.connect(on_size_allocate);
         show_all();
     }
@@ -76,11 +74,11 @@ public class MprisWidget : Gtk.Box
     /**
      * Do basic dbus initialisation
      */
-    public void setup_dbus()
+    public async void setup_dbus()
     {
         try {
-            impl = Bus.get_proxy_sync(BusType.SESSION, "org.freedesktop.DBus", "/org/freedesktop/DBus");
-            var names = impl.list_names();
+            impl = yield Bus.get_proxy(BusType.SESSION, "org.freedesktop.DBus", "/org/freedesktop/DBus");
+            var names = yield impl.list_names();
 
             /* Search for existing players (launched prior to our start) */
             foreach (var name in names) {
