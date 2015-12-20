@@ -236,7 +236,7 @@ public class PanelManager : DesktopManager
             Environment.unset_variable("DESKTOP_AUTOSTART_ID");
         } else {
             start_id = "";
-            warning("DESKTOP_AUTOSTART_ID not set, session registration may be broken (not running arc-desktop?)");
+            message("DESKTOP_AUTOSTART_ID not set, session registration may be broken (not running arc-desktop?)");
         }
 
         try {

@@ -105,6 +105,58 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
         pop.show();
     }
 
+    void on_widget_mapped(Gtk.Widget? p)
+    {
+        owner.set_expanded(true);
+        this.visible_popover = p as Gtk.Popover;
+        make_modal(this.visible_popover);
+    }
+
+    void on_popover_closed(Gtk.Popover? p)
+    {
+        if (!mousing && grabbed) {
+            make_modal(p, false);
+            visible_popover = null;
+        }
+    }
+
+    bool enter_notify_event(Gtk.Widget? w, Gdk.Event? e)
+    {
+        if (mousing) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        if (grabbed) {
+            if (widgets.contains(w)) {
+                if (visible_popover != widgets[w] && visible_popover != null) {
+                    /* Hide current popover, re-open next */
+                    mousing = true;
+                    visible_popover.hide();
+                    visible_popover = widgets[w];
+                    visible_popover.show_all();
+                    owner.set_focus(null);
+                    visible_popover.grab_focus();
+                    mousing = false;
+                }
+            }
+            return Gdk.EVENT_STOP;
+        }
+        return Gdk.EVENT_PROPAGATE;
+    }
+
+    void notify_visible(Object? o, ParamSpec spec)
+    {
+        Gtk.Popover? popover = o as Gtk.Popover;
+
+        if (mousing || grabbed) {
+            return;
+        }
+        if (!popover.get_visible()) {
+            make_modal(visible_popover, false);
+            visible_popover = null;
+            owner.set_expanded(false);
+        }
+    }
+
     public void register_popover(Gtk.Widget? widg, Gtk.Popover? popover)
     {
         if (widgets.contains(widg)) {
@@ -113,48 +165,11 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
         if (widg is Gtk.MenuButton) {
             (widg as Gtk.MenuButton).can_focus = false;
         } 
-        popover.map.connect((p)=> {
-            owner.set_expanded(true);
-            this.visible_popover = p as Gtk.Popover;
-            make_modal(this.visible_popover);
-        });
-        popover.closed.connect((p)=> {
-            if (!mousing && grabbed) {
-                make_modal(p, false);
-                visible_popover = null;
-            }
-        });
-        widg.enter_notify_event.connect((w,e)=> {
-            if (mousing) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            if (grabbed) {
-                if (widgets.contains(w)) {
-                    if (visible_popover != widgets[w] && visible_popover != null) {
-                        /* Hide current popover, re-open next */
-                        mousing = true;
-                        visible_popover.hide();
-                        visible_popover = widgets[w];
-                        visible_popover.show_all();
-                        owner.set_focus(null);
-                        visible_popover.grab_focus();
-                        mousing = false;
-                    }
-                }
-                return Gdk.EVENT_STOP;
-            }
-            return Gdk.EVENT_PROPAGATE;
-        });
-        popover.notify["visible"].connect_after(()=> {
-            if (mousing || grabbed) {
-                return;
-            }
-            if (!popover.get_visible()) {
-                make_modal(visible_popover, false);
-                visible_popover = null;
-                owner.set_expanded(false);
-            }
-        });
+        popover.map.connect(on_widget_mapped);
+        popover.closed.connect(on_popover_closed);
+
+        widg.enter_notify_event.connect(enter_notify_event);
+        popover.notify["visible"].connect_after(notify_visible);
         popover.destroy.connect((w)=> {
             widgets.remove(w);
         });
