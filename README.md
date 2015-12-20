@@ -149,6 +149,8 @@ Currently the GtkPopover can *randomly* glitch when the panel is at the
 bottom of the screen. It is expected to be fixed in a later commit, however
 let's be fair, it does kinda look better up top.
 
+*Update*: This only happens on the *first* show of the applet.
+
 TODO
 ----
 

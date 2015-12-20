@@ -588,7 +588,19 @@ public class Panel : Arc.Toplevel
         } else {
             scr = orig_scr;
         }
+
+        Gtk.Allocation alloc = Gtk.Allocation() {
+            x = 0,
+            y = 0,
+            width = scr.width,
+            height = scr.height
+        };
+        set_allocation(alloc);
         queue_resize();
+
+        while (Gtk.events_pending()) {
+            Gtk.main_iteration();
+        }
 
         if (expanded) {
             present();

@@ -95,6 +95,16 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
         widgets.remove(widg);
     }
 
+    public void show_popover(Gtk.Widget? parent) {
+        unowned Gtk.Popover? pop = widgets.lookup(parent);
+        if (pop == null) {
+            return;
+        }
+
+        owner.set_expanded(true);
+        pop.show();
+    }
+
     public void register_popover(Gtk.Widget? widg, Gtk.Popover? popover)
     {
         if (widgets.contains(widg)) {
@@ -135,7 +145,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             return Gdk.EVENT_PROPAGATE;
         });
-        popover.notify["visible"].connect(()=> {
+        popover.notify["visible"].connect_after(()=> {
             if (mousing || grabbed) {
                 return;
             }

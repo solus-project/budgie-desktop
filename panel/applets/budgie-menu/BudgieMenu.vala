@@ -30,6 +30,8 @@ public class BudgieMenuApplet : Arc.Applet
     Gtk.Label label;
     private string modifier;
 
+    private unowned Arc.PopoverManager? manager = null;
+
     public BudgieMenuApplet()
     {
         Object();
@@ -63,10 +65,13 @@ public class BudgieMenuApplet : Arc.Applet
             if (popover.get_visible()) {
                 popover.hide();
             } else {
-                popover.show_all();
+                popover.get_child().show_all();
+                this.manager.show_popover(widget);
             }
             return Gdk.EVENT_STOP;
         });
+
+        popover.get_child().show_all();
 
         // This enables us to respond to the "overlay-key" action
         /*action_invoked.connect((t) => {
@@ -136,6 +141,7 @@ public class BudgieMenuApplet : Arc.Applet
 
     public override void update_popovers(Arc.PopoverManager? manager)
     {
+        this.manager = manager;
         manager.register_popover(widget, popover);
     }
 

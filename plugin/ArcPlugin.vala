@@ -30,6 +30,9 @@ public interface PopoverManager : GLib.Object
      * Unregister a widget that was previously registered
      */
     public abstract void unregister_popover(Gtk.Widget? widget);
+
+    public abstract void show_popover(Gtk.Widget? parent);
+
 }
 
 /**

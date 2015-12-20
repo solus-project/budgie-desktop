@@ -15,6 +15,7 @@ namespace Arc {
     {
         public abstract void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
         public abstract void unregister_popover(Gtk.Widget? widget);
+        public abstract void show_popover(Gtk.Widget? parent);
     }
     [CCode (cheader_filename = "ArcPlugin.h")]
     public interface Plugin : GLib.Object {

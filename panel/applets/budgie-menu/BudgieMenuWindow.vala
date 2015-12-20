@@ -349,6 +349,10 @@ public class BudgieMenuWindow : Gtk.Popover
         Idle.add(()=> {
             load_menus(null);
             apply_scores();
+            queue_resize();
+            if (!get_realized()) {
+                realize();
+            }
             return false;
         });
     }

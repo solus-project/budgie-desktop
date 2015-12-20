@@ -40,6 +40,7 @@ public class ClockApplet : Arc.Applet
 
     Gtk.Popover? popover = null;
     AppInfo? calprov = null;
+    private unowned Arc.PopoverManager? manager = null;
 
     public ClockApplet()
     {
@@ -63,7 +64,7 @@ public class ClockApplet : Arc.Applet
             if (popover.get_visible()) {
                 popover.hide();
             } else {
-                popover.show_all();
+                this.manager.show_popover(widget);
             }
             return Gdk.EVENT_STOP;
         });
@@ -123,6 +124,7 @@ public class ClockApplet : Arc.Applet
 
     public override void update_popovers(Arc.PopoverManager? manager)
     {
+        this.manager = manager;
         manager.register_popover(widget, popover);
     }
 
