@@ -63,7 +63,14 @@ public class ArcWM : Meta.Plugin
 
     public override void start()
     {
+        var screen = this.get_screen();
+        var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
+        var stage = Meta.Compositor.get_stage_for_screen(screen);
+
         /* TODO: Add backgrounds, monitor handling, etc. */
+
+        screen_group.show();
+        stage.show();
     }
 
 
