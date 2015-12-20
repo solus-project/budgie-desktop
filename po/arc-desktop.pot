@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-20 11:25+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#.
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#.
+#: ../raven/ui/appearance.ui.h:1
+msgid "Appearance"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:2
+msgid "Dark theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:4
+msgid "Widget Theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:6
+msgid "Icon Theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:1
+msgid "Panel 1\n"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:3
+msgid "Manage Panels"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:4
+msgid "Position"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:5
+msgid "Size"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Shadow"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:7
+msgid "Autohide policy"
+msgstr ""
+
+#: ../raven/ui/panel.ui.h:8 ../raven/main_view.vala:67
+msgid "Applets"
+msgstr ""
+
+#: ../raven/settings_view.vala:129
+msgid "Top Panel"
+msgstr ""
+
+#: ../raven/settings_view.vala:131
+msgid "Right Panel"
+msgstr ""
+
+#: ../raven/settings_view.vala:133
+msgid "Left Panel"
+msgstr ""
+
+#: ../raven/settings_view.vala:135
+msgid "Bottom Panel"
+msgstr ""
+
+#: ../raven/settings_view.vala:459
+msgid "General"
+msgstr ""
+
+#: ../raven/settings_view.vala:462
+msgid "Panel"
+msgstr ""
+
+#: ../raven/settings_view.vala:463
+msgid "Sidebar"
+msgstr ""
+
+#: ../raven/sound.vala:90
+msgid "Output"
+msgstr ""
+
+#: ../raven/sound.vala:107
+msgid "Input"
+msgstr ""
+
+#. End class
+#.
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#.
+#: ../session/arc-desktop.desktop.in.in.h:1
+#: ../session/arc-desktop.session.in.in.h:1
+msgid "Arc Desktop"
+msgstr ""
+
+#: ../session/arc-desktop.desktop.in.in.h:2
+msgid "This session logs you into the new Budgie Desktop"
+msgstr ""

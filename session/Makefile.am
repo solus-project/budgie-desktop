@@ -30,3 +30,6 @@ xsession_DATA = \
 gnomesessiondir = $(datadir)/gnome-session/sessions
 gnomesession_DATA = \
 	arc-desktop.session
+
+@INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_XML_NOMERGE_RULE@
