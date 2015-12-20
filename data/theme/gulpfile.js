@@ -5,7 +5,7 @@ var filter      = require('gulp-filter');
 gulp.task('default', function () {
     return gulp.src('sass/*.scss')
         .pipe(sass({
-            outputStyle: 'nested',
+            outputStyle: 'compressed',
             precision: 5,
             onError: function (err) {
                 notify().write(err);
