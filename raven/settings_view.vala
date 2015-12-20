@@ -25,7 +25,7 @@ public enum PanelColumn {
     N_COLUMNS = 2,
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/panel.glade")]
+[GtkTemplate (ui = "/com/solus-project/arc/raven/panel.ui")]
 public class PanelEditor : Gtk.Box
 {
 
@@ -272,7 +272,7 @@ public class PanelEditor : Gtk.Box
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/settings.glade")]
+[GtkTemplate (ui = "/com/solus-project/arc/raven/settings.ui")]
 public class SettingsHeader : Gtk.Box
 {
     private SettingsView? view = null;
@@ -289,7 +289,7 @@ public class SettingsHeader : Gtk.Box
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/appearance.glade")]
+[GtkTemplate (ui = "/com/solus-project/arc/raven/appearance.ui")]
 public class AppearanceSettings : Gtk.Box
 {
 
