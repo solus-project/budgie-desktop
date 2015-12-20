@@ -54,7 +54,7 @@ public class BudgieMenuApplet : Arc.Applet
         // Better styling to fit in with the budgie-panel
         var st = img.get_style_context();
         st.add_class("primary-control");
-        popover = new BudgieMenuWindow(widget);
+        popover = new BudgieMenuWindow(img);
 
         widget.button_press_event.connect((e)=> {
             if (e.button != 1) {
