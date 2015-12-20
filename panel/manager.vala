@@ -41,7 +41,7 @@ public static const string APPLET_KEY_PAD_END   = "padding-end";
 [DBus (name="org.gnome.SessionManager")]
 public interface Gnome.SessionManager : Object
 {
-    public abstract ObjectPath RegisterClient(string app_id, string client_start_id) throws IOError;
+    public abstract async ObjectPath RegisterClient(string app_id, string client_start_id) throws IOError;
 }
 
 [DBus (name="org.gnome.SessionManager.ClientPrivate")]
@@ -217,7 +217,7 @@ public class PanelManager : DesktopManager
         }
     }
 
-    private void register_with_session()
+    private async bool register_with_session()
     {
         ObjectPath? path = null;
         string? msg = null;
@@ -228,32 +228,33 @@ public class PanelManager : DesktopManager
             Environment.unset_variable("DESKTOP_AUTOSTART_ID");
         } else {
             start_id = "";
+            warning("DESKTOP_AUTOSTART_ID not set, session registration may be broken (not running arc-desktop?)");
         }
 
         try {
-            session = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SessionManager", "/org/gnome/SessionManager");
+            session = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SessionManager", "/org/gnome/SessionManager");
         } catch (Error e) {
             warning("Unable to connect to session manager: %s", e.message);
             session = null;
-            return;
+            return false;
         }
         /* now we need to gain Moar.. */
         try {
-            path = session.RegisterClient("arc-panel", start_id);
+            path = yield session.RegisterClient("arc-panel", start_id);
         } catch (Error e) {
             msg = e.message;
             path = null;
         }
         if (path == null) {
             warning("Error registering with session manager%s", msg != null ? ": %s".printf(msg) : "");
-            return;
+            return false;
         }
 
         try {
-            sclient = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SessionManager", path);
+            sclient = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SessionManager", path);
         } catch (Error e) {
             warning("Unable to get Private Client proxy: %s", e.message);
-            return;
+            return false;
         }
 
         sclient.QueryEndSession.connect(()=> {
@@ -265,6 +266,7 @@ public class PanelManager : DesktopManager
         sclient.Stop.connect(()=> {
             end_session(true);
         });
+        return true;
     }
 
     public PanelManager()
@@ -396,7 +398,14 @@ public class PanelManager : DesktopManager
             message("Loaded existing configuration");
         }
 
-        register_with_session();
+        register_with_session.begin((o,res)=> {
+            bool success = register_with_session.end(res);
+            if (!success) {
+                message("Failed to register with Session manager");
+            } else {
+                message("Successfully registered with Session manager");
+            }
+        });
     }
 
     void set_css_from_uri(string uri)
