@@ -22,6 +22,8 @@ enum ClockFormat {
     TWELVE = 1;
 }
 
+public static const string CALENDAR_MIME = "text/calendar";
+
 public class ClockApplet : Arc.Applet
 {
 
@@ -36,12 +38,35 @@ public class ClockApplet : Arc.Applet
 
     protected Settings settings;
 
+    Gtk.Popover? popover = null;
+    AppInfo? calprov = null;
+
     public ClockApplet()
     {
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
         time = new DateTime.now_local();
         widget.add(clock);
+
+
+        var menu = new GLib.Menu();
+        menu.append("Time and date settings", "clock.time_and_date");
+        menu.append("Calendar", "clock.calendar");
+        popover = new Gtk.Popover.from_model(widget, menu);
+
+        popover.get_child().show_all();
+
+        widget.button_press_event.connect((e)=> {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            if (popover.get_visible()) {
+                popover.hide();
+            } else {
+                popover.show_all();
+            }
+            return Gdk.EVENT_STOP;
+        });
 
         Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
 
@@ -50,9 +75,56 @@ public class ClockApplet : Arc.Applet
         on_settings_change("clock-format");
         on_settings_change("clock-show-seconds");
         on_settings_change("clock-show-date");
+
+        var group = new GLib.SimpleActionGroup();
+        var date = new GLib.SimpleAction("time_and_date", null);
+        date.activate.connect(on_date_activate);
+        group.add_action(date);
+
+        /* TODO: Listen for app changes */
+        calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
+
+        this.insert_action_group("clock", group);
+        var cal = new GLib.SimpleAction("calendar", null);
+        cal.set_enabled(calprov != null);
+        cal.activate.connect(on_cal_activate);
+        group.add_action(cal);
+
         update_clock();
         add(widget);
         show_all();
+    }
+
+    void on_date_activate()
+    {
+        var app_info = new DesktopAppInfo("gnome-datetime-panel.desktop");
+
+        if (app_info == null) {
+            return;
+        }
+        try {
+            app_info.launch(null, null);
+        } catch (Error e) {
+            message("Unable to launch gnome-datetime-panel.desktop: %s", e.message);
+        }
+    }
+
+    void on_cal_activate()
+    {
+        if (calprov == null) {
+            return;
+        }
+        try {
+            calprov.launch(null, null);
+        } catch (Error e) {
+            message("Unable to launch %s: %s", calprov.get_name(), e.message);
+        }
+    }
+
+    public override void update_popovers(Arc.PopoverManager? manager)
+    {
+        message("Registered popover!!");
+        manager.register_popover(widget, popover);
     }
 
     protected void on_settings_change(string key)
