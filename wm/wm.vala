@@ -125,11 +125,6 @@ public class ArcWM : Meta.Plugin
         }
     }
 
-    public override void destroy(Meta.WindowActor actor)
-    {
-        this.destroy_completed(actor);
-    }
-
     void minimize_done(Clutter.Actor? actor)
     {
         actor.remove_all_transitions();
@@ -168,6 +163,54 @@ public class ArcWM : Meta.Plugin
 
         actor.set("opacity", 0, "x", (double)icon.x, "y", (double)icon.y, "scale-x", 0.0, "scale-y", 0.0);
         actor.restore_easing_state();
+    }
+
+    void destroy_done(Clutter.Actor? actor)
+    {
+        actor.remove_all_transitions();
+        SignalHandler.disconnect_by_func(actor, (void*)destroy_done, this);
+        this.destroy_completed(actor as Meta.WindowActor);
+    }
+
+    static const int DESTROY_TIMEOUT  = 170;
+    static const double DESTROY_SCALE = 0.6;
+
+    public override void destroy(Meta.WindowActor actor)
+    {
+        if (!this.use_animations) {
+            this.destroy_completed(actor);
+            return;
+        }
+
+        Meta.Window? window = actor.get_meta_window();
+        actor.remove_all_transitions();
+
+        switch (window.get_window_type()) {
+            case Meta.WindowType.NOTIFICATION:
+            case Meta.WindowType.NORMAL:
+            case Meta.WindowType.DIALOG:
+            case Meta.WindowType.MODAL_DIALOG:
+                actor.set("pivot-point", PV_CENTER);
+                actor.save_easing_state();
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+                actor.set_easing_duration(DESTROY_TIMEOUT);
+                actor.transitions_completed.connect(destroy_done);
+
+                actor.set("scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0);
+                actor.restore_easing_state();
+                break;
+            case Meta.WindowType.MENU:
+                actor.save_easing_state();
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+                actor.transitions_completed.connect(destroy_done);
+
+                actor.set("opacity", 0);
+                actor.restore_easing_state();
+                break;
+            default:
+                this.destroy_completed(actor);
+                break;
+        }
     }
 }
 
