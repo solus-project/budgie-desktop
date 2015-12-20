@@ -13,12 +13,14 @@
 public static int main(string[] args)
 {
     unowned OptionContext? ctx = null;
+    Arc.ArcWM.old_args = args;
 
     ctx = Meta.get_option_context();
 
     if ("--wayland" in args) {
         warning("Running under Wayland, GTK+ functionality not available");
         Arc.ArcWM.gtk_available = false;
+        Arc.ArcWM.wayland = true;
     } else if (!Gtk.init_check(ref args)) {
         warning("GTK+ functionality not available");
         Arc.ArcWM.gtk_available = false;

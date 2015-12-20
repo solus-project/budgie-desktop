@@ -21,6 +21,8 @@ public class ArcWM : Meta.Plugin
     static Meta.PluginInfo info;
 
     public bool use_animations { public set ; public get ; default = true; }
+    public static string[]? old_args;
+    public static bool wayland = false;
 
     public static bool gtk_available = true;
 
@@ -71,6 +73,16 @@ public class ArcWM : Meta.Plugin
 
         screen_group.show();
         stage.show();
+
+        if (wayland && !gtk_available) {
+            unowned string[] args = ArcWM.old_args;
+            if (Gtk.init_check(ref args)) {
+                ArcWM.gtk_available = true;
+                message("Got GTK+ now");
+            } else {
+                message("Still no GTK+");
+            }
+        }
     }
 
 
