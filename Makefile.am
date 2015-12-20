@@ -22,4 +22,5 @@ SUBDIRS = \
 	raven \
 	panel \
 	session \
-	wm
+	wm \
+	po
