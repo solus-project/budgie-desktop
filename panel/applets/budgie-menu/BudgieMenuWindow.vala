@@ -285,7 +285,7 @@ public class BudgieMenuWindow : Gtk.Popover
         categories_scroll = new Gtk.ScrolledWindow(null, null);
         categories_scroll.set_overlay_scrolling(false);
         categories_scroll.add(categories);
-        categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
         middle.pack_start(categories_scroll, false, false, 0);
 
         // "All" button"
