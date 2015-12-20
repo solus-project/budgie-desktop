@@ -17,6 +17,8 @@ namespace Arc
 public static const string DBUS_NAME        = "com.solus_project.arc.Panel";
 public static const string DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
 
+public static const string DEFAULT_CONFIG   = "resource:///com/solus-project/arc/panel/panel.ini";
+
 
 /**
  * Available slots
@@ -809,7 +811,7 @@ public class PanelManager : DesktopManager
 
     public override void create_new_panel()
     {
-        create_panel(false);
+        create_panel();
     }
 
     public override void delete_panel(string uuid)
@@ -833,17 +835,41 @@ public class PanelManager : DesktopManager
         psettings.reset(null);
     }
 
-    void create_panel(bool new_defaults = false)
+    void create_panel(string? name = null, KeyFile new_defaults = null)
     {
+        PanelPosition position = PanelPosition.NONE;
+        int size = -1;
+
         if (this.slots_available() < 1) {
             warning("Asked to create panel with no slots available");
             return;
         }
 
-        var position = get_first_position(this.primary_monitor);
-        if (position == PanelPosition.NONE) {
-            critical("No slots available, this should not happen");
-            return;
+        if (name != null && new_defaults != null) {
+            try {
+                /* Determine new panel position */
+                if (new_defaults.has_key(name, "Position")) {
+                    switch (new_defaults.get_string(name, "Position").down()) {
+                        case "top":
+                            position = PanelPosition.TOP;
+                            break;
+                        default:
+                            position = PanelPosition.BOTTOM;
+                            break;
+                    }
+                }
+                if (new_defaults.has_key(name, "Size")) {
+                    size = new_defaults.get_integer(name, "Size");
+                }
+            } catch (Error e) {
+                warning("create_panel(): %s", e.message);
+            }
+        } else {
+            position = get_first_position(this.primary_monitor);
+            if (position == PanelPosition.NONE) {
+                critical("No slots available, this should not happen");
+                return;
+            }
         }
 
         var uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
@@ -852,11 +878,16 @@ public class PanelManager : DesktopManager
         set_panels();
         show_panel(uuid, position);
 
-        if (!new_defaults) {
+        if (new_defaults == null || name == null) {
             return;
+        }
+        /* TODO: Add size clamp */
+        if (size > 0) {
+            set_size(uuid, size);
         }
 
         var panel = panels.lookup(uuid);
+        /* TODO: Pass off the configuration here.. */
         panel.create_default_layout();
     }
 
@@ -882,9 +913,44 @@ public class PanelManager : DesktopManager
      */
     void create_default()
     {
-        /* Eventually we'll do something fancy with defaults, when
-         * applet loading lands */
-        create_panel(true);
+        File f = null;
+        KeyFile config_file = new KeyFile();
+        StringBuilder builder = new StringBuilder();
+        string? line = null;
+        PanelPosition pos;
+
+        try {
+            f = File.new_for_uri(DEFAULT_CONFIG);
+            var dis = new DataInputStream(f.read());
+            while ((line = dis.read_line()) != null) {
+                builder.append_printf("%s\n", line);
+            }
+            config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
+        } catch (Error e) {
+            warning("Failed to load default config: %s", e.message);
+        }
+
+        try {
+            if (!config_file.has_key("Panels", "Panels")) {
+                critical("Config is missing required Panels section");
+            }
+
+            var panels = config_file.get_string_list("Panels", "Panels");
+
+            /* Begin creating named panels */
+            foreach (var panel in panels) {
+                panel = panel.strip();
+                pos = PanelPosition.TOP;
+                if (!config_file.has_group(panel)) {
+                    warning("Missing Panel config: %s", panel);
+                    continue;
+                }
+                create_panel(panel, config_file);
+            }
+        } catch (Error e) {
+            warning("Error configuring panels!");
+        }
+
     }
 
     private void on_name_lost(DBusConnection conn, string name)
