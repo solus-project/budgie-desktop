@@ -85,7 +85,9 @@ public class BudgieMenuApplet : Arc.Applet
 
         add(widget);
         show_all();
-        valign = Gtk.Align.CENTER;
+        layout.valign = Gtk.Align.CENTER;
+        valign = Gtk.Align.FILL;
+        halign = Gtk.Align.FILL;
         on_settings_changed("enable-menu-label");
         on_settings_changed("menu-icon");
         on_settings_changed("menu-label");
