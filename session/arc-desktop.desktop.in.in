@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Arc Desktop
-Comment=This session logs you into the new Budgie Desktop
+_Name=Arc Desktop
+_Comment=This session logs you into the new Budgie Desktop
 Exec=@prefix@/bin/arc-desktop
 TryExec=@prefix@/bin/arc-desktop
 Icon=

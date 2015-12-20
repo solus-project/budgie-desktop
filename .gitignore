@@ -62,7 +62,9 @@ arc-panel-resources.*
 
 /session/arc-desktop
 /session/arc-desktop.desktop
+/session/arc-desktop.desktop.in
 /session/arc-desktop.session
+/session/arc-desktop.session.in
 
 /wm/arc-wm
 /wm/arc-wm.desktop
@@ -71,3 +73,4 @@ arc-panel-resources.*
 /po/POTFILES
 /po/Makefile.in.in
 /po/stamp-it
+/po/.intltool-merge-cache

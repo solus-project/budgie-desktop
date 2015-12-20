@@ -95,8 +95,8 @@ AC_CONFIG_FILES([Makefile
                 panel/arc-panel.desktop
                 panel/Makefile
                 panel/applets/Makefile
-                session/arc-desktop.desktop
-                session/arc-desktop.session
+                session/arc-desktop.desktop.in
+                session/arc-desktop.session.in
                 session/arc-desktop
                 session/Makefile
                 wm/arc-wm.desktop
