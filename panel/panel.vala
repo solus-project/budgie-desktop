@@ -328,10 +328,10 @@ public class Panel : Arc.Toplevel
 
                 info = new AppletInfo(null, uuid, null, null);
                 if (config.has_key(appl, "PackType")) {
-                    pack_type = config.get_string("appl", "PackType").strip();
+                    pack_type = config.get_string(appl, "PackType").strip();
                 }
                 if (config.has_key(appl, "Alignment")) {
-                    alignment = config.get_string("appl", "Alignment").strip();
+                    alignment = config.get_string(appl, "Alignment").strip();
                 }
 
                 switch (alignment) {
@@ -416,6 +416,7 @@ public class Panel : Arc.Toplevel
                 pack_target.pack_end(info.applet, false, false, 0);
                 break;
         }
+        pack_target.child_set(info.applet, "position", info.position);
         info.notify.connect(applet_updated);
     }
 

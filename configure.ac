@@ -74,6 +74,7 @@ AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
 
 # Got this idea from gnome-builder :)
 m4_include([panel/applets/budgie-menu/configure.ac])
+m4_include([panel/applets/clock/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 
 LT_PREREQ(2.2)
