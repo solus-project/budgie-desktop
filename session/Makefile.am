@@ -17,7 +17,12 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	arc-desktop.session.in \
-	arc-desktop.desktop.in
+	arc-desktop.session \
+	arc-desktop.desktop.in \
+	arc-desktop.desktop
+
+DISTCLEANFILES = \
+	$(CLEANFILES)
 
 bin_SCRIPTS = \
 	arc-desktop

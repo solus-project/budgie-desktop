@@ -27,7 +27,13 @@ BUILT_SOURCES = \
 	arc-panel-resources.c
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) \
+	arc-panel.desktop \
+	arc-panel.desktop.in
+
+DISTCLEANFILES = \
+	arc-panel.desktop \
+	arc-panel.desktop.in
 
 # resources
 arc-panel-resources.h: $(top_srcdir)/data/arc-panel.gresource.xml $(panel_resources)
