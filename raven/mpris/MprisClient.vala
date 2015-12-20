@@ -50,7 +50,7 @@ public interface DbusPropIface : Object
 public interface MprisIface : Object
 {
     public abstract void raise() throws IOError;
-    public abstract void quit() throws IOError;
+    public abstract async void quit() throws IOError;
 
     public abstract bool can_quit { get; set; }
     public abstract bool fullscreen { get; } /* Optional */
@@ -73,15 +73,15 @@ public interface MprisIface : Object
 [DBus (name="org.mpris.MediaPlayer2.Player")]
 public interface PlayerIface : MprisIface
 {
-    public abstract void next() throws IOError;
-    public abstract void previous() throws IOError;
-    public abstract void pause() throws IOError;
-    public abstract void play_pause() throws IOError;
-    public abstract void stop() throws IOError;
-    public abstract void play() throws IOError;
+    public abstract async void next() throws IOError;
+    public abstract async void previous() throws IOError;
+    public abstract async void pause() throws IOError;
+    public abstract async void play_pause() throws IOError;
+    public abstract async void stop() throws IOError;
+    public abstract async void play() throws IOError;
     /* Eh we don't use everything in this iface :p */
-    public abstract void seek(int64 offset) throws IOError;
-    public abstract void open_uri(string uri) throws IOError;
+    public abstract async void seek(int64 offset) throws IOError;
+    public abstract async void open_uri(string uri) throws IOError;
 
     public abstract string playback_status { owned get; }
     public abstract string loop_status { owned get; set; } /* Optional */

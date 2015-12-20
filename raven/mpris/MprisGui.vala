@@ -85,16 +85,13 @@ public class ClientWidget : Gtk.Box
         });
         header = new Arc.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
         header.closed.connect(()=> {
-            Idle.add(()=> {
-                try {
-                    if (client.player.can_quit) {
-                        client.player.quit();
-                    }
-                } catch (Error e) {
-                    warning("Error closing %s: %s", client.player.identity, e.message);
+            try {
+                if (client.player.can_quit) {
+                    client.player.quit.begin();
                 }
-                return false;
-            });
+            } catch (Error e) {
+                warning("Error closing %s: %s", client.player.identity, e.message);
+            }
         });
         pack_start(header, false, false, 0);
 
@@ -145,16 +142,13 @@ public class ClientWidget : Gtk.Box
         btn.set_can_focus(false);
         prev_btn = btn;
         btn.clicked.connect(()=> {
-            Idle.add(()=> {
-                if (client.player.can_go_previous) {
-                    try { 
-                        client.player.previous();
-                    } catch (Error e) {
-                        warning("Could not go to previous track: %s", e.message);
-                    }
+            if (client.player.can_go_previous) {
+                try { 
+                    client.player.previous.begin();
+                } catch (Error e) {
+                    warning("Could not go to previous track: %s", e.message);
                 }
-                return false;
-            });
+            }
         });
         btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
@@ -163,14 +157,11 @@ public class ClientWidget : Gtk.Box
         play_btn = btn;
         btn.set_can_focus(false);
         btn.clicked.connect(()=> {
-            Idle.add(()=> {
-                try {
-                    client.player.play_pause();
-                } catch (Error e) {
-                    warning("Could not play/pause: %s", e.message);
-                }
-                return false;
-            });
+            try {
+                client.player.play_pause.begin();
+            } catch (Error e) {
+                warning("Could not play/pause: %s", e.message);
+            }
         });
         btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
@@ -180,16 +171,13 @@ public class ClientWidget : Gtk.Box
         btn.set_can_focus(false);
         next_btn = btn;
         btn.clicked.connect(()=> {
-            Idle.add(()=> {
-                if (client.player.can_go_next) {
-                    try { 
-                        client.player.next();
-                    } catch (Error e) {
-                        warning("Could not go to next track: %s", e.message);
-                    }
+            if (client.player.can_go_next) {
+                try { 
+                    client.player.next.begin();
+                } catch (Error e) {
+                    warning("Could not go to next track: %s", e.message);
                 }
-                return false;
-            });
+            }
         });
         btn.get_style_context().add_class("flat");
         controls.pack_start(btn, false, false, 0);
