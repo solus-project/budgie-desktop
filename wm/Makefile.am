@@ -1,7 +1,11 @@
 -include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
-	arc-wm.desktop.in
+	arc-wm.desktop.in \
+	com.solus-project.arc.wm.gschema.xml
+
+gsettings_SCHEMAS = com.solus-project.arc.wm.gschema.xml
+@GSETTINGS_RULES@
 
 applicationsdir = $(datadir)/applications
 applications_DATA = \
@@ -10,7 +14,8 @@ applications_DATA = \
 bin_PROGRAMS = arc-wm
 
 arc_wm_SOURCES = \
-	main.vala
+	main.vala \
+	wm.vala
 
 arc_wm_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \

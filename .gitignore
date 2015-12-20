@@ -70,6 +70,7 @@ arc-panel-resources.*
 /wm/arc-wm
 /wm/arc-wm.desktop
 /wm/*.c
+/wm/*.valid
 
 /po/POTFILES
 /po/Makefile.in.in

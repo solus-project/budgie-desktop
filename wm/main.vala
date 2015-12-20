@@ -26,6 +26,7 @@ public static int main(string[] args)
     }
 
     /* Set plugin type here */
+    Meta.Plugin.manager_set_plugin_type(typeof(Arc.ArcWM));
     Meta.set_gnome_wm_keybindings("Mutter,GNOME Shell");
     Meta.set_wm_name("Mutter(Arc)");
 
@@ -36,10 +37,7 @@ public static int main(string[] args)
 
     Meta.register_with_session();
 
-    /* return Meta.run(); */
-
-    /* No plugin yet */
-    return Meta.ExitCode.ERROR;
+    return Meta.run();
 }
 
 /*
