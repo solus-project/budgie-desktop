@@ -128,12 +128,36 @@ public class ArcWM : Meta.Plugin
         }
     }
 
+    void background_activate()
+    {
+        try {
+            var info = new DesktopAppInfo("gnome-background-panel.desktop");
+            if (info != null) {
+                info.launch(null, null);
+            }
+        } catch (Error e) {
+            warning("Unable to launch gnome-background-panel.desktop: %s", e.message);
+        }
+    }
+
+    void settings_activate()
+    {
+        try {
+            var info = new DesktopAppInfo("gnome-control-center.desktop");
+            if (info != null) {
+                info.launch(null, null);
+            }
+        } catch (Error e) {
+            warning("Unable to launch gnome-control-center.desktop: %s", e.message);
+        }
+    }
 
     void init_menu()
     {
         menu = new Gtk.Menu();
         menu.show();
         var item = new Gtk.MenuItem.with_label(_("Change background\u2026"));
+        item.activate.connect(background_activate);
         item.show();
         menu.append(item);
 
@@ -142,6 +166,7 @@ public class ArcWM : Meta.Plugin
         menu.append(sep);
 
         item = new Gtk.MenuItem.with_label(_("Settings"));
+        item.activate.connect(settings_activate);
         item.show();
         menu.append(item);
 
