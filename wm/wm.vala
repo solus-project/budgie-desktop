@@ -105,7 +105,7 @@ public class ArcWM : Meta.Plugin
         }
     }
 
-    bool on_button_press(Clutter.ButtonEvent? event)
+    bool on_button_release(Clutter.ButtonEvent? event)
     {
         if (event.button != 3) {
             return CLUTTER_EVENT_PROPAGATE;
@@ -113,7 +113,7 @@ public class ArcWM : Meta.Plugin
         if (menu.get_visible()) {
             menu.hide();
         } else {
-            menu.popup( null, null, null, event.button, event.time);
+            menu.popup(null, null, null, event.button, event.time);
         }
         return CLUTTER_EVENT_STOP;
     }
@@ -132,6 +132,7 @@ public class ArcWM : Meta.Plugin
     void init_menu()
     {
         menu = new Gtk.Menu();
+        menu.show();
         var item = new Gtk.MenuItem.with_label(_("Change background\u2026"));
         item.show();
         menu.append(item);
@@ -144,7 +145,7 @@ public class ArcWM : Meta.Plugin
         item.show();
         menu.append(item);
 
-        this.background_group.button_press_event.connect(on_button_press);
+        this.background_group.button_release_event.connect(on_button_release);
     }
 
     static const int MAP_TIMEOUT  = 170;
