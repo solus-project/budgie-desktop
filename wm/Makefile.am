@@ -21,7 +21,8 @@ arc_wm_SOURCES = \
 arc_wm_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
 	$(ARC_WM_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	-DGNOME_DESKTOP_USE_UNSTABLE_API
 
 arc_wm_LDADD = \
 	$(ARC_BASE_LIBS) \
@@ -31,5 +32,6 @@ arc_wm_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libmutter \
 	--pkg gsettings-desktop-schemas \
+	--pkg gnome-desktop-3.0 \
 	--vapidir=${top_srcdir}/vapi \
 	$(VALAFLAGS)
