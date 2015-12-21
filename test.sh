@@ -25,7 +25,7 @@ if [[ -z "${SCREEN_SIZE}" ]]; then
     SCREEN_SIZE="1024x768"
 fi
 
-Xephyr -title "Arc Test" -screen "${SCREEN_SIZE}" "${LOCAL_DISPLAY}" &
+Xephyr -title "Arc Test" +iglx -screen "${SCREEN_SIZE}" "${LOCAL_DISPLAY}" &
 XPID="$!"
 
 GTK_THEME="Arc-Darker" DISPLAY="${LOCAL_DISPLAY}" arc-wm &
