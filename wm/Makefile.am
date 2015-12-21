@@ -16,6 +16,7 @@ bin_PROGRAMS = arc-wm
 arc_wm_SOURCES = \
 	background.vala \
 	main.vala \
+	keyboard.vala \
 	wm.vala
 
 arc_wm_CFLAGS = \
