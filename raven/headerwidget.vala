@@ -59,7 +59,7 @@ public class HeaderWidget : Gtk.Box
      */
     public signal void closed();
             
-    public HeaderWidget(string text, string icon_name, bool can_close, Gtk.Widget? custom_widget = null)
+    public HeaderWidget(string text, string icon_name, bool can_close, Gtk.Widget? custom_widget = null, Gtk.Widget? end_widget = null)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
 
@@ -84,18 +84,22 @@ public class HeaderWidget : Gtk.Box
             header_box.pack_start(label, true, true, 0);
         }
 
-        exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-        exp_button.get_style_context().add_class("flat");
-        exp_button.get_style_context().add_class("expander-button");
-        exp_button.clicked.connect(()=> {
-            this.expanded = !this.expanded;
-            if (!this.expanded) {
-                (exp_button.get_image() as Gtk.Image).icon_name = "pan-end-symbolic";
-            } else {
-                (exp_button.get_image() as Gtk.Image).icon_name = "pan-down-symbolic";
-            }
-        });
-        header_box.pack_end(exp_button, false, false, 0);
+        if (end_widget == null) {
+            exp_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+            exp_button.get_style_context().add_class("flat");
+            exp_button.get_style_context().add_class("expander-button");
+            exp_button.clicked.connect(()=> {
+                this.expanded = !this.expanded;
+                if (!this.expanded) {
+                    (exp_button.get_image() as Gtk.Image).icon_name = "pan-end-symbolic";
+                } else {
+                    (exp_button.get_image() as Gtk.Image).icon_name = "pan-down-symbolic";
+                }
+            });
+            header_box.pack_end(exp_button, false, false, 0);
+        } else {
+            header_box.pack_end(end_widget, false, false, 0);
+        }
 
         show_all();
 

@@ -66,7 +66,8 @@ public class MainView : Gtk.Box
         var scroll = new Gtk.ScrolledWindow(null, null);
         main_stack.add_titled(scroll, "applets", _("Applets"));
         /* Dummy - no notifications right now */
-        main_stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "notifications", "Notifications");
+        var not = new NotificationsView();
+        main_stack.add_titled(not, "notifications", _("Notifications"));
 
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
@@ -87,6 +88,9 @@ public class MainView : Gtk.Box
         box.pack_start(mpris, false, false, 0);
 
         show_all();
+
+        main_stack.set_visible_child_name("applets");
+
     }
 }
 

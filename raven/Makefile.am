@@ -30,6 +30,7 @@ libraven_la_SOURCES = \
 	arc-raven-resources.c \
 	raven.vala \
 	main_view.vala \
+	notifications_view.vala \
 	settings_view.vala \
 	powerstrip.vala \
 	headerwidget.vala \
