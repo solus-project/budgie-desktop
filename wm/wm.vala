@@ -13,12 +13,20 @@ namespace Arc {
 
 
 public static const string MUTTER_EDGE_TILING  = "edge-tiling";
-public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialog";
-public static const string WM_SCHEMA           = "com.solus-project.arc.wm";
+public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
+public static const string WM_SCHEMA           = "com.solus-project.arc-wm";
 
 public static const bool CLUTTER_EVENT_PROPAGATE = false;
 public static const bool CLUTTER_EVENT_STOP      = true;
 
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+
+[DBus (name="com.solus_project.arc.Raven")]
+public interface RavenRemote : Object
+{
+    public abstract async void Toggle() throws Error;
+}
 
 public class ArcWM : Meta.Plugin
 {
@@ -38,6 +46,9 @@ public class ArcWM : Meta.Plugin
     private Gtk.Menu? menu = null;
     private KeyboardManager? keyboard = null;
 
+    Settings? settings = null;
+    RavenRemote? raven_proxy = null;
+
     static construct
     {
         info = Meta.PluginInfo() {
@@ -56,17 +67,46 @@ public class ArcWM : Meta.Plugin
         PV_NORM.y = 0.0f;
     }
 
-    public ArcWM()
+    /* Hold onto our Raven proxy ref */
+    void on_raven_get(GLib.Object? o, GLib.AsyncResult? res)
     {
-        Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
-        Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
-
-        /* Follow GTK's policy on animations */
-        if (gtk_available) {
-            var settings = Gtk.Settings.get_default();
-            settings.bind_property("gtk-enable-animations", this, "use-animations");
-        } 
+        try {
+            raven_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to gain Raven proxy: %s", e.message);
+        }
     }
+
+    /* Binding for toggle-raven activated */
+    void on_raven_toggle(Meta.Display display, Meta.Screen screen,
+                         Meta.Window? window, Clutter.KeyEvent? event,
+                         Meta.KeyBinding binding)
+    {
+        if (raven_proxy == null) {
+            warning("Raven does not appear to be running!");
+            return;
+        }
+        try {
+            raven_proxy.Toggle.begin();
+        } catch (Error e) {
+            warning("Unable to Toggle() Raven: %s", e.message);
+        }
+    }
+
+    /* Set up the proxy when raven appears */
+    void has_raven()
+    {
+        if (raven_proxy == null) {
+            Bus.get_proxy.begin<RavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
+            return;
+        }
+    }
+
+    void lost_raven()
+    {
+        raven_proxy = null;
+    }
+
 
     public override unowned Meta.PluginInfo? plugin_info() {
         return info;
@@ -78,7 +118,24 @@ public class ArcWM : Meta.Plugin
         var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
         var stage = Meta.Compositor.get_stage_for_screen(screen);
 
-        /* TODO: Add backgrounds, monitor handling, etc. */
+        var display = screen.get_display();
+
+        Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
+        Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
+
+        /* Follow GTK's policy on animations */
+        if (gtk_available) {
+            var settings = Gtk.Settings.get_default();
+            settings.bind_property("gtk-enable-animations", this, "use-animations");
+        }
+
+        settings = new Settings(WM_SCHEMA);
+        /* Custom keybindings */
+        display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_toggle);
+
+        /* Hook up Raven handler.. */
+        Bus.watch_name(BusType.SESSION, RAVEN_DBUS_NAME, BusNameWatcherFlags.NONE,
+            has_raven, lost_raven);
 
         background_group = new Meta.BackgroundGroup();
         background_group.set_reactive(true);
