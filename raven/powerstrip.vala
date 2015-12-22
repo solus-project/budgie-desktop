@@ -12,17 +12,30 @@
 namespace Arc
 {
 
-[DBus (name="org.freedesktop.DisplayManager.Seat")]
-public interface DMSeat : Object
+
+[DBus (name="org.gnome.ScreenSaver")]
+public interface ScreenSaver : Object
 {
-    public abstract void lock() throws IOError;
+    public abstract void lock() throws Error;
 }
 
-public class PowerStrip : Gtk.EventBox
+class PowerStrip : Gtk.EventBox
 {
 
-    private DMSeat? proxy = null;
+    private ScreenSaver? saver = null;
 
+    private Gtk.Button? lock_btn = null;
+
+    async void setup_dbus()
+    {
+        try {
+            saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
+        } catch (Error e) {
+            warning("Unable to contact login manager: %s", e.message);
+            return;
+        }
+    }
+            
     public PowerStrip(Arc.Raven? raven)
     {
         Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 20);
@@ -56,7 +69,7 @@ public class PowerStrip : Gtk.EventBox
             raven.set_expanded(false);
             lock_screen();
         });
-        var lock_btn = btn;
+        lock_btn = btn;
         btn.halign = Gtk.Align.START;
         btn.get_style_context().add_class("flat");
         bottom.pack_start(btn, false, false, 0);
@@ -75,28 +88,25 @@ public class PowerStrip : Gtk.EventBox
         btn.get_style_context().add_class("flat");
         bottom.pack_start(btn, false, false, 0);
 
-        var path = Environment.get_variable("XDG_SEAT_PATH");
-        if (path == null) {
-            lock_btn.no_show_all = true;
-            lock_btn.hide();
-        }
+        lock_btn.no_show_all = true;
+        lock_btn.hide();
+        setup_dbus.begin((obj,res)=> {
+            if (saver != null) {
+                lock_btn.no_show_all = false;
+                lock_btn.show_all();
+            }
+        });
     }
 
     void lock_screen()
     {
-        var path = Environment.get_variable("XDG_SEAT_PATH");
 
         try {
-            if (proxy == null) {
-                proxy = Bus.get_proxy_sync(BusType.SYSTEM, "org.freedesktop.DisplayManager", path);
-            }
-            proxy.lock();
+            saver.lock();
         } catch (Error e) {
-            warning(e.message);
-            proxy = null;
-            return;
+            warning("Cannot lock screen: %s", e.message);
         }
-    }
+    }    
 }
 
 } /* End namespace */
