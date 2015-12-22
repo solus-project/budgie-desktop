@@ -2,6 +2,7 @@ EXTRA_DIST = \
 	arc-panel.desktop.in \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
+	icons/notification-alert-symbolic.svg \
 	panel.ini \
 	theme/.nvmrc \
 	theme/gulpfile.js \
@@ -36,4 +37,8 @@ gsettings_SCHEMAS = com.solus-project.arc-panel.gschema.xml
 appdir = $(datadir)/applications
 
 app_DATA = \
-        arc-panel.desktop
+	arc-panel.desktop
+
+iconsdir = $(datadir)/icons/gnome/scalable/actions
+icons_DATA = \
+	icons/notification-alert-symbolic.svg
