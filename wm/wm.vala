@@ -36,6 +36,7 @@ public class ArcWM : Meta.Plugin
     private Meta.BackgroundGroup? background_group;
 
     private Gtk.Menu? menu = null;
+    private KeyboardManager? keyboard = null;
 
     static construct
     {
@@ -103,6 +104,8 @@ public class ArcWM : Meta.Plugin
         if (ArcWM.gtk_available) {
             init_menu();
         }
+
+        keyboard = new KeyboardManager(this);
     }
 
     bool on_button_release(Clutter.ButtonEvent? event)

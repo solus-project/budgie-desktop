@@ -16,12 +16,33 @@ public static const string DEFAULT_LOCALE = "en_US";
 public static const string DEFAULT_LAYOUT = "us";
 public static const string DEFAULT_VARIANT = "";
 
+class InputSource
+{
+    public bool xkb = false;
+    public string? layout = null;
+    public string? variant = null;
+    public uint idx = 0;
+
+    public InputSource(uint idx, string? layout, string? variant, bool xkb = false)
+    {
+        this.idx = idx;
+        this.layout = layout;
+        this.variant = variant;
+        this.xkb = xkb;
+    }
+}
+
 public class KeyboardManager : GLib.Object
 {
     public unowned Arc.ArcWM? wm { construct set ; public get; }
     private Gnome.XkbInfo? xkb;
-    private string? xkb_layout = null;
-    private string? xkb_variant = null;
+    string[] options = {};
+
+    Settings? settings = null;
+    Array<InputSource> sources;
+    InputSource fallback;
+
+    uint current_source = 0;
 
     public KeyboardManager(Arc.ArcWM? wm)
     {
@@ -29,11 +50,100 @@ public class KeyboardManager : GLib.Object
 
         xkb = new Gnome.XkbInfo();
 
-        update_default();
+        settings = new Settings("org.gnome.desktop.input-sources");
+        settings.changed.connect(on_settings_changed);
+        update_fallback();
+
+        on_settings_changed("xkb-options");
+        on_settings_changed("sources");
+
+        /* TODO: Add support to cycle through the keyboard layouts,
+         * this quite literally involves increasing the current
+         * source % sources.length, and apply_layout */
+    }
+
+    void on_settings_changed(string key)
+    {
+        switch (key) {
+            case "sources":
+                /* Update our sources. */
+                update_sources();
+                break;
+            case "xkb-options":
+                /* Update our xkb-options */
+                this.options = settings.get_strv(key);
+                break;
+        }
+    }
+
+    /* Reset InputSource list and produce something consumable by xkb */
+    void update_sources()
+    {
+        sources = new Array<InputSource>();
+
+        var val = settings.get_value("sources");
+        for (size_t i = 0; i < val.n_children(); i++) {
+            InputSource? source = null;
+            string? id = null;
+            string? type = null;
+
+            val.get_child(i, "(ss)", out id, out type);
+
+            if (id == "xkb") {
+                string[] spl = type.split("+");
+                string? variant = "";
+                if (spl.length > 1) {
+                    variant = spl[1];
+                }
+                source = new InputSource((uint)i, spl[0], variant, true);
+                sources.append_val(source);
+            } else {
+                warning("FIXME: Arc does not yet support IBUS!");
+                continue;
+            }
+        }
+
+        /* Always add fallback last, at the very worst it's the only available
+         * source and we use the locale guessed source */
+        fallback.idx = sources.length;
+        sources.append_val(fallback);
+
+        this.apply_layout_group();
+        this.apply_layout(0);
+    }
+
+    /* Apply our given layout groups to mutter */
+    void apply_layout_group()
+    {
+        unowned InputSource? source;
+        string[] layouts = {};
+        string[] variants = {};
+
+        for (uint i = 0; i < sources.length; i++) {
+            source = sources.index(i);
+            layouts += source.layout;
+            variants += source.variant;
+        }
+
+        string? slayouts = string.joinv(",", layouts);
+        string? svariants = string.joinv(",", variants);
+        string? options = string.joinv(",", this.options);
+
+        Meta.Backend.get_backend().set_keymap(slayouts, svariants, options);
+    }
+
+    /* Apply an indexed layout, i.e. 0 for now */
+    void apply_layout(uint idx)
+    {
+        if (idx > sources.length) {
+            idx = 0;
+        }
+        this.current_source = idx;
+        Meta.Backend.get_backend().lock_layout_group(idx);
     }
 
 
-    void update_default()
+    void update_fallback()
     {
         string? type = null;
         string? id = null;
@@ -52,11 +162,9 @@ public class KeyboardManager : GLib.Object
         }
 
         if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-            this.xkb_layout = xkb_layout;
-            this.xkb_variant = xkb_variant;
+            fallback = new InputSource(0, xkb_layout, xkb_variant, true);
         } else {
-            this.xkb_layout = DEFAULT_LAYOUT;
-            this.xkb_variant = DEFAULT_VARIANT;
+            fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
         }
     }
 }
