@@ -89,7 +89,6 @@ public class ShellShim : GLib.Object
     {
         try {
             conn.register_object("/org/gnome/Shell", this);
-            message("Regged bro");
         } catch (Error e) {
             message("Unable to register ShellShim: %s", e.message);
         }
