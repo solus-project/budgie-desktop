@@ -39,6 +39,6 @@ appdir = $(datadir)/applications
 app_DATA = \
 	arc-panel.desktop
 
-iconsdir = $(datadir)/icons/gnome/scalable/actions
+iconsdir = $(datadir)/icons/hicolor/scalable/actions
 icons_DATA = \
 	icons/notification-alert-symbolic.svg
