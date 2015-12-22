@@ -48,6 +48,7 @@ public class ArcWM : Meta.Plugin
 
     Settings? settings = null;
     RavenRemote? raven_proxy = null;
+    ShellShim? shim = null;
 
     static construct
     {
@@ -136,6 +137,9 @@ public class ArcWM : Meta.Plugin
         /* Hook up Raven handler.. */
         Bus.watch_name(BusType.SESSION, RAVEN_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_raven, lost_raven);
+
+        shim = new ShellShim(this);
+        shim.serve();
 
         background_group = new Meta.BackgroundGroup();
         background_group.set_reactive(true);
