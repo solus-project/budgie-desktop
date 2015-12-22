@@ -5,4 +5,4 @@ Exec=@prefix@/bin/arc-desktop
 TryExec=@prefix@/bin/arc-desktop
 Icon=
 Type=Application
-DesktopNames=GNOME;Arc
+DesktopNames=GNOME
