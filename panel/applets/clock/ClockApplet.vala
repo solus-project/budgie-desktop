@@ -88,13 +88,14 @@ public class ClockApplet : Arc.Applet
 
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(update_cal);
-        update_cal();
 
         this.insert_action_group("clock", group);
         cal = new GLib.SimpleAction("calendar", null);
         cal.set_enabled(calprov != null);
         cal.activate.connect(on_cal_activate);
         group.add_action(cal);
+
+        update_cal();
 
         update_clock();
         add(widget);
