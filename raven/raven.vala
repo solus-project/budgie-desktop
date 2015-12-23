@@ -20,7 +20,10 @@ public class RavenIface
 {
 
     private Raven? parent = null;
+    [DBus (visible = false)]
+    public uint notifications = 0;
 
+    [DBus (visible = false)]
     public RavenIface(Raven? parent)
     {
         this.parent = parent;
@@ -52,6 +55,12 @@ public class RavenIface
         }
     }
 
+    public signal void NotificationsChanged();
+
+    public uint GetNotificationCount() {
+        return this.notifications;
+    }
+
     public string get_version()
     {
         return "1";
@@ -63,6 +72,7 @@ public class Raven : Gtk.Window
 
     /* Use 15% of screen estate */
     private double intended_size = 0.15;
+    private static Raven? _instance = null;
 
     int our_width = 0;
     int our_height = 0;
@@ -85,6 +95,8 @@ public class Raven : Gtk.Window
     private Arc.MainView? main_view = null;
     private Arc.SettingsView? settings_view = null;
     private Gtk.Stack? main_stack;
+
+    private uint n_count = 0;
 
     public Arc.DesktopManager? manager { public set; public get; }
 
@@ -120,10 +132,26 @@ public class Raven : Gtk.Window
         main_view.expose_notification();
     }
 
+    public static unowned Raven? get_instance()
+    {
+        return Raven._instance;
+    }
+
+    public void set_notification_count(uint count)
+    {
+        if (this.n_count != count) {
+            this.n_count = count;
+            this.iface.notifications = count;
+            this.iface.NotificationsChanged();
+        }
+    }
+
     public Raven(Arc.DesktopManager? manager)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, gravity : Gdk.Gravity.EAST, manager: manager);
         get_style_context().add_class("arc-container");
+
+        Raven._instance = this;
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
