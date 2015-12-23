@@ -27,4 +27,44 @@ namespace Arc {
 
         public virtual void update_popovers(Arc.PopoverManager? manager) { }
     }
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public class AppletInfo : GLib.Object
+    {
+
+        public GLib.Settings? settings;
+
+        public Arc.Applet applet { get; set; }
+
+        public string icon {  get; set; }
+
+        public string name { get;  set; }
+
+        public string uuid { get; set; }
+
+        public string alignment { get ; set; }
+
+        public int pad_start { get ; set ; }
+
+        public int pad_end { get ; set; }
+
+        public int position { get; set; }
+
+        public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet? applet, GLib.Settings? settings);
+    }
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public static const string APPLET_KEY_NAME;
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public static const string APPLET_KEY_ALIGN;
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public static const string APPLET_KEY_POS;
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public static const string APPLET_KEY_PAD_START;
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public static const string APPLET_KEY_PAD_END;
 }

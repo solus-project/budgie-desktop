@@ -28,14 +28,6 @@ class Screen : Object {
     public Gdk.Rectangle area;
 }
 
-
-/** Name of the plugin */
-public static const string APPLET_KEY_NAME      = "name";
-public static const string APPLET_KEY_ALIGN     = "alignment";
-public static const string APPLET_KEY_POS       = "position";
-public static const string APPLET_KEY_PAD_START = "padding-start";
-public static const string APPLET_KEY_PAD_END   = "padding-end";
-
 /**
  * Proxy for gnome-session
  */
@@ -54,70 +46,6 @@ public interface Gnome.SessionClient : Object
     public signal void QueryEndSession(uint flags);
     public signal void EndSession(uint flags);
     public signal void CancelEndSession();
-}
-
-/**
- * Used to track Applets in a sane way
- */
-public class AppletInfo : GLib.Object
-{
-
-    /** Applet instance */
-    public Arc.Applet applet { public get; private set; }
-
-    public unowned GLib.Settings? settings;
-
-    /** Known icon name */
-    public string icon {  public get; protected set; }
-
-    /** Instance name */
-    public string name { public get; protected set; }
-
-    public string uuid { public get; protected set; }
-
-    /** Which panel region to use */
-    public string alignment { public get ; public set ; default = "start"; }
-
-    /** Start padding */
-    public int pad_start { public get ; public set ; default = 0; }
-
-    /** End padding */
-    public int pad_end { public get ; public set; default = 0; }
-
-    /** Position (packging index */
-    public int position { public get; public set; default = 0; }
-
-    /**
-     * Construct a new AppletInfo. Simply a wrapper around applets
-     */
-    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet? applet, GLib.Settings? settings)
-    {
-        if (applet != null) {
-            this.applet = applet;
-        }
-        if (plugin_info != null) {
-            icon = plugin_info.get_icon_name();
-            this.name = plugin_info.get_name();
-        }
-        this.uuid = uuid;
-        if (settings != null) {
-            this.settings = settings;
-            this.bind_settings();
-        }
-    }
-
-    void bind_settings()
-    {
-        settings.bind(Arc.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_PAD_START, this, "pad-start", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_PAD_END, this, "pad-end", SettingsBindFlags.DEFAULT);
-
-        /* Automatically handle margins */
-        this.bind_property("pad-start", applet, "margin-start", BindingFlags.DEFAULT);
-        this.bind_property("pad-end", applet, "margin-end", BindingFlags.DEFAULT);
-    }
 }
 
 /**
