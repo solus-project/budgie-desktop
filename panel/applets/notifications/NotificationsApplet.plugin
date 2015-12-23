@@ -1,0 +1,8 @@
+[Plugin]
+Module=notificationsapplet.so
+Name=Notifications Applet
+Description=Notifications Indicator
+Authors=Ikey Doherty
+Copyright=Copyright © 2015 Ikey Doherty
+Website=https://solus-project.com
+Icon=notification-alert-symbolic
