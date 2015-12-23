@@ -11,10 +11,6 @@
       <value nick="center" value="2" />
       <value nick="end" value="4" />
   </enum>
-  <enum id="com.solus-project.arc-panel.PackType">
-      <value nick="start" value="1" />
-      <value nick="end" value="2" />
-  </enum>
 
   <schema id="com.solus-project.arc-panel.panel">
     <key enum="com.solus-project.arc-panel.Position" name="location">
@@ -44,12 +40,6 @@
   </schema>
 
   <schema id="com.solus-project.arc-panel.applet">
-    <key enum="com.solus-project.arc-panel.PackType" name="pack-type">
-      <default>'start'</default>
-      <summary>Pack type</summary>
-      <description>Where to pack the applet</description>
-    </key>
-
     <key enum="com.solus-project.arc-applet.Alignment" name="alignment">
       <default>'start'</default>
       <summary>Which area of the panel to use</summary>

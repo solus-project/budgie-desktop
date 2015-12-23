@@ -191,11 +191,13 @@ public class Panel : Arc.Toplevel
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        start_box.halign = Gtk.Align.START;
         layout.pack_start(start_box, true, true, 0);
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.pack_end(end_box, true, true, 0);
+        end_box.halign = Gtk.Align.END;
 
         get_child().show_all();
         set_expanded(false);
@@ -305,7 +307,6 @@ public class Panel : Arc.Toplevel
                 AppletInfo? info = null;
                 string? uuid = null;
                 appl = appl.strip();
-                string pack_type = "start"; /*  end */
                 string alignment = "start"; /* center, end */
 
                 if (!config.has_group(appl)) {
@@ -327,9 +328,6 @@ public class Panel : Arc.Toplevel
                 }
 
                 info = new AppletInfo(null, uuid, null, null);
-                if (config.has_key(appl, "PackType")) {
-                    pack_type = config.get_string(appl, "PackType").strip();
-                }
                 if (config.has_key(appl, "Alignment")) {
                     alignment = config.get_string(appl, "Alignment").strip();
                 }
@@ -345,7 +343,6 @@ public class Panel : Arc.Toplevel
                         index = ++s_index;
                         break;
                 }
-                info.pack_type = pack_type;
                 info.alignment = alignment;
                 info.position = index;
 
@@ -384,7 +381,6 @@ public class Panel : Arc.Toplevel
         if (initial_info != null) {
             message("Preconfiguring applet %s", info.uuid);
             info.alignment = initial_info.alignment;
-            info.pack_type = initial_info.pack_type;
             info.position = initial_info.position;
             initial_config.remove(info.uuid);
         }
@@ -406,16 +402,8 @@ public class Panel : Arc.Toplevel
         this.set_applets();
 
         info.applet.update_popovers(this.popover_manager);
+        pack_target.pack_start(info.applet, false, false, 0);
 
-        /* Pack type */
-        switch (info.pack_type) {
-            case "start":
-                pack_target.pack_start(info.applet, false, false, 0);
-                break;
-            default:
-                pack_target.pack_end(info.applet, false, false, 0);
-                break;
-        }
         pack_target.child_set(info.applet, "position", info.position);
         info.notify.connect(applet_updated);
     }
@@ -447,24 +435,8 @@ public class Panel : Arc.Toplevel
                 position = 0;
             }
             info.applet.reparent(new_parent);
-            /* Reset to "start" pack - might change in future */
-            info.pack_type = "start";
             /* We need to be packed after all the other widgets */
             info.position = position;
-            return;
-        } else if (p.name == "pack-type") {
-            /* Swap the pack type */
-            Gtk.PackType t;
-
-            switch (info.pack_type) {
-                case "start":
-                    t = Gtk.PackType.START;
-                    break;
-                default:
-                    t = Gtk.PackType.END;
-                    break;
-            }
-            info.applet.get_parent().child_set(info.applet, "pack-type", t);
             return;
         } else if (p.name == "position") {
             info.applet.get_parent().child_set(info.applet, "position", info.position);

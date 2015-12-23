@@ -32,7 +32,6 @@ class Screen : Object {
 /** Name of the plugin */
 public static const string APPLET_KEY_NAME      = "name";
 public static const string APPLET_KEY_ALIGN     = "alignment";
-public static const string APPLET_KEY_PACK      = "pack-type";
 public static const string APPLET_KEY_POS       = "position";
 public static const string APPLET_KEY_PAD_START = "padding-start";
 public static const string APPLET_KEY_PAD_END   = "padding-end";
@@ -76,10 +75,7 @@ public class AppletInfo : GLib.Object
 
     public string uuid { public get; protected set; }
 
-    /** Packing type */
-    public string pack_type { public get ; public set ; default = "start"; }
-
-    /** Whether to place in the status area or not */
+    /** Which panel region to use */
     public string alignment { public get ; public set ; default = "start"; }
 
     /** Start padding */
@@ -115,7 +111,6 @@ public class AppletInfo : GLib.Object
         settings.bind(Arc.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_PACK, this, "pack-type", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_PAD_START, this, "pad-start", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_PAD_END, this, "pad-end", SettingsBindFlags.DEFAULT);
 
