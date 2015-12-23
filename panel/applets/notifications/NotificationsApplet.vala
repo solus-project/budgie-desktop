@@ -25,6 +25,8 @@ public interface RavenRemote : Object
 {
     public abstract async void Toggle() throws Error;
     public abstract async void ToggleNotification() throws Error;
+    public signal void NotificationsChanged();
+    public abstract async uint GetNotificationCount() throws Error;
 }
 
 public class NotificationsApplet : Arc.Applet
@@ -39,11 +41,30 @@ public class NotificationsApplet : Arc.Applet
     {
         try {
             raven_proxy = Bus.get_proxy.end(res);
+            raven_proxy.NotificationsChanged.connect(on_notifications_changed);
         } catch (Error e) {
             warning("Failed to gain Raven proxy: %s", e.message);
         }
     }
 
+    void on_get_count(GLib.Object? o, AsyncResult? res)
+    {
+        uint count = 0;
+
+        try {
+            count = raven_proxy.GetNotificationCount.end(res);
+        } catch (Error e) {
+            warning("Error getting notifications: %s", e.message);
+            return;
+        }
+
+        /* Set the classes here, depending on the count. */
+    }
+
+    void on_notifications_changed()
+    {
+        raven_proxy.GetNotificationCount.begin(on_get_count);
+    }
 
     bool on_button_release(Gdk.EventButton? button)
     {
