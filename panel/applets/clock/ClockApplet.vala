@@ -40,6 +40,8 @@ public class ClockApplet : Arc.Applet
 
     Gtk.Popover? popover = null;
     AppInfo? calprov = null;
+    SimpleAction? cal = null;
+
     private unowned Arc.PopoverManager? manager = null;
 
     public ClockApplet()
@@ -82,11 +84,14 @@ public class ClockApplet : Arc.Applet
         date.activate.connect(on_date_activate);
         group.add_action(date);
 
-        /* TODO: Listen for app changes */
         calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
 
+        var monitor = AppInfoMonitor.get();
+        monitor.changed.connect(update_cal);
+        update_cal();
+
         this.insert_action_group("clock", group);
-        var cal = new GLib.SimpleAction("calendar", null);
+        cal = new GLib.SimpleAction("calendar", null);
         cal.set_enabled(calprov != null);
         cal.activate.connect(on_cal_activate);
         group.add_action(cal);
@@ -94,6 +99,12 @@ public class ClockApplet : Arc.Applet
         update_clock();
         add(widget);
         show_all();
+    }
+
+    void update_cal()
+    {
+        calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
+        cal.set_enabled(calprov != null);
     }
 
     void on_date_activate()
