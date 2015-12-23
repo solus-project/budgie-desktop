@@ -44,6 +44,14 @@ public class RavenIface
         this.is_expanded = !this.is_expanded;
     }
 
+    public void ToggleNotification()
+    {
+        this.is_expanded = !this.is_expanded;
+        if (this.is_expanded) {
+            parent.expose_notification();
+        }
+    }
+
     public string get_version()
     {
         return "1";
@@ -104,6 +112,12 @@ public class Raven : Gtk.Window
             stderr.printf("Error registering Raven: %s\n", e.message);
             Process.exit(1);
         }
+    }
+
+    public void expose_notification()
+    {
+        main_stack.set_visible_child_name("main");
+        main_view.expose_notification();
     }
 
     public Raven(Arc.DesktopManager? manager)

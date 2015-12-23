@@ -25,6 +25,11 @@ public class MainView : Gtk.Box
 
     public signal void view_switch();
 
+    public void expose_notification()
+    {
+        main_stack.set_visible_child_name("notifications");
+    }
+
     public MainView()
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
