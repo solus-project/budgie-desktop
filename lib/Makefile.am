@@ -13,14 +13,19 @@ libtoplevel_la_SOURCES = \
 
 libtoplevel_la_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
+	$(ARC_PLUGIN_CFLAGS) \
 	$(DECLARATIONS)
 
 libtoplevel_la_LIBADD = \
-	$(ARC_BASE_LIBS)
+	$(ARC_BASE_LIBS) \
+	$(ARC_PLUGIN_LIBS) \
+	${top_builddir}/plugin/libarc-plugin.la
 
 libtoplevel_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
+	--pkg arc-1.0 \
+	--vapidir=${top_srcdir}/plugin \
 	-H ArcToplevel.h \
 	$(VALAFLAGS)
 

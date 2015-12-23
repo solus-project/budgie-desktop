@@ -20,6 +20,11 @@ namespace Arc {
 
         public Arc.PanelPosition position { set; get; default = Arc.PanelPosition.BOTTOM; }
 
+        public abstract GLib.List<Arc.AppletInfo?> get_applets();
+        public signal void applet_changed(Arc.AppletInfo? info);
+        public signal void applet_added(Arc.AppletInfo? info);
+        public signal void applet_removed(Arc.AppletInfo? info);
+
         public virtual void reset_shadow();
     }
 

@@ -135,7 +135,19 @@ public class Panel : Arc.Toplevel
         this.shadow.required_size = this.orig_scr.width;
         this.shadow.removal = 0;
     }
-        
+
+    public override GLib.List<AppletInfo?> get_applets()
+    {
+        GLib.List<Arc.AppletInfo?> ret = new GLib.List<Arc.AppletInfo?>();
+        unowned string? key = null;
+        unowned Arc.AppletInfo? appl_info = null;
+
+        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        while (iter.next(out key, out appl_info)) {
+            ret.append(appl_info);
+        }
+        return ret;
+    }
 
     public Panel(Arc.PanelManager? manager, string? uuid, Settings? settings)
     {

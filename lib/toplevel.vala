@@ -40,6 +40,11 @@ public abstract class Toplevel : Gtk.Window
     public Arc.PanelPosition position { public set; public get; default = Arc.PanelPosition.BOTTOM; }
 
     public virtual void reset_shadow() { }
+
+    public abstract GLib.List<Arc.AppletInfo?> get_applets();
+    public signal void applet_changed(Arc.AppletInfo? info);
+    public signal void applet_added(Arc.AppletInfo? info);
+    public signal void applet_removed(Arc.AppletInfo? info);
 }
 
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)
