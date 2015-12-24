@@ -174,9 +174,11 @@ public class PanelEditor : Gtk.Box
 
     private unowned Arc.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
+    private ulong applet_added_id;
 
     private AppletPicker? picker;
 
+    private HashTable<string?,Arc.AppletInfo?> applets = null;
 
     private unowned Gtk.Stack? panel_stack = null;
 
@@ -193,6 +195,8 @@ public class PanelEditor : Gtk.Box
         button_remove_panel.clicked.connect(()=> {
             this.manager.delete_panel(current_panel.uuid);
         });
+
+        applets = new HashTable<string?,Arc.AppletInfo?>(str_hash, str_equal);
 
         /* PanelPosition */
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));
@@ -249,6 +253,7 @@ public class PanelEditor : Gtk.Box
             }
         });
         button_add_applet.clicked.connect(()=> {
+            this.picker.set_plugin_list(manager.get_panel_plugins());
             this.panel_stack.set_visible_child_name("applets");
         });
 
@@ -379,12 +384,14 @@ public class PanelEditor : Gtk.Box
         if (current_panel != null) {
             SignalHandler.disconnect(current_panel, notify_id);
             SignalHandler.disconnect(current_panel, applets_changed_id);
+            SignalHandler.disconnect(current_panel, applet_added_id);
         }
         current_panel = panel;
 
         /* Bind position.. ? */
         notify_id = panel.notify.connect(on_panel_update);
         applets_changed_id = panel.applets_changed.connect(refresh_applets);
+        applet_added_id = panel.applet_added.connect(applet_added);
 
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
@@ -400,6 +407,32 @@ public class PanelEditor : Gtk.Box
         init_applets();
 
         this.panel_stack.set_visible_child_name("panel");
+    }
+
+    void applet_added(Arc.AppletInfo? info)
+    {
+        insert_applet(info);
+        refresh_applets();
+    }
+
+    void insert_applet(Arc.AppletInfo? applet)
+    {
+        var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.MENU);
+        img.margin_start = 6;
+        img.margin_end = 8;
+        img.margin_top = 4;
+        img.margin_bottom = 4;
+        widgem.pack_start(img, false, false, 0);
+        widgem.set_data("ainfo", applet);
+
+        var label = new Gtk.Label(applet.name);
+        widgem.pack_start(label, true, true, 0);
+        label.halign = Gtk.Align.START;
+
+        widgem.show_all();
+        listbox_applets.add(widgem);
+        applets.insert(applet.uuid, applet);
     }
 
     void refresh_applets()
@@ -419,6 +452,7 @@ public class PanelEditor : Gtk.Box
             child.destroy();
         }
 
+        applets.remove_all();
         if (current_panel == null) {
             return;
         }
@@ -429,21 +463,7 @@ public class PanelEditor : Gtk.Box
         current_applet = null;
 
         foreach (var applet in current_panel.get_applets()) {
-            var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-            var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.MENU);
-            img.margin_start = 6;
-            img.margin_end = 8;
-            img.margin_top = 4;
-            img.margin_bottom = 4;
-            widgem.pack_start(img, false, false, 0);
-            widgem.set_data("ainfo", applet);
-
-            var label = new Gtk.Label(applet.name);
-            widgem.pack_start(label, true, true, 0);
-            label.halign = Gtk.Align.START;
-
-            widgem.show_all();
-            listbox_applets.add(widgem);
+            insert_applet(applet);
         }
 
         listbox_applets.invalidate_sort();

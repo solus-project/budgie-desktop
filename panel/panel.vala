@@ -416,8 +416,6 @@ public class Panel : Arc.Toplevel
         } catch (Error e) {
             warning("Error loading default config: %s", e.message);
         }
-        //add_new("Budgie Menu Applet");
-        //add_new("Task List");
     }
 
     void set_applets()
@@ -470,6 +468,8 @@ public class Panel : Arc.Toplevel
 
         pack_target.child_set(info.applet, "position", info.position);
         info.notify.connect(applet_updated);
+
+        this.applet_added(info);
     }
 
     void applet_updated(Object o, ParamSpec p)
