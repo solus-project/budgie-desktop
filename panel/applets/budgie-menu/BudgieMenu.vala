@@ -36,7 +36,7 @@ public class BudgieMenuApplet : Arc.Applet
     {
         Object();
 
-        settings = new Settings("com.evolve-os.budgie.panel");
+        settings = new Settings("com.solus-project.budgie-menu");
         ksettings = new Settings("org.gnome.mutter");
         settings.changed.connect(on_settings_changed);
         ksettings.changed.connect(on_settings_changed);

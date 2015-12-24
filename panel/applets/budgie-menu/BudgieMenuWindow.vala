@@ -269,7 +269,7 @@ public class BudgieMenuWindow : Gtk.Popover
         border_width = 6;
 
         // Currently just to track usage
-        settings = new Settings("com.solus-project.budgie-panel");
+        settings = new Settings("com.solus-project.budgie-menu");
         icon_size = settings.get_int("menu-icons-size");
 
         // search entry up north
