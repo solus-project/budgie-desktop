@@ -704,7 +704,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    void budge_em_left(string alignment)
+    void budge_em_left(string alignment, int after)
     {
         unowned string key;
         unowned Arc.AppletInfo? val;
@@ -712,7 +712,7 @@ public class Panel : Arc.Toplevel
 
         while (iter.next(out key, out val)) {
             if (val.alignment == alignment) {
-                if (val.position > 0) {
+                if (val.position > after) {
                     val.position--;
                 }
             }
@@ -753,7 +753,7 @@ public class Panel : Arc.Toplevel
             uint len = new_parent.get_children().length();
             info.alignment = new_home;
             info.position = (int)len;
-            budge_em_left(old_home);
+            budge_em_left(old_home, 0);
             applets_changed();
         }
     }
