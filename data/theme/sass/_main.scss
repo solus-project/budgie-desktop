@@ -33,6 +33,9 @@ GtkPopover .scrollbar .trough {
     }
     .label:insensitive { color: transparentize($fg_color, 0.65); }
 
+    // used to indicate unread notifications
+    .alert { color: lighten($destructive_color, 10%); }
+
     // Entries
     .entry {
         @extend %reset_style;
