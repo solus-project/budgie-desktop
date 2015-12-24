@@ -62,8 +62,19 @@ public class PanelEditor : Gtk.Box
 
     [GtkChild]
     private Gtk.ScrolledWindow? scrolledwindow_applets;
-
     Gtk.ListBox? listbox_applets = null;
+
+    [GtkChild]
+    private Gtk.Button? button_add_applet;
+
+    [GtkChild]
+    private Gtk.Button? button_remove_applet;
+
+    [GtkChild]
+    private Gtk.Button? button_move_applet_left;
+
+    [GtkChild]
+    private Gtk.Button? button_move_applet_right;
 
     public PanelEditor(Arc.DesktopManager? manager)
     {

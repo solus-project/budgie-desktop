@@ -291,7 +291,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="button_add_applet">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -308,7 +308,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button4">
+              <object class="GtkButton" id="button_remove_applet">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -370,7 +370,7 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <child>
-              <object class="GtkButton" id="button5">
+              <object class="GtkButton" id="button_move_applet_left">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -388,7 +388,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button6">
+              <object class="GtkButton" id="button_move_applet_right">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -423,7 +423,7 @@
     <widgets>
       <widget name="combobox_panels"/>
       <widget name="button_remove_panel"/>
-      <widget name="button3"/>
+      <widget name="button_add_applet"/>
     </widgets>
   </object>
 </interface>
