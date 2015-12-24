@@ -1,6 +1,6 @@
 [Plugin]
 Module=notificationsapplet.so
-Name=Notifications Applet
+Name=Notifications
 Description=Notifications Indicator
 Authors=Ikey Doherty
 Copyright=Copyright © 2015 Ikey Doherty

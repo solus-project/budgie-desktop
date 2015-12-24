@@ -1,6 +1,6 @@
 [Plugin]
 Module=clockapplet.so
-Name=Clock Applet
+Name=Clock
 Description=Provides a clock for the panel
 Authors=Ikey Doherty
 Copyright=Copyright © 2014 Ikey Doherty

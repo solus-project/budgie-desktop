@@ -1,6 +1,6 @@
 [Plugin]
 Module=budgiemenuapplet.so
-Name=Budgie Menu Applet
+Name=Budgie Menu
 Description=Standard Budgie Menu
 Authors=Ikey Doherty
 Copyright=Copyright © 2014 Ikey Doherty
