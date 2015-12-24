@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/sh
 
 INKSCAPE="/usr/bin/inkscape"
 OPTIPNG="/usr/bin/optipng"
