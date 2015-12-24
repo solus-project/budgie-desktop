@@ -627,27 +627,27 @@ public class Panel : Arc.Toplevel
         return (info.position >= info.applet.get_parent().get_children().length() - 1);
     }
 
-    private unowned Gtk.Box? get_box_left(Arc.AppletInfo? info)
+    private string? get_box_left(Arc.AppletInfo? info)
     {
         unowned Gtk.Widget? parent = null;
 
         if ((parent = info.applet.get_parent()) == end_box) {
-            return center_box;
+            return "center";
         } else if (parent == center_box) {
-            return start_box;
+            return "start";
         } else {
             return null;
         }
     }
 
-    private unowned Gtk.Box? get_box_right(Arc.AppletInfo? info)
+    private string? get_box_right(Arc.AppletInfo? info)
     {
         unowned Gtk.Widget? parent = null;
 
         if ((parent = info.applet.get_parent()) == start_box) {
-            return center_box;
+            return "center";
         } else if (parent == center_box) {
-            return end_box;
+            return "end";
         } else {
             return null;
         }
@@ -675,14 +675,67 @@ public class Panel : Arc.Toplevel
         return false;
     }
 
+    void conflict_swap(Arc.AppletInfo? info, int old_position)
+    {
+        unowned string key;
+        unowned Arc.AppletInfo? val;
+        unowned Arc.AppletInfo? conflict = null;
+        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+
+        while (iter.next(out key, out val)) {
+            if (val.position == info.position) {
+                conflict = val;
+                break;
+            }
+        }
+
+        if (conflict == null) {
+            return;
+        }
+
+        conflict.position = old_position;
+    }
+
     public override void move_applet_left(Arc.AppletInfo? info)
     {
-        /* NOOP */
+        string? new_home = null;
+        int new_position = info.position;
+        int old_position = info.position;
+
+        if (!applet_at_start_of_region(info)) {
+            new_position--;
+            if (new_position < 0) {
+                new_position = 0;
+            }
+            info.position = new_position;
+            conflict_swap(info, old_position);
+            return;
+        }
+        if ((new_home = get_box_left(info)) != null) {
+            info.alignment = new_home;
+        }
     }
 
     public override void move_applet_right(Arc.AppletInfo? info)
     {
-        /* NOOP */
+        string? new_home = null;
+        int new_position = info.position;
+        int old_position = info.position;
+        uint len;
+
+        if (!applet_at_end_of_region(info)) {
+            new_position++;
+            len = info.applet.get_parent().get_children().length();
+            if (new_position > len) {
+                new_position = (int) len;
+            }
+            info.position = new_position;
+            conflict_swap(info, old_position);
+            return;
+        }
+        if ((new_home = get_box_right(info)) != null) {
+            info.alignment = new_home;
+        }
     }
 }
 
