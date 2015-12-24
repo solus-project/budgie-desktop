@@ -60,6 +60,11 @@ public class PanelEditor : Gtk.Box
     unowned Arc.Toplevel? current_panel = null;
     private ulong notify_id;
 
+    [GtkChild]
+    private Gtk.ScrolledWindow? scrolledwindow_applets;
+
+    Gtk.ListBox? listbox_applets = null;
+
     public PanelEditor(Arc.DesktopManager? manager)
     {
         Object(manager: manager);
@@ -104,6 +109,10 @@ public class PanelEditor : Gtk.Box
         shadow_id = switch_shadow.notify["active"].connect(on_shadow_changed);
 
         panels_id = combobox_panels.changed.connect(on_panel_changed);
+
+        listbox_applets = new Gtk.ListBox();
+        listbox_applets.get_style_context().remove_class("background");
+        scrolledwindow_applets.add(listbox_applets);
     }
 
     void on_panel_changed()
@@ -224,6 +233,35 @@ public class PanelEditor : Gtk.Box
         SignalHandler.unblock(spinbutton_size, spin_id);
 
         switch_shadow.set_active(panel.shadow_visible);
+
+        update_applets();
+    }
+
+    void update_applets()
+    {
+        foreach (var child in listbox_applets.get_children()) {
+            child.destroy();
+        }
+
+        if (current_panel == null) {
+            return;
+        }
+
+        foreach (var applet in current_panel.get_applets()) {
+            var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.LARGE_TOOLBAR);
+            img.margin_start = 6;
+            img.margin_end = 8;
+            img.margin_top = 4;
+            img.margin_bottom = 4;
+            widgem.pack_start(img, false, false, 0);
+
+            var label = new Gtk.Label(applet.name);
+            widgem.pack_start(label, true, true, 0);
+            label.halign = Gtk.Align.START;
+
+            listbox_applets.add(widgem);
+        }
     }
 
     /* Handle updates to the current panel
