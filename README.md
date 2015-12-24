@@ -158,7 +158,7 @@ TODO
 
  - [ ] Fix Raven glitch when adding a new panel
  - [x] Add applet manipulation
- - [ ] Allow adding/removing applets (popover menu?)
+ - [x] Allow adding/removing applets
  - [ ] Port old applets into tree
  - [ ] Convert Raven modules into actual modules
  - [ ] Complete WM
