@@ -138,9 +138,8 @@ public class DesktopHelper : Object
         return p1;
     }
 
-    public static void set_pinned(DesktopAppInfo app_info, bool pinned)
+    public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
     {
-        Settings settings = new Settings("com.evolve-os.budgie.panel");
         string[] launchers = settings.get_strv("pinned-launchers");
         if (pinned) {
             if (app_info.get_id() in launchers) {
@@ -189,6 +188,8 @@ public class IconButton : Gtk.ToggleButton
 
     protected int current_cycles = 0;
 
+    unowned Settings? settings;
+
     public void update_from_window()
     {
         we_urgent = false;
@@ -226,13 +227,13 @@ public class IconButton : Gtk.ToggleButton
         /* Handle running instance pin/unpin */
         pinnage.activate.connect(()=> {
             requested_pin = true;
-            DesktopHelper.set_pinned(ainfo, true);
+            DesktopHelper.set_pinned(settings, ainfo, true);
         });
 
         unpinnage.activate.connect(()=> {
             if (this is /*Sparta*/ PinnedIconButton) {
                 var p = this as PinnedIconButton;
-                DesktopHelper.set_pinned(p.app_info, false);
+                DesktopHelper.set_pinned(settings, p.app_info, false);
             }
         });
 
@@ -347,8 +348,10 @@ public class IconButton : Gtk.ToggleButton
         return base.draw(cr);
     }
 
-    public IconButton(Wnck.Window? window, int size, DesktopAppInfo? ainfo)
+    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo)
     {
+        this.settings = settings;
+
         image = new Gtk.Image();
         image.pixel_size = size;
         icon_size = size;
@@ -468,10 +471,13 @@ public class PinnedIconButton : IconButton
     public string? id = null;
     private Gtk.Menu alt_menu;
 
-    public PinnedIconButton(DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
+    unowned Settings? settings;
+
+    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
     {
-        base(null, size, info);
+        base(settings, null, size, info);
         this.app_info = info;
+        this.settings = settings;
 
         this.context = context;
         set_tooltip_text("Launch %s".printf(info.get_display_name()));
@@ -483,7 +489,7 @@ public class PinnedIconButton : IconButton
         item.show_all();
 
         item.activate.connect(()=> {
-            DesktopHelper.set_pinned(this.app_info, false);
+            DesktopHelper.set_pinned(settings, this.app_info, false);
         });
     }
 
@@ -601,7 +607,7 @@ public class IconTasklistApplet : Arc.Applet
 
         // Fallback to new button.
         if (button == null) {
-            var btn = new IconButton(window, icon_size, pinfo);
+            var btn = new IconButton(settings, window, icon_size, pinfo);
             button = btn;
             widget.pack_start(btn, false, false, 0);
         }
@@ -756,7 +762,7 @@ public class IconTasklistApplet : Arc.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(info, icon_size, ref this.context);
+            var button = new PinnedIconButton(settings, info, icon_size, ref this.context);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button, false, false, 0);
 
@@ -796,7 +802,7 @@ public class IconTasklistApplet : Arc.Applet
                 btn.destroy();
             } else {
                 /* We need to move this fella.. */
-                IconButton b2 = new IconButton(btn.window, icon_size, (owned)btn.app_info);
+                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info);
                 btn.destroy();
                 widget.pack_start(b2, false, false, 0);
                 buttons[b2.window]  = b2;
