@@ -34,7 +34,7 @@ public class CalendarWidget : Gtk.Box
         var time = new DateTime.now_local();
 
         /* TODO: Fix icon */
-        header = new Arc.HeaderWidget(time.format("%x"), "open-menu-symbolic", false);
+        header = new Arc.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
         pack_start(header, false, false);
 
         revealer = new Gtk.Revealer();
