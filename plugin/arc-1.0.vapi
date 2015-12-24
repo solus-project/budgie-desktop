@@ -19,13 +19,18 @@ namespace Arc {
     }
     [CCode (cheader_filename = "ArcPlugin.h")]
     public interface Plugin : GLib.Object {
-        public abstract Arc.Applet get_panel_widget ();
+        public abstract Arc.Applet get_panel_widget (string uuid);
     }
     [CCode (cheader_filename = "ArcPlugin.h")]
     public class Applet : Gtk.Bin {
         public Applet();
 
         public virtual void update_popovers(Arc.PopoverManager? manager) { }
+
+        public GLib.Settings? get_applet_settings(string uuid);
+
+        public string? settings_prefix { get; set; }
+        public string? settings_schema { get; set; }
     }
 
     [CCode (cheader_filename = "ArcPlugin.h")]

@@ -53,7 +53,7 @@ public interface Plugin : GLib.Object
      * 
      * Returns: (transfer full): A Gtk+ widget for use on the ArcPanel
      */
-    public abstract Arc.Applet get_panel_widget();
+    public abstract Arc.Applet get_panel_widget(string uuid);
 }
 
 /**
@@ -71,6 +71,9 @@ public class Applet : Gtk.Bin
      */
     public Applet() { }
 
+    public string? settings_prefix { public get; private set; default = null; }
+    public string? settings_schema { public get; private set; default = null; }
+
     /**
      * arc_applet_update_popovers:
      * @manager: a valid #ArcPopoverManager
@@ -79,6 +82,19 @@ public class Applet : Gtk.Bin
      * is always valid
      */
     public virtual void update_popovers(Arc.PopoverManager? manager) { }
+
+    /**
+     * arc_applet_get_settings:
+     *
+     * Returns: (transfer full): A newly initialised Settings for this applet, or NULL if none are used
+     */
+    public Settings? get_applet_settings(string uuid) {
+        if (settings_prefix != null && settings_schema != null) {
+            var path = "%s/{%s}/".printf(this.settings_prefix, uuid);
+            return new Settings.with_path(this.settings_schema, path);
+        }
+        return null;
+    } 
 }
 
 /**
