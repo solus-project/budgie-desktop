@@ -1,8 +1,8 @@
 [Plugin]
 Module=separatorapplet.so
 Name=Separator
-Description=Tasklist
+Description=Separator
 Authors=Ikey Doherty
 Copyright=Copyright © 2015 Ikey Doherty
 Website=https://solus-project.com
-Icon=view-continous-symbolic
+Icon=view-continuous-symbolic
