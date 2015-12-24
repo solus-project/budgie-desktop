@@ -303,6 +303,55 @@ public class Panel : Arc.Toplevel
         }
     }
 
+    /**
+     * Add a new applet to the panel (Raven UI)
+     *
+     * Explanation: Try to find the most underpopulated region first,
+     * and add the applet there. Determine a suitable position,
+     * set the alignment+position, stuff an initial config in,
+     * and hope for the best when we initiate add_new
+     */
+    public override void add_new_applet(string id)
+    {
+        /* First, determine a panel to place this guy */
+        int position = (int) applets.size() + 1;
+        unowned Gtk.Box? target = null;
+        string? align = null;
+        AppletInfo? info = null;
+        string? uuid = null;
+
+        Gtk.Box?[] regions = {
+            start_box,
+            center_box,
+            end_box
+        };
+
+        foreach (var region in regions) {
+            var kids = region.get_children();
+            var len = kids.length();
+            if (len < position) {
+                position = (int)len;
+                target = region;
+            }
+        }
+
+        if (target == start_box) {
+            align = "start";
+        } else if (target == center_box) {
+            align = "center";
+        } else {
+            align = "end";
+        }
+
+        uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+        info = new AppletInfo(null, uuid, null, null);
+        info.alignment = align;
+        info.position = position;
+
+        initial_config.insert(uuid, info);
+        add_new(id, uuid);
+    }
+
     public void create_default_layout(string name, KeyFile config)
     {
         int s_index = -1;

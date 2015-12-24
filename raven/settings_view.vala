@@ -62,7 +62,6 @@ public class AppletPicker : Gtk.Box {
     void add_clicked()
     {
         view_switch();
-        message("Applet adding not yet implemented");
         applet_add(this.current_info);
     }
 
@@ -258,7 +257,17 @@ public class PanelEditor : Gtk.Box
         picker.view_switch.connect(()=> {
             this.panel_stack.set_visible_child_name("panel");
         });
+        picker.applet_add.connect(do_applet_add);
         this.panel_stack.add_titled(picker, "applets", "Applets");
+    }
+
+    void do_applet_add(Peas.PluginInfo? info)
+    {
+        if (info == null || current_panel == null) {
+            return;
+        }
+
+        current_panel.add_new_applet(info.get_name());
     }
 
     void init_applets()

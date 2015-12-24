@@ -52,6 +52,8 @@ public abstract class Toplevel : Gtk.Window
 
     public abstract void move_applet_left(Arc.AppletInfo? info);
     public abstract void move_applet_right(Arc.AppletInfo? info);
+
+    public abstract void add_new_applet(string id);
 }
 
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)

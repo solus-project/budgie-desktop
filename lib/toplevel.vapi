@@ -33,6 +33,8 @@ namespace Arc {
         public abstract void move_applet_right(Arc.AppletInfo? info);
 
         public virtual void reset_shadow();
+
+        public abstract void add_new_applet(string id);
     }
 
     [CCode (cheader_filename = "ArcToplevel.h")]
