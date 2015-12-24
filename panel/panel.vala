@@ -228,7 +228,12 @@ public class Panel : Arc.Toplevel
 
         var iter = HashTableIter<string?,AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
+            Settings? app_settings = info.applet.get_applet_settings(info.uuid);
             info.settings.reset(null);
+
+            if (app_settings != null) {
+                app_settings.reset(null);
+            }
         }
     }
 
