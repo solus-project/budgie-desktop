@@ -76,6 +76,8 @@ public class PanelEditor : Gtk.Box
     [GtkChild]
     private Gtk.Button? button_move_applet_right;
 
+    private Arc.AppletInfo? current_applet = null;
+
     public PanelEditor(Arc.DesktopManager? manager)
     {
         Object(manager: manager);
@@ -126,6 +128,23 @@ public class PanelEditor : Gtk.Box
         scrolledwindow_applets.add(listbox_applets);
         listbox_applets.set_sort_func(lb_sort);
         listbox_applets.set_header_func(lb_headers);
+        listbox_applets.row_activated.connect(on_row_activate);
+
+        /*button_remove_applet.clicked.connect(()=> {
+            if (current_applet != null && current_panel != null) {
+                current_panel.remove_applet(current_applet);
+            }
+        });*/
+        button_move_applet_left.clicked.connect(()=> {
+            if (current_applet != null && current_panel != null) {
+                current_panel.move_applet_left(current_applet);
+            }
+        });  
+        button_move_applet_right.clicked.connect(()=> {
+            if (current_applet != null && current_panel != null) {
+                current_panel.move_applet_right(current_applet);
+            }
+        });  
     }
 
     void on_panel_changed()
@@ -260,6 +279,11 @@ public class PanelEditor : Gtk.Box
             return;
         }
 
+        button_remove_applet.sensitive = false;
+        button_move_applet_left.sensitive = false;
+        button_move_applet_right.sensitive = false;
+        current_applet = null;
+
         foreach (var applet in current_panel.get_applets()) {
             var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.MENU);
@@ -369,6 +393,29 @@ public class PanelEditor : Gtk.Box
         } else {
             before.set_header(null);
         }
+    }
+
+    void on_row_activate(Gtk.ListBoxRow? row)
+    {
+        unowned Arc.AppletInfo? info = null;
+
+        if (current_panel == null) {
+            button_move_applet_left.sensitive = false;
+            button_move_applet_right.sensitive = false;
+            button_remove_applet.sensitive = false;
+            return;
+        }
+
+        if (row == null) {
+            button_move_applet_left.sensitive = false;
+            button_move_applet_right.sensitive = false;
+            button_remove_applet.sensitive = false;
+        }
+        
+        info = row.get_data("ainfo");
+        button_move_applet_left.sensitive = current_panel.can_move_applet_left(info);
+        button_move_applet_right.sensitive = current_panel.can_move_applet_right(info);
+        button_remove_applet.sensitive = true;
     }
 
     /* Handle updates to the current panel

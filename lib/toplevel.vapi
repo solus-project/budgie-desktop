@@ -25,6 +25,12 @@ namespace Arc {
         public signal void applet_added(Arc.AppletInfo? info);
         public signal void applet_removed(Arc.AppletInfo? info);
 
+        public abstract bool can_move_applet_left(Arc.AppletInfo? info);
+        public abstract bool can_move_applet_right(Arc.AppletInfo? info);
+
+        public abstract void move_applet_left(Arc.AppletInfo? info);
+        public abstract void move_applet_right(Arc.AppletInfo? info);
+
         public virtual void reset_shadow();
     }
 

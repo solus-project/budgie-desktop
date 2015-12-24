@@ -616,6 +616,26 @@ public class Panel : Arc.Toplevel
                 break;
         }
     }
+
+    public override bool can_move_applet_left(Arc.AppletInfo? info)
+    {
+        return false;
+    }
+
+    public override bool can_move_applet_right(Arc.AppletInfo? info)
+    {
+        return false;
+    }
+
+    public override void move_applet_left(Arc.AppletInfo? info)
+    {
+        /* NOOP */
+    }
+
+    public override void move_applet_right(Arc.AppletInfo? info)
+    {
+        /* NOOP */
+    }
 }
 
 } // End namespace
