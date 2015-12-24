@@ -24,8 +24,7 @@ public class NotificationsView : Gtk.Box
         img.margin_bottom = 4;
 
         var header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, img);
-        header.margin_top = 4;
-        header.margin_bottom = 4;
+        header.margin_top = 6;
 
         pack_start(header, false, false, 0);
 
