@@ -77,6 +77,7 @@ public class PanelEditor : Gtk.Box
     private Gtk.Button? button_move_applet_right;
 
     private unowned Arc.AppletInfo? current_applet = null;
+    private ulong applets_changed_id;
 
     public PanelEditor(Arc.DesktopManager? manager)
     {
@@ -250,11 +251,13 @@ public class PanelEditor : Gtk.Box
         /* Unbind old panel?! */
         if (current_panel != null) {
             SignalHandler.disconnect(current_panel, notify_id);
+            SignalHandler.disconnect(current_panel, applets_changed_id);
         }
         current_panel = panel;
 
         /* Bind position.. ? */
         notify_id = panel.notify.connect(on_panel_update);
+        applets_changed_id = panel.applets_changed.connect(refresh_applets);
 
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
@@ -267,6 +270,12 @@ public class PanelEditor : Gtk.Box
         switch_shadow.set_active(panel.shadow_visible);
 
         update_applets();
+    }
+
+    void refresh_applets()
+    {
+        listbox_applets.invalidate_sort();
+        listbox_applets.invalidate_headers();
     }
 
     void update_applets()

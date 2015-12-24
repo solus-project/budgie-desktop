@@ -445,17 +445,12 @@ public class Panel : Arc.Toplevel
             if (new_parent == info.applet.get_parent()) {
                 return;
             }
-            int position = (int) new_parent.get_children().length() - 1;
-            if (position < 0) {
-                position = 0;
-            }
             info.applet.reparent(new_parent);
-            /* We need to be packed after all the other widgets */
-            info.position = position;
             return;
         } else if (p.name == "position") {
             info.applet.get_parent().child_set(info.applet, "position", info.position);
         } /* TODO: Implement position knowledge */
+        this.applets_changed();
     }
 
     void add_new(string plugin_name, string? initial_uuid = null)
@@ -683,7 +678,7 @@ public class Panel : Arc.Toplevel
         var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
 
         while (iter.next(out key, out val)) {
-            if (val.position == info.position) {
+            if (val.position == info.position && info != val) {
                 conflict = val;
                 break;
             }
@@ -709,10 +704,29 @@ public class Panel : Arc.Toplevel
             }
             info.position = new_position;
             conflict_swap(info, old_position);
+            applets_changed();
             return;
         }
         if ((new_home = get_box_left(info)) != null) {
             info.alignment = new_home;
+            unowned Gtk.Box? new_parent = null;
+            switch (info.alignment) {
+                case "start":
+                    new_parent = start_box;
+                    break;
+                case "center":
+                    new_parent = center_box;
+                    break;
+                default:
+                    new_parent = end_box;
+                    break;
+            }
+
+            uint len = new_parent.get_children().length();
+            if (len > 0) {
+                info.position = (int)len;
+            }
+            applets_changed();
         }
     }
 
@@ -731,10 +745,14 @@ public class Panel : Arc.Toplevel
             }
             info.position = new_position;
             conflict_swap(info, old_position);
+            applets_changed();
             return;
         }
         if ((new_home = get_box_right(info)) != null) {
             info.alignment = new_home;
+            info.position = 0;
+            conflict_swap(info, 0);
+            applets_changed();
         }
     }
 }
