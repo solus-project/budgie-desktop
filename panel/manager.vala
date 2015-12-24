@@ -148,11 +148,6 @@ public class PanelManager : DesktopManager
         }
     }
 
-    public override unowned Peas.ExtensionSet? get_panel_extensions()
-    {
-        return extensions;
-    }
-
     private async bool register_with_session()
     {
         ObjectPath? path = null;
@@ -454,6 +449,18 @@ public class PanelManager : DesktopManager
             return false;
         }
         return true;
+    }
+
+    public override GLib.List<Peas.PluginInfo?> get_panel_plugins()
+    {
+        GLib.List<Peas.PluginInfo?> ret = new GLib.List<Peas.PluginInfo?>();
+        foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
+            if (!this.engine.provides_extension(info, typeof(Arc.Plugin))) {
+                continue;
+            }
+            ret.append(info);
+        }
+        return ret;
     }
 
     /**
