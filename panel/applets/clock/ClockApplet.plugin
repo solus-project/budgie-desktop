@@ -5,4 +5,4 @@ Description=Provides a clock for the panel
 Authors=Ikey Doherty
 Copyright=Copyright © 2014 Ikey Doherty
 Website=https://solus-project.com
-Icon=clock
+Icon=preferences-system-time-symbolic
