@@ -4,5 +4,6 @@
                 <file preprocess="xml-stripblanks">settings.ui</file>
                 <file preprocess="xml-stripblanks">appearance.ui</file>
                 <file preprocess="xml-stripblanks">panel.ui</file>
+                <file preprocess="xml-stripblanks">applets.ui</file>
         </gresource>
 </gresources>

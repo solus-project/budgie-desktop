@@ -25,6 +25,67 @@ public enum PanelColumn {
     N_COLUMNS = 2,
 }
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/applets.ui")]
+public class AppletPicker : Gtk.Box {
+
+    [GtkChild]
+    private Gtk.Button? button_add;
+
+    [GtkChild]
+    private Gtk.Button? button_back;
+
+    [GtkChild]
+    private Gtk.ScrolledWindow? scrolledwindow;
+
+    private Gtk.ListBox? listbox;
+
+    public AppletPicker() {
+        listbox = new Gtk.ListBox();
+        listbox.set_sort_func(lb_sort);
+        scrolledwindow.add(listbox);
+    }
+
+    int lb_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        unowned Peas.PluginInfo? before_info = before.get_child().get_data("info");
+        unowned Peas.PluginInfo? after_info = after.get_child().get_data("info");
+
+        if (before_info != null && after_info != null ) {
+            return GLib.strcmp(before_info.get_name(), after_info.get_name());
+        }
+        return 0;
+    }
+
+    public void set_plugin_list(GLib.List<Peas.PluginInfo?> plugins)
+    {
+        foreach (var child in listbox.get_children()) {
+            child.destroy();
+        }
+
+        foreach (var info in plugins) {
+            var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            var img = new Gtk.Image.from_icon_name(info.get_icon_name(), Gtk.IconSize.MENU);
+            img.margin_start = 10;
+            img.margin_end = 8;
+            img.margin_top = 4;
+            img.margin_bottom = 4;
+            widgem.pack_start(img, false, false, 0);
+            widgem.set_data("info", info);
+
+            var label = new Gtk.Label(info.get_name());
+            widgem.pack_start(label, true, true, 0);
+            label.halign = Gtk.Align.START;
+
+            widgem.show_all();
+            listbox.add(widgem);
+            listbox.show_all();
+            scrolledwindow.show_all();
+        }
+        listbox.invalidate_sort();
+    }
+}
+
+
 [GtkTemplate (ui = "/com/solus-project/arc/raven/panel.ui")]
 public class PanelEditor : Gtk.Box
 {
@@ -79,11 +140,15 @@ public class PanelEditor : Gtk.Box
     private unowned Arc.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
 
-    private Gtk.ListBox? new_applets_listbox;
+    private AppletPicker? picker;
 
-    public PanelEditor(Arc.DesktopManager? manager)
+
+    private unowned Gtk.Stack? panel_stack = null;
+
+    public PanelEditor(Arc.DesktopManager? manager, Gtk.Stack? panel_stack)
     {
         Object(manager: manager);
+        this.panel_stack = panel_stack;
 
         manager.panels_changed.connect(on_panels_changed);
 
@@ -148,35 +213,18 @@ public class PanelEditor : Gtk.Box
                 current_panel.move_applet_right(current_applet);
             }
         });
-        new_applets_listbox = new Gtk.ListBox();
+        button_add_applet.clicked.connect(()=> {
+            this.panel_stack.set_visible_child_name("applets");
+        });
+
+
+        picker = new AppletPicker();
+        this.panel_stack.add_titled(picker, "applets", "Applets");
     }
 
     void init_applets()
     {
-        foreach (var child in new_applets_listbox.get_children()) {
-            child.destroy();
-        }
-
-        if (current_panel == null) {
-            return;
-        }
-        foreach (var info in manager.get_panel_plugins()) {
-            var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-            var img = new Gtk.Image.from_icon_name(info.get_icon_name(), Gtk.IconSize.MENU);
-            img.margin_start = 6;
-            img.margin_end = 8;
-            img.margin_top = 4;
-            img.margin_bottom = 4;
-            widgem.pack_start(img, false, false, 0);
-            widgem.set_data("info", info);
-
-            var label = new Gtk.Label(info.get_name());
-            widgem.pack_start(label, true, true, 0);
-            label.halign = Gtk.Align.START;
-
-            widgem.show_all();
-            new_applets_listbox.add(widgem);
-        }
+        picker.set_plugin_list(manager.get_panel_plugins());
     }
 
     void on_panel_changed()
@@ -302,6 +350,8 @@ public class PanelEditor : Gtk.Box
 
         update_applets();
         init_applets();
+
+        this.panel_stack.set_visible_child_name("panel");
     }
 
     void refresh_applets()
@@ -670,6 +720,8 @@ public class SettingsView : Gtk.Box
 
     public Arc.DesktopManager? manager { public set ; public get ; }
 
+    private Gtk.Stack? panel_stack = null;
+
     public SettingsView(Arc.DesktopManager? manager)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0, manager: manager);
@@ -697,8 +749,12 @@ public class SettingsView : Gtk.Box
         var appearance = new AppearanceSettings();
         stack.add_titled(appearance, "appearance", _("General"));
 
-        var panel = new PanelEditor(manager);
-        stack.add_titled(panel, "panel", _("Panel"));
+
+        panel_stack = new Gtk.Stack();
+        panel_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN);
+        var panel = new PanelEditor(manager, panel_stack);
+        panel_stack.add_titled(panel, "panel", _("Panel"));
+        stack.add_titled(panel_stack, "panel", _("Panel"));
         stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", _("Sidebar"));
 
         appearance.load_themes();
