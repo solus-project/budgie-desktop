@@ -84,8 +84,10 @@ Now build it:
 Theming
 ------
 
-Please look at `./data/theme/theme.css` to override aspects of the default
-theming.
+Please look at `./data/theme/sass` to override aspects of the default
+theming. Arc theming is created using SASS, and the CSS files shipped
+are minified. Check out `./data/theme/README.md` for more information
+on regenerating the theme from SASS.
 
 Alternatively, you may invoke the panel with the GTK Inspector to
 analyse the structure::
