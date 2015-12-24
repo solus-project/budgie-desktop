@@ -45,6 +45,9 @@ public class RavenIface
     public void Toggle()
     {
         this.is_expanded = !this.is_expanded;
+        if (this.is_expanded) {
+            parent.expose_main_view();
+        }
     }
 
     public void ToggleNotification()
@@ -124,6 +127,13 @@ public class Raven : Gtk.Window
             stderr.printf("Error registering Raven: %s\n", e.message);
             Process.exit(1);
         }
+    }
+
+    public void expose_main_view()
+    {
+        main_stack.set_visible_child_name("main");
+        main_view.set_clean();
+        settings_view.set_clean();
     }
 
     public void expose_notification()

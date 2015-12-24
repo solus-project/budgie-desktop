@@ -97,6 +97,11 @@ public class MainView : Gtk.Box
         main_stack.set_visible_child_name("applets");
 
     }
+
+    public void set_clean()
+    {
+        main_stack.set_visible_child_name("applets");
+    }
 }
 
 } /* End namespace */

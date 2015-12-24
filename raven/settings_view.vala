@@ -837,6 +837,12 @@ public class SettingsView : Gtk.Box
 
         show_all();
     }
+
+    public void set_clean()
+    {
+        stack.set_visible_child_name("appearance");
+        panel_stack.set_visible_child_name("panel");
+    }
 }
 
 } /* End namespace */
