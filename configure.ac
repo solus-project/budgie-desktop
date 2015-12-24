@@ -81,6 +81,7 @@ m4_include([panel/applets/icon-tasklist/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
+m4_include([panel/applets/workspaces/configure.ac])
 
 LT_PREREQ(2.2)
 LT_INIT([disable-static])
@@ -141,4 +142,5 @@ AC_MSG_RESULT([
         notifications:          always
         separator:              always
         tasklist:               ${have_wnck}
+        workspaces:             ${have_wnck}
 ])

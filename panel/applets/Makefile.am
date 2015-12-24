@@ -4,4 +4,5 @@ SUBDIRS = \
 	icon-tasklist \
 	tasklist \
 	notifications \
-	separator
+	separator \
+	workspaces
