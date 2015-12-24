@@ -425,3 +425,36 @@ GtkPopover .scrollbar .trough {
 
     .button.image-button { padding: 8px; }
 }
+
+// Tasklist
+.arc-panel WnckTasklist .button,
+.arc-panel WnckTasklist .button:backdrop {
+
+    border-radius: 0;
+
+    @if $variant == 'default' {
+        &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
+        background: none;
+        background-clip: padding-box;
+        border: none;
+
+        &:hover { background-color: transparentize(black, 0.9); }
+        &:active, &:checked { background-color: transparentize(black, 0.8); }
+
+        @each $pos, $b_pos in (top, bottom),(bottom,top),(left,right),(right,left) {
+            .#{$pos} & {
+                border-#{$b_pos}: 2px solid transparent;
+                border-#{$pos}: 2px solid transparent;
+
+                &:hover {
+                    border-#{$b_pos}: 2px solid transparentize(black, 0.9);
+                    border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
+                }
+                &:active, &:checked {
+                    border-#{$b_pos}: 2px solid transparentize(black, 0.8);
+                    border-#{$pos}: 2px solid $selected_bg_color;
+                }
+            }
+        }
+    }
+}
