@@ -113,6 +113,7 @@ public class PanelEditor : Gtk.Box
         listbox_applets = new Gtk.ListBox();
         listbox_applets.get_style_context().remove_class("background");
         scrolledwindow_applets.add(listbox_applets);
+        listbox_applets.set_sort_func(lb_sort);
     }
 
     void on_panel_changed()
@@ -255,6 +256,7 @@ public class PanelEditor : Gtk.Box
             img.margin_top = 4;
             img.margin_bottom = 4;
             widgem.pack_start(img, false, false, 0);
+            widgem.set_data("ainfo", applet);
 
             var label = new Gtk.Label(applet.name);
             widgem.pack_start(label, true, true, 0);
@@ -262,6 +264,47 @@ public class PanelEditor : Gtk.Box
 
             listbox_applets.add(widgem);
         }
+
+        listbox_applets.invalidate_sort();
+    }
+
+    int align_to_int(string al)
+    {
+        switch (al) {
+            case "start":
+                return 0;
+            case "center":
+                return 1;
+            default:
+                return 2;
+        }
+    }
+
+    int lb_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        unowned Arc.AppletInfo? before_info = before.get_child().get_data("ainfo");
+        unowned Arc.AppletInfo? after_info = after.get_child().get_data("ainfo");
+
+        if (before_info != null && after_info != null && before_info.alignment != after_info.alignment) {
+            int bi = align_to_int(before_info.alignment);
+            int ai = align_to_int(after_info.alignment);
+
+            if (ai > bi) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        if (after_info == null) {
+            return 0;
+        }
+        if (before_info.position < after_info.position) {
+            return -1;
+        } else if (before_info.position > after_info.position) {
+            return 1;
+        }
+        return 0;
     }
 
     /* Handle updates to the current panel
