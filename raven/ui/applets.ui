@@ -33,6 +33,7 @@
             <property name="relief">none</property>
             <property name="xalign">0.54000002145767212</property>
             <property name="yalign">0.51999998092651367</property>
+            <signal name="clicked" handler="back_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -62,6 +63,7 @@
             <property name="margin_top">4</property>
             <property name="margin_bottom">4</property>
             <property name="image">image2</property>
+            <signal name="clicked" handler="add_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

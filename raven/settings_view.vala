@@ -39,10 +39,31 @@ public class AppletPicker : Gtk.Box {
 
     private Gtk.ListBox? listbox;
 
+    private unowned Peas.PluginInfo? current_info = null;
+
     public AppletPicker() {
         listbox = new Gtk.ListBox();
         listbox.set_sort_func(lb_sort);
         scrolledwindow.add(listbox);
+        listbox.row_activated.connect(on_row_activate);
+    }
+
+
+    public signal void view_switch();
+    public signal void applet_add(Peas.PluginInfo? info);
+
+    [GtkCallback]
+    void back_clicked()
+    {
+        view_switch();
+    }
+
+    [GtkCallback]
+    void add_clicked()
+    {
+        view_switch();
+        message("Applet adding not yet implemented");
+        applet_add(this.current_info);
     }
 
     int lb_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
@@ -61,6 +82,8 @@ public class AppletPicker : Gtk.Box {
         foreach (var child in listbox.get_children()) {
             child.destroy();
         }
+
+        button_add.sensitive = false;
 
         foreach (var info in plugins) {
             var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -82,6 +105,19 @@ public class AppletPicker : Gtk.Box {
             scrolledwindow.show_all();
         }
         listbox.invalidate_sort();
+    }
+
+    void on_row_activate(Gtk.ListBoxRow? row)
+    {
+        unowned Peas.PluginInfo? info = null;
+
+        if (row == null) {
+            button_add.sensitive = false;
+        }
+        
+        info = row.get_child().get_data("info");
+        button_add.sensitive = true;
+        current_info = info;
     }
 }
 
@@ -219,6 +255,9 @@ public class PanelEditor : Gtk.Box
 
 
         picker = new AppletPicker();
+        picker.view_switch.connect(()=> {
+            this.panel_stack.set_visible_child_name("panel");
+        });
         this.panel_stack.add_titled(picker, "applets", "Applets");
     }
 
