@@ -79,6 +79,7 @@ m4_include([panel/applets/budgie-menu/configure.ac])
 m4_include([panel/applets/clock/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
+m4_include([panel/applets/separator/configure.ac])
 
 LT_PREREQ(2.2)
 LT_INIT([disable-static])

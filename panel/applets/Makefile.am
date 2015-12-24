@@ -2,4 +2,5 @@ SUBDIRS = \
 	budgie-menu \
 	clock \
 	tasklist \
-	notifications
+	notifications \
+	separator
