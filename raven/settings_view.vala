@@ -79,6 +79,8 @@ public class PanelEditor : Gtk.Box
     private unowned Arc.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
 
+    private Gtk.ListBox? new_applets_listbox;
+
     public PanelEditor(Arc.DesktopManager? manager)
     {
         Object(manager: manager);
@@ -145,7 +147,36 @@ public class PanelEditor : Gtk.Box
             if (current_applet != null && current_panel != null) {
                 current_panel.move_applet_right(current_applet);
             }
-        });  
+        });
+        new_applets_listbox = new Gtk.ListBox();
+    }
+
+    void init_applets()
+    {
+        foreach (var child in new_applets_listbox.get_children()) {
+            child.destroy();
+        }
+
+        if (current_panel == null) {
+            return;
+        }
+        foreach (var info in manager.get_panel_plugins()) {
+            var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            var img = new Gtk.Image.from_icon_name(info.get_icon_name(), Gtk.IconSize.MENU);
+            img.margin_start = 6;
+            img.margin_end = 8;
+            img.margin_top = 4;
+            img.margin_bottom = 4;
+            widgem.pack_start(img, false, false, 0);
+            widgem.set_data("info", info);
+
+            var label = new Gtk.Label(info.get_name());
+            widgem.pack_start(label, true, true, 0);
+            label.halign = Gtk.Align.START;
+
+            widgem.show_all();
+            new_applets_listbox.add(widgem);
+        }
     }
 
     void on_panel_changed()
@@ -270,6 +301,7 @@ public class PanelEditor : Gtk.Box
         switch_shadow.set_active(panel.shadow_visible);
 
         update_applets();
+        init_applets();
     }
 
     void refresh_applets()
