@@ -443,16 +443,18 @@ public class Panel : Arc.Toplevel
         SignalHandler.disconnect(info, notify_id);
         info.applet.get_parent().remove(info.applet);
 
-        /*
-         * IN FUTURE:
-         * info.applet.reset_settings();
-         */
+        Settings? app_settings = info.applet.get_applet_settings(uuid);
 
         info.settings.reset(null);
 
         /* TODO: Add refcounting and unload unused plugins. */
         applets.remove(uuid);
         applet_removed(uuid);
+
+        if (app_settings != null) {
+            app_settings.reset(null);
+        }
+
         set_applets();
         budge_em_left(alignment, position);
     }
