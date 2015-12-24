@@ -617,13 +617,61 @@ public class Panel : Arc.Toplevel
         }
     }
 
+    private bool applet_at_start_of_region(Arc.AppletInfo? info)
+    {
+        return (info.position == 0);
+    }
+
+    private bool applet_at_end_of_region(Arc.AppletInfo? info)
+    {
+        return (info.position >= info.applet.get_parent().get_children().length() - 1);
+    }
+
+    private unowned Gtk.Box? get_box_left(Arc.AppletInfo? info)
+    {
+        unowned Gtk.Widget? parent = null;
+
+        if ((parent = info.applet.get_parent()) == end_box) {
+            return center_box;
+        } else if (parent == center_box) {
+            return start_box;
+        } else {
+            return null;
+        }
+    }
+
+    private unowned Gtk.Box? get_box_right(Arc.AppletInfo? info)
+    {
+        unowned Gtk.Widget? parent = null;
+
+        if ((parent = info.applet.get_parent()) == start_box) {
+            return center_box;
+        } else if (parent == center_box) {
+            return end_box;
+        } else {
+            return null;
+        }
+    }
+
     public override bool can_move_applet_left(Arc.AppletInfo? info)
     {
+        if (!applet_at_start_of_region(info)) {
+            return true;
+        }
+        if (get_box_left(info) != null) {
+            return true;
+        }
         return false;
     }
 
     public override bool can_move_applet_right(Arc.AppletInfo? info)
     {
+        if (!applet_at_end_of_region(info)) {
+            return true;
+        }
+        if (get_box_right(info) != null) {
+            return true;
+        }
         return false;
     }
 

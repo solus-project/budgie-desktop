@@ -76,7 +76,7 @@ public class PanelEditor : Gtk.Box
     [GtkChild]
     private Gtk.Button? button_move_applet_right;
 
-    private Arc.AppletInfo? current_applet = null;
+    private unowned Arc.AppletInfo? current_applet = null;
 
     public PanelEditor(Arc.DesktopManager? manager)
     {
@@ -412,10 +412,11 @@ public class PanelEditor : Gtk.Box
             button_remove_applet.sensitive = false;
         }
         
-        info = row.get_data("ainfo");
+        info = row.get_child().get_data("ainfo");
         button_move_applet_left.sensitive = current_panel.can_move_applet_left(info);
         button_move_applet_right.sensitive = current_panel.can_move_applet_right(info);
         button_remove_applet.sensitive = true;
+        current_applet = info;
     }
 
     /* Handle updates to the current panel
