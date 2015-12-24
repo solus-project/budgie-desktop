@@ -225,11 +225,11 @@ GtkPopover .scrollbar .trough {
                    ('radio','radio') {
       .#{$w} {
         color: $fg_color;
-        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}.svg"),url("assets/#{$a}@2.svg")),
+        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}.png"),url("assets/#{$a}@2.png")),
                                                     -gtk-icontheme('#{$a}-symbolic'));
 
         &:checked, &:active {
-            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}-active.svg"),url("assets/#{$a}-active@2.svg")),
+            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}-active.png"),url("assets/#{$a}-active@2.png")),
                                                         -gtk-icontheme('#{$a}-checked-symbolic'));
         }
         &:insensitive { color: transparentize($fg_color, 0.65); }
@@ -255,9 +255,9 @@ GtkPopover .scrollbar .trough {
             &:dir(rtl) { background-position: left center; }
         }
         &.trough {
-            background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.svg"),url("assets/switch#{$asset_suffix}@2.svg"));
+            background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.png"),url("assets/switch#{$asset_suffix}@2.png"));
 
-            &:active { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.svg"),url("assets/switch-active#{$asset_suffix}@2.svg")); }
+            &:active { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.png"),url("assets/switch-active#{$asset_suffix}@2.png")); }
         }
     }
 

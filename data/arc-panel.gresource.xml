@@ -3,22 +3,22 @@
         <gresource prefix="/com/solus-project/arc/panel">
                 <file>theme/theme.css</file>
                 <file>theme/theme_hc.css</file>
-                <file preprocess="xml-stripblanks">theme/assets/checkbox.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/checkbox@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/checkbox-active.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/checkbox-active@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/radio.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/radio@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/radio-active.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/radio-active@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-active.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-active@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-hc.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-hc@2.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-active-hc.svg</file>
-                <file preprocess="xml-stripblanks">theme/assets/switch-active-hc@2.svg</file>
+                <file>theme/assets/checkbox.png</file>
+                <file>theme/assets/checkbox@2.png</file>
+                <file>theme/assets/checkbox-active.png</file>
+                <file>theme/assets/checkbox-active@2.png</file>
+                <file>theme/assets/radio.png</file>
+                <file>theme/assets/radio@2.png</file>
+                <file>theme/assets/radio-active.png</file>
+                <file>theme/assets/radio-active@2.png</file>
+                <file>theme/assets/switch.png</file>
+                <file>theme/assets/switch@2.png</file>
+                <file>theme/assets/switch-active.png</file>
+                <file>theme/assets/switch-active@2.png</file>
+                <file>theme/assets/switch-hc.png</file>
+                <file>theme/assets/switch-hc@2.png</file>
+                <file>theme/assets/switch-active-hc.png</file>
+                <file>theme/assets/switch-active-hc@2.png</file>
                 <file>panel.ini</file>
         </gresource>
 </gresources>

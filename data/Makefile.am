@@ -6,26 +6,30 @@ EXTRA_DIST = \
 	icons/notification-alert-symbolic.svg \
 	panel.ini \
 	theme/.nvmrc \
+	theme/assets.svg \
+	theme/assets.txt \
 	theme/gulpfile.js \
 	theme/package.json \
+	theme/README.md \
+	theme/render-assets.sh \
 	theme/theme.css \
 	theme/theme_hc.css \
-	theme/assets/checkbox.svg \
-	theme/assets/checkbox@2.svg \
-	theme/assets/checkbox-active.svg \
-	theme/assets/checkbox-active@2.svg \
-	theme/assets/radio.svg \
-	theme/assets/radio@2.svg \
-	theme/assets/radio-active.svg \
-	theme/assets/radio-active@2.svg \
-	theme/assets/switch.svg \
-	theme/assets/switch@2.svg \
-	theme/assets/switch-active.svg \
-	theme/assets/switch-active@2.svg \
-	theme/assets/switch-hc.svg \
-	theme/assets/switch-hc@2.svg \
-	theme/assets/switch-active-hc.svg \
-	theme/assets/switch-active-hc@2.svg \
+	theme/assets/checkbox.png \
+	theme/assets/checkbox@2.png \
+	theme/assets/checkbox-active.png \
+	theme/assets/checkbox-active@2.png \
+	theme/assets/radio.png \
+	theme/assets/radio@2.png \
+	theme/assets/radio-active.png \
+	theme/assets/radio-active@2.png \
+	theme/assets/switch.png \
+	theme/assets/switch@2.png \
+	theme/assets/switch-active.png \
+	theme/assets/switch-active@2.png \
+	theme/assets/switch-hc.png \
+	theme/assets/switch-hc@2.png \
+	theme/assets/switch-active-hc.png \
+	theme/assets/switch-active-hc@2.png \
 	theme/sass/_colors.scss \
 	theme/sass/_drawing.scss \
 	theme/sass/_main.scss \
