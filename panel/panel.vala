@@ -203,11 +203,14 @@ public class Panel : Arc.Toplevel
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        start_box.get_style_context().add_class("start-region");
         start_box.halign = Gtk.Align.START;
         layout.pack_start(start_box, true, true, 0);
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        center_box.get_style_context().add_class("center-region");
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        end_box.get_style_context().add_class("end-region");
         layout.pack_end(end_box, true, true, 0);
         end_box.halign = Gtk.Align.END;
 
