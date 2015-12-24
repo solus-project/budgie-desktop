@@ -71,8 +71,8 @@ public class Applet : Gtk.Bin
      */
     public Applet() { }
 
-    public string? settings_prefix { public get; private set; default = null; }
-    public string? settings_schema { public get; private set; default = null; }
+    public string? settings_prefix { public get; public set; default = null; }
+    public string? settings_schema { public get; public set; default = null; }
 
     /**
      * arc_applet_update_popovers:
