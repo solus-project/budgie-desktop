@@ -19,13 +19,12 @@ public class NotificationsView : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
-        var img = new Gtk.Image.from_icon_name("open-menu-symbolic", Gtk.IconSize.MENU);
+        var img = new Gtk.Image.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         img.margin_top = 4;
         img.margin_bottom = 4;
 
         var header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, img);
-        header.margin_top = 4;
-        header.margin_bottom = 4;
+        header.margin_top = 6;
 
         pack_start(header, false, false, 0);
 
