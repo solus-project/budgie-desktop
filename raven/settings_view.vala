@@ -175,10 +175,11 @@ public class PanelEditor : Gtk.Box
     private unowned Arc.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
     private ulong applet_added_id;
+    private ulong applet_removed_id;
 
     private AppletPicker? picker;
 
-    private HashTable<string?,Arc.AppletInfo?> applets = null;
+    private HashTable<string?,Gtk.Widget?> applets = null;
 
     private unowned Gtk.Stack? panel_stack = null;
 
@@ -196,7 +197,7 @@ public class PanelEditor : Gtk.Box
             this.manager.delete_panel(current_panel.uuid);
         });
 
-        applets = new HashTable<string?,Arc.AppletInfo?>(str_hash, str_equal);
+        applets = new HashTable<string?,Gtk.Widget?>(str_hash, str_equal);
 
         /* PanelPosition */
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));
@@ -237,11 +238,11 @@ public class PanelEditor : Gtk.Box
         listbox_applets.set_header_func(lb_headers);
         listbox_applets.row_activated.connect(on_row_activate);
 
-        /*button_remove_applet.clicked.connect(()=> {
+        button_remove_applet.clicked.connect(()=> {
             if (current_applet != null && current_panel != null) {
                 current_panel.remove_applet(current_applet);
             }
-        });*/
+        });
         button_move_applet_left.clicked.connect(()=> {
             if (current_applet != null && current_panel != null) {
                 current_panel.move_applet_left(current_applet);
@@ -385,6 +386,7 @@ public class PanelEditor : Gtk.Box
             SignalHandler.disconnect(current_panel, notify_id);
             SignalHandler.disconnect(current_panel, applets_changed_id);
             SignalHandler.disconnect(current_panel, applet_added_id);
+            SignalHandler.disconnect(current_panel, applet_removed_id);
         }
         current_panel = panel;
 
@@ -392,6 +394,7 @@ public class PanelEditor : Gtk.Box
         notify_id = panel.notify.connect(on_panel_update);
         applets_changed_id = panel.applets_changed.connect(refresh_applets);
         applet_added_id = panel.applet_added.connect(applet_added);
+        applet_removed_id = panel.applet_removed.connect(applet_removed);
 
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
@@ -415,6 +418,11 @@ public class PanelEditor : Gtk.Box
         refresh_applets();
     }
 
+    void applet_removed(string uuid)
+    {
+        update_applets();
+    }
+
     void insert_applet(Arc.AppletInfo? applet)
     {
         var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -432,7 +440,7 @@ public class PanelEditor : Gtk.Box
 
         widgem.show_all();
         listbox_applets.add(widgem);
-        applets.insert(applet.uuid, applet);
+        applets.insert(applet.uuid, widgem);
     }
 
     void refresh_applets()

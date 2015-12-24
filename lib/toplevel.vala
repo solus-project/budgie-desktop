@@ -43,7 +43,7 @@ public abstract class Toplevel : Gtk.Window
 
     public abstract GLib.List<Arc.AppletInfo?> get_applets();
     public signal void applet_added(Arc.AppletInfo? info);
-    public signal void applet_removed(Arc.AppletInfo? info);
+    public signal void applet_removed(string uuid);
 
     public signal void applets_changed();
 
@@ -54,6 +54,7 @@ public abstract class Toplevel : Gtk.Window
     public abstract void move_applet_right(Arc.AppletInfo? info);
 
     public abstract void add_new_applet(string id);
+    public abstract void remove_applet(Arc.AppletInfo? info);
 }
 
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)

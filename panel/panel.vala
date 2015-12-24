@@ -432,6 +432,31 @@ public class Panel : Arc.Toplevel
         settings.set_strv(Arc.PANEL_KEY_APPLETS, uuids);
     }
 
+    public override void remove_applet(Arc.AppletInfo? info)
+    {
+        int position = info.position;
+        string alignment = info.alignment;
+        string uuid = info.uuid;
+
+        ulong notify_id = info.get_data("notify_id");
+
+        SignalHandler.disconnect(info, notify_id);
+        info.applet.get_parent().remove(info.applet);
+
+        /*
+         * IN FUTURE:
+         * info.applet.reset_settings();
+         */
+
+        info.settings.reset(null);
+
+        /* TODO: Add refcounting and unload unused plugins. */
+        applets.remove(uuid);
+        applet_removed(uuid);
+        set_applets();
+        budge_em_left(alignment, position);
+    }
+
     void add_applet(Arc.AppletInfo? info)
     {
         unowned Gtk.Box? pack_target = null;
@@ -467,8 +492,8 @@ public class Panel : Arc.Toplevel
         pack_target.pack_start(info.applet, false, false, 0);
 
         pack_target.child_set(info.applet, "position", info.position);
-        info.notify.connect(applet_updated);
-
+        ulong id = info.notify.connect(applet_updated);
+        info.set_data("notify_id", id);
         this.applet_added(info);
     }
 
