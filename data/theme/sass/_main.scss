@@ -326,6 +326,28 @@ GtkPopover .scrollbar .trough {
         .trough { background-color: if($variant == 'default', transparentize(black, 0.6), $trough_bg); }
     }
 
+    // Lists
+    .list { @extend %reset_style; }
+
+    .list-row.activatable {
+        @extend %reset_style;
+
+        &:hover { background-color: $button_bg; }
+        &:active { color: $fg_color; }
+        &:selected {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+
+            &:active { color: $selected_fg_color; }
+            &:hover { background-color: mix(black, $selected_bg_color, 10%); }
+            &:insensitive {
+                color: transparentize($selected_fg_color, 0.3);
+                background-color: transparentize($selected_bg_color, 0.3);
+                .label { color: inherit; }
+            }
+        }
+    }
+
     // Calendar
     GtkCalendar.raven-calendar {
         @extend %reset_style;
