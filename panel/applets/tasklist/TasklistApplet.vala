@@ -13,7 +13,7 @@ const int icon_size = 32;
 
 public class TasklistPlugin : Arc.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget()
+    public Arc.Applet get_panel_widget(string uuid)
     {
         return new TasklistApplet();
     }

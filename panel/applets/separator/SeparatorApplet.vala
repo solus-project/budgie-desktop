@@ -11,7 +11,7 @@
 
 public class SeparatorPlugin : Arc.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget()
+    public Arc.Applet get_panel_widget(string uuid)
     {
         return new SeparatorApplet();
     }
