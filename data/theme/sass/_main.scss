@@ -27,19 +27,22 @@ GtkPopover .scrollbar .trough {
 .raven,
 .arc-panel {
 
-    .dim-label {
+    * {
+        padding: 0;
         @extend %reset_style;
-        opacity: 0.55;
     }
+
+    .dim-label { opacity: 0.55; }
     .label:insensitive { color: transparentize($fg_color, 0.65); }
+    .separator { color: rgba(0,0,0,0.25); }
+    .cell { color: $fg_color; }
+    GtkLabel, GtkImage { color: inherit; }
 
     // used to indicate unread notifications
-    .alert { color: lighten($destructive_color, 10%); }
+    .alert { color: $alert_color; }
 
     // Entries
     .entry {
-        @extend %reset_style;
-
         padding: 4px 8px;
         border: $border_width solid;
         border-radius: $roundness;
@@ -61,8 +64,6 @@ GtkPopover .scrollbar .trough {
 
     // Buttons
     .button {
-        @extend %reset_style;
-
         background-clip: padding-box;
         padding: 4px 8px;
         border: $border_width solid;
@@ -157,8 +158,6 @@ GtkPopover .scrollbar .trough {
 
     // Spinbuttons
     .spinbutton {
-        @extend %reset_style;
-
         border-radius: $roundness;
 
         .button {
@@ -172,8 +171,6 @@ GtkPopover .scrollbar .trough {
 
     // Progressbars
     GtkProgressBar {
-        @extend %reset_style;
-
         padding: 0;
         font-size: smaller;
         color: transparentize($fg_color, 0.3);
@@ -192,8 +189,6 @@ GtkPopover .scrollbar .trough {
 
     // Scale
     .scale {
-        @extend %reset_style;
-
         -GtkScale-slider-length: if($variant == 'default', 9, 16);
         -GtkRange-slider-width: if($variant == 'default', 5, 16);
         -GtkRange-trough-border: 0;
@@ -229,14 +224,12 @@ GtkPopover .scrollbar .trough {
     @each $w,$a in ('check', 'checkbox'),
                    ('radio','radio') {
       .#{$w} {
-        @extend %reset_style;
-
         color: $fg_color;
-        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}.svg"),url("assets/#{$a}@2.svg")),
+        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}.png"),url("assets/#{$a}@2.png")),
                                                     -gtk-icontheme('#{$a}-symbolic'));
 
         &:checked, &:active {
-            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}-active.svg"),url("assets/#{$a}-active@2.svg")),
+            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}-active.png"),url("assets/#{$a}-active@2.png")),
                                                         -gtk-icontheme('#{$a}-checked-symbolic'));
         }
         &:insensitive { color: transparentize($fg_color, 0.65); }
@@ -246,14 +239,10 @@ GtkPopover .scrollbar .trough {
 
     // Switches
     GtkSwitch {
-        @extend %reset_style;
-
         font: 1;
         -GtkSwitch-slider-width: 45;
         -GtkSwitch-slider-height: 19;
         outline-color: transparent;
-
-        @extend %reset_style;
 
         &:insensitive { opacity: 0.4; }
 
@@ -266,16 +255,14 @@ GtkPopover .scrollbar .trough {
             &:dir(rtl) { background-position: left center; }
         }
         &.trough {
-            background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.svg"),url("assets/switch#{$asset_suffix}@2.svg"));
+            background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.png"),url("assets/switch#{$asset_suffix}@2.png"));
 
-            &:active { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.svg"),url("assets/switch-active#{$asset_suffix}@2.svg")); }
+            &:active { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.png"),url("assets/switch-active#{$asset_suffix}@2.png")); }
         }
     }
 
     // Scrollbars
     .scrollbar {
-        @extend %reset_style;
-
         -GtkRange-slider-width: 13;
         -GtkRange-trough-border: 0;
         -GtkScrollbar-has-backward-stepper: false;
@@ -327,10 +314,10 @@ GtkPopover .scrollbar .trough {
     }
 
     // Lists
-    .list { @extend %reset_style; }
-
+    .list { color: $fg_color; }
     .list-row.activatable {
-        @extend %reset_style;
+        padding: 3px;
+        color: $fg_color;
 
         &:hover { background-color: $button_bg; }
         &:active { color: $fg_color; }
@@ -347,11 +334,45 @@ GtkPopover .scrollbar .trough {
             }
         }
     }
+    @at-root .raven {
+        .menu {
+          .cell { color: inherit; }
+
+          margin: 4px;
+          padding: 0;
+          border-radius: 0;
+          background-color: $raven_bg;
+
+          .menuitem {
+            padding: 5px;
+            color: $fg_color;
+            &:hover {
+              color: $selected_fg_color;
+              background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
+              border: solid if($variant == 'hc', $selected_bg_color, transparentize(white, 0.93));
+              border-width: 1px 0 1px 0;
+            }
+            &:insensitive { color: transparentize($fg_color, 0.65); }
+            &.separator { color: transparentize($raven_bg, 1); }
+          }
+          &.button {
+            border: none;
+            &:hover { background-color: $selected_bg_color; }
+            &:insensitive {
+              color: transparentize($fg_color, 0.65);
+              background-color: transparent;
+            }
+          }
+        }
+        .window-frame.csd.popup {
+          box-shadow: 0 3px 6px transparentize(black, 0.55),
+                      0 0 0 1px transparentize(black, 0.55);
+        }
+    }
 
     // Calendar
     GtkCalendar.raven-calendar {
-        @extend %reset_style;
-
+        padding: 3px;
         color: $fg_color;
 
         &:inconsistent { color: gtkalpha(currentColor,0.3); }
@@ -395,6 +416,8 @@ GtkPopover .scrollbar .trough {
 
     // Raven borders
     .#{$pos} .raven-frame {
+        padding: 0;
+        background: none;
         border: none;
         border-#{$b_pos}: $border_width solid $raven_border;
     }
@@ -427,8 +450,11 @@ GtkPopover .scrollbar .trough {
         .expander-button { color: gtkalpha(currentColor, 0.5); }
     }
     .raven-background {
+        color: $fg_color;
         background-color: $raven_background_bg;
         border-bottom: 1px solid $raven_background_border;
+
+        &.middle { border-bottom-style: none; }  // applet background between two headers
     }
     .powerstrip .button {
         padding: 10px;
