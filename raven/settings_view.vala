@@ -262,7 +262,7 @@ public class PanelEditor : Gtk.Box
 
         foreach (var applet in current_panel.get_applets()) {
             var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-            var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.LARGE_TOOLBAR);
+            var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.MENU);
             img.margin_start = 6;
             img.margin_end = 8;
             img.margin_top = 4;
