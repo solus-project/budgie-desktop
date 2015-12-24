@@ -30,8 +30,6 @@ public class TasklistApplet : Arc.Applet
         add(tlist);
 
         tlist.set_grouping(Wnck.TasklistGroupingType.AUTO_GROUP);
-        margin_top = 2;
-        margin_bottom = 2;
 
         show_all();
     }
