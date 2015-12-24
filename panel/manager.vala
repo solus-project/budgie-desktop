@@ -455,9 +455,6 @@ public class PanelManager : DesktopManager
     {
         GLib.List<Peas.PluginInfo?> ret = new GLib.List<Peas.PluginInfo?>();
         foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
-            if (!this.engine.provides_extension(info, typeof(Arc.Plugin))) {
-                continue;
-            }
             ret.append(info);
         }
         return ret;
