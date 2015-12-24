@@ -678,7 +678,7 @@ public class Panel : Arc.Toplevel
         var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
 
         while (iter.next(out key, out val)) {
-            if (val.position == info.position && info != val) {
+            if (val.alignment == info.alignment && val.position == info.position && info != val) {
                 conflict = val;
                 break;
             }
@@ -689,6 +689,19 @@ public class Panel : Arc.Toplevel
         }
 
         conflict.position = old_position;
+    }
+
+    void budge_em_right(string alignment)
+    {
+        unowned string key;
+        unowned Arc.AppletInfo? val;
+        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+
+        while (iter.next(out key, out val)) {
+            if (val.alignment == alignment) {
+                val.position++;
+            }
+        }
     }
 
     public override void move_applet_left(Arc.AppletInfo? info)
@@ -708,7 +721,6 @@ public class Panel : Arc.Toplevel
             return;
         }
         if ((new_home = get_box_left(info)) != null) {
-            info.alignment = new_home;
             unowned Gtk.Box? new_parent = null;
             switch (info.alignment) {
                 case "start":
@@ -723,9 +735,8 @@ public class Panel : Arc.Toplevel
             }
 
             uint len = new_parent.get_children().length();
-            if (len > 0) {
-                info.position = (int)len;
-            }
+            info.alignment = new_home;
+            info.position = (int)len;
             applets_changed();
         }
     }
@@ -739,7 +750,7 @@ public class Panel : Arc.Toplevel
 
         if (!applet_at_end_of_region(info)) {
             new_position++;
-            len = info.applet.get_parent().get_children().length();
+            len = info.applet.get_parent().get_children().length() - 1;
             if (new_position > len) {
                 new_position = (int) len;
             }
@@ -749,9 +760,9 @@ public class Panel : Arc.Toplevel
             return;
         }
         if ((new_home = get_box_right(info)) != null) {
+            budge_em_right(new_home);
             info.alignment = new_home;
             info.position = 0;
-            conflict_swap(info, 0);
             applets_changed();
         }
     }
