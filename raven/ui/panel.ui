@@ -364,6 +364,7 @@
         </child>
         <style>
           <class name="raven-background"/>
+          <class name="middle"/>
         </style>
       </object>
       <packing>
