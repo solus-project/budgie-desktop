@@ -764,7 +764,7 @@ public class PanelManager : DesktopManager
         psettings.reset(null);
     }
 
-    void create_panel(string? name = null, KeyFile new_defaults = null)
+    void create_panel(string? name = null, KeyFile? new_defaults = null)
     {
         PanelPosition position = PanelPosition.NONE;
         int size = -1;

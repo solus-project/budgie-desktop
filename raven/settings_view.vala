@@ -263,6 +263,7 @@ public class PanelEditor : Gtk.Box
             widgem.pack_start(label, true, true, 0);
             label.halign = Gtk.Align.START;
 
+            widgem.show_all();
             listbox_applets.add(widgem);
         }
 
