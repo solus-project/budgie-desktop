@@ -77,6 +77,7 @@ AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
 # Got this idea from gnome-builder :)
 m4_include([panel/applets/budgie-menu/configure.ac])
 m4_include([panel/applets/clock/configure.ac])
+m4_include([panel/applets/icon-tasklist/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
