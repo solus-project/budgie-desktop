@@ -26,7 +26,6 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 
 # data
-/data/*.valid
 /data/arc-panel.desktop
 
 # panel
@@ -70,7 +69,8 @@ arc-panel-resources.*
 /wm/arc-wm
 /wm/arc-wm.desktop
 /wm/*.c
-/wm/*.valid
+
+*.gschema.valid
 
 /po/POTFILES
 /po/Makefile.in.in

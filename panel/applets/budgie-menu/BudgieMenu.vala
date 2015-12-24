@@ -15,7 +15,7 @@ public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
 {
     public Arc.Applet get_panel_widget(string uuid)
     {
-        return new BudgieMenuApplet();
+        return new BudgieMenuApplet(uuid);
     }
 }
 
@@ -32,11 +32,17 @@ public class BudgieMenuApplet : Arc.Applet
 
     private unowned Arc.PopoverManager? manager = null;
 
-    public BudgieMenuApplet()
-    {
-        Object();
+    public string uuid { public set ; public get; }
 
-        settings = new Settings("com.solus-project.budgie-menu");
+    public BudgieMenuApplet(string uuid)
+    {
+        Object(uuid: uuid);
+
+        settings_schema = "com.solus-project.budgie-menu";
+        settings_prefix = "/com/solus-project/budgie-menu";
+
+        settings = this.get_applet_settings(uuid);
+
         ksettings = new Settings("org.gnome.mutter");
         settings.changed.connect(on_settings_changed);
         ksettings.changed.connect(on_settings_changed);
@@ -56,7 +62,7 @@ public class BudgieMenuApplet : Arc.Applet
         // Better styling to fit in with the budgie-panel
         var st = img.get_style_context();
         st.add_class("primary-control");
-        popover = new BudgieMenuWindow(img);
+        popover = new BudgieMenuWindow(settings, img);
 
         widget.button_press_event.connect((e)=> {
             if (e.button != 1) {

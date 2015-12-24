@@ -10,7 +10,9 @@ plugin_DATA += \
 	BudgieMenu.plugin
 
 EXTRA_DIST += \
-	$(plugin_DATA)
+	$(plugin_DATA) \
+	com.solus-project.budgie-menu.gschema.xml
+
 
 plugin_LTLIBRARIES = libbudgiemenuapplet.la
 
@@ -43,3 +45,8 @@ libbudgiemenuapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg arc-1.0 \
 	--vapidir=${top_srcdir}/plugin
+
+gsettings_SCHEMAS = \
+	com.solus-project.budgie-menu.gschema.xml
+
+@GSETTINGS_RULES@

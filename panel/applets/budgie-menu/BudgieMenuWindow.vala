@@ -95,14 +95,14 @@ public class BudgieMenuWindow : Gtk.Popover
 
     // The current group 
     protected GMenu.TreeDirectory? group = null;
-
-    protected Settings settings;
     protected bool compact_mode;
 
     // Current search term
     protected string search_term = "";
 
     protected int icon_size = 22;
+
+    public unowned Settings settings { public get; public set; }
 
     /* Reload menus, essentially. */
     public void refresh_tree()
@@ -260,16 +260,14 @@ public class BudgieMenuWindow : Gtk.Popover
 
     }
 
-    public BudgieMenuWindow(Gtk.Widget? leparent)
+    public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent)
     {
-        Object(relative_to: leparent);
+        Object(settings: settings, relative_to: leparent);
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
 
         border_width = 6;
 
-        // Currently just to track usage
-        settings = new Settings("com.solus-project.budgie-menu");
         icon_size = settings.get_int("menu-icons-size");
 
         // search entry up north

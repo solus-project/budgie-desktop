@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="budgie">
-  <schema path="/com/solus-project/budgie-menu/" id="com.solus-project.budgie-menu">
-
-    <key type="as" name="pinned-launchers">
-      <default>[]</default>
-      <summary>Pinned launchers</summary>
-      <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
-    </key>
+  <schema id="com.solus-project.budgie-menu">
 
     <key type="a(si)" name="app-scores">
       <default>[]</default>
@@ -49,6 +43,6 @@
       <summary>Whether to show menu headers</summary>
       <description>Enable menu category headers</description>
     </key>
-
   </schema>
+
 </schemalist>
