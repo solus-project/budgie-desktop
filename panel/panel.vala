@@ -704,6 +704,21 @@ public class Panel : Arc.Toplevel
         }
     }
 
+    void budge_em_left(string alignment)
+    {
+        unowned string key;
+        unowned Arc.AppletInfo? val;
+        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+
+        while (iter.next(out key, out val)) {
+            if (val.alignment == alignment) {
+                if (val.position > 0) {
+                    val.position--;
+                }
+            }
+        }
+    }
+
     public override void move_applet_left(Arc.AppletInfo? info)
     {
         string? new_home = null;
@@ -723,20 +738,22 @@ public class Panel : Arc.Toplevel
         if ((new_home = get_box_left(info)) != null) {
             unowned Gtk.Box? new_parent = null;
             switch (info.alignment) {
-                case "start":
-                    new_parent = start_box;
+                case "end":
+                    new_parent = center_box;
                     break;
                 case "center":
-                    new_parent = center_box;
+                    new_parent = start_box;
                     break;
                 default:
                     new_parent = end_box;
                     break;
             }
 
+            string old_home = info.alignment;
             uint len = new_parent.get_children().length();
             info.alignment = new_home;
             info.position = (int)len;
+            budge_em_left(old_home);
             applets_changed();
         }
     }
