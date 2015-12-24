@@ -114,6 +114,7 @@ public class PanelEditor : Gtk.Box
         listbox_applets.get_style_context().remove_class("background");
         scrolledwindow_applets.add(listbox_applets);
         listbox_applets.set_sort_func(lb_sort);
+        listbox_applets.set_header_func(lb_headers);
     }
 
     void on_panel_changed()
@@ -266,6 +267,7 @@ public class PanelEditor : Gtk.Box
         }
 
         listbox_applets.invalidate_sort();
+        listbox_applets.invalidate_headers();
     }
 
     int align_to_int(string al)
@@ -305,6 +307,56 @@ public class PanelEditor : Gtk.Box
             return 1;
         }
         return 0;
+    }
+
+    void lb_headers(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        Gtk.Widget? child = null;
+        string? prev = null;
+        string? next = null;
+        unowned Arc.AppletInfo? before_info = null;
+        unowned Arc.AppletInfo? after_info = null;
+    
+        if (before != null) {
+            before_info = before.get_child().get_data("ainfo");
+            prev = before_info.alignment;
+        }
+
+        if (after != null) {
+            after_info = after.get_child().get_data("ainfo");
+            next = after_info.alignment;
+        }
+        
+        if (before == null || after == null || prev != next) {
+            Gtk.Label? label = null;
+            switch (prev) {
+                case "start":
+                    label = new Gtk.Label(_("Start"));
+                    break;
+                case "center":
+                    label = new Gtk.Label(_("Center"));
+                    break;
+                default:
+                    label = new Gtk.Label(_("End"));
+                    break;
+            }
+            label.get_style_context().add_class("dim-label");
+            label.halign = Gtk.Align.START;
+            var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+            label.margin_start = 8;
+            label.margin_end = 6;
+            label.margin_top = 3;
+            label.margin_bottom = 3;
+
+            var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            box.pack_start(label, false, false, 0);
+            box.pack_start(sep, true, true, 0);
+            label.use_markup = true;
+            box.show_all();
+            before.set_header(box);
+        } else {
+            before.set_header(null);
+        }
     }
 
     /* Handle updates to the current panel
