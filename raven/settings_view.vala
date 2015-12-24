@@ -276,6 +276,11 @@ public class PanelEditor : Gtk.Box
     {
         listbox_applets.invalidate_sort();
         listbox_applets.invalidate_headers();
+
+        var row = listbox_applets.get_selected_row();;
+        if (row != null) {
+            on_row_activate(row);
+        }
     }
 
     void update_applets()
