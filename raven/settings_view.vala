@@ -790,7 +790,7 @@ public class SettingsView : Gtk.Box
 
 
         panel_stack = new Gtk.Stack();
-        panel_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN);
+        panel_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         var panel = new PanelEditor(manager, panel_stack);
         panel_stack.add_titled(panel, "panel", _("Panel"));
         stack.add_titled(panel_stack, "panel", _("Panel"));
