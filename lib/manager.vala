@@ -29,6 +29,8 @@ public abstract class DesktopManager : GLib.Object
 
     public abstract void create_new_panel();
     public abstract void delete_panel(string uuid);
+    public abstract unowned Peas.ExtensionSet? get_panel_extensions();
+
 }
 
 

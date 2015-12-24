@@ -148,6 +148,11 @@ public class PanelManager : DesktopManager
         }
     }
 
+    public override unowned Peas.ExtensionSet? get_panel_extensions()
+    {
+        return extensions;
+    }
+
     private async bool register_with_session()
     {
         ObjectPath? path = null;
