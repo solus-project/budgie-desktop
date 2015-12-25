@@ -56,10 +56,35 @@ public class KeyboardManager : GLib.Object
 
         on_settings_changed("xkb-options");
         on_settings_changed("sources");
+    }
 
-        /* TODO: Add support to cycle through the keyboard layouts,
-         * this quite literally involves increasing the current
-         * source % sources.length, and apply_layout */
+	public delegate void KeyHandlerFunc (Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
+
+    void switch_input_source(Meta.Display display, Meta.Screen screen,
+                             Meta.Window? window, Clutter.KeyEvent? event,
+                             Meta.KeyBinding binding)
+    {
+        current_source = (current_source-1) % sources.length;
+        this.apply_layout(current_source);
+    }
+    void switch_input_source_backward(Meta.Display display, Meta.Screen screen,
+                                      Meta.Window? window, Clutter.KeyEvent? event,
+                                      Meta.KeyBinding binding)
+    {
+        current_source = (current_source+1) % sources.length;
+
+        this.apply_layout(current_source);
+    }
+
+    public void hook_extra()
+    {
+        var screen = wm.get_screen();
+        var display = screen.get_display();
+
+        /* Hook into GNOME defaults */
+        var schema = new Settings("org.gnome.desktop.wm.keybindings");
+        display.add_keybinding("switch-input-source", schema, Meta.KeyBindingFlags.NONE, switch_input_source);
+        display.add_keybinding("switch-input-source-backward", schema, Meta.KeyBindingFlags.NONE, switch_input_source_backward);
     }
 
     void on_settings_changed(string key)

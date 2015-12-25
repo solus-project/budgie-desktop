@@ -167,6 +167,7 @@ public class ArcWM : Meta.Plugin
         }
 
         keyboard = new KeyboardManager(this);
+        keyboard.hook_extra();
     }
 
     bool on_button_release(Clutter.ButtonEvent? event)
