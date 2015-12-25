@@ -5,4 +5,5 @@ SUBDIRS = \
 	tasklist \
 	notifications \
 	separator \
+	show-desktop \
 	workspaces
