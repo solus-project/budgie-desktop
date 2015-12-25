@@ -878,7 +878,7 @@ public class SettingsView : Gtk.Box
         var panel = new PanelEditor(manager, panel_stack);
         panel_stack.add_titled(panel, "panel", _("Panel"));
         stack.add_titled(panel_stack, "panel", _("Panel"));
-        stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", _("Sidebar"));
+        /*stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", _("Sidebar"));*/
 
         appearance.load_themes();
 
