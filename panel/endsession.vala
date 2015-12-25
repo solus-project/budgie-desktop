@@ -78,7 +78,6 @@ public class EndSessionDialog : Gtk.Window
     {
         try {
             conn.register_object("/com/solus_project/Session/EndSessionDialog", this);
-            message("Erm registered??");
         } catch (Error e) {
             warning("Cannot register EndSessionDialog");
         }
