@@ -39,7 +39,7 @@ public class BudgieMenuApplet : Arc.Applet
         Object(uuid: uuid);
 
         settings_schema = "com.solus-project.budgie-menu";
-        settings_prefix = "/com/solus-project/budgie-menu";
+        settings_prefix = "/com/solus-project/arc-panel/instance/budgie-menu";
 
         settings = this.get_applet_settings(uuid);
 

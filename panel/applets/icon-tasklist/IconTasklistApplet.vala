@@ -678,7 +678,7 @@ public class IconTasklistApplet : Arc.Applet
         this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
 
         settings_schema = "com.solus-project.icon-tasklist";
-        settings_prefix = "/com/solus-project/icon-tasklist";
+        settings_prefix = "/com/solus-project/arc-panel/instance/icon-tasklist";
 
         helper = new DesktopHelper();
 
