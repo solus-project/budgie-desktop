@@ -199,7 +199,14 @@ public class IconButton : Gtk.ToggleButton
         }
 
         if (window == null) {
+            if (this is PinnedIconButton) {
+                this.get_style_context().remove_class("running");
+            }
             return;
+        }
+
+        if (this is PinnedIconButton) {
+            this.get_style_context().add_class("running");
         }
         set_tooltip_text(window.get_name());
 
