@@ -705,50 +705,38 @@ public class IconTasklistApplet : Arc.Applet
         screen.window_closed.connect(window_closed);
         screen.active_window_changed.connect(active_window_changed);
 
-        /*icon_size_changed.connect((i,s)=> {
-            icon_size = (int)i;
-            Wnck.set_default_icon_size(icon_size);
-            foreach (var btn in buttons.values) {
-                Idle.add(()=>{
-                    btn.icon_size = icon_size;
-                    btn.update_icon();
-                    return false;
-                });
-            }
-            foreach (var btn in pin_buttons.values) {
-                Idle.add(()=>{
-                    btn.icon_size = icon_size;
-                    btn.update_icon();
-                    return false;
-                });
-            }
-        });
-
-        // Update orientation when parent panel does
-        orientation_changed.connect((o)=> {
-            main_layout.set_orientation(o);
-            widget.set_orientation(o);
-            pinned.set_orientation(o);
-        });
-        position_changed.connect((p) => {
-            pinned.set_property("margin", 0);
-            switch (p) {
-                case Arc.PanelPosition.LEFT:
-                case Arc.PanelPosition.RIGHT:
-                    pinned.set_property("margin-bottom", 10);
-                    break;
-                default:
-                    pinned.set_property("margin-right", 10);
-                    break;
-            }
-            panel_position = p;
-            queue_draw();
-        });*/
+        panel_size_changed.connect(on_panel_size_changed);
 
         get_style_context().add_class("icon-tasklist");
 
         add(main_layout);
         show_all();
+    }
+
+    void on_panel_size_changed(int panel, int icon)
+    {
+        icon_size = icon;
+        unowned Wnck.Window? btn_key = null;
+        unowned string? str_key = null;
+        unowned IconButton? val = null;
+        unowned PinnedIconButton? pin_val = null;
+        
+        Wnck.set_default_icon_size(icon_size);
+
+        Idle.add(()=> {
+            var iter = HashTableIter<Wnck.Window?,IconButton?>(buttons);
+            while (iter.next(out btn_key, out val)) {
+                val.icon_size = icon_size;
+                val.update_icon();
+            }
+
+            var iter2 = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
+            while (iter2.next(out str_key, out pin_val)) {
+                pin_val.icon_size = icon_size;
+                pin_val.update_icon();
+            }
+            return false;
+        });
     }
 
     protected void on_settings_change(string key)
