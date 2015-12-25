@@ -6,19 +6,39 @@ plugindir = $(MODULEDIR)
 plugin_DATA =
 
 
+plugin_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/panel/applets/budgie-menu  --generate-dependencies $(top_srcdir)/panel/applets/budgie-menu/plugin.gresource.xml)
+
+# resources
+plugin-resources.h: $(top_srcdir)/panel/applets/budgie-menu/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/budgie-menu --generate-header --c-name budgie_menu $<
+
+plugin-resources.c: $(top_srcdir)/panel/applets/budgie-menu/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/budgie-menu --generate-source --c-name budgie_menu $<
+
+BUILT_SOURCES = \
+	plugin-resources.h \
+	plugin-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
+
 plugin_DATA += \
 	BudgieMenu.plugin
 
 EXTRA_DIST += \
 	$(plugin_DATA) \
-	com.solus-project.budgie-menu.gschema.xml
+	com.solus-project.budgie-menu.gschema.xml \
+	plugin.resource.xml \
+	settings.ui
 
 
 plugin_LTLIBRARIES = libbudgiemenuapplet.la
 
 libbudgiemenuapplet_la_SOURCES = \
 	BudgieMenu.vala \
-	BudgieMenuWindow.vala
+	BudgieMenuWindow.vala \
+	plugin-resources.h \
+	plugin-resources.c
 
 libbudgiemenuapplet_la_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
@@ -44,7 +64,9 @@ libbudgiemenuapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg arc-1.0 \
-	--vapidir=${top_srcdir}/plugin
+	--vapidir=${top_srcdir}/plugin \
+	--target-glib=2.38 \
+	--gresources=${srcdir}/plugin.gresource.xml
 
 gsettings_SCHEMAS = \
 	com.solus-project.budgie-menu.gschema.xml

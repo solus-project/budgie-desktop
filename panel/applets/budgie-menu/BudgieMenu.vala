@@ -19,6 +19,12 @@ public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
     }
 }
 
+[GtkTemplate (ui = "/com/solus-project/budgie-menu/settings.ui")]
+public class BudgieMenuSettings : Gtk.Grid
+{
+
+}
+
 public class BudgieMenuApplet : Arc.Applet
 {
 
@@ -39,7 +45,7 @@ public class BudgieMenuApplet : Arc.Applet
     public override unowned Gtk.Widget? get_settings_ui()
     {
         if (this.settings_ui == null) {
-            this.settings_ui = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            this.settings_ui = new BudgieMenuSettings();
         }
         return this.settings_ui;
     }

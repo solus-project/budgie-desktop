@@ -76,3 +76,6 @@ arc-panel-resources.*
 /po/Makefile.in.in
 /po/stamp-it
 /po/.intltool-merge-cache
+
+plugin-resources.c
+plugin-resources.h
