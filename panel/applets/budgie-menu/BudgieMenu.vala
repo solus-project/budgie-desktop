@@ -9,8 +9,6 @@
  * (at your option) any later version.
  */
 
-const int icon_size = 32;
-
 public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
 {
     public Arc.Applet get_panel_widget(string uuid)
@@ -84,7 +82,7 @@ public class BudgieMenuApplet : Arc.Applet
 
         widget = new Gtk.EventBox();
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
-        img.pixel_size = icon_size;
+        img.pixel_size = 32;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.pack_start(img, false, false, 3);
@@ -139,9 +137,9 @@ public class BudgieMenuApplet : Arc.Applet
         on_settings_changed("menu-label");
         on_settings_changed("overlay-key");
 
-        /*icon_size_changed.connect((i,s)=> {
+        panel_size_changed.connect((p,i)=> {
             img.pixel_size = (int)i;
-        });*/
+        });
 
         popover.key_release_event.connect((e)=> {
             var human = Gdk.keyval_name(e.keyval);
