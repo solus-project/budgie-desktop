@@ -19,8 +19,7 @@ plugin_LTLIBRARIES = libstatusapplet.la
 libstatusapplet_la_SOURCES = \
 	StatusApplet.vala \
 	PowerIndicator.vala \
-	SoundIndicator.vala \
-	UserClient.vala
+	SoundIndicator.vala
 
 libstatusapplet_la_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \

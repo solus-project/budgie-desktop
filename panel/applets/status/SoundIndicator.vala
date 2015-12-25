@@ -23,11 +23,6 @@ public class SoundIndicator : Gtk.Bin
     /** Default stream */
     public Gvc.MixerStream? stream { protected set ; public get ; }
 
-    /** For the Status popover */
-    public Gtk.Scale status_widget { protected set ; public get ; }
-    public Gtk.Image status_image { protected set; public get; }
-
-    private ulong change_id;
     private double step_size;
 
     public SoundIndicator()
@@ -44,13 +39,6 @@ public class SoundIndicator : Gtk.Bin
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
         mixer.open();
-
-        status_widget = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
-        status_widget.set_draw_value(false);
-
-        status_image = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
-
-        change_id = status_widget.value_changed.connect(on_scale_change);
 
         /* Catch scroll wheel events */
         wrap.add_events(Gdk.EventMask.SCROLL_MASK);
@@ -72,16 +60,6 @@ public class SoundIndicator : Gtk.Bin
                 }
             });
             update_volume();
-        }
-    }
-
-    /**
-     * Update from the scale (set volume.)
-     */
-    protected void on_scale_change()
-    {
-        if (stream.set_volume((uint32)status_widget.get_value())) {
-            Gvc.push_volume(stream);
         }
     }
 
@@ -164,17 +142,11 @@ public class SoundIndicator : Gtk.Bin
             }
         }
         widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
-        status_image.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
 
         var vol_max = mixer.get_vol_max_amplified();
 
         // Each scroll increments by 5%, much better than units..
         step_size = vol_max / 20;
-        SignalHandler.block(status_widget, change_id);
-        status_widget.set_range(0, vol_max);
-        status_widget.set_value(vol);
-        status_widget.set_increments(step_size, step_size);
-        SignalHandler.unblock(status_widget, change_id);
 
         // This usually goes up to about 150% (152.2% on mine though.)
         var pct = ((float)vol / (float)vol_norm)*100;
