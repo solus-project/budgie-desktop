@@ -404,6 +404,18 @@ GtkPopover .scrollbar .trough {
     }
 }
 
+// Budgie Menu
+.budgie-menu {
+    GtkSearchEntry.entry:not(:selected) {
+        border: none;
+        box-shadow: none;
+        background: none;
+        font-size: 120%;
+
+        &.image { padding-left: 0px; padding-right: 6px; }
+    }
+}
+
 // Panel
 .arc-panel {
     color: $fg_color;
