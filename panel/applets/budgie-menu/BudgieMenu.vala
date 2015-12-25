@@ -40,14 +40,14 @@ public class BudgieMenuApplet : Arc.Applet
 
     public string uuid { public set ; public get; }
 
-    private new Gtk.Widget? settings_ui = null;
-
-    public override unowned Gtk.Widget? get_settings_ui()
+    public override Gtk.Widget? get_settings_ui()
     {
-        if (this.settings_ui == null) {
-            this.settings_ui = new BudgieMenuSettings();
-        }
-        return this.settings_ui;
+        return new BudgieMenuSettings();
+    }
+
+    public override bool supports_settings()
+    {
+        return true;
     }
 
     public BudgieMenuApplet(string uuid)

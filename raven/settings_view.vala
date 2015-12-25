@@ -48,7 +48,8 @@ public class AppletSettings : Gtk.Box {
             scrolledwindow.remove(scrolledwindow.get_child());
         }
         label_title.set_text(info.name);
-        scrolledwindow.add(info.settings_ui);
+        scrolledwindow.add(info.applet.get_settings_ui());
+        scrolledwindow.show_all();
     }
 
     public AppletSettings()
@@ -633,11 +634,7 @@ public class PanelEditor : Gtk.Box
         button_move_applet_left.sensitive = current_panel.can_move_applet_left(info);
         button_move_applet_right.sensitive = current_panel.can_move_applet_right(info);
         button_remove_applet.sensitive = true;
-        if (info.settings_ui != null) {
-            button_settings.sensitive = true;
-        } else {
-            button_settings.sensitive = false;
-        }
+        button_settings.sensitive = info.applet.supports_settings();
         current_applet = info;
     }
 

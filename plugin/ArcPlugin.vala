@@ -84,11 +84,20 @@ public class Applet : Gtk.Bin
     public virtual void update_popovers(Arc.PopoverManager? manager) { }
 
     /**
+     * arc_applet_supports_settings:
+     *
+     * Indicates whether this applet supports settings or not
+     */
+    public virtual bool supports_settings() {
+        return false;
+    }
+
+    /**
      * arc_applet_get_settings_ui:
      *
-     * Return the configuration UI (if any) for this applet. Initialised once only
+     * Returns: (transfer full): the configuration UI (if any) for this applet. Initialised once only
      */
-    public virtual unowned Gtk.Widget? get_settings_ui() { return null; }
+    public virtual Gtk.Widget? get_settings_ui() { return null; }
 
     /**
      * arc_applet_get_settings:
@@ -134,8 +143,6 @@ public class AppletInfo : GLib.Object
 
     /** Position (packging index */
     public int position { public get; public set; default = 0; }
-
-    public unowned Gtk.Widget? settings_ui = null;
 
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets

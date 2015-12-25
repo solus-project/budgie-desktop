@@ -32,7 +32,8 @@ namespace Arc {
         public string? settings_prefix { get; set; }
         public string? settings_schema { get; set; }
 
-        public virtual unowned Gtk.Widget? get_settings_ui();
+        public virtual Gtk.Widget? get_settings_ui();
+        public virtual bool supports_settings();
     }
 
     [CCode (cheader_filename = "ArcPlugin.h")]
@@ -56,8 +57,6 @@ namespace Arc {
         public int pad_end { get ; set; }
 
         public int position { get; set; }
-
-        public unowned Gtk.Widget? settings_ui;
 
         public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet? applet, GLib.Settings? settings);
     }

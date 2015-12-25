@@ -229,9 +229,6 @@ public class Panel : Arc.Toplevel
         var iter = HashTableIter<string?,AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
             Settings? app_settings = info.applet.get_applet_settings(info.uuid);
-            if (info.settings_ui != null) {
-                info.settings_ui.destroy();
-            }
             info.settings.reset(null);
 
             if (app_settings != null) {
@@ -450,9 +447,6 @@ public class Panel : Arc.Toplevel
 
         SignalHandler.disconnect(info, notify_id);
         info.applet.get_parent().remove(info.applet);
-        if (info.settings_ui != null) {
-            info.settings_ui.destroy();
-        }
 
         Settings? app_settings = info.applet.get_applet_settings(uuid);
 
