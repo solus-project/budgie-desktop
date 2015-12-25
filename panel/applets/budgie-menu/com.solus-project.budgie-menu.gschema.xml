@@ -33,7 +33,7 @@
     </key>
 
     <key type="b" name="menu-compact">
-      <default>true</default>
+      <default>false</default>
       <summary>Compact menu style (no categories)</summary>
       <description>Whether to use a compact or full Budgie Menu (show categories)</description>
     </key>
