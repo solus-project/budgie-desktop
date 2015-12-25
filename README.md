@@ -52,6 +52,7 @@ Operating System, are given:
     - mutter >= 3.18.0
     - gnome-desktop-3.0 >= 3.18.0
     - libwnck >= 3.14.0
+    - upower-glib >= 0.9.20
 
 And:
 
@@ -61,7 +62,7 @@ To install these on Solus:
 
 ```bash
 
-    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel mutter-devel libwnck-devel vala
+    sudo eopkg it glib2-devel libgtk-3-devel libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel mutter-devel libwnck-devel upower-devel vala
     sudo eopkg it -c system.devel
 ```
 
