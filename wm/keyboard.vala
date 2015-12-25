@@ -67,12 +67,12 @@ public class KeyboardManager : GLib.Object
         current_source = (current_source+1) % sources.length;
         this.apply_layout(current_source);
     }
+
     void switch_input_source_backward(Meta.Display display, Meta.Screen screen,
                                       Meta.Window? window, Clutter.KeyEvent? event,
                                       Meta.KeyBinding binding)
     {
         current_source = (current_source-1) % sources.length;
-
         this.apply_layout(current_source);
     }
 
