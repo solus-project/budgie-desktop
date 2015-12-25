@@ -7,5 +7,6 @@ SUBDIRS = \
 	notifications \
 	separator \
 	show-desktop \
+	status \
 	tray \
 	workspaces

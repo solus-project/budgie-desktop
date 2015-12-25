@@ -84,6 +84,7 @@ m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
 m4_include([panel/applets/show-desktop/configure.ac])
+m4_include([panel/applets/status/configure.ac])
 m4_include([panel/applets/tray/configure.ac])
 m4_include([panel/applets/workspaces/configure.ac])
 
@@ -148,6 +149,7 @@ AC_MSG_RESULT([
         notifications:          always
         separator:              always
         tasklist:               ${have_wnck}
+        status:                 ${have_upower}
         tray:                   ${have_natray}
         workspaces:             ${have_wnck}
 ])
