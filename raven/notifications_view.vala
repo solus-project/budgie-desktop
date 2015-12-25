@@ -62,8 +62,11 @@ public class NotificationWidget : Gtk.Box
     private uint expire_id = 0;
     private uint32 timeout = 0;
 
+    private GLib.Cancellable? cancel;
+
     public NotificationWidget()
     {
+        cancel = new GLib.Cancellable();
     }
 
     private async bool set_from_image_path()
@@ -93,7 +96,7 @@ public class NotificationWidget : Gtk.Box
         try {
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
-            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, null);
+            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
             image_icon.set_from_pixbuf(pbuf);
         } catch (Error e) {
             return false;
@@ -116,6 +119,9 @@ public class NotificationWidget : Gtk.Box
         this.hints = hints;
 
         stop_decay();
+
+        this.cancel.cancel();
+        this.cancel.reset();
 
         bool is_img = yield this.set_from_image_path();
 
@@ -179,6 +185,8 @@ public class NotificationsView : Gtk.Box
         "body", "body-markup", "actions", "action-icons"
     };
 
+    private GLib.Queue<NotificationWidget?> queue = null;
+
     /* Obviously we'll change this.. */
     private HashTable<uint32,NotificationWidget?> notifications;
 
@@ -189,10 +197,7 @@ public class NotificationsView : Gtk.Box
 
     public async void CloseNotification(uint32 id) {
         if (remove_notification(id)) {
-            Idle.add(()=> {
-                this.NotificationClosed(id, NotificationCloseReason.CLOSED);
-                return false;
-            });
+            this.NotificationClosed(id, NotificationCloseReason.CLOSED);
         }
     }
 
@@ -237,8 +242,10 @@ public class NotificationsView : Gtk.Box
         ++notif_id;
 
         unowned NotificationWidget? pack = null;
+        unowned NotificationWindow? window = null;
+
         if (replaces_id > 0) {
-            notifications.lookup(replaces_id);
+            pack = notifications.lookup(replaces_id);
         }
 
         int32 expire = expire_timeout;
@@ -254,17 +261,23 @@ public class NotificationsView : Gtk.Box
             npack.set_data("npack_id", nid);
             notifications.insert(notif_id, npack);
             pack = npack;
+
+            var nwindow = new NotificationWindow();
+            nwindow.add(pack);
+
+            window = nwindow;
+        } else {
+            notifications.steal(notif_id);
+            window = pack.get_parent() as NotificationWindow;
+            notifications.insert(notif_id, pack);
         }
 
         yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
             hints, expire);
 
-        /*var window = new NotificationWindow();
-        window.add(pack);
-
-        window.show_all();*/
+        /* Do some placement please 
+        window.show_all(); */
         pack.begin_decay();
-        /* Do some placement please */
         
         return notif_id;
     }
