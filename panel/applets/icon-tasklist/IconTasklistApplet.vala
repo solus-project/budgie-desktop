@@ -542,6 +542,7 @@ public class PinnedIconButton : IconButton
     {
         image.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
         set_tooltip_text("Launch %s".printf(app_info.get_display_name()));
+        get_style_context().remove_class("running");
         set_active(false);
         // Actions menu
         menu.destroy();
