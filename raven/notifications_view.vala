@@ -13,6 +13,107 @@
 namespace Arc
 {
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/notification.ui")]
+public class NotificationWidget : Gtk.Box
+{
+    public uint32 id;
+
+    [GtkChild]
+    private Gtk.Image? image_icon = null;
+
+    [GtkChild]
+    private Gtk.Label? label_title = null;
+
+    [GtkChild]
+    private Gtk.Label? label_body = null;
+
+    [GtkChild]
+    private Gtk.Button? button_close = null;
+
+    [GtkChild]
+    private Gtk.ButtonBox? buttonbox_actions = null;
+
+    /* Allow deprecated usage */
+    private string[] img_search = {
+        "image-path", "image_path"
+    };
+
+    HashTable<string,Variant>? hints = null;
+
+    private string? image_path = null;
+
+    public NotificationWidget()
+    {
+    }
+
+    private async bool set_from_image_path()
+    {
+        /* Update the icon. */
+        string? img_path = null;
+        foreach (var img in img_search) {
+            var vimg_path = hints.lookup(img);
+            if (vimg_path != null) {
+                img_path = vimg_path.get_string();
+                break;
+            }
+        }
+
+        /* Take the img_path */
+        if (img_path == null) {
+            return false;
+        }
+
+        /* Don't unnecessarily update the image */
+        if (img_path == this.image_path) {
+            return true;
+        }
+    
+        this.image_path = img_path;
+
+        try {
+            var file = File.new_for_path(image_path);
+            var ins = yield file.read_async(Priority.DEFAULT, null);
+            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, null);
+            image_icon.set_from_pixbuf(pbuf);
+        } catch (Error e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async void set_from_notify(uint32 id, string app_name, string app_icon,
+                                        string summary, string body, string[] actions,
+                                        HashTable<string, Variant> hints, int32 expire_timeout)
+    {
+        this.id = id;
+        this.hints = hints;
+
+        bool is_img = yield this.set_from_image_path();
+
+        /* Fallback to named icon if no image-path is specified */
+        if (!is_img) {
+            this.image_path = null;
+
+            if (app_icon != "") {
+                image_icon.set_from_icon_name(app_icon, Gtk.IconSize.INVALID);
+                image_icon.pixel_size = 48;
+            } else {
+                image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+                image_icon.pixel_size = 48;
+            }
+        }
+
+        if (summary == "") {
+            label_title.set_text(app_name);
+        } else {
+            label_title.set_text(Markup.escape_text(summary));
+        }
+
+        label_body.set_text(Markup.escape_text(body));
+    }
+}
+
 public enum NotificationCloseReason {
     EXPIRED = 1,    /** The notification expired. */
     DISMISSED = 2, /** The notification was dismissed by the user. */
@@ -25,8 +126,11 @@ public class NotificationsView : Gtk.Box
 {
 
     string[] caps = {
-        "body", "body-markup", "actions", "action-icons"
+        "body", /*"body-markup",*/ "actions", "action-icons"
     };
+
+    /* Obviously we'll change this.. */
+    private HashTable<uint32,NotificationWidget?> notifications;
 
     public async string[] get_capabilities()
     {
@@ -45,6 +149,21 @@ public class NotificationsView : Gtk.Box
                            HashTable<string, Variant> hints, int32 expire_timeout)
     {
         ++notif_id;
+
+        unowned NotificationWidget? pack = null;
+        if (replaces_id > 0) {
+            notifications.lookup(replaces_id);
+        }
+
+        if (pack == null) {
+            var npack = new NotificationWidget();
+            notifications.insert(notif_id, npack);
+            pack = npack;
+        }
+
+        yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
+            hints, expire_timeout);
+        
         return notif_id;
     }
     
@@ -75,6 +194,8 @@ public class NotificationsView : Gtk.Box
 
         pack_start(header, false, false, 0);
 
+        notifications = new HashTable<uint32,NotificationWidget?>(direct_hash, direct_equal);
+
         show_all();
 
         serve_dbus();
@@ -93,7 +214,7 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void serve_dbus()
     {
-        Bus.own_name(BusType.SESSION, "org.freedesktop.Notififications",
+        Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications",
             BusNameOwnerFlags.NONE,
             on_bus_acquired, null, null);
     }
