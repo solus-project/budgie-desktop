@@ -3,6 +3,7 @@ EXTRA_DIST = \
 	com.solus-project.arc-panel.gschema.xml \
 	arc-panel.gresource.xml \
 	icons/notification-alert-symbolic.svg \
+	endsession.ui \
 	panel.ini \
 	theme/.nvmrc \
 	theme/assets.svg \

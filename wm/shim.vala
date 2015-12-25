@@ -16,6 +16,102 @@ public struct GsdAccel {
     uint flags;
 }
 
+[DBus (name = "org.gnome.SessionManager.EndSessionDialog")]
+public class SessionHandler : GLib.Object
+{
+
+    public signal void ConfirmedLogout();
+    public signal void ConfirmedReboot();
+    public signal void ConfirmedShutdown();
+    public signal void Canceled();
+    public signal void Closed();
+
+    private bool showing = false;
+
+    private EndSessionDialog? proxy = null;
+
+    public SessionHandler()
+    {
+        Bus.watch_name(BusType.SESSION, "com.solus_project.Session.EndSessionDialog",
+            BusNameWatcherFlags.NONE, has_dialog, lost_dialog);
+    }
+
+    void on_dialog_get(Object? o, AsyncResult? res)
+    {
+        try {
+            proxy = Bus.get_proxy.end(res);
+            proxy.ConfirmedLogout.connect(()=> {
+                this.ConfirmedLogout();
+            });
+            proxy.ConfirmedReboot.connect(()=> {
+                this.ConfirmedReboot();
+            });
+            proxy.ConfirmedShutdown.connect(()=> {
+                this.ConfirmedShutdown();
+            });
+            proxy.Canceled.connect(()=> {
+                this.Canceled();
+            });
+            proxy.Closed.connect(()=> {
+                this.Closed();
+            });
+        } catch (Error e) {
+            proxy = null;
+        }
+    }
+    
+    void has_dialog()
+    {
+        if (proxy != null) {
+            return;
+        }
+        Bus.get_proxy.begin<EndSessionDialog>(BusType.SESSION, "com.solus_project.Session.EndSessionDialog", "/com/solus_project/Session/EndSessionDialog", 0, null, on_dialog_get);
+    }
+
+    void lost_dialog()
+    {
+        proxy = null;
+    }
+
+    public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters)
+    {
+        if (proxy == null) {
+            return;
+        }
+        try {
+            proxy.Open(type, timestamp, open_length, inhibiters);
+        } catch (Error e) {
+            message(e.message);
+        }
+    }
+
+    public void Close()
+    {
+        if (proxy == null) {
+            try {
+                proxy.Close();
+            } catch (Error e) {
+                message(e.message);
+            }
+        }
+    }
+}
+
+[DBus (name = "com.solus_project.Session.EndSessionDialog")]
+public interface EndSessionDialog : GLib.Object
+{
+
+    public signal void ConfirmedLogout();
+    public signal void ConfirmedReboot();
+    public signal void ConfirmedShutdown();
+    public signal void Canceled();
+    public signal void Closed();
+
+    public abstract void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws Error;
+
+    public abstract void Close() throws Error;
+}
+
 [DBus (name = "org.gnome.Shell")]
 public class ShellShim : GLib.Object
 {
@@ -24,6 +120,8 @@ public class ShellShim : GLib.Object
     HashTable<string,uint> watches;
     unowned Meta.Display? display;
 
+    private SessionHandler? handler = null;
+
     protected ShellShim(Arc.ArcWM? wm)
     {
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
@@ -31,6 +129,8 @@ public class ShellShim : GLib.Object
 
         display = wm.get_screen().get_display();
         display.accelerator_activated.connect(on_accelerator_activated);
+
+        handler = new SessionHandler();
     }
 
     private void on_accelerator_activated(uint action, uint device_id)
@@ -89,6 +189,7 @@ public class ShellShim : GLib.Object
     {
         try {
             conn.register_object("/org/gnome/Shell", this);
+            conn.register_object("/org/gnome/SessionManager/EndSessionDialog", handler);
         } catch (Error e) {
             message("Unable to register ShellShim: %s", e.message);
         }

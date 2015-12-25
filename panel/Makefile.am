@@ -51,7 +51,8 @@ arc_panel_SOURCES = \
 	manager.vala \
 	panel.vala \
 	popovers.vala \
-	uuid.vala
+	uuid.vala \
+	endsession.vala
 
 arc_panel_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
@@ -81,4 +82,6 @@ arc_panel_VALAFLAGS = \
 	--vapidir=${top_srcdir}/panel \
 	--vapidir=${top_srcdir}/raven \
 	--vapidir=${top_srcdir}/lib \
+	--target-glib=2.38 \
+	--gresources=${top_srcdir}/data/arc-panel.gresource.xml \
 	$(VALAFLAGS)

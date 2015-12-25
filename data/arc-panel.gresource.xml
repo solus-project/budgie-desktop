@@ -21,4 +21,7 @@
                 <file>theme/assets/switch-active-hc@2.png</file>
                 <file>panel.ini</file>
         </gresource>
+        <gresource prefix="/com/solus-project/arc/endsession">
+                <file>endsession.ui</file>
+        </gresource>
 </gresources>

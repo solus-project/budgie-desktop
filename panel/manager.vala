@@ -135,6 +135,8 @@ public class PanelManager : DesktopManager
 
     private string current_theme_uri;
 
+    private EndSessionDialog? end_dialog = null;
+
     private void end_session(bool quit)
     {
         if (quit) {
@@ -321,6 +323,8 @@ public class PanelManager : DesktopManager
         raven.setup_dbus();
 
         setup_plugins();
+
+        end_dialog = new Arc.EndSessionDialog();
 
         if (!load_panels()) {
             message("Creating default panel layout");
