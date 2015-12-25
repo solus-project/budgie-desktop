@@ -21,9 +21,10 @@ public class SoundIndicator : Gtk.Bin
     public Gvc.MixerControl mixer { protected set ; public get ; }
 
     /** Default stream */
-    public Gvc.MixerStream? stream { protected set ; public get ; }
+    private Gvc.MixerStream? stream;
 
     private double step_size;
+    private ulong notify_id;
 
     public SoundIndicator()
     {
@@ -38,12 +39,36 @@ public class SoundIndicator : Gtk.Bin
 
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
+        mixer.default_sink_changed.connect(on_sink_changed);
         mixer.open();
 
         /* Catch scroll wheel events */
         wrap.add_events(Gdk.EventMask.SCROLL_MASK);
         wrap.scroll_event.connect(on_scroll_event);
         show_all();
+    }
+
+    void on_sink_changed(uint id)
+    {
+        set_default_mixer();
+    }
+
+    void set_default_mixer()
+    {
+        if (stream != null) {
+            SignalHandler.disconnect(stream, notify_id);
+        }
+        
+        stream = mixer.get_default_sink();
+        notify_id = stream.notify.connect(on_notify);
+        update_volume();
+    }
+
+    void on_notify(Object? o, ParamSpec? p)
+    {
+        if (p.name == "volume" || p.name == "is-muted") {
+            update_volume();
+        }
     }
 
     /**
@@ -53,13 +78,7 @@ public class SoundIndicator : Gtk.Bin
     protected void on_state_change(uint new_state)
     {
         if (new_state == Gvc.MixerControlState.READY) {
-            stream  = mixer.get_default_sink();
-            stream.notify.connect((s,p)=> {
-                if (p.name == "volume" || p.name == "is-muted") {
-                    update_volume();
-                }
-            });
-            update_volume();
+            set_default_mixer();
         }
     }
 
