@@ -9,7 +9,7 @@
     <property name="margin_right">4</property>
     <property name="margin_top">4</property>
     <property name="margin_bottom">4</property>
-    <property name="row_spacing">6</property>
+    <property name="row_spacing">10</property>
     <property name="column_spacing">6</property>
     <child>
       <object class="GtkLabel" id="label1">
@@ -17,7 +17,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="label" translatable="yes">Label on menu button</property>
+        <property name="label" translatable="yes">Show Menu Label</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -39,7 +39,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Compact menu</property>
+        <property name="label" translatable="yes">Compact Mode</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -61,7 +61,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Section headers in menu</property>
+        <property name="label" translatable="yes">Show Headers</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -79,10 +79,29 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkLabel" id="label2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="label" translatable="yes">Menu Label</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkEntry" id="entry_label">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="caps_lock_warning">False</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+      </packing>
     </child>
   </template>
 </interface>

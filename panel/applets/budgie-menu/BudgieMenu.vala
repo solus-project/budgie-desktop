@@ -30,6 +30,9 @@ public class BudgieMenuSettings : Gtk.Grid
     [GtkChild]
     private Gtk.Switch? switch_menu_headers;
 
+    [GtkChild]
+    private Gtk.Entry? entry_label;
+
     private Settings? settings;
 
     public BudgieMenuSettings(Settings? settings)
@@ -38,6 +41,7 @@ public class BudgieMenuSettings : Gtk.Grid
         settings.bind("enable-menu-label", switch_menu_label, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-compact", switch_menu_compact, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-headers", switch_menu_headers, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("menu-label", entry_label, "text", SettingsBindFlags.DEFAULT);
     }
 
 }
