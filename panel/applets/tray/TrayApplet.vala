@@ -59,6 +59,7 @@ public class TrayApplet : Arc.Applet
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
             add(label);
+            label.show_all();
             return;
         }
         tray.set_icon_size(icon_size);
