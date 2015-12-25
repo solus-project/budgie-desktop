@@ -10,6 +10,14 @@
  */
 
 namespace Arc {
+
+    [CCode (cheader_filename = "ArcPlugin.h")]
+    public enum PanelAction {
+        NONE,
+        MENU,
+        MAX,
+    }
+
     [CCode (cheader_filename = "ArcPlugin.h")]
     public interface PopoverManager : GLib.Object
     {
@@ -17,6 +25,7 @@ namespace Arc {
         public abstract void unregister_popover(Gtk.Widget? widget);
         public abstract void show_popover(Gtk.Widget? parent);
     }
+
     [CCode (cheader_filename = "ArcPlugin.h")]
     public interface Plugin : GLib.Object {
         public abstract Arc.Applet get_panel_widget (string uuid);
@@ -31,9 +40,12 @@ namespace Arc {
 
         public string? settings_prefix { get; set; }
         public string? settings_schema { get; set; }
+        public PanelAction supported_actions { get ; set; }
 
         public virtual Gtk.Widget? get_settings_ui();
         public virtual bool supports_settings();
+
+        public virtual void invoke_action(Arc.PanelAction action);
 
         public signal void panel_size_changed(int panel_size, int icon_size);
 

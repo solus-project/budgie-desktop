@@ -112,20 +112,7 @@ public class BudgieMenuApplet : Arc.Applet
 
         popover.get_child().show_all();
 
-        // This enables us to respond to the "overlay-key" action
-        /*action_invoked.connect((t) => {
-            if (t != Budgie.ActionType.INVOKE_MAIN_MENU) {
-                return;
-            }
-            Idle.add(()=> {
-                if (!popover.get_visible()) {
-                    popover.show_all();
-                } else {
-                    popover.hide();
-                }
-                return false;
-            });
-        });*/
+        supported_actions = Arc.PanelAction.MENU;
 
         add(widget);
         show_all();
@@ -149,6 +136,17 @@ public class BudgieMenuApplet : Arc.Applet
             }
             return Gdk.EVENT_PROPAGATE;
         });
+    }
+
+    public override void invoke_action(Arc.PanelAction action)
+    {
+        if ((action & Arc.PanelAction.MENU) != 0) {
+            if (popover.get_visible()) {
+                popover.hide();
+            } else {
+                this.manager.show_popover(widget);
+            }
+        }
     }
 
     protected void on_settings_changed(string key)

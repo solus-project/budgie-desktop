@@ -19,6 +19,11 @@ public static const string APPLET_KEY_POS       = "position";
 public static const string APPLET_KEY_PAD_START = "padding-start";
 public static const string APPLET_KEY_PAD_END   = "padding-end";
 
+public enum PanelAction {
+    NONE = 1 << 0,
+    MENU = 1 << 1,
+    MAX = 1 << 2
+}
 
 public interface PopoverManager : GLib.Object
 {
@@ -40,7 +45,6 @@ public interface PopoverManager : GLib.Object
     public abstract void unregister_popover(Gtk.Widget? widget);
 
     public abstract void show_popover(Gtk.Widget? parent);
-
 }
 
 /**
@@ -73,6 +77,9 @@ public class Applet : Gtk.Bin
 
     public string? settings_prefix { public get; public set; default = null; }
     public string? settings_schema { public get; public set; default = null; }
+    public PanelAction supported_actions { get ; set; default = Arc.PanelAction.NONE; }
+
+    public virtual void invoke_action(Arc.PanelAction action) { }
 
     /**
      * arc_applet_update_popovers:
