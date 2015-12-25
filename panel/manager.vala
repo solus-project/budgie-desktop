@@ -522,6 +522,7 @@ public class PanelManager : DesktopManager
         name = null;
         Arc.Applet applet = (extension as Arc.Plugin).get_panel_widget(uuid);
         var info = new Arc.AppletInfo(pinfo, uuid, applet, settings);
+        info.settings_ui = applet.get_settings_ui();
 
         return info;
     }

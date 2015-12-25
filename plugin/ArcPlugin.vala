@@ -84,6 +84,13 @@ public class Applet : Gtk.Bin
     public virtual void update_popovers(Arc.PopoverManager? manager) { }
 
     /**
+     * arc_applet_get_settings_ui:
+     *
+     * Return the configuration UI (if any) for this applet. Initialised once only
+     */
+    public virtual unowned Gtk.Widget? get_settings_ui() { return null; }
+
+    /**
      * arc_applet_get_settings:
      *
      * Returns: (transfer full): A newly initialised Settings for this applet, or NULL if none are used
@@ -127,6 +134,8 @@ public class AppletInfo : GLib.Object
 
     /** Position (packging index */
     public int position { public get; public set; default = 0; }
+
+    public unowned Gtk.Widget? settings_ui = null;
 
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets
