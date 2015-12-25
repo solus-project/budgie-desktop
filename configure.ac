@@ -84,6 +84,7 @@ m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
 m4_include([panel/applets/show-desktop/configure.ac])
+m4_include([panel/applets/tray/configure.ac])
 m4_include([panel/applets/workspaces/configure.ac])
 
 LT_PREREQ(2.2)
@@ -147,5 +148,6 @@ AC_MSG_RESULT([
         notifications:          always
         separator:              always
         tasklist:               ${have_wnck}
+        tray:                   ${have_natray}
         workspaces:             ${have_wnck}
 ])
