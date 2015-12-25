@@ -303,7 +303,7 @@ public class PanelEditor : Gtk.Box
         appsettings.view_switch.connect(()=> {
             this.panel_stack.set_visible_child_name("panel");
         });
-        this.panel_stack.add_titled(picker, "settings", "Settings");
+        this.panel_stack.add_titled(appsettings, "settings", "Settings");
     }
 
     void do_applet_add(Peas.PluginInfo? info)
