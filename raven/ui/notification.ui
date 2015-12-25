@@ -73,6 +73,7 @@
             <property name="valign">start</property>
             <property name="image">image2</property>
             <property name="relief">none</property>
+            <signal name="clicked" handler="close_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">2</property>

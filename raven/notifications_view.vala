@@ -13,6 +13,15 @@
 namespace Arc
 {
 
+public enum NotificationCloseReason {
+    EXPIRED = 1,    /** The notification expired. */
+    DISMISSED = 2,  /** The notification was dismissed by the user. */
+    CLOSED = 3,     /** The notification was closed by a call to CloseNotification. */
+    UNDEFINED = 4   /** Undefined/reserved reasons. */
+}
+
+
+
 [GtkTemplate (ui = "/com/solus-project/arc/raven/notification.ui")]
 public class NotificationWidget : Gtk.Box
 {
@@ -33,6 +42,14 @@ public class NotificationWidget : Gtk.Box
     [GtkChild]
     private Gtk.ButtonBox? buttonbox_actions = null;
 
+    [GtkCallback]
+    void close_clicked()
+    {
+        this.Closed(NotificationCloseReason.DISMISSED);
+    }
+
+    public signal void Closed(NotificationCloseReason reason);
+
     /* Allow deprecated usage */
     private string[] img_search = {
         "image-path", "image_path"
@@ -41,6 +58,9 @@ public class NotificationWidget : Gtk.Box
     HashTable<string,Variant>? hints = null;
 
     private string? image_path = null;
+
+    private uint expire_id = 0;
+    private uint32 timeout = 0;
 
     public NotificationWidget()
     {
@@ -82,12 +102,20 @@ public class NotificationWidget : Gtk.Box
         return true;
     }
 
+    bool do_expire()
+    {
+        this.Closed(NotificationCloseReason.EXPIRED);
+        return false;
+    }
+
     public async void set_from_notify(uint32 id, string app_name, string app_icon,
                                         string summary, string body, string[] actions,
                                         HashTable<string, Variant> hints, int32 expire_timeout)
     {
         this.id = id;
         this.hints = hints;
+
+        stop_decay();
 
         bool is_img = yield this.set_from_image_path();
 
@@ -107,18 +135,40 @@ public class NotificationWidget : Gtk.Box
         if (summary == "") {
             label_title.set_text(app_name);
         } else {
-            label_title.set_text(Markup.escape_text(summary));
+            label_title.set_markup(summary);
         }
 
-        label_body.set_text(Markup.escape_text(body));
+        label_body.set_markup(body);
+
+        this.timeout = expire_timeout;
+    }
+
+    public void begin_decay()
+    {
+        expire_id = Timeout.add(timeout, do_expire);
+    }
+
+    public void stop_decay()
+    {
+        if (expire_id > 0) {
+            Source.remove(expire_id);
+            expire_id = 0;
+        }
     }
 }
 
-public enum NotificationCloseReason {
-    EXPIRED = 1,    /** The notification expired. */
-    DISMISSED = 2, /** The notification was dismissed by the user. */
-    CLOSED = 3,     /** The notification was closed by a call to CloseNotification. */
-    UNDEFINED = 4  /** Undefined/reserved reasons. */
+public class NotificationWindow : Gtk.Window
+{
+
+    public NotificationWindow()
+    {
+        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+
+        Gdk.Visual? vis = screen.get_rgba_visual();
+        if (vis != null) {
+            this.set_visual(vis);
+        }
+    }
 }
 
 [DBus (name = "org.freedesktop.Notifications")]
@@ -126,7 +176,7 @@ public class NotificationsView : Gtk.Box
 {
 
     string[] caps = {
-        "body", /*"body-markup",*/ "actions", "action-icons"
+        "body", "body-markup", "actions", "action-icons"
     };
 
     /* Obviously we'll change this.. */
@@ -138,11 +188,47 @@ public class NotificationsView : Gtk.Box
     }
 
     public async void CloseNotification(uint32 id) {
-        /* TODO: Implement */
-        yield;
+        if (remove_notification(id)) {
+            Idle.add(()=> {
+                this.NotificationClosed(id, NotificationCloseReason.CLOSED);
+                return false;
+            });
+        }
     }
 
-    uint32 notif_id = 0;
+    private uint32 notif_id = 0;
+    [DBus (visible = false)]
+    void on_notification_closed(NotificationWidget? widget, NotificationCloseReason reason)
+    {
+        ulong nid = widget.get_data("npack_id");
+
+        SignalHandler.disconnect(widget, nid);
+        this.NotificationClosed(widget.id, reason);
+
+        this.remove_notification(widget.id);
+    }
+
+    [DBus (visible = false)]
+    bool remove_notification(uint32 id)
+    {
+        unowned Gtk.Widget? parent = null;
+        unowned NotificationWidget? widget = notifications.lookup(id);
+        if (widget == null) {
+            return false;
+        }
+
+        widget.stop_decay();
+        parent = widget.get_parent();
+        if (parent != null && parent is NotificationWindow) {
+            /* TODO: Update placement lists */
+        }
+
+        notifications.remove(widget.id);
+        if (parent != null) {
+            parent.destroy();
+        }
+        return true;
+    }
 
     public async uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
                            string summary, string body, string[] actions,
@@ -155,14 +241,30 @@ public class NotificationsView : Gtk.Box
             notifications.lookup(replaces_id);
         }
 
+        int32 expire = expire_timeout;
+
+        /* Prevent pure derpery. */
+        if (expire_timeout < 4000 || expire_timeout > 20000) {
+            expire = 4000;
+        }
+
         if (pack == null) {
             var npack = new NotificationWidget();
+            ulong nid = npack.Closed.connect(on_notification_closed);
+            npack.set_data("npack_id", nid);
             notifications.insert(notif_id, npack);
             pack = npack;
         }
 
         yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
-            hints, expire_timeout);
+            hints, expire);
+
+        /*var window = new NotificationWindow();
+        window.add(pack);
+
+        window.show_all();*/
+        pack.begin_decay();
+        /* Do some placement please */
         
         return notif_id;
     }
