@@ -158,5 +158,8 @@
         </child>
       </object>
     </child>
+    <style>
+      <class name="arc-session-dialog"/>
+    </style>
   </template>
 </interface>
