@@ -688,10 +688,12 @@ public class IconTasklistApplet : Arc.Applet
 
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
+        pinned.margin_end = 14;
         pinned.get_style_context().add_class("pinned");
         main_layout.pack_start(pinned, false, false, 0);
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
+        widget.get_style_context().add_class("unpinned");
         main_layout.pack_start(widget, false, false, 0);
 
         settings = this.get_applet_settings(uuid);

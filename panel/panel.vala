@@ -238,7 +238,8 @@ public class Panel : Arc.Toplevel
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         center_box.get_style_context().add_class("center-region");
         layout.set_center_widget(center_box);
-        end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+        end_box.margin = 2;
         end_box.get_style_context().add_class("end-region");
         layout.pack_end(end_box, true, true, 0);
         end_box.halign = Gtk.Align.END;

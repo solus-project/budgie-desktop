@@ -28,6 +28,8 @@ public class SeparatorApplet : Arc.Applet
         add(sep);
 
         sep.margin = 2;
+        sep.margin_bottom = 6;
+        sep.margin_top = 6;
 
         show_all();
     }

@@ -4,6 +4,7 @@
 
 $roundness: 3px;
 $border_width: if($variant == 'default', 1px, 2px);
+$pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
 $asset_suffix: if($variant == 'default', '', '-hc');
 
 // Used to reset all style properties set by the gtk theme
@@ -336,37 +337,37 @@ GtkPopover .scrollbar .trough {
     }
     @at-root .raven {
         .menu {
-          .cell { color: inherit; }
+            .cell { color: inherit; }
 
-          margin: 4px;
-          padding: 0;
-          border-radius: 0;
-          background-color: $raven_bg;
+            margin: 4px;
+            padding: 0;
+            border-radius: 0;
+            background-color: $raven_bg;
 
-          .menuitem {
-            padding: 5px;
-            color: $fg_color;
-            &:hover {
-              color: $selected_fg_color;
-              background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
-              border: solid if($variant == 'hc', $selected_bg_color, transparentize(white, 0.93));
-              border-width: 1px 0 1px 0;
+            .menuitem {
+                padding: 5px;
+                color: $fg_color;
+                &:hover {
+                    color: $selected_fg_color;
+                    background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
+                    border: solid if($variant == 'hc', $selected_bg_color, transparentize(white, 0.93));
+                    border-width: 1px 0 1px 0;
+              }
+              &:insensitive { color: transparentize($fg_color, 0.65); }
+              &.separator { color: transparentize($raven_bg, 1); }
             }
-            &:insensitive { color: transparentize($fg_color, 0.65); }
-            &.separator { color: transparentize($raven_bg, 1); }
-          }
-          &.button {
-            border: none;
-            &:hover { background-color: $selected_bg_color; }
-            &:insensitive {
-              color: transparentize($fg_color, 0.65);
-              background-color: transparent;
+            &.button {
+                border: none;
+                &:hover { background-color: $selected_bg_color; }
+                &:insensitive {
+                    color: transparentize($fg_color, 0.65);
+                    background-color: transparent;
+                }
             }
-          }
         }
         .window-frame.csd.popup {
-          box-shadow: 0 3px 6px transparentize(black, 0.55),
-                      0 0 0 1px transparentize(black, 0.55);
+            box-shadow: 0 3px 6px transparentize(black, 0.55),
+                        0 0 0 1px transparentize(black, 0.55);
         }
     }
 
@@ -403,13 +404,91 @@ GtkPopover .scrollbar .trough {
     }
 }
 
+// Budgie Menu
+.budgie-menu {
+    GtkSearchEntry.entry:not(:selected) {
+        border: none;
+        box-shadow: none;
+        background: none;
+        font-size: 120%;
+
+        &.image { padding-left: 0px; padding-right: 6px; }
+    }
+}
+
 // Panel
 .arc-panel {
     color: $fg_color;
     background-color: $panel_bg;
+
+    // End Section needs to be fancy
+    @if $variant == 'default' {
+        .end-region {
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 2px;
+
+            .separator { color: transparentize($fg_color, 0.85) }
+        }
+    }
 }
 
-@each $pos, $b_pos in (top, bottom),(bottom,top),(left,right),(right,left) {
+// Tasklist
+.arc-panel WnckTasklist .button,
+.arc-panel WnckTasklist .button:backdrop {
+
+    border-radius: 0;
+
+    @if $variant == 'default' {
+        &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
+        background: none;
+        background-clip: padding-box;
+        border: none;
+
+        @extend %underscores;
+    }
+}
+
+// Icon Tasklist
+.arc-panel {
+
+    .launcher {
+        transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        padding-left: 2px;
+        padding-right: 2px;
+        border-color: transparentize($panel_bg,1); // fixes the transition
+
+        &:hover { -gtk-image-effect: highlight; }
+    }
+    .unpinned .launcher,
+    .pinned .launcher.running { @extend %underscores; }
+}
+
+%underscores {
+    &:hover { background-color: transparentize(black, 0.9); }
+    &:active, &:checked { background-color: transparentize(black, 0.8); }
+
+    @each $pos, $b_pos in $pos_list {
+        .#{$pos} & {
+            border-#{$b_pos}: 2px solid transparentize($panel_bg,1);
+            border-#{$pos}: 2px solid transparentize($panel_bg,1);
+
+            @at-root {
+                .#{$pos} .arc-panel .unpinned .launcher,
+                .#{$pos} .arc-panel .pinned .launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
+            }
+            &:hover {
+                border-#{$b_pos}: 2px solid transparentize(black, 0.9);
+                border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
+            }
+            &:active, &:checked {
+                border-#{$b_pos}: 2px solid transparentize(black, 0.8);
+                border-#{$pos}: 2px solid $selected_bg_color;
+            }
+        }
+    }
+}
+
+@each $pos, $b_pos in $pos_list {
 
     // Panel borders
     .#{$pos} .arc-panel { border-#{$b_pos}: $border_width solid $panel_border; }
@@ -472,37 +551,4 @@ GtkPopover .scrollbar .trough {
     border-width: 1px 0;
 
     .button.image-button { padding: 8px; }
-}
-
-// Tasklist
-.arc-panel WnckTasklist .button,
-.arc-panel WnckTasklist .button:backdrop {
-
-    border-radius: 0;
-
-    @if $variant == 'default' {
-        &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
-        background: none;
-        background-clip: padding-box;
-        border: none;
-
-        &:hover { background-color: transparentize(black, 0.9); }
-        &:active, &:checked { background-color: transparentize(black, 0.8); }
-
-        @each $pos, $b_pos in (top, bottom),(bottom,top),(left,right),(right,left) {
-            .#{$pos} & {
-                border-#{$b_pos}: 2px solid transparent;
-                border-#{$pos}: 2px solid transparent;
-
-                &:hover {
-                    border-#{$b_pos}: 2px solid transparentize(black, 0.9);
-                    border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
-                }
-                &:active, &:checked {
-                    border-#{$b_pos}: 2px solid transparentize(black, 0.8);
-                    border-#{$pos}: 2px solid $selected_bg_color;
-                }
-            }
-        }
-    }
 }

@@ -263,6 +263,7 @@ public class BudgieMenuWindow : Gtk.Popover
     public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent)
     {
         Object(settings: settings, relative_to: leparent);
+        get_style_context().add_class("budgie-menu");
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
 
