@@ -22,10 +22,26 @@ public static const bool CLUTTER_EVENT_STOP      = true;
 public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
 public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
 
+public static const string PANEL_DBUS_NAME        = "com.solus_project.arc.Panel";
+public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
+
+public enum PanelAction {
+    NONE = 1 << 0,
+    MENU = 1 << 1,
+    MAX = 1 << 2
+}
+
 [DBus (name="com.solus_project.arc.Raven")]
 public interface RavenRemote : Object
 {
     public abstract async void Toggle() throws Error;
+}
+
+[DBus (name = "com.solus_project.arc.Panel")]
+public interface PanelRemote : Object
+{
+
+    public abstract async void ActivateAction(int flags) throws Error;
 }
 
 public class ArcWM : Meta.Plugin
@@ -49,6 +65,7 @@ public class ArcWM : Meta.Plugin
     Settings? settings = null;
     RavenRemote? raven_proxy = null;
     ShellShim? shim = null;
+    PanelRemote? panel_proxy = null;
 
     static construct
     {
@@ -78,6 +95,28 @@ public class ArcWM : Meta.Plugin
         }
     }
 
+    /* Obtain Panel manager */
+    void on_panel_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            panel_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to get Panel proxy: %s", e.message);
+        }
+    }
+
+    void lost_panel()
+    {
+        panel_proxy = null;
+    }
+
+    void has_panel()
+    {
+        if (panel_proxy == null) {
+            Bus.get_proxy.begin<PanelRemote>(BusType.SESSION, PANEL_DBUS_NAME, PANEL_DBUS_OBJECT_PATH, 0, null, on_panel_get);
+        }
+    }
+
     /* Binding for toggle-raven activated */
     void on_raven_toggle(Meta.Display display, Meta.Screen screen,
                          Meta.Window? window, Clutter.KeyEvent? event,
@@ -99,7 +138,6 @@ public class ArcWM : Meta.Plugin
     {
         if (raven_proxy == null) {
             Bus.get_proxy.begin<RavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
-            return;
         }
     }
 
@@ -111,6 +149,21 @@ public class ArcWM : Meta.Plugin
 
     public override unowned Meta.PluginInfo? plugin_info() {
         return info;
+    }
+
+    void on_overlay_key()
+    {
+        if (panel_proxy == null) {
+            return;
+        }
+        Idle.add(()=> {
+            try {
+                panel_proxy.ActivateAction.begin((int) PanelAction.MENU);
+            } catch (Error e) {
+                message("Unable to ActivateAction for menu: %s", e.message);
+            }
+            return false;
+        });
     }
 
     public override void start()
@@ -133,10 +186,14 @@ public class ArcWM : Meta.Plugin
         settings = new Settings(WM_SCHEMA);
         /* Custom keybindings */
         display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_toggle);
+        display.overlay_key.connect(on_overlay_key);
 
         /* Hook up Raven handler.. */
         Bus.watch_name(BusType.SESSION, RAVEN_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_raven, lost_raven);
+
+        Bus.watch_name(BusType.SESSION, PANEL_DBUS_NAME, BusNameWatcherFlags.NONE,
+            has_panel, lost_panel);
 
         shim = new ShellShim(this);
         shim.serve();

@@ -97,7 +97,12 @@ public class Panel : Arc.Toplevel
         var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
         while (iter.next(out uuid, out info)) {
             if ((info.applet.supported_actions & action) != 0) {
-                info.applet.invoke_action(action);
+                this.present();
+
+                Idle.add(()=> {
+                    info.applet.invoke_action(action);
+                    return false;
+                });
                 return true;
             }
         }
@@ -715,7 +720,10 @@ public class Panel : Arc.Toplevel
         }
 
         if (expanded) {
-            present();
+            Idle.add(()=> {
+                present();
+                return false;
+            });
         }
     }
 
