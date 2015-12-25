@@ -16,8 +16,6 @@ namespace Arc
 public static const string APPLET_KEY_NAME      = "name";
 public static const string APPLET_KEY_ALIGN     = "alignment";
 public static const string APPLET_KEY_POS       = "position";
-public static const string APPLET_KEY_PAD_START = "padding-start";
-public static const string APPLET_KEY_PAD_END   = "padding-end";
 
 public enum PanelAction {
     NONE = 1 << 0,
@@ -144,11 +142,6 @@ public class AppletInfo : GLib.Object
     /** Which panel region to use */
     public string alignment { public get ; public set ; default = "start"; }
 
-    /** Start padding */
-    public int pad_start { public get ; public set ; default = 0; }
-
-    /** End padding */
-    public int pad_end { public get ; public set; default = 0; }
 
     /** Position (packging index */
     public int position { public get; public set; default = 0; }
@@ -177,12 +170,6 @@ public class AppletInfo : GLib.Object
         settings.bind(Arc.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
         settings.bind(Arc.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_PAD_START, this, "pad-start", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_PAD_END, this, "pad-end", SettingsBindFlags.DEFAULT);
-
-        /* Automatically handle margins */
-        this.bind_property("pad-start", applet, "margin-start", BindingFlags.DEFAULT);
-        this.bind_property("pad-end", applet, "margin-end", BindingFlags.DEFAULT);
     }
 }
 

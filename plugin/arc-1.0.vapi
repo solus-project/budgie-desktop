@@ -67,9 +67,6 @@ namespace Arc {
 
         public string alignment { get ; set; }
 
-        public int pad_start { get ; set ; }
-
-        public int pad_end { get ; set; }
 
         public int position { get; set; }
 
@@ -85,9 +82,4 @@ namespace Arc {
     [CCode (cheader_filename = "ArcPlugin.h")]
     public static const string APPLET_KEY_POS;
 
-    [CCode (cheader_filename = "ArcPlugin.h")]
-    public static const string APPLET_KEY_PAD_START;
-
-    [CCode (cheader_filename = "ArcPlugin.h")]
-    public static const string APPLET_KEY_PAD_END;
 }
