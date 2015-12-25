@@ -25,6 +25,29 @@ public enum PanelColumn {
     N_COLUMNS = 2,
 }
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/applet_settings.ui")]
+public class AppletSettings : Gtk.Box {
+
+    [GtkChild]
+    private Gtk.Label? label_title;
+
+    [GtkChild]
+    private Gtk.ScrolledWindow? scrolledwindow;
+
+    public signal void view_switch();
+
+    [GtkCallback]
+    void back_clicked()
+    {
+        view_switch();
+    }
+
+    public AppletSettings()
+    {
+    }
+
+}
+
 [GtkTemplate (ui = "/com/solus-project/arc/raven/applets.ui")]
 public class AppletPicker : Gtk.Box {
 
@@ -172,12 +195,22 @@ public class PanelEditor : Gtk.Box
     [GtkChild]
     private Gtk.Button? button_move_applet_right;
 
+    [GtkChild]
+    private Gtk.Button? button_settings;
+
+    [GtkCallback]
+    void settings_clicked()
+    {
+        /* Do sweet fuck all right now */
+    }
+
     private unowned Arc.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
     private ulong applet_added_id;
     private ulong applet_removed_id;
 
     private AppletPicker? picker;
+    private AppletSettings? appsettings;
 
     private HashTable<string?,Gtk.Widget?> applets = null;
 
@@ -265,6 +298,12 @@ public class PanelEditor : Gtk.Box
         });
         picker.applet_add.connect(do_applet_add);
         this.panel_stack.add_titled(picker, "applets", "Applets");
+
+        appsettings = new AppletSettings();
+        appsettings.view_switch.connect(()=> {
+            this.panel_stack.set_visible_child_name("panel");
+        });
+        this.panel_stack.add_titled(picker, "settings", "Settings");
     }
 
     void do_applet_add(Peas.PluginInfo? info)
@@ -468,6 +507,7 @@ public class PanelEditor : Gtk.Box
         button_remove_applet.sensitive = false;
         button_move_applet_left.sensitive = false;
         button_move_applet_right.sensitive = false;
+        button_settings.sensitive = false;
         current_applet = null;
 
         foreach (var applet in current_panel.get_applets()) {
@@ -571,23 +611,23 @@ public class PanelEditor : Gtk.Box
     {
         unowned Arc.AppletInfo? info = null;
 
-        if (current_panel == null) {
+        if (current_panel == null || row == null) {
             button_move_applet_left.sensitive = false;
             button_move_applet_right.sensitive = false;
             button_remove_applet.sensitive = false;
+            button_settings.sensitive = false;
             return;
-        }
-
-        if (row == null) {
-            button_move_applet_left.sensitive = false;
-            button_move_applet_right.sensitive = false;
-            button_remove_applet.sensitive = false;
         }
         
         info = row.get_child().get_data("ainfo");
         button_move_applet_left.sensitive = current_panel.can_move_applet_left(info);
         button_move_applet_right.sensitive = current_panel.can_move_applet_right(info);
         button_remove_applet.sensitive = true;
+        if (info.settings_ui != null) {
+            button_settings.sensitive = true;
+        } else {
+            button_settings.sensitive = false;
+        }
         current_applet = info;
     }
 

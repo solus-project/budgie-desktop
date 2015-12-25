@@ -39,6 +39,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">go-down-symbolic</property>
   </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">emblem-system-symbolic</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -378,21 +383,50 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="box6">
+          <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
             <child>
-              <object class="GtkButton" id="button_move_applet_left">
+              <object class="GtkBox" id="box6">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="margin_left">10</property>
-                <property name="margin_top">4</property>
-                <property name="margin_bottom">4</property>
-                <property name="image">image5</property>
-                <property name="xalign">0.50999999046325684</property>
-                <property name="always_show_image">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkButton" id="button_move_applet_left">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
+                    <property name="image">image5</property>
+                    <property name="xalign">0.50999999046325684</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_move_applet_right">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
+                    <property name="image">image6</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <style>
+                  <class name="linked"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -401,23 +435,24 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_move_applet_right">
+              <object class="GtkButton" id="button_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
                 <property name="margin_top">4</property>
                 <property name="margin_bottom">4</property>
-                <property name="image">image6</property>
+                <property name="image">image7</property>
+                <signal name="clicked" handler="settings_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
-            <style>
-              <class name="linked"/>
-            </style>
           </object>
         </child>
         <style>
