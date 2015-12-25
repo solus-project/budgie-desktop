@@ -1,6 +1,10 @@
-if ENABLE_NATRAY
-
 -include $(top_srcdir)/common.mk
+
+
+EXTRA_DIST = \
+		natray-1.0.vapi
+		
+if ENABLE_NATRAY
 
 noinst_LTLIBRARIES = libnatray.la
 
@@ -17,10 +21,7 @@ libnatray_la_SOURCES = \
 libnatray_la_CFLAGS = \
 		$(NATRAY_CFLAGS)
 
-libnatray_la_la_LIBADD = \
+libnatray_la_LIBADD = \
 		$(NATRAY_LIBS)
-
-EXTRA_DIST = \
-		natray-1.0.vapi
 
 endif
