@@ -159,7 +159,7 @@ TODO
  - [ ] Fix Raven glitch when adding a new panel
  - [x] Add applet manipulation
  - [x] Allow adding/removing applets
- - [ ] Port old applets into tree
+ - [x] Port old applets into tree
  - [ ] Convert Raven modules into actual modules
  - [ ] Complete WM
  - [ ] Add defaults file for vendors to specify default configuration.
