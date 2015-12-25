@@ -112,9 +112,8 @@ public class StatusApplet : Arc.Applet
         grid.attach(sound.status_widget, 1, row, width-1, 1);
         sound.status_widget.hexpand = true;
         sound.status_widget.halign = Gtk.Align.FILL;
-        sound.status_widget.valign = Gtk.Align.END;
+        sound.status_widget.valign = Gtk.Align.CENTER;
         sound.status_image.valign = Gtk.Align.CENTER;
-        sound.status_image.margin_top = 6; /* Due to mark */
         sound.status_widget.margin_start = 2; /* Due to button for settings */
 
         var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
@@ -123,9 +122,8 @@ public class StatusApplet : Arc.Applet
         row += 1;
 
         /* Settings */
-        var img = new Gtk.Image.from_icon_name("preferences-system-symbolic", Gtk.IconSize.INVALID);
+        var img = new Gtk.Image.from_icon_name("preferences-system-symbolic", Gtk.IconSize.MENU);
         grid.attach(img, 0, row, 1, 1);
-        img.pixel_size = 22;
         var label = new Gtk.Button.with_label("Settings");
         label.set_relief(Gtk.ReliefStyle.NONE);
         label.set_property("margin-left", 1);
@@ -149,8 +147,7 @@ public class StatusApplet : Arc.Applet
         row += 1;
 
         /* Session controls */
-        user_img = new Gtk.Image.from_icon_name("user-info-symbolic", Gtk.IconSize.INVALID);
-        user_img.pixel_size = 22;
+        user_img = new Gtk.Image.from_icon_name("user-info-symbolic", Gtk.IconSize.MENU);
         grid.attach(user_img, 0, row, 1, 1);
 
         /* clickable username.. change account options */

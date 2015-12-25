@@ -24,7 +24,6 @@ public class PowerIndicator : Gtk.Bin
     public PowerIndicator()
     {
         widget = new Gtk.Image();
-        widget.pixel_size = icon_size;
         add(widget);
 
         client = new Up.Client();
@@ -83,7 +82,7 @@ public class PowerIndicator : Gtk.Bin
         set_tooltip_text(tip);
         margin = 2;
 
-        widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
+        widget.set_from_icon_name(image_name, Gtk.IconSize.MENU);
         show_all();
     }
 } // End class

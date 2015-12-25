@@ -10,7 +10,6 @@
  */
 
 const string MIXER_NAME = "Budgie Volume Control";
-const int icon_size = 22;
 
 public class SoundIndicator : Gtk.Bin
 {
@@ -31,24 +30,16 @@ public class SoundIndicator : Gtk.Bin
     private ulong change_id;
     private double step_size;
 
-    protected bool respect_lugholes = true;
-
     public SoundIndicator()
     {
         // Start off with at least some icon until we connect to pulseaudio */
-        widget = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.INVALID);
-        widget.pixel_size = icon_size;
+        widget = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
         margin = 2;
         var wrap = new Gtk.EventBox();
         wrap.add(widget);
         wrap.margin = 0;
         wrap.border_width = 0;
         add(wrap);
-
-        /* So I can use the mouse wheel to scroll the sound to obscene volumes. */
-        if (Environment.get_variable("BUDGIE_DISRESPECT_LUGHOLES") != null) {
-            respect_lugholes = false;
-        }
 
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
@@ -57,8 +48,7 @@ public class SoundIndicator : Gtk.Bin
         status_widget = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
         status_widget.set_draw_value(false);
 
-        status_image = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.INVALID);
-        status_image.pixel_size = icon_size;
+        status_image = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
 
         change_id = status_widget.value_changed.connect(on_scale_change);
 
@@ -133,7 +123,7 @@ public class SoundIndicator : Gtk.Bin
         }
 
         /* Prevent amplification using scroll on sound indicator */
-        if (respect_lugholes && vol >= norm) {
+        if (vol >= norm) {
             vol = (uint32)norm;
         }
 
@@ -184,11 +174,6 @@ public class SoundIndicator : Gtk.Bin
         status_widget.set_range(0, vol_max);
         status_widget.set_value(vol);
         status_widget.set_increments(step_size, step_size);
-        if (vol_norm < vol_max) {
-            status_widget.add_mark(vol_norm, Gtk.PositionType.TOP, null);
-        } else {
-            status_widget.clear_marks();
-        }
         SignalHandler.unblock(status_widget, change_id);
 
         // This usually goes up to about 150% (152.2% on mine though.)
