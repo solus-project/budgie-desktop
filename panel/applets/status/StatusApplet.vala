@@ -16,6 +16,12 @@ public class StatusPlugin : Arc.Plugin, Peas.ExtensionBase
     }
 }
 
+[DBus (name="org.gnome.SessionManager")]
+public interface SessionManager : Object
+{
+    public abstract async void Shutdown() throws Error;
+}
+
 public class StatusApplet : Arc.Applet
 {
 
@@ -28,6 +34,7 @@ public class StatusApplet : Arc.Applet
     protected Gtk.EventBox wrap;
 
     AccountsService? proxy = null;
+    Gtk.Button? power_btn;
 
     private unowned Arc.PopoverManager? manager = null;
 
@@ -37,6 +44,17 @@ public class StatusApplet : Arc.Applet
         manager.register_popover(wrap, popover);
     }
 
+    private SessionManager? session = null;
+    async void setup_session()
+    {
+        try {
+            session = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SessionManager", "/org/gnome/SessionManager");
+        } catch (Error e) {
+            power_btn.sensitive = false;
+            warning("Unable to contact GNOME Session: %s", e.message);
+        }
+    }
+    
     public StatusApplet()
     {
         wrap = new Gtk.EventBox();
@@ -71,6 +89,8 @@ public class StatusApplet : Arc.Applet
         });
 
         show_all();
+
+        setup_session.begin();
     }
 
     void update_user()
@@ -152,7 +172,7 @@ public class StatusApplet : Arc.Applet
         grid.set_border_width(6);
         grid.set_halign(Gtk.Align.FILL);
         grid.column_spacing = 10;
-        grid.row_spacing = 10;
+        grid.row_spacing = 6;
         popover.add(grid);
         int row = 0;
         const int width = 3;
@@ -177,7 +197,7 @@ public class StatusApplet : Arc.Applet
         grid.attach(img, 0, row, 1, 1);
         var label = new Gtk.Button.with_label("Settings");
         label.set_relief(Gtk.ReliefStyle.NONE);
-        label.set_property("margin-left", 1);
+        label.set_property("margin-start", 1);
         label.get_child().set_halign(Gtk.Align.START);
         label.clicked.connect(()=>{
             load_desktop("gnome-control-center.desktop");
@@ -208,7 +228,7 @@ public class StatusApplet : Arc.Applet
         label.halign = Gtk.Align.FILL;
         label.hexpand = true;
         label.set_relief(Gtk.ReliefStyle.NONE);
-        label.set_property("margin-left", 1);
+        label.set_property("margin-start", 1);
         label.get_child().set_halign(Gtk.Align.START);
         grid.attach(label, 1, row, 1, 1);
 
@@ -216,7 +236,9 @@ public class StatusApplet : Arc.Applet
         end_session.clicked.connect(()=> {
             popover.hide();
             try {
-                Process.spawn_command_line_async("budgie-session-dialog");
+                if (session != null) {
+                    session.Shutdown.begin();
+                }
             } catch (Error e) {
                 message("Error invoking end session dialog: %s", e.message);
             }
