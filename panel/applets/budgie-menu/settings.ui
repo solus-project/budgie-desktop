@@ -25,7 +25,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="switch1">
+      <object class="GtkSwitch" id="switch_menu_label">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>
@@ -47,7 +47,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="switch2">
+      <object class="GtkSwitch" id="switch_menu_compact">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>
@@ -69,7 +69,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="switch3">
+      <object class="GtkSwitch" id="switch_menu_headers">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>

@@ -23,6 +23,25 @@ public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
 public class BudgieMenuSettings : Gtk.Grid
 {
 
+    [GtkChild]
+    private Gtk.Switch? switch_menu_label;
+
+    [GtkChild]
+    private Gtk.Switch? switch_menu_compact;
+
+    [GtkChild]
+    private Gtk.Switch? switch_menu_headers;
+
+    private Settings? settings;
+
+    public BudgieMenuSettings(Settings? settings)
+    {
+        this.settings = settings;
+        settings.bind("enable-menu-label", switch_menu_label, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("menu-compact", switch_menu_compact, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("menu-headers", switch_menu_headers, "active", SettingsBindFlags.DEFAULT);
+    }
+
 }
 
 public class BudgieMenuApplet : Arc.Applet
@@ -42,7 +61,7 @@ public class BudgieMenuApplet : Arc.Applet
 
     public override Gtk.Widget? get_settings_ui()
     {
-        return new BudgieMenuSettings();
+        return new BudgieMenuSettings(this.get_applet_settings(uuid));
     }
 
     public override bool supports_settings()
