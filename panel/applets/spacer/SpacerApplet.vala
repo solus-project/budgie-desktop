@@ -17,6 +17,21 @@ public class SpacerPlugin : Arc.Plugin, Peas.ExtensionBase
     }
 }
 
+[GtkTemplate (ui = "/com/solus-project/spacer/settings.ui")]
+public class SpacerSettings : Gtk.Grid
+{
+    Settings? settings = null;
+
+    [GtkChild]
+    private Gtk.SpinButton? spinbutton_size;
+
+    public SpacerSettings(Settings? settings)
+    {
+        this.settings = settings;
+        settings.bind("size", spinbutton_size, "value", SettingsBindFlags.DEFAULT);
+    }
+}
+
 public class SpacerApplet : Arc.Applet
 {
 
@@ -25,6 +40,17 @@ public class SpacerApplet : Arc.Applet
     public string uuid { public set; public get; }
 
     private Settings? settings;
+
+
+    public override bool supports_settings()
+    {
+        return true;
+    }
+
+    public override Gtk.Widget? get_settings_ui()
+    {
+        return new SpacerSettings(this.get_applet_settings(uuid));
+    }
 
     public SpacerApplet(string uuid)
     {

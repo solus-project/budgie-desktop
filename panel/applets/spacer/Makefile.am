@@ -5,10 +5,27 @@ pkglib_LTLIBRARIES =
 plugindir = $(MODULEDIR)
 plugin_DATA =
 
+plugin_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/panel/applets/spacer  --generate-dependencies $(top_srcdir)/panel/applets/spacer/plugin.gresource.xml)
+
+# resources
+plugin-resources.h: $(top_srcdir)/panel/applets/spacer/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/spacer --generate-header --c-name budgie_menu $<
+
+plugin-resources.c: $(top_srcdir)/panel/applets/spacer/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/spacer --generate-source --c-name budgie_menu $<
+
+BUILT_SOURCES = \
+	plugin-resources.h \
+	plugin-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
+
 
 plugin_DATA += \
 	SpacerApplet.plugin \
-	com.solus-project.spacer.gschema.xml
+	com.solus-project.spacer.gschema.xml \
+	plugin.gresource.xml
 
 EXTRA_DIST += \
 	$(plugin_DATA)
@@ -16,7 +33,9 @@ EXTRA_DIST += \
 plugin_LTLIBRARIES = libspacerapplet.la
 
 libspacerapplet_la_SOURCES = \
-	SpacerApplet.vala
+	SpacerApplet.vala \
+	plugin-resources.h \
+	plugin-resources.c
 
 libspacerapplet_la_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
@@ -39,7 +58,9 @@ libspacerapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg arc-1.0 \
-	--vapidir=${top_srcdir}/plugin
+	--vapidir=${top_srcdir}/plugin \
+	--target-glib=2.38 \
+	--gresources=${srcdir}/plugin.gresource.xml
 
 gsettings_SCHEMAS = \
 	com.solus-project.spacer.gschema.xml
