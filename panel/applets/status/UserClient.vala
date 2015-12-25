@@ -12,7 +12,7 @@
 [DBus (name="org.freedesktop.Accounts")]
 public interface AccountsService : Object
 {
-    public abstract ObjectPath FindUserById(int64 id) throws IOError;
+    public abstract async ObjectPath FindUserById(int64 id) throws IOError;
 }
 
 [DBus (name="org.freedesktop.Accounts.User")]

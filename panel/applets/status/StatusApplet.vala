@@ -27,6 +27,8 @@ public class StatusApplet : Arc.Applet
     protected Gtk.Image user_img;
     protected Gtk.EventBox wrap;
 
+    AccountsService? proxy = null;
+
     private unowned Arc.PopoverManager? manager = null;
 
     public override void update_popovers(Arc.PopoverManager? manager)
@@ -71,25 +73,74 @@ public class StatusApplet : Arc.Applet
         show_all();
     }
 
+    void update_user()
+    {
+        if (user == null) {
+            return;
+        }
+        SignalHandler.disconnect_by_func(user, (void*)update_user, this);
+        user = null;
+
+        update_accounts.begin();
+
+        update_image();
+    }
+
+    void update_image()
+    {
+        if (user == null) {
+            return;
+        }
+        try {
+            var pbuf = new Gdk.Pixbuf.from_file_at_size(user.icon_file, 22, 22);
+            user_img.set_from_pixbuf(pbuf);
+        } catch (Error e) {
+            warning("update_user: %s", e.message);
+        }
+    }
+
+    async void update_accounts()
+    {
+        try {
+            var path = yield proxy.FindUserById(Posix.getuid());
+            user = yield Bus.get_proxy(BusType.SYSTEM, "org.freedesktop.Accounts", path);
+            user.Changed.connect(update_user);
+            update_image();
+        } catch (Error e) {
+            warning("update_accounts: %s", e.message);
+        }
+    }
+
+    void on_accounts_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            proxy = Bus.get_proxy.end(res);
+            update_accounts.begin();
+        } catch (Error e) {
+            warning("AccountsService not available: %s", e.message);
+        }
+    }
+
     /**
      * Note: This is not dynamic.. We don't get a properties changed event for iconfile
      */
     protected void setup_user()
     {
+        Bus.get_proxy.begin<AccountsService>(BusType.SYSTEM, "org.freedesktop.Accounts", "/org/freedesktop/Accounts", 0, null, on_accounts_get);
+    }
+
+
+    void load_desktop(string name)
+    {
+        popover.hide();
         try {
-            AccountsService proxy = Bus.get_proxy_sync(BusType.SYSTEM, "org.freedesktop.Accounts", "/org/freedesktop/Accounts");
-            var path = proxy.FindUserById(Posix.getuid());
-            user = Bus.get_proxy_sync(BusType.SYSTEM, "org.freedesktop.Accounts", path);
-        } catch (Error e) {
-            message("AccountsService query failed: %s", e.message);
-        }
-        if (user != null) {
-            try {
-                var pbuf = new Gdk.Pixbuf.from_file_at_size(user.icon_file, 22, 22);
-                user_img.set_from_pixbuf(pbuf);
-            } catch (Error e) {
-                message("Unable to update user image: %s", e.message);
+            var info = new DesktopAppInfo(name);
+            if (info == null) {
+                return;
             }
+            info.launch(null, null);
+        } catch (Error e) {
+            warning("load_desktop: %s", e.message);
         }
     }
 
@@ -129,12 +180,7 @@ public class StatusApplet : Arc.Applet
         label.set_property("margin-left", 1);
         label.get_child().set_halign(Gtk.Align.START);
         label.clicked.connect(()=>{
-            popover.hide();
-            try {
-                Process.spawn_command_line_async("gnome-control-center");
-            } catch (Error e) {
-                message("Error invoking gnome-control-center: %s", e.message);
-            }
+            load_desktop("gnome-control-center.desktop");
         });
         label.halign = Gtk.Align.FILL;
         label.hexpand = true;
@@ -157,12 +203,7 @@ public class StatusApplet : Arc.Applet
         }
         label = new Gtk.Button.with_label(username);
         label.clicked.connect(()=> {
-            popover.hide();
-            try {
-                Process.spawn_command_line_async("gnome-control-center user-accounts");
-            } catch (Error e) {
-                message("Error invoking gnome-control-center user-accounts: %s", e.message);
-            }
+            load_desktop("gnome-user-accounts-panel.desktop");
         });
         label.halign = Gtk.Align.FILL;
         label.hexpand = true;
