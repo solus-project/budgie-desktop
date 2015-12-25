@@ -89,12 +89,15 @@ public class EndSessionDialog : Gtk.Window
         Bus.own_name(BusType.SESSION, "com.solus_project.Session.EndSessionDialog", BusNameOwnerFlags.NONE,
             on_bus_acquired, null, null);
         set_keep_above(true);
-        decorated = false;
 
         Gdk.Visual? visual = screen.get_rgba_visual();
         if (visual != null) {
             this.set_visual(visual);
         }
+
+        var header = new Gtk.EventBox();
+        set_titlebar(header);
+        header.get_style_context().remove_class("titlebar");
 
         delete_event.connect(()=> {
             this.cancel_clicked();
