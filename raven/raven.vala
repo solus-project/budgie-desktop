@@ -174,6 +174,18 @@ public class Raven : Gtk.Window
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
 
+
+        enter_notify_event.connect((e)=> {
+            unowned Gdk.Window? window = get_window();
+            if (window == null) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            if (!has_toplevel_focus) {
+                window.focus(e.time);
+            }
+            return Gdk.EVENT_PROPAGATE;
+        });
+
         shadow = new Arc.ShadowBlock(PanelPosition.RIGHT);
         layout.pack_start(shadow, false, false, 0);
         /* For now Raven is always on the right */
