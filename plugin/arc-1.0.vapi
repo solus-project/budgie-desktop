@@ -34,6 +34,9 @@ namespace Arc {
 
         public virtual Gtk.Widget? get_settings_ui();
         public virtual bool supports_settings();
+
+        public signal void panel_size_changed(int panel_size, int icon_size);
+
     }
 
     [CCode (cheader_filename = "ArcPlugin.h")]

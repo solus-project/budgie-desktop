@@ -81,6 +81,12 @@ public class Panel : Arc.Toplevel
     /* Box for the end of the panel */
     Gtk.Box? end_box;
 
+    int[] icon_sizes = {
+        16, 22, 24, 32, 48, 96, 128, 256
+    };
+
+    int current_icon_size;
+
     /**
      * Force update the geometry
      */
@@ -128,6 +134,7 @@ public class Panel : Arc.Toplevel
         this.layout.queue_resize();
         queue_resize();
         placement();
+        update_sizes();
     }
 
     public override void reset_shadow()
@@ -218,7 +225,31 @@ public class Panel : Arc.Toplevel
         set_expanded(false);
 
         this.manager.extension_loaded.connect_after(this.on_extension_loaded);
+
+        /* bit of a no-op. */
+        update_sizes();
         load_applets();
+    }
+
+    void update_sizes()
+    {
+        int size = icon_sizes[0];
+        unowned string? key = null;
+        unowned Arc.AppletInfo? info = null;
+
+        for (int i = 1; i < icon_sizes.length; i++) {
+            if (icon_sizes[i] > intended_size) {
+                break;
+            }
+            size = icon_sizes[i];
+        }
+
+        this.current_icon_size = size;
+
+        var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
+        while (iter.next(out key, out info)) {
+            info.applet.panel_size_changed(intended_size, size);
+        }
     }
 
     public void destroy_children()
@@ -496,6 +527,7 @@ public class Panel : Arc.Toplevel
         this.set_applets();
 
         info.applet.update_popovers(this.popover_manager);
+        info.applet.panel_size_changed(intended_size, this.current_icon_size);
         pack_target.pack_start(info.applet, false, false, 0);
 
         pack_target.child_set(info.applet, "position", info.position);

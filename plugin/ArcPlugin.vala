@@ -110,7 +110,9 @@ public class Applet : Gtk.Bin
             return new Settings.with_path(this.settings_schema, path);
         }
         return null;
-    } 
+    }
+
+    public signal void panel_size_changed(int panel_size, int icon_size);
 }
 
 /**
