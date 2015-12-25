@@ -19,12 +19,21 @@ public interface ScreenSaver : Object
     public abstract void lock() throws Error;
 }
 
+[DBus (name="org.gnome.SessionManager")]
+public interface SessionManager : Object
+{
+    public abstract async void Shutdown() throws Error;
+}
+
+
 class PowerStrip : Gtk.EventBox
 {
 
     private ScreenSaver? saver = null;
+    private SessionManager? session = null;
 
     private Gtk.Button? lock_btn = null;
+    private Gtk.Button? power_btn = null;
 
     async void setup_dbus()
     {
@@ -33,6 +42,12 @@ class PowerStrip : Gtk.EventBox
         } catch (Error e) {
             warning("Unable to contact login manager: %s", e.message);
             return;
+        }
+        try {
+            session = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SessionManager", "/org/gnome/SessionManager");
+        } catch (Error e) {
+            power_btn.sensitive = false;
+            warning("Unable to contact GNOME Session: %s", e.message);
         }
     }
             
@@ -75,11 +90,15 @@ class PowerStrip : Gtk.EventBox
         bottom.pack_start(btn, false, false, 0);
 
         btn = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+        power_btn = btn;
         btn.clicked.connect(()=> {
             try {
                 raven.set_expanded(false);
+                if (session == null) {
+                    return;
+                }
                 /* TODO: Swap this out for gnome-session stuff */
-                Process.spawn_command_line_async("budgie-session-dialog");
+                session.Shutdown.begin();
             } catch (Error e) {
                 message("Error invoking end session dialog: %s", e.message);
             }
