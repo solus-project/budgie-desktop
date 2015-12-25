@@ -26,7 +26,6 @@ public class ShowDesktopApplet : Arc.Applet
     public ShowDesktopApplet()
     {
         widget = new Gtk.ToggleButton();
-        widget.get_style_context().add_class("launcher");
         widget.relief = Gtk.ReliefStyle.NONE;
         widget.set_active(false);
         img = new Gtk.Image.from_icon_name("user-desktop-symbolic", Gtk.IconSize.BUTTON);
