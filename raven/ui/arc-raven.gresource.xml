@@ -6,5 +6,6 @@
                 <file preprocess="xml-stripblanks">panel.ui</file>
                 <file preprocess="xml-stripblanks">applets.ui</file>
                 <file preprocess="xml-stripblanks">applet_settings.ui</file>
+                <file preprocess="xml-stripblanks">notification.ui</file>
         </gresource>
 </gresources>
