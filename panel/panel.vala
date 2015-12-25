@@ -721,6 +721,9 @@ public class Panel : Arc.Toplevel
 
         if (expanded) {
             Idle.add(()=> {
+                if (get_window() != null) {
+                    get_window().focus(Gdk.CURRENT_TIME);
+                }
                 present();
                 return false;
             });
