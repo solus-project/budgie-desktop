@@ -42,6 +42,15 @@ public class AppletSettings : Gtk.Box {
         view_switch();
     }
 
+    public void set_applet(Arc.AppletInfo? info)
+    {
+        if (scrolledwindow.get_child() != null) {
+            scrolledwindow.remove(scrolledwindow.get_child());
+        }
+        label_title.set_text(info.name);
+        scrolledwindow.add(info.settings_ui);
+    }
+
     public AppletSettings()
     {
     }
@@ -201,7 +210,8 @@ public class PanelEditor : Gtk.Box
     [GtkCallback]
     void settings_clicked()
     {
-        /* Do sweet fuck all right now */
+        this.appsettings.set_applet(current_applet);
+        this.panel_stack.set_visible_child_name("settings");
     }
 
     private unowned Arc.AppletInfo? current_applet = null;

@@ -34,6 +34,16 @@ public class BudgieMenuApplet : Arc.Applet
 
     public string uuid { public set ; public get; }
 
+    private new Gtk.Widget? settings_ui = null;
+
+    public override unowned Gtk.Widget? get_settings_ui()
+    {
+        if (this.settings_ui == null) {
+            this.settings_ui = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        }
+        return this.settings_ui;
+    }
+
     public BudgieMenuApplet(string uuid)
     {
         Object(uuid: uuid);
