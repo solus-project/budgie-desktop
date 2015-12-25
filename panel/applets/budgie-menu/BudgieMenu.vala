@@ -144,6 +144,7 @@ public class BudgieMenuApplet : Arc.Applet
             if (popover.get_visible()) {
                 popover.hide();
             } else {
+                popover.get_child().show_all();
                 this.manager.show_popover(widget);
             }
         }

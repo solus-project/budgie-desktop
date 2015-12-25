@@ -104,10 +104,24 @@ public static const string PANEL_KEY_SHADOW     = "enable-shadow";
 public class PanelManagerIface
 {
 
+    private Arc.PanelManager? manager = null;
+
+    [DBus (visible = false)]
+    public PanelManagerIface(Arc.PanelManager? manager)
+    {
+        this.manager = manager;
+    }
+
     public string get_version()
     {
         return Arc.VERSION;
     }
+
+    public void ActivateAction(int action)
+    {
+        this.manager.activate_action(action);
+    }
+        
 }
 
 public class PanelManager : DesktopManager
@@ -136,6 +150,20 @@ public class PanelManager : DesktopManager
     private string current_theme_uri;
 
     private EndSessionDialog? end_dialog = null;
+
+    public void activate_action(int action)
+    {
+        unowned string? uuid = null;
+        unowned Arc.Panel? panel = null;
+
+        var iter = HashTableIter<string?,Arc.Panel?>(panels);
+        /* Only let one panel take the action, and one applet per panel */
+        while (iter.next(out uuid, out panel)) {
+            if (panel.activate_action(action)) {
+                break;
+            }
+        }
+    }
 
     private void end_session(bool quit)
     {
@@ -281,7 +309,7 @@ public class PanelManager : DesktopManager
     private void on_bus_acquired(DBusConnection conn)
     {
         try {
-            iface = new PanelManagerIface();
+            iface = new PanelManagerIface(this);
             conn.register_object(Arc.DBUS_OBJECT_PATH, iface);
         } catch (Error e) {
             stderr.printf("Error registering PanelManager: %s\n", e.message);

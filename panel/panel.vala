@@ -87,6 +87,23 @@ public class Panel : Arc.Toplevel
 
     int current_icon_size;
 
+    public bool activate_action(int remote_action)
+    {
+        unowned string? uuid = null;
+        unowned Arc.AppletInfo? info = null;
+
+        Arc.PanelAction action = (Arc.PanelAction)remote_action;
+
+        var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
+        while (iter.next(out uuid, out info)) {
+            if ((info.applet.supported_actions & action) != 0) {
+                info.applet.invoke_action(action);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Force update the geometry
      */
