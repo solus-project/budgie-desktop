@@ -22,6 +22,7 @@ SUBDIRS = \
 	plugin \
 	lib \
 	raven \
+	imports \
 	panel \
 	session \
 	wm \
