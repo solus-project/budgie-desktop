@@ -376,12 +376,11 @@ public class NotificationsView : Gtk.Box
                 clone.show_all();
                 this.listbox.add(clone);
                 clone.show_all();
+                Raven.get_instance().UnreadNotifications();
             }
         }
 
         update_child_count();
-        Raven.get_instance().UnreadNotifications();
-
         this.remove_notification(widget.id);
     }
 
