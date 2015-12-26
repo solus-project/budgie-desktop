@@ -23,8 +23,20 @@ public enum NotificationCloseReason {
 
 
 [GtkTemplate (ui = "/com/solus-project/arc/raven/notification.ui")]
-public class NotificationWidget : Gtk.Box
+public class NotificationWindow : Gtk.Window
 {
+
+    public NotificationWindow()
+    {
+        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+
+        Gdk.Visual? vis = screen.get_rgba_visual();
+        if (vis != null) {
+            this.set_visual(vis);
+        }
+        cancel = new GLib.Cancellable();
+    }
+
     public uint32 id;
 
     [GtkChild]
@@ -63,11 +75,6 @@ public class NotificationWidget : Gtk.Box
     private uint32 timeout = 0;
 
     private GLib.Cancellable? cancel;
-
-    public NotificationWidget()
-    {
-        cancel = new GLib.Cancellable();
-    }
 
     private async bool set_from_image_path()
     {
@@ -163,20 +170,6 @@ public class NotificationWidget : Gtk.Box
     }
 }
 
-public class NotificationWindow : Gtk.Window
-{
-
-    public NotificationWindow()
-    {
-        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION);
-
-        Gdk.Visual? vis = screen.get_rgba_visual();
-        if (vis != null) {
-            this.set_visual(vis);
-        }
-    }
-}
-
 [DBus (name = "org.freedesktop.Notifications")]
 public class NotificationsView : Gtk.Box
 {
@@ -185,10 +178,10 @@ public class NotificationsView : Gtk.Box
         "body", "body-markup", "actions", "action-icons"
     };
 
-    private GLib.Queue<NotificationWidget?> queue = null;
+    private GLib.Queue<NotificationWindow?> queue = null;
 
     /* Obviously we'll change this.. */
-    private HashTable<uint32,NotificationWidget?> notifications;
+    private HashTable<uint32,NotificationWindow?> notifications;
 
     public async string[] get_capabilities()
     {
@@ -203,7 +196,7 @@ public class NotificationsView : Gtk.Box
 
     private uint32 notif_id = 0;
     [DBus (visible = false)]
-    void on_notification_closed(NotificationWidget? widget, NotificationCloseReason reason)
+    void on_notification_closed(NotificationWindow? widget, NotificationCloseReason reason)
     {
         ulong nid = widget.get_data("npack_id");
 
@@ -216,22 +209,15 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     bool remove_notification(uint32 id)
     {
-        unowned Gtk.Widget? parent = null;
-        unowned NotificationWidget? widget = notifications.lookup(id);
+        unowned NotificationWindow? widget = notifications.lookup(id);
         if (widget == null) {
             return false;
         }
 
         widget.stop_decay();
-        parent = widget.get_parent();
-        if (parent != null && parent is NotificationWindow) {
-            /* TODO: Update placement lists */
-        }
 
         notifications.remove(widget.id);
-        if (parent != null) {
-            parent.destroy();
-        }
+        widget.destroy();
         return true;
     }
 
@@ -241,8 +227,7 @@ public class NotificationsView : Gtk.Box
     {
         ++notif_id;
 
-        unowned NotificationWidget? pack = null;
-        unowned NotificationWindow? window = null;
+        unowned NotificationWindow? pack = null;
 
         if (replaces_id > 0) {
             pack = notifications.lookup(replaces_id);
@@ -256,27 +241,20 @@ public class NotificationsView : Gtk.Box
         }
 
         if (pack == null) {
-            var npack = new NotificationWidget();
+            var npack = new NotificationWindow();
             ulong nid = npack.Closed.connect(on_notification_closed);
             npack.set_data("npack_id", nid);
             notifications.insert(notif_id, npack);
             pack = npack;
-
-            var nwindow = new NotificationWindow();
-            nwindow.add(pack);
-
-            window = nwindow;
         } else {
             notifications.steal(notif_id);
-            window = pack.get_parent() as NotificationWindow;
             notifications.insert(notif_id, pack);
         }
 
         yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
             hints, expire);
 
-        /* Do some placement please 
-        window.show_all(); */
+        /* Do some placement please*/
         pack.begin_decay();
         
         return notif_id;
@@ -309,7 +287,7 @@ public class NotificationsView : Gtk.Box
 
         pack_start(header, false, false, 0);
 
-        notifications = new HashTable<uint32,NotificationWidget?>(direct_hash, direct_equal);
+        notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
 
         show_all();
 
