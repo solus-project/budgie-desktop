@@ -26,7 +26,9 @@ GtkPopover .scrollbar .trough {
 .arc-container { background-color: transparent; }
 
 .raven,
-.arc-panel {
+.arc-panel,
+.arc-notification,
+.arc-session-dialog {
 
     * {
         padding: 0;
@@ -552,3 +554,31 @@ GtkPopover .scrollbar .trough {
 
     .button.image-button { padding: 8px; }
 }
+
+// Notifications
+.arc-notification {
+    &.background {
+        border-radius: 1px;
+        background-color: $panel_bg;
+        color: $fg_color;
+        box-shadow: 0 3px 5px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    }
+    .notification-title {
+        font-size: 110%;
+        color: $fg_color;
+    }
+    .notification-body { color: transparentize($fg_color, 0.3); }
+}
+
+// Session Dialog
+.arc-session-dialog {
+     &.background { @extend .arc-notification.background; }
+
+    .linked > .button {
+        border-bottom: none;
+        border-radius: 0;
+        &:first-child { border-left: none; border-radius: 0; }
+        &:last-child { border-right: none; border-radius: 0; }
+    }
+}
+

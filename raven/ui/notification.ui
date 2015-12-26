@@ -13,6 +13,10 @@
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">3</property>
+        <property name="margin_right">3</property>
+        <property name="margin_top">3</property>
+        <property name="margin_bottom">3</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkGrid" id="grid1">
@@ -29,6 +33,9 @@
                 <property name="pixel_size">48</property>
                 <property name="icon_name">mail-unread-symbolic</property>
                 <property name="icon_size">6</property>
+                <style>
+                  <class name="notification-icon"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -51,6 +58,9 @@
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
+                <style>
+                  <class name="notification-title"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -68,6 +78,9 @@
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="xalign">0</property>
+                <style>
+                  <class name="notification-body"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -127,5 +140,8 @@
         </child>
       </object>
     </child>
+    <style>
+      <class name="arc-notification"/>
+    </style>
   </template>
 </interface>
