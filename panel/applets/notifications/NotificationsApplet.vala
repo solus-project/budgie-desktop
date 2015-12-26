@@ -58,6 +58,12 @@ public class NotificationsApplet : Arc.Applet
             return;
         }
 
+        if (count > 0) {
+            this.icon.get_style_context().add_class("alert");
+        } else {
+            this.icon.get_style_context().remove_class("alert");
+        }
+
         /* Set the classes here, depending on the count. */
     }
 

@@ -342,6 +342,7 @@ public class NotificationsView : Gtk.Box
         "lollypop.desktop", "Lollypop"
     };
 
+    private HeaderWidget? header = null;
     private Gtk.ListBox? listbox;
 
     private GLib.Queue<NotificationWindow?> queue = null;
@@ -374,8 +375,11 @@ public class NotificationsView : Gtk.Box
                 var clone = new NotificationClone(widget);
                 clone.show_all();
                 this.listbox.add(clone);
+                clone.show_all();
             }
         }
+
+        update_child_count();
 
         this.remove_notification(widget.id);
     }
@@ -394,6 +398,23 @@ public class NotificationsView : Gtk.Box
         queue.remove(widget);
         widget.destroy();
         return true;
+    }
+
+    [DBus (visible = false)]
+    void update_child_count()
+    {
+        uint len = listbox.get_children().length();
+
+        string? text = null;
+        if (len > 1) {
+            text = _("%u new notifications".printf(len));
+        } else if (len == 1) {
+            text = _("1 new notification");
+        } else {
+            text = _("No new notifications");
+        }
+        Raven.get_instance().set_notification_count(len);
+        header.text = text;
     }
 
     public async uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
@@ -491,6 +512,17 @@ public class NotificationsView : Gtk.Box
         spec_version = "1";
     }
 
+
+    [DBus (visible = false)]
+    void clear_all()
+    {
+        foreach (var child in listbox.get_children()) {
+            child.destroy();
+        }
+
+        update_child_count();
+    }
+
     [DBus (visible = false)]
     public NotificationsView()
     {
@@ -498,10 +530,16 @@ public class NotificationsView : Gtk.Box
 
         var img = new Gtk.Image.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         img.margin_top = 4;
-        img.margin_bottom = 4;
 
-        var header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, img);
+        var btn = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
+        btn.relief = Gtk.ReliefStyle.NONE;
+        btn.margin_top = 4;
+        btn.margin_bottom = 4;
+
+        header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, btn);
         header.margin_top = 6;
+
+        btn.clicked.connect(this.clear_all);
 
         pack_start(header, false, false, 0);
 
@@ -517,6 +555,7 @@ public class NotificationsView : Gtk.Box
         scrolledwindow.add(listbox);
 
         show_all();
+        update_child_count();
 
         serve_dbus();
     }
