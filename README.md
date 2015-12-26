@@ -3,10 +3,6 @@ budgie-desktop
 
 The Budgie Desktop is the flagship desktop of Solus OS.
 
-![screenshot1](https://raw.githubusercontent.com/solus-project/budgie-desktop/master/screenshots/Raven_Main.png)
-
-![screenshot2](https://raw.githubusercontent.com/solus-project/budgie-desktop/master/screenshots/Raven_Settings.png)
-
 License
 -------
 
