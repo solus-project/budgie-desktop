@@ -18,6 +18,7 @@ arc_wm_SOURCES = \
 	main.vala \
 	keyboard.vala \
 	shim.vala \
+	windowmenu.vala \
 	wm.vala
 
 arc_wm_CFLAGS = \

@@ -66,6 +66,7 @@ public class ArcWM : Meta.Plugin
     RavenRemote? raven_proxy = null;
     ShellShim? shim = null;
     PanelRemote? panel_proxy = null;
+    WindowMenu? winmenu = null;
 
     static construct
     {
@@ -198,6 +199,7 @@ public class ArcWM : Meta.Plugin
 
         ChildWatch.add(pid, on_dialog_closed);
     }
+
     public override void start()
     {
         var screen = this.get_screen();
@@ -213,6 +215,7 @@ public class ArcWM : Meta.Plugin
         if (gtk_available) {
             var settings = Gtk.Settings.get_default();
             settings.bind_property("gtk-enable-animations", this, "use-animations");
+            winmenu = new WindowMenu();
         }
 
         settings = new Settings(WM_SCHEMA);
@@ -263,6 +266,22 @@ public class ArcWM : Meta.Plugin
         keyboard.hook_extra();
     }
 
+    public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y)
+    {
+        if (type != Meta.WindowMenuType.WM) {
+            return;
+        }
+
+        if (winmenu == null) {
+            return;
+        }
+        Timeout.add(100, ()=> {
+            winmenu.meta_window = window;
+            winmenu.popup(null, null, null, 3, Gdk.CURRENT_TIME);
+            return false;
+        });
+    }
+        
     bool on_button_release(Clutter.ButtonEvent? event)
     {
         if (event.button != 3) {
