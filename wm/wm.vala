@@ -247,7 +247,10 @@ public class ArcWM : Meta.Plugin
 
 
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
+        Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
 
+                
         shim = new ShellShim(this);
         shim.serve();
 
@@ -569,7 +572,83 @@ public class ArcWM : Meta.Plugin
             this.tile_preview.hide();
         }
     }
-    
+
+
+    /* SERIOUS LEVELS OF DERP FOLLOW: This is alt+Tab shite ported from old Budgie
+     * MUST fix. */
+    static int tab_sort(Meta.Window a, Meta.Window b)
+    {
+        uint32 at;
+        uint32 bt;
+
+        at = a.get_user_time();
+        bt = a.get_user_time();
+
+        if (at < bt) {
+            return -1;
+        }
+        if (at > bt) {
+            return 1;
+        }
+        return 0;
+    }
+
+    unowned Meta.Workspace? cur_workspace = null;
+    List<weak Meta.Window>? cur_tabs = null;
+    int cur_index = 0;
+    uint32 last_time = -1;
+
+    void invalidate_tab(Meta.Workspace space, Meta.Window window)
+    {
+        if (space == cur_workspace) {
+            cur_tabs = null;
+            cur_index = 0;
+            last_time = -1;
+        }
+    }
+
+    public static const uint32 MAX_TAB_ELAPSE = 2000;
+
+    public void switch_windows(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        uint32 cur_time = display.get_current_time();
+
+        var workspace = screen.get_active_workspace();
+
+        string? data = null;
+        if ((data = workspace.get_data("__flagged")) == null) {
+            workspace.window_added.connect(invalidate_tab);
+            workspace.window_removed.connect(invalidate_tab);
+            workspace.set_data("__flagged", "yes");
+        }
+
+        if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
+            cur_workspace = workspace;
+            cur_tabs = null;
+            cur_index = 0;
+        }
+        last_time = cur_time;
+
+        if (cur_tabs == null) {
+            cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
+            CompareFunc<weak Meta.Window> cm = Arc.ArcWM.tab_sort;
+            cur_tabs.sort(cm);
+        }
+        if (cur_tabs == null) {
+            return;
+        }
+        cur_index++;
+        if (cur_index > cur_tabs.length()-1) {
+            cur_index = 0;
+        }
+        var win = cur_tabs.nth_data(cur_index);
+        if (win == null) {
+            return;
+        }
+        win.activate(display.get_current_time());
+    }
 }
 
 } /* End namespace */
