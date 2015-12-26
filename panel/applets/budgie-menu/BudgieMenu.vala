@@ -52,10 +52,8 @@ public class BudgieMenuApplet : Arc.Applet
     protected Gtk.EventBox widget;
     protected BudgieMenuWindow? popover;
     protected Settings settings;
-    protected Settings ksettings;
     Gtk.Image img;
     Gtk.Label label;
-    private string modifier;
 
     private unowned Arc.PopoverManager? manager = null;
 
@@ -80,9 +78,7 @@ public class BudgieMenuApplet : Arc.Applet
 
         settings = this.get_applet_settings(uuid);
 
-        ksettings = new Settings("org.gnome.mutter");
         settings.changed.connect(on_settings_changed);
-        ksettings.changed.connect(on_settings_changed);
 
         widget = new Gtk.EventBox();
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
@@ -133,10 +129,8 @@ public class BudgieMenuApplet : Arc.Applet
         });
 
         popover.key_release_event.connect((e)=> {
-            var human = Gdk.keyval_name(e.keyval);
-            if (human == modifier) {
+            if (e.keyval == Gdk.Key.Escape) {
                 popover.hide();
-                return Gdk.EVENT_STOP;
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -171,10 +165,6 @@ public class BudgieMenuApplet : Arc.Applet
                 break;
             case "enable-menu-label":
                 label.set_visible(settings.get_boolean(key));
-                break;
-            case "overlay-key":
-                /* Reset modifiers.. */
-                modifier = ksettings.get_string(key);
                 break;
             default:
                 break;
