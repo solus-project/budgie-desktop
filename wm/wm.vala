@@ -189,6 +189,15 @@ public class BudgieWM : Meta.Plugin
         on_overlay_key();
     }
 
+    void launch_rundialog(Meta.Display display, Meta.Screen screen,
+                            Meta.Window? window, Clutter.KeyEvent? event,
+                            Meta.KeyBinding binding)
+    {
+        try {
+            Process.spawn_command_line_async("budgie-run-dialog");
+        } catch (Error e) {}
+    }
+
     void on_dialog_closed(GLib.Pid pid, int status)
     {
         bool ok = false;
@@ -247,6 +256,7 @@ public class BudgieWM : Meta.Plugin
 
 
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
+        Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
         Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
         Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
 
