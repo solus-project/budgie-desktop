@@ -174,6 +174,30 @@ public class ArcWM : Meta.Plugin
         on_overlay_key();
     }
 
+    void on_dialog_closed(GLib.Pid pid, int status)
+    {
+        bool ok = false;
+        try {
+            ok = Process.check_exit_status(status);
+        } catch (Error e) {
+        }
+        this.complete_display_change(ok);
+    }
+
+    public override void confirm_display_change()
+    {
+        GLib.Pid pid = Meta.Util.show_dialog("--question",
+                          "Does the display look OK?",
+                          "20",
+                          null,
+                          "_Keep This Configuration",
+                          "_Restore Previous Configuration",
+                          "preferences-desktop-display",
+                          0,
+                          null, null);
+
+        ChildWatch.add(pid, on_dialog_closed);
+    }
     public override void start()
     {
         var screen = this.get_screen();
