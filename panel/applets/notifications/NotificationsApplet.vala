@@ -74,11 +74,11 @@ public class NotificationsApplet : Arc.Applet
         }
 
         if (count > 1) {
-            this.icon.set_tooltip_text("%u unread notifications".printf(count));
-        } else if (count == 0) {
-            this.icon.set_tooltip_text("%1 unread notification");
+            this.icon.set_tooltip_text(_("%u unread notifications").printf(count));
+        } else if (count == 1) {
+            this.icon.set_tooltip_text(_("1 unread notification"));
         } else {
-            this.icon.set_tooltip_text("No unread notifications");
+            this.icon.set_tooltip_text(_("No unread notifications"));
         }
     }
 
