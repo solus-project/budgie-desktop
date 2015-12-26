@@ -129,7 +129,7 @@ public class BudgieMenuApplet : Arc.Applet
         on_settings_changed("overlay-key");
 
         panel_size_changed.connect((p,i,s)=> {
-            img.pixel_size = (int)s;
+            img.pixel_size = (int)i;
         });
 
         popover.key_release_event.connect((e)=> {
