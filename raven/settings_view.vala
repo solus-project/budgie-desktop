@@ -876,7 +876,13 @@ public class SettingsView : Gtk.Box
         panel_stack = new Gtk.Stack();
         panel_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         var panel = new PanelEditor(manager, panel_stack);
-        panel_stack.add_titled(panel, "panel", _("Panel"));
+
+
+        var scroll = new Gtk.ScrolledWindow(null, null);
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        scroll.add(panel);
+
+        panel_stack.add_titled(scroll, "panel", _("Panel"));
         stack.add_titled(panel_stack, "panel", _("Panel"));
         /*stack.add_titled(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), "sidebar", _("Sidebar"));*/
 
