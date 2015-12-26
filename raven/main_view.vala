@@ -96,6 +96,15 @@ public class MainView : Gtk.Box
 
         main_stack.set_visible_child_name("applets");
 
+        main_stack.notify["visible-child-name"].connect(on_name_change);
+
+    }
+
+    void on_name_change()
+    {
+        if (main_stack.get_visible_child_name() == "notifications") {
+            Raven.get_instance().ReadNotifications();
+        }
     }
 
     public void set_clean()
