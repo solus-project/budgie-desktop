@@ -21,6 +21,38 @@ public enum NotificationCloseReason {
 }
 
 
+[GtkTemplate (ui = "/com/solus-project/arc/raven/notification_clone.ui")]
+public class NotificationClone : Gtk.Grid
+{
+
+    [GtkChild]
+    private Gtk.Image? image_icon = null;
+
+    [GtkChild]
+    private Gtk.Label? label_title = null;
+
+    [GtkChild]
+    private Gtk.Label? label_body = null;
+
+    [GtkChild]
+    private Gtk.Label? label_timestamp = null;
+
+    public NotificationClone(NotificationWindow? target)
+    {
+        if (target.pixbuf != null) {
+            this.image_icon.set_from_pixbuf(target.pixbuf);
+        } else {
+            this.image_icon.set_from_icon_name(target.icon_name, Gtk.IconSize.INVALID);
+            this.image_icon.pixel_size = 32;
+        }
+
+        label_title.set_markup(target.title);
+        label_body.set_markup(target.body);
+
+        var date = new DateTime.from_unix_local(target.timestamp);
+        label_timestamp.set_text(date.format("%H:%M"));
+    }
+}
 
 [GtkTemplate (ui = "/com/solus-project/arc/raven/notification.ui")]
 public class NotificationWindow : Gtk.Window
@@ -63,6 +95,12 @@ public class NotificationWindow : Gtk.Window
     [GtkChild]
     private Gtk.ButtonBox? box_actions = null;
 
+    public string? title;
+    public string? body;
+    public Gdk.Pixbuf? pixbuf = null;
+    public int64 timestamp;
+    public string app_name;
+
     [GtkCallback]
     void close_clicked()
     {
@@ -86,6 +124,7 @@ public class NotificationWindow : Gtk.Window
     private uint32 timeout = 0;
 
     private GLib.Cancellable? cancel;
+    public string? category = null;
 
     private async bool set_from_image_path()
     {
@@ -115,6 +154,7 @@ public class NotificationWindow : Gtk.Window
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
             Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
+            this.pixbuf = pbuf;
             image_icon.set_from_pixbuf(pbuf);
         } catch (Error e) {
             return false;
@@ -140,6 +180,8 @@ public class NotificationWindow : Gtk.Window
 
         this.cancel.cancel();
         this.cancel.reset();
+        var datetime = new DateTime.now_local();
+        this.timestamp = datetime.to_unix();
 
         bool is_img = yield this.set_from_image_path();
 
@@ -150,19 +192,34 @@ public class NotificationWindow : Gtk.Window
             if (app_icon != "") {
                 image_icon.set_from_icon_name(app_icon, Gtk.IconSize.INVALID);
                 image_icon.pixel_size = 48;
+                this.icon_name = app_icon;
             } else {
                 image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+                this.icon_name = "mail-read-symbolic";
                 image_icon.pixel_size = 48;
             }
         }
 
-        if (summary == "") {
-            label_title.set_text(app_name);
+        if ("category" in hints) {
+            this.category = hints.lookup("category").get_string();
+        }
+        if ("desktop-entry" in hints) {
+            this.app_name = hints.lookup("desktop-entry").get_string();
         } else {
-            label_title.set_markup(summary);
+            this.app_name = app_name;
         }
 
+
+        if (summary == "") {
+            label_title.set_text(app_name);
+            this.title = app_name;
+        } else {
+            label_title.set_markup(summary);
+            this.title = summary;
+        }
+    
         label_body.set_markup(body);
+        this.body = body;
 
         this.timeout = expire_timeout;
     }
@@ -252,6 +309,16 @@ public class NotificationsView : Gtk.Box
         "body", "body-markup", "actions", "action-icons"
     };
 
+    private string[] spammers = {
+        "x-gnome.music"
+    };
+
+    private string[] spam_apps = {
+        "lollypop.desktop", "Lollypop"
+    };
+
+    private Gtk.ListBox? listbox;
+
     private GLib.Queue<NotificationWindow?> queue = null;
 
     /* Obviously we'll change this.. */
@@ -276,6 +343,14 @@ public class NotificationsView : Gtk.Box
 
         SignalHandler.disconnect(widget, nid);
         this.NotificationClosed(widget.id, reason);
+
+        if (reason == NotificationCloseReason.EXPIRED) {
+            if (!(widget.category != null && widget.category in spammers) && !(widget.app_name != null && widget.app_name in spam_apps)) {
+                var clone = new NotificationClone(widget);
+                clone.show_all();
+                this.listbox.add(clone);
+            }
+        }
 
         this.remove_notification(widget.id);
     }
@@ -407,6 +482,14 @@ public class NotificationsView : Gtk.Box
 
         notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
         queue = new GLib.Queue<NotificationWindow?>();
+
+        var scrolledwindow = new Gtk.ScrolledWindow(null, null);
+        scrolledwindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+
+        pack_start(scrolledwindow, true, true, 0);
+
+        listbox = new Gtk.ListBox();
+        scrolledwindow.add(listbox);
 
         show_all();
 

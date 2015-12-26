@@ -7,7 +7,8 @@ EXTRA_DIST = \
 	ui/panel.ui \
 	ui/applets.ui \
 	ui/applet_settings.ui \
-	ui/notification.ui
+	ui/notification.ui \
+	ui/notification_clone.ui
 
 raven_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/raven/ui --generate-dependencies $(top_srcdir)/raven/ui/arc-raven.gresource.xml)
 
