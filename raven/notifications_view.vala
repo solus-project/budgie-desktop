@@ -534,8 +534,6 @@ public class NotificationsView : Gtk.Box
 
         var btn = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         btn.relief = Gtk.ReliefStyle.NONE;
-        btn.margin_top = 4;
-        btn.margin_bottom = 4;
 
         header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, btn);
         header.margin_top = 6;
@@ -548,6 +546,7 @@ public class NotificationsView : Gtk.Box
         queue = new GLib.Queue<NotificationWindow?>();
 
         var scrolledwindow = new Gtk.ScrolledWindow(null, null);
+        scrolledwindow.get_style_context().add_class("raven-background");
         scrolledwindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
         pack_start(scrolledwindow, true, true, 0);
