@@ -297,9 +297,19 @@ public class ArcWM : Meta.Plugin
 
     static const int MAP_TIMEOUT  = 170;
     static const float MAP_SCALE  = 0.8f;
+    static const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
+    static const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
     static const int FADE_TIMEOUT = 165;
 
     void map_done(Clutter.Actor? actor)
+    {
+        actor.remove_all_transitions();
+        SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
+        actor.set("pivot-point", PV_NORM);
+        this.map_completed(actor as Meta.WindowActor);
+    }
+
+    void notification_map_done(Clutter.Actor? actor)
     {
         actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
@@ -319,7 +329,6 @@ public class ArcWM : Meta.Plugin
         switch (window.get_window_type()) {
             case Meta.WindowType.POPUP_MENU:
             case Meta.WindowType.DROPDOWN_MENU:
-            case Meta.WindowType.NOTIFICATION:
             case Meta.WindowType.MENU:
                 actor.opacity = 0;
                 actor.show();
@@ -330,6 +339,19 @@ public class ArcWM : Meta.Plugin
                 actor.transitions_completed.connect(map_done);
 
                 actor.opacity = 255;
+                actor.restore_easing_state();
+                break;
+            case Meta.WindowType.NOTIFICATION:
+                actor.set("opacity", 0, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
+                    "pivot-point", PV_CENTER);
+                actor.show();
+
+                actor.save_easing_state();
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUART);
+                actor.set_easing_duration(MAP_TIMEOUT);
+                actor.transitions_completed.connect(notification_map_done);
+
+                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255);
                 actor.restore_easing_state();
                 break;
             case Meta.WindowType.NORMAL:
