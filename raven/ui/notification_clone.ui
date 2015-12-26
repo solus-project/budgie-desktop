@@ -55,6 +55,9 @@
         <property name="wrap">True</property>
         <property name="wrap_mode">word-char</property>
         <property name="xalign">0</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">1</property>
