@@ -1,17 +1,7 @@
 budgie-desktop
 ==========
 
-The Budgie Desktop is the successor to the Budgie Desktop, with a focus
-on modern style and function.
-
-Note that this work will be merged *back* into the Budgie Desktop
-repo on GitHub upon completion - the name-change is SOLELY to make
-it parallel installable and help me with debugging.
-
-Enormous thanks go to horst3180 for all the design work, contributions
-and overseeing of the project to ensure it meets his mockups. The
-project would not be possible without him.
-
+The Budgie Desktop is the flagship desktop of Solus OS.
 
 ![screenshot1](https://raw.githubusercontent.com/solus-project/budgie-desktop/master/screenshots/Raven_Main.png)
 
@@ -157,13 +147,6 @@ let's be fair, it does kinda look better up top.
 TODO
 ----
 
- - [x] Fix Raven glitch when adding a new panel
- - [x] Add applet manipulation
- - [x] Allow adding/removing applets
- - [x] Port old applets into tree
- - [ ] Complete WM
- - [ ] Merge into Budgie (preserving git history)
- - [ ] Tag release
  - [ ] Get translations in order
  - [ ] Second release
 
