@@ -58,9 +58,11 @@ public class NotificationClone : Gtk.Grid
 public class NotificationWindow : Gtk.Window
 {
 
-    public NotificationWindow()
+    public NotificationsView? owner { public set ; public get; }
+
+    public NotificationWindow(NotificationsView? owner)
     {
-        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION, owner: owner);
         resizable = false;
         skip_pager_hint = true;
         skip_taskbar_hint = true;
@@ -76,6 +78,17 @@ public class NotificationWindow : Gtk.Window
         title.get_style_context().remove_class("titlebar");
 
         set_default_size(NOTIFICATION_SIZE, -1);
+    }
+
+    void action_handler(Gtk.Button? button)
+    {
+        string? action_id = button.get_data("action_id");
+        if (action_id == null) {
+            return;
+        }
+        did_interact = true;
+
+        owner.ActionInvoked(this.id, action_id);
     }
 
     public uint32 id;
@@ -125,6 +138,8 @@ public class NotificationWindow : Gtk.Window
 
     private GLib.Cancellable? cancel;
     public string? category = null;
+
+    public bool did_interact = false;
 
     private async bool set_from_image_path()
     {
@@ -254,19 +269,25 @@ public class NotificationWindow : Gtk.Window
         }
 
         foreach (var kid in box_actions.get_children()) {
+            ulong con_id = kid.get_data("action_con");
+            SignalHandler.disconnect(kid, con_id);
             kid.destroy();
         }
         for (int i = 0; i < actions.length; i++) {
             Gtk.Button? button = null;
+            string action = actions[i];
+            string local = actions[++i];
             if (icons) {
-                button = new Gtk.Button.from_icon_name(actions[i], Gtk.IconSize.MENU);
+                button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
                 /* set action; */
             } else {
-                button = new Gtk.Button.with_label(actions[i]);
+                button = new Gtk.Button.with_label(local);
                 button.set_can_focus(false);
                 button.set_can_default(false);
             }
-            ++i;
+            ulong con_id = button.clicked.connect(action_handler);
+            button.set_data("action_con", con_id);
+            button.set_data("action_id", action);
             box_actions.add(button);
         }
         box_actions.show_all();
@@ -345,7 +366,7 @@ public class NotificationsView : Gtk.Box
         this.NotificationClosed(widget.id, reason);
 
         if (reason == NotificationCloseReason.EXPIRED) {
-            if (!(widget.category != null && widget.category in spammers) && !(widget.app_name != null && widget.app_name in spam_apps)) {
+            if (!(widget.category != null && widget.category in spammers) && !(widget.app_name != null && widget.app_name in spam_apps) && !widget.did_interact) {
                 var clone = new NotificationClone(widget);
                 clone.show_all();
                 this.listbox.add(clone);
@@ -392,7 +413,7 @@ public class NotificationsView : Gtk.Box
         }
 
         if (pack == null) {
-            var npack = new NotificationWindow();
+            var npack = new NotificationWindow(this);
             ulong nid = npack.Closed.connect(on_notification_closed);
             npack.set_data("npack_id", nid);
             notifications.insert(notif_id, npack);
