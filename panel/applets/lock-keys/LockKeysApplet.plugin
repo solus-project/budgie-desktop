@@ -1,8 +1,0 @@
-[Plugin]
-Module=lockkeysapplet.so
-Name=Lock Keys Applet
-Description=Indicators for capslock and numlock
-Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
-Website=https://solus-project.com
-Icon=preferences-desktop-keyboard

@@ -1,8 +1,0 @@
-[Plugin]
-Module=tasklistapplet.so
-Name=Task List
-Description=Provides a traditional window list (buttons)
-Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
-Website=https://solus-project.com
-Icon=gnome-panel-window-list

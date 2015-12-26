@@ -1,8 +1,0 @@
-[Plugin]
-Module=clockapplet.so
-Name=Clock Applet
-Description=Provides a clock for the panel
-Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
-Website=https://solus-project.com
-Icon=clock

@@ -1,8 +1,0 @@
-[Plugin]
-Module=menubarapplet.so
-Name=Menubar Applet
-Description=Traditional Menubar Applet
-Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
-Website=https://solus-project.com
-Icon=view-grid-symbolic

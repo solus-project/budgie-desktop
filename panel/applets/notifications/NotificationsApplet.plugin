@@ -1,8 +1,0 @@
-[Plugin]
-Module=notificationsapplet.so
-Name=Notifications Applet
-Description=Provides a notification daemon for Budgie Desktop
-Authors=Josh Klar, Ikey Doherty
-Copyright=Copyright © 2014 Josh Klar, Copyright © 2014 Ikey Doherty
-Website=https://solus-project.com
-Icon=user-invisible-symbolic
