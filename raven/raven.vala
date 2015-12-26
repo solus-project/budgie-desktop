@@ -107,6 +107,9 @@ public class Raven : Gtk.Window
 
     public Arc.DesktopManager? manager { public set; public get; }
 
+    private int our_x = -1;
+    private int our_y = -1;
+
     public double nscale {
         public set {
             scale = value;
@@ -174,7 +177,7 @@ public class Raven : Gtk.Window
 
     public Raven(Arc.DesktopManager? manager)
     {
-        Object(type_hint: Gdk.WindowTypeHint.DOCK, gravity : Gdk.Gravity.EAST, manager: manager);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
         get_style_context().add_class("arc-container");
 
         Raven._instance = this;
@@ -356,10 +359,14 @@ public class Raven : Gtk.Window
                 this.bind_panel_shadow(bottom);
             }
         }
+        if (x != our_x || y != our_y) {
+            our_x = x;
+            our_y = y;
+            move(x, y);
+        }
 
         our_height = height;
         our_width = width;
-        move(x, y);
         if (!get_visible()) {
             queue_resize();
         }
