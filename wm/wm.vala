@@ -31,6 +31,20 @@ public enum PanelAction {
     MAX = 1 << 2
 }
 
+public class ScreenTilePreview : Clutter.Actor
+{
+
+    public Meta.Rectangle tile_rect;
+
+    construct {
+        set_background_color(Clutter.Color.get_static(Clutter.StaticColor.SKY_BLUE));
+        set_opacity(100);
+
+        tile_rect = Meta.Rectangle();
+    }
+}
+
+
 [DBus (name="com.solus_project.arc.Raven")]
 public interface RavenRemote : Object
 {
@@ -517,6 +531,45 @@ public class ArcWM : Meta.Plugin
                 break;
         }
     }
+
+    private ScreenTilePreview? tile_preview = null;
+
+    /* Ported from old budgie-wm, in turn ported from Mutter's default plugin */
+    public override void show_tile_preview(Meta.Window window, Meta.Rectangle tile_rect, int tile_monitor_num)
+    {
+        var screen = this.get_screen();
+
+        if (this.tile_preview == null) {
+            this.tile_preview = new ScreenTilePreview();
+            var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
+            screen_group.add_child(this.tile_preview);
+        }
+
+        if (tile_preview.is_visible() &&
+            tile_preview.tile_rect.x == tile_rect.x &&
+            tile_preview.tile_rect.y == tile_rect.y &&
+            tile_preview.tile_rect.width == tile_rect.width &&
+            tile_preview.tile_rect.height == tile_rect.height)
+        {
+            return;
+        }
+
+        tile_preview.set_position(tile_rect.x, tile_rect.y);
+        tile_preview.set_size(tile_rect.width, tile_rect.height);
+        tile_preview.show();
+
+        var win_actor = window.get_compositor_private() as Clutter.Actor;
+        tile_preview.lower(win_actor);
+        tile_preview.tile_rect = tile_rect;
+    }
+
+    public override void hide_tile_preview()
+    {
+        if (tile_preview != null) {
+            this.tile_preview.hide();
+        }
+    }
+    
 }
 
 } /* End namespace */
