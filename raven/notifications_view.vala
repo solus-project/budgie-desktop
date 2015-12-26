@@ -190,7 +190,7 @@ public class NotificationWindow : Gtk.Window
 }
 
 public static const int BUFFER_ZONE = 10;
-public static const int INITIAL_BUFFER_ZONE = 100;
+public static const int INITIAL_BUFFER_ZONE = 45;
 public static const int NOTIFICATION_SIZE = 400;
 
 [DBus (name = "org.freedesktop.Notifications")]
@@ -311,7 +311,7 @@ public class NotificationsView : Gtk.Box
         } else {
             x = (rect.x+rect.width) - NOTIFICATION_SIZE;
             x -= BUFFER_ZONE; /* Don't touch lip of next desktop */
-            y = (rect.y-rect.height) + INITIAL_BUFFER_ZONE;
+            y = (rect.y) + INITIAL_BUFFER_ZONE;
         }
 
         queue.push_tail(window);
