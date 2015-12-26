@@ -60,6 +60,13 @@ PKG_CHECK_MODULES([BUDGIE_WM],
                 ]
 )
 
+# Runtime dialog, avoid unnecessary linking
+PKG_CHECK_MODULES([RUNDIALOG],
+                [
+                 gtk+-3.0 >= gtk_required_version
+                ]
+)
+
 
 
 MODULEDIR="${libdir}/budgie-desktop/plugins"
@@ -108,6 +115,7 @@ AC_CONFIG_FILES([Makefile
                 panel/budgie-panel.desktop.in
                 panel/Makefile
                 panel/applets/Makefile
+                rundialog/Makefile
                 session/budgie-desktop.desktop.in
                 session/budgie-desktop.session.in
                 session/budgie-desktop

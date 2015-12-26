@@ -79,3 +79,7 @@ budgie-panel-resources.*
 
 plugin-resources.c
 plugin-resources.h
+
+rundialog/*.c
+rundialog/*.h
+budgie-run-dialog

@@ -25,6 +25,7 @@ SUBDIRS = \
 	raven \
 	imports \
 	panel \
+	rundialog \
 	session \
 	wm \
 	po

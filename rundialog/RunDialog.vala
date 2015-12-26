@@ -168,7 +168,7 @@ public class RunDialog : Gtk.Window
         // Load our default styling
         try {
             var prov = new Gtk.CssProvider();
-            var file = File.new_for_uri("resource://com/evolve-os/budgie/run-dialog/rundialog-style.css");
+            var file = File.new_for_uri("resource://com/solus-project/budgie/run-dialog/rundialog-style.css");
             prov.load_from_file(file);
 
             Gtk.StyleContext.add_provider_for_screen(this.screen, prov,
