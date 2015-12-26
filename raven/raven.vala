@@ -55,6 +55,7 @@ public class RavenIface
         this.is_expanded = !this.is_expanded;
         if (this.is_expanded) {
             parent.expose_notification();
+            this.ReadNotifications();
         }
     }
 
