@@ -101,7 +101,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="buttonbox_actions">
+          <object class="GtkButtonBox" id="box_actions">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">6</property>
@@ -115,6 +115,9 @@
             <child>
               <placeholder/>
             </child>
+            <style>
+              <class name="linked"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>

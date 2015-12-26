@@ -61,7 +61,7 @@ public class NotificationWindow : Gtk.Window
     private Gtk.Button? button_close = null;
 
     [GtkChild]
-    private Gtk.ButtonBox? buttonbox_actions = null;
+    private Gtk.ButtonBox? box_actions = null;
 
     [GtkCallback]
     void close_clicked()
@@ -75,6 +75,8 @@ public class NotificationWindow : Gtk.Window
     private string[] img_search = {
         "image-path", "image_path"
     };
+
+    private string[]? actions = null;
 
     HashTable<string,Variant>? hints = null;
 
@@ -128,8 +130,8 @@ public class NotificationWindow : Gtk.Window
     }
 
     public async void set_from_notify(uint32 id, string app_name, string app_icon,
-                                        string summary, string body, string[] actions,
-                                        HashTable<string, Variant> hints, int32 expire_timeout)
+                                        string summary, string body, HashTable<string, Variant> hints,
+                                        int32 expire_timeout)
     {
         this.id = id;
         this.hints = hints;
@@ -163,6 +165,55 @@ public class NotificationWindow : Gtk.Window
         label_body.set_markup(body);
 
         this.timeout = expire_timeout;
+    }
+
+    public void set_actions(string[] actions)
+    {
+        if (this.actions == actions) {
+            return;
+        }
+
+        if (actions.length == this.actions.length) {
+            bool same = true;
+            for (int i = 0; i < actions.length; i++) {
+                if (actions[i] != this.actions[i]) {
+                    same = false;
+                    break;
+                }
+            }
+            if (same) {
+                return;
+            }
+        }
+
+        this.actions = actions;
+
+        bool icons = hints.contains("action-icons");
+        if (actions == null || actions.length == 0) {
+            return;
+        }
+        if (actions.length % 2 != 0) {
+            return;
+        }
+
+        foreach (var kid in box_actions.get_children()) {
+            kid.destroy();
+        }
+        for (int i = 0; i < actions.length; i++) {
+            Gtk.Button? button = null;
+            if (icons) {
+                button = new Gtk.Button.from_icon_name(actions[i], Gtk.IconSize.MENU);
+                /* set action; */
+            } else {
+                button = new Gtk.Button.with_label(actions[i]);
+                button.set_can_focus(false);
+                button.set_can_default(false);
+            }
+            ++i;
+            box_actions.add(button);
+        }
+        box_actions.show_all();
+        queue_draw();
     }
 
     public void begin_decay()
@@ -277,8 +328,14 @@ public class NotificationsView : Gtk.Box
             notifications.insert(notif_id, pack);
         }
 
-        yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
-            hints, expire);
+        string[] actions_copy = {};
+
+        foreach (var action in actions) {
+            actions_copy += "%s".printf(action);
+        }
+        /* When we yield vala unrefs everything and we get double frees. GG */
+        yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, hints, expire);
+        pack.set_actions(actions_copy);
 
         if (configure) {
             configure_window(pack);
