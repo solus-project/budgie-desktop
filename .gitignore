@@ -26,21 +26,21 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 
 # data
-/data/arc-panel.desktop
+/data/budgie-panel.desktop
 
 # panel
-/panel/arc-panel
+/panel/budgie-panel
 /panel/*.c
-arc-panel-resources.*
-/panel/arc-panel.desktop
-/panel/arc-panel.desktop.in
+budgie-panel-resources.*
+/panel/budgie-panel.desktop
+/panel/budgie-panel.desktop.in
 
 # plugin
 *.gir
 *.typelib
 /plugin/*.c
 /plugin/*.h
-/plugin/arc-1.0.pc
+/plugin/budgie-1.0.pc
 
 *.la
 *.lo
@@ -48,26 +48,26 @@ arc-panel-resources.*
 *.stamp*
 
 /raven/*.c
-/raven/ArcRaven.h
+/raven/BudgieRaven.h
 /raven/mpris/*.c
 /raven/*.h
 
 /lib/toplevel.c
 /lib/shadow.c
 /lib/animation.c
-/lib/ArcToplevel.h
+/lib/BudgieToplevel.h
 /lib/manager.c
 
 *.ui~
 
-/session/arc-desktop
-/session/arc-desktop.desktop
-/session/arc-desktop.desktop.in
-/session/arc-desktop.session
-/session/arc-desktop.session.in
+/session/budgie-desktop
+/session/budgie-desktop.desktop
+/session/budgie-desktop.desktop.in
+/session/budgie-desktop.session
+/session/budgie-desktop.session.in
 
-/wm/arc-wm
-/wm/arc-wm.desktop
+/wm/budgie-wm
+/wm/budgie-wm.desktop
 /wm/*.c
 
 *.gschema.valid

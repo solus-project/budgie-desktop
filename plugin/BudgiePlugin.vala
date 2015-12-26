@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *
@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 /** Name of the plugin */
@@ -26,7 +26,7 @@ public enum PanelAction {
 public interface PopoverManager : GLib.Object
 {
     /**
-     * arc_popover_manager_register_popover:
+     * budgie_popover_manager_register_popover:
      * @widget: Widget that the popover is associated with
      * @popover: a #GtkPopover to assicate with @widget
      * 
@@ -35,7 +35,7 @@ public interface PopoverManager : GLib.Object
     public abstract void register_popover(Gtk.Widget? widget, Gtk.Popover? popover);
 
     /**
-     * arc_popover_manager_unregister_popover:
+     * budgie_popover_manager_unregister_popover:
      * @widget: Widget that the popover is associated with
      *
      * Unregister a widget that was previously registered
@@ -46,26 +46,26 @@ public interface PopoverManager : GLib.Object
 }
 
 /**
- * ArcPlugin
+ * BudgiePlugin
  */
 public interface Plugin : GLib.Object
 {
     /**
-     * arc_plugin_get_panel_widget:
+     * budgie_plugin_get_panel_widget:
      * 
-     * Returns: (transfer full): A Gtk+ widget for use on the ArcPanel
+     * Returns: (transfer full): A Gtk+ widget for use on the BudgiePanel
      */
-    public abstract Arc.Applet get_panel_widget(string uuid);
+    public abstract Budgie.Applet get_panel_widget(string uuid);
 }
 
 /**
- * ArcApplet
+ * BudgieApplet
  */
 public class Applet : Gtk.Bin
 {
 
     /**
-     * arc_applet_construct:
+     * budgie_applet_construct:
      *
      * Construct a new BudgieApplet
      *
@@ -75,21 +75,21 @@ public class Applet : Gtk.Bin
 
     public string? settings_prefix { public get; public set; default = null; }
     public string? settings_schema { public get; public set; default = null; }
-    public PanelAction supported_actions { get ; set; default = Arc.PanelAction.NONE; }
+    public PanelAction supported_actions { get ; set; default = Budgie.PanelAction.NONE; }
 
-    public virtual void invoke_action(Arc.PanelAction action) { }
+    public virtual void invoke_action(Budgie.PanelAction action) { }
 
     /**
-     * arc_applet_update_popovers:
-     * @manager: a valid #ArcPopoverManager
+     * budgie_applet_update_popovers:
+     * @manager: a valid #BudgiePopoverManager
      *
      * Inform the applet it needs to register it's popovers. The #PopoverManager
      * is always valid
      */
-    public virtual void update_popovers(Arc.PopoverManager? manager) { }
+    public virtual void update_popovers(Budgie.PopoverManager? manager) { }
 
     /**
-     * arc_applet_supports_settings:
+     * budgie_applet_supports_settings:
      *
      * Indicates whether this applet supports settings or not
      */
@@ -98,14 +98,14 @@ public class Applet : Gtk.Bin
     }
 
     /**
-     * arc_applet_get_settings_ui:
+     * budgie_applet_get_settings_ui:
      *
      * Returns: (transfer full): the configuration UI (if any) for this applet. Initialised once only
      */
     public virtual Gtk.Widget? get_settings_ui() { return null; }
 
     /**
-     * arc_applet_get_settings:
+     * budgie_applet_get_settings:
      *
      * Returns: (transfer full): A newly initialised Settings for this applet, or NULL if none are used
      */
@@ -127,7 +127,7 @@ public class AppletInfo : GLib.Object
 {
 
     /** Applet instance */
-    public Arc.Applet applet { public get; private set; }
+    public Budgie.Applet applet { public get; private set; }
 
     public unowned GLib.Settings? settings;
 
@@ -149,7 +149,7 @@ public class AppletInfo : GLib.Object
     /**
      * Construct a new AppletInfo. Simply a wrapper around applets
      */
-    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Arc.Applet? applet, GLib.Settings? settings)
+    public AppletInfo(Peas.PluginInfo? plugin_info, string uuid, Budgie.Applet? applet, GLib.Settings? settings)
     {
         if (applet != null) {
             this.applet = applet;
@@ -167,9 +167,9 @@ public class AppletInfo : GLib.Object
 
     void bind_settings()
     {
-        settings.bind(Arc.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
-        settings.bind(Arc.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
+        settings.bind(Budgie.APPLET_KEY_NAME, this, "name", SettingsBindFlags.DEFAULT);
+        settings.bind(Budgie.APPLET_KEY_POS, this, "position", SettingsBindFlags.DEFAULT);
+        settings.bind(Budgie.APPLET_KEY_ALIGN, this, "alignment", SettingsBindFlags.DEFAULT);
     }
 }
 

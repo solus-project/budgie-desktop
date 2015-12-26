@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *

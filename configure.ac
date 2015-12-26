@@ -1,4 +1,4 @@
-AC_INIT([Arc Desktop], 1, [ikey@solus-project.com], [arc-desktop], [https://solus-project.com/])
+AC_INIT([Budgie Desktop], 1, [ikey@solus-project.com], [budgie-desktop], [https://solus-project.com/])
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC
@@ -19,7 +19,7 @@ m4_define([gsettings_required_version], [3.18.0])
 
 GOBJECT_INTROSPECTION_CHECK([1.44.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
-AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Arc Desktop])])
+AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 AC_SUBST(VALAFLAGS)
 
 
@@ -35,7 +35,7 @@ PKG_CHECK_MODULES(GVC,
 # Specific requirements
 PKG_CHECK_MODULES([UUID], [uuid])
 
-PKG_CHECK_MODULES([ARC_BASE],
+PKG_CHECK_MODULES([BUDGIE_BASE],
                 [
                  gobject-2.0 >= glib_required_version,
                  gio-2.0 >= glib_required_version,
@@ -45,14 +45,14 @@ PKG_CHECK_MODULES([ARC_BASE],
 )
 
 # Plugin global deps
-PKG_CHECK_MODULES([ARC_PLUGIN],
+PKG_CHECK_MODULES([BUDGIE_PLUGIN],
                  [
                   libpeas-gtk-1.0 >= peas_required_version
                  ]
 )
 
 # Additional WM deps
-PKG_CHECK_MODULES([ARC_WM],
+PKG_CHECK_MODULES([BUDGIE_WM],
                 [
                  libmutter >= mutter_required_version,
                  gnome-desktop-3.0 >= gdesktop_required_version,
@@ -62,16 +62,16 @@ PKG_CHECK_MODULES([ARC_WM],
 
 
 
-MODULEDIR="${libdir}/arc-desktop/plugins"
+MODULEDIR="${libdir}/budgie-desktop/plugins"
 AC_SUBST(MODULEDIR)
 AC_DEFINE_UNQUOTED(MODULEDIR, "$MODULEDIR",
-                   [Installation directory for Arc plugins])
+                   [Installation directory for Budgie plugins])
 
 # Technically unused right now but might be used in the future
-MODULE_DATA_DIR="${datadir}/share/arc-desktop/plugins"
+MODULE_DATA_DIR="${datadir}/share/budgie-desktop/plugins"
 AC_SUBST(MODULE_DATA_DIR)
 AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
-                   [Installation directory for Arc plugin data])
+                   [Installation directory for Budgie plugin data])
 
 
 # Got this idea from gnome-builder :)
@@ -98,26 +98,26 @@ AH_BOTTOM([#endif])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_FILES([Makefile
-                data/arc-panel.desktop
+                data/budgie-panel.desktop
                 data/Makefile
                 gvc/Makefile
                 lib/Makefile
                 plugin/Makefile
-                plugin/arc-1.0.pc
+                plugin/budgie-1.0.pc
                 raven/Makefile
-                panel/arc-panel.desktop.in
+                panel/budgie-panel.desktop.in
                 panel/Makefile
                 panel/applets/Makefile
-                session/arc-desktop.desktop.in
-                session/arc-desktop.session.in
-                session/arc-desktop
+                session/budgie-desktop.desktop.in
+                session/budgie-desktop.session.in
+                session/budgie-desktop
                 session/Makefile
-                wm/arc-wm.desktop
+                wm/budgie-wm.desktop
                 wm/Makefile
                 po/Makefile.in])
 
 IT_PROG_INTLTOOL([0.50.0])
-GETTEXT_PACKAGE=arc-desktop
+GETTEXT_PACKAGE=budgie-desktop
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
@@ -126,7 +126,7 @@ AC_OUTPUT
 
 AM_GLIB_GNU_GETTEXT
 AC_MSG_RESULT([
-        arc-desktop $VERSION
+        budgie-desktop $VERSION
         ========
 
         prefix:                 ${prefix}

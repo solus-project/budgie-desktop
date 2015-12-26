@@ -39,16 +39,16 @@ libicontasklistapplet_la_SOURCES = \
 	plugin-resources.c
 
 libicontasklistapplet_la_CFLAGS = \
-	$(ARC_BASE_CFLAGS) \
-	$(ARC_PLUGIN_CFLAGS) \
+	$(BUDGIE_BASE_CFLAGS) \
+	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(ICON_TASKLIST_PLUGIN_CFLAGS) \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
 	$(DECLARATIONS)
 
 libicontasklistapplet_la_LIBADD = \
-	${top_builddir}/plugin/libarc-plugin.la \
-	$(ARC_BASE_LIBS) \
-	$(ARC_PLUGIN_LIBS) \
+	${top_builddir}/plugin/libbudgie-plugin.la \
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
 	$(ICON_TASKLIST_PLUGIN_LIBS)
 
 libicontasklistapplet_la_LDFLAGS = \
@@ -61,7 +61,7 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
-	--pkg arc-1.0 \
+	--pkg budgie-1.0 \
 	--vapidir=${top_srcdir}/plugin \
 	--target-glib=2.38 \
 	--gresources=${srcdir}/plugin.gresource.xml

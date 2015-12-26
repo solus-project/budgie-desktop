@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -22,11 +22,11 @@ public static int main(string[] args)
     OptionContext ctx;
 
     Intl.setlocale(LocaleCategory.ALL, "");
-    Intl.bindtextdomain(Arc.GETTEXT_PACKAGE, Arc.LOCALEDIR);
-    Intl.bind_textdomain_codeset(Arc.GETTEXT_PACKAGE, "UTF-8");
-    Intl.textdomain(Arc.GETTEXT_PACKAGE);
+    Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+    Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain(Budgie.GETTEXT_PACKAGE);
 
-    ctx = new OptionContext("- Arc Panel");
+    ctx = new OptionContext("- Budgie Panel");
     ctx.set_help_enabled(true);
     ctx.add_main_entries(options, null);
     ctx.add_group(Gtk.get_option_group(false));
@@ -38,7 +38,7 @@ public static int main(string[] args)
         return 0;
     }
 
-    var manager = new Arc.PanelManager();
+    var manager = new Budgie.PanelManager();
     manager.serve(replace);
 
     Gtk.main();

@@ -56,7 +56,7 @@
       </row>
     </data>
   </object>
-  <template class="ArcPanelEditor" parent="GtkBox">
+  <template class="BudgiePanelEditor" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>

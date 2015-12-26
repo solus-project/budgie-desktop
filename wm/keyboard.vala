@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
@@ -10,7 +10,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc {
+namespace Budgie {
 
 public static const string DEFAULT_LOCALE = "en_US";
 public static const string DEFAULT_LAYOUT = "us";
@@ -34,7 +34,7 @@ class InputSource
 
 public class KeyboardManager : GLib.Object
 {
-    public unowned Arc.ArcWM? wm { construct set ; public get; }
+    public unowned Budgie.BudgieWM? wm { construct set ; public get; }
     private Gnome.XkbInfo? xkb;
     string[] options = {};
 
@@ -44,7 +44,7 @@ public class KeyboardManager : GLib.Object
 
     uint current_source = 0;
 
-    public KeyboardManager(Arc.ArcWM? wm)
+    public KeyboardManager(Budgie.BudgieWM? wm)
     {
         Object(wm: wm);
 
@@ -123,7 +123,7 @@ public class KeyboardManager : GLib.Object
                 source = new InputSource((uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
-                warning("FIXME: Arc does not yet support IBUS!");
+                warning("FIXME: Budgie does not yet support IBUS!");
                 continue;
             }
         }

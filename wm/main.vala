@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -13,17 +13,17 @@
 public static int main(string[] args)
 {
     unowned OptionContext? ctx = null;
-    Arc.ArcWM.old_args = args;
+    Budgie.BudgieWM.old_args = args;
 
     ctx = Meta.get_option_context();
 
     if ("--wayland" in args) {
         warning("Running under Wayland, GTK+ functionality not available");
-        Arc.ArcWM.gtk_available = false;
-        Arc.ArcWM.wayland = true;
+        Budgie.BudgieWM.gtk_available = false;
+        Budgie.BudgieWM.wayland = true;
     } else if (!Gtk.init_check(ref args)) {
         warning("GTK+ functionality not available");
-        Arc.ArcWM.gtk_available = false;
+        Budgie.BudgieWM.gtk_available = false;
     }
 
     try {
@@ -36,9 +36,9 @@ public static int main(string[] args)
     }
 
     /* Set plugin type here */
-    Meta.Plugin.manager_set_plugin_type(typeof(Arc.ArcWM));
+    Meta.Plugin.manager_set_plugin_type(typeof(Budgie.BudgieWM));
     Meta.set_gnome_wm_keybindings("Mutter,GNOME Shell");
-    Meta.set_wm_name("Mutter(Arc)");
+    Meta.set_wm_name("Mutter(Budgie)");
 
     Environment.set_variable("NO_GAIL", "1", true);
     Environment.set_variable("NO_AT_BRIDGE", "1", true);

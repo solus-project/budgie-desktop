@@ -11,30 +11,30 @@
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 EXTRA_DIST = \
-	arc-desktop.session.in.in \
-	arc-desktop.desktop.in.in \
-	arc-desktop.in
+	budgie-desktop.session.in.in \
+	budgie-desktop.desktop.in.in \
+	budgie-desktop.in
 
 CLEANFILES = \
-	arc-desktop.session.in \
-	arc-desktop.session \
-	arc-desktop.desktop.in \
-	arc-desktop.desktop
+	budgie-desktop.session.in \
+	budgie-desktop.session \
+	budgie-desktop.desktop.in \
+	budgie-desktop.desktop
 
 DISTCLEANFILES = \
 	$(CLEANFILES)
 
 bin_SCRIPTS = \
-	arc-desktop
+	budgie-desktop
 
 xsessiondir = $(datadir)/xsessions
 
 xsession_DATA = \
-	arc-desktop.desktop
+	budgie-desktop.desktop
 
 gnomesessiondir = $(datadir)/gnome-session/sessions
 gnomesession_DATA = \
-	arc-desktop.session
+	budgie-desktop.session
 
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@

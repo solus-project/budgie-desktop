@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -11,7 +11,7 @@
 
 using LibUUID;
 
-namespace Arc
+namespace Budgie
 {
 
 /**
@@ -25,7 +25,7 @@ public class MainPanel : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL);
         this.intended_size = size;
-        get_style_context().add_class("arc-panel");
+        get_style_context().add_class("budgie-panel");
     }
 
     public override void get_preferred_height(out int m, out int n)
@@ -43,7 +43,7 @@ public class MainPanel : Gtk.Box
 /**
  * The toplevel window for a panel
  */
-public class Panel : Arc.Toplevel
+public class Panel : Budgie.Toplevel
 {
 
     Gdk.Rectangle scr;
@@ -54,18 +54,18 @@ public class Panel : Arc.Toplevel
     Gtk.Box main_layout;
 
     public Settings settings { construct set ; public get; }
-    private unowned Arc.PanelManager? manager;
+    private unowned Budgie.PanelManager? manager;
 
     PopoverManager? popover_manager;
     bool expanded = true;
 
-    Arc.ShadowBlock shadow;
+    Budgie.ShadowBlock shadow;
 
     HashTable<string,HashTable<string,string>> pending = null;
     HashTable<string,HashTable<string,string>> creating = null;
-    HashTable<string,Arc.AppletInfo?> applets = null;
+    HashTable<string,Budgie.AppletInfo?> applets = null;
 
-    HashTable<string,Arc.AppletInfo?> initial_config = null;
+    HashTable<string,Budgie.AppletInfo?> initial_config = null;
 
     construct {
         position = PanelPosition.NONE;
@@ -91,11 +91,11 @@ public class Panel : Arc.Toplevel
     public bool activate_action(int remote_action)
     {
         unowned string? uuid = null;
-        unowned Arc.AppletInfo? info = null;
+        unowned Budgie.AppletInfo? info = null;
 
-        Arc.PanelAction action = (Arc.PanelAction)remote_action;
+        Budgie.PanelAction action = (Budgie.PanelAction)remote_action;
 
-        var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
+        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
         while (iter.next(out uuid, out info)) {
             if ((info.applet.supported_actions & action) != 0) {
                 this.present();
@@ -116,7 +116,7 @@ public class Panel : Arc.Toplevel
     public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int size = 0)
     {
         Gdk.Rectangle small = screen;
-        string old_class = Arc.position_class_name(this.position);
+        string old_class = Budgie.position_class_name(this.position);
         if (old_class != "") {
             this.get_style_context().remove_class(old_class);
         }
@@ -125,11 +125,11 @@ public class Panel : Arc.Toplevel
             size = intended_size;
         }
 
-        this.settings.set_int(Arc.PANEL_KEY_SIZE, size);
+        this.settings.set_int(Budgie.PANEL_KEY_SIZE, size);
 
         this.intended_size = size;
 
-        this.get_style_context().add_class(Arc.position_class_name(position));
+        this.get_style_context().add_class(Budgie.position_class_name(position));
 
         switch (position) {
             case PanelPosition.TOP:
@@ -141,7 +141,7 @@ public class Panel : Arc.Toplevel
                 break;
         }
         if (position != this.position) {
-            this.settings.set_enum(Arc.PANEL_KEY_POSITION, position);
+            this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
         }
         this.position = position;
         this.small_scr = small;
@@ -168,24 +168,24 @@ public class Panel : Arc.Toplevel
 
     public override GLib.List<AppletInfo?> get_applets()
     {
-        GLib.List<Arc.AppletInfo?> ret = new GLib.List<Arc.AppletInfo?>();
+        GLib.List<Budgie.AppletInfo?> ret = new GLib.List<Budgie.AppletInfo?>();
         unowned string? key = null;
-        unowned Arc.AppletInfo? appl_info = null;
+        unowned Budgie.AppletInfo? appl_info = null;
 
-        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
         while (iter.next(out key, out appl_info)) {
             ret.append(appl_info);
         }
         return ret;
     }
 
-    public Panel(Arc.PanelManager? manager, string? uuid, Settings? settings)
+    public Panel(Budgie.PanelManager? manager, string? uuid, Settings? settings)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
-        initial_config = new HashTable<string,Arc.AppletInfo>(str_hash, str_equal);
+        initial_config = new HashTable<string,Budgie.AppletInfo>(str_hash, str_equal);
 
-        intended_size = settings.get_int(Arc.PANEL_KEY_SIZE);
+        intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
         this.manager = manager;
     
         scale = get_scale_factor();
@@ -193,7 +193,7 @@ public class Panel : Arc.Toplevel
         popover_manager = new PopoverManagerImpl(this);
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
-        applets = new HashTable<string,Arc.AppletInfo?>(str_hash, str_equal);
+        applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
@@ -203,7 +203,7 @@ public class Panel : Arc.Toplevel
         }
         resizable = false;
         app_paintable = true;
-        get_style_context().add_class("arc-container");
+        get_style_context().add_class("budgie-container");
 
         main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_layout);
@@ -216,17 +216,17 @@ public class Panel : Arc.Toplevel
         main_layout.valign = Gtk.Align.START;
 
         /* Shadow.. */
-        shadow = new Arc.ShadowBlock(this.position);
+        shadow = new Budgie.ShadowBlock(this.position);
         shadow.no_show_all = true;
         shadow.hexpand = false;
         shadow.halign = Gtk.Align.START;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
 
-        this.settings.bind(Arc.PANEL_KEY_SHADOW, shadow, "visible", SettingsBindFlags.GET);
+        this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "visible", SettingsBindFlags.GET);
 
-        shadow_visible = this.settings.get_boolean(Arc.PANEL_KEY_SHADOW);
-        this.settings.bind(Arc.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
+        shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
+        this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
         this.bind_property("shadow-width", shadow, "removal");
         this.bind_property("intended-size", layout, "intended-size");
@@ -261,7 +261,7 @@ public class Panel : Arc.Toplevel
         int small_size = icon_sizes[0];
 
         unowned string? key = null;
-        unowned Arc.AppletInfo? info = null;
+        unowned Budgie.AppletInfo? info = null;
 
         for (int i = 1; i < icon_sizes.length; i++) {
             if (icon_sizes[i] > intended_size - 5) {
@@ -274,7 +274,7 @@ public class Panel : Arc.Toplevel
         this.current_icon_size = size;
         this.current_small_icon_size = small_size;
 
-        var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
+        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
             info.applet.panel_size_changed(intended_size, size, small_size);
         }
@@ -306,7 +306,7 @@ public class Panel : Arc.Toplevel
 
             while (iter.next(out uuid, null)) {
                 string? uname = null;
-                Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out uname);
+                Budgie.AppletInfo? info = this.manager.load_applet_instance(uuid, out uname);
                 if (info == null) {
                     critical("Failed to load applet when we know it exists: %s", uname);
                     return;
@@ -324,7 +324,7 @@ public class Panel : Arc.Toplevel
             string? uuid = null;
 
             while (iter.next(out uuid, null)) {
-                Arc.AppletInfo? info = this.manager.create_new_applet(name, uuid);
+                Budgie.AppletInfo? info = this.manager.create_new_applet(name, uuid);
                 if (info == null) {
                     critical("Failed to load applet when we know it exists");
                     return;
@@ -341,7 +341,7 @@ public class Panel : Arc.Toplevel
      */
     void load_applets()
     {
-        string[]? applets = settings.get_strv(Arc.PANEL_KEY_APPLETS);
+        string[]? applets = settings.get_strv(Budgie.PANEL_KEY_APPLETS);
         if (applets == null || applets.length == 0) {
             message("No applets configured for panel %s", this.uuid);
             return;
@@ -349,7 +349,7 @@ public class Panel : Arc.Toplevel
 
         for (int i = 0; i < applets.length; i++) {
             string? name = null;
-            Arc.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
+            Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
 
             if (info == null) {
                 /* Faiiiil */
@@ -486,17 +486,17 @@ public class Panel : Arc.Toplevel
     {
         string[]? uuids = null;
         unowned string? uuid = null;
-        unowned Arc.AppletInfo? plugin = null;
+        unowned Budgie.AppletInfo? plugin = null;
 
-        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
         while (iter.next(out uuid, out plugin)) {
             uuids += uuid;
         }
 
-        settings.set_strv(Arc.PANEL_KEY_APPLETS, uuids);
+        settings.set_strv(Budgie.PANEL_KEY_APPLETS, uuids);
     }
 
-    public override void remove_applet(Arc.AppletInfo? info)
+    public override void remove_applet(Budgie.AppletInfo? info)
     {
         int position = info.position;
         string alignment = info.alignment;
@@ -523,10 +523,10 @@ public class Panel : Arc.Toplevel
         budge_em_left(alignment, position);
     }
 
-    void add_applet(Arc.AppletInfo? info)
+    void add_applet(Budgie.AppletInfo? info)
     {
         unowned Gtk.Box? pack_target = null;
-        Arc.AppletInfo? initial_info = null;
+        Budgie.AppletInfo? initial_info = null;
 
         message("adding %s: %s", info.name, info.uuid);
 
@@ -627,7 +627,7 @@ public class Panel : Arc.Toplevel
             return;
         }
         /* Already exists */
-        Arc.AppletInfo? info = this.manager.create_new_applet(plugin_name, uuid);
+        Budgie.AppletInfo? info = this.manager.create_new_applet(plugin_name, uuid);
         if (info == null) {
             critical("Failed to load applet when we know it exists");
             return;
@@ -664,7 +664,7 @@ public class Panel : Arc.Toplevel
         }
 
         /* Already exists */
-        Arc.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
+        Budgie.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
         if (info == null) {
             critical("Failed to load applet when we know it exists");
             return;
@@ -738,9 +738,9 @@ public class Panel : Arc.Toplevel
 
     void placement()
     {
-        Arc.set_struts(this, position, (intended_size - 5)*this.scale);
+        Budgie.set_struts(this, position, (intended_size - 5)*this.scale);
         switch (position) {
-            case Arc.PanelPosition.TOP:
+            case Budgie.PanelPosition.TOP:
                 if (main_layout.valign != Gtk.Align.START) {
                     main_layout.valign = Gtk.Align.START;
                 }
@@ -759,17 +759,17 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    private bool applet_at_start_of_region(Arc.AppletInfo? info)
+    private bool applet_at_start_of_region(Budgie.AppletInfo? info)
     {
         return (info.position == 0);
     }
 
-    private bool applet_at_end_of_region(Arc.AppletInfo? info)
+    private bool applet_at_end_of_region(Budgie.AppletInfo? info)
     {
         return (info.position >= info.applet.get_parent().get_children().length() - 1);
     }
 
-    private string? get_box_left(Arc.AppletInfo? info)
+    private string? get_box_left(Budgie.AppletInfo? info)
     {
         unowned Gtk.Widget? parent = null;
 
@@ -782,7 +782,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    private string? get_box_right(Arc.AppletInfo? info)
+    private string? get_box_right(Budgie.AppletInfo? info)
     {
         unowned Gtk.Widget? parent = null;
 
@@ -795,7 +795,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    public override bool can_move_applet_left(Arc.AppletInfo? info)
+    public override bool can_move_applet_left(Budgie.AppletInfo? info)
     {
         if (!applet_at_start_of_region(info)) {
             return true;
@@ -806,7 +806,7 @@ public class Panel : Arc.Toplevel
         return false;
     }
 
-    public override bool can_move_applet_right(Arc.AppletInfo? info)
+    public override bool can_move_applet_right(Budgie.AppletInfo? info)
     {
         if (!applet_at_end_of_region(info)) {
             return true;
@@ -817,12 +817,12 @@ public class Panel : Arc.Toplevel
         return false;
     }
 
-    void conflict_swap(Arc.AppletInfo? info, int old_position)
+    void conflict_swap(Budgie.AppletInfo? info, int old_position)
     {
         unowned string key;
-        unowned Arc.AppletInfo? val;
-        unowned Arc.AppletInfo? conflict = null;
-        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        unowned Budgie.AppletInfo? val;
+        unowned Budgie.AppletInfo? conflict = null;
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
         while (iter.next(out key, out val)) {
             if (val.alignment == info.alignment && val.position == info.position && info != val) {
@@ -841,8 +841,8 @@ public class Panel : Arc.Toplevel
     void budge_em_right(string alignment)
     {
         unowned string key;
-        unowned Arc.AppletInfo? val;
-        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        unowned Budgie.AppletInfo? val;
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
         while (iter.next(out key, out val)) {
             if (val.alignment == alignment) {
@@ -854,8 +854,8 @@ public class Panel : Arc.Toplevel
     void budge_em_left(string alignment, int after)
     {
         unowned string key;
-        unowned Arc.AppletInfo? val;
-        var iter = HashTableIter<string,Arc.AppletInfo?>(applets);
+        unowned Budgie.AppletInfo? val;
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
         while (iter.next(out key, out val)) {
             if (val.alignment == alignment) {
@@ -866,7 +866,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    public override void move_applet_left(Arc.AppletInfo? info)
+    public override void move_applet_left(Budgie.AppletInfo? info)
     {
         string? new_home = null;
         int new_position = info.position;
@@ -905,7 +905,7 @@ public class Panel : Arc.Toplevel
         }
     }
 
-    public override void move_applet_right(Arc.AppletInfo? info)
+    public override void move_applet_right(Budgie.AppletInfo? info)
     {
         string? new_home = null;
         int new_position = info.position;

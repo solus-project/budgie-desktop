@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,15 +9,15 @@
  * (at your option) any later version.
  */
 
-public class SeparatorPlugin : Arc.Plugin, Peas.ExtensionBase
+public class SeparatorPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new SeparatorApplet();
     }
 }
 
-public class SeparatorApplet : Arc.Applet
+public class SeparatorApplet : Budgie.Applet
 {
 
     Gtk.Separator sep;
@@ -41,7 +41,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(SeparatorPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(SeparatorPlugin));
 }
 
 /*

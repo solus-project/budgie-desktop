@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -59,7 +59,7 @@ public class ClientWidget : Gtk.Box
         default = true;
     }
 
-    Arc.HeaderWidget? header = null;
+    Budgie.HeaderWidget? header = null;
 
     /**
      * Create a new ClientWidget
@@ -83,7 +83,7 @@ public class ClientWidget : Gtk.Box
         player_revealer.notify["child-revealed"].connect_after(()=> {
             this.get_toplevel().queue_draw();
         });
-        header = new Arc.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
+        header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
         header.closed.connect(()=> {
             try {
                 if (client.player.can_quit) {

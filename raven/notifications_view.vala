@@ -1,8 +1,8 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
- * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Arc)
+ * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie)
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,7 +10,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 public enum NotificationCloseReason {
@@ -21,7 +21,7 @@ public enum NotificationCloseReason {
 }
 
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/notification_clone.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/notification_clone.ui")]
 public class NotificationClone : Gtk.Grid
 {
 
@@ -54,7 +54,7 @@ public class NotificationClone : Gtk.Grid
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/notification.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/notification.ui")]
 public class NotificationWindow : Gtk.Window
 {
 

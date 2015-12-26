@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -44,7 +44,7 @@ public class SoundWidget : Gtk.Box
         default = true;
     }
 
-    private Arc.HeaderWidget? header = null;
+    private Budgie.HeaderWidget? header = null;
 
     public SoundWidget()
     {
@@ -56,7 +56,7 @@ public class SoundWidget : Gtk.Box
         scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
         scale.set_draw_value(false);
         scale.value_changed.connect(on_output_scale_change);
-        header = new Arc.HeaderWidget("", "audio-volume-muted-symbolic", false, scale);
+        header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, scale);
         pack_start(header, false, false);
 
         revealer = new Gtk.Revealer();
@@ -68,7 +68,7 @@ public class SoundWidget : Gtk.Box
 
         outputs = new HashTable<uint,Gtk.RadioButton?>(direct_hash,direct_equal);
         inputs = new HashTable<uint,Gtk.RadioButton?>(direct_hash,direct_equal);
-        mixer = new Gvc.MixerControl("Arc Volume Control");
+        mixer = new Gvc.MixerControl("Budgie Volume Control");
         mixer.state_changed.connect(on_state_changed);
         mixer.output_added.connect(on_output_added);
         mixer.output_removed.connect(on_output_removed);

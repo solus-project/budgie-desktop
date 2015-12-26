@@ -7,7 +7,7 @@
     <property name="can_focus">False</property>
     <property name="icon_name">window-close-symbolic</property>
   </object>
-  <template class="ArcNotificationWindow" parent="GtkWindow">
+  <template class="BudgieNotificationWindow" parent="GtkWindow">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox" id="box">
@@ -141,7 +141,7 @@
       </object>
     </child>
     <style>
-      <class name="arc-notification"/>
+      <class name="budgie-notification"/>
     </style>
   </template>
 </interface>

@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,9 +9,9 @@
  * (at your option) any later version.
  */
 
-public class BudgieMenu : Arc.Plugin, Peas.ExtensionBase
+public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new BudgieMenuApplet(uuid);
     }
@@ -46,7 +46,7 @@ public class BudgieMenuSettings : Gtk.Grid
 
 }
 
-public class BudgieMenuApplet : Arc.Applet
+public class BudgieMenuApplet : Budgie.Applet
 {
 
     protected Gtk.EventBox widget;
@@ -55,7 +55,7 @@ public class BudgieMenuApplet : Arc.Applet
     Gtk.Image img;
     Gtk.Label label;
 
-    private unowned Arc.PopoverManager? manager = null;
+    private unowned Budgie.PopoverManager? manager = null;
 
     public string uuid { public set ; public get; }
 
@@ -74,7 +74,7 @@ public class BudgieMenuApplet : Arc.Applet
         Object(uuid: uuid);
 
         settings_schema = "com.solus-project.budgie-menu";
-        settings_prefix = "/com/solus-project/arc-panel/instance/budgie-menu";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/budgie-menu";
 
         settings = this.get_applet_settings(uuid);
 
@@ -112,7 +112,7 @@ public class BudgieMenuApplet : Arc.Applet
 
         popover.get_child().show_all();
 
-        supported_actions = Arc.PanelAction.MENU;
+        supported_actions = Budgie.PanelAction.MENU;
 
         add(widget);
         show_all();
@@ -136,9 +136,9 @@ public class BudgieMenuApplet : Arc.Applet
         });
     }
 
-    public override void invoke_action(Arc.PanelAction action)
+    public override void invoke_action(Budgie.PanelAction action)
     {
-        if ((action & Arc.PanelAction.MENU) != 0) {
+        if ((action & Budgie.PanelAction.MENU) != 0) {
             if (popover.get_visible()) {
                 popover.hide();
             } else {
@@ -171,7 +171,7 @@ public class BudgieMenuApplet : Arc.Applet
         }
     }
 
-    public override void update_popovers(Arc.PopoverManager? manager)
+    public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
         manager.register_popover(widget, popover);
@@ -184,7 +184,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(BudgieMenu));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(BudgieMenu));
 }
 
 /*

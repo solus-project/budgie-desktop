@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -11,13 +11,13 @@
  
 using LibUUID;
 
-namespace Arc
+namespace Budgie
 {
 
-public static const string DBUS_NAME        = "com.solus_project.arc.Panel";
-public static const string DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
+public static const string DBUS_NAME        = "com.solus_project.budgie.Panel";
+public static const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
-public static const string DEFAULT_CONFIG   = "resource:///com/solus-project/arc/panel/panel.ini";
+public static const string DEFAULT_CONFIG   = "resource:///com/solus-project/budgie/panel/panel.ini";
 
 
 /**
@@ -56,28 +56,28 @@ public static const uint MAX_SLOTS         = 2;
 /**
  * Root prefix for fixed schema
  */
-public static const string ROOT_SCHEMA     = "com.solus-project.arc-panel";
+public static const string ROOT_SCHEMA     = "com.solus-project.budgie-panel";
 
 /**
  * Relocatable schema ID for toplevel panels
  */
-public static const string TOPLEVEL_SCHEMA = "com.solus-project.arc-panel.panel";
+public static const string TOPLEVEL_SCHEMA = "com.solus-project.budgie-panel.panel";
 
 /**
  * Prefix for all relocatable panel settings
  */
-public static const string TOPLEVEL_PREFIX = "/com/solus-project/arc-panel/panels";
+public static const string TOPLEVEL_PREFIX = "/com/solus-project/budgie-panel/panels";
 
 
 /**
  * Relocatable schema ID for applets
  */
-public static const string APPLET_SCHEMA   = "com.solus-project.arc-panel.applet";
+public static const string APPLET_SCHEMA   = "com.solus-project.budgie-panel.applet";
 
 /**
  * Prefix for all relocatable applet settings
  */
-public static const string APPLET_PREFIX   = "/com/solus-project/arc-panel/applets";
+public static const string APPLET_PREFIX   = "/com/solus-project/budgie-panel/applets";
 
 /**
  * Known panels
@@ -100,21 +100,21 @@ public static const string PANEL_KEY_SIZE       = "size";
 public static const string PANEL_KEY_SHADOW     = "enable-shadow";
 
 
-[DBus (name = "com.solus_project.arc.Panel")]
+[DBus (name = "com.solus_project.budgie.Panel")]
 public class PanelManagerIface
 {
 
-    private Arc.PanelManager? manager = null;
+    private Budgie.PanelManager? manager = null;
 
     [DBus (visible = false)]
-    public PanelManagerIface(Arc.PanelManager? manager)
+    public PanelManagerIface(Budgie.PanelManager? manager)
     {
         this.manager = manager;
     }
 
     public string get_version()
     {
-        return Arc.VERSION;
+        return Budgie.VERSION;
     }
 
     public void ActivateAction(int action)
@@ -134,7 +134,7 @@ public class PanelManager : DesktopManager
     private Gnome.SessionClient? sclient;
 
     HashTable<int,Screen?> screens;
-    HashTable<string,Arc.Panel?> panels;
+    HashTable<string,Budgie.Panel?> panels;
 
     int primary_monitor = 0;
     Settings settings;
@@ -145,7 +145,7 @@ public class PanelManager : DesktopManager
 
     private Gtk.CssProvider? css_provider = null;
 
-    private Arc.Raven? raven = null;
+    private Budgie.Raven? raven = null;
 
     private string current_theme_uri;
 
@@ -154,9 +154,9 @@ public class PanelManager : DesktopManager
     public void activate_action(int action)
     {
         unowned string? uuid = null;
-        unowned Arc.Panel? panel = null;
+        unowned Budgie.Panel? panel = null;
 
-        var iter = HashTableIter<string?,Arc.Panel?>(panels);
+        var iter = HashTableIter<string?,Budgie.Panel?>(panels);
         /* Only let one panel take the action, and one applet per panel */
         while (iter.next(out uuid, out panel)) {
             if (panel.activate_action(action)) {
@@ -189,7 +189,7 @@ public class PanelManager : DesktopManager
             Environment.unset_variable("DESKTOP_AUTOSTART_ID");
         } else {
             start_id = "";
-            message("DESKTOP_AUTOSTART_ID not set, session registration may be broken (not running arc-desktop?)");
+            message("DESKTOP_AUTOSTART_ID not set, session registration may be broken (not running budgie-desktop?)");
         }
 
         try {
@@ -201,7 +201,7 @@ public class PanelManager : DesktopManager
         }
         /* now we need to gain Moar.. */
         try {
-            path = yield session.RegisterClient("arc-panel", start_id);
+            path = yield session.RegisterClient("budgie-panel", start_id);
         } catch (Error e) {
             msg = e.message;
             path = null;
@@ -234,23 +234,23 @@ public class PanelManager : DesktopManager
     {
         Object();
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
-        panels = new HashTable<string,Arc.Panel?>(str_hash, str_equal);
+        panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
         plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
     }
 
-    public Arc.AppletInfo? get_applet(string key)
+    public Budgie.AppletInfo? get_applet(string key)
     {
         return null;
     }
 
     string create_panel_path(string uuid)
     {
-        return "%s/{%s}/".printf(Arc.TOPLEVEL_PREFIX, uuid);
+        return "%s/{%s}/".printf(Budgie.TOPLEVEL_PREFIX, uuid);
     }
 
     string create_applet_path(string uuid)
     {
-        return "%s/{%s}/".printf(Arc.APPLET_PREFIX, uuid);
+        return "%s/{%s}/".printf(Budgie.APPLET_PREFIX, uuid);
 
     }
 
@@ -263,12 +263,12 @@ public class PanelManager : DesktopManager
     {
         var scr = Gdk.Screen.get_default();
         var mon = scr.get_primary_monitor();
-        HashTableIter<string,Arc.Panel?> iter;
+        HashTableIter<string,Budgie.Panel?> iter;
         unowned string uuid;
-        unowned Arc.Panel panel;
+        unowned Budgie.Panel panel;
         unowned Screen? primary;
-        unowned Arc.Panel? top = null;
-        unowned Arc.Panel? bottom = null;
+        unowned Budgie.Panel? top = null;
+        unowned Budgie.Panel? bottom = null;
 
         screens.remove_all();
 
@@ -278,7 +278,7 @@ public class PanelManager : DesktopManager
         for (int i = 0; i < scr.get_n_monitors(); i++) {
             Gdk.Rectangle usable_area;
             scr.get_monitor_geometry(i, out usable_area);
-            Arc.Screen? screen = new Arc.Screen();
+            Budgie.Screen? screen = new Budgie.Screen();
             screen.area = usable_area;
             screen.slots = PanelPosition.NONE;
             screens.insert(i, screen);
@@ -287,15 +287,15 @@ public class PanelManager : DesktopManager
         primary = screens.lookup(mon);
 
         /* Fix all existing panels here */
-        iter = HashTableIter<string,Arc.Panel?>(panels);
+        iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out uuid, out panel)) {
             if (mon != this.primary_monitor) {
                 /* Force existing panels to update to new primary display */
                 panel.update_geometry(primary.area, panel.position);
             }
-            if (panel.position == Arc.PanelPosition.TOP) {
+            if (panel.position == Budgie.PanelPosition.TOP) {
                 top = panel;
-            } else if (panel.position == Arc.PanelPosition.BOTTOM) {
+            } else if (panel.position == Budgie.PanelPosition.BOTTOM) {
                 bottom = panel;
             }
             /* Re-take the position */
@@ -310,7 +310,7 @@ public class PanelManager : DesktopManager
     {
         try {
             iface = new PanelManagerIface(this);
-            conn.register_object(Arc.DBUS_OBJECT_PATH, iface);
+            conn.register_object(Budgie.DBUS_OBJECT_PATH, iface);
         } catch (Error e) {
             stderr.printf("Error registering PanelManager: %s\n", e.message);
             Process.exit(1);
@@ -330,7 +330,7 @@ public class PanelManager : DesktopManager
             return;
         }
         if (settings.get_boolean(key)) {
-            this.current_theme_uri = "resource://com/solus-project/arc/panel/theme/theme.css";
+            this.current_theme_uri = "resource://com/solus-project/budgie/panel/theme/theme.css";
         } else {
             this.current_theme_uri = null;
         }
@@ -349,16 +349,16 @@ public class PanelManager : DesktopManager
         scr.monitors_changed.connect(this.on_monitors_changed);
 
         /* Set up dark mode across the desktop */
-        settings = new GLib.Settings(Arc.ROOT_SCHEMA);
+        settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
         var gtksettings = Gtk.Settings.get_default();
-        this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
+        this.settings.bind(Budgie.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
 
         settings.changed.connect(on_settings_changed);
 
-        raven = new Arc.Raven(this);
+        raven = new Budgie.Raven(this);
 
         this.on_monitors_changed();
-        this.current_theme_uri = "resource://com/solus-project/arc/panel/theme/theme.css";
+        this.current_theme_uri = "resource://com/solus-project/budgie/panel/theme/theme.css";
 
         gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
         on_theme_changed();
@@ -368,7 +368,7 @@ public class PanelManager : DesktopManager
 
         setup_plugins();
 
-        end_dialog = new Arc.EndSessionDialog();
+        end_dialog = new Budgie.EndSessionDialog();
 
         if (!load_panels()) {
             message("Creating default panel layout");
@@ -425,7 +425,7 @@ public class PanelManager : DesktopManager
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/arc/panel/theme/theme_hc.css");
+            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/budgie/panel/theme/theme_hc.css");
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);
@@ -445,23 +445,23 @@ public class PanelManager : DesktopManager
             var repo = GI.Repository.get_default();
             repo.require("Peas", "1.0", 0);
             repo.require("PeasGtk", "1.0", 0);
-            repo.require("Arc", "1.0", 0);
+            repo.require("Budgie", "1.0", 0);
         } catch (Error e) {
             message("Error loading typelibs: %s", e.message);
         }
 
         /* System path */
         var dir = Environment.get_user_data_dir();
-        engine.add_search_path(Arc.MODULE_DIRECTORY, Arc.MODULE_DATA_DIRECTORY);
+        engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
 
         /* User path */
-        var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "arc-desktop", "modules");
-        var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "arc-desktop", "data");
+        var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "modules");
+        var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
 
         engine.add_search_path(hmod, hdata);
         engine.rescan_plugins();
 
-        extensions = new Peas.ExtensionSet(engine, typeof(Arc.Plugin));
+        extensions = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
         extensions.extension_added.connect(on_extension_added);
         engine.load_plugin.connect_after((i)=> {
@@ -533,7 +533,7 @@ public class PanelManager : DesktopManager
     {
         Peas.PluginInfo? i = this.get_plugin_info(name);
         if (i == null) {
-            warning("arc_panel_modprobe called for non existent module: %s", name);
+            warning("budgie_panel_modprobe called for non existent module: %s", name);
             return;
         }
         this.engine.try_load_plugin(i);
@@ -542,16 +542,16 @@ public class PanelManager : DesktopManager
     /**
      * Attempt to load plugin, will set the plugin-name on failure
      */
-    public Arc.AppletInfo? load_applet_instance(string? uuid, out string name, GLib.Settings? psettings = null)
+    public Budgie.AppletInfo? load_applet_instance(string? uuid, out string name, GLib.Settings? psettings = null)
     {
         var path = this.create_applet_path(uuid);
         GLib.Settings? settings = null;
         if (psettings == null) {
-            settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
+            settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
         } else {
             settings = psettings;
         }
-        var pname = settings.get_string(Arc.APPLET_KEY_NAME);
+        var pname = settings.get_string(Budgie.APPLET_KEY_NAME);
         Peas.PluginInfo? pinfo = plugins.lookup(pname);
 
         /* Not yet loaded */
@@ -572,8 +572,8 @@ public class PanelManager : DesktopManager
             return null;
         }
         name = null;
-        Arc.Applet applet = (extension as Arc.Plugin).get_panel_widget(uuid);
-        var info = new Arc.AppletInfo(pinfo, uuid, applet, settings);
+        Budgie.Applet applet = (extension as Budgie.Plugin).get_panel_widget(uuid);
+        var info = new Budgie.AppletInfo(pinfo, uuid, applet, settings);
 
         return info;
     }
@@ -581,15 +581,15 @@ public class PanelManager : DesktopManager
     /**
      * Attempt to create a fresh applet instance
      */
-    public Arc.AppletInfo? create_new_applet(string name, string uuid)
+    public Budgie.AppletInfo? create_new_applet(string name, string uuid)
     {
         string? unused = null;
         if (!plugins.contains(name)) {
             return null;
         }
         var path = this.create_applet_path(uuid);
-        var settings = new Settings.with_path(Arc.APPLET_SCHEMA, path);
-        settings.set_string(Arc.APPLET_KEY_NAME, name);
+        var settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
+        settings.set_string(Budgie.APPLET_KEY_NAME, name);
         return this.load_applet_instance(uuid, out unused, settings);
     }
 
@@ -646,16 +646,16 @@ public class PanelManager : DesktopManager
         PanelPosition position;
         int size;
 
-        var settings = new GLib.Settings.with_path(Arc.TOPLEVEL_SCHEMA, path);
-        Arc.Panel? panel = new Arc.Panel(this, uuid, settings);
+        var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
+        Budgie.Panel? panel = new Budgie.Panel(this, uuid, settings);
         panels.insert(uuid, panel);
 
         if (!configure) {
             return;
         }
 
-        position = (PanelPosition)settings.get_enum(Arc.PANEL_KEY_POSITION);
-        size = settings.get_int(Arc.PANEL_KEY_SIZE);
+        position = (PanelPosition)settings.get_enum(Budgie.PANEL_KEY_POSITION);
+        size = settings.get_int(Budgie.PANEL_KEY_SIZE);
         panel.intended_size = (int)size;
         this.show_panel(uuid, position);
     }
@@ -677,7 +677,7 @@ public class PanelManager : DesktopManager
 
     void show_panel(string uuid, PanelPosition position)
     {
-        Arc.Panel? panel = panels.lookup(uuid);
+        Budgie.Panel? panel = panels.lookup(uuid);
         unowned Screen? scr;
 
         if (panel == null) {
@@ -695,7 +695,7 @@ public class PanelManager : DesktopManager
      */
     public override void set_size(string uuid, int size)
     {
-        Arc.Panel? panel = panels.lookup(uuid);
+        Budgie.Panel? panel = panels.lookup(uuid);
 
         if (panel == null) {
             warning("Asked to resize non-existent panel: %s", uuid);
@@ -711,10 +711,10 @@ public class PanelManager : DesktopManager
      */
     public override void set_placement(string uuid, PanelPosition position)
     {
-        Arc.Panel? panel = panels.lookup(uuid);
+        Budgie.Panel? panel = panels.lookup(uuid);
         string? key = null;
-        Arc.Panel? val = null;
-        Arc.Panel? conflict = null;
+        Budgie.Panel? val = null;
+        Budgie.Panel? conflict = null;
 
         if (panel == null) {
             warning("Trying to move non-existent panel: %s", uuid);
@@ -730,7 +730,7 @@ public class PanelManager : DesktopManager
         }
 
         /* Attempt to find a conflicting position */
-        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out key, out val)) {
             if (val.position == position) {
                 conflict = val;
@@ -764,17 +764,17 @@ public class PanelManager : DesktopManager
      */
     void update_screen()
     {
-        Arc.Toplevel? top = null;
-        Arc.Toplevel? bottom = null;
+        Budgie.Toplevel? top = null;
+        Budgie.Toplevel? bottom = null;
 
         string? key = null;
-        Arc.Panel? val = null;
+        Budgie.Panel? val = null;
         Screen? area = screens.lookup(primary_monitor);
-        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out key, out val)) {
-            if (val.position == Arc.PanelPosition.TOP) {
+            if (val.position == Budgie.PanelPosition.TOP) {
                 top = val;
-            } else if (val.position == Arc.PanelPosition.BOTTOM) {
+            } else if (val.position == Budgie.PanelPosition.BOTTOM) {
                 bottom = val;
             }
             val.update_geometry(area.area, val.position, val.intended_size);
@@ -790,7 +790,7 @@ public class PanelManager : DesktopManager
      */
     bool load_panels()
     {
-        string[] panels = this.settings.get_strv(Arc.ROOT_KEY_PANELS);
+        string[] panels = this.settings.get_strv(Budgie.ROOT_KEY_PANELS);
         if (panels.length == 0) {
             return false;
         }
@@ -810,7 +810,7 @@ public class PanelManager : DesktopManager
 
     public override void delete_panel(string uuid)
     {
-        unowned Arc.Panel? panel = panels.lookup(uuid);
+        unowned Budgie.Panel? panel = panels.lookup(uuid);
         if (panel == null) {
             warning("Asked to delete non-existent panel: %s", uuid);
             return;
@@ -825,7 +825,7 @@ public class PanelManager : DesktopManager
         panel.destroy();
 
 
-        var psettings = new Settings.with_path(Arc.TOPLEVEL_SCHEMA, spath);
+        var psettings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, spath);
         psettings.reset(null);
     }
 
@@ -890,16 +890,16 @@ public class PanelManager : DesktopManager
      */
     void set_panels()
     {
-        unowned Arc.Panel? panel;
+        unowned Budgie.Panel? panel;
         unowned string? key;
         string[]? keys = null;
 
-        var iter = HashTableIter<string,Arc.Panel?>(panels);
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out key, out panel)) {
             keys += key;
         }
 
-        this.settings.set_strv(Arc.ROOT_KEY_PANELS, keys);
+        this.settings.set_strv(Budgie.ROOT_KEY_PANELS, keys);
     }
 
     /**
@@ -950,7 +950,7 @@ public class PanelManager : DesktopManager
     private void on_name_lost(DBusConnection conn, string name)
     {
         if (setup) {
-            message("Replaced existing arc-panel");
+            message("Replaced existing budgie-panel");
         } else {
             message("Another panel is already running. Use --replace to replace it");
         }
@@ -963,18 +963,18 @@ public class PanelManager : DesktopManager
         if (replace) {
             flags |= BusNameOwnerFlags.REPLACE;
         }
-        Bus.own_name(BusType.SESSION, Arc.DBUS_NAME, flags,
+        Bus.own_name(BusType.SESSION, Budgie.DBUS_NAME, flags,
             on_bus_acquired, on_name_acquired, on_name_lost);
     }
 
-    public override GLib.List<Arc.Toplevel?> get_panels()
+    public override GLib.List<Budgie.Toplevel?> get_panels()
     {
-        var list = new GLib.List<Arc.Toplevel?>();
+        var list = new GLib.List<Budgie.Toplevel?>();
         unowned string? key;
-        unowned Arc.Panel? panel;
-        var iter = HashTableIter<string?,Arc.Panel?>(panels);
+        unowned Budgie.Panel? panel;
+        var iter = HashTableIter<string?,Budgie.Panel?>(panels);
         while (iter.next(out key, out panel)) {
-            list.append((Arc.Toplevel)panel);
+            list.append((Budgie.Toplevel)panel);
         }
         return list;
     }

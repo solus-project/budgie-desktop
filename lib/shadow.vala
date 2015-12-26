@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *
@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 /**

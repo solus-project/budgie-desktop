@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2014 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,9 +9,9 @@
  * (at your option) any later version.
  */
 
-public class ClockPlugin : Arc.Plugin, Peas.ExtensionBase
+public class ClockPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new ClockApplet();
     }
@@ -24,7 +24,7 @@ enum ClockFormat {
 
 public static const string CALENDAR_MIME = "text/calendar";
 
-public class ClockApplet : Arc.Applet
+public class ClockApplet : Budgie.Applet
 {
 
     protected Gtk.EventBox widget;
@@ -42,7 +42,7 @@ public class ClockApplet : Arc.Applet
     AppInfo? calprov = null;
     SimpleAction? cal = null;
 
-    private unowned Arc.PopoverManager? manager = null;
+    private unowned Budgie.PopoverManager? manager = null;
 
     public ClockApplet()
     {
@@ -134,7 +134,7 @@ public class ClockApplet : Arc.Applet
         }
     }
 
-    public override void update_popovers(Arc.PopoverManager? manager)
+    public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
         manager.register_popover(widget, popover);
@@ -195,7 +195,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(ClockPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(ClockPlugin));
 }
 
 /*

@@ -1,7 +1,7 @@
 EXTRA_DIST = \
-	arc-panel.desktop.in \
-	com.solus-project.arc-panel.gschema.xml \
-	arc-panel.gresource.xml \
+	budgie-panel.desktop.in \
+	com.solus-project.budgie-panel.gschema.xml \
+	budgie-panel.gresource.xml \
 	icons/notification-alert-symbolic.svg \
 	endsession.ui \
 	panel.ini \
@@ -37,14 +37,14 @@ EXTRA_DIST = \
 	theme/sass/theme_hc.scss
 
 gsettings_SCHEMAS = \
-	com.solus-project.arc-panel.gschema.xml
+	com.solus-project.budgie-panel.gschema.xml
 
 @GSETTINGS_RULES@
 
 appdir = $(datadir)/applications
 
 app_DATA = \
-	arc-panel.desktop
+	budgie-panel.desktop
 
 iconsdir = $(datadir)/icons/hicolor/scalable/actions
 icons_DATA = \

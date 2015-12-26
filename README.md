@@ -1,7 +1,7 @@
-arc-desktop
+budgie-desktop
 ==========
 
-The Arc Desktop is the successor to the Budgie Desktop, with a focus
+The Budgie Desktop is the successor to the Budgie Desktop, with a focus
 on modern style and function.
 
 Note that this work will be merged *back* into the Budgie Desktop
@@ -13,15 +13,15 @@ and overseeing of the project to ensure it meets his mockups. The
 project would not be possible without him.
 
 
-![screenshot1](https://raw.githubusercontent.com/solus-project/arc-desktop/master/screenshots/Raven_Main.png)
+![screenshot1](https://raw.githubusercontent.com/solus-project/budgie-desktop/master/screenshots/Raven_Main.png)
 
-![screenshot2](https://raw.githubusercontent.com/solus-project/arc-desktop/master/screenshots/Raven_Settings.png)
+![screenshot2](https://raw.githubusercontent.com/solus-project/budgie-desktop/master/screenshots/Raven_Settings.png)
 
 License
 -------
 
-arc-desktop is available under a split license model. This enables
-developers to link against the libraries of arc-desktop without
+budgie-desktop is available under a split license model. This enables
+developers to link against the libraries of budgie-desktop without
 affecting their choice of license and distribution.
 
 The shared libraries are available under the terms of the LGPL-2.1,
@@ -35,7 +35,7 @@ of each source file.
 Building
 --------
 
-arc-desktop has a number of build dependencies that must be present
+budgie-desktop has a number of build dependencies that must be present
 before attempting configuration. The names are different depending on
 distribution, so the pkg-config names, and the names within the Solus
 Operating System, are given:
@@ -70,13 +70,13 @@ Clone the repository:
 
 ```bash
 
-    git clone https://github.com/solus-project/arc-desktop.git
+    git clone https://github.com/solus-project/budgie-desktop.git
 ```
 
 Now build it:
 ```bash
 
-    cd arc-desktop
+    cd budgie-desktop
     ./autogen.sh --prefix=/usr
     make -j$(($(getconf _NPROCESSORS_ONLN)+1))
     sudo make install
@@ -86,7 +86,7 @@ Theming
 ------
 
 Please look at `./data/theme/sass` to override aspects of the default
-theming. Arc theming is created using SASS, and the CSS files shipped
+theming. Budgie theming is created using SASS, and the CSS files shipped
 are minified. Check out `./data/theme/README.md` for more information
 on regenerating the theme from SASS.
 
@@ -95,24 +95,24 @@ analyse the structure::
 
 ```bash
 
-    arc-panel --gtk-debug=interactive --replace
+    budgie-panel --gtk-debug=interactive --replace
 ```
 
 If you are validating changes from a git clone, then::
 
 ```bash
 
-    ./panel/arc-panel --gtk-debug=interactive --replace
+    ./panel/budgie-panel --gtk-debug=interactive --replace
 ```
 
 Note that for local changes, GSettings schemas and applets are expected
 to be installed first with `make install`.
 
-Note that it is intentional for the toplevel `ArcPanel` object to
-be transparent, as it contains the `ArcMainPanel` and `ArcShadowBlock`
+Note that it is intentional for the toplevel `BudgiePanel` object to
+be transparent, as it contains the `BudgieMainPanel` and `BudgieShadowBlock`
 within a singular window.
 
-Also note that by default Arc overrides all theming with the stylesheet,
+Also note that by default Budgie overrides all theming with the stylesheet,
 and in future we'll also make it possible for you to set a custom theme.
 To do this, test your changes in tree first. When you have a reasonable
 theme put together, please open an issue and we'll enable setting of
@@ -127,7 +127,7 @@ ok. To reset the entire configuration tree, issue::
 
 ```bash
 
-    dconf reset -f /com/solus-project/arc-panel/  
+    dconf reset -f /com/solus-project/budgie-panel/  
 ```
 
 Porting

@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 
@@ -51,7 +51,7 @@ class PowerStrip : Gtk.EventBox
         }
     }
             
-    public PowerStrip(Arc.Raven? raven)
+    public PowerStrip(Budgie.Raven? raven)
     {
         Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 20);
 

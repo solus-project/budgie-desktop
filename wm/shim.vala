@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc {
+namespace Budgie {
 
 public struct GsdAccel {
     string accelerator;
@@ -122,7 +122,7 @@ public class ShellShim : GLib.Object
 
     private SessionHandler? handler = null;
 
-    protected ShellShim(Arc.ArcWM? wm)
+    protected ShellShim(Budgie.BudgieWM? wm)
     {
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
         watches = new HashTable<string,uint>(str_hash, str_equal);

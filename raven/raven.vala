@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,13 +9,13 @@
  * (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
-[DBus (name = "com.solus_project.arc.Raven")]
+[DBus (name = "com.solus_project.budgie.Raven")]
 public class RavenIface
 {
 
@@ -84,7 +84,7 @@ public class Raven : Gtk.Window
     int our_width = 0;
     int our_height = 0;
 
-    private Arc.ShadowBlock? shadow;
+    private Budgie.ShadowBlock? shadow;
     private RavenIface? iface = null;
     bool expanded = false;
 
@@ -96,16 +96,16 @@ public class Raven : Gtk.Window
 
     private PowerStrip? strip = null;
 
-    unowned Arc.Toplevel? toplevel_top = null;
-    unowned Arc.Toplevel? toplevel_bottom = null;
+    unowned Budgie.Toplevel? toplevel_top = null;
+    unowned Budgie.Toplevel? toplevel_bottom = null;
 
-    private Arc.MainView? main_view = null;
-    private Arc.SettingsView? settings_view = null;
+    private Budgie.MainView? main_view = null;
+    private Budgie.SettingsView? settings_view = null;
     private Gtk.Stack? main_stack;
 
     private uint n_count = 0;
 
-    public Arc.DesktopManager? manager { public set; public get; }
+    public Budgie.DesktopManager? manager { public set; public get; }
 
     private int our_x = -1;
     private int our_y = -1;
@@ -141,7 +141,7 @@ public class Raven : Gtk.Window
     {
         try {
             iface = new RavenIface(this);
-            conn.register_object(Arc.RAVEN_DBUS_OBJECT_PATH, iface);
+            conn.register_object(Budgie.RAVEN_DBUS_OBJECT_PATH, iface);
         } catch (Error e) {
             stderr.printf("Error registering Raven: %s\n", e.message);
             Process.exit(1);
@@ -175,10 +175,10 @@ public class Raven : Gtk.Window
         }
     }
 
-    public Raven(Arc.DesktopManager? manager)
+    public Raven(Budgie.DesktopManager? manager)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
-        get_style_context().add_class("arc-container");
+        get_style_context().add_class("budgie-container");
 
         Raven._instance = this;
 
@@ -205,10 +205,10 @@ public class Raven : Gtk.Window
             return Gdk.EVENT_PROPAGATE;
         });
 
-        shadow = new Arc.ShadowBlock(PanelPosition.RIGHT);
+        shadow = new Budgie.ShadowBlock(PanelPosition.RIGHT);
         layout.pack_start(shadow, false, false, 0);
         /* For now Raven is always on the right */
-        this.get_style_context().add_class(Arc.position_class_name(PanelPosition.RIGHT));
+        this.get_style_context().add_class(Budgie.position_class_name(PanelPosition.RIGHT));
 
         var frame = new Gtk.Frame(null);
         frame.get_style_context().add_class("raven-frame");
@@ -224,12 +224,12 @@ public class Raven : Gtk.Window
         main_box.pack_start(main_stack, true, true, 0);
 
         /* Applets */
-        main_view = new Arc.MainView();
+        main_view = new Budgie.MainView();
         main_view.view_switch.connect(on_view_switch);
         main_stack.add_named(main_view, "main");
 
         /* Settings */
-        settings_view = new Arc.SettingsView(manager);
+        settings_view = new Budgie.SettingsView(manager);
         settings_view.view_switch.connect(on_view_switch);
         main_stack.add_named(settings_view, "settings");
 
@@ -288,11 +288,11 @@ public class Raven : Gtk.Window
 
     public void setup_dbus()
     {
-        Bus.own_name(BusType.SESSION, Arc.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+        Bus.own_name(BusType.SESSION, Budgie.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
             on_bus_acquired, ()=> {}, ()=> { warning("Raven could not take dbus!"); });
     }
 
-    void bind_panel_shadow(Arc.Toplevel? toplevel)
+    void bind_panel_shadow(Budgie.Toplevel? toplevel)
     {
         weak Binding? b = bind_property("required-size", toplevel, "shadow-width", BindingFlags.DEFAULT, (b,v, ref v2)=> {
             var d = v.get_int()-5;
@@ -303,7 +303,7 @@ public class Raven : Gtk.Window
         toplevel.set_data("_binding_shadow", b);
     }
 
-    void unbind_panel_shadow(Arc.Toplevel? top)
+    void unbind_panel_shadow(Budgie.Toplevel? top)
     {
         if (top == null) {
             return;
@@ -322,7 +322,7 @@ public class Raven : Gtk.Window
     /**
      * Update our geometry based on other panels in the neighbourhood, and the screen we
      * need to be on */
-    public void update_geometry(Gdk.Rectangle rect, Arc.Toplevel? top, Arc.Toplevel? bottom)
+    public void update_geometry(Gdk.Rectangle rect, Budgie.Toplevel? top, Budgie.Toplevel? bottom)
     {
         int width = required_size;
 
@@ -429,17 +429,17 @@ public class Raven : Gtk.Window
 
         this.expanded = exp;
 
-        var anim = new Arc.Animation();
+        var anim = new Budgie.Animation();
         anim.widget = this;
-        anim.length = 270 * Arc.MSECOND;
-        anim.tween = Arc.sine_ease_in;
-        anim.changes = new Arc.PropChange[] {
-            Arc.PropChange() {
+        anim.length = 270 * Budgie.MSECOND;
+        anim.tween = Budgie.sine_ease_in;
+        anim.changes = new Budgie.PropChange[] {
+            Budgie.PropChange() {
                 property = "nscale",
                 old = old_op,
                 @new = new_op
             },
-            Arc.PropChange() {
+            Budgie.PropChange() {
                 property = "opacity",
                 old = old_op,
                 @new = new_op
@@ -447,7 +447,7 @@ public class Raven : Gtk.Window
         };
 
         anim.start((a)=> {
-            if ((a.widget as Arc.Raven).nscale == 0.0) {
+            if ((a.widget as Budgie.Raven).nscale == 0.0) {
                 a.widget.hide();
             } else {
                 (a.widget as Gtk.Window).present();

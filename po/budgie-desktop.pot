@@ -134,12 +134,12 @@ msgstr ""
 #. * vi: set shiftwidth=4 tabstop=4 expandtab:
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #.
-#: ../session/arc-desktop.desktop.in.in.h:1
-#: ../session/arc-desktop.session.in.in.h:1
-msgid "Arc Desktop"
+#: ../session/budgie-desktop.desktop.in.in.h:1
+#: ../session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
 msgstr ""
 
-#: ../session/arc-desktop.desktop.in.in.h:2
+#: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the new Budgie Desktop"
 msgstr ""
 

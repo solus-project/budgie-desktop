@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -25,7 +25,7 @@ public class CalendarWidget : Gtk.Box
         default = true;
     }
 
-    private Arc.HeaderWidget? header = null;
+    private Budgie.HeaderWidget? header = null;
 
     public CalendarWidget()
     {
@@ -34,7 +34,7 @@ public class CalendarWidget : Gtk.Box
         var time = new DateTime.now_local();
 
         /* TODO: Fix icon */
-        header = new Arc.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
+        header = new Budgie.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
         pack_start(header, false, false);
 
         revealer = new Gtk.Revealer();

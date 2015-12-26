@@ -12,22 +12,22 @@ libtoplevel_la_SOURCES = \
 	manager.vala
 
 libtoplevel_la_CFLAGS = \
-	$(ARC_BASE_CFLAGS) \
-	$(ARC_PLUGIN_CFLAGS) \
+	$(BUDGIE_BASE_CFLAGS) \
+	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(DECLARATIONS)
 
 libtoplevel_la_LIBADD = \
-	$(ARC_BASE_LIBS) \
-	$(ARC_PLUGIN_LIBS) \
-	${top_builddir}/plugin/libarc-plugin.la
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
+	${top_builddir}/plugin/libbudgie-plugin.la
 
 libtoplevel_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
-	--pkg arc-1.0 \
+	--pkg budgie-1.0 \
 	--vapidir=${top_srcdir}/plugin \
-	-H ArcToplevel.h \
+	-H BudgieToplevel.h \
 	$(VALAFLAGS)
 
 nodist_include_HEADERS = \
-	ArcToplevel.h
+	BudgieToplevel.h

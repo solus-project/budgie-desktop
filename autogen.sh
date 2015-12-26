@@ -5,7 +5,7 @@ srcdir=`dirname $0`
 test -n "$srcdir" || srcdir=`dirname "$0"`
 test -n "$srcdir" || srcdir=.
 
-PKG_NAME="arc-desktop"
+PKG_NAME="budgie-desktop"
 prevdir="$PWD"
 cd "$srcdir"
 

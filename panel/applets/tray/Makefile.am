@@ -20,16 +20,16 @@ libtrayapplet_la_SOURCES = \
 	TrayApplet.vala
 
 libtrayapplet_la_CFLAGS = \
-	$(ARC_BASE_CFLAGS) \
-	$(ARC_PLUGIN_CFLAGS) \
+	$(BUDGIE_BASE_CFLAGS) \
+	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(NATRAY_CFLAGS) \
 	$(DECLARATIONS) \
 	-I${top_srcdir}/imports/natray
 
 libtrayapplet_la_LIBADD = \
-	${top_builddir}/plugin/libarc-plugin.la \
-	$(ARC_BASE_LIBS) \
-	$(ARC_PLUGIN_LIBS) \
+	${top_builddir}/plugin/libbudgie-plugin.la \
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
 	$(NATRAY_LIBS) \
 	${top_builddir}/imports/natray/libnatray.la
 
@@ -44,7 +44,7 @@ libtrayapplet_la_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
-	--pkg arc-1.0 \
+	--pkg budgie-1.0 \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/imports/natray
 

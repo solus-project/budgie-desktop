@@ -1,6 +1,6 @@
 /* Injects compile time defines into BudgiePanel.vala */
 
-namespace Arc {
+namespace Budgie {
     [CCode (cheader_filename = "panelconfig.h")]
     public static extern const string MODULE_DIRECTORY;
 

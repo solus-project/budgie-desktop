@@ -8,7 +8,7 @@
 EXTRA_DIST = \
 	panelconfig.h \
 	panelconfig.vapi \
-	arc-panel.desktop.in.in
+	budgie-panel.desktop.in.in
 
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@
@@ -18,35 +18,35 @@ SUBDIRS = \
 
 applicationsdir = $(datadir)/applications
 applications_DATA = \
-	arc-panel.desktop
+	budgie-panel.desktop
 
-panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/arc-panel.gresource.xml)
+panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/data --generate-dependencies $(top_srcdir)/data/budgie-panel.gresource.xml)
 
 BUILT_SOURCES = \
-	arc-panel-resources.h \
-	arc-panel-resources.c
+	budgie-panel-resources.h \
+	budgie-panel-resources.c
 
 CLEANFILES = \
 	$(BUILT_SOURCES) \
-	arc-panel.desktop \
-	arc-panel.desktop.in
+	budgie-panel.desktop \
+	budgie-panel.desktop.in
 
 DISTCLEANFILES = \
-	arc-panel.desktop \
-	arc-panel.desktop.in
+	budgie-panel.desktop \
+	budgie-panel.desktop.in
 
 # resources
-arc-panel-resources.h: $(top_srcdir)/data/arc-panel.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name arc_panel $<
+budgie-panel-resources.h: $(top_srcdir)/data/budgie-panel.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name budgie_panel $<
 
-arc-panel-resources.c: $(top_srcdir)/data/arc-panel.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name arc_panel $<
+budgie-panel-resources.c: $(top_srcdir)/data/budgie-panel.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name budgie_panel $<
 
-bin_PROGRAMS = arc-panel
+bin_PROGRAMS = budgie-panel
 
-arc_panel_SOURCES = \
-	arc-panel-resources.h \
-	arc-panel-resources.c \
+budgie_panel_SOURCES = \
+	budgie-panel-resources.h \
+	budgie-panel-resources.c \
 	main.vala \
 	manager.vala \
 	panel.vala \
@@ -54,26 +54,26 @@ arc_panel_SOURCES = \
 	uuid.vala \
 	endsession.vala
 
-arc_panel_CFLAGS = \
-	$(ARC_BASE_CFLAGS) \
-	$(ARC_PLUGIN_CFLAGS) \
+budgie_panel_CFLAGS = \
+	$(BUDGIE_BASE_CFLAGS) \
+	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(UUID_CFLAGS) \
 	$(DECLARATIONS)
 
-arc_panel_LDADD = \
-	$(ARC_BASE_LIBS) \
-	$(ARC_PLUGIN_LIBS) \
+budgie_panel_LDADD = \
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
 	$(UUID_LIBS) \
-	${top_builddir}/plugin/libarc-plugin.la \
+	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/raven/libraven.la
 
-arc_panel_VALAFLAGS = \
+budgie_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg libuuid \
 	--pkg libpeas-gtk-1.0 \
-	--pkg arc-1.0 \
+	--pkg budgie-1.0 \
 	--pkg panelconfig \
 	--pkg raven \
 	--pkg toplevel \
@@ -83,5 +83,5 @@ arc_panel_VALAFLAGS = \
 	--vapidir=${top_srcdir}/raven \
 	--vapidir=${top_srcdir}/lib \
 	--target-glib=2.38 \
-	--gresources=${top_srcdir}/data/arc-panel.gresource.xml \
+	--gresources=${top_srcdir}/data/budgie-panel.gresource.xml \
 	$(VALAFLAGS)

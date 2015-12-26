@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc {
+namespace Budgie {
 
  
 public static const string BACKGROUND_SCHEMA      = "org.gnome.desktop.background";
@@ -20,7 +20,7 @@ public static const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
 public static const string BACKGROUND_STYLE_KEY   = "picture-options";
 public static const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
 
-public class ArcBackground : Meta.BackgroundGroup
+public class BudgieBackground : Meta.BackgroundGroup
 {
 
     public unowned Meta.Screen? screen { construct set ; public get; }
@@ -35,7 +35,7 @@ public class ArcBackground : Meta.BackgroundGroup
 
     static const int BACKGROUND_TIMEOUT = 850;
 
-    public ArcBackground(Meta.Screen? screen, int index)
+    public BudgieBackground(Meta.Screen? screen, int index)
     {
         Object(screen: screen, index: index);
         Meta.Rectangle rect;
@@ -138,7 +138,7 @@ public class ArcBackground : Meta.BackgroundGroup
             background.set_file(bg_file, style);
         }
     }
-} /* End ArcBackground */
+} /* End BudgieBackground */
 
 } /* End namespace */
 /*

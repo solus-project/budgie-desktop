@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Arc Panel
-Comment=Core part of the Arc Desktop, providing the panels and Raven sidebar
-Exec=arc-panel
+Name=Budgie Panel
+Comment=Core part of the Budgie Desktop, providing the panels and Raven sidebar
+Exec=budgie-panel
 Terminal=false
 Categories=GNOME;GTK;System;Core;
 NoDisplay=true

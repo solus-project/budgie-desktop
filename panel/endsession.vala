@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 /* Currently unused by us */
@@ -27,7 +27,7 @@ public enum DialogType {
     UPDATE_RESTART = 3
 }
 
-[GtkTemplate (ui="/com/solus-project/arc/endsession/endsession.ui")]
+[GtkTemplate (ui="/com/solus-project/budgie/endsession/endsession.ui")]
 [DBus (name = "com.solus_project.Session.EndSessionDialog")]
 public class EndSessionDialog : Gtk.Window
 {

@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,21 +9,21 @@
  * (at your option) any later version.
  */
 
-namespace Arc {
+namespace Budgie {
 
 
 public static const string MUTTER_EDGE_TILING  = "edge-tiling";
 public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
-public static const string WM_SCHEMA           = "com.solus-project.arc-wm";
+public static const string WM_SCHEMA           = "com.solus-project.budgie-wm";
 
 public static const bool CLUTTER_EVENT_PROPAGATE = false;
 public static const bool CLUTTER_EVENT_STOP      = true;
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
-public static const string PANEL_DBUS_NAME        = "com.solus_project.arc.Panel";
-public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/arc/Panel";
+public static const string PANEL_DBUS_NAME        = "com.solus_project.budgie.Panel";
+public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
 public enum PanelAction {
     NONE = 1 << 0,
@@ -45,20 +45,20 @@ public class ScreenTilePreview : Clutter.Actor
 }
 
 
-[DBus (name="com.solus_project.arc.Raven")]
+[DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenRemote : Object
 {
     public abstract async void Toggle() throws Error;
 }
 
-[DBus (name = "com.solus_project.arc.Panel")]
+[DBus (name = "com.solus_project.budgie.Panel")]
 public interface PanelRemote : Object
 {
 
     public abstract async void ActivateAction(int flags) throws Error;
 }
 
-public class ArcWM : Meta.Plugin
+public class BudgieWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
 
@@ -85,12 +85,12 @@ public class ArcWM : Meta.Plugin
     static construct
     {
         info = Meta.PluginInfo() {
-            name = "Arc WM",
-            /*version = Arc.VERSION,*/
+            name = "Budgie WM",
+            /*version = Budgie.VERSION,*/
             version = "1",
             author = "Ikey Doherty",
             license = "GPL-2.0",
-            description = "Arc Window Manager"
+            description = "Budgie Window Manager"
         };
         PV_CENTER = Clutter.Point.alloc();
         PV_CENTER.x = 0.5f;
@@ -266,16 +266,16 @@ public class ArcWM : Meta.Plugin
         stage.show();
 
         if (wayland && !gtk_available) {
-            unowned string[] args = ArcWM.old_args;
+            unowned string[] args = BudgieWM.old_args;
             if (Gtk.init_check(ref args)) {
-                ArcWM.gtk_available = true;
+                BudgieWM.gtk_available = true;
                 message("Got GTK+ now");
             } else {
                 message("Still no GTK+");
             }
         }
 
-        if (ArcWM.gtk_available) {
+        if (BudgieWM.gtk_available) {
             init_menu();
         }
 
@@ -317,7 +317,7 @@ public class ArcWM : Meta.Plugin
         background_group.destroy_all_children();
 
         for (int i = 0; i < screen.get_n_monitors(); i++) {
-            var actor = new ArcBackground(screen, i);
+            var actor = new BudgieBackground(screen, i);
             background_group.add_child(actor);
         }
     }
@@ -633,7 +633,7 @@ public class ArcWM : Meta.Plugin
 
         if (cur_tabs == null) {
             cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
-            CompareFunc<weak Meta.Window> cm = Arc.ArcWM.tab_sort;
+            CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort;
             cur_tabs.sort(cm);
         }
         if (cur_tabs == null) {

@@ -48,9 +48,9 @@ public static bool startupid_match(string id1, string id2)
     return (id2 == id3);
 }
 
-public class IconTasklist : Arc.Plugin, Peas.ExtensionBase
+public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new IconTasklistApplet(uuid);
     }
@@ -571,7 +571,7 @@ public class PinnedIconButton : IconButton
     }
 }
 
-public class IconTasklistApplet : Arc.Applet
+public class IconTasklistApplet : Budgie.Applet
 {
 
     protected Gtk.Box widget;
@@ -708,7 +708,7 @@ public class IconTasklistApplet : Arc.Applet
         this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
 
         settings_schema = "com.solus-project.icon-tasklist";
-        settings_prefix = "/com/solus-project/arc-panel/instance/icon-tasklist";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
 
         helper = new DesktopHelper();
 
@@ -874,5 +874,5 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(IconTasklist));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(IconTasklist));
 }

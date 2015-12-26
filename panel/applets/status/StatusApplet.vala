@@ -8,24 +8,24 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-public class StatusPlugin : Arc.Plugin, Peas.ExtensionBase
+public class StatusPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new StatusApplet();
     }
 }
 
-[DBus (name="com.solus_project.arc.Raven")]
+[DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenProxy : Object
 {
     public abstract async void Toggle() throws Error;
 }
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
-public class StatusApplet : Arc.Applet
+public class StatusApplet : Budgie.Applet
 {
 
     protected Gtk.Box widget;
@@ -100,5 +100,5 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(StatusPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(StatusPlugin));
 }

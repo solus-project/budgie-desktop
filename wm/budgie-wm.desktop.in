@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=Arc Window Manager
-Exec=arc-wm
+Name=Budgie Window Manager
+Exec=budgie-wm
 NoDisplay=true
 X-GNOME-WMSettingsModule=metacity
-X-GNOME-WMName=Arc
+X-GNOME-WMName=Budgie
 X-GnomeWMSettingsLibrary=metacity
 X-GNOME-Autostart-Phase=WindowManager
 X-GNOME-Provides=windowmanager

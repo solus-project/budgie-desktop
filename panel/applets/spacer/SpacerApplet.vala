@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,9 +9,9 @@
  * (at your option) any later version.
  */
 
-public class SpacerPlugin : Arc.Plugin, Peas.ExtensionBase
+public class SpacerPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new SpacerApplet(uuid);
     }
@@ -32,7 +32,7 @@ public class SpacerSettings : Gtk.Grid
     }
 }
 
-public class SpacerApplet : Arc.Applet
+public class SpacerApplet : Budgie.Applet
 {
 
     public int space_size { public set; public get; default = 5; }
@@ -57,7 +57,7 @@ public class SpacerApplet : Arc.Applet
         Object(uuid: uuid);
 
         settings_schema = "com.solus-project.spacer";
-        settings_prefix = "/com/solus-project/arc-panel/instance/spacer";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/spacer";
 
         settings = this.get_applet_settings(uuid);
         settings.changed.connect(on_settings_change);
@@ -92,7 +92,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(SpacerPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(SpacerPlugin));
 }
 
 /*

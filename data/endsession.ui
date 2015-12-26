@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <template class="ArcEndSessionDialog" parent="GtkWindow">
+  <template class="BudgieEndSessionDialog" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="window_position">center-always</property>
     <property name="skip_taskbar_hint">True</property>
@@ -159,7 +159,7 @@
       </object>
     </child>
     <style>
-      <class name="arc-session-dialog"/>
+      <class name="budgie-session-dialog"/>
     </style>
   </template>
 </interface>

@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,15 +9,15 @@
  * (at your option) any later version.
  */
 
-public class ShowDesktopPlugin : Arc.Plugin, Peas.ExtensionBase
+public class ShowDesktopPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new ShowDesktopApplet();
     }
 }
 
-public class ShowDesktopApplet : Arc.Applet
+public class ShowDesktopApplet : Budgie.Applet
 {
     protected Gtk.ToggleButton widget;
     protected Gtk.Image img;
@@ -54,7 +54,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(ShowDesktopPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(ShowDesktopPlugin));
 }
 
 /*

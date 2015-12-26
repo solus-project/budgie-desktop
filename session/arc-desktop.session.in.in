@@ -1,4 +1,0 @@
-[GNOME Session]
-_Name=Arc Desktop
-RequiredComponents=arc-wm;gnome-settings-daemon;arc-panel;
-DesktopName=Arc Desktop

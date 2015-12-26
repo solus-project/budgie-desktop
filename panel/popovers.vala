@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *
@@ -9,21 +9,21 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 public class PopoverManagerImpl : PopoverManager, GLib.Object
 {
     HashTable<Gtk.Widget?,Gtk.Popover?> widgets;
 
-    unowned Arc.Panel? owner;
+    unowned Budgie.Panel? owner;
     unowned Gtk.Popover? visible_popover = null;
 
     bool grabbed = false;
     bool mousing = false;
 
 
-    public PopoverManagerImpl(Arc.Panel? owner)
+    public PopoverManagerImpl(Budgie.Panel? owner)
     {
         this.owner = owner;
         widgets = new HashTable<Gtk.Widget?,Gtk.Popover?>(direct_hash, direct_equal);

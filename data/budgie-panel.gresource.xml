@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-        <gresource prefix="/com/solus-project/arc/panel">
+        <gresource prefix="/com/solus-project/budgie/panel">
                 <file>theme/theme.css</file>
                 <file>theme/theme_hc.css</file>
                 <file>theme/assets/checkbox.png</file>
@@ -21,7 +21,7 @@
                 <file>theme/assets/switch-active-hc@2.png</file>
                 <file>panel.ini</file>
         </gresource>
-        <gresource prefix="/com/solus-project/arc/endsession">
+        <gresource prefix="/com/solus-project/budgie/endsession">
                 <file>endsession.ui</file>
         </gresource>
 </gresources>

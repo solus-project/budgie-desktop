@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 public enum ThemeType {
@@ -25,7 +25,7 @@ public enum PanelColumn {
     N_COLUMNS = 2,
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/applet_settings.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/applet_settings.ui")]
 public class AppletSettings : Gtk.Box {
 
     [GtkChild]
@@ -42,7 +42,7 @@ public class AppletSettings : Gtk.Box {
         view_switch();
     }
 
-    public void set_applet(Arc.AppletInfo? info)
+    public void set_applet(Budgie.AppletInfo? info)
     {
         if (scrolledwindow.get_child() != null) {
             scrolledwindow.remove(scrolledwindow.get_child());
@@ -58,7 +58,7 @@ public class AppletSettings : Gtk.Box {
 
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/applets.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/applets.ui")]
 public class AppletPicker : Gtk.Box {
 
     [GtkChild]
@@ -154,11 +154,11 @@ public class AppletPicker : Gtk.Box {
 }
 
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/panel.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/panel.ui")]
 public class PanelEditor : Gtk.Box
 {
 
-    public Arc.DesktopManager? manager { public set ; public get ; }
+    public Budgie.DesktopManager? manager { public set ; public get ; }
 
     [GtkChild]
     private Gtk.ComboBox? combobox_panels;
@@ -185,8 +185,8 @@ public class PanelEditor : Gtk.Box
     private Gtk.Switch? switch_shadow;
     private ulong shadow_id;
 
-    HashTable<string?,Arc.Toplevel?> panels;
-    unowned Arc.Toplevel? current_panel = null;
+    HashTable<string?,Budgie.Toplevel?> panels;
+    unowned Budgie.Toplevel? current_panel = null;
     private ulong notify_id;
 
     [GtkChild]
@@ -215,7 +215,7 @@ public class PanelEditor : Gtk.Box
         this.panel_stack.set_visible_child_name("settings");
     }
 
-    private unowned Arc.AppletInfo? current_applet = null;
+    private unowned Budgie.AppletInfo? current_applet = null;
     private ulong applets_changed_id;
     private ulong applet_added_id;
     private ulong applet_removed_id;
@@ -227,7 +227,7 @@ public class PanelEditor : Gtk.Box
 
     private unowned Gtk.Stack? panel_stack = null;
 
-    public PanelEditor(Arc.DesktopManager? manager, Gtk.Stack? panel_stack)
+    public PanelEditor(Budgie.DesktopManager? manager, Gtk.Stack? panel_stack)
     {
         Object(manager: manager);
         this.panel_stack = panel_stack;
@@ -347,7 +347,7 @@ public class PanelEditor : Gtk.Box
         manager.set_size(current_panel.uuid, (int)spinbutton_size.get_value());
     }
 
-    string get_panel_id(Arc.Toplevel? panel)
+    string get_panel_id(Budgie.Toplevel? panel)
     {
         switch (panel.position) {
             case PanelPosition.TOP:
@@ -386,7 +386,7 @@ public class PanelEditor : Gtk.Box
             old_uuid = current_panel.uuid;
         }
 
-        panels = new HashTable<string?,Arc.Toplevel?>(str_hash, str_equal);
+        panels = new HashTable<string?,Budgie.Toplevel?>(str_hash, str_equal);
 
         var panels = manager.get_panels();
         if (panels == null || panels.length() < 1) {
@@ -422,7 +422,7 @@ public class PanelEditor : Gtk.Box
      */
     void set_active_panel(string uuid)
     {
-        unowned Arc.Toplevel? panel = panels.lookup(uuid);
+        unowned Budgie.Toplevel? panel = panels.lookup(uuid);
         SignalHandler.block(combobox_panels, panels_id);
         combobox_panels.set_active_id(uuid);
         SignalHandler.unblock(combobox_panels, panels_id);
@@ -462,7 +462,7 @@ public class PanelEditor : Gtk.Box
         this.panel_stack.set_visible_child_name("panel");
     }
 
-    void applet_added(Arc.AppletInfo? info)
+    void applet_added(Budgie.AppletInfo? info)
     {
         insert_applet(info);
         refresh_applets();
@@ -473,7 +473,7 @@ public class PanelEditor : Gtk.Box
         update_applets();
     }
 
-    void insert_applet(Arc.AppletInfo? applet)
+    void insert_applet(Budgie.AppletInfo? applet)
     {
         var widgem = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         var img = new Gtk.Image.from_icon_name(applet.icon, Gtk.IconSize.MENU);
@@ -543,8 +543,8 @@ public class PanelEditor : Gtk.Box
 
     int lb_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
     {
-        unowned Arc.AppletInfo? before_info = before.get_child().get_data("ainfo");
-        unowned Arc.AppletInfo? after_info = after.get_child().get_data("ainfo");
+        unowned Budgie.AppletInfo? before_info = before.get_child().get_data("ainfo");
+        unowned Budgie.AppletInfo? after_info = after.get_child().get_data("ainfo");
 
         if (before_info != null && after_info != null && before_info.alignment != after_info.alignment) {
             int bi = align_to_int(before_info.alignment);
@@ -573,8 +573,8 @@ public class PanelEditor : Gtk.Box
         Gtk.Widget? child = null;
         string? prev = null;
         string? next = null;
-        unowned Arc.AppletInfo? before_info = null;
-        unowned Arc.AppletInfo? after_info = null;
+        unowned Budgie.AppletInfo? before_info = null;
+        unowned Budgie.AppletInfo? after_info = null;
     
         if (before != null) {
             before_info = before.get_child().get_data("ainfo");
@@ -620,7 +620,7 @@ public class PanelEditor : Gtk.Box
 
     void on_row_activate(Gtk.ListBoxRow? row)
     {
-        unowned Arc.AppletInfo? info = null;
+        unowned Budgie.AppletInfo? info = null;
 
         if (current_panel == null || row == null) {
             button_move_applet_left.sensitive = false;
@@ -642,7 +642,7 @@ public class PanelEditor : Gtk.Box
      */
     void on_panel_update(Object o, ParamSpec p)
     {
-        var panel = o as Arc.Toplevel;
+        var panel = o as Budgie.Toplevel;
 
         /* Update position */
         if (p.name == "position") {
@@ -684,7 +684,7 @@ public class PanelEditor : Gtk.Box
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/settings.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/settings.ui")]
 public class SettingsHeader : Gtk.Box
 {
     private SettingsView? view = null;
@@ -701,7 +701,7 @@ public class SettingsHeader : Gtk.Box
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/arc/raven/appearance.ui")]
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/appearance.ui")]
 public class AppearanceSettings : Gtk.Box
 {
 
@@ -718,7 +718,7 @@ public class AppearanceSettings : Gtk.Box
     private Gtk.Switch? switch_builtin;
 
     private GLib.Settings ui_settings;
-    private GLib.Settings arc_settings;
+    private GLib.Settings budgie_settings;
 
     construct {
         var render = new Gtk.CellRendererText();
@@ -729,9 +729,9 @@ public class AppearanceSettings : Gtk.Box
         combobox_icon.add_attribute(render, "text", 0);
 
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
-        arc_settings = new GLib.Settings("com.solus-project.arc-panel");
-        arc_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
-        arc_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+        budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
+        budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
+        budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
     }
 
     public void load_themes()
@@ -845,11 +845,11 @@ public class SettingsView : Gtk.Box
     private Gtk.Stack? stack = null;
     private Gtk.StackSwitcher? switcher = null;
 
-    public Arc.DesktopManager? manager { public set ; public get ; }
+    public Budgie.DesktopManager? manager { public set ; public get ; }
 
     private Gtk.Stack? panel_stack = null;
 
-    public SettingsView(Arc.DesktopManager? manager)
+    public SettingsView(Budgie.DesktopManager? manager)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0, manager: manager);
 

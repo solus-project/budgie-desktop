@@ -22,17 +22,17 @@ libstatusapplet_la_SOURCES = \
 	SoundIndicator.vala
 
 libstatusapplet_la_CFLAGS = \
-	$(ARC_BASE_CFLAGS) \
-	$(ARC_PLUGIN_CFLAGS) \
+	$(BUDGIE_BASE_CFLAGS) \
+	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(STATUS_PLUGIN_CFLAGS) \
 	$(GVC_CFLAGS) \
 	$(DECLARATIONS)
 
 libstatusapplet_la_LIBADD = \
-	${top_builddir}/plugin/libarc-plugin.la \
+	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/gvc/libgvc.la \
-	$(ARC_BASE_LIBS) \
-	$(ARC_PLUGIN_LIBS) \
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
 	$(GVC_LIBS) \
 	$(STATUS_PLUGIN_LIBS)
 
@@ -47,7 +47,7 @@ libstatusapplet_la_VALAFLAGS = \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
-	--pkg arc-1.0 \
+	--pkg budgie-1.0 \
 	--pkg posix \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/vapi

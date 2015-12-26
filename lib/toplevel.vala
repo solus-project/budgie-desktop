@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *
@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 public abstract class Toplevel : Gtk.Window
@@ -37,24 +37,24 @@ public abstract class Toplevel : Gtk.Window
      */
     public string uuid { public set ; public get; }
 
-    public Arc.PanelPosition position { public set; public get; default = Arc.PanelPosition.BOTTOM; }
+    public Budgie.PanelPosition position { public set; public get; default = Budgie.PanelPosition.BOTTOM; }
 
     public virtual void reset_shadow() { }
 
-    public abstract GLib.List<Arc.AppletInfo?> get_applets();
-    public signal void applet_added(Arc.AppletInfo? info);
+    public abstract GLib.List<Budgie.AppletInfo?> get_applets();
+    public signal void applet_added(Budgie.AppletInfo? info);
     public signal void applet_removed(string uuid);
 
     public signal void applets_changed();
 
-    public abstract bool can_move_applet_left(Arc.AppletInfo? info);
-    public abstract bool can_move_applet_right(Arc.AppletInfo? info);
+    public abstract bool can_move_applet_left(Budgie.AppletInfo? info);
+    public abstract bool can_move_applet_right(Budgie.AppletInfo? info);
 
-    public abstract void move_applet_left(Arc.AppletInfo? info);
-    public abstract void move_applet_right(Arc.AppletInfo? info);
+    public abstract void move_applet_left(Budgie.AppletInfo? info);
+    public abstract void move_applet_right(Budgie.AppletInfo? info);
 
     public abstract void add_new_applet(string id);
-    public abstract void remove_applet(Arc.AppletInfo? info);
+    public abstract void remove_applet(Budgie.AppletInfo? info);
 }
 
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)

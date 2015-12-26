@@ -25,13 +25,13 @@ if [[ -z "${SCREEN_SIZE}" ]]; then
     SCREEN_SIZE="1024x768"
 fi
 
-Xephyr -title "Arc Test" +iglx -screen "${SCREEN_SIZE}" "${LOCAL_DISPLAY}" &
+Xephyr -title "Budgie Test" +iglx -screen "${SCREEN_SIZE}" "${LOCAL_DISPLAY}" &
 XPID="$!"
 
-GTK_THEME="Arc-Darker" DISPLAY="${LOCAL_DISPLAY}" arc-wm &
+GTK_THEME="Budgie-Darker" DISPLAY="${LOCAL_DISPLAY}" budgie-wm &
 WMPID="$!"
 
 sleep 1
 
-GTK_THEME="Arc-Darker" DISPLAY="${LOCAL_DISPLAY}" arc-panel
+GTK_THEME="Budgie-Darker" DISPLAY="${LOCAL_DISPLAY}" budgie-panel
 PANELPID="$1"

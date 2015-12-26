@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop
+ * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
  * 
@@ -9,18 +9,18 @@
  * (at your option) any later version.
  */
 
-public class NotificationsPlugin : Arc.Plugin, Peas.ExtensionBase
+public class NotificationsPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Arc.Applet get_panel_widget(string uuid)
+    public Budgie.Applet get_panel_widget(string uuid)
     {
         return new NotificationsApplet();
     }
 }
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.arc.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/arc/Raven";
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
-[DBus (name="com.solus_project.arc.Raven")]
+[DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenRemote : Object
 {
     public abstract async void Toggle() throws Error;
@@ -31,7 +31,7 @@ public interface RavenRemote : Object
     public signal void ReadNotifications();
 }
 
-public class NotificationsApplet : Arc.Applet
+public class NotificationsApplet : Budgie.Applet
 {
 
     Gtk.EventBox? widget;
@@ -129,7 +129,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Arc.Plugin), typeof(NotificationsPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(NotificationsPlugin));
 }
 
 /*

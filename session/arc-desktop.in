@@ -1,2 +1,0 @@
-#!/bin/sh
-exec gnome-session --session=arc-desktop $*

@@ -1,5 +1,5 @@
 /*
- * This file is part of arc-desktop.
+ * This file is part of budgie-desktop.
  *
  * Copyright (C) 2015 Ikey Doherty
  *
@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Arc
+namespace Budgie
 {
 
 public abstract class DesktopManager : GLib.Object
@@ -17,14 +17,14 @@ public abstract class DesktopManager : GLib.Object
 
     public signal void panels_changed();
 
-    public virtual GLib.List<Arc.Toplevel?> get_panels()
+    public virtual GLib.List<Budgie.Toplevel?> get_panels()
     {
-        return new GLib.List<Arc.Toplevel?>();
+        return new GLib.List<Budgie.Toplevel?>();
     }
 
     public abstract uint slots_available();
     public abstract uint slots_used();
-    public abstract void set_placement(string uuid, Arc.PanelPosition position);
+    public abstract void set_placement(string uuid, Budgie.PanelPosition position);
     public abstract void set_size(string uuid, int size);
 
     public abstract void create_new_panel();

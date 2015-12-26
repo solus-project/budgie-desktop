@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-_Name=Arc Panel
+_Name=Budgie Panel
 _Comment=Launch other applications and provide various utilities to manage windows, show the time, etc.
-Exec=arc-panel
+Exec=budgie-panel
 Terminal=false
 Categories=GNOME;GTK;System;Core;
 NoDisplay=true
