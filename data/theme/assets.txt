@@ -1,0 +1,8 @@
+checkbox
+checkbox-active
+radio
+radio-active
+switch
+switch-active
+switch-hc
+switch-active-hc

@@ -1,0 +1,9 @@
+gvc/gvc-mixer-control.c
+panel/arc-panel.desktop.in
+session/arc-desktop.desktop.in
+panel/arc-panel.desktop.in.in
+raven/main_view.c
+raven/settings_view.c
+raven/sound.c
+panel/arc-panel.desktop.in
+session/arc-desktop.desktop.in

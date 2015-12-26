@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+        <gresource prefix="/com/solus-project/arc/raven">
+                <file preprocess="xml-stripblanks">settings.ui</file>
+                <file preprocess="xml-stripblanks">appearance.ui</file>
+                <file preprocess="xml-stripblanks">panel.ui</file>
+                <file preprocess="xml-stripblanks">applets.ui</file>
+                <file preprocess="xml-stripblanks">applet_settings.ui</file>
+                <file preprocess="xml-stripblanks">notification.ui</file>
+                <file preprocess="xml-stripblanks">notification_clone.ui</file>
+        </gresource>
+</gresources>

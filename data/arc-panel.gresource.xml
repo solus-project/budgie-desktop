@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+        <gresource prefix="/com/solus-project/arc/panel">
+                <file>theme/theme.css</file>
+                <file>theme/theme_hc.css</file>
+                <file>theme/assets/checkbox.png</file>
+                <file>theme/assets/checkbox@2.png</file>
+                <file>theme/assets/checkbox-active.png</file>
+                <file>theme/assets/checkbox-active@2.png</file>
+                <file>theme/assets/radio.png</file>
+                <file>theme/assets/radio@2.png</file>
+                <file>theme/assets/radio-active.png</file>
+                <file>theme/assets/radio-active@2.png</file>
+                <file>theme/assets/switch.png</file>
+                <file>theme/assets/switch@2.png</file>
+                <file>theme/assets/switch-active.png</file>
+                <file>theme/assets/switch-active@2.png</file>
+                <file>theme/assets/switch-hc.png</file>
+                <file>theme/assets/switch-hc@2.png</file>
+                <file>theme/assets/switch-active-hc.png</file>
+                <file>theme/assets/switch-active-hc@2.png</file>
+                <file>panel.ini</file>
+        </gresource>
+        <gresource prefix="/com/solus-project/arc/endsession">
+                <file>endsession.ui</file>
+        </gresource>
+</gresources>
