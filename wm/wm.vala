@@ -166,6 +166,14 @@ public class ArcWM : Meta.Plugin
         });
     }
 
+
+    void launch_menu(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        on_overlay_key();
+    }
+
     public override void start()
     {
         var screen = this.get_screen();
@@ -194,6 +202,10 @@ public class ArcWM : Meta.Plugin
 
         Bus.watch_name(BusType.SESSION, PANEL_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_panel, lost_panel);
+
+
+
+        Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
 
         shim = new ShellShim(this);
         shim.serve();
