@@ -278,7 +278,11 @@ public class NotificationWindow : Gtk.Window
             string action = actions[i];
             string local = actions[++i];
             if (icons) {
-                button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
+                if (!action.has_suffix("-symbolic")) {
+                    button = new Gtk.Button.from_icon_name("%s-symbolic".printf(action), Gtk.IconSize.MENU);
+                } else {
+                    button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
+                }
                 /* set action; */
             } else {
                 button = new Gtk.Button.with_label(local);
