@@ -29,12 +29,21 @@ public class NotificationWindow : Gtk.Window
     public NotificationWindow()
     {
         Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+        resizable = false;
+        skip_pager_hint = true;
+        skip_taskbar_hint = true;
 
         Gdk.Visual? vis = screen.get_rgba_visual();
         if (vis != null) {
             this.set_visual(vis);
         }
         cancel = new GLib.Cancellable();
+
+        var title = new Gtk.EventBox();
+        set_titlebar(title);
+        title.get_style_context().remove_class("titlebar");
+
+        set_default_size(NOTIFICATION_SIZE, -1);
     }
 
     public uint32 id;
@@ -168,7 +177,21 @@ public class NotificationWindow : Gtk.Window
             expire_id = 0;
         }
     }
+
+    public override void get_preferred_width(out int min, out int nat)
+    {
+        min = nat = NOTIFICATION_SIZE;
+    }
+
+    public override void get_preferred_width_for_height(int h, out int min, out int nat)
+    {
+        min = nat = NOTIFICATION_SIZE;
+    }
 }
+
+public static const int BUFFER_ZONE = 10;
+public static const int INITIAL_BUFFER_ZONE = 100;
+public static const int NOTIFICATION_SIZE = 400;
 
 [DBus (name = "org.freedesktop.Notifications")]
 public class NotificationsView : Gtk.Box
@@ -217,6 +240,7 @@ public class NotificationsView : Gtk.Box
         widget.stop_decay();
 
         notifications.remove(widget.id);
+        queue.remove(widget);
         widget.destroy();
         return true;
     }
@@ -228,6 +252,7 @@ public class NotificationsView : Gtk.Box
         ++notif_id;
 
         unowned NotificationWindow? pack = null;
+        bool configure = false;
 
         if (replaces_id > 0) {
             pack = notifications.lookup(replaces_id);
@@ -246,6 +271,7 @@ public class NotificationsView : Gtk.Box
             npack.set_data("npack_id", nid);
             notifications.insert(notif_id, npack);
             pack = npack;
+            configure = true;
         } else {
             notifications.steal(notif_id);
             notifications.insert(notif_id, pack);
@@ -254,12 +280,47 @@ public class NotificationsView : Gtk.Box
         yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, actions,
             hints, expire);
 
-        /* Do some placement please*/
-        pack.begin_decay();
+        if (configure) {
+            configure_window(pack);
+        } else {
+            pack.begin_decay();
+        }
         
         return notif_id;
     }
-    
+
+    private void configure_window(NotificationWindow? window)
+    {
+        int x = 0;
+        int y = 0;
+        Gdk.Rectangle rect;
+
+        unowned NotificationWindow? tail = queue.peek_tail();
+        var screen = Gdk.Screen.get_default();
+
+        int mon = screen.get_primary_monitor();
+
+        screen.get_monitor_geometry(mon, out rect);
+
+        if (tail != null) {
+            int nx;
+            int ny;
+            tail.get_position(out nx, out ny);
+            x = nx;
+            y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+        } else {
+            x = (rect.x+rect.width) - NOTIFICATION_SIZE;
+            x -= BUFFER_ZONE; /* Don't touch lip of next desktop */
+            y = (rect.y-rect.height) + INITIAL_BUFFER_ZONE;
+        }
+
+        queue.push_tail(window);
+        window.move(x, y);
+        window.show_all();
+        window.begin_decay();
+    }
+
+
     /* Let the client know the notification was closed */
     public signal void NotificationClosed(uint32 id, uint32 reason);
     public signal void ActionInvoked(uint32 id, string action_key);
@@ -288,6 +349,7 @@ public class NotificationsView : Gtk.Box
         pack_start(header, false, false, 0);
 
         notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
+        queue = new GLib.Queue<NotificationWindow?>();
 
         show_all();
 

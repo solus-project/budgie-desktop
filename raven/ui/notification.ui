@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">window-close-symbolic</property>
+  </object>
   <template class="ArcNotificationWindow" parent="GtkWindow">
     <property name="can_focus">False</property>
     <child>
@@ -18,6 +23,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
+                <property name="margin_left">8</property>
+                <property name="margin_right">8</property>
                 <property name="margin_top">8</property>
                 <property name="pixel_size">48</property>
                 <property name="icon_name">mail-unread-symbolic</property>
@@ -37,6 +44,10 @@
                 <property name="margin_top">4</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Notification Title</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="ellipsize">start</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
@@ -54,6 +65,9 @@
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Notification Body..</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -111,9 +125,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">window-close-symbolic</property>
-  </object>
 </interface>
