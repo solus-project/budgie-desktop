@@ -8,7 +8,7 @@
     </key>
 
     <key type="b" name="larger-icons">
-      <default>true</default>
+      <default>false</default>
       <summary>Use larger icons by default</summary>
       <description>Use larger icons by default</description>
     </key>
