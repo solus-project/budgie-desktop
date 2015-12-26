@@ -157,13 +157,11 @@ let's be fair, it does kinda look better up top.
 TODO
 ----
 
- - [ ] Fix Raven glitch when adding a new panel
+ - [x] Fix Raven glitch when adding a new panel
  - [x] Add applet manipulation
  - [x] Allow adding/removing applets
  - [x] Port old applets into tree
- - [ ] Convert Raven modules into actual modules
  - [ ] Complete WM
- - [ ] Add defaults file for vendors to specify default configuration.
  - [ ] Merge into Budgie (preserving git history)
  - [ ] Tag release
  - [ ] Get translations in order
