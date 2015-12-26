@@ -380,6 +380,7 @@ public class NotificationsView : Gtk.Box
         }
 
         update_child_count();
+        Raven.get_instance().UnreadNotifications();
 
         this.remove_notification(widget.id);
     }
@@ -521,6 +522,7 @@ public class NotificationsView : Gtk.Box
         }
 
         update_child_count();
+        Raven.get_instance().ReadNotifications();
     }
 
     [DBus (visible = false)]

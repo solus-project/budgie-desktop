@@ -27,6 +27,8 @@ public interface RavenRemote : Object
     public abstract async void ToggleNotification() throws Error;
     public signal void NotificationsChanged();
     public abstract async uint GetNotificationCount() throws Error;
+    public signal void UnreadNotifications();
+    public signal void ReadNotifications();
 }
 
 public class NotificationsApplet : Arc.Applet
@@ -42,9 +44,22 @@ public class NotificationsApplet : Arc.Applet
         try {
             raven_proxy = Bus.get_proxy.end(res);
             raven_proxy.NotificationsChanged.connect(on_notifications_changed);
+            raven_proxy.UnreadNotifications.connect(on_notifications_unread);
+            raven_proxy.ReadNotifications.connect(on_notifications_read);
+            raven_proxy.GetNotificationCount.begin(on_get_count);
         } catch (Error e) {
             warning("Failed to gain Raven proxy: %s", e.message);
         }
+    }
+
+    void on_notifications_read()
+    {
+        this.icon.get_style_context().remove_class("alert");
+    }
+
+    void on_notifications_unread()
+    {
+        this.icon.get_style_context().add_class("alert");
     }
 
     void on_get_count(GLib.Object? o, AsyncResult? res)
@@ -58,13 +73,13 @@ public class NotificationsApplet : Arc.Applet
             return;
         }
 
-        if (count > 0) {
-            this.icon.get_style_context().add_class("alert");
+        if (count > 1) {
+            this.icon.set_tooltip_text("%u unread notifications".printf(count));
+        } else if (count == 0) {
+            this.icon.set_tooltip_text("%1 unread notification");
         } else {
-            this.icon.get_style_context().remove_class("alert");
+            this.icon.set_tooltip_text("No unread notifications");
         }
-
-        /* Set the classes here, depending on the count. */
     }
 
     void on_notifications_changed()

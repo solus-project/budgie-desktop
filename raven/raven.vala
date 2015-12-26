@@ -64,6 +64,9 @@ public class RavenIface
         return this.notifications;
     }
 
+    public signal void UnreadNotifications();
+    public signal void ReadNotifications();
+
     public string get_version()
     {
         return "1";
@@ -115,6 +118,18 @@ public class Raven : Gtk.Window
         }
         public get {
             return scale;
+        }
+    }
+
+    public void ReadNotifications() {
+        if (iface != null) {
+            iface.ReadNotifications();
+        }
+    }
+
+    public void UnreadNotifications() {
+        if (iface != null) {
+            iface.UnreadNotifications();
         }
     }
 
