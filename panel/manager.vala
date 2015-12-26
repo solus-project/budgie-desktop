@@ -324,6 +324,20 @@ public class PanelManager : DesktopManager
         do_setup();
     }
 
+    void on_settings_changed(string key)
+    {
+        if (key != "builtin-theme") {
+            return;
+        }
+        if (settings.get_boolean(key)) {
+            this.current_theme_uri = "resource://com/solus-project/arc/panel/theme/theme.css";
+        } else {
+            this.current_theme_uri = null;
+        }
+
+        on_theme_changed();
+    }
+
     /**
      * Initial setup, once we've owned the dbus name
      * i.e. no risk of dying
@@ -338,6 +352,8 @@ public class PanelManager : DesktopManager
         settings = new GLib.Settings(Arc.ROOT_SCHEMA);
         var gtksettings = Gtk.Settings.get_default();
         this.settings.bind(Arc.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
+
+        settings.changed.connect(on_settings_changed);
 
         raven = new Arc.Raven(this);
 
@@ -371,11 +387,19 @@ public class PanelManager : DesktopManager
         });
     }
 
-    void set_css_from_uri(string uri)
+    void set_css_from_uri(string? uri)
     {
         var screen = Gdk.Screen.get_default();
         Gtk.CssProvider? new_provider = null;
 
+        if (uri == null) {
+            if (this.css_provider != null) {
+                Gtk.StyleContext.remove_provider_for_screen(screen, this.css_provider);
+                this.css_provider = null;
+            }
+            return;
+        }
+    
         try {
             var f = File.new_for_uri(uri);
             new_provider = new Gtk.CssProvider();
@@ -401,7 +425,7 @@ public class PanelManager : DesktopManager
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri("resource://com/solus-project/arc/panel/theme/theme_hc.css");
+            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/arc/panel/theme/theme_hc.css");
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);

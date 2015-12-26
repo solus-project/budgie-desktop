@@ -70,5 +70,10 @@
       <summary>Use dark theme within Arc Desktop</summary>
       <description>Use the dark theme within Arc, aka night mode</description>
     </key>
+    <key type="b" name="builtin-theme">
+      <default>true</default>
+      <summary>Enable the built-in theming</summary>
+      <description>Enable the built-in theming, or disable to let themes override it.</description>
+    </key>
   </schema>
 </schemalist>

@@ -714,6 +714,9 @@ public class AppearanceSettings : Gtk.Box
     [GtkChild]
     private Gtk.Switch? switch_dark;
 
+    [GtkChild]
+    private Gtk.Switch? switch_builtin;
+
     private GLib.Settings ui_settings;
     private GLib.Settings arc_settings;
 
@@ -728,6 +731,7 @@ public class AppearanceSettings : Gtk.Box
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
         arc_settings = new GLib.Settings("com.solus-project.arc-panel");
         arc_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
+        arc_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
     }
 
     public void load_themes()
