@@ -155,8 +155,11 @@ AC_MSG_RESULT([
 
         budgie-menu:            always
         clock:                  always
-        notifications:          always
+        icon-tasklist           ${have_wnck}
+        notifications           always
         separator:              always
+        spacer:                 always
+        show-desktop:           ${have_wnck}
         tasklist:               ${have_wnck}
         status:                 ${have_upower}
         tray:                   ${have_natray}
