@@ -86,6 +86,7 @@ public class Panel : Arc.Toplevel
     };
 
     int current_icon_size;
+    int current_small_icon_size;
 
     public bool activate_action(int remote_action)
     {
@@ -257,10 +258,13 @@ public class Panel : Arc.Toplevel
     void update_sizes()
     {
         int size = icon_sizes[0];
+        int small_size = icon_sizes[0];
+
         unowned string? key = null;
         unowned Arc.AppletInfo? info = null;
 
         for (int i = 1; i < icon_sizes.length; i++) {
+            small_size = icon_sizes[i-1];
             if (icon_sizes[i] > intended_size - 5) {
                 break;
             }
@@ -268,10 +272,11 @@ public class Panel : Arc.Toplevel
         }
 
         this.current_icon_size = size;
+        this.current_small_icon_size = small_size;
 
         var iter = HashTableIter<string?,Arc.AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
-            info.applet.panel_size_changed(intended_size, size);
+            info.applet.panel_size_changed(intended_size, size, small_size);
         }
     }
 
@@ -550,7 +555,7 @@ public class Panel : Arc.Toplevel
         this.set_applets();
 
         info.applet.update_popovers(this.popover_manager);
-        info.applet.panel_size_changed(intended_size, this.current_icon_size);
+        info.applet.panel_size_changed(intended_size, this.current_icon_size, this.current_small_icon_size);
         pack_target.pack_start(info.applet, false, false, 0);
 
         pack_target.child_set(info.applet, "position", info.position);

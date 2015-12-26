@@ -47,7 +47,7 @@ namespace Arc {
 
         public virtual void invoke_action(Arc.PanelAction action);
 
-        public signal void panel_size_changed(int panel_size, int icon_size);
+        public signal void panel_size_changed(int panel_size, int icon_size, int small_icon_size);
 
     }
 
