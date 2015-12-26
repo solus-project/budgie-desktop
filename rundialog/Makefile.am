@@ -9,6 +9,10 @@ BUILT_SOURCES = \
 CLEANFILES = \
 	$(BUILT_SOURCES)
 
+EXTRA_DIST = \
+	rundialog.gresource.xml \
+	rundialog-style.css
+
 # resources
 budgie-run-dialog-resources.h: $(top_srcdir)/rundialog/rundialog.gresource.xml $(rundialog_resources)
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/rundialog --generate-header --c-name budgie_run_dialog $<

@@ -28,7 +28,7 @@ plugin_DATA += \
 EXTRA_DIST += \
 	$(plugin_DATA) \
 	com.solus-project.budgie-menu.gschema.xml \
-	plugin.resource.xml \
+	plugin.gresource.xml \
 	settings.ui
 
 
