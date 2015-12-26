@@ -7,18 +7,36 @@ pkglib_LTLIBRARIES =
 plugindir = $(MODULEDIR)
 plugin_DATA =
 
+plugin_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist  --generate-dependencies $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml)
+
+# resources
+plugin-resources.h: $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist --generate-header --c-name budgie_menu $<
+
+plugin-resources.c: $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml $(plugin_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist --generate-source --c-name budgie_menu $<
+
+BUILT_SOURCES = \
+	plugin-resources.h \
+	plugin-resources.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
 
 plugin_DATA += \
 	IconTasklistApplet.plugin
 
 EXTRA_DIST += \
 	$(plugin_DATA) \
-	com.solus-project.icon-tasklist.gschema.xml
+	com.solus-project.icon-tasklist.gschema.xml \
+	plugin.gresource.xml
 
 plugin_LTLIBRARIES = libicontasklistapplet.la
 
 libicontasklistapplet_la_SOURCES = \
-	IconTasklistApplet.vala
+	IconTasklistApplet.vala \
+	plugin-resources.h \
+	plugin-resources.c
 
 libicontasklistapplet_la_CFLAGS = \
 	$(ARC_BASE_CFLAGS) \
@@ -44,7 +62,9 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg arc-1.0 \
-	--vapidir=${top_srcdir}/plugin
+	--vapidir=${top_srcdir}/plugin \
+	--target-glib=2.38 \
+	--gresources=${srcdir}/plugin.gresource.xml
 
 gsettings_SCHEMAS = \
 	com.solus-project.icon-tasklist.gschema.xml
