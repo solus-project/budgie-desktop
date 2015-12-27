@@ -97,6 +97,7 @@ public class DesktopHelper : Object
         simpletons["nautilus"] = "org.gnome.Nautilus";
         simpletons["totem"] = "org.gnome.Totem";
         simpletons["gedit"] = "org.gnome.gedit";
+        simpletons["calibre-gui"] = "calibre";
 
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(()=> {
