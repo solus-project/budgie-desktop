@@ -558,7 +558,7 @@ public class BudgieWM : Meta.Plugin
             screen_group.add_child(this.tile_preview);
         }
 
-        if (tile_preview.is_visible() &&
+        if (tile_preview.visible &&
             tile_preview.tile_rect.x == tile_rect.x &&
             tile_preview.tile_rect.y == tile_rect.y &&
             tile_preview.tile_rect.width == tile_rect.width &&
