@@ -122,7 +122,6 @@ public class BudgieMenuApplet : Budgie.Applet
         on_settings_changed("enable-menu-label");
         on_settings_changed("menu-icon");
         on_settings_changed("menu-label");
-        on_settings_changed("overlay-key");
 
         panel_size_changed.connect((p,i,s)=> {
             img.pixel_size = (int)i;
