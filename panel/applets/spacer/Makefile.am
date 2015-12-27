@@ -25,7 +25,8 @@ CLEANFILES = \
 plugin_DATA += \
 	SpacerApplet.plugin \
 	com.solus-project.spacer.gschema.xml \
-	plugin.gresource.xml
+	plugin.gresource.xml \
+	settings.ui
 
 EXTRA_DIST += \
 	$(plugin_DATA)

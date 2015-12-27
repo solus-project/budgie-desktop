@@ -8,7 +8,8 @@ EXTRA_DIST = \
 	ui/applets.ui \
 	ui/applet_settings.ui \
 	ui/notification.ui \
-	ui/notification_clone.ui
+	ui/notification_clone.ui \
+	ui/settings.ui
 
 raven_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/raven/ui --generate-dependencies $(top_srcdir)/raven/ui/budgie-raven.gresource.xml)
 

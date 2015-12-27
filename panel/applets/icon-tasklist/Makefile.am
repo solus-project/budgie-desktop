@@ -29,7 +29,8 @@ plugin_DATA += \
 EXTRA_DIST += \
 	$(plugin_DATA) \
 	com.solus-project.icon-tasklist.gschema.xml \
-	plugin.gresource.xml
+	plugin.gresource.xml \
+	settings.ui
 
 plugin_LTLIBRARIES = libicontasklistapplet.la
 
