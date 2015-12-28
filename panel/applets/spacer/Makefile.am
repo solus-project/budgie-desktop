@@ -23,13 +23,13 @@ CLEANFILES = \
 
 
 plugin_DATA += \
-	SpacerApplet.plugin \
+	SpacerApplet.plugin
+
+EXTRA_DIST += \
+	$(plugin_DATA) \
 	com.solus-project.spacer.gschema.xml \
 	plugin.gresource.xml \
 	settings.ui
-
-EXTRA_DIST += \
-	$(plugin_DATA)
 
 plugin_LTLIBRARIES = libspacerapplet.la
 
