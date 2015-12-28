@@ -9,15 +9,15 @@ AC_CONFIG_MACRO_DIR([m4])
 
 GLIB_GSETTINGS
 
-m4_define([mutter_required_version], [3.18.0])
-m4_define([glib_required_version], [2.44.0])
+m4_define([mutter_required_version], [3.16.0])
+m4_define([glib_required_version], [2.42.0])
 m4_define([gtk_required_version], [3.16.0])
 m4_define([peas_required_version], [1.8.0])
-m4_define([gdesktop_required_version], [3.18.0])
+m4_define([gdesktop_required_version], [3.16.0])
 m4_define([pulse_required_version], [2.0])
-m4_define([gsettings_required_version], [3.18.0])
+m4_define([gsettings_required_version], [3.16.0])
 
-GOBJECT_INTROSPECTION_CHECK([1.44.0])
+GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 AC_SUBST(VALAFLAGS)
