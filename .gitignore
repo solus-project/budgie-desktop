@@ -65,6 +65,7 @@ budgie-panel-resources.*
 /session/budgie-desktop.desktop.in
 /session/budgie-desktop.session
 /session/budgie-desktop.session.in
+/session/budgie-desktop-nm-applet.desktop
 
 /wm/budgie-wm
 /wm/budgie-wm.desktop

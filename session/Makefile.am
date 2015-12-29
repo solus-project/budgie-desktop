@@ -13,13 +13,15 @@
 EXTRA_DIST = \
 	budgie-desktop.session.in.in \
 	budgie-desktop.desktop.in.in \
-	budgie-desktop.in
+	budgie-desktop.in \
+	budgie-desktop-nm-applet.desktop.in
 
 CLEANFILES = \
 	budgie-desktop.session.in \
 	budgie-desktop.session \
 	budgie-desktop.desktop.in \
-	budgie-desktop.desktop
+	budgie-desktop.desktop \
+	budgie-desktop-nm-applet.desktop
 
 DISTCLEANFILES = \
 	$(CLEANFILES)
@@ -35,6 +37,11 @@ xsession_DATA = \
 gnomesessiondir = $(datadir)/gnome-session/sessions
 gnomesession_DATA = \
 	budgie-desktop.session
+
+# TODO: Permit stateless on Solus
+autostartdir = $(sysconfdir)/xdg/autostart
+autostart_DATA = \
+	budgie-desktop-nm-applet.desktop
 
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@

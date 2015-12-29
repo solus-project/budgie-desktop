@@ -28,5 +28,7 @@ else
   autoreconf --force --install || exit $?
 fi
 
+DEF_OPTS="--prefix=/usr --sysconfdir=/etc"
+
 cd "$prevdir"
-test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
+test -n "$NOCONFIGURE" || "$srcdir/configure" ${DEF_OPTS} "$@"

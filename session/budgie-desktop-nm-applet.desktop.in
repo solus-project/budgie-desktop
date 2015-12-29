@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Network (Budgie Desktop)
+Comment=Manage your network connections
+Icon=nm-device-wireless
+Exec=nm-applet
+TryExec=nm-applet
+Terminal=false
+Type=Application
+NoDisplay=true
+OnlyShowIn=Budgie;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=NetworkManager
+X-GNOME-Bugzilla-Component=nm-applet
+X-GNOME-UsesNotifications=true
