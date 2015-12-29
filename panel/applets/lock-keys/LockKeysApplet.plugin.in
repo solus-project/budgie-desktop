@@ -1,7 +1,7 @@
 [Plugin]
 Module=lockkeysapplet.so
 Name=Lock Keys Indicator
-Description=Lock Keys Indicator
+_Description=Lock Keys Indicator
 Authors=Ikey Doherty
 Copyright=Copyright © 2015 Ikey Doherty
 Website=https://solus-project.com

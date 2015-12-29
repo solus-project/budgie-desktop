@@ -1,8 +1,8 @@
 [Plugin]
-Module=tasklistapplet.so
-Name=Task List
-Description=Tasklist
+Module=spacerapplet.so
+Name=Spacer
+_Description=Spacer
 Authors=Ikey Doherty
 Copyright=Copyright © 2015 Ikey Doherty
 Website=https://solus-project.com
-Icon=tab-new-symbolic
+Icon=format-justify-fill-symbolic

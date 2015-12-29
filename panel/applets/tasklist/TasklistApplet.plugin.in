@@ -1,7 +1,7 @@
 [Plugin]
-Module=icontasklistapplet.so
-Name=Icon Task List
-Description=Icon Tasklist
+Module=tasklistapplet.so
+Name=Task List
+_Description=Task List
 Authors=Ikey Doherty
 Copyright=Copyright © 2015 Ikey Doherty
 Website=https://solus-project.com
