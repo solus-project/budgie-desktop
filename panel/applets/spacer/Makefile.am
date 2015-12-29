@@ -5,6 +5,12 @@ pkglib_LTLIBRARIES =
 plugindir = $(MODULEDIR)
 plugin_DATA =
 
+%.plugin: %.plugin.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po)
+	$(AM_V_GEN) \
+	$(MKDIR_P) "$(dir $@)"; \
+	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+
 plugin_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/panel/applets/spacer  --generate-dependencies $(top_srcdir)/panel/applets/spacer/plugin.gresource.xml)
 
 # resources
@@ -26,7 +32,7 @@ plugin_DATA += \
 	SpacerApplet.plugin
 
 EXTRA_DIST += \
-	$(plugin_DATA) \
+	SpacerApplet.plugin.in \
 	com.solus-project.spacer.gschema.xml \
 	plugin.gresource.xml \
 	settings.ui

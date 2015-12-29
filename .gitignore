@@ -83,3 +83,6 @@ plugin-resources.h
 rundialog/*.c
 rundialog/*.h
 budgie-run-dialog
+
+# Applet translations
+/panel/applets/*/*.plugin

@@ -7,12 +7,17 @@ pkglib_LTLIBRARIES =
 plugindir = $(MODULEDIR)
 plugin_DATA =
 
+%.plugin: %.plugin.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po)
+	$(AM_V_GEN) \
+	$(MKDIR_P) "$(dir $@)"; \
+	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
 
 plugin_DATA += \
 	StatusApplet.plugin
 
 EXTRA_DIST += \
-	$(plugin_DATA)
+	StatusApplet.plugin.in
 
 plugin_LTLIBRARIES = libstatusapplet.la
 
