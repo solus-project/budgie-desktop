@@ -3,11 +3,11 @@ raven/main_view.vala
 raven/settings_view.vala
 raven/notifications_view.vala
 raven/sound.vala
-[type: gettext/keys]panel/applets/spacer/settings.ui
-[type: gettext/keys]raven/ui/settings.ui
-[type: gettext/keys]raven/ui/applets.ui
-[type: gettext/keys]raven/ui/notification.ui
-[type: gettext/keys]raven/ui/notification_clone.ui
+[type: gettext/glade]panel/applets/spacer/settings.ui
+[type: gettext/glade]raven/ui/settings.ui
+[type: gettext/glade]raven/ui/applets.ui
+[type: gettext/glade]raven/ui/notification.ui
+[type: gettext/glade]raven/ui/notification_clone.ui
 [type: gettext/glade]raven/ui/appearance.ui
 [type: gettext/glade]raven/ui/panel.ui
 
@@ -27,3 +27,17 @@ panel/applets/show-desktop/ShowDesktopApplet.vala
 
 wm/windowmenu.vala
 wm/wm.vala
+
+
+[type: gettext/keys]panel/applets/clock/ClockApplet.plugin.in
+[type: gettext/keys]panel/applets/show-desktop/ShowDesktopApplet.plugin.in
+[type: gettext/keys]panel/applets/tasklist/TasklistApplet.plugin.in
+[type: gettext/keys]panel/applets/icon-tasklist/IconTasklistApplet.plugin.in
+[type: gettext/keys]panel/applets/lock-keys/LockKeysApplet.plugin.in
+[type: gettext/keys]panel/applets/spacer/SpacerApplet.plugin.in
+[type: gettext/keys]panel/applets/workspaces/WorkspacesApplet.plugin.in
+[type: gettext/keys]panel/applets/tray/TrayApplet.plugin.in
+[type: gettext/keys]panel/applets/status/StatusApplet.plugin.in
+[type: gettext/keys]panel/applets/budgie-menu/BudgieMenu.plugin.in
+[type: gettext/keys]panel/applets/separator/SeparatorApplet.plugin.in
+[type: gettext/keys]panel/applets/notifications/NotificationsApplet.plugin.in
