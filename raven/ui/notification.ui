@@ -74,7 +74,7 @@
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
-                <property name="label">Notification Body..</property>
+                <property name="label"> </property>
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="xalign">0</property>
