@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 00:28+0000\n"
+"POT-Creation-Date: 2015-12-29 01:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgid "Applets"
 msgstr ""
 
 #: ../raven/main_view.vala:75
+#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
 msgstr ""
 
@@ -95,6 +96,22 @@ msgstr ""
 #. * vi: set shiftwidth=4 tabstop=4 expandtab:
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #.
+#: ../panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr ""
+
+#: ../raven/ui/settings.ui.h:1
+msgid "Budgie Settings"
+msgstr ""
+
+#: ../raven/ui/settings.ui.h:2
+msgid "Exit"
+msgstr ""
+
+#: ../raven/ui/applets.ui.h:1
+msgid "Add new applet"
+msgstr ""
+
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
 msgstr ""
@@ -239,4 +256,61 @@ msgstr ""
 
 #: ../wm/wm.vala:372
 msgid "Settings"
+msgstr ""
+
+#. End namespace
+#.
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#.
+#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr ""
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr ""
+
+#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr ""
+
+#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr ""
+
+#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr ""
+
+#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr ""
+
+#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr ""
+
+#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr ""
+
+#: ../panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr ""
+
+#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr ""
+
+#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
 msgstr ""
