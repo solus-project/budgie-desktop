@@ -33,7 +33,7 @@ plugin_DATA += \
 	IconTasklistApplet.plugin
 
 EXTRA_DIST += \
-	IconTasklistApplet.plugin \
+	IconTasklistApplet.plugin.in \
 	com.solus-project.icon-tasklist.gschema.xml \
 	plugin.gresource.xml \
 	settings.ui

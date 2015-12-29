@@ -18,3 +18,16 @@ raven/sound.c
 wm/windowmenu.c
 wm/wm.c
 
+
+./panel/applets/clock/ClockApplet.plugin
+./panel/applets/show-desktop/ShowDesktopApplet.plugin
+./panel/applets/tasklist/TasklistApplet.plugin
+./panel/applets/icon-tasklist/IconTasklistApplet.plugin
+./panel/applets/lock-keys/LockKeysApplet.plugin
+./panel/applets/spacer/SpacerApplet.plugin
+./panel/applets/workspaces/WorkspacesApplet.plugin
+./panel/applets/tray/TrayApplet.plugin
+./panel/applets/status/StatusApplet.plugin
+./panel/applets/budgie-menu/BudgieMenu.plugin
+./panel/applets/separator/SeparatorApplet.plugin
+./panel/applets/notifications/NotificationsApplet.plugin
