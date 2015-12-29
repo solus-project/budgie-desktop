@@ -31,7 +31,7 @@ public class CategoryButton : Gtk.RadioButton
         } else {
             // Special case, "All"
             img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.INVALID);
-            lab = new Gtk.Label("All");
+            lab = new Gtk.Label(_("All"));
         }
         img.pixel_size = icon_size;
         lab.set_alignment(0.0f, 0.5f);

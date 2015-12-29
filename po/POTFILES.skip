@@ -9,6 +9,7 @@ aven/ui/notification.ui
 raven/ui/notification_clone.ui
 
 panel/applets/clock/ClockApplet.c
+panel/applets/budgie-menu/BudgieMenuWindow.c
 panel/applets/lock-keys/LockKeysApplet.c
 panel/applets/notifications/NotificationsApplet.c
 panel/applets/show-desktop/ShowDesktopApplet.c
