@@ -343,7 +343,6 @@ public class Panel : Budgie.Toplevel
     {
         string[]? applets = settings.get_strv(Budgie.PANEL_KEY_APPLETS);
         if (applets == null || applets.length == 0) {
-            message("No applets configured for panel %s", this.uuid);
             return;
         }
 
@@ -422,8 +421,6 @@ public class Panel : Budgie.Toplevel
         int c_index = -1;
         int e_index = -1;
         int index = 0;
-
-        message("Creating default panel layout from config name: %s", name);
 
         try {
             if (!config.has_key(name, "Children")) {
@@ -528,11 +525,8 @@ public class Panel : Budgie.Toplevel
         unowned Gtk.Box? pack_target = null;
         Budgie.AppletInfo? initial_info = null;
 
-        message("adding %s: %s", info.name, info.uuid);
-
         initial_info = initial_config.lookup(info.uuid);
         if (initial_info != null) {
-            message("Preconfiguring applet %s", info.uuid);
             info.alignment = initial_info.alignment;
             info.position = initial_info.position;
             initial_config.remove(info.uuid);

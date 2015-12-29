@@ -373,16 +373,12 @@ public class PanelManager : DesktopManager
         if (!load_panels()) {
             message("Creating default panel layout");
             create_default();
-        } else {
-            message("Loaded existing configuration");
         }
 
         register_with_session.begin((o,res)=> {
             bool success = register_with_session.end(res);
             if (!success) {
                 message("Failed to register with Session manager");
-            } else {
-                message("Successfully registered with Session manager");
             }
         });
     }
