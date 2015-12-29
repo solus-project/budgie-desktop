@@ -1,13 +1,29 @@
 panel/main.vala
-[type: gettext/glade]raven/ui/appearance.ui
-[type: gettext/glade]raven/ui/panel.ui
 raven/main_view.vala
 raven/settings_view.vala
+raven/notifications_view.vala
 raven/sound.vala
-session/budgie-desktop.desktop.in.in
-[type: gettext/keys]session/budgie-desktop.session.in.in
-panel/applets/clock/ClockApplet.vala
-[type: gettext/keys]panel/applets/icon-tasklist/settings.ui
 [type: gettext/keys]panel/applets/spacer/settings.ui
 [type: gettext/keys]raven/ui/settings.ui
+[type: gettext/keys]raven/ui/applets.ui
+[type: gettext/keys]raven/ui/notification.ui
+[type: gettext/keys]raven/ui/notification_clone.ui
+[type: gettext/glade]raven/ui/appearance.ui
+[type: gettext/glade]raven/ui/panel.ui
 
+session/budgie-desktop.desktop.in.in
+[type: gettext/keys]session/budgie-desktop.session.in.in
+
+[type: gettext/keys]data/endsession.ui
+
+
+panel/applets/budgie-menu/settings.ui
+panel/applets/clock/ClockApplet.vala
+[type: gettext/keys]panel/applets/icon-tasklist/settings.ui
+panel/applets/lock-keys/LockKeysApplet.vala
+panel/applets/notifications/NotificationsApplet.vala
+panel/applets/show-desktop/ShowDesktopApplet.vala
+
+
+wm/windowmenu.vala
+wm/wm.vala

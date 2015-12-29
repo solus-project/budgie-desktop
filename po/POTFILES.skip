@@ -4,3 +4,17 @@ session/budgie-desktop.desktop.in
 panel/budgie-panel.desktop.in.in
 panel/budgie-panel.desktop.in
 session/budgie-desktop.desktop.in
+
+
+panel/applets/clock/ClockApplet.c
+panel/applets/lock-keys/LockKeysApplet.c
+panel/applets/notifications/NotificationsApplet.c
+panel/applets/show-desktop/ShowDesktopApplet.c
+
+raven/main_view.c
+raven/notifications_view.c
+raven/settings_view.c
+raven/sound.c
+wm/windowmenu.c
+wm/wm.c
+
