@@ -104,7 +104,7 @@ public class AppletPicker : Gtk.Box {
         unowned Peas.PluginInfo? after_info = after.get_child().get_data("info");
 
         if (before_info != null && after_info != null ) {
-            return GLib.strcmp(before_info.get_name(), after_info.get_name());
+            return GLib.strcmp(before_info.get_description(), after_info.get_description());
         }
         return 0;
     }
@@ -127,7 +127,7 @@ public class AppletPicker : Gtk.Box {
             widgem.pack_start(img, false, false, 0);
             widgem.set_data("info", info);
 
-            var label = new Gtk.Label(info.get_name());
+            var label = new Gtk.Label(info.get_description());
             widgem.pack_start(label, true, true, 0);
             label.halign = Gtk.Align.START;
 
@@ -484,7 +484,7 @@ public class PanelEditor : Gtk.Box
         widgem.pack_start(img, false, false, 0);
         widgem.set_data("ainfo", applet);
 
-        var label = new Gtk.Label(applet.name);
+        var label = new Gtk.Label(applet.description);
         widgem.pack_start(label, true, true, 0);
         label.halign = Gtk.Align.START;
 

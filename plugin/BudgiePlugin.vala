@@ -137,6 +137,9 @@ public class AppletInfo : GLib.Object
     /** Instance name */
     public string name { public get; protected set; }
 
+    /** Plugin description/display-name */
+    public string description { public get; protected set; }
+
     public string uuid { public get; protected set; }
 
     /** Which panel region to use */
@@ -157,6 +160,7 @@ public class AppletInfo : GLib.Object
         if (plugin_info != null) {
             icon = plugin_info.get_icon_name();
             this.name = plugin_info.get_name();
+            this.description = plugin_info.get_description();
         }
         this.uuid = uuid;
         if (settings != null) {

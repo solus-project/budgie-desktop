@@ -60,6 +60,7 @@ namespace Budgie {
         public Budgie.Applet applet { get; set; }
 
         public string icon {  get; set; }
+        public string description { get; set; }
 
         public string name { get;  set; }
 
