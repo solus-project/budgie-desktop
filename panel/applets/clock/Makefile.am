@@ -16,6 +16,12 @@ plugin_DATA += \
 EXTRA_DIST += \
 	ClockApplet.plugin.in
 
+CLEANFILES = \
+	ClockApplet.plugin
+
+DISTCLEANFILES = \
+	ClockApplet.plugin
+	
 plugin_LTLIBRARIES = libclockapplet.la
 
 libclockapplet_la_SOURCES = \

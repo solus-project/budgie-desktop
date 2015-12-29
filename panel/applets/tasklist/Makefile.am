@@ -13,6 +13,12 @@ plugin_DATA =
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 
+CLEANFILES = \
+	TasklistApplet.plugin
+
+DISTCLEANFILES = \
+	TasklistApplet.plugin
+
 plugin_DATA += \
 	TasklistApplet.plugin
 

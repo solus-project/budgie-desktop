@@ -27,7 +27,11 @@ BUILT_SOURCES = \
 	plugin-resources.c
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) \
+	IconTasklistApplet.plugin
+
+DISTCLEANFILES = \
+	IconTasklistApplet.plugin
 
 plugin_DATA += \
 	IconTasklistApplet.plugin

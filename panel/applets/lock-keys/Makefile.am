@@ -11,6 +11,12 @@ plugin_DATA =
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 
+CLEANFILES = \
+	LockKeysApplet.plugin
+
+DISTCLEANFILES = \
+	LockKeysApplet.plugin
+
 plugin_DATA += \
 	LockKeysApplet.plugin
 

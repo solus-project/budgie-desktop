@@ -25,7 +25,11 @@ BUILT_SOURCES = \
 	plugin-resources.c
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) \
+	SpacerApplet.plugin
+
+DISTCLEANFILES = \
+	SpacerApplet.plugin
 
 
 plugin_DATA += \

@@ -24,8 +24,13 @@ BUILT_SOURCES = \
 	plugin-resources.c
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) \
+	BudgieMenu.plugin
 
+DISTCLEANFILES = \
+	BudgieMenu.plugin
+
+	
 plugin_DATA += \
 	BudgieMenu.plugin
 

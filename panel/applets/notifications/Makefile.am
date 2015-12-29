@@ -10,6 +10,11 @@ plugin_DATA =
 	$(MKDIR_P) "$(dir $@)"; \
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
+CLEANFILES = \
+	NotificationsApplet.plugin
+
+DISTCLEANFILES = \
+	NotificationsApplet.plugin
 
 plugin_DATA += \
 	NotificationsApplet.plugin

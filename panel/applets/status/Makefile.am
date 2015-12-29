@@ -12,6 +12,12 @@ plugin_DATA =
 	$(MKDIR_P) "$(dir $@)"; \
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
+CLEANFILES = \
+	StatusApplet.plugin
+
+DISTCLEANFILES = \
+	StatusApplet.plugin
+
 
 plugin_DATA += \
 	StatusApplet.plugin
