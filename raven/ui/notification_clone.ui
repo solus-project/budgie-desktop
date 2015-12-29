@@ -29,7 +29,7 @@
         <property name="can_focus">False</property>
         <property name="margin_top">4</property>
         <property name="hexpand">True</property>
-        <property name="label" translatable="yes">Notification Title</property>
+        <property name="label">Notification Title</property>
         <property name="wrap">True</property>
         <property name="wrap_mode">word-char</property>
         <property name="ellipsize">start</property>
@@ -52,7 +52,7 @@
         <property name="valign">start</property>
         <property name="margin_right">4</property>
         <property name="hexpand">True</property>
-        <property name="label" translatable="yes">Notification Body..</property>
+        <property name="label">Notification Body..</property>
         <property name="wrap">True</property>
         <property name="wrap_mode">word-char</property>
         <property name="max_width_chars">30</property>
@@ -73,7 +73,7 @@
         <property name="can_focus">False</property>
         <property name="halign">end</property>
         <property name="margin_right">4</property>
-        <property name="label" translatable="yes">label</property>
+        <property name="label">label</property>
         <style>
           <class name="dim-label"/>
         </style>

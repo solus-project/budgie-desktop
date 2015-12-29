@@ -6,8 +6,6 @@ raven/sound.vala
 [type: gettext/glade]panel/applets/spacer/settings.ui
 [type: gettext/glade]raven/ui/settings.ui
 [type: gettext/glade]raven/ui/applets.ui
-[type: gettext/glade]raven/ui/notification.ui
-[type: gettext/glade]raven/ui/notification_clone.ui
 [type: gettext/glade]raven/ui/appearance.ui
 [type: gettext/glade]raven/ui/panel.ui
 
