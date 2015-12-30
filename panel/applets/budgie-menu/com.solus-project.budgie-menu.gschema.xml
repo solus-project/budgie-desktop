@@ -21,7 +21,7 @@
     </key>
 
     <key type="s" name="menu-icon">
-      <default>'start-here-symbolic'</default>
+      <default>'view-grid-symbolic'</default>
       <summary>Menu button icon</summary>
       <description>The icon to display on the main menu button</description>
     </key>
