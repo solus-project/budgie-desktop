@@ -256,15 +256,7 @@ public class Raven : Gtk.Window
         });
 
         this.get_child().show_all();
-
-        focus_out_event.connect_after(this.on_focus_out);
     }
-
-    bool on_focus_out()
-    {
-        set_expanded(false);
-        return Gdk.EVENT_PROPAGATE;
-    } 
 
 
     void on_view_switch(Gtk.Widget? widget)
