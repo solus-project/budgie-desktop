@@ -1,0 +1,317 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Demiray Muhterem <mdemiray@msn.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"PO-Revision-Date: 2015-12-29 22:19+0000\n"
+"Last-Translator: Demiray Muhterem <mdemiray@msn.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/solus-project/budgie-desktop/language/tr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+msgid "Applets"
+msgstr "Uygulamalar"
+
+#: ../raven/main_view.vala:75
+#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "Bildirimler"
+
+#: ../raven/settings_view.vala:354
+msgid "Top Panel"
+msgstr "Panel Üstte"
+
+#: ../raven/settings_view.vala:356
+msgid "Right Panel"
+msgstr "Panel Sağda"
+
+#: ../raven/settings_view.vala:358
+msgid "Left Panel"
+msgstr "Panel Solda"
+
+#: ../raven/settings_view.vala:360
+msgid "Bottom Panel"
+msgstr "Panel Altta"
+
+#: ../raven/settings_view.vala:593
+msgid "Start"
+msgstr "Başlat"
+
+#: ../raven/settings_view.vala:596
+msgid "Center"
+msgstr "Ortala"
+
+#: ../raven/settings_view.vala:599
+msgid "End"
+msgstr "Son"
+
+#: ../raven/settings_view.vala:877
+msgid "General"
+msgstr "Genel"
+
+#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+msgid "Panel"
+msgstr "Panel"
+
+#: ../raven/notifications_view.vala:410
+#, c-format
+msgid "%u new notifications"
+msgstr "%u yeni bildirim"
+
+#: ../raven/notifications_view.vala:412
+msgid "1 new notification"
+msgstr "1 yeni bildirim"
+
+#: ../raven/notifications_view.vala:414
+msgid "No new notifications"
+msgstr "Yeni bildirim yok"
+
+#: ../raven/sound.vala:90
+msgid "Output"
+msgstr "Çıktı"
+
+#: ../raven/sound.vala:107
+msgid "Input"
+msgstr "Girdi"
+
+#. End class
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Boşluk boyutu"
+
+#: ../raven/ui/settings.ui.h:1
+msgid "Budgie Settings"
+msgstr "Budgie Ayarları"
+
+#: ../raven/ui/settings.ui.h:2
+msgid "Exit"
+msgstr "Çıkış"
+
+#: ../raven/ui/applets.ui.h:1
+msgid "Add new applet"
+msgstr "Yeni uygulamacık ekle"
+
+#: ../raven/ui/appearance.ui.h:1
+msgid "Appearance"
+msgstr "Görünüm"
+
+#: ../raven/ui/appearance.ui.h:2
+msgid "Dark theme"
+msgstr "Koyu tema"
+
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr "Koyu tema kullan"
+
+#: ../raven/ui/appearance.ui.h:4
+msgid "Widget Theme"
+msgstr "Gereç Teması"
+
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr "GTK+ bir tema seç"
+
+#: ../raven/ui/appearance.ui.h:6
+msgid "Icon Theme"
+msgstr "Simge Teması"
+
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr "Bir simge teması seç"
+
+#: ../raven/ui/appearance.ui.h:8
+msgid "Built-in theme"
+msgstr "Temayı düzenle"
+
+#: ../raven/ui/appearance.ui.h:9
+msgid "Override defaults"
+msgstr "Varsayılanın üzerine yaz"
+
+#: ../raven/ui/panel.ui.h:1
+msgid "Panel 1\n"
+msgstr "Panel 1\n"
+
+#: ../raven/ui/panel.ui.h:3
+msgid "Manage Panels"
+msgstr "Panel Yönetimi"
+
+#: ../raven/ui/panel.ui.h:4
+msgid "Position"
+msgstr "Konum"
+
+#: ../raven/ui/panel.ui.h:5
+msgid "Size"
+msgstr "Boyut"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Shadow"
+msgstr "Gölge"
+
+#: ../raven/ui/panel.ui.h:7
+msgid "Autohide policy"
+msgstr "Otomatik gizleme seçeneği"
+
+#: ../session/budgie-desktop.desktop.in.in.h:1
+#: ../session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Budgie Masaüstü"
+
+#: ../session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Bu oturumu Budgie Masaüstüne log tut"
+
+#: ../panel/applets/clock/ClockApplet.vala:56
+msgid "Time and date settings"
+msgstr "Tarih ve zaman ayarları"
+
+#: ../panel/applets/clock/ClockApplet.vala:57
+msgid "Calendar"
+msgstr "Takvim"
+
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+msgid "All"
+msgstr "Tümü"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:53
+msgid "Caps lock is active"
+msgstr "Caps lock aktif"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:56
+msgid "Caps lock is not active"
+msgstr "Caps lock pasif"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:66
+msgid "Num lock is active"
+msgstr "Num lock aktif"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:69
+msgid "Num lock is not active"
+msgstr "Num lock pasif"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u okunmamış bildirim"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "1 unread notification"
+msgstr "1 okunmamış bildirim"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:81
+msgid "No unread notifications"
+msgstr "Okunmamış bildirim yok"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
+msgid "Toggle the desktop"
+msgstr "Masaüstü geçiş"
+
+#: ../wm/windowmenu.vala:124
+msgid "Minimize"
+msgstr "Küçült"
+
+#: ../wm/windowmenu.vala:129
+msgid "Unmaximize"
+msgstr "Büyültme"
+
+#: ../wm/windowmenu.vala:134
+msgid "Maximize"
+msgstr "Büyült"
+
+#: ../wm/windowmenu.vala:139
+msgid "Move"
+msgstr "Taşı"
+
+#: ../wm/windowmenu.vala:144
+msgid "Resize"
+msgstr "Boyutlandır"
+
+#: ../wm/windowmenu.vala:149
+msgid "Always On Top"
+msgstr "Daima yukarda"
+
+#: ../wm/windowmenu.vala:154
+msgid "Close"
+msgstr "Kapat"
+
+#: ../wm/wm.vala:363
+msgid "Change background\\u2026"
+msgstr "Arkaplan değiştir\\u2026"
+
+#: ../wm/wm.vala:372
+msgid "Settings"
+msgstr "Ayarlar"
+
+#. End namespace
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "Saat"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "Masaüstünü Göster Butonu"
+
+#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "Görev Listesi"
+
+#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "Görev Listesi Simgeleri"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Kilit Göstergesi"
+
+#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "Boşluk"
+
+#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "Çalışma Alanı Değiştirici"
+
+#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "Sistem Çubuğu"
+
+#: ../panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "Durum Göstergesi"
+
+#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Budgie Menü"
+
+#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "Ayırıcı"
