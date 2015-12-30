@@ -630,6 +630,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (btn != null) {
                 btn.window = window;
                 btn.update_from_window();
+                btn.id = null;
                 button = btn;
             }
         }
