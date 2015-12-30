@@ -87,7 +87,7 @@ public class BudgieWM : Meta.Plugin
         info = Meta.PluginInfo() {
             name = "Budgie WM",
             /*version = Budgie.VERSION,*/
-            version = "10.2",
+            version = "10.2.1",
             author = "Ikey Doherty",
             license = "GPL-2.0",
             description = "Budgie Window Manager"
