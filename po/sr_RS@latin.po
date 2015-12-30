@@ -1,0 +1,317 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Stefan Ric <stfric369@gmail.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"PO-Revision-Date: 2015-12-30 13:41+0000\n"
+"Last-Translator: dany 12 <dany12@archlinux.us>\n"
+"Language-Team: Serbian (Latin) (Serbia) (http://www.transifex.com/solus-project/budgie-desktop/language/sr_RS@latin/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sr_RS@latin\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+msgid "Applets"
+msgstr "Apleti"
+
+#: ../raven/main_view.vala:75
+#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "Notifikacije"
+
+#: ../raven/settings_view.vala:354
+msgid "Top Panel"
+msgstr "Gornji panel"
+
+#: ../raven/settings_view.vala:356
+msgid "Right Panel"
+msgstr "Desni panel"
+
+#: ../raven/settings_view.vala:358
+msgid "Left Panel"
+msgstr "Levi panel"
+
+#: ../raven/settings_view.vala:360
+msgid "Bottom Panel"
+msgstr "Donji panel"
+
+#: ../raven/settings_view.vala:593
+msgid "Start"
+msgstr "Početak"
+
+#: ../raven/settings_view.vala:596
+msgid "Center"
+msgstr "Sredina"
+
+#: ../raven/settings_view.vala:599
+msgid "End"
+msgstr "Kraj"
+
+#: ../raven/settings_view.vala:877
+msgid "General"
+msgstr "Opšte"
+
+#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+msgid "Panel"
+msgstr "Panel"
+
+#: ../raven/notifications_view.vala:410
+#, c-format
+msgid "%u new notifications"
+msgstr "%u novih notifikacija"
+
+#: ../raven/notifications_view.vala:412
+msgid "1 new notification"
+msgstr "1 nova notifikacija"
+
+#: ../raven/notifications_view.vala:414
+msgid "No new notifications"
+msgstr "Bez novih notifikacija"
+
+#: ../raven/sound.vala:90
+msgid "Output"
+msgstr "Izlaz"
+
+#: ../raven/sound.vala:107
+msgid "Input"
+msgstr "Ulaz"
+
+#. End class
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Veličina razmaknice"
+
+#: ../raven/ui/settings.ui.h:1
+msgid "Budgie Settings"
+msgstr "Badži postavke"
+
+#: ../raven/ui/settings.ui.h:2
+msgid "Exit"
+msgstr "Izađi"
+
+#: ../raven/ui/applets.ui.h:1
+msgid "Add new applet"
+msgstr "Dodaj novi aplet"
+
+#: ../raven/ui/appearance.ui.h:1
+msgid "Appearance"
+msgstr "Izgled"
+
+#: ../raven/ui/appearance.ui.h:2
+msgid "Dark theme"
+msgstr "Tamna tema"
+
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr "Koristi tamnu temu"
+
+#: ../raven/ui/appearance.ui.h:4
+msgid "Widget Theme"
+msgstr "Vidžetska tema"
+
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr "Izaberi GTK+ temu"
+
+#: ../raven/ui/appearance.ui.h:6
+msgid "Icon Theme"
+msgstr "Tema ikona"
+
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr "Izaberi temu ikona"
+
+#: ../raven/ui/appearance.ui.h:8
+msgid "Built-in theme"
+msgstr "Ugradjena tema"
+
+#: ../raven/ui/appearance.ui.h:9
+msgid "Override defaults"
+msgstr "Preinači podrazumevane postavke"
+
+#: ../raven/ui/panel.ui.h:1
+msgid "Panel 1\n"
+msgstr "Panel 1\n"
+
+#: ../raven/ui/panel.ui.h:3
+msgid "Manage Panels"
+msgstr "Rukovodi panelima"
+
+#: ../raven/ui/panel.ui.h:4
+msgid "Position"
+msgstr "Pozicija"
+
+#: ../raven/ui/panel.ui.h:5
+msgid "Size"
+msgstr "Veličina"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Shadow"
+msgstr "Senka"
+
+#: ../raven/ui/panel.ui.h:7
+msgid "Autohide policy"
+msgstr "Postavka automatskog skrivanja"
+
+#: ../session/budgie-desktop.desktop.in.in.h:1
+#: ../session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Badži desktop"
+
+#: ../session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Ova sesija te prijavljuje u Badži desktop"
+
+#: ../panel/applets/clock/ClockApplet.vala:56
+msgid "Time and date settings"
+msgstr "Postavke vremena i datuma"
+
+#: ../panel/applets/clock/ClockApplet.vala:57
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+msgid "All"
+msgstr "Sve"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:53
+msgid "Caps lock is active"
+msgstr "Taster za velika slova je aktivan"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:56
+msgid "Caps lock is not active"
+msgstr "Taster za velika slova nije aktivan"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:66
+msgid "Num lock is active"
+msgstr "Taster za zaključavanje brojčane tastature je aktivan"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:69
+msgid "Num lock is not active"
+msgstr "Taster za zaključavanje brojčane tastature nije aktivan"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u nepročitanih notifikacija"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "1 unread notification"
+msgstr "1 nepročitana notifikacija"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:81
+msgid "No unread notifications"
+msgstr "Bez nepročitanih notifikacija"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
+msgid "Toggle the desktop"
+msgstr "Prikaži/Sakrij radnu površinu"
+
+#: ../wm/windowmenu.vala:124
+msgid "Minimize"
+msgstr "Minimiziraj"
+
+#: ../wm/windowmenu.vala:129
+msgid "Unmaximize"
+msgstr "Povrati"
+
+#: ../wm/windowmenu.vala:134
+msgid "Maximize"
+msgstr "Maksimiziraj"
+
+#: ../wm/windowmenu.vala:139
+msgid "Move"
+msgstr "Pomeri"
+
+#: ../wm/windowmenu.vala:144
+msgid "Resize"
+msgstr "Promeni veličinu"
+
+#: ../wm/windowmenu.vala:149
+msgid "Always On Top"
+msgstr "Uvek na vrhu"
+
+#: ../wm/windowmenu.vala:154
+msgid "Close"
+msgstr "Zatvori"
+
+#: ../wm/wm.vala:363
+msgid "Change background\\u2026"
+msgstr "Promeni pozadinu\\u2026"
+
+#: ../wm/wm.vala:372
+msgid "Settings"
+msgstr "Podešavanja"
+
+#. End namespace
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "Sat"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "Dugme za prikazivanje radne površine"
+
+#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "Lista otvorenih aplikacija"
+
+#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "Lista otvorenih aplikacija (ikone)"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Indikator tastera za zaključavanje"
+
+#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "Razmaknica"
+
+#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "Prebacivač radnih okruženja"
+
+#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "Sistemska traka"
+
+#: ../panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "Statusni indikator"
+
+#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Badži meni"
+
+#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "Odvajač"
