@@ -14,6 +14,7 @@ namespace Budgie {
 
 public static const string MUTTER_EDGE_TILING  = "edge-tiling";
 public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
+public static const string MUTTER_BUTTON_LAYOUT = "button-layout";
 public static const string WM_SCHEMA           = "com.solus-project.budgie-wm";
 
 public static const bool CLUTTER_EVENT_PROPAGATE = false;
@@ -299,6 +300,7 @@ public class BudgieWM : Meta.Plugin
 
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
+        Meta.Prefs.override_preference_schema(MUTTER_BUTTON_LAYOUT, WM_SCHEMA);
 
         /* Follow GTK's policy on animations */
         if (gtk_available) {
