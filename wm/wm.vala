@@ -25,6 +25,9 @@ public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/R
 public static const string PANEL_DBUS_NAME        = "com.solus_project.budgie.Panel";
 public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
+public static const string LOGIND_DBUS_NAME        = "org.freedesktop.login1";
+public static const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
+
 public enum PanelAction {
     NONE = 1 << 0,
     MENU = 1 << 1,
@@ -58,6 +61,12 @@ public interface PanelRemote : Object
     public abstract async void ActivateAction(int flags) throws Error;
 }
 
+[DBus (name = "org.freedesktop.login1.Manager")]
+public interface LoginDRemote : GLib.Object
+{
+    public signal void PrepareForSleep(bool suspending);
+}
+    
 public class BudgieWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
@@ -81,6 +90,7 @@ public class BudgieWM : Meta.Plugin
     ShellShim? shim = null;
     PanelRemote? panel_proxy = null;
     WindowMenu? winmenu = null;
+    LoginDRemote? logind_proxy = null;
 
     static construct
     {
@@ -98,6 +108,12 @@ public class BudgieWM : Meta.Plugin
         PV_NORM = Clutter.Point.alloc();
         PV_NORM.x = 0.0f;
         PV_NORM.y = 0.0f;
+    }
+
+    /* TODO: Make this support BSD, etc! */
+    bool have_logind()
+    {
+        return FileUtils.test("/run/systemd/seats", FileTest.EXISTS);
     }
 
     /* Hold onto our Raven proxy ref */
@@ -129,6 +145,38 @@ public class BudgieWM : Meta.Plugin
     {
         if (panel_proxy == null) {
             Bus.get_proxy.begin<PanelRemote>(BusType.SESSION, PANEL_DBUS_NAME, PANEL_DBUS_OBJECT_PATH, 0, null, on_panel_get);
+        }
+    }
+
+    /* Obtain login manager */
+    void on_logind_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            logind_proxy = Bus.get_proxy.end(res);
+            if (logind_proxy == null) {
+                return;
+            }
+            if (this.is_nvidia()) {
+                logind_proxy.PrepareForSleep.connect(prepare_for_sleep);
+            }
+        } catch (Error e) {
+            warning("Failed to get LoginD proxy: %s", e.message);
+        }
+    }
+
+    /* Kudos to gnome-shell guys here: https://bugzilla.gnome.org/show_bug.cgi?id=739178 */
+    void prepare_for_sleep(bool suspending)
+    {
+        if (suspending) {
+            return;
+        }
+        Meta.Background.refresh_all();
+    }
+
+    void get_logind()
+    {
+        if (logind_proxy == null) {
+            Bus.get_proxy.begin<LoginDRemote>(BusType.SYSTEM, LOGIND_DBUS_NAME, LOGIND_DBUS_OBJECT_PATH, 0, null, on_logind_get);
         }
     }
 
@@ -223,6 +271,24 @@ public class BudgieWM : Meta.Plugin
         ChildWatch.add(pid, on_dialog_closed);
     }
 
+    delegate unowned string GlQueryFunc(uint id);
+    static const uint GL_VENDOR = 0x1F00;
+
+    private bool is_nvidia()
+    {
+        var ptr = (GlQueryFunc)Cogl.get_proc_address("glGetString");
+
+        if (ptr == null) {
+            return false;
+        }
+
+        unowned string? ret = ptr(GL_VENDOR);
+        if (ret != null && "NVIDIA Corporation" in ret) {
+            return true;
+        }
+        return false;
+    }
+
     public override void start()
     {
         var screen = this.get_screen();
@@ -252,6 +318,11 @@ public class BudgieWM : Meta.Plugin
 
         Bus.watch_name(BusType.SESSION, PANEL_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_panel, lost_panel);
+
+        /* Keep an eye out for systemd stuffs */
+        if (have_logind()) {
+            get_logind();
+        }
 
 
 
