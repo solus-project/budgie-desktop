@@ -35,7 +35,21 @@ public class TrayApplet : Budgie.Applet
         box.vexpand = false;
         vexpand = false;
 
-        integrate_tray();
+        realize.connect_after(()=> {
+            maybe_integrate_tray();
+        });
+
+
+        show_all();
+        panel_size_changed.connect((p,i,s)=> {
+            this.icon_size = s;
+            if (tray != null) {
+                tray.set_icon_size(icon_size);
+                queue_resize();
+                tray.queue_resize();
+                tray.force_redraw();
+            }
+        });
     }
 
     public override void get_preferred_height(out int m, out int n)
@@ -50,11 +64,12 @@ public class TrayApplet : Budgie.Applet
         n = icon_size;
     }
 
-    protected void integrate_tray()
+    protected void maybe_integrate_tray()
     {
         if (tray != null) {
             return;
         }
+
         tray = new Na.Tray.for_screen(get_screen(), Gtk.Orientation.HORIZONTAL);
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
