@@ -289,10 +289,8 @@ public class PanelManager : DesktopManager
         /* Fix all existing panels here */
         iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out uuid, out panel)) {
-            if (mon != this.primary_monitor) {
-                /* Force existing panels to update to new primary display */
-                panel.update_geometry(primary.area, panel.position);
-            }
+            /* Force existing panels to update to new primary display */
+            panel.update_geometry(primary.area, panel.position);
             if (panel.position == Budgie.PanelPosition.TOP) {
                 top = panel;
             } else if (panel.position == Budgie.PanelPosition.BOTTOM) {
@@ -347,6 +345,7 @@ public class PanelManager : DesktopManager
         var scr = Gdk.Screen.get_default();
         primary_monitor = scr.get_primary_monitor();
         scr.monitors_changed.connect(this.on_monitors_changed);
+        scr.size_changed.connect(this.on_monitors_changed);
 
         /* Set up dark mode across the desktop */
         settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
