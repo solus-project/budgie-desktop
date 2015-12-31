@@ -91,8 +91,8 @@ public class BudgieBackground : Meta.BackgroundGroup
         GDesktop.BackgroundStyle style;
         GDesktop.BackgroundShading shading_direction;
         Meta.Rectangle rect;
-        Clutter.Color primary_color = Clutter.Color();
-        Clutter.Color secondary_color = Clutter.Color();
+        Clutter.Color? primary_color = Clutter.Color();
+        Clutter.Color? secondary_color = Clutter.Color();
 
 
         style = (GDesktop.BackgroundStyle)settings.get_enum(BACKGROUND_STYLE_KEY);
@@ -116,17 +116,17 @@ public class BudgieBackground : Meta.BackgroundGroup
         shading_direction = (GDesktop.BackgroundShading)settings.get_enum(COLOR_SHADING_TYPE_KEY);
         var color_str = settings.get_string(PRIMARY_COLOR_KEY);
         if (color_str != null && color_str != "") {
-            primary_color.from_string(color_str);
+            primary_color = Clutter.Color.from_string(color_str);
             color_str = null;
         }
 
         color_str = settings.get_string(SECONDARY_COLOR_KEY);
         if (color_str != null && color_str != "") {
-            secondary_color.from_string(color_str);
+            secondary_color = Clutter.Color.from_string(color_str);
             color_str = null;
         }
 
-        if (style == GDesktop.BackgroundStyle.NONE || bg_filename.has_prefix(GNOME_COLOR_HACK)) {
+        if (style == GDesktop.BackgroundStyle.NONE || bg_filename.has_suffix(GNOME_COLOR_HACK)) {
             if (shading_direction == GDesktop.BackgroundShading.SOLID) {
                 background.set_color(primary_color);
             } else {
