@@ -45,7 +45,8 @@ libstatusapplet_la_LIBADD = \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS) \
 	$(GVC_LIBS) \
-	$(STATUS_PLUGIN_LIBS)
+	$(STATUS_PLUGIN_LIBS) \
+	-lm
 
 libstatusapplet_la_LDFLAGS = \
 	$(MODULE_FLAGS) \
