@@ -16,6 +16,7 @@ m4_define([peas_required_version], [1.8.0])
 m4_define([gdesktop_required_version], [3.16.0])
 m4_define([pulse_required_version], [2.0])
 m4_define([gsettings_required_version], [3.16.0])
+m4_define([polkit_required_version], [0.110])
 
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
@@ -95,6 +96,7 @@ m4_include([panel/applets/spacer/configure.ac])
 m4_include([panel/applets/status/configure.ac])
 m4_include([panel/applets/tray/configure.ac])
 m4_include([panel/applets/workspaces/configure.ac])
+m4_include([polkit/configure.ac])
 
 LT_PREREQ(2.2)
 LT_INIT([disable-static])
@@ -164,4 +166,6 @@ AC_MSG_RESULT([
         status:                 ${have_upower}
         tray:                   ${have_natray}
         workspaces:             ${have_wnck}
+
+        Polkit Agent:           ${have_polkit}
 ])

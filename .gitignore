@@ -35,6 +35,9 @@ budgie-panel-resources.*
 /panel/budgie-panel.desktop
 /panel/budgie-panel.desktop.in
 
+/polkit/*.c
+budgie-polkit-dialog
+
 # plugin
 *.gir
 *.typelib

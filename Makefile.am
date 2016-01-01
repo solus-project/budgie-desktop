@@ -27,6 +27,7 @@ SUBDIRS = \
 	raven \
 	imports \
 	panel \
+	polkit \
 	rundialog \
 	session \
 	wm \
