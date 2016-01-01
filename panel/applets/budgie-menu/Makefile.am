@@ -58,8 +58,8 @@ libbudgiemenuapplet_la_CFLAGS = \
 
 libbudgiemenuapplet_la_LIBADD = \
 	${top_builddir}/plugin/libbudgie-plugin.la \
-	$(BUDGIE_BASE_CFLAGS) \
-	$(BUDGIE_PLUGIN_CFLAGS) \
+	$(BUDGIE_BASE_LIBS) \
+	$(BUDGIE_PLUGIN_LIBS) \
 	$(GMENU_LIBS)
 
 libbudgiemenuapplet_la_LDFLAGS = \
