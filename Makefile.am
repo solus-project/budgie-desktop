@@ -12,7 +12,9 @@ EXTRA_DIST = \
 	${top_srcdir}/vapi/libuuid.vapi \
 	${top_srcdir}/vapi/gnome-desktop-3.0.vapi \
 	${top_srcdir}/vapi/gsettings-desktop-schemas.vapi
-	${top_srcdir}/vapi/upower-glib-1.0.vapi
+	${top_srcdir}/vapi/upower-glib-1.0.vapi \
+	${top_srcdir}/vapi/polkit-gobject-1.vapi \
+	${top_srcdir}/vapi/polkit-agent-1.vapi
 
 NULL =
 CLEANFILES =
