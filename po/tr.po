@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-29 22:19+0000\n"
+"PO-Revision-Date: 2015-12-31 01:21+0000\n"
 "Last-Translator: Demiray Muhterem <mdemiray@msn.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/solus-project/budgie-desktop/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
 msgid "Applets"
-msgstr "Uygulamalar"
+msgstr "Seçenekler"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
@@ -29,31 +29,31 @@ msgstr "Bildirimler"
 
 #: ../raven/settings_view.vala:354
 msgid "Top Panel"
-msgstr "Panel Üstte"
+msgstr "Üst Panel"
 
 #: ../raven/settings_view.vala:356
 msgid "Right Panel"
-msgstr "Panel Sağda"
+msgstr "Sağ Panel"
 
 #: ../raven/settings_view.vala:358
 msgid "Left Panel"
-msgstr "Panel Solda"
+msgstr "Sol Panel"
 
 #: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
-msgstr "Panel Altta"
+msgstr "Alt Panel"
 
 #: ../raven/settings_view.vala:593
 msgid "Start"
-msgstr "Başlat"
+msgstr "Panelin başına sabitle"
 
 #: ../raven/settings_view.vala:596
 msgid "Center"
-msgstr "Ortala"
+msgstr "Panelin ortasına sabitle"
 
 #: ../raven/settings_view.vala:599
 msgid "End"
-msgstr "Son"
+msgstr "Panelin sonuna sabitle"
 
 #: ../raven/settings_view.vala:877
 msgid "General"
@@ -78,11 +78,11 @@ msgstr "Yeni bildirim yok"
 
 #: ../raven/sound.vala:90
 msgid "Output"
-msgstr "Çıktı"
+msgstr "Çıktı aygıtları"
 
 #: ../raven/sound.vala:107
 msgid "Input"
-msgstr "Girdi"
+msgstr "Girdi aygıtları"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -101,7 +101,7 @@ msgstr "Boşluk boyutu"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Budgie Ayarları"
+msgstr "Budgie Masaüstü Ayarları"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
@@ -109,7 +109,7 @@ msgstr "Çıkış"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Yeni uygulamacık ekle"
+msgstr "Yeni gereç ekle"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
@@ -129,7 +129,7 @@ msgstr "Gereç Teması"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select a GTK+ theme"
-msgstr "GTK+ bir tema seç"
+msgstr "GTK+ tema seç"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
@@ -141,11 +141,11 @@ msgstr "Bir simge teması seç"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Temayı düzenle"
+msgstr "Tema etkin"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Override defaults"
-msgstr "Varsayılanın üzerine yaz"
+msgstr "Varsayılan tema aktif/pasif"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -306,7 +306,7 @@ msgstr "Sistem Çubuğu"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Durum Göstergesi"
+msgstr "Kontrol Seçenekleri"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
