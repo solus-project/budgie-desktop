@@ -9,6 +9,7 @@ AM_CFLAGS =  -fstack-protector -Wall -Wno-pedantic \
 
 AM_CPPFLAGS += \
 	-I $(top_srcdir) \
+	-I $(top_srcdir)/config \
 	-I $(top_srcdir)/gvc \
 	-I $(top_srcdir)/lib \
 	-I $(top_srcdir)/panel \
@@ -17,10 +18,6 @@ AM_CPPFLAGS += \
 	-O2
 
 DECLARATIONS = \
-	-DMODULE_DIR=\"$(MODULEDIR)\" \
-	-DMODULE_DATA_DIR=\"$(MODULE_DATA_DIR)\" \
-	-DDATADIR=\"$(datadir)/budgie-desktop\" \
-	-DLOCALEDIR=\"$(localedir)\" \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\"
 
 MODULE_FLAGS = \

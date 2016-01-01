@@ -20,6 +20,7 @@ NULL =
 CLEANFILES =
 
 SUBDIRS = \
+	config \
 	data \
 	gvc \
 	plugin \

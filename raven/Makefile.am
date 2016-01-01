@@ -55,6 +55,7 @@ libraven_la_LIBADD = \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS) \
 	$(GVC_LIBS) \
+	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/gvc/libgvc.la
@@ -65,7 +66,9 @@ libraven_la_VALAFLAGS = \
 	--pkg budgie-1.0 \
 	--pkg toplevel \
 	--pkg gvc-1.0 \
+	--pkg budgie-config \
 	-H BudgieRaven.h \
+	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/lib \

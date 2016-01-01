@@ -6,8 +6,6 @@
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 EXTRA_DIST = \
-	panelconfig.h \
-	panelconfig.vapi \
 	budgie-panel.desktop.in.in
 
 @INTLTOOL_DESKTOP_RULE@
@@ -64,6 +62,7 @@ budgie_panel_LDADD = \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS) \
 	$(UUID_LIBS) \
+	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/raven/libraven.la
@@ -74,9 +73,10 @@ budgie_panel_VALAFLAGS = \
 	--pkg libuuid \
 	--pkg libpeas-gtk-1.0 \
 	--pkg budgie-1.0 \
-	--pkg panelconfig \
+	--pkg budgie-config \
 	--pkg raven \
 	--pkg toplevel \
+	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/panel \

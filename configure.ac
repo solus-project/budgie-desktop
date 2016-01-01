@@ -68,19 +68,7 @@ PKG_CHECK_MODULES([RUNDIALOG],
                 ]
 )
 
-
-
-MODULEDIR="${libdir}/budgie-desktop/plugins"
-AC_SUBST(MODULEDIR)
-AC_DEFINE_UNQUOTED(MODULEDIR, "$MODULEDIR",
-                   [Installation directory for Budgie plugins])
-
-# Technically unused right now but might be used in the future
-MODULE_DATA_DIR="${datadir}/share/budgie-desktop/plugins"
-AC_SUBST(MODULE_DATA_DIR)
-AC_DEFINE_UNQUOTED(MODULE_DATA_DIR, "$MODULEDIR",
-                   [Installation directory for Budgie plugin data])
-
+m4_include([config/configure.ac])
 
 # Got this idea from gnome-builder :)
 m4_include([imports/configure.ac])
@@ -107,6 +95,7 @@ AH_BOTTOM([#endif])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_FILES([Makefile
+                config/Makefile
                 data/budgie-panel.desktop
                 data/Makefile
                 gvc/Makefile
