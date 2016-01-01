@@ -2,6 +2,9 @@ if ENABLE_POLKIT_DIALOG
 
 -include $(top_srcdir)/common.mk
 
+EXTRA_DIST = \
+	dialog.ui
+
 bin_PROGRAMS = \
 	budgie-polkit-dialog
 
@@ -10,6 +13,7 @@ budgie_polkit_dialog_SOURCES = \
 
 budgie_polkit_dialog_CFLAGS = \
 	$(POLKIT_DIALOG_CFLAGS) \
+	-DPOLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE \
 	$(DECLARATIONS)
 
 budgie_polkit_dialog_LDADD = \

@@ -9,6 +9,23 @@
  * (at your option) any later version.
  */
 
+public class BudgieAgent : PolkitAgent.Listener
+{
+
+        public override void initiate_authentication(string action_id, string message, string icon_name,
+            Polkit.Details details, string cookie, GLib.List<Polkit.Identity?> identities,
+            GLib.Cancellable cancellable, GLib.AsyncReadyCallback @callback)
+        {
+
+        }
+
+        public override bool initiate_authentication_finish(GLib.AsyncResult res)
+        {
+            return false;
+        }
+
+}
+
 public static int main(string[] args)
 {
     return 0;
