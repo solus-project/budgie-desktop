@@ -34,7 +34,8 @@ public class CategoryButton : Gtk.RadioButton
             lab = new Gtk.Label(_("All"));
         }
         img.pixel_size = icon_size;
-        lab.set_alignment(0.0f, 0.5f);
+        lab.halign = Gtk.Align.START;
+        lab.valign = Gtk.Align.CENTER;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
         layout.pack_start(img, false, false, 5);
@@ -65,7 +66,8 @@ public class MenuButton : Gtk.Button
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
         img.pixel_size = icon_size;
         var lab = new Gtk.Label(parent.get_display_name());
-        lab.set_alignment(0.0f, 0.5f);
+        lab.halign = Gtk.Align.START;
+        lab.valign = Gtk.Align.CENTER;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
         layout.pack_start(img, false, false, 5);
