@@ -1,6 +1,9 @@
 PKG_CHECK_MODULES(NATRAY,
-    gtk+-3.0 >= gtk_required_version
+    [
+    gtk+-3.0 >= gtk_required_version,
     gtk+-x11-3.0 >= gtk_required_version,
+    x11
+    ],
     [have_natray=yes], [have_natray=no]
 )
 
