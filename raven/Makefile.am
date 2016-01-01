@@ -58,7 +58,8 @@ libraven_la_LIBADD = \
 	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/plugin/libbudgie-plugin.la \
-	${top_builddir}/gvc/libgvc.la
+	${top_builddir}/gvc/libgvc.la \
+	-lm
 
 libraven_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \

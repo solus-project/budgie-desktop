@@ -86,6 +86,15 @@ m4_include([panel/applets/tray/configure.ac])
 m4_include([panel/applets/workspaces/configure.ac])
 m4_include([polkit/configure.ac])
 
+# Find the libraries containing animation functions we need.
+BACKLIBS="$LIBS"
+AC_CHECK_LIB([m], [sin], [], [AC_MSG_FAILURE([Missing required sin function])])
+AC_CHECK_LIB([m], [cos], [], [AC_MSG_FAILURE([Missing required cos function])])
+AC_CHECK_LIB([m], [sqrt], [], [AC_MSG_FAILURE([Missing required sqrt function])])
+AC_CHECK_LIB([m], [floor], [], [AC_MSG_FAILURE([Missing required floor function])])
+AC_CHECK_LIB([m], [pow], [], [AC_MSG_FAILURE([Missing required pow function])])
+LIBS="$BACKLIBS"
+
 LT_PREREQ(2.2)
 LT_INIT([disable-static])
 
