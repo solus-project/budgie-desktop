@@ -28,6 +28,7 @@ budgie_wm_CFLAGS = \
 	-DGNOME_DESKTOP_USE_UNSTABLE_API
 
 budgie_wm_LDADD = \
+	${top_builddir}/config/libbudgie-config.la \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_WM_LIBS)
 
@@ -36,5 +37,7 @@ budgie_wm_VALAFLAGS = \
 	--pkg libmutter \
 	--pkg gsettings-desktop-schemas \
 	--pkg gnome-desktop-3.0 \
+	--pkg budgie-config \
+	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	$(VALAFLAGS)
