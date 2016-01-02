@@ -1,9 +1,8 @@
 [main]
 host = https://www.transifex.com
 
-
-[solus-project.budgie-desktop]
-source_file = po/budgie-desktop.pot
+[budgie-desktop.budgie-desktoppot]
+file_filter = po/<lang>.po
 source_lang = en
 type = PO
-file_filter = po/<lang>.po
+
