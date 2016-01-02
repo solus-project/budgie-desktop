@@ -140,12 +140,6 @@ let's be fair, it does kinda look better up top.
 
 *Update*: This only happens on the *first* show of the applet.
 
-TODO
-----
-
- - [ ] Get translations in order
- - [ ] Second release
-
 Authors
 =======
 
