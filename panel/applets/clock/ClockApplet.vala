@@ -60,7 +60,7 @@ public class ClockApplet : Budgie.Applet
         popover.get_child().show_all();
 
         widget.button_press_event.connect((e)=> {
-            if (e.button != 1) {
+            if (e.button != 3) {
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
