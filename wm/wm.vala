@@ -459,7 +459,7 @@ public class BudgieWM : Meta.Plugin
     {
         actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
-        actor.set("pivot-point", PV_NORM);
+        actor.set("pivot-point", PV_NORM, "opacity", 255U);
         this.map_completed(actor as Meta.WindowActor);
     }
 
@@ -467,7 +467,7 @@ public class BudgieWM : Meta.Plugin
     {
         actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
-        actor.set("pivot-point", PV_NORM);
+        actor.set("pivot-point", PV_NORM, "opacity", 255U);
         this.map_completed(actor as Meta.WindowActor);
     }
 
@@ -484,7 +484,7 @@ public class BudgieWM : Meta.Plugin
             case Meta.WindowType.POPUP_MENU:
             case Meta.WindowType.DROPDOWN_MENU:
             case Meta.WindowType.MENU:
-                actor.opacity = 0;
+                actor.opacity = 0U;
                 actor.show();
 
                 actor.save_easing_state();
@@ -492,11 +492,11 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_duration(MAP_TIMEOUT);
                 actor.transitions_completed.connect(map_done);
 
-                actor.opacity = 255;
+                actor.opacity = 255U;
                 actor.restore_easing_state();
                 break;
             case Meta.WindowType.NOTIFICATION:
-                actor.set("opacity", 0, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
+                actor.set("opacity", 0U, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
                     "pivot-point", PV_CENTER);
                 actor.show();
 
@@ -505,13 +505,13 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_duration(MAP_TIMEOUT);
                 actor.transitions_completed.connect(notification_map_done);
 
-                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255);
+                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
                 actor.restore_easing_state();
                 break;
             case Meta.WindowType.NORMAL:
             case Meta.WindowType.DIALOG:
             case Meta.WindowType.MODAL_DIALOG:
-                actor.set("opacity", 0, "scale-x", MAP_SCALE, "scale-y", MAP_SCALE,
+                actor.set("opacity", 0U, "scale-x", MAP_SCALE, "scale-y", MAP_SCALE,
                     "pivot-point", PV_CENTER);
                 actor.show();
 
@@ -520,7 +520,7 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_duration(MAP_TIMEOUT);
                 actor.transitions_completed.connect(map_done);
 
-                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255);
+                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
                 actor.restore_easing_state();
                 break;
             default:
@@ -533,7 +533,7 @@ public class BudgieWM : Meta.Plugin
     {
         actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)minimize_done, this);
-        actor.set("pivot-point", PV_NORM, "opacity", 255, "scale-x", 1.0, "scale-y", 1.0);
+        actor.set("pivot-point", PV_NORM, "opacity", 255U, "scale-x", 1.0, "scale-y", 1.0);
         actor.hide();
         this.minimize_completed(actor as Meta.WindowActor);
     }
@@ -565,7 +565,7 @@ public class BudgieWM : Meta.Plugin
         actor.set_easing_duration(MINIMIZE_TIMEOUT);
         actor.transitions_completed.connect(minimize_done);
 
-        actor.set("opacity", 0, "x", (double)icon.x, "y", (double)icon.y, "scale-x", 0.0, "scale-y", 0.0);
+        actor.set("opacity", 0U, "x", (double)icon.x, "y", (double)icon.y, "scale-x", 0.0, "scale-y", 0.0);
         actor.restore_easing_state();
     }
 
@@ -600,7 +600,7 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_duration(DESTROY_TIMEOUT);
                 actor.transitions_completed.connect(destroy_done);
 
-                actor.set("scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0);
+                actor.set("scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0U);
                 actor.restore_easing_state();
                 break;
             case Meta.WindowType.MENU:
@@ -608,7 +608,7 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
                 actor.transitions_completed.connect(destroy_done);
 
-                actor.set("opacity", 0);
+                actor.set("opacity", 0U);
                 actor.restore_easing_state();
                 break;
             default:
