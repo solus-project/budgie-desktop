@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"POT-Creation-Date: 2016-01-02 00:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,11 +254,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../wm/wm.vala:363
+#: ../wm/wm.vala:435
 msgid "Change background\\u2026"
 msgstr ""
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:444
 msgid "Settings"
 msgstr ""
 
