@@ -36,3 +36,4 @@ wm/wm.c
 ./panel/applets/notifications/NotificationsApplet.plugin
 
 polkit/dialog.ui
+polkit/polkitdialog.c
