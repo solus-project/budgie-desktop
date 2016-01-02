@@ -61,6 +61,9 @@ budgie-polkit-dialog
 /lib/BudgieToplevel.h
 /lib/manager.c
 
+/libsession/*.c
+/libsession/*.h
+
 *.ui~
 
 /session/budgie-desktop

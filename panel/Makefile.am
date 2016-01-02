@@ -65,6 +65,7 @@ budgie_panel_LDADD = \
 	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/lib/libtoplevel.la \
+	${top_builddir}/libsession/libsession.la \
 	${top_builddir}/raven/libraven.la
 
 budgie_panel_VALAFLAGS = \
@@ -76,12 +77,14 @@ budgie_panel_VALAFLAGS = \
 	--pkg budgie-config \
 	--pkg raven \
 	--pkg toplevel \
+	--pkg libsession \
 	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/panel \
 	--vapidir=${top_srcdir}/raven \
 	--vapidir=${top_srcdir}/lib \
+	--vapidir=${top_srcdir}/libsession \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/data/budgie-panel.gresource.xml \
 	$(VALAFLAGS)

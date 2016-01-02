@@ -29,6 +29,7 @@ SUBDIRS = \
 	lib \
 	raven \
 	imports \
+	libsession \
 	panel \
 	polkit \
 	rundialog \

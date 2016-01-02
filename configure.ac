@@ -45,6 +45,13 @@ PKG_CHECK_MODULES([BUDGIE_BASE],
                 ]
 )
 
+PKG_CHECK_MODULES([LIBSESSION],
+                [
+                 gio-unix-2.0 >= glib_required_version,
+                 gobject-2.0 >= glib_required_version
+                ]
+)
+
 # Plugin global deps
 PKG_CHECK_MODULES([BUDGIE_PLUGIN],
                  [
@@ -109,6 +116,7 @@ AC_CONFIG_FILES([Makefile
                 data/Makefile
                 gvc/Makefile
                 lib/Makefile
+                libsession/Makefile
                 plugin/Makefile
                 plugin/budgie-1.0.pc
                 raven/Makefile
