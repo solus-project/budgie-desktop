@@ -20,7 +20,7 @@ budgie-polkit-resources.c: $(top_srcdir)/polkit/budgie-polkit.gresource.xml $(po
 
 EXTRA_DIST = \
 	dialog.ui \
-	bdugie-polkit.gresource.xml
+	budgie-polkit.gresource.xml
 
 bin_PROGRAMS = \
 	budgie-polkit-dialog
