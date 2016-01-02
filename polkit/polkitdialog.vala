@@ -31,6 +31,7 @@ public class AgentDialog : Gtk.Dialog
     private Gtk.ListBox? list_idents;
 
     public PolkitAgent.Session? pk_session = null;
+    private unowned Polkit.Identity? pk_identity = null;
 
     public string action_id { public get; public set; }
     public string message {
@@ -79,6 +80,8 @@ public class AgentDialog : Gtk.Dialog
         header.get_style_context().remove_class("titlebar");
 
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
+
+        list_idents.row_activated.connect(on_row_activated);
     }
 
     /* Ensure we grab focus */
@@ -91,6 +94,74 @@ public class AgentDialog : Gtk.Dialog
         }
         win.focus(Gdk.CURRENT_TIME);
         entry_auth.grab_focus();
+    }
+
+    void deselect_session()
+    {
+        /* dc old signals */
+        pk_session = null;
+        pk_identity = null;
+
+    }
+
+    void select_session()
+    {
+        if (pk_session != null) {
+            deselect_session();
+        }
+
+        pk_session = new PolkitAgent.Session(this.pk_identity, this.cookie);
+        /*pk_session.completed.connect(on_pk_session_completed);
+        pk_session.request.connect(on_pk_request);
+        pk_session.show_error.connect(on_pk_error);
+        pk_session.show_info.connect(on_pk_info);*/
+    }
+
+    void on_row_activated(Gtk.ListBoxRow? row)
+    {
+        if (row == null) {
+            deselect_session();
+            return;
+        }
+
+        var child = row.get_child();
+
+        pk_identity = row.get_data("pk_identity");
+        select_session();
+    }
+
+    void set_from_idents(ref List<Polkit.Identity?> idents)
+    {
+        Gtk.ListBoxRow? active_row = null;
+
+        foreach (var child in list_idents.get_children()) {
+            child.destroy();
+        }
+
+        foreach (unowned Polkit.Identity? ident in idents)
+        {
+            string? name = null;
+
+            if (ident is Polkit.UnixUser) {
+                unowned Posix.Passwd? pwd = Posix.getpwuid((ident as Polkit.UnixUser).get_uid());
+                name = "%s".printf(pwd.pw_name);
+            } else if (ident is Polkit.UnixGroup) {
+                unowned Posix.Group? gwd = Posix.getgrgid((ident as Polkit.UnixGroup).get_gid());
+                name = "%s: %s".printf(_("Group:"), gwd.gr_name);
+            } else {
+                name = ident.to_string();
+            }
+
+            var label = new Gtk.Label(name);
+            label.halign = Gtk.Align.START;
+            label.set_data("pk_identity", ident);
+            list_idents.add(label);
+
+            if (active_row == null) {
+                active_row = label.get_parent() as Gtk.ListBoxRow;
+                list_idents.select_row(active_row);
+            }
+        }
     }
 }
 
@@ -150,7 +221,7 @@ public static int main(string[] args)
     set_css_from_uri("resource://com/solus-project/budgie/theme/theme.css");
     /* Testing  
     var dlg = new Budgie.AgentDialog("lol", "Authentication is required to launch a nuke at the neighbour's squirrel", "dialog-password-symbolic", "cookies!");
-    int response = dlg.run();*.
+    int response = dlg.run();*/
 
     return 0;
 }

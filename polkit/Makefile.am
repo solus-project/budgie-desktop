@@ -44,6 +44,7 @@ budgie_polkit_dialog_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg polkit-gobject-1 \
 	--pkg polkit-agent-1 \
+	--pkg posix \
 	--vapidir=${top_srcdir}/vapi \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/polkit/budgie-polkit.gresource.xml
