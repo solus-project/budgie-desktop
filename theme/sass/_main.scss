@@ -582,3 +582,9 @@ GtkPopover .scrollbar .trough {
     }
 }
 
+// PolKit Dialog
+.budgie-polkit-dialog {
+     &.background { @extend .budgie-notification.background; }
+
+    .message { color: transparentize($fg_color, 0.3); }
+}
