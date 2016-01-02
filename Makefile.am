@@ -27,6 +27,7 @@ SUBDIRS = \
 	gvc \
 	plugin \
 	lib \
+	theme \
 	raven \
 	imports \
 	libsession \

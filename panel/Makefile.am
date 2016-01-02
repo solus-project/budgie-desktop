@@ -66,7 +66,8 @@ budgie_panel_LDADD = \
 	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/lib/libtoplevel.la \
 	${top_builddir}/libsession/libsession.la \
-	${top_builddir}/raven/libraven.la
+	${top_builddir}/raven/libraven.la \
+	${top_builddir}/theme/libbudgietheme.la
 
 budgie_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \

@@ -46,6 +46,9 @@ budgie-polkit-dialog
 /plugin/*.h
 /plugin/budgie-1.0.pc
 
+/theme/*.c
+/theme/*.h
+
 *.la
 *.lo
 /panel/applets/*/*.c

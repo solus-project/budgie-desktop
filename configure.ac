@@ -119,6 +119,7 @@ AC_CONFIG_FILES([Makefile
                 libsession/Makefile
                 plugin/Makefile
                 plugin/budgie-1.0.pc
+                theme/Makefile
                 raven/Makefile
                 panel/budgie-panel.desktop.in
                 panel/Makefile
