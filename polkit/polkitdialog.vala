@@ -73,6 +73,12 @@ public class AgentDialog : Gtk.Dialog
         set_keep_above(true);
         list_idents = new Gtk.ListBox();
         scrolledwindow_idents.add(list_idents);
+
+        var header = new Gtk.EventBox();
+        set_titlebar(header);
+        header.get_style_context().remove_class("titlebar");
+
+        get_settings().set_property("gtk-application-prefer-dark-theme", true);
     }
 
     /* Ensure we grab focus */
@@ -142,9 +148,9 @@ public static int main(string[] args)
 
 
     set_css_from_uri("resource://com/solus-project/budgie/theme/theme.css");
-    /* Testing  */
-    var dlg = new Budgie.AgentDialog("lol", "SQUIRRELS", "dialog-password-symbolic", "cookies!");
-    int response = dlg.run();
+    /* Testing  
+    var dlg = new Budgie.AgentDialog("lol", "Authentication is required to launch a nuke at the neighbour's squirrel", "dialog-password-symbolic", "cookies!");
+    int response = dlg.run();*.
 
     return 0;
 }
