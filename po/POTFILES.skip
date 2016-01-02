@@ -34,3 +34,5 @@ wm/wm.c
 ./panel/applets/budgie-menu/BudgieMenu.plugin
 ./panel/applets/separator/SeparatorApplet.plugin
 ./panel/applets/notifications/NotificationsApplet.plugin
+
+polkit/dialog.ui
