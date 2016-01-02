@@ -1,6 +1,6 @@
 -include $(top_srcdir)/common.mk
 
--include $(INTROSPECTION_MAKEFILE)
+include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)

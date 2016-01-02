@@ -16,6 +16,8 @@ EXTRA_DIST = \
 	${top_srcdir}/vapi/polkit-gobject-1.vapi \
 	${top_srcdir}/vapi/polkit-agent-1.vapi
 
+DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
+
 NULL =
 CLEANFILES =
 
