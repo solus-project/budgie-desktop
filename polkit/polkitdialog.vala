@@ -117,13 +117,34 @@ public class Agent : PolkitAgent.Listener
 
 } /* End namespace */
 
+static void set_css_from_uri(string? uri)
+{
+    var screen = Gdk.Screen.get_default();
+    Gtk.CssProvider? new_provider = null;
+
+    try {
+        var f = File.new_for_uri(uri);
+        new_provider = new Gtk.CssProvider();
+        new_provider.load_from_file(f);
+    } catch (Error e) {
+        warning("Error loading theme: %s", e.message);
+        new_provider = null;
+        return;
+    }
+
+
+    Gtk.StyleContext.add_provider_for_screen(screen, new_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
 public static int main(string[] args)
 {
     Gtk.init(ref args);
 
-    /* Testing 
+
+    set_css_from_uri("resource://com/solus-project/budgie/theme/theme.css");
+    /* Testing  */
     var dlg = new Budgie.AgentDialog("lol", "SQUIRRELS", "dialog-password-symbolic", "cookies!");
-    int response = dlg.run();*/
+    int response = dlg.run();
 
     return 0;
 }

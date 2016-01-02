@@ -36,7 +36,8 @@ budgie_polkit_dialog_CFLAGS = \
 	$(DECLARATIONS)
 
 budgie_polkit_dialog_LDADD = \
-	$(POLKIT_DIALOG_LIBS)
+	$(POLKIT_DIALOG_LIBS) \
+	${top_builddir}/theme/libbudgietheme.la
 
 
 budgie_polkit_dialog_VALAFLAGS = \
