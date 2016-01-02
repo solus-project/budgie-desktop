@@ -5,6 +5,9 @@
   <template class="BudgieAgentDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Authentication Required</property>
+    <property name="default_width">250</property>
+    <property name="icon_name">dialog-password-symbolic</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -110,6 +113,8 @@
               <object class="GtkEntry" id="entry_auth">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="margin_top">6</property>
                 <property name="margin_bottom">6</property>
                 <property name="visibility">False</property>
@@ -121,7 +126,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="label_message">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
@@ -178,5 +183,9 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="0">button_cancel</action-widget>
+      <action-widget response="1">button_auth</action-widget>
+    </action-widgets>
   </template>
 </interface>
