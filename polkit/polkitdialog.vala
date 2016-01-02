@@ -9,22 +9,33 @@
  * (at your option) any later version.
  */
 
-public class BudgieAgent : PolkitAgent.Listener
+namespace Budgie
 {
 
-        public override void initiate_authentication(string action_id, string message, string icon_name,
-            Polkit.Details details, string cookie, GLib.List<Polkit.Identity?> identities,
-            GLib.Cancellable cancellable, GLib.AsyncReadyCallback @callback)
-        {
-
-        }
-
-        public override bool initiate_authentication_finish(GLib.AsyncResult res)
-        {
-            return false;
-        }
+[GtkTemplate (ui = "/com/solus-project/budgie/polkit/dialog.ui")]
+public class AgentDialog : Gtk.Dialog
+{
 
 }
+
+public class Agent : PolkitAgent.Listener
+{
+
+    public override void initiate_authentication(string action_id, string message, string icon_name,
+        Polkit.Details details, string cookie, GLib.List<Polkit.Identity?> identities,
+        GLib.Cancellable cancellable, GLib.AsyncReadyCallback @callback)
+    {
+
+    }
+
+    public override bool initiate_authentication_finish(GLib.AsyncResult res)
+    {
+        return false;
+    }
+
+}
+
+} /* End namespace */
 
 public static int main(string[] args)
 {

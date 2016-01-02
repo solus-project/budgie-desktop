@@ -36,6 +36,7 @@ budgie-panel-resources.*
 /panel/budgie-panel.desktop.in
 
 /polkit/*.c
+/polkit/*.h
 budgie-polkit-dialog
 
 # plugin
