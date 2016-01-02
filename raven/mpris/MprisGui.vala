@@ -338,6 +338,9 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
     label.set_line_wrap(true);
     label.set_line_wrap_mode(Pango.WrapMode.WORD);
     label.halign = Gtk.Align.START;
+    /* I truly don't care that this is deprecated, it's the only way
+     * to actually fix the alignment on line wrap. */
+    label.set_alignment(0.0f, 0.5f);
     box.pack_start(label, true, true, 0);
 
     box.set_data("label_item", label);
