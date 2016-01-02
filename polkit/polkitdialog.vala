@@ -196,6 +196,7 @@ public class Agent : PolkitAgent.Listener
 
 static void set_css_from_uri(string? uri)
 {
+    Budgie.please_link_me_libtool_i_have_great_themes();
     var screen = Gdk.Screen.get_default();
     Gtk.CssProvider? new_provider = null;
 

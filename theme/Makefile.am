@@ -29,7 +29,8 @@ EXTRA_DIST = \
 	sass/_drawing.scss \
 	sass/_main.scss \
 	sass/theme.scss \
-	sass/theme_hc.scss
+	sass/theme_hc.scss \
+	theme.vapi
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/theme --generate-dependencies $(top_srcdir)/theme/budgie-theme.gresource.xml)
 
@@ -50,7 +51,9 @@ lib_LTLIBRARIES = \
 
 libbudgietheme_la_SOURCES = \
 	budgie-theme-resources.h \
-	budgie-theme-resources.c
+	budgie-theme-resources.c \
+	theme.h \
+	theme.c
 
 libbudgietheme_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS)

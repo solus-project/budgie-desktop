@@ -79,6 +79,7 @@ budgie_panel_VALAFLAGS = \
 	--pkg raven \
 	--pkg toplevel \
 	--pkg libsession \
+	--pkg theme \
 	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/plugin \
@@ -86,6 +87,7 @@ budgie_panel_VALAFLAGS = \
 	--vapidir=${top_srcdir}/raven \
 	--vapidir=${top_srcdir}/lib \
 	--vapidir=${top_srcdir}/libsession \
+	--vapidir=${top_srcdir}/theme \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/data/budgie-panel.gresource.xml \
 	$(VALAFLAGS)

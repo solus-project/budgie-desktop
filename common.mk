@@ -16,6 +16,7 @@ AM_CPPFLAGS += \
 	-I $(top_srcdir)/panel \
 	-I $(top_srcdir)/plugin \
 	-I $(top_srcdir)/raven \
+	-I $(top_srcdir)/theme \
 	-O2
 
 DECLARATIONS = \
