@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-29 23:49+0000\n"
+"PO-Revision-Date: 2015-12-31 17:42+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/solus-project/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -179,7 +179,7 @@ msgstr "Budgie darbastalis"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Ši sesija įkels jus į Budgie Darbastalį"
+msgstr "Ši sesija įkels jus į Budgie darbastalį"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -279,7 +279,7 @@ msgstr "Laikrodis"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Parodyti Darbastalio Mygtuką"
+msgstr "Mygtukas rodyti darbastalį"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
@@ -291,7 +291,7 @@ msgstr "Piktogramų užduočių sąrašas"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Užrakintų Klavišų Rodiklis"
+msgstr "Užrakintų klavišų indikatorius"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
@@ -299,7 +299,7 @@ msgstr "Tarpiklis"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Darbalaukio Keitiklis"
+msgstr "Darbalaukio perjungiklis"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"

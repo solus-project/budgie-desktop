@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-29 22:49+0000\n"
+"PO-Revision-Date: 2015-12-31 10:10+0000\n"
 "Last-Translator: Martin Furejta <hackis.bell@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/solus-project/budgie-desktop/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "Budgie Nastavení"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Zavřít"
+msgstr "Zpět"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
@@ -155,7 +155,7 @@ msgstr "Panel 1\n"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
-msgstr "Spravovat panely"
+msgstr "Správa panelů"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Position"
@@ -176,15 +176,15 @@ msgstr "Automatické skrývání"
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Plocha Budgie"
+msgstr "Prostředí Budgie"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Tato sekce vás přihlásí do Plochy Budgie"
+msgstr "Tato sekce vás přihlásí do desktopového prostředí Budgie"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
-msgstr "Nastavení času a data"
+msgstr "Nastavení data a času"
 
 #: ../panel/applets/clock/ClockApplet.vala:57
 msgid "Calendar"

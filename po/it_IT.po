@@ -3,54 +3,49 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alejandro Seoane <asetrigo@gmail.com>, 2015
-# Fran <franchulo021@gmail.com>, 2015
-# Joaquin Mendez <joaquin8mendez@gmail.com>, 2015
-# Manuel Pol <manuel.pol@gmail.com>, 2015
-# Pablo Gabriel Costela <pgabytes@gmail.com>, 2015
-# Sebastián Meneses <sebastian.meneses.n@usach.cl>, 2015
+# Marco Martini <deckedspring@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-31 19:34+0000\n"
-"Last-Translator: Manuel Pol <manuel.pol@gmail.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/solus-project/budgie-desktop/language/es/)\n"
+"PO-Revision-Date: 2015-12-30 22:12+0000\n"
+"Last-Translator: Marco Martini <deckedspring@gmail.com>\n"
+"Language-Team: Italian (Italy) (http://www.transifex.com/solus-project/budgie-desktop/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
+"Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
 msgid "Applets"
-msgstr "Componentes"
+msgstr "Applet"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Notificaciones"
+msgstr "Notifiche"
 
 #: ../raven/settings_view.vala:354
 msgid "Top Panel"
-msgstr "Panel superior"
+msgstr "Pannello Superiore"
 
 #: ../raven/settings_view.vala:356
 msgid "Right Panel"
-msgstr "Panel derecho"
+msgstr "Pannello Destro"
 
 #: ../raven/settings_view.vala:358
 msgid "Left Panel"
-msgstr "Panel Izquierdo"
+msgstr "Pannello Sinistro"
 
 #: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
-msgstr "Panel Inferior"
+msgstr "Pannello Inferiore"
 
 #: ../raven/settings_view.vala:593
 msgid "Start"
-msgstr "Principio"
+msgstr "Inizio"
 
 #: ../raven/settings_view.vala:596
 msgid "Center"
@@ -58,36 +53,36 @@ msgstr "Centro"
 
 #: ../raven/settings_view.vala:599
 msgid "End"
-msgstr "Fin"
+msgstr "Fine"
 
 #: ../raven/settings_view.vala:877
 msgid "General"
-msgstr "General"
+msgstr "Generale"
 
 #: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
 msgid "Panel"
-msgstr "Panel"
+msgstr "Pannello"
 
 #: ../raven/notifications_view.vala:410
 #, c-format
 msgid "%u new notifications"
-msgstr "%u notificaciones nuevas"
+msgstr "%u Nuove Notifiche"
 
 #: ../raven/notifications_view.vala:412
 msgid "1 new notification"
-msgstr "1 nueva notificación"
+msgstr "1 Nuova Notifica"
 
 #: ../raven/notifications_view.vala:414
 msgid "No new notifications"
-msgstr "No hay nuevas notificaciones"
+msgstr "Nessuna Nuova Notifica"
 
 #: ../raven/sound.vala:90
 msgid "Output"
-msgstr "Salida"
+msgstr "Output"
 
 #: ../raven/sound.vala:107
 msgid "Input"
-msgstr "Entrada"
+msgstr "Input"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -102,92 +97,92 @@ msgstr "Entrada"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Tamaño Espaciador"
+msgstr "Largezza Spaziatore"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Ajustes de Budgie"
+msgstr "Impostazioni Budgie"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Salir"
+msgstr "Esci"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Agregar nuevo componente"
+msgstr "Aggiungi un nuovo Applet"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
-msgstr "Apariencia"
+msgstr "Apparenza"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Tema oscuro"
+msgstr "Tema Scuro"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Use the dark theme"
-msgstr "Usar tema oscuro"
+msgstr "Usa il Tema Scuro"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "Tema del Widget"
+msgstr "Tema Widget"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select a GTK+ theme"
-msgstr "Selecciona un tema GTK+"
+msgstr "Seleziona un tema GTK+"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "Tema de iconos"
+msgstr "Tema delle Icone"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Select an icon theme"
-msgstr "Selecciona un tema de iconos"
+msgstr "Seleziona un tema delle Icone"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Tema Incorporado"
+msgstr "Tema Predefinito"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Override defaults"
-msgstr "Valores Predeterminados"
+msgstr "Sostituisci impostazioni predefinite"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
-msgstr "Panel 1 \n"
+msgstr "annello 1\n"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
-msgstr "Manipular Paneles"
+msgstr "Gestisci Pannelli"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Position"
-msgstr "Posición"
+msgstr "Posizione"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Size"
-msgstr "Tamaño"
+msgstr "Grandezza"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Shadow"
-msgstr "Sombra"
+msgstr "Ombreggiatura"
 
 #: ../raven/ui/panel.ui.h:7
 msgid "Autohide policy"
-msgstr "Política de ocultación automática"
+msgstr "Metodo di Nascondimento Automatico"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Escritorio Budgie"
+msgstr "Desktop Budgie"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Esta sesión te permite ingresar al Escritorio Budgie"
+msgstr "Questa sessione ti fa entrare nel Desktop Budgie"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
-msgstr "Configuración de hora y fecha"
+msgstr "Impostazioni di Data e Ora"
 
 #: ../panel/applets/clock/ClockApplet.vala:57
 msgid "Calendar"
@@ -195,76 +190,76 @@ msgstr "Calendario"
 
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
 msgid "All"
-msgstr "Todo"
+msgstr "Tutto"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Mayúscula activa"
+msgstr "Block Maiusc è attivo"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Mayúscula no activa"
+msgstr "Block Maiusc non è attivo"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Pad numérico activo"
+msgstr "Block num è attivo"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Pad numérico no activo"
+msgstr " Block num non  è attivo"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u notificaciones no leidas"
+msgstr "%u Notifiche non lette"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "1 unread notification"
-msgstr "1 notificación no leída "
+msgstr "1 Notifica non letta"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:81
 msgid "No unread notifications"
-msgstr "No hay nuevas notificaciones"
+msgstr "Nessuna Notifica non letta"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Alternar Escritorio"
+msgstr "Mostra il Desktop"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimizar"
+msgstr "Minimizza"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Desmaximizar"
+msgstr "De-Massimizza"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Maximizar"
+msgstr "Massimizza"
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Mover"
+msgstr "Sposta"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Cambiar tamaño"
+msgstr "Scala"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Siempre encima"
+msgstr "Sempre Davanti"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Cerrar"
+msgstr "Chiudi"
 
 #: ../wm/wm.vala:363
 msgid "Change background\\u2026"
-msgstr "Cambiar fondo\\u2026"
+msgstr "Cambia sfondo\\u2026"
 
 #: ../wm/wm.vala:372
 msgid "Settings"
-msgstr "Ajustes"
+msgstr "Impostazioni"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -279,44 +274,44 @@ msgstr "Ajustes"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Reloj"
+msgstr "Orologio"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Mostrar Botón Escritorio"
+msgstr "Mostra il pulsante Desktop"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Lista de Tareas"
+msgstr "Lista Task"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Icono de Lista de Tareas"
+msgstr "Icona Lista Task"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indicador de Bloqueo de Teclas"
+msgstr "Indicatore Lock Keys"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Espaciador"
+msgstr "Spaziatore"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Cambiar de Espacio de Trabajo"
+msgstr "Selettore Desktop Virtuali"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Bandeja de Sistema"
+msgstr "Tray di Sistema"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Indicador de Estado"
+msgstr "Indicatore di Stato"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budgie Menu"
+msgstr "Menú Budgie"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Separador"
+msgstr "Separatore"
