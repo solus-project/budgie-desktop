@@ -25,6 +25,8 @@ EXTRA_DIST = \
 	assets/switch-hc@2.png \
 	assets/switch-active-hc.png \
 	assets/switch-active-hc@2.png \
+	assets/scale-slider.png \
+	assets/scale-slider@2.png \
 	sass/_colors.scss \
 	sass/_drawing.scss \
 	sass/_main.scss \
