@@ -16,7 +16,7 @@ m4_define([peas_required_version], [1.8.0])
 m4_define([gdesktop_required_version], [3.16.0])
 m4_define([pulse_required_version], [2.0])
 m4_define([gsettings_required_version], [3.16.0])
-m4_define([polkit_required_version], [0.110])
+m4_define([polkit_required_version], [0.105])
 
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
