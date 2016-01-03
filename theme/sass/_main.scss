@@ -587,4 +587,6 @@ GtkPopover .scrollbar .trough {
      &.background { @extend .budgie-notification.background; }
 
     .message { color: transparentize($fg_color, 0.3); }
+
+    .failure { color: $alert_color; }
 }

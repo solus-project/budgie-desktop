@@ -31,6 +31,9 @@ public class AgentDialog : Gtk.Dialog
     [GtkChild]
     private Gtk.Label? label_prompt;
 
+    [GtkChild]
+    private Gtk.Label? label_error;
+
     public PolkitAgent.Session? pk_session = null;
     private Polkit.Identity? pk_identity = null;
 
@@ -120,6 +123,7 @@ public class AgentDialog : Gtk.Dialog
         /* Not authed */
         set_sensitive(true);
         if (!authorized || cancellable.is_cancelled()) {
+            label_error.set_text(_("Authentication failed"));
             /* TODO: Cancel non existent spinner */
             var session = pk_session;
             deselect_session();
@@ -252,6 +256,7 @@ public class AgentDialog : Gtk.Dialog
 
         /* TODO: Start up a spinner */
         set_sensitive(false);
+        label_error.set_text("");
         pk_session.response(auth_data);
     }
 
