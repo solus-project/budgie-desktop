@@ -26,12 +26,10 @@ public class AgentDialog : Gtk.Dialog
     private Gtk.Image? image_icon;
 
     [GtkChild]
-    private Gtk.ScrolledWindow? scrolledwindow_idents;
+    private Gtk.ComboBox? combobox_idents;
 
     [GtkChild]
     private Gtk.Label? label_prompt;
-
-    private Gtk.ListBox? list_idents;
 
     public PolkitAgent.Session? pk_session = null;
     private Polkit.Identity? pk_identity = null;
@@ -77,9 +75,6 @@ public class AgentDialog : Gtk.Dialog
         Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable, use_header_bar: 0);
 
         set_keep_above(true);
-        /* TODO: Replace this crap with a combobox */
-        list_idents = new Gtk.ListBox();
-        scrolledwindow_idents.add(list_idents);
 
         var header = new Gtk.EventBox();
         set_titlebar(header);
@@ -87,7 +82,11 @@ public class AgentDialog : Gtk.Dialog
 
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
 
-        list_idents.row_activated.connect(on_row_activated);
+        combobox_idents.changed.connect(on_ident_changed);
+        var render = new Gtk.CellRendererText();
+        combobox_idents.pack_start(render, true);
+        combobox_idents.add_attribute(render, "text", 0);
+        combobox_idents.set_id_column(0);
 
         response.connect(on_agent_response);
         cancellable.cancelled.connect(on_agent_cancelled);
@@ -180,27 +179,31 @@ public class AgentDialog : Gtk.Dialog
         pk_session.initiate();
     }
 
-    /* Select an identity */
-    void on_row_activated(Gtk.ListBoxRow? row)
+    void on_ident_changed()
     {
-        if (row == null) {
+        Gtk.TreeIter iter;
+
+        if (!combobox_idents.get_active_iter(out iter)) {
             deselect_session();
             return;
         }
 
-        var child = row.get_child();
+        var model = combobox_idents.get_model();
+        if (model == null) {
+            return;
+        }
 
-        pk_identity = child.get_data("pk_identity");        
+        model.get(iter, 1, out pk_identity, -1);
         select_session();
     }
+
 
     public void set_from_idents(List<Polkit.Identity?> idents)
     {
         Gtk.ListBoxRow? active_row = null;
 
-        foreach (var child in list_idents.get_children()) {
-            child.destroy();
-        }
+        Gtk.ListStore? model = new Gtk.ListStore(2, typeof(string), typeof(Polkit.Identity));
+        Gtk.TreeIter iter;
 
         foreach (unowned Polkit.Identity? ident in idents)
         {
@@ -216,18 +219,13 @@ public class AgentDialog : Gtk.Dialog
                 name = ident.to_string();
             }
 
-            var label = new Gtk.Label(name);
-            label.halign = Gtk.Align.START;
-            label.set_data("pk_identity", ident.ref());
-            list_idents.add(label);
-
-            if (active_row == null) {
-                active_row = label.get_parent() as Gtk.ListBoxRow;
-                list_idents.select_row(active_row);
-            }
+            
+            model.append(out iter);
+            model.set(iter, 0, name, 1, ident);
         }
 
-        list_idents.show_all();
+        combobox_idents.set_model(model);
+        combobox_idents.active = 0;
     }
 
     /* Got a response from the AgentDialog */
