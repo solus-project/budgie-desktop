@@ -420,6 +420,8 @@ GtkPopover .scrollbar .trough {
 
         &.image { padding-left: 0px; padding-right: 6px; }
     }
+    .list-row.activatable:selected,
+    .list-row.activatable:selected .button { color: inherit; }
 }
 
 // Panel
