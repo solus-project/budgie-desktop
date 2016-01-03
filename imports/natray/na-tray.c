@@ -192,6 +192,19 @@ find_icon_position (NaTray    *tray,
   return position;
 }
 
+static void refresh_toplevel (NaTray *tray)
+{
+  GtkWidget *win = NULL;
+
+  win = gtk_widget_get_toplevel (GTK_WIDGET (tray));
+
+  if (!win) {
+    return;
+  }
+
+  gtk_widget_queue_draw (win);
+}
+
 static void
 tray_added (NaTrayManager *manager,
             GtkWidget     *icon,
@@ -216,6 +229,8 @@ tray_added (NaTrayManager *manager,
   gtk_box_reorder_child (GTK_BOX (priv->box), icon, position);
 
   gtk_widget_show (icon);
+
+  refresh_toplevel (tray);
 }
 
 static void
@@ -239,6 +254,8 @@ tray_removed (NaTrayManager *manager,
   g_hash_table_remove (trays_screen->icon_table, icon);
   /* this will also destroy the tip associated to this icon */
   g_hash_table_remove (trays_screen->tip_table, icon);
+
+  refresh_toplevel (tray);
 }
 
 static void

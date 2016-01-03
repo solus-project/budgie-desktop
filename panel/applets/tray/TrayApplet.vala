@@ -81,6 +81,12 @@ public class TrayApplet : Budgie.Applet
         tray.set_padding(5);
         box.add(tray);
         show_all();
+
+        var win = this.get_toplevel();
+        if (win == null) {
+            return;
+        }
+        win.queue_draw();
     }
 }
 
