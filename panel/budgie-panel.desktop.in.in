@@ -11,3 +11,4 @@ X-GNOME-AutoRestart=false
 X-GNOME-Autostart-Notify=true
 X-GNOME-Autostart-Phase=Panel
 X-GNOME-Provides=panel
+OnlyShowIn=Budgie;
