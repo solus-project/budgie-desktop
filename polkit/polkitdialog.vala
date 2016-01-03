@@ -13,7 +13,7 @@ namespace Budgie
 {
 
 [GtkTemplate (ui = "/com/solus-project/budgie/polkit/dialog.ui")]
-public class AgentDialog : Gtk.Dialog
+public class AgentDialog : Gtk.Window
 {
 
     [GtkChild]
@@ -75,7 +75,7 @@ public class AgentDialog : Gtk.Dialog
     /* Save manually setting all this crap via some nice properties */
     public AgentDialog(string action_id, string message, string icon_name, string cookie, GLib.Cancellable? cancellable)
     {
-        Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable, use_header_bar: 0);
+        Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable);
 
         set_keep_above(true);
 
@@ -91,17 +91,24 @@ public class AgentDialog : Gtk.Dialog
         combobox_idents.add_attribute(render, "text", 0);
         combobox_idents.set_id_column(0);
 
-        response.connect(on_agent_response);
-        cancellable.cancelled.connect(on_agent_cancelled);
-
         window_position = Gtk.WindowPosition.CENTER_ALWAYS;
+
+        key_release_event.connect(on_key_release);
+    }
+
+    bool on_key_release(Gdk.EventKey key)
+    {
+        if (key.keyval == Gdk.Key.Escape) {
+            this.on_agent_cancelled();
+            return Gdk.EVENT_STOP;
+        }
+        return Gdk.EVENT_PROPAGATE;
     }
 
     [GtkCallback]
     void on_entry_auth_activate()
     {
-        /* Stop hardcoding, make an enum */
-        this.response(1);
+        this.on_agent_authenticate();
     }
 
     /* Ensure we grab focus */
@@ -242,15 +249,9 @@ public class AgentDialog : Gtk.Dialog
         }
     }
 
-    /* Got a response from the AgentDialog */
-    void on_agent_response(int response)
+    [GtkCallback]
+    void on_agent_authenticate()
     {
-        if (response < 1) {
-            cancellable.cancel();
-            done();
-            return;
-        }
-
         if (pk_session == null) {
             return;
         }
@@ -261,11 +262,14 @@ public class AgentDialog : Gtk.Dialog
         pk_session.response(auth_data);
     }
 
-    /* Cancellable, whichever, kill this session */
+    [GtkCallback]
     void on_agent_cancelled()
     {
         if (pk_session != null) {
             pk_session.cancel();
+        }
+        if (!cancellable.is_cancelled()) {
+            cancellable.cancel();
         }
         done();
     }
