@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.12"/>
   <template class="BudgieAgentDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="title" translatable="yes">Authentication Required</property>
     <property name="default_width">250</property>
     <property name="icon_name">dialog-password-symbolic</property>
@@ -17,9 +16,8 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="margin_right">12</property>
-            <property name="layout_style">end</property>
+            <property name="valign">end</property>
+            <property name="layout_style">expand</property>
             <child>
               <object class="GtkButton" id="button_cancel">
                 <property name="label" translatable="yes">Cancel</property>
