@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-02 00:35+0000\n"
+"POT-Creation-Date: 2016-01-03 22:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,35 +117,35 @@ msgid "Appearance"
 msgstr ""
 
 #: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr ""
-
-#: ../raven/ui/appearance.ui.h:3
 msgid "Use the dark theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
+#: ../raven/ui/appearance.ui.h:3
+msgid "Dark theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Select a GTK+ theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
+#: ../raven/ui/appearance.ui.h:5
+msgid "Widget Theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
 msgstr ""
 
+#: ../raven/ui/appearance.ui.h:7
+msgid "Icon Theme"
+msgstr ""
+
 #: ../raven/ui/appearance.ui.h:8
-msgid "Built-in theme"
+msgid "Override defaults"
 msgstr ""
 
 #: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
+msgid "Built-in theme"
 msgstr ""
 
 #: ../raven/ui/panel.ui.h:1
