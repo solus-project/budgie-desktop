@@ -302,9 +302,24 @@ public class Agent : PolkitAgent.Listener
         return true;
     }
 
+    private string? current_theme_uri;
+    private Settings? settings;
+    private Gtk.CssProvider? css_provider = null;
 
     public Agent()
     {
+        this.current_theme_uri = "resource://com/solus-project/budgie/theme/theme.css";
+
+        /* Set up dark mode across the desktop */
+        settings = new GLib.Settings("com.solus-project.budgie-panel");
+        var gtksettings = Gtk.Settings.get_default();
+        this.settings.bind("dark-theme", gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
+
+        settings.changed.connect(on_settings_changed);
+
+        gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
+        on_theme_changed();
+
         register_with_session.begin((o,res)=> {
             bool success = register_with_session.end(res);
             if (!success) {
@@ -346,29 +361,69 @@ public class Agent : PolkitAgent.Listener
         }
     }
 
+    void on_theme_changed()
+    {
+        var gtksettings = Gtk.Settings.get_default();
+
+        if (gtksettings.gtk_theme_name == "HighContrast") {
+            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/budgie/theme/theme_hc.css");
+        } else {
+            /* In future we'll actually support custom themes.. */
+            set_css_from_uri(this.current_theme_uri);
+        }
+    }
+
+    void set_css_from_uri(string? uri)
+    {
+        Budgie.please_link_me_libtool_i_have_great_themes();
+        var screen = Gdk.Screen.get_default();
+        Gtk.CssProvider? new_provider = null;
+
+        if (uri == null) {
+            if (this.css_provider != null) {
+                Gtk.StyleContext.remove_provider_for_screen(screen, this.css_provider);
+                this.css_provider = null;
+            }
+            return;
+        }
+    
+        try {
+            var f = File.new_for_uri(uri);
+            new_provider = new Gtk.CssProvider();
+            new_provider.load_from_file(f);
+        } catch (Error e) {
+            warning("Error loading theme: %s", e.message);
+            new_provider = null;
+            return;
+        }
+
+        if (css_provider != null) {
+            Gtk.StyleContext.remove_provider_for_screen(screen, css_provider);
+            css_provider = null;
+        }
+
+        css_provider = new_provider;
+
+        Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    void on_settings_changed(string key)
+    {
+        if (key != "builtin-theme") {
+            return;
+        }
+        if (settings.get_boolean(key)) {
+            this.current_theme_uri = "resource://com/solus-project/budgie/theme.css";
+        } else {
+            this.current_theme_uri = null;
+        }
+
+        on_theme_changed();
+    }
 }
 
 } /* End namespace */
 
-static void set_css_from_uri(string? uri)
-{
-    Budgie.please_link_me_libtool_i_have_great_themes();
-    var screen = Gdk.Screen.get_default();
-    Gtk.CssProvider? new_provider = null;
-
-    try {
-        var f = File.new_for_uri(uri);
-        new_provider = new Gtk.CssProvider();
-        new_provider.load_from_file(f);
-    } catch (Error e) {
-        warning("Error loading theme: %s", e.message);
-        new_provider = null;
-        return;
-    }
-
-
-    Gtk.StyleContext.add_provider_for_screen(screen, new_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-}
 
 public static int main(string[] args)
 {
@@ -392,8 +447,6 @@ public static int main(string[] args)
         stderr.printf("Unable to register listener: %s", e.message);
         return 1;
     }
-
-    set_css_from_uri("resource://com/solus-project/budgie/theme/theme.css");
 
     Gtk.main();
 
