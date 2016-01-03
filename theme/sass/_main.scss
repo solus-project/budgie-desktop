@@ -197,6 +197,8 @@ GtkPopover .scrollbar .trough {
 
         color: gtkalpha(currentColor, 0.7);
 
+        &:insensitive { opacity: 0.4; }
+
         &.slider {
             border-radius: 50%;
 
