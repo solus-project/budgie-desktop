@@ -90,6 +90,9 @@ budgie-polkit-dialog
 /po/.intltool-merge-cache
 /po/*.gmo
 
+/polkit/*.desktop.in
+/polkit/*.desktop
+
 plugin-resources.c
 plugin-resources.h
 

@@ -275,6 +275,8 @@ public class AgentDialog : Gtk.Dialog
 
 public class Agent : PolkitAgent.Listener
 {
+    /* Keep track of our SessionManager */
+    private LibSession.SessionClient? sclient;
 
     public override async bool initiate_authentication(string action_id, string message, string icon_name,
         Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable)
@@ -298,6 +300,50 @@ public class Agent : PolkitAgent.Listener
         dialog.destroy();
 
         return true;
+    }
+
+
+    public Agent()
+    {
+        register_with_session.begin((o,res)=> {
+            bool success = register_with_session.end(res);
+            if (!success) {
+                message("Failed to register with Session manager");
+            }
+        });
+    }
+
+    private async bool register_with_session()
+    {
+        try {
+            sclient = yield LibSession.register_with_session("budgie-polkit");
+        } catch (Error e) {
+            return false;
+        }
+
+        sclient.QueryEndSession.connect(()=> {
+            end_session(false);
+        });
+        sclient.EndSession.connect(()=> {
+            end_session(false);
+        });
+        sclient.Stop.connect(()=> {
+            end_session(true);
+        });
+        return true;
+    }
+
+    private void end_session(bool quit)
+    {
+        if (quit) {
+            Gtk.main_quit();
+            return;
+        }
+        try {
+            sclient.EndSessionResponse(true, "");
+        } catch (Error e) {
+            warning("Unable to respond to session manager! %s", e.message);
+        }
     }
 
 }

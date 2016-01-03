@@ -174,5 +174,5 @@ AC_MSG_RESULT([
         tray:                   ${have_natray}
         workspaces:             ${have_wnck}
 
-        Polkit Agent:           ${have_polkit}
+        Polkit Agent:           always
 ])

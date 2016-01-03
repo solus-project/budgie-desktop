@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie PolicyKit UI
+Comment=Budgie PolicyKit Authorisation UI
+Exec=budgie-polkit-dialog
+Terminal=false
+Categories=GNOME;GTK;System;Core;
+NoDisplay=true
+StartupNotify=true
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-Notify=true
+X-GNOME-Autostart-Phase=Desktop
+OnlyShowIn=Budgie

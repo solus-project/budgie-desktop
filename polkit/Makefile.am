@@ -1,8 +1,11 @@
-if ENABLE_POLKIT_DIALOG
-
 -include $(top_srcdir)/common.mk
 
 polkit_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/polkit --generate-dependencies $(top_srcdir)/polkit/budgie-polkit.gresource.xml)
+
+%.desktop: %.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po)
+	$(AM_V_GEN) \
+	$(MKDIR_P) "$(dir $@)"; \
+	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 BUILT_SOURCES = \
 	budgie-polkit-resources.h \
@@ -10,6 +13,11 @@ BUILT_SOURCES = \
 
 CLEANFILES = \
 	$(BUILT_SOURCES)
+
+
+@INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_XML_NOMERGE_RULE@
+
 
 # resources
 budgie-polkit-resources.h: $(top_srcdir)/polkit/budgie-polkit.gresource.xml $(polkit_resources)
@@ -20,7 +28,8 @@ budgie-polkit-resources.c: $(top_srcdir)/polkit/budgie-polkit.gresource.xml $(po
 
 EXTRA_DIST = \
 	dialog.ui \
-	budgie-polkit.gresource.xml
+	budgie-polkit.gresource.xml \
+	budgie-polkit.desktop.in.in
 
 bin_PROGRAMS = \
 	budgie-polkit-dialog
@@ -37,8 +46,13 @@ budgie_polkit_dialog_CFLAGS = \
 
 budgie_polkit_dialog_LDADD = \
 	$(POLKIT_DIALOG_LIBS) \
+	${top_builddir}/libsession/libsession.la \
 	${top_builddir}/theme/libbudgietheme.la
 
+
+applicationsdir = $(datadir)/applications
+applications_DATA = \
+	budgie-polkit.desktop
 
 budgie_polkit_dialog_VALAFLAGS = \
 	--pkg gtk+-3.0 \
@@ -46,9 +60,9 @@ budgie_polkit_dialog_VALAFLAGS = \
 	--pkg polkit-agent-1 \
 	--pkg posix \
 	--pkg theme \
+	--pkg libsession \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/theme \
+	--vapidir=${top_srcdir}/libsession \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/polkit/budgie-polkit.gresource.xml
-
-endif
