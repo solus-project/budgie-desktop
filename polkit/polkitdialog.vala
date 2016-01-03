@@ -118,6 +118,7 @@ public class AgentDialog : Gtk.Dialog
     void on_pk_session_completed(bool authorized)
     {
         /* Not authed */
+        set_sensitive(true);
         if (!authorized || cancellable.is_cancelled()) {
             /* TODO: Cancel non existent spinner */
             var session = pk_session;
@@ -205,6 +206,8 @@ public class AgentDialog : Gtk.Dialog
         Gtk.ListStore? model = new Gtk.ListStore(2, typeof(string), typeof(Polkit.Identity));
         Gtk.TreeIter iter;
 
+        int length = 0;
+
         foreach (unowned Polkit.Identity? ident in idents)
         {
             string? name = null;
@@ -222,10 +225,16 @@ public class AgentDialog : Gtk.Dialog
             
             model.append(out iter);
             model.set(iter, 0, name, 1, ident);
+            ++length;
         }
 
         combobox_idents.set_model(model);
         combobox_idents.active = 0;
+
+        if (length < 2) {
+            combobox_idents.no_show_all = true;
+            combobox_idents.hide();
+        }
     }
 
     /* Got a response from the AgentDialog */
@@ -242,6 +251,7 @@ public class AgentDialog : Gtk.Dialog
         }
 
         /* TODO: Start up a spinner */
+        set_sensitive(false);
         pk_session.response(auth_data);
     }
 
