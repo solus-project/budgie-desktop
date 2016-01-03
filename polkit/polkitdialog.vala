@@ -28,10 +28,13 @@ public class AgentDialog : Gtk.Dialog
     [GtkChild]
     private Gtk.ScrolledWindow? scrolledwindow_idents;
 
+    [GtkChild]
+    private Gtk.Label? label_prompt;
+
     private Gtk.ListBox? list_idents;
 
     public PolkitAgent.Session? pk_session = null;
-    private unowned Polkit.Identity? pk_identity = null;
+    private Polkit.Identity? pk_identity = null;
 
     public string action_id { public get; public set; }
     public string message {
@@ -63,15 +66,18 @@ public class AgentDialog : Gtk.Dialog
         }
     }
 
+    /* Manipulate Vala's pointer logic to prevent a copy */
+    public unowned GLib.Cancellable? cancellable { public set ; public get; }
+
     public string cookie { public get; public set; }
 
     /* Save manually setting all this crap via some nice properties */
-    public AgentDialog(string action_id, string message, string icon_name, string cookie)
+    public AgentDialog(string action_id, string message, string icon_name, string cookie, GLib.Cancellable? cancellable)
     {
-        Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, use_header_bar: 0);
-        realize.connect(on_realize);
+        Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable, use_header_bar: 0);
 
         set_keep_above(true);
+        /* TODO: Replace this crap with a combobox */
         list_idents = new Gtk.ListBox();
         scrolledwindow_idents.add(list_idents);
 
@@ -82,11 +88,24 @@ public class AgentDialog : Gtk.Dialog
         get_settings().set_property("gtk-application-prefer-dark-theme", true);
 
         list_idents.row_activated.connect(on_row_activated);
+
+        response.connect(on_agent_response);
+        cancellable.cancelled.connect(on_agent_cancelled);
+
+        window_position = Gtk.WindowPosition.CENTER_ALWAYS;
+    }
+
+    [GtkCallback]
+    void on_entry_auth_activate()
+    {
+        /* Stop hardcoding, make an enum */
+        this.response(1);
     }
 
     /* Ensure we grab focus */
-    void on_realize()
+    public override void show()
     {
+        base.show();
         weak Gdk.Window? win = null;
 
         if ((win = get_window()) == null) {
@@ -96,13 +115,56 @@ public class AgentDialog : Gtk.Dialog
         entry_auth.grab_focus();
     }
 
+    /* Session request completed */
+    void on_pk_session_completed(bool authorized)
+    {
+        /* Not authed */
+        if (!authorized || cancellable.is_cancelled()) {
+            /* TODO: Cancel non existent spinner */
+            var session = pk_session;
+            deselect_session();
+            auth_data = "";
+            entry_auth.grab_focus();
+            pk_session = session;
+            select_session();
+            return;
+        }
+        done();
+    }
+
+    void on_pk_request(string request, bool echo_on)
+    {
+        entry_auth.set_visibility(echo_on);
+        /* TODO: Force i18n */
+        label_prompt.set_text(request);
+    }
+
+    void on_pk_error(string text)
+    {
+        warning("PkError: %s", text);
+    }
+
+    void on_pk_info(string text)
+    {
+        GLib.message("PKInfo: %s", text);
+    }
+
     void deselect_session()
     {
         /* dc old signals */
+        if (pk_session != null) {
+            SignalHandler.disconnect(pk_session, error_id);
+            SignalHandler.disconnect(pk_session, complete_id);
+            SignalHandler.disconnect(pk_session, request_id);
+            SignalHandler.disconnect(pk_session, info_id);
+        }
         pk_session = null;
-        pk_identity = null;
-
     }
+
+    ulong error_id;
+    ulong request_id;
+    ulong info_id;
+    ulong complete_id;
 
     void select_session()
     {
@@ -111,12 +173,14 @@ public class AgentDialog : Gtk.Dialog
         }
 
         pk_session = new PolkitAgent.Session(this.pk_identity, this.cookie);
-        /*pk_session.completed.connect(on_pk_session_completed);
-        pk_session.request.connect(on_pk_request);
-        pk_session.show_error.connect(on_pk_error);
-        pk_session.show_info.connect(on_pk_info);*/
+        complete_id = pk_session.completed.connect(on_pk_session_completed);
+        request_id = pk_session.request.connect(on_pk_request);
+        error_id = pk_session.show_error.connect(on_pk_error);
+        info_id = pk_session.show_info.connect(on_pk_info);
+        pk_session.initiate();
     }
 
+    /* Select an identity */
     void on_row_activated(Gtk.ListBoxRow? row)
     {
         if (row == null) {
@@ -126,11 +190,11 @@ public class AgentDialog : Gtk.Dialog
 
         var child = row.get_child();
 
-        pk_identity = row.get_data("pk_identity");
+        pk_identity = child.get_data("pk_identity");        
         select_session();
     }
 
-    void set_from_idents(ref List<Polkit.Identity?> idents)
+    public void set_from_idents(List<Polkit.Identity?> idents)
     {
         Gtk.ListBoxRow? active_row = null;
 
@@ -154,7 +218,7 @@ public class AgentDialog : Gtk.Dialog
 
             var label = new Gtk.Label(name);
             label.halign = Gtk.Align.START;
-            label.set_data("pk_identity", ident);
+            label.set_data("pk_identity", ident.ref());
             list_idents.add(label);
 
             if (active_row == null) {
@@ -162,32 +226,65 @@ public class AgentDialog : Gtk.Dialog
                 list_idents.select_row(active_row);
             }
         }
+
+        list_idents.show_all();
     }
+
+    /* Got a response from the AgentDialog */
+    void on_agent_response(int response)
+    {
+        if (response < 1) {
+            cancellable.cancel();
+            done();
+            return;
+        }
+
+        if (pk_session == null) {
+            return;
+        }
+
+        /* TODO: Start up a spinner */
+        pk_session.response(auth_data);
+    }
+
+    /* Cancellable, whichever, kill this session */
+    void on_agent_cancelled()
+    {
+        if (pk_session != null) {
+            pk_session.cancel();
+        }
+        done();
+    }
+
+    public signal void done();
+
 }
 
 public class Agent : PolkitAgent.Listener
 {
 
-    /* Placeholder */
-    void on_agent_response(AgentDialog? dialog)
+    public override async bool initiate_authentication(string action_id, string message, string icon_name,
+        Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable)
     {
-        if (dialog.pk_session == null) {
-            return;
+
+        var dialog = new AgentDialog(action_id, message, "dialog-password-symbolic", cookie, cancellable);
+        dialog.done.connect(()=> {
+            initiate_authentication.callback();
+        });
+
+        if (identities == null) {
+            dialog.destroy();
+            return false;
         }
-        dialog.pk_session.response(dialog.auth_data);
-    }
 
-    /* Noop */
-    public override void initiate_authentication(string action_id, string message, string icon_name,
-        Polkit.Details details, string cookie, GLib.List<Polkit.Identity?> identities,
-        GLib.Cancellable cancellable, GLib.AsyncReadyCallback @callback)
-    {
-    }
+        dialog.set_from_idents(identities);
 
-    /* Noop */
-    public override bool initiate_authentication_finish(GLib.AsyncResult res)
-    {
-        return false;
+        dialog.show();
+        yield;
+
+        dialog.destroy();
+
+        return true;
     }
 
 }
@@ -218,11 +315,28 @@ public static int main(string[] args)
 {
     Gtk.init(ref args);
 
+    Budgie.Agent? agent = new Budgie.Agent();
+    Polkit.Subject? subject = null;
+
+    int pid = Posix.getpid();
+
+    try {
+        subject = Polkit.UnixSession.new_for_process_sync(pid, null);
+    } catch (Error e) {
+        stdout.printf("Unable to initiate PolKit: %s", e.message);
+        return 1;
+    }
+
+    try {
+        PolkitAgent.register_listener(agent, subject, null);
+    } catch (Error e) {
+        stderr.printf("Unable to register listener: %s", e.message);
+        return 1;
+    }
 
     set_css_from_uri("resource://com/solus-project/budgie/theme/theme.css");
-    /* Testing  
-    var dlg = new Budgie.AgentDialog("lol", "Authentication is required to launch a nuke at the neighbour's squirrel", "dialog-password-symbolic", "cookies!");
-    int response = dlg.run();*/
+
+    Gtk.main();
 
     return 0;
 }

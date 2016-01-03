@@ -119,6 +119,7 @@
                 <property name="margin_bottom">8</property>
                 <property name="visibility">False</property>
                 <property name="invisible_char">●</property>
+                <signal name="activate" handler="on_entry_auth_activate" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -160,12 +161,6 @@
                 <property name="top_attach">2</property>
                 <property name="width">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
