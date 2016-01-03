@@ -12,7 +12,13 @@ BUILT_SOURCES = \
 	budgie-polkit-resources.c
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) \
+	budgie-polkit.desktop \
+	budgie-polkit.desktop.in
+
+DISTCLEANFILES = \
+	budgie-polkit.desktop \
+	budgie-polkit.desktop.in
 
 
 @INTLTOOL_DESKTOP_RULE@
