@@ -189,8 +189,8 @@ GtkPopover .scrollbar .trough {
 
     // Scale
     .scale {
-        -GtkScale-slider-length: if($variant == 'default', 9, 16);
-        -GtkRange-slider-width: if($variant == 'default', 5, 16);
+        -GtkScale-slider-length: 16;
+        -GtkRange-slider-width: 16;
         -GtkRange-trough-border: 0;
         outline-offset: -1px;
         outline-radius: 2px;
@@ -198,25 +198,23 @@ GtkPopover .scrollbar .trough {
         color: gtkalpha(currentColor, 0.7);
 
         &.slider {
-            border-radius: if($variant == 'default', 2.5px, 50%);
-            background-color: $selected_bg_color;
-            border-color: $selected_fg_color;
+            border-radius: 50%;
 
-            &:hover { opacity: 1; }
+            @if $variant == 'default' {
+                background-image: -gtk-scaled(url("assets/scale-slider.png"),url("assets/scale-slider@2.png"));
+            }
+            @else {
+                background-color: $selected_bg_color;
+            }
 
-            &:insensitive {}
+            &:hover { background: $selected_bg_color; }
         }
         &.trough {
-            margin: if($variant == 'default', 0, 5px);
+            margin: 5px;
             background-color: $trough_bg;
             border-radius: 2.5px;
 
-            &.highlight {
-                background-color: $selected_bg_color;
-
-                &:insensitive {}
-            }
-            &:insensitive {}
+            &.highlight { background-color: $selected_bg_color; }
         }
     }
 

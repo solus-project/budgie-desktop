@@ -28,9 +28,9 @@
      inkscape:window-height="723"
      id="namedview15"
      showgrid="true"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="60.399523"
-     inkscape:cy="6.2277302"
+     inkscape:zoom="22.627417"
+     inkscape:cx="90.477981"
+     inkscape:cy="57.650547"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
@@ -554,6 +554,48 @@
          width="45"
          id="rect4156"
          style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       style="display:inline;fill:#ffffff;fill-opacity:1"
+       id="scale-slider"
+       inkscape:label="#g4143-8"
+       transform="matrix(1.1320384,0,0,1.0820107,1426.8465,309.04093)">
+      <rect
+         ry="2.7755576e-17"
+         rx="2.7755576e-17"
+         y="0"
+         x="0"
+         height="16"
+         width="16"
+         id="rect4141-2-4"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         style="display:inline"
+         id="layer9-2-0-9"
+         transform="translate(-60,-518)" />
+      <g
+         id="layer10-8-9-3"
+         transform="translate(-60,-518)" />
+      <g
+         id="layer11-7-8-3"
+         transform="translate(-60,-518)" />
+      <g
+         id="layer13-10-6-8"
+         transform="translate(-60,-518)" />
+      <g
+         id="layer14-4-4-0"
+         transform="translate(-60,-518)" />
+      <g
+         id="layer15-42-1-9"
+         transform="translate(-60,-518)" />
+      <rect
+         style="display:inline;opacity:1;fill:#5294e2;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.21176471"
+         id="rect4287"
+         width="8"
+         height="6"
+         x="3.9999821"
+         y="5.0000052"
+         ry="3" />
     </g>
   </g>
 </svg>

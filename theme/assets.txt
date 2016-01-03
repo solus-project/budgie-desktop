@@ -6,3 +6,4 @@ switch
 switch-active
 switch-hc
 switch-active-hc
+scale-slider

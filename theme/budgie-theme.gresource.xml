@@ -19,5 +19,7 @@
                 <file>assets/switch-hc@2.png</file>
                 <file>assets/switch-active-hc.png</file>
                 <file>assets/switch-active-hc@2.png</file>
+                <file>assets/scale-slider.png</file>
+                <file>assets/scale-slider@2.png</file>
         </gresource>
 </gresources>
