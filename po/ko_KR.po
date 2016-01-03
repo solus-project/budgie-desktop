@@ -1,0 +1,319 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# David Kang <hpdk97@gmail.com>, 2015
+# Joshua Huh <mr.saint@gmail.com>, 2016
+# Youngbin Han <sukso96100@gmail.com>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"PO-Revision-Date: 2016-01-03 15:04+0000\n"
+"Last-Translator: Youngbin Han <sukso96100@gmail.com>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.com/solus-project/budgie-desktop/language/ko_KR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+msgid "Applets"
+msgstr "애플릿"
+
+#: ../raven/main_view.vala:75
+#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "알림"
+
+#: ../raven/settings_view.vala:354
+msgid "Top Panel"
+msgstr "위 패널"
+
+#: ../raven/settings_view.vala:356
+msgid "Right Panel"
+msgstr "오른쪽 패널"
+
+#: ../raven/settings_view.vala:358
+msgid "Left Panel"
+msgstr "왼쪽 패널"
+
+#: ../raven/settings_view.vala:360
+msgid "Bottom Panel"
+msgstr "아래 패널"
+
+#: ../raven/settings_view.vala:593
+msgid "Start"
+msgstr "시작"
+
+#: ../raven/settings_view.vala:596
+msgid "Center"
+msgstr "가운데"
+
+#: ../raven/settings_view.vala:599
+msgid "End"
+msgstr "끝"
+
+#: ../raven/settings_view.vala:877
+msgid "General"
+msgstr "일반"
+
+#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+msgid "Panel"
+msgstr "패널"
+
+#: ../raven/notifications_view.vala:410
+#, c-format
+msgid "%u new notifications"
+msgstr "새 알림 %u 개"
+
+#: ../raven/notifications_view.vala:412
+msgid "1 new notification"
+msgstr "새 알림 1 개"
+
+#: ../raven/notifications_view.vala:414
+msgid "No new notifications"
+msgstr "새 알림 없음"
+
+#: ../raven/sound.vala:90
+msgid "Output"
+msgstr "출력"
+
+#: ../raven/sound.vala:107
+msgid "Input"
+msgstr "입력"
+
+#. End class
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "빈 공간 크기"
+
+#: ../raven/ui/settings.ui.h:1
+msgid "Budgie Settings"
+msgstr "Budgie 설정"
+
+#: ../raven/ui/settings.ui.h:2
+msgid "Exit"
+msgstr "나가기"
+
+#: ../raven/ui/applets.ui.h:1
+msgid "Add new applet"
+msgstr "애플릿 새로 추가"
+
+#: ../raven/ui/appearance.ui.h:1
+msgid "Appearance"
+msgstr "모습"
+
+#: ../raven/ui/appearance.ui.h:2
+msgid "Dark theme"
+msgstr "어두운 테마"
+
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr "어두운 테마 사용"
+
+#: ../raven/ui/appearance.ui.h:4
+msgid "Widget Theme"
+msgstr "위젯 테마"
+
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr "GTK+ 테마 선택"
+
+#: ../raven/ui/appearance.ui.h:6
+msgid "Icon Theme"
+msgstr "아이콘 테마"
+
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr "아이콘 테마 선택"
+
+#: ../raven/ui/appearance.ui.h:8
+msgid "Built-in theme"
+msgstr "기본 테마"
+
+#: ../raven/ui/appearance.ui.h:9
+msgid "Override defaults"
+msgstr "기본값 덮어쓰기"
+
+#: ../raven/ui/panel.ui.h:1
+msgid "Panel 1\n"
+msgstr "패널 1\n"
+
+#: ../raven/ui/panel.ui.h:3
+msgid "Manage Panels"
+msgstr "패널 관리"
+
+#: ../raven/ui/panel.ui.h:4
+msgid "Position"
+msgstr "위치"
+
+#: ../raven/ui/panel.ui.h:5
+msgid "Size"
+msgstr "크기"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Shadow"
+msgstr "그림자"
+
+#: ../raven/ui/panel.ui.h:7
+msgid "Autohide policy"
+msgstr "자동숨김 정책"
+
+#: ../session/budgie-desktop.desktop.in.in.h:1
+#: ../session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Budgie 데스크톱"
+
+#: ../session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Budgie 데스크톱에 로그인합니다"
+
+#: ../panel/applets/clock/ClockApplet.vala:56
+msgid "Time and date settings"
+msgstr "날짜 및 시간"
+
+#: ../panel/applets/clock/ClockApplet.vala:57
+msgid "Calendar"
+msgstr "캘린더"
+
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+msgid "All"
+msgstr "전체"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:53
+msgid "Caps lock is active"
+msgstr "Caps lock 켜짐"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:56
+msgid "Caps lock is not active"
+msgstr "Caps lock 꺼짐"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:66
+msgid "Num lock is active"
+msgstr "Num lock 켜짐"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.vala:69
+msgid "Num lock is not active"
+msgstr "Num lock 꺼짐"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+#, c-format
+msgid "%u unread notifications"
+msgstr "읽지 않은 알림 %u 개"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "1 unread notification"
+msgstr "읽지 않은 알림 1 개"
+
+#: ../panel/applets/notifications/NotificationsApplet.vala:81
+msgid "No unread notifications"
+msgstr "읽지 않은 알림 없음"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
+msgid "Toggle the desktop"
+msgstr "데스크톱 보기/숨기기"
+
+#: ../wm/windowmenu.vala:124
+msgid "Minimize"
+msgstr "최소화"
+
+#: ../wm/windowmenu.vala:129
+msgid "Unmaximize"
+msgstr "최대화 취소"
+
+#: ../wm/windowmenu.vala:134
+msgid "Maximize"
+msgstr "최대화"
+
+#: ../wm/windowmenu.vala:139
+msgid "Move"
+msgstr "이동"
+
+#: ../wm/windowmenu.vala:144
+msgid "Resize"
+msgstr "크기 조절"
+
+#: ../wm/windowmenu.vala:149
+msgid "Always On Top"
+msgstr "항상 위에 표시"
+
+#: ../wm/windowmenu.vala:154
+msgid "Close"
+msgstr "닫기"
+
+#: ../wm/wm.vala:363
+msgid "Change background\\u2026"
+msgstr "바탕 화면 배경 바꾸기\\u2026"
+
+#: ../wm/wm.vala:372
+msgid "Settings"
+msgstr "설정"
+
+#. End namespace
+#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#. *
+#. * Local variables:
+#. * c-basic-offset: 4
+#. * tab-width: 4
+#. * indent-tabs-mode: nil
+#. * End:
+#. *
+#. * vi: set shiftwidth=4 tabstop=4 expandtab:
+#. * :indentSize=4:tabSize=4:noTabs=true:
+#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "시계"
+
+#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "바탕 화면 보기 버튼"
+
+#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "작업 목록"
+
+#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "작업 아이콘 목록"
+
+#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Caps/Num lock 상태"
+
+#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "빈 공간"
+
+#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "작업공간 전환기"
+
+#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "시스템 트레이"
+
+#: ../panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "상태 표시기"
+
+#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Budgie 메뉴"
+
+#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "구분자"
