@@ -25,10 +25,7 @@ GtkPopover .scrollbar .trough {
 // this transparent..
 .budgie-container { background-color: transparent; }
 
-.raven,
-.budgie-panel,
-.budgie-notification,
-.budgie-session-dialog {
+%widgets {
 
     * {
         padding: 0;
@@ -420,6 +417,7 @@ GtkPopover .scrollbar .trough {
 
 // Panel
 .budgie-panel {
+    @extend %widgets;
     color: $fg_color;
     background-color: $panel_bg;
 
@@ -514,6 +512,7 @@ GtkPopover .scrollbar .trough {
 
 // Raven
 .raven {
+    @extend %widgets;
     color: $fg_color;
     background-color: $raven_bg;
     transition: 170ms ease-out;
@@ -557,6 +556,7 @@ GtkPopover .scrollbar .trough {
 
 // Notifications
 .budgie-notification {
+    @extend %widgets;
     &.background {
         border-radius: 1px;
         background-color: $panel_bg;
@@ -572,7 +572,8 @@ GtkPopover .scrollbar .trough {
 
 // Session Dialog
 .budgie-session-dialog {
-     &.background { @extend .budgie-notification.background; }
+    @extend %widgets;
+    &.background { @extend .budgie-notification.background; }
 
     .linked > .button {
         border-bottom: none;
@@ -584,7 +585,8 @@ GtkPopover .scrollbar .trough {
 
 // PolKit Dialog
 .budgie-polkit-dialog {
-     &.background { @extend .budgie-notification.background; }
+    @extend %widgets;
+    &.background { @extend .budgie-notification.background; }
 
     .message { color: transparentize($fg_color, 0.3); }
 
