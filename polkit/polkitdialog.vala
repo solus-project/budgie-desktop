@@ -203,6 +203,7 @@ public class AgentDialog : Gtk.Dialog
     }
 
 
+    /* This bit is inspired by lxpolkit */
     public void set_from_idents(List<Polkit.Identity?> idents)
     {
         Gtk.ListBoxRow? active_row = null;
