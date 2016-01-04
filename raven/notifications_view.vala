@@ -355,7 +355,7 @@ public class NotificationsView : Gtk.Box
         return caps;
     }
 
-    public async void CloseNotification(uint32 id) {
+    public void CloseNotification(uint32 id) {
         if (remove_notification(id)) {
             this.NotificationClosed(id, NotificationCloseReason.CLOSED);
         }
@@ -417,7 +417,7 @@ public class NotificationsView : Gtk.Box
         header.text = text;
     }
 
-    public async uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
+    public uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
                            string summary, string body, string[] actions,
                            HashTable<string, Variant> hints, int32 expire_timeout)
     {
@@ -455,14 +455,15 @@ public class NotificationsView : Gtk.Box
             actions_copy += "%s".printf(action);
         }
         /* When we yield vala unrefs everything and we get double frees. GG */
-        yield pack.set_from_notify(notif_id, app_name, app_icon, summary, body, hints, expire);
-        pack.set_actions(actions_copy);
+        pack.set_from_notify.begin(notif_id, app_name, app_icon, summary, body, hints, expire, ()=> {
+            pack.set_actions(actions_copy);
 
-        if (configure) {
-            configure_window(pack);
-        } else {
-            pack.begin_decay();
-        }
+            if (configure) {
+                configure_window(pack);
+            } else {
+                pack.begin_decay();
+            }
+        });
         
         return notif_id;
     }
