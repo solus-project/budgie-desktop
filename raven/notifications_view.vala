@@ -168,6 +168,9 @@ public class NotificationWindow : Gtk.Window
         try {
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
+            if (this.cancel.is_cancelled()) {
+                return false;
+            }
             Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
             this.pixbuf = pbuf;
             image_icon.set_from_pixbuf(pbuf);
@@ -193,7 +196,9 @@ public class NotificationWindow : Gtk.Window
 
         stop_decay();
 
-        this.cancel.cancel();
+        if (!this.cancel.is_cancelled()) {
+            this.cancel.cancel();
+        }
         this.cancel.reset();
         var datetime = new DateTime.now_local();
         this.timestamp = datetime.to_unix();
