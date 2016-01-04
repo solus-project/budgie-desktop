@@ -143,6 +143,10 @@ public class NotificationWindow : Gtk.Window
 
     private async bool set_from_image_path()
     {
+        if (this.cancel.is_cancelled()) {
+            return false;
+        }
+
         /* Update the icon. */
         string? img_path = null;
         foreach (var img in img_search) {
@@ -162,15 +166,12 @@ public class NotificationWindow : Gtk.Window
         if (img_path == this.image_path) {
             return true;
         }
-    
-        this.image_path = img_path;
 
+        this.image_path = img_path;
+    
         try {
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
-            if (this.cancel.is_cancelled()) {
-                return false;
-            }
             Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
             this.pixbuf = pbuf;
             image_icon.set_from_pixbuf(pbuf);
