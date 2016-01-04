@@ -83,10 +83,13 @@ public class Raven : Gtk.Window
 
     int our_width = 0;
     int our_height = 0;
+    int our_x = 0;
+    int our_y = 0;
 
     private Budgie.ShadowBlock? shadow;
     private RavenIface? iface = null;
     bool expanded = false;
+    bool outside_win = false;
 
     Gdk.Rectangle old_rect;
 
@@ -172,6 +175,34 @@ public class Raven : Gtk.Window
         }
     }
 
+    bool on_enter_notify()
+    {
+        this.outside_win = false;
+        return Gdk.EVENT_PROPAGATE;
+    }
+
+    bool on_focus_out()
+    {
+        if (this.outside_win && this.expanded) {
+            this.set_expanded(false);
+        }
+        return Gdk.EVENT_PROPAGATE;
+    }
+
+    bool on_leave_notify(Gtk.Widget? widget, Gdk.EventCrossing? evt)
+    {
+        if (evt.x_root < this.our_x ||
+            evt.x_root > (this.our_x+this.our_width) ||
+            evt.y_root < this.our_y ||
+            evt.y_root > (this.our_y+this.our_height))
+        {
+            this.outside_win = true;
+        } else {
+            this.outside_win = false;
+        }
+        return Gdk.EVENT_PROPAGATE;
+    }
+
     public Raven(Budgie.DesktopManager? manager)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
@@ -185,6 +216,10 @@ public class Raven : Gtk.Window
         } else {
             set_visual(vis);
         }
+
+        leave_notify_event.connect(on_leave_notify);
+        enter_notify_event.connect(on_enter_notify);
+        focus_out_event.connect(on_focus_out);
 
         /* Set up our main layout */
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -361,6 +396,9 @@ public class Raven : Gtk.Window
 
         our_height = height;
         our_width = width;
+        our_x = x;
+        our_y = y;
+
         if (!get_visible()) {
             queue_resize();
         }
@@ -418,6 +456,8 @@ public class Raven : Gtk.Window
         nscale = old_op;
 
         if (exp) {
+            /* Until we're told otherwise */
+            outside_win = true;
             show_all();
         }
 
