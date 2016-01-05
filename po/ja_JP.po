@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# BALLOON a.k.a. Fu-sen., 2015
+# BALLOON a.k.a. Fu-sen., 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-30 00:19+0000\n"
+"PO-Revision-Date: 2016-01-05 01:46+0000\n"
 "Last-Translator: BALLOON a.k.a. Fu-sen.\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/solus-project/budgie-desktop/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -29,23 +29,23 @@ msgstr "通知"
 
 #: ../raven/settings_view.vala:354
 msgid "Top Panel"
-msgstr "パネルを上に"
+msgstr "上パネル"
 
 #: ../raven/settings_view.vala:356
 msgid "Right Panel"
-msgstr "パネルを右に"
+msgstr "右パネル"
 
 #: ../raven/settings_view.vala:358
 msgid "Left Panel"
-msgstr "パネルを左に"
+msgstr "左パネル"
 
 #: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
-msgstr "パネルを下に"
+msgstr "下パネル"
 
 #: ../raven/settings_view.vala:593
 msgid "Start"
-msgstr "開始"
+msgstr "左・上"
 
 #: ../raven/settings_view.vala:596
 msgid "Center"
@@ -53,7 +53,7 @@ msgstr "中央"
 
 #: ../raven/settings_view.vala:599
 msgid "End"
-msgstr "終了"
+msgstr "右・下"
 
 #: ../raven/settings_view.vala:877
 msgid "General"
