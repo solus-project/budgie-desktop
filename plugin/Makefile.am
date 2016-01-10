@@ -15,6 +15,14 @@ lib_LTLIBRARIES = libbudgie-plugin.la
 
 budgie_enum_headers = applet.h
 
+
+budgie_devdir = $(includedir)/budgie-desktop
+budgie_dev_HEADERS = \
+	plugin.h \
+	applet.h \
+	popover-manager.h \
+	budgie-enums.h
+
 budgie-enums.h: $(budgie_enum_headers) budgie-enums.h.template
 	$(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > \
 	budgie-enums.h.tmp && mv budgie-enums.h.tmp budgie-enums.h

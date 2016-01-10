@@ -7,6 +7,6 @@ datarootdir=${prefix}/share
 Name: Budgie
 Description: Budgie Plugin Library
 Version: 1
-Requires: gtk+-3.0 >= 3.16.0 libpeas-1.0 >= 1.8.0
+Requires: gtk+-3.0 >= 3.16.0, libpeas-1.0 >= 1.8.0, libpeas-gtk-1.0 >= 1.8.0, glib-2.0 >= 2.42.0, gio-unix-2.0 >= 2.42.0
 Libs: -L${libdir} -lbudgie-plugin
-Cflags: -I${includedir}/
+Cflags: -I${includedir}/budgie-desktop
