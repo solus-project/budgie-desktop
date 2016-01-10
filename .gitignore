@@ -42,9 +42,10 @@ budgie-polkit-dialog
 # plugin
 *.gir
 *.typelib
-/plugin/*.c
-/plugin/*.h
 /plugin/budgie-1.0.pc
+/plugin/*.vapi
+/plugin/budgie-enums.c
+/plugin/budgie-enums.h
 
 /theme/*resources*.c
 /theme/*resources*.h

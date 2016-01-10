@@ -25,6 +25,7 @@ libtoplevel_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg budgie-1.0 \
+	--pkg libpeas-1.0 \
 	--vapidir=${top_srcdir}/plugin \
 	-H BudgieToplevel.h \
 	$(VALAFLAGS)

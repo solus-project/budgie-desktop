@@ -110,6 +110,7 @@ AH_TOP([#ifndef CONFIG_H_INCLUDED
 AH_BOTTOM([#endif])
 AC_CONFIG_HEADERS([config.h])
 
+
 AC_CONFIG_FILES([Makefile
                 config/Makefile
                 data/budgie-panel.desktop
@@ -138,6 +139,10 @@ GETTEXT_PACKAGE=budgie-desktop
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
+
+AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+
+VAPIGEN_CHECK_FORCE([0.28],,,)
 
 AC_OUTPUT
 

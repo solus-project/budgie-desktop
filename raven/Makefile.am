@@ -68,6 +68,7 @@ libraven_la_VALAFLAGS = \
 	--pkg toplevel \
 	--pkg gvc-1.0 \
 	--pkg budgie-config \
+	--pkg libpeas-1.0 \
 	-H BudgieRaven.h \
 	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
