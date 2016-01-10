@@ -8,7 +8,9 @@ INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 CLEANFILES =
-EXTRA_DIST =
+EXTRA_DIST = \
+	budgie-enums.h.template \
+	budgie-enums.c.template
 
 lib_LTLIBRARIES = libbudgie-plugin.la
 
