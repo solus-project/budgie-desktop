@@ -36,4 +36,5 @@ SUBDIRS = \
 	rundialog \
 	session \
 	wm \
-	po
+	po \
+	docs

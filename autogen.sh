@@ -18,6 +18,7 @@ fi
 git submodule update
 
 intltoolize --force
+gtkdocize || exit 1
 AUTORECONF=`which autoreconf`
 if test -z $AUTORECONF;
 then

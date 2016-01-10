@@ -102,3 +102,19 @@ budgie-run-dialog
 
 # Applet translations
 /panel/applets/*/*.plugin
+
+
+gtk-doc.make
+m4/gtk-doc.m4
+
+docs/budgie-desktop.args
+docs/budgie-desktop.hierarchy
+docs/budgie-desktop.interfaces
+docs/budgie-desktop.prerequisites
+docs/budgie-desktop.signals
+docs/budgie-desktop.types
+docs/budgie-desktop*.txt
+docs/html/
+docs/xml/
+test-driver
+

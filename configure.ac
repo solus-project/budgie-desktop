@@ -110,6 +110,12 @@ AH_TOP([#ifndef CONFIG_H_INCLUDED
 AH_BOTTOM([#endif])
 AC_CONFIG_HEADERS([config.h])
 
+# check for gtk-doc
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
 
 AC_CONFIG_FILES([Makefile
                 config/Makefile
@@ -132,7 +138,8 @@ AC_CONFIG_FILES([Makefile
                 session/Makefile
                 wm/budgie-wm.desktop
                 wm/Makefile
-                po/Makefile.in])
+                po/Makefile.in
+                docs/Makefile])
 
 IT_PROG_INTLTOOL([0.50.0])
 GETTEXT_PACKAGE=budgie-desktop
