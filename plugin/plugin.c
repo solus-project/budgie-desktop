@@ -11,6 +11,44 @@
 
 #include "plugin.h"
 
+/**
+ * SECTION:plugin
+ * @Short_description: Main entry point for Budgie Panel Applets
+ * @Title: BudgiePlugin
+ *
+ * The BudgiePlugin provides the main entry point for modules that wish
+ * to extend the functionality of the Budgie Panel. In reality, the vast
+ * majority of the work is actually implemented in #BudgieApplet.
+ *
+ * Implementations must implement the #budgie_plugin_get_panel_widget method,
+ * and provide a new instance of their implementation of the BudgieApplet:
+ * |[<!-- language="C" -->
+ *
+ *      static BudgieApplet *my_type_get_panel_widget(BudgiePlugin *self, gchar *uuid)
+ *      {
+ *              return my_applet_new(uuid);
+ *      }
+ *
+ *      static void my_class_init(GObjectClass *klass)
+ *      {
+ *              MyClass *mc = MY_CLASS(klass);
+ *              ...
+ *              mc->get_panel_widget = my_type_get_panel_widget;
+ *      }
+ * ]|
+ *
+ * In Vala we would achieve like so:
+ *  * In Vala we can achieve it like so:
+ * 
+ * |[<!-- language="Vala" -->
+ *
+ *      public Budgie.Applet get_panel_widget(string uuid)
+ *      {
+ *          return new MyApplet();
+ *      }
+ * ]|
+ */
+
 typedef BudgiePluginIface BudgiePluginInterface;
 
 G_DEFINE_INTERFACE(BudgiePlugin, budgie_plugin, G_TYPE_OBJECT)
@@ -21,7 +59,8 @@ static void budgie_plugin_default_init(__attribute__ ((unused)) BudgiePluginIfac
 
 /**
  * budgie_plugin_get_panel_widget:
- * @uuid UUID for this new instance
+ * @self: A #BudgiePlugin
+ * @uuid: UUID for this new instance
  *
  * Returns: (transfer full): A newly initialised panel widget
  */
