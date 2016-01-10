@@ -10,7 +10,9 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 CLEANFILES =
 EXTRA_DIST = \
 	budgie-enums.h.template \
-	budgie-enums.c.template
+	budgie-enums.c.template \
+	budgie-1.0.vapi \
+	budgie-1.0.deps
 
 lib_LTLIBRARIES = libbudgie-plugin.la
 
@@ -74,16 +76,9 @@ typelibs_DATA = Budgie-1.0.typelib
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 
-VAPIGEN_VAPIS = budgie-1.0.vapi
 
-budgie-1.0.vapi: Budgie-1.0.gir
-budgie_1_0_vapi_DEPS = gobject-2.0 gio-unix-2.0 gtk+-3.0 libpeas-1.0
-budgie_1_0_vapi_METADATADIRS = $(srcdir)
-budgie_1_0_vapi_VAPIDIRS = $(datadir)/vala/vapi
-budgie_1_0_vapi_FILES = Budgie-1.0.gir
-
-vapidir = $(VAPIGEN_VAPIDIR)
-nodist_vapi_DATA = $(VAPIGEN_VAPIS)
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = budgie-1.0.vapi
 
 CLEANFILES += $(nodist_vapi_DATA)
  

@@ -43,7 +43,6 @@ budgie-polkit-dialog
 *.gir
 *.typelib
 /plugin/budgie-1.0.pc
-/plugin/*.vapi
 /plugin/budgie-enums.c
 /plugin/budgie-enums.h
 
