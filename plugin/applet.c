@@ -409,6 +409,20 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self)
 
 /**
  * budgie_applet_update_popovers:
+ *
+ * This virtual method should be implemented by panel applets that wish
+ * to support #GtkPopover's natively. As each Budgie Panel may house multiple
+ * GtkPopover widgets, each one must be registered with the @manager.
+ *
+ * During this call, it is safe to store a reference to the @manager. In
+ * this call you should invoke #BudgiePopoverManager::register_popover to
+ * register your popover with the panel manager.
+ *
+ * Each registered popover joins the global menu system of popovers in the
+ * panel. It is a requirement to register, otherwise the panel will not
+ * know when to expand and collapse the main panel harness to accomdate
+ * the GtkPopover.
+ *
  * @manager: (nullable)
  */
 void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *manager)
@@ -422,7 +436,12 @@ void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *man
                 klazz->update_popovers(self, manager);
         }
 }
-        
+
+ /**
+  * budgie_applet_get_supported_actions:
+  * 
+  * Utility function for Python bindings. See #BudgieApplet:supported-actions
+  */
 BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self)
 {
         if (!self) {

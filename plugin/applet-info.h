@@ -39,6 +39,12 @@ struct _BudgieAppletInfoClass {
         GObjectClass parent_class;
 };
 
+/**
+ * BudgieAppletInfo:
+ *
+ * This type is private to the panel implementation, and is used to monitor, track,
+ * and control each applet instance.
+ */
 struct _BudgieAppletInfo {
         GObject parent_instance;
         BudgieAppletInfoPrivate *priv;

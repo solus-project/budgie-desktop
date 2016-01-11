@@ -38,7 +38,6 @@
  * ]|
  *
  * In Vala we would achieve like so:
- *  * In Vala we can achieve it like so:
  * 
  * |[<!-- language="Vala" -->
  *
