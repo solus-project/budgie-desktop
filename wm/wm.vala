@@ -29,6 +29,7 @@ public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/P
 public static const string LOGIND_DBUS_NAME        = "org.freedesktop.login1";
 public static const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 
+[Flags]
 public enum PanelAction {
     NONE = 1 << 0,
     MENU = 1 << 1,

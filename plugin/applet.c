@@ -60,8 +60,8 @@ static guint applet_signals[N_SIGNALS] = { 0 };
 #define FREE_IF_SET(x) { if (self->priv->x) { g_free(self->priv->x) ; self->priv->x = NULL; } }
 
 
-static void budgie_applet_get_property(GObject *object, guint id,
-                                        GValue *value, GParamSpec* spec)
+static void budgie_applet_set_property(GObject *object, guint id,
+                                        const GValue *value, GParamSpec* spec)
 {
         BudgieApplet *self = BUDGIE_APPLET(object);
 
@@ -73,7 +73,7 @@ static void budgie_applet_get_property(GObject *object, guint id,
                         budgie_applet_set_settings_schema(self, g_value_get_string(value));
                         break;
                 case PROP_ACTIONS:
-                        self->priv->actions = g_value_get_enum(value);
+                        self->priv->actions = g_value_get_flags(value);
                         break;
                 default:
                         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
@@ -82,20 +82,20 @@ static void budgie_applet_get_property(GObject *object, guint id,
                         
 }
 
-static void budgie_applet_set_property(GObject *object, guint id,
-                                        const GValue *value, GParamSpec *spec)
+static void budgie_applet_get_property(GObject *object, guint id,
+                                        GValue *value, GParamSpec *spec)
 {
         BudgieApplet *self = BUDGIE_APPLET(object);
 
         switch (id) {
                 case PROP_PREFIX:
-                        g_value_set_string((GValue*)value, budgie_applet_get_settings_prefix(self));
+                        g_value_set_string(value, budgie_applet_get_settings_prefix(self));
                         break;
                 case PROP_SCHEMA:
-                        g_value_set_string((GValue*)value, budgie_applet_get_settings_schema(self));
+                        g_value_set_string(value, budgie_applet_get_settings_schema(self));
                         break;
                 case PROP_ACTIONS:
-                        g_value_set_flags((GValue*)value, self->priv->actions);
+                        g_value_set_flags(value, self->priv->actions);
                         break;
                 default:
                         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
