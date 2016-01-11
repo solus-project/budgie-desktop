@@ -3,6 +3,10 @@ budgie-desktop
 
 The Budgie Desktop is the flagship desktop of Solus OS.
 
+NOTE:: The `master` branch is currently highly unstable, due to a rework.
+For now use commit from before 0596e73177f74911eb93ccd6eca952c79b88f25f
+or use the 10.2.2 tag, thanks!
+
 License
 -------
 
