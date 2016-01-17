@@ -149,4 +149,4 @@ let's be fair, it does kinda look better up top.
 Authors
 =======
 
-Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
+Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
