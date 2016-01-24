@@ -1,6 +1,10 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
-
+# NOTE:
+#   We automatically clone the gvc submodule, and this is included within
+#   the "make dist" tarball- you need this to package Budgie!
+#   See issue: 303
+#
 srcdir=`dirname $0`
 test -n "$srcdir" || srcdir=`dirname "$0"`
 test -n "$srcdir" || srcdir=.
