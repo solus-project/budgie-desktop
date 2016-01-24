@@ -24,6 +24,9 @@ public class TrayApplet : Budgie.Applet
     protected int icon_size = 24;
     Gtk.EventBox box;
 
+    int width;
+    int height;
+
     public TrayApplet()
     {
         margin = 1;
@@ -50,8 +53,22 @@ public class TrayApplet : Budgie.Applet
                 tray.force_redraw();
             }
         });
+
+        size_allocate.connect(on_size_allocate);
     }
 
+    void on_size_allocate(Gtk.Allocation alloc)
+    {
+        if (!get_realized() || get_parent() == null) {
+            return;
+        }
+        if (this.width != alloc.width || this.height != alloc.height) {
+            this.width = alloc.width;
+            this.height = alloc.height;
+            this.get_parent().queue_resize();
+            this.get_toplevel().queue_resize();
+        }
+    }
     public override void get_preferred_height(out int m, out int n)
     {
         m = icon_size;
