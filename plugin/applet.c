@@ -453,6 +453,8 @@ BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self)
 static void budgie_applet_init(BudgieApplet *self)
 {
         self->priv = budgie_applet_get_instance_private(self);
+
+        gtk_widget_set_can_focus(GTK_WIDGET(self), FALSE);
 }
 
 /**
