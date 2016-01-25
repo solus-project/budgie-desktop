@@ -13,15 +13,16 @@
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">3</property>
-        <property name="margin_right">3</property>
-        <property name="margin_top">3</property>
-        <property name="margin_bottom">3</property>
+        <property name="border_width">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="margin_top">3</property>
+            <property name="margin_bottom">3</property>
             <child>
               <object class="GtkImage" id="image_icon">
                 <property name="visible">True</property>
@@ -106,6 +107,9 @@
             <child>
               <placeholder/>
             </child>
+            <style>
+              <class name="budgie-notification"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -118,6 +122,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">6</property>
+            <property name="margin_bottom">3</property>
             <property name="layout_style">center</property>
             <child>
               <placeholder/>
@@ -138,10 +143,13 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <style>
+          <class name="drop-shadow"/>
+        </style>
       </object>
     </child>
     <style>
-      <class name="budgie-notification"/>
+      <class name="budgie-notification-window"/>
     </style>
   </template>
 </interface>

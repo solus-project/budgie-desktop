@@ -564,20 +564,35 @@ GtkPopover .scrollbar .trough {
     .button.image-button { padding: 8px; }
 }
 
+.budgie-notification-window {
+    @extend %widgets;
+    background-color: transparent;
+    background-image: none;
+    border-radius: 1px;
+}
+
 // Notifications
 .budgie-notification {
     @extend %widgets;
     &.background {
-        border-radius: 1px;
-        background-color: $panel_bg;
         color: $fg_color;
-        box-shadow: 0 3px 5px 0 $panel_shadow, 0 0 0 1px $panel_border;
+        border-radius: 1px;
     }
+
     .notification-title {
         font-size: 110%;
         color: $fg_color;
     }
     .notification-body { color: transparentize($fg_color, 0.3); }
+}
+
+.drop-shadow {
+    @extend %widgets;
+
+    background-color: $panel_bg;
+    background-image: none;
+    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    border-radius: 1px;
 }
 
 // Session Dialog

@@ -62,20 +62,17 @@ public class NotificationWindow : Gtk.Window
 
     public NotificationWindow(NotificationsView? owner)
     {
-        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION, owner: owner);
+        Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION, owner: owner);
         resizable = false;
         skip_pager_hint = true;
         skip_taskbar_hint = true;
+        set_decorated(false);
 
         Gdk.Visual? vis = screen.get_rgba_visual();
         if (vis != null) {
             this.set_visual(vis);
         }
         cancel = new GLib.Cancellable();
-
-        var title = new Gtk.EventBox();
-        set_titlebar(title);
-        title.get_style_context().remove_class("titlebar");
 
         set_default_size(NOTIFICATION_SIZE, -1);
     }
