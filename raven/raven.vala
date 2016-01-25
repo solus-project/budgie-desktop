@@ -203,6 +203,17 @@ public class Raven : Gtk.Window
         return Gdk.EVENT_PROPAGATE;
     }
 
+    private void steal_focus()
+    {
+        unowned Gdk.Window? window = get_window();
+        if (window == null) {
+            return;
+        }
+        if (!has_toplevel_focus) {
+            window.focus(Gdk.CURRENT_TIME);
+        }
+    }
+
     public Raven(Budgie.DesktopManager? manager)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
@@ -227,13 +238,7 @@ public class Raven : Gtk.Window
 
 
         enter_notify_event.connect((e)=> {
-            unowned Gdk.Window? window = get_window();
-            if (window == null) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            if (!has_toplevel_focus) {
-                window.focus(e.time);
-            }
+            steal_focus();
             return Gdk.EVENT_PROPAGATE;
         });
 
@@ -486,6 +491,7 @@ public class Raven : Gtk.Window
             } else {
                 (a.widget as Gtk.Window).present();
                 (a.widget as Gtk.Window).grab_focus();
+                steal_focus();
             }
         });
     }
