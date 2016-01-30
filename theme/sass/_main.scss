@@ -564,21 +564,16 @@ GtkPopover .scrollbar .trough {
     .button.image-button { padding: 8px; }
 }
 
+// Notifications
 .budgie-notification-window {
-    @extend %widgets;
-    background-color: transparent;
-    background-image: none;
+    background: none;
     border-radius: 1px;
 }
 
-// Notifications
 .budgie-notification {
-    @extend %widgets;
     &.background {
-        color: $fg_color;
         border-radius: 1px;
     }
-
     .notification-title {
         font-size: 110%;
         color: $fg_color;
@@ -589,18 +584,17 @@ GtkPopover .scrollbar .trough {
 .drop-shadow {
     @extend %widgets;
 
+    color: $fg_color;
     background-color: $panel_bg;
-    background-image: none;
     box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
     border-radius: 1px;
 }
 
 // Session Dialog
 .budgie-session-dialog {
-    @extend %widgets;
-    &.background { @extend .budgie-notification.background; }
+    &.background { @extend .drop-shadow; }
 
-    .linked > .button {
+    .linked.horizontal > .button {
         border-bottom: none;
         border-radius: 0;
         &:first-child { border-left: none; border-radius: 0; }
