@@ -275,7 +275,7 @@ public class PanelManager : DesktopManager
             return;
         }
         if (settings.get_boolean(key)) {
-            this.current_theme_uri = "resource://com/solus-project/budgie/theme.css";
+            this.current_theme_uri = "resource://com/solus-project/budgie/theme/theme.css";
         } else {
             this.current_theme_uri = null;
         }
@@ -304,10 +304,10 @@ public class PanelManager : DesktopManager
         raven = new Budgie.Raven(this);
 
         this.on_monitors_changed();
-        this.current_theme_uri = "resource://com/solus-project/budgie/theme/theme.css";
 
         gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
-        on_theme_changed();
+
+        on_settings_changed("builtin-theme");
 
         /* Some applets might want raven */
         raven.setup_dbus();
