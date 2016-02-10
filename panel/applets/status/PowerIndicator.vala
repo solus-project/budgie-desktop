@@ -9,11 +9,21 @@
  * (at your option) any later version.
  */
 
+public class BatteryIcon : Gtk.Image
+{
+    /** The battery associated with this icon */
+    public unowned Up.Device battery { protected set; public get; }
+
+    public BatteryIcon(Up.Device battery) {
+        this.battery = battery;
+    }
+}
+
 public class PowerIndicator : Gtk.Bin
 {
 
-    /** Current image to display */
-    public Gtk.Image widget { protected set; public get; }
+    /** Widget containing battery icons to display */
+    public Gtk.Box widget { protected set; public get; }
 
     /** Our upower client */
     public Up.Client client { protected set; public get; }
@@ -25,7 +35,7 @@ public class PowerIndicator : Gtk.Bin
     {
         batteries = new List<Up.Device>();
 
-        widget = new Gtk.Image();
+        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         add(widget);
 
         client = new Up.Client();
@@ -63,38 +73,53 @@ public class PowerIndicator : Gtk.Bin
         }
         hide();
 
-        // TODO: For each battery
-    	var battery = batteries.nth_data(0);
+        // Update/add icon for each battery
+        batteries.foreach((battery) => {
+            // Determine the icon to use for this battery
+            string image_name;
+            if (battery.percentage <= 10) {
+                image_name = "battery-empty";
+            } else if (battery.percentage <= 35) {
+                image_name = "battery-low";
+            } else if (battery.percentage <= 75) {
+                image_name = "battery-good";
+            } else {
+                image_name = "battery-full";
+            }
 
-        // Got a battery, determine the icon to use
-        string image_name;
-        if (battery.percentage <= 10) {
-            image_name = "battery-empty";
-        } else if (battery.percentage <= 35) {
-            image_name = "battery-low";
-        } else if (battery.percentage <= 75) {
-            image_name = "battery-good";
-        } else {
-            image_name = "battery-full";
-        }
+            // Fully charged OR charging
+            if (battery.state == 4) {
+                    image_name = "battery-full-charged-symbolic";
+            } else if (battery.state == 1) {
+                    image_name += "-charging-symbolic";
+            } else {
+                    image_name += "-symbolic";
+            }
 
-        // Fully charged OR charging
-        if (battery.state == 4) {
-                image_name = "battery-full-charged-symbolic";
-        } else if (battery.state == 1) {
-                image_name += "-charging-symbolic";
-        } else {
-                image_name += "-symbolic";
-        }
+            // Determine BatteryIcon that corresponds to the battery
+            BatteryIcon icon = null;
+            widget.get_children().foreach((child) => {
+                BatteryIcon childIcon = (BatteryIcon) child;
+                if (childIcon.battery.serial == battery.serial) {
+                    icon = childIcon;
+                }
+            });
+            // If not already contained, create new BatteryIcon
+            if (icon == null) {
+                icon = new BatteryIcon(battery);
+                widget.pack_end(icon);
+            }
 
-        // Set a handy tooltip until we gain a menu in StatusApplet
-        int hours = (int)battery.time_to_empty / (60 * 60);
-        int minutes = (int)battery.time_to_empty / 60 - hours * 60;
-        string tip = "Battery remaining: %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
-        set_tooltip_text(tip);
-        margin = 2;
+            // Set a handy tooltip until we gain a menu in StatusApplet
+            int hours = (int)battery.time_to_empty / (60 * 60);
+            int minutes = (int)battery.time_to_empty / 60 - hours * 60;
+            string tip = "Battery remaining: %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
+            icon.margin = 2;
+            icon.set_tooltip_text(tip);
 
-        widget.set_from_icon_name(image_name, Gtk.IconSize.MENU);
+            icon.set_from_icon_name(image_name, Gtk.IconSize.MENU);
+        });
+
         show_all();
     }
 } // End class
