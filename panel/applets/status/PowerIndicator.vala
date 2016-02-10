@@ -18,11 +18,13 @@ public class PowerIndicator : Gtk.Bin
     /** Our upower client */
     public Up.Client client { protected set; public get; }
 
-    /** Device reference */
-    protected unowned Up.Device? battery = null;
+    /** Device references */
+    protected List<unowned Up.Device> batteries;
 
     public PowerIndicator()
     {
+        batteries = new List<Up.Device>();
+
         widget = new Gtk.Image();
         add(widget);
 
@@ -35,24 +37,34 @@ public class PowerIndicator : Gtk.Bin
      */
     protected void update_ui()
     {
-        if (battery == null) {
-            // try to discover the battery
-            var devices = client.get_devices();
+        // try to discover batteries
+        var devices = client.get_devices();
 
-            devices.foreach((device) => {
-                if (device.kind == Up.DeviceKind.BATTERY && battery == null) {
-                    battery = device;
-                    battery.notify.connect(() => update_ui ());
-                }
-            });
-            if (battery == null) {
-                warning("Unable to discover a battery");
-                remove(widget);
-                hide();
+        devices.foreach((device) => {
+            if (device.kind != Up.DeviceKind.BATTERY) {
                 return;
             }
+
+            bool alreadyContained = false;
+            batteries.foreach((battery) => {
+                if (device.serial == battery.serial) alreadyContained = true;
+            });
+
+            if (!alreadyContained) {
+            	batteries.append(device);
+                device.notify.connect(() => update_ui ());
+            }
+        });
+        if (batteries.length() == 0) {
+            warning("Unable to discover a battery");
+            remove(widget);
             hide();
+            return;
         }
+        hide();
+
+        // TODO: For each battery
+    	var battery = batteries.nth_data(0);
 
         // Got a battery, determine the icon to use
         string image_name;
