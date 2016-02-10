@@ -65,6 +65,16 @@
       <summary>Toplevel panels</summary>
       <description>Toplevel panels</description>
     </key>
+    <key type="as" name="spam-apps">
+      <default>['Spotify', 'Lollypop', 'lollypop.desktop']</default>
+      <summary>Spam Apps</summary>
+      <description>Notifications send by these apps will not be displayed in Raven.</description>
+    </key>
+    <key type="as" name="spam-categories">
+      <default>['x-gnome.music']</default>
+      <summary>Spam Categories</summary>
+      <description>Notifications send by apps of these categories will not be displayed in Raven.</description>
+    </key>
     <key type="b" name="dark-theme">
       <default>true</default>
       <summary>Use dark theme within Budgie Desktop</summary>
