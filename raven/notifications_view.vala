@@ -13,6 +13,13 @@
 namespace Budgie
 {
 
+
+/** Spam apps */
+public static const string ROOT_KEY_SPAM_APPS = "spam-apps";
+
+/** Spam categories */
+public static const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
+
 public enum NotificationCloseReason {
     EXPIRED = 1,    /** The notification expired. */
     DISMISSED = 2,  /** The notification was dismissed by the user. */
@@ -337,13 +344,7 @@ public class NotificationsView : Gtk.Box
         "body", "body-markup", "actions", "action-icons"
     };
 
-    private string[] spammers = {
-        "x-gnome.music"
-    };
-
-    private string[] spam_apps = {
-        "lollypop.desktop", "Lollypop"
-    };
+    private Settings settings = new GLib.Settings("com.solus-project.budgie-panel");
 
     private HeaderWidget? header = null;
     private Gtk.ListBox? listbox;
@@ -373,8 +374,10 @@ public class NotificationsView : Gtk.Box
         SignalHandler.disconnect(widget, nid);
         this.NotificationClosed(widget.id, reason);
 
+        string[] spam_apps = settings.get_strv(Budgie.ROOT_KEY_SPAM_APPS);
+        string[] spam_categories = settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
         if (reason == NotificationCloseReason.EXPIRED) {
-            if (!(widget.category != null && widget.category in spammers) && !(widget.app_name != null && widget.app_name in spam_apps) && !widget.did_interact) {
+            if (!(widget.category != null && widget.category in spam_categories) && !(widget.app_name != null && widget.app_name in spam_apps) && !widget.did_interact) {
                 var clone = new NotificationClone(widget);
                 clone.show_all();
                 this.listbox.add(clone);
