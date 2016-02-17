@@ -3,86 +3,89 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Ville Kivelä <vkivela@hotmail.com>, 2015-2016
+# aldorgan <d.ubuntu@gmail.com>, 2016
+# Eduard Drehner <i.am@k0nsl.org>, 2016
+# Eduard Drehner <i.am@k0nsl.org>, 2016
+# Michael Svensson <m.svensson@operamail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2016-02-14 19:15+0000\n"
-"Last-Translator: Ville Kivelä <vkivela@hotmail.com>\n"
-"Language-Team: Finnish (http://www.transifex.com/solus-project/budgie-desktop/language/fi/)\n"
+"PO-Revision-Date: 2016-02-17 18:47+0000\n"
+"Last-Translator: Michael Svensson <m.svensson@operamail.com>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.com/solus-project/budgie-desktop/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
+"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
 msgid "Applets"
-msgstr "Appletit"
+msgstr "Applets"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Ilmoitukset"
+msgstr "Meddelanden"
 
 #: ../raven/settings_view.vala:354
 msgid "Top Panel"
-msgstr "Yläpaneeli"
+msgstr "Topp Panel"
 
 #: ../raven/settings_view.vala:356
 msgid "Right Panel"
-msgstr "Oikea paneeli"
+msgstr "Höger Panel"
 
 #: ../raven/settings_view.vala:358
 msgid "Left Panel"
-msgstr "Vasen paneeli"
+msgstr "Vänster Panel"
 
 #: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
-msgstr "Alapaneeli"
+msgstr "Nedre Panel"
 
 #: ../raven/settings_view.vala:593
 msgid "Start"
-msgstr "Alku"
+msgstr "Start"
 
 #: ../raven/settings_view.vala:596
 msgid "Center"
-msgstr "Keski"
+msgstr "Mitten"
 
 #: ../raven/settings_view.vala:599
 msgid "End"
-msgstr "Loppu"
+msgstr "Slutet"
 
 #: ../raven/settings_view.vala:877
 msgid "General"
-msgstr "Yleiset"
+msgstr "Allmänt"
 
 #: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
 msgid "Panel"
-msgstr "Paneeli"
+msgstr "Panel"
 
 #: ../raven/notifications_view.vala:410
 #, c-format
 msgid "%u new notifications"
-msgstr "%u uutta ilmoitusta"
+msgstr "%u nya meddelanden"
 
 #: ../raven/notifications_view.vala:412
 msgid "1 new notification"
-msgstr "1 uusi ilmoitus"
+msgstr "1 nytt meddelande"
 
 #: ../raven/notifications_view.vala:414
 msgid "No new notifications"
-msgstr "Ei uusia ilmoituksia"
+msgstr "Inga nya meddelanden"
 
 #: ../raven/sound.vala:90
 msgid "Output"
-msgstr "Ulostulo"
+msgstr "Utmatning"
 
 #: ../raven/sound.vala:107
 msgid "Input"
-msgstr "Sisääntulo"
+msgstr "Inmatning"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -97,169 +100,169 @@ msgstr "Sisääntulo"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Välin koko"
+msgstr "mellanrums storlek"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Budgien asetukset"
+msgstr "Budgie Inställningar"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Poistu"
+msgstr "Avsluta"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Lisää uusi appletti"
+msgstr "Lägg till en ny applet"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
-msgstr "Ulkonäkö"
+msgstr "Utseende"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Tumma teema"
+msgstr "Svart tema"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Use the dark theme"
-msgstr "Käytä tummaa teemaa"
+msgstr "Använd det svarta temat"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "Widgetti teema"
+msgstr "Widget Tema"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select a GTK+ theme"
-msgstr "Valitse GTK+ teema"
+msgstr "Välj ett GTK+ tema"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "Ikoni teema"
+msgstr "Ikon Tema"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Select an icon theme"
-msgstr "Valitse ikoni teema"
+msgstr "Välj ett tema för ikoner"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Sisäänrakennettu teema"
+msgstr "Inbyggt tema"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Override defaults"
-msgstr "Ohita oletukset"
+msgstr "åsidosätta standard inställning"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
-msgstr "Paneeli 1\n"
+msgstr "Panel 1\n"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
-msgstr "Hallinnoi paneeleja"
+msgstr "Hantera Paneler"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Position"
-msgstr "Sijainti"
+msgstr "Position"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Size"
-msgstr "Koko"
+msgstr "Storlek"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Shadow"
-msgstr "Varjo"
+msgstr "Skuggor"
 
 #: ../raven/ui/panel.ui.h:7
 msgid "Autohide policy"
-msgstr "Automaattisen piiloituksen tapa"
+msgstr "Göm principer automatiskt"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie työpöytä"
+msgstr "Budgie Skrivbord"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Tämä istunto kirjaa sinut Budgie työpöydälle"
+msgstr "Denna sessionen loggar in till Budgie Skrivbordet"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
-msgstr "Päivä- ja aika-asetukset"
+msgstr "Datum och Tid inställningar"
 
 #: ../panel/applets/clock/ClockApplet.vala:57
 msgid "Calendar"
-msgstr "Kalenteri"
+msgstr "Kalender"
 
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
 msgid "All"
-msgstr "Kaikki"
+msgstr "Alla"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Caps lock on aktiivinen"
+msgstr "Caps Lock är aktiverat"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Caps lock ei ole aktiivinen"
+msgstr "Caps lock är inte aktivt"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Num lock on aktiivinen"
+msgstr "Num Lock är aktiverat"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Num lock ei ole aktiivinen"
+msgstr "Num Lock är inte aktiverat"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u lukematonta ilmoitusta"
+msgstr "%u olästa meddelanden"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "1 unread notification"
-msgstr "1 lukematon ilmoitus"
+msgstr "1 oläst meddelande"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:81
 msgid "No unread notifications"
-msgstr "Ei lukemattomia ilmoituksia"
+msgstr "Inga olästa meddelanden"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Näytä työpöytä"
+msgstr "Visa skrivbordet"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimoi"
+msgstr "Minimera"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Pienennä"
+msgstr "Återställ"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Suurenna"
+msgstr "Maximera"
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Siirrä"
+msgstr "Flytta"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Muuta kokoa"
+msgstr "Ändra storlek"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Aina päällimmäisenä"
+msgstr "Alltid På Topp"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Sulje"
+msgstr "Stäng"
 
 #: ../wm/wm.vala:363
 msgid "Change background\\u2026"
-msgstr "Vaihda tausta\\u2026"
+msgstr "Byt bakgrund\\u2026"
 
 #: ../wm/wm.vala:372
 msgid "Settings"
-msgstr "Asetukset"
+msgstr "Inställningar"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -274,44 +277,44 @@ msgstr "Asetukset"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Kello"
+msgstr "Klocka"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Näytä työpöytänäppäin"
+msgstr "Visa skrivbordet"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Tehtävälista"
+msgstr "Program lista"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Ikoni tehtävälista"
+msgstr "Ikon lista"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Lukitusnäppäin indikaattori"
+msgstr "Låsta nycklar indikator"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Väli"
+msgstr "tomrum"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Työpöytävaihtaja"
+msgstr "Växla mellan Arbetsytor"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Tehtäväpalkki"
+msgstr "Aktivitetsfält"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Tilailmaisin"
+msgstr "Statusindikator"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budgie valikko"
+msgstr "Budgie Meny"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Erotin"
+msgstr "Tomrum"
