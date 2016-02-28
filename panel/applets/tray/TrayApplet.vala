@@ -95,6 +95,19 @@ public class TrayApplet : Budgie.Applet
             return;
         }
         tray.set_icon_size(icon_size);
+
+        Gdk.Color fg;
+        Gdk.Color warning;
+        Gdk.Color error;
+        Gdk.Color success;
+
+        Gdk.Color.parse("white", out fg);
+        Gdk.Color.parse("red", out error);
+        Gdk.Color.parse("orange", out warning);
+        Gdk.Color.parse("white", out success);
+
+        tray.set_colors(fg, error, warning, success);
+
         tray.set_padding(5);
         box.add(tray);
         show_all();
@@ -104,6 +117,7 @@ public class TrayApplet : Budgie.Applet
             return;
         }
         win.queue_draw();
+        tray.force_redraw();
     }
 }
 
