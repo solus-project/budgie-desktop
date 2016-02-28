@@ -160,7 +160,7 @@ public class SoundIndicator : Gtk.Bin
                     break;
             }
         }
-        widget.set_from_icon_name(image_name, Gtk.IconSize.INVALID);
+        widget.set_from_icon_name(image_name, Gtk.IconSize.MENU);
 
         var vol_max = mixer.get_vol_max_amplified();
 
