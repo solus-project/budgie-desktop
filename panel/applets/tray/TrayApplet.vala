@@ -38,7 +38,7 @@ public class TrayApplet : Budgie.Applet
         box.vexpand = false;
         vexpand = false;
 
-        realize.connect_after(()=> {
+        map.connect_after(()=> {
             maybe_integrate_tray();
         });
 
@@ -118,6 +118,7 @@ public class TrayApplet : Budgie.Applet
         }
         win.queue_draw();
         tray.force_redraw();
+        this.queue_resize();
     }
 }
 
