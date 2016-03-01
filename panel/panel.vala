@@ -187,6 +187,9 @@ public class Panel : Budgie.Toplevel
 
         intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
         this.manager = manager;
+
+        skip_taskbar_hint = true;
+        skip_pager_hint = true;
     
         scale = get_scale_factor();
 
