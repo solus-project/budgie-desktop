@@ -1,2 +1,5 @@
 #!/bin/sh
+
+XDG_CURRENT_DESKTOP=Budgie:GNOME
+export XDG_CURRENT_DESKTOP
 exec gnome-session --session=budgie-desktop $*
