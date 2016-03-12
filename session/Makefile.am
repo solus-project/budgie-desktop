@@ -38,8 +38,8 @@ gnomesessiondir = $(datadir)/gnome-session/sessions
 gnomesession_DATA = \
 	budgie-desktop.session
 
-# TODO: Permit stateless on Solus
-autostartdir = $(sysconfdir)/xdg/autostart
+autostartdir = $(XDGDIR)/autostart
+
 autostart_DATA = \
 	budgie-desktop-nm-applet.desktop
 

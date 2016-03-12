@@ -117,6 +117,19 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
 
+AC_ARG_ENABLE(stateless, AS_HELP_STRING([--enable-stateless], [enable stateless configuration]))
+if test "x$enable_stateless" = "xyes" ; then
+    AC_DEFINE([STATELESS], [1], [Using stateless configuration])
+    adl_RECURSIVE_EVAL(["${datadir}/xdg"], [XDGDIR])
+else
+    enable_stateless="no"
+    adl_RECURSIVE_EVAL(["${sysconfdir}/xdg"], [XDGDIR])
+fi
+
+AC_SUBST(XDGDIR)
+
+AM_CONDITIONAL([STATELESS_CONFIG], [test x$enable_stateless = "xyes"])
+
 AC_CONFIG_FILES([Makefile
                 config/Makefile
                 data/budgie-panel.desktop
@@ -167,6 +180,9 @@ AC_MSG_RESULT([
         compiler:               ${CC}
         cflags:                 ${CFLAGS}
         ldflags:                ${LDFLAGS}
+
+        stateless:              ${enable_stateless}
+        xdg directory:          ${XDGDIR}
 
         Plugins:
         =======
