@@ -61,6 +61,7 @@ libstatusapplet_la_VALAFLAGS = \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg posix \
+	--pkg GnomeBluetooth-1.0 \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/vapi
 
