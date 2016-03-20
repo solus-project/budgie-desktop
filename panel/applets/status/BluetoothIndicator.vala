@@ -21,6 +21,8 @@ public class BluetoothIndicator : Gtk.Bin
     private Gtk.TreeModel? model = null;
     public Gtk.Popover? popover = null;
 
+    SimpleAction? send_to = null;
+
 
     bool get_default_adapter(out Gtk.TreeIter adapter)
     {
@@ -78,9 +80,12 @@ public class BluetoothIndicator : Gtk.Bin
 
         if (n_devices > 0) {
             lbl = ngettext("Connected to %d device", "Connected to %d devices", n_devices).printf(n_devices);
+            send_to.set_enabled(true);
         } else if (n_devices < 0) {
             hide();
             return;
+        } else {
+            send_to.set_enabled(false);
         }
 
         /* TODO: Determine if bluetooth is actually active (rfkill) */
@@ -91,7 +96,6 @@ public class BluetoothIndicator : Gtk.Bin
     void on_settings_activate()
     {
         var app_info = new DesktopAppInfo("gnome-bluetooth-panel.desktop");
-
         if (app_info == null) {
             return;
         }
@@ -99,6 +103,19 @@ public class BluetoothIndicator : Gtk.Bin
             app_info.launch(null, null);
         } catch (Error e) {
             message("Unable to launch gnome-bluetooth-panel.desktop: %s", e.message);
+        }
+    }
+
+    void on_send_file()
+    {
+        var app_info = AppInfo.create_from_commandline("bluetooth-sendto", "Bluetooth Transfer", AppInfoCreateFlags.NONE);
+        if (app_info == null) {
+            return;
+        }
+        try {
+            app_info.launch(null, null);
+        } catch (Error e) {
+            message("Unable to launch bluetooth-sendto: %s", e.message);
         }
     }
 
@@ -126,6 +143,10 @@ public class BluetoothIndicator : Gtk.Bin
         var settings = new GLib.SimpleAction("settings", null);
         settings.activate.connect(on_settings_activate);
         group.add_action(settings);
+
+        send_to = new GLib.SimpleAction("send-file", null);
+        send_to.activate.connect(on_send_file);
+        group.add_action(send_to);
 
         this.insert_action_group("bluetooth", group);
 
