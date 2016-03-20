@@ -12,6 +12,12 @@
  * BluetoothIndicator is largely inspired by gnome-flashback.
  */
 
+[DBus (name="org.gnome.SettingsDaemon.Rfkill")]
+public interface Rfkill : Object
+{
+    public abstract bool BluetoothAirplaneMode { set; get; }
+}
+
 public class BluetoothIndicator : Gtk.Bin
 {
     public Gtk.Image? image = null;
@@ -23,7 +29,17 @@ public class BluetoothIndicator : Gtk.Bin
 
     SimpleAction? send_to = null;
     SimpleAction? airplane = null;
+    Rfkill? killer = null;
 
+    async void setup_dbus()
+    {
+        try {
+            killer = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SettingsDaemon.Rfkill", "/org/gnome/SettingsDaemon/Rfkill");
+        } catch (Error e) {
+            warning("Unable to contact RfKill manager: %s", e.message);
+            return;
+        }
+    }
 
     bool get_default_adapter(out Gtk.TreeIter adapter)
     {
@@ -78,6 +94,17 @@ public class BluetoothIndicator : Gtk.Bin
     {
         var n_devices = get_n_devices();
         string? lbl = null;
+
+        if (killer != null) {
+            if (killer.BluetoothAirplaneMode) {
+                image.set_from_icon_name("bluetooth-disabled-symbolic", Gtk.IconSize.MENU);
+                lbl = _("Bluetooth is disabled");
+                n_devices = 0;
+            } else {
+                image.set_from_icon_name("bluetooth-active-symbolic", Gtk.IconSize.MENU);
+                lbl = _("Bluetooth is active");
+            }
+        }
 
         if (n_devices > 0) {
             lbl = ngettext("Connected to %d device", "Connected to %d devices", n_devices).printf(n_devices);
@@ -138,7 +165,7 @@ public class BluetoothIndicator : Gtk.Bin
         var menu = new GLib.Menu();
         menu.append(_("Bluetooth Settings"), "bluetooth.settings");
         menu.append(_("Send Files"), "bluetooth.send-file");
-        menu.append(_("Bluetooth Enabled"), "bluetooth.airplane-mode");
+        menu.append(_("Bluetooth Airplane Mode"), "bluetooth.airplane-mode");
         popover = new Gtk.Popover.from_model(ebox, menu);
 
         var group = new GLib.SimpleActionGroup();
@@ -151,20 +178,48 @@ public class BluetoothIndicator : Gtk.Bin
         group.add_action(send_to);
 
         airplane = new GLib.SimpleAction.stateful("airplane-mode", null, new Variant.boolean(true));
-        airplane.activate.connect(()=> {
-            var active = airplane.get_state().get_boolean();
-            airplane.set_state(new Variant.boolean(!active));
-
-            message("RfKill iface not yet implemented!");
-
-            this.popover.hide();
-        });
+        airplane.activate.connect(on_set_airplane);
         group.add_action(airplane);
         this.insert_action_group("bluetooth", group);
 
-
         this.resync();
 
+        this.setup_dbus.begin(()=> {
+            if (this.killer == null) {
+                return;
+            }
+            this.sync_rfkill();
+        });
+
         show_all();
+    }
+
+    /* We set */
+    void on_set_airplane()
+    {
+        bool s = !(airplane.get_state().get_boolean());
+        try {
+            killer.BluetoothAirplaneMode = s;
+        } catch (Error e) {
+            message("Error setting airplane mode: %s", e.message);
+        }
+    }
+
+    /* Notify */
+    void on_airplane_change()
+    {
+        bool b = killer.BluetoothAirplaneMode;
+        airplane.set_state(new Variant.boolean(b));
+        this.resync();
+    }
+
+    void sync_rfkill()
+    {
+        bool b = killer.BluetoothAirplaneMode;
+
+        var db = killer as DBusProxy;
+        db.g_properties_changed.connect(on_airplane_change);
+        airplane.set_state(new Variant.boolean(b));
+        this.resync();
     }
 } // End class
