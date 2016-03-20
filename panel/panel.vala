@@ -26,6 +26,7 @@ public class MainPanel : Gtk.Box
         Object(orientation: Gtk.Orientation.HORIZONTAL);
         this.intended_size = size;
         get_style_context().add_class("budgie-panel");
+        get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
     }
 
     public override void get_preferred_height(out int m, out int n)
