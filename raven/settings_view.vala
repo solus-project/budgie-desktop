@@ -712,6 +712,9 @@ public class AppearanceSettings : Gtk.Box
     private Gtk.ComboBox? combobox_icon;
 
     [GtkChild]
+    private Gtk.ComboBox? combobox_cursor;
+
+    [GtkChild]
     private Gtk.Switch? switch_dark;
 
     [GtkChild]
@@ -727,6 +730,9 @@ public class AppearanceSettings : Gtk.Box
     
         combobox_icon.pack_start(render, true);
         combobox_icon.add_attribute(render, "text", 0);
+
+        combobox_cursor.pack_start(render, true);
+        combobox_cursor.add_attribute(render, "text", 0);
 
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
         budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
@@ -750,6 +756,14 @@ public class AppearanceSettings : Gtk.Box
             queue_resize();
             if (b) {
                 ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
+            }
+        });
+        load_themes_by_type.begin(ThemeType.CURSOR_THEME, (obj,res)=> {
+            bool b = load_themes_by_type.end(res);
+            combobox_cursor.sensitive = b;
+            queue_resize();
+            if (b) {
+                ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
             }
         });
     }
@@ -784,6 +798,7 @@ public class AppearanceSettings : Gtk.Box
             case ThemeType.CURSOR_THEME:
                 item = "icons";
                 suffix = "cursors";
+                target = this.combobox_cursor;
                 break;
             default:
                 return false;
