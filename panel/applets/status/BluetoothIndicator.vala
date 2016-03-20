@@ -88,6 +88,20 @@ public class BluetoothIndicator : Gtk.Bin
         image.set_tooltip_text(lbl);
     }
 
+    void on_settings_activate()
+    {
+        var app_info = new DesktopAppInfo("gnome-bluetooth-panel.desktop");
+
+        if (app_info == null) {
+            return;
+        }
+        try {
+            app_info.launch(null, null);
+        } catch (Error e) {
+            message("Unable to launch gnome-bluetooth-panel.desktop: %s", e.message);
+        }
+    }
+
     public BluetoothIndicator()
     {
         image = new Gtk.Image.from_icon_name("bluetooth-active-symbolic", Gtk.IconSize.MENU);
@@ -107,6 +121,14 @@ public class BluetoothIndicator : Gtk.Bin
         menu.append(_("Bluetooth Settings"), "bluetooth.settings");
         menu.append(_("Send Files"), "bluetooth.send-file");
         popover = new Gtk.Popover.from_model(ebox, menu);
+
+        var group = new GLib.SimpleActionGroup();
+        var settings = new GLib.SimpleAction("settings", null);
+        settings.activate.connect(on_settings_activate);
+        group.add_action(settings);
+
+        this.insert_action_group("bluetooth", group);
+
 
         this.resync();
 
