@@ -29,6 +29,7 @@ public class StatusApplet : Budgie.Applet
 {
 
     protected Gtk.Box widget;
+    protected BluetoothIndicator blue;
     protected SoundIndicator sound;
     protected PowerIndicator power;
     protected Gtk.Popover popover;
@@ -48,6 +49,9 @@ public class StatusApplet : Budgie.Applet
 
         sound = new SoundIndicator();
         widget.pack_start(sound, false, false, 0);
+
+        blue = new BluetoothIndicator();
+        widget.pack_start(blue, false, false, 0);
 
         wrap.button_release_event.connect(on_button_release);
 

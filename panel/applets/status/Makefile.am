@@ -28,6 +28,7 @@ EXTRA_DIST += \
 plugin_LTLIBRARIES = libstatusapplet.la
 
 libstatusapplet_la_SOURCES = \
+	BluetoothIndicator.vala \
 	StatusApplet.vala \
 	PowerIndicator.vala \
 	SoundIndicator.vala
