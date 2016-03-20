@@ -197,7 +197,7 @@ AC_MSG_RESULT([
         spacer:                 always
         show-desktop:           ${have_wnck}
         tasklist:               ${have_wnck}
-        status:                 ${have_upower}
+        status:                 ${have_status}
         tray:                   ${have_natray}
         workspaces:             ${have_wnck}
 
