@@ -22,6 +22,7 @@ public class BluetoothIndicator : Gtk.Bin
     public Gtk.Popover? popover = null;
 
     SimpleAction? send_to = null;
+    SimpleAction? airplane = null;
 
 
     bool get_default_adapter(out Gtk.TreeIter adapter)
@@ -137,6 +138,7 @@ public class BluetoothIndicator : Gtk.Bin
         var menu = new GLib.Menu();
         menu.append(_("Bluetooth Settings"), "bluetooth.settings");
         menu.append(_("Send Files"), "bluetooth.send-file");
+        menu.append(_("Bluetooth Enabled"), "bluetooth.airplane-mode");
         popover = new Gtk.Popover.from_model(ebox, menu);
 
         var group = new GLib.SimpleActionGroup();
@@ -148,6 +150,16 @@ public class BluetoothIndicator : Gtk.Bin
         send_to.activate.connect(on_send_file);
         group.add_action(send_to);
 
+        airplane = new GLib.SimpleAction.stateful("airplane-mode", null, new Variant.boolean(true));
+        airplane.activate.connect(()=> {
+            var active = airplane.get_state().get_boolean();
+            airplane.set_state(new Variant.boolean(!active));
+
+            message("RfKill iface not yet implemented!");
+
+            this.popover.hide();
+        });
+        group.add_action(airplane);
         this.insert_action_group("bluetooth", group);
 
 
