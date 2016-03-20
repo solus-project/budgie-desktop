@@ -7,8 +7,6 @@ EXTRA_DIST = \
 	package.json \
 	README.md \
 	render-assets.sh \
-	theme.css \
-	theme_hc.css \
 	assets/checkbox.png \
 	assets/checkbox@2.png \
 	assets/checkbox-active.png \
@@ -27,11 +25,13 @@ EXTRA_DIST = \
 	assets/switch-active-hc@2.png \
 	assets/scale-slider.png \
 	assets/scale-slider@2.png \
-	sass/_colors.scss \
-	sass/_drawing.scss \
-	sass/_main.scss \
-	sass/theme.scss \
-	sass/theme_hc.scss \
+	3.18/sass/_colors.scss \
+	3.18/sass/_drawing.scss \
+	3.18/sass/_main.scss \
+	3.18/sass/theme.scss \
+	3.18/sass/theme_hc.scss \
+	3.18/theme.css \
+	3.18/theme_hc.css \
 	theme.vapi
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/theme --generate-dependencies $(top_srcdir)/theme/budgie-theme.gresource.xml)

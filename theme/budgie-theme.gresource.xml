@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
         <gresource prefix="/com/solus-project/budgie/theme">
-                <file>theme.css</file>
-                <file>theme_hc.css</file>
+                <file>3.18/theme.css</file>
+                <file>3.18/theme_hc.css</file>
+        </gresource>
+
+        <gresource prefix="/com/solus-project/budgie/theme">
                 <file>assets/checkbox.png</file>
                 <file>assets/checkbox@2.png</file>
                 <file>assets/checkbox-active.png</file>

@@ -3,7 +3,7 @@ var sass        = require("gulp-sass");
 var filter      = require('gulp-filter');
 
 gulp.task('default', function () {
-    return gulp.src('sass/*.scss')
+    return gulp.src('3.18/sass/*.scss')
         .pipe(sass({
             outputStyle: 'compressed',
             precision: 5,
@@ -11,5 +11,5 @@ gulp.task('default', function () {
                 notify().write(err);
             }
         }))
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest('3.18'))
 });

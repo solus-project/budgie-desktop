@@ -275,7 +275,7 @@ public class PanelManager : DesktopManager
             return;
         }
         if (settings.get_boolean(key)) {
-            this.current_theme_uri = "resource://com/solus-project/budgie/theme/theme.css";
+            this.current_theme_uri = "resource://com/solus-project/budgie/theme/3.18/theme.css";
         } else {
             this.current_theme_uri = null;
         }
@@ -368,7 +368,7 @@ public class PanelManager : DesktopManager
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/budgie/theme/theme_hc.css");
+            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/budgie/theme/3.18/theme_hc.css");
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);
