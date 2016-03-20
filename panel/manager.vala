@@ -336,6 +336,8 @@ public class PanelManager : DesktopManager
     private string get_theme_prefix()
     {
         switch (Gtk.get_minor_version()) {
+            case 20:
+                return "resource://com/solus-project/budgie/theme/3.20";
             case 18:
             default:
                 return "resource://com/solus-project/budgie/theme/3.18";

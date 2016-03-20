@@ -32,6 +32,13 @@ EXTRA_DIST = \
 	3.18/sass/theme_hc.scss \
 	3.18/theme.css \
 	3.18/theme_hc.css \
+	3.20/sass/_colors.scss \
+	3.20/sass/_drawing.scss \
+	3.20/sass/_main.scss \
+	3.20/sass/theme.scss \
+	3.20/sass/theme_hc.scss \
+	3.20/theme.css \
+	3.20/theme_hc.css \
 	theme.vapi
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/theme --generate-dependencies $(top_srcdir)/theme/budgie-theme.gresource.xml)
