@@ -198,6 +198,7 @@ AC_MSG_RESULT([
         show-desktop:           ${have_wnck}
         tasklist:               ${have_wnck}
         status:                 ${have_upower}
+        bluetooth indicator:    ${have_bluetooth}
         tray:                   ${have_natray}
         workspaces:             ${have_wnck}
 
