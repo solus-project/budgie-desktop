@@ -255,21 +255,6 @@ public class RunDialog : Gtk.Window
         }
     }
 
-
-    /**
-     * Launch the budgie-panel preferences and exit
-     */
-    protected void launch_panel_preferences ()
-    {
-        try {
-            Process.spawn_command_line_async ("budgie-panel --prefs");
-            this.destroy();
-        } catch (SpawnError e) {
-            stderr.printf ("Error launching budgie settings: %s\n",
-                           e.message);
-        }
-    }
-
     /**
      * Build the headerbar
      */
@@ -277,17 +262,10 @@ public class RunDialog : Gtk.Window
     {
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, (int) this.border_width);
 
-        var preferences = new Gtk.Button.from_icon_name ("preferences-desktop",
-                Gtk.IconSize.MENU);
-        preferences.tooltip_text = "Budgie Settings";
-        preferences.clicked.connect(launch_panel_preferences);
-
         var close = new Gtk.Button.from_icon_name ("window-close-symbolic",
                 Gtk.IconSize.MENU);
         close.relief = Gtk.ReliefStyle.NONE;
         close.clicked.connect(() => this.destroy());
-
-        box.add(preferences);
         box.add(new Gtk.Separator (Gtk.Orientation.VERTICAL));
         box.pack_start (entry, true, true, 0);
         box.add(close);
