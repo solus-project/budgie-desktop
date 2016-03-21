@@ -50,7 +50,7 @@
         background-color: transparentize($bg, 0.1);
         border-color: transparentize($border, 0.2);
 
-        > .label { color: inherit; }
+        > label { color: inherit; }
     }
     @else if $t==insensitive-active {
         opacity: 0.5;
