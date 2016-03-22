@@ -13,6 +13,7 @@ panel/applets/budgie-menu/BudgieMenuWindow.c
 panel/applets/lock-keys/LockKeysApplet.c
 panel/applets/notifications/NotificationsApplet.c
 panel/applets/show-desktop/ShowDesktopApplet.c
+panel/applets/status/BluetoothIndicator.c
 
 raven/main_view.c
 raven/notifications_view.c
