@@ -19,6 +19,7 @@ public class MainView : Gtk.Box
     private MprisWidget? mpris = null;
     private CalendarWidget? cal = null;
     private SoundWidget? sound = null;
+    private BrightnessWidget? brightness = null;
 
     private Gtk.Stack? main_stack = null;
     private Gtk.StackSwitcher? switcher = null;
@@ -84,6 +85,15 @@ public class MainView : Gtk.Box
         cal.margin_top = 6;
         box.pack_start(cal, false, false, 0);
 
+        brightness = new BrightnessWidget();
+
+        /* Check if a compatible backlight controller is available */
+        if(brightness.has_controller())
+        {
+            brightness.margin_top = 6;
+            box.pack_start(brightness, false, false, 0);
+        }
+
         sound = new SoundWidget();
         sound.margin_top = 6;
         box.pack_start(sound, false, false, 0);
@@ -105,11 +115,21 @@ public class MainView : Gtk.Box
         if (main_stack.get_visible_child_name() == "notifications") {
             Raven.get_instance().ReadNotifications();
         }
+        else if(main_stack.get_visible_child_name() == "applets") {
+            if(brightness.has_controller()) {
+                brightness.update_scale();
+            }
+        }
+
     }
 
     public void set_clean()
     {
         main_stack.set_visible_child_name("applets");
+        
+        if(brightness.has_controller()) {
+            brightness.update_scale();
+        }
     }
 }
 
