@@ -19,6 +19,8 @@ popover scrollbar trough {
     text-shadow: none;
     -gtk-icon-shadow: none;
     opacity: 1;
+    min-width: 0;
+    min-height: 0;
 }
 
 // Container for both the "panel" area and the shadow. Wise to keep
@@ -34,15 +36,20 @@ popover scrollbar trough {
         outline-offset: -3px;
         outline-width: 1px;
         -gtk-outline-radius: 2px;
+        margin: 0;
 
         @extend %reset_style;
     }
 
     .dim-label { opacity: 0.55; }
     label:disabled { color: transparentize($fg_color, 0.65); }
-    separator { color: rgba(0,0,0,0.25); }
-    cell { color: $fg_color; }
     label, image { color: inherit; }
+
+    separator {
+        background-color: rgba(0,0,0,0.25);
+        min-width: 1px;
+        min-height: 1px;
+    }
 
     // used to indicate unread notifications
     .alert { color: $alert_color; }
@@ -52,8 +59,16 @@ popover scrollbar trough {
         padding: 4px 8px;
         border: $border_width solid;
         border-radius: $roundness;
+        caret-color: $fg_color;
 
         @include entry(normal);
+
+        image {
+            color: $fg_color;
+
+            &.left { padding-left: 0; padding-right: 3px; }
+            &.right { padding-right: 0; padding-left: 3px; }
+        }
 
         &:focus {
             @include entry(focus);
@@ -61,8 +76,8 @@ popover scrollbar trough {
         &:disabled {
             @include entry(insensitive);
         }
-        &:selected,
-        &:selected:focus {
+        selection,
+        selection:focus {
             color: $selected_fg_color;
             background-color: $selected_bg_color;
         }
@@ -76,6 +91,8 @@ popover scrollbar trough {
         border-radius: $roundness;
 
         @include button(normal);
+
+        separator { margin: 4px 1px; }
 
         &.flat:not(:hover):not(:active):not(:checked) {
             &, &:disabled {
@@ -105,6 +122,8 @@ popover scrollbar trough {
         &.text-button { padding: 4px 12px; }
         &.image-button { padding: 4px; }
     }
+
+    stackswitcher button.text-button { min-width: 70px; }
 
     // Linked Widgets
     .linked {
@@ -138,45 +157,30 @@ popover scrollbar trough {
 
     // ComboBoxes
     combobox {
-        entry {
-            &:dir(ltr) {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            &:dir(rtl) {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-            }
+        arrow {
+          -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+          min-height: 16px;
+          min-width: 16px;
         }
-        button {
-            &:dir(ltr) {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                border-left-style: none;
-            }
-            &:dir(rtl) {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                border-right-style: none;
+        &.linked {
+            button:nth-child(2) {
+                &:dir(ltr) { @extend %linked:last-child; }
+                &:dir(rtl) { @extend %linked:first-child; }
             }
         }
     }
 
     // Spinbuttons
     spinbutton {
-        border-radius: $roundness;
+        color: $fg_color;
+        caret-color: currentColor;
 
-        button {
-            border-color: transparentize($button_border, 0.3);
-            border-style: none none none solid;
-            border-radius: 0;
-
-            &:dir(rtl) { border-style: none solid none none; }
+        &:not(.vertical) {
+            button, entry { @extend %linked; }
         }
 
-        entry {
-            padding: 0 8px;
-        }
+        &:dir(ltr) entry,
+        &:dir(rtl) button.up { border-radius: $roundness 0 0 $roundness; }
     }
 
     // Progressbars
@@ -185,12 +189,12 @@ popover scrollbar trough {
         font-size: smaller;
         color: transparentize($fg_color, 0.3);
 
-        &.progressbar {
+        progress {
             background-color: $selected_bg_color;
             border: none;
             border-radius: 3px;
         }
-        &.trough {
+        trough {
             border: none;
             border-radius: 3px;
             background-color: $trough_bg;
@@ -199,36 +203,50 @@ popover scrollbar trough {
 
     // Scale
     scale {
-        outline-offset: -1px;
-        -gtk-outline-radius: 2px;
-        outline-color: transparentize($fg_color, 0.7);
+        min-height: 10px;
+        min-width: 10px;
+        padding: 5px;
 
-        color: gtkalpha(currentColor, 0.7);
+        value, marks { color: gtkalpha(currentColor, 0.7); }
 
         &:disabled { opacity: 0.4; }
 
+        // slider sizing
+        @if $variant == 'default' {
+            slider {
+                min-width: 6px;
+                min-height: 6px;
+                margin: 0;
+            }
+            &:hover slider {
+                min-width: 14px;
+                min-height: 14px;
+                margin: -4px;
+            }
+        }
+        @else {
+            slider {
+                min-width: 16px;
+                min-height: 16px;
+                margin: -6px;
+            }
+        }
+
         slider {
-            min-height: 16px;
-            min-width: 16px;
             border-radius: 50%;
-
-            @if $variant == 'default' {
-                background-image: -gtk-scaled(url("../assets/scale-slider.png"),url("../assets/scale-slider@2.png"));
-            }
-            @else {
-                background-color: $selected_bg_color;
-            }
-
-            &:hover { background: $selected_bg_color; }
+            background-color: $selected_bg_color;
         }
         trough {
-            min-height: 6px;
-            min-width: 6px;
+            outline-offset: 2px;
+            -gtk-outline-radius: 2px;
             margin: 5px;
             background-color: $trough_bg;
             border-radius: 2.5px;
 
-            highlight { background-color: $selected_bg_color; }
+            highlight {
+                border-radius: 2.5px;
+                background-color: $selected_bg_color;
+            }
         }
     }
 
@@ -248,24 +266,37 @@ popover scrollbar trough {
         &:indeterminate { -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic'); }
       }
     }
+    radiobutton radio,
+    checkbutton check {
+      min-width: 16px;
+      min-height: 16px;
+      margin: 0 2px;
+      &:only-child { margin: 0; }
+    }
 
     // Switches
     switch {
         font: 1;
         outline-color: transparent;
-        color: transparent;
-        background-size: 45px 19px;
-        background-repeat: no-repeat;
-        background-position: right center;
-        &:dir(rtl) { background-position: left center; }
-        background-image: -gtk-scaled(url("../assets/switch#{$asset_suffix}.png"),url("../assets/switch#{$asset_suffix}@2.png"));
-        &:active { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
-        &:disabled { opacity: 0.4; }
 
         slider {
-            min-height: 20px;
             min-width: 45px;
+            min-height: 19px;
         }
+
+        &, slider {
+            color: transparent;
+            background-size: 45px 19px;
+            background-repeat: no-repeat;
+            background-position: right center;
+
+            &:dir(rtl) { background-position: left center; }
+        }
+
+        background-image: -gtk-scaled(url("../assets/switch#{$asset_suffix}.png"),url("../assets/switch#{$asset_suffix}@2.png"));
+
+        &:active { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
+        &:disabled { opacity: 0.4; }
     }
 
     // Scrollbars
@@ -283,7 +314,7 @@ popover scrollbar trough {
                 opacity: if($variant == 'default', 0.4, 1);
 
                 slider {
-                    margin: $_slider_margin - 1px 0;
+                    margin: 0;
                     background-color: $scrollbar_bg;
                     border: 1px solid $scrollbar_border;
                     background-clip: padding-box;
@@ -291,6 +322,12 @@ popover scrollbar trough {
                 trough {
                     border-style: none;
                     background-color: transparent;
+                }
+                // sizing
+                &.vertical slider {
+                    min-width: 4px;
+                    margin-top: $_slider_margin - 1px;
+                    margin-bottom: $_slider_margin - 1px;
                 }
             }
             &.dragging,
@@ -308,9 +345,21 @@ popover scrollbar trough {
 
             &:disabled { background-color: transparent; }
         }
-        &.fine-tune slider { margin: $_slider_fine_tune_margin; }
 
         trough { background-color: if($variant == 'default', transparentize(black, 0.6), $trough_bg); }
+
+        // sizing
+        &.vertical {
+            &.fine-tune slider {
+                min-width: 4px;
+                margin: $_slider_fine_tune_margin;
+            }
+            slider {
+                min-height: 42px;
+                min-width: 6px;
+                margin: $_slider_margin;
+            }
+        }
     }
 
     // Lists
@@ -335,9 +384,7 @@ popover scrollbar trough {
         }
     }
     @at-root %menu {
-        menu {
-            cell { color: inherit; }
-
+        .menu, menu {
             margin: 4px;
             padding: 0;
             border-radius: 0;
@@ -346,6 +393,8 @@ popover scrollbar trough {
             menuitem {
                 padding: 5px;
                 color: $fg_color;
+                border: solid transparent;
+                border-width: 1px 0 1px 0;
                 &:hover {
                     color: $selected_fg_color;
                     background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
@@ -353,10 +402,21 @@ popover scrollbar trough {
                     border-width: 1px 0 1px 0;
               }
               &:disabled { color: transparentize($fg_color, 0.65); }
-              separator { color: transparentize($raven_bg, 1); }
+              separator { background-color: transparentize($raven_bg, 1); }
             }
-            button {
+            arrow {
                 border: none;
+                min-width: 16px;
+                min-height: 16px;
+
+                &.top {
+                    -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+                    border-bottom: 1px solid mix($fg_color, $raven_bg, 10%);
+                }
+                &.bottom {
+                    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+                    border-top: 1px solid mix($fg_color, $raven_bg, 10%);
+                }
                 &:hover { background-color: $selected_bg_color; }
                 &:disabled {
                     color: transparentize($fg_color, 0.65);
@@ -364,7 +424,7 @@ popover scrollbar trough {
                 }
             }
         }
-        decoration.csd.popup {
+        .csd.popup decoration {
             box-shadow: 0 3px 6px transparentize(black, 0.55),
                         0 0 0 1px transparentize(black, 0.55);
         }
@@ -391,7 +451,7 @@ popover scrollbar trough {
             border: none;
             border-radius: 0;
         }
-        button, button:focus {
+        &.button, &.button:focus {
             color: gtkalpha(currentColor,0.5);
             background-color: transparent;
 
@@ -405,7 +465,7 @@ popover scrollbar trough {
 
 // Budgie Menu
 .budgie-menu {
-    entry:not(:selected) {
+    entry.search {
         border: none;
         box-shadow: none;
         background: none;
@@ -429,16 +489,17 @@ popover scrollbar trough {
             background-color: rgba(0,0,0,0.3);
             border-radius: 2px;
 
-            separator { color: transparentize($fg_color, 0.85) }
+            separator { background-color: transparentize($fg_color, 0.85) }
         }
     }
 }
 
 // Tasklist
-.budgie-panel wnck-tasklist button,
-.budgie-panel wnck-tasklist button:backdrop {
+.budgie-panel #tasklist-button,
+.budgie-panel #tasklist-button:backdrop {
 
     border-radius: 0;
+    outline-color: transparent;
 
     @if $variant == 'default' {
         &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
@@ -453,16 +514,19 @@ popover scrollbar trough {
 // Icon Tasklist
 .budgie-panel {
 
-    .launcher {
+    button.flat.launcher {
+        @extend %reset_style;
+
+        outline-color: transparent;
         transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        padding-left: 2px;
-        padding-right: 2px;
+        padding: 1px 2px;
         border-color: transparentize($panel_bg,1); // fixes the transition
+        border-radius: 0;
 
         &:hover { -gtk-icon-effect: highlight; }
     }
-    .unpinned .launcher,
-    .pinned .launcher.running { @extend %underscores; }
+    .unpinned button.flat.launcher,
+    .pinned button.flat.launcher.running { @extend %underscores; }
 }
 
 %underscores {
@@ -475,8 +539,8 @@ popover scrollbar trough {
             border-#{$pos}: 2px solid transparentize($panel_bg,1);
 
             @at-root {
-                .#{$pos} .budgie-panel .unpinned .launcher,
-                .#{$pos} .budgie-panel .pinned .launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
+                .#{$pos} .budgie-panel .unpinned button.flat.launcher,
+                .#{$pos} .budgie-panel .pinned button.flat.launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
             }
             &:hover {
                 border-#{$b_pos}: 2px solid transparentize(black, 0.9);
@@ -499,8 +563,11 @@ popover scrollbar trough {
     .#{$pos} .raven-frame {
         padding: 0;
         background: none;
-        border: none;
-        border-#{$b_pos}: $border_width solid $raven_border;
+
+        border {
+            border: none;
+            border-#{$b_pos}: $border_width solid $raven_border;
+        }
     }
 
     // Shadows
@@ -521,6 +588,8 @@ popover scrollbar trough {
     transition: 170ms ease-out;
 
     .raven-header {
+        min-height: 32px;
+
         color: $fg_color;
         border: solid $raven_expander_border;
         border-width: 1px 0;
