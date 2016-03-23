@@ -1,6 +1,7 @@
 /*
- * This file is part of budgie-desktop
- * 
+ * This widget is based on the sound widget (sound.vala) and was
+ * created on 03-21-2016
+ *
  * Copyright (C) 2016 Gregor Müller-Riederer
  * 
  * This program is free software; you can redistribute it and/or modify
@@ -11,9 +12,9 @@
 
 public class BrightnessWidget : Gtk.Box
 {
+    private const string backlight_path = "/sys/class/backlight";
     private Gtk.Scale? scale = null;
     private ulong scale_id = 0;
-    private const string backlight_path = "/sys/class/backlight";
     private string backlight_controller;
     private int max_brightness;
 
@@ -26,7 +27,6 @@ public class BrightnessWidget : Gtk.Box
 
         get_style_context().add_class("brightness-widget");
 
-        /* TODO: Fix icon */
         scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
         scale.set_draw_value(false);
         scale_id = scale.value_changed.connect(on_bightness_scale_change);
