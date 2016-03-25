@@ -83,6 +83,7 @@ public class BudgieMenuApplet : Budgie.Applet
         widget = new Gtk.EventBox();
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
         img.pixel_size = 32;
+        img.no_show_all = true;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.pack_start(img, false, false, 3);
@@ -149,15 +150,21 @@ public class BudgieMenuApplet : Budgie.Applet
 
     protected void on_settings_changed(string key)
     {
+        bool should_show = true;
+
         switch (key)
         {
             case "menu-icon":
-                if ("/" in settings.get_string(key)) {
-                    Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(settings.get_string(key));
+                string? icon = settings.get_string(key);
+                if ("/" in icon) {
+                    Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(icon);
                     img.set_from_pixbuf(pixbuf.scale_simple(32, 32, Gdk.InterpType.BILINEAR));
+                } else if (icon == "") {
+                    should_show = false;
                 } else {
-                    img.set_from_icon_name(settings.get_string(key), Gtk.IconSize.INVALID);
+                    img.set_from_icon_name(icon, Gtk.IconSize.INVALID);
                 }
+                img.set_visible(should_show);
                 break;
             case "menu-label":
                 label.set_label(settings.get_string(key));
