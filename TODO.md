@@ -1,0 +1,46 @@
+Panel
+-----
+ * [ ] Steal some PopoverManager changes from the wingpanel guys back into Budgie Panel
+ * [ ] Steal the focus-manager trick from Wingpanel too (Nice work guys!)
+ * [ ] Fix startup issues:
+    * [ ] Only expose when startup is complete
+    * [ ] Reveal the Panel using an animation (cairo+buffer offset)
+    * [ ] Disable automatic sorting until the panel is fully loaded, and then go
+      back and sort them all to fix weird placement issues
+ * [ ] Use an animation to reveal new applets, looks fugly just BAM there's a new applet.
+ * [ ] Add garbage collection for unloaded modules
+ * [ ] Approved "new" applets needed:
+   * [ ] Screencast indicator for integration with WM (Status Applet?)
+   * [ ] Keyboard layout indicator
+
+Raven
+------
+ * [ ] Add proper Raven API for applets (single instance, unlike Budgie Panel)
+ * [ ] Enforce constant sizes
+ * [ ] Enhance discoverability. People seem to not know that it exists ....
+ * [ ] Actually add some applets:
+   * [ ] "System Monitor"
+   * [ ] Ticker?
+ * [ ] It might be GTK but make these things more alive!!
+ * [ ] Add all relevant options to allow deprecation of gnome-tweak-tool usage by us.
+ * [ ] Fix notifications (Yes you Spotify..)
+   - Probably sign up with Spotify too. Sure as shit beats using YouTube all the time.
+
+Window Manager
+---------------
+ * [ ] Fix derpy-ass alt+tab
+ * [ ] Add proper ibus support
+ * [ ] Add screen recording and screenshot support (see GNOME Shell)
+ * [ ] Low Priority: "Blur Behind" effect based on wm_class
+ * [ ] Extend the d-bus API so that the Panel and Raven are positioned by us for future
+   Wayland work (Also require an accessible strut mechanism from the compositor.
+   Sync with elementary + Jasper St Pierre over this) [Low Priority]
+
+
+General
+-------
+
+ * [ ] Make it suck less.
+ * [ ] Need a sexy LightDM greeter.
+ * [ ] Take over the world.
+ * Focus on X11 for now, even thinking about Wayland atm will make my head asplode.
