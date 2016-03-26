@@ -5,7 +5,7 @@ panel/budgie-panel.desktop.in.in
 panel/budgie-panel.desktop.in
 session/budgie-desktop.desktop.in
 
-aven/ui/notification.ui
+raven/ui/notification.ui
 raven/ui/notification_clone.ui
 
 panel/applets/clock/ClockApplet.c
