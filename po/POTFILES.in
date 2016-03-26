@@ -12,7 +12,7 @@ raven/sound.vala
 session/budgie-desktop.desktop.in.in
 [type: gettext/keys]session/budgie-desktop.session.in.in
 
-[type: gettext/keys]data/endsession.ui
+[type: gettext/glade]data/endsession.ui
 
 
 panel/applets/budgie-menu/settings.ui
