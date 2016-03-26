@@ -8,6 +8,8 @@ raven/sound.vala
 [type: gettext/glade]raven/ui/applets.ui
 [type: gettext/glade]raven/ui/appearance.ui
 [type: gettext/glade]raven/ui/panel.ui
+[type: gettext/glade]raven/ui/background.ui
+[type: gettext/glade]raven/ui/fonts.ui
 
 session/budgie-desktop.desktop.in.in
 [type: gettext/keys]session/budgie-desktop.session.in.in
