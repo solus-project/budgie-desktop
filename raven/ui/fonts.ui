@@ -5,7 +5,7 @@
   <template class="BudgieFontSettings" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_top">5</property>
+    <property name="margin_top">8</property>
     <property name="margin_bottom">6</property>
     <property name="hexpand">False</property>
     <property name="orientation">vertical</property>
@@ -158,12 +158,6 @@
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>
