@@ -56,6 +56,23 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
     }
 }
 
+public class ButtonWrapper : Gtk.Revealer
+{
+    unowned IconButton? button;
+
+    public ButtonWrapper(IconButton? button)
+    {
+        this.button = button;
+
+        this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT);
+
+        this.add(button);
+        this.set_reveal_child(false);
+        this.show_all();
+    }
+}
+
+
 
 
 [GtkTemplate (ui = "/com/solus-project/icon-tasklist/settings.ui")]
@@ -672,11 +689,13 @@ public class IconTasklistApplet : Budgie.Applet
         // Fallback to new button.
         if (button == null) {
             var btn = new IconButton(settings, window, icon_size, pinfo);
+            var button_wrap = new ButtonWrapper(btn);
+
             button = btn;
-            widget.pack_start(btn, false, false, 0);
+            widget.pack_start(button_wrap, false, false, 0);
         }
         buttons[window] = button;
-        button.show_all();
+        (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
     }
 
     protected void window_closed(Wnck.Window window)
@@ -691,7 +710,7 @@ public class IconTasklistApplet : Budgie.Applet
             var pbtn = btn as PinnedIconButton;
             pbtn.reset();
         } else {
-            btn.destroy();
+            btn.get_parent().destroy();
         }
         buttons.remove(window);
     }
@@ -839,8 +858,9 @@ public class IconTasklistApplet : Budgie.Applet
                 continue;
             }
             var button = new PinnedIconButton(settings, info, icon_size, ref this.context);
+            var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
-            pinned.pack_start(button, false, false, 0);
+            pinned.pack_start(button_wrap, false, false, 0);
 
             // Do we already have an icon button for this?
             var iter = HashTableIter<Wnck.Window,IconButton>(buttons);
@@ -854,7 +874,7 @@ public class IconTasklistApplet : Budgie.Applet
                     // Pinning an already active button.
                     button.window = btn.window;
                     // destroy old one
-                    btn.destroy();
+                    btn.get_parent().destroy();
                     buttons.remove(keyn);
                     buttons[keyn] = button;
                     button.update_from_window();
@@ -862,7 +882,7 @@ public class IconTasklistApplet : Budgie.Applet
                 }
             }
 
-            button.show_all();
+            (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
         }
         string[] removals = {};
         /* Conversely, remove ones which have been unset. */
@@ -875,14 +895,16 @@ public class IconTasklistApplet : Budgie.Applet
             }
             /* We have a removal. */
             if (btn.window == null) {
-                btn.destroy();
+                btn.get_parent().destroy();
             } else {
                 /* We need to move this fella.. */
                 IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info);
-                btn.destroy();
-                widget.pack_start(b2, false, false, 0);
+                var button_wrap = new ButtonWrapper(b2);
+
+                btn.get_parent().destroy();
+                widget.pack_start(button_wrap, false, false, 0);
                 buttons[b2.window]  = b2;
-                b2.show_all();
+                button_wrap.set_reveal_child(true);
             }
             removals += key_name;
         }
