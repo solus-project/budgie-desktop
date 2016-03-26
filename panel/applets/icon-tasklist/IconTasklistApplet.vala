@@ -70,6 +70,20 @@ public class ButtonWrapper : Gtk.Revealer
         this.set_reveal_child(false);
         this.show_all();
     }
+
+    public void gracefully_die()
+    {
+        if (!get_settings().gtk_enable_animations) {
+            this.destroy();
+            return;
+        }
+
+        this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
+        this.notify["child-revealed"].connect_after(()=> {
+            this.destroy();
+        });
+        this.set_reveal_child(false);
+    }
 }
 
 
@@ -710,7 +724,7 @@ public class IconTasklistApplet : Budgie.Applet
             var pbtn = btn as PinnedIconButton;
             pbtn.reset();
         } else {
-            btn.get_parent().destroy();
+            (btn.get_parent() as ButtonWrapper).gracefully_die();
         }
         buttons.remove(window);
     }
@@ -874,7 +888,7 @@ public class IconTasklistApplet : Budgie.Applet
                     // Pinning an already active button.
                     button.window = btn.window;
                     // destroy old one
-                    btn.get_parent().destroy();
+                    (btn.get_parent() as ButtonWrapper).gracefully_die();
                     buttons.remove(keyn);
                     buttons[keyn] = button;
                     button.update_from_window();
@@ -895,13 +909,13 @@ public class IconTasklistApplet : Budgie.Applet
             }
             /* We have a removal. */
             if (btn.window == null) {
-                btn.get_parent().destroy();
+                (btn.get_parent() as ButtonWrapper).gracefully_die();
             } else {
                 /* We need to move this fella.. */
                 IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info);
                 var button_wrap = new ButtonWrapper(b2);
 
-                btn.get_parent().destroy();
+                (btn.get_parent() as ButtonWrapper).gracefully_die();
                 widget.pack_start(button_wrap, false, false, 0);
                 buttons[b2.window]  = b2;
                 button_wrap.set_reveal_child(true);
