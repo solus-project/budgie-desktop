@@ -84,6 +84,14 @@ public class DesktopHelper : Object
 
     HashTable<string?,string?> simpletons;
     HashTable<string?,string?> startupids;
+    static string[] derpers;
+
+    static construct {
+        derpers = new string[] {
+            "google-chrome",
+            "hexchat"
+        };
+    }
 
     public DesktopHelper()
     {
@@ -156,6 +164,14 @@ public class DesktopHelper : Object
             }
         }
         return p1;
+    }
+
+    public static bool has_derpy_icon(Wnck.Window? window)
+    {
+        if (window.get_class_instance_name() in DesktopHelper.derpers) {
+            return true;
+        }
+        return false;
     }
 
     public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
@@ -426,14 +442,23 @@ public class IconButton : Gtk.ToggleButton
             return;
         }
 
-        if (window.get_icon_is_fallback()) {
-            if (ainfo != null && ainfo.get_icon() != null) {
-                image.set_from_gicon(ainfo.get_icon(), Gtk.IconSize.INVALID);
+        unowned GLib.Icon? aicon = null;
+        if (ainfo != null) {
+            aicon = ainfo.get_icon();
+        }
+
+        if (DesktopHelper.has_derpy_icon(window) && aicon != null) {
+            image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
+        } else {
+            if (window.get_icon_is_fallback()) {
+                if (ainfo != null && ainfo.get_icon() != null) {
+                    image.set_from_gicon(ainfo.get_icon(), Gtk.IconSize.INVALID);
+                } else {
+                    image.set_from_pixbuf(window.get_icon());
+                }
             } else {
                 image.set_from_pixbuf(window.get_icon());
             }
-        } else {
-            image.set_from_pixbuf(window.get_icon());
         }
         image.pixel_size = icon_size;
     }
