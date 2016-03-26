@@ -12,7 +12,15 @@ Panel
  * [ ] Approved "new" applets needed:
    * [ ] Screencast indicator for integration with WM (Status Applet?)
    * [ ] Keyboard layout indicator
-
+ * [ ] Add pinning capabilities to the Budgie Menu itself
+ * [ ] Disallow Ugly Apps from overriding the icon (main chrome instance, hexchat, etc)
+ * [ ] Turn Power Icon into a user menu (Hibernate, Switch User, etc)
+ * [ ] Ensure all popover-associated applets use this as  the *primary* action, no
+       more right-click left-click nonsense. Left click only.
+ * [ ] Just because it's at the end of the panel, doesn't mean it needs to launch
+       feckin Raven. Notification icon + sound are sufficient.
+ * [ ] Add intellihide.
+ 
 Raven
 ------
  * [ ] Add proper Raven API for applets (single instance, unlike Budgie Panel)
@@ -25,6 +33,7 @@ Raven
  * [ ] Add all relevant options to allow deprecation of gnome-tweak-tool usage by us.
  * [ ] Fix notifications (Yes you Spotify..)
    - Probably sign up with Spotify too. Sure as shit beats using YouTube all the time.
+ * [ ] Clean up the UI.
 
 Window Manager
 ---------------
