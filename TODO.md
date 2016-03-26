@@ -20,6 +20,9 @@ Panel
  * [ ] Just because it's at the end of the panel, doesn't mean it needs to launch
        feckin Raven. Notification icon + sound are sufficient.
  * [ ] Add intellihide.
+ * [ ] More popovers.
+
+ ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
  
 Raven
 ------
