@@ -13,7 +13,7 @@ Panel
    * [ ] Screencast indicator for integration with WM (Status Applet?)
    * [ ] Keyboard layout indicator
  * [ ] Add pinning capabilities to the Budgie Menu itself
- * [ ] Disallow Ugly Apps from overriding the icon (main chrome instance, hexchat, etc)
+ * [x] Disallow Ugly Apps from overriding the icon (main chrome instance, hexchat, etc)
  * [ ] Turn Power Icon into a user menu (Hibernate, Switch User, etc)
  * [ ] Ensure all popover-associated applets use this as  the *primary* action, no
        more right-click left-click nonsense. Left click only.
