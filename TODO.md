@@ -5,7 +5,7 @@ Panel
  * [ ] Fix startup issues:
     * [ ] Only expose when startup is complete
     * [ ] Reveal the Panel using an animation (cairo+buffer offset)
-    * [ ] Disable automatic sorting until the panel is fully loaded, and then go
+    * [x] Disable automatic sorting until the panel is fully loaded, and then go
       back and sort them all to fix weird placement issues
  * [ ] Use an animation to reveal new applets, looks fugly just BAM there's a new applet.
  * [ ] Add garbage collection for unloaded modules
