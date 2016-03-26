@@ -94,6 +94,8 @@ public class Panel : Budgie.Toplevel
     /* Track initial load */
     private bool is_fully_loaded = false;
 
+    public signal void panel_loaded();
+
     public bool activate_action(int remote_action)
     {
         unowned string? uuid = null;
@@ -185,6 +187,27 @@ public class Panel : Budgie.Toplevel
         return ret;
     }
 
+    /* Handle being "fully" loaded */
+    private void on_fully_loaded()
+    {
+        unowned string? uuid = null;
+        unowned Budgie.AppletInfo? info = null;
+
+        if (applets.size() < 1) {
+            return;
+        }
+
+        /* All applets loaded and positioned, now re-sort them */
+        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
+        while (iter.next(out uuid, out info)) {
+            applet_reparent(info);
+            applet_reposition(info);
+        }
+
+        /* Let everyone else know we're in business */
+        applets_changed();
+    }
+
     public Panel(Budgie.PanelManager? manager, string? uuid, Settings? settings)
     {
         Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
@@ -204,6 +227,7 @@ public class Panel : Budgie.Toplevel
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
         expected_uuids = new List<string?>();
+        panel_loaded.connect(on_fully_loaded);
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
@@ -353,6 +377,8 @@ public class Panel : Budgie.Toplevel
     {
         string[]? applets = settings.get_strv(Budgie.PANEL_KEY_APPLETS);
         if (applets == null || applets.length == 0) {
+            this.panel_loaded();
+            this.is_fully_loaded = true;
             return;
         }
 
@@ -559,7 +585,7 @@ public class Panel : Budgie.Toplevel
             }
             if (expected_uuids.length() == 0) {
                 this.is_fully_loaded = true;
-                // message("Now fully loaded");
+                this.panel_loaded();
             }
         }
 
@@ -589,33 +615,47 @@ public class Panel : Budgie.Toplevel
         this.applet_added(info);
     }
 
+    void applet_reparent(Budgie.AppletInfo? info)
+    {
+        /* Handle being reparented. */
+        unowned Gtk.Box? new_parent = null;
+        switch (info.alignment) {
+            case "start":
+                new_parent = this.start_box;
+                break;
+            case "end":
+                new_parent = this.end_box;
+                break;
+            default:
+                new_parent = this.center_box;
+                break;
+        }
+        /* Don't needlessly reparent */
+        if (new_parent == info.applet.get_parent()) {
+            return;
+        }
+        info.applet.reparent(new_parent);
+    }
+
+    void applet_reposition(Budgie.AppletInfo? info)
+    {
+        info.applet.get_parent().child_set(info.applet, "position", info.position);
+    }
+
     void applet_updated(Object o, ParamSpec p)
     {
         unowned AppletInfo? info = o as AppletInfo;
 
-        if (p.name == "alignment") {
-            /* Handle being reparented. */
-            unowned Gtk.Box? new_parent = null;
-            switch (info.alignment) {
-                case "start":
-                    new_parent = this.start_box;
-                    break;
-                case "end":
-                    new_parent = this.end_box;
-                    break;
-                default:
-                    new_parent = this.center_box;
-                    break;
-            }
-            /* Don't needlessly reparent */
-            if (new_parent == info.applet.get_parent()) {
-                return;
-            }
-            info.applet.reparent(new_parent);
+        /* Prevent a massive amount of resorting */
+        if (!this.is_fully_loaded) {
             return;
+        }
+
+        if (p.name == "alignment") {
+            applet_reparent(info);
         } else if (p.name == "position") {
-            info.applet.get_parent().child_set(info.applet, "position", info.position);
-        } /* TODO: Implement position knowledge */
+            applet_reposition(info);
+        }
         this.applets_changed();
     }
 
