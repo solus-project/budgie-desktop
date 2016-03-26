@@ -33,7 +33,7 @@ Raven
    * [ ] "System Monitor"
    * [ ] Ticker?
  * [ ] It might be GTK but make these things more alive!!
- * [ ] Add all relevant options to allow deprecation of gnome-tweak-tool usage by us.
+ * [x] Add all relevant options to allow deprecation of gnome-tweak-tool usage by us.
  * [ ] Fix notifications (Yes you Spotify..)
    - Probably sign up with Spotify too. Sure as shit beats using YouTube all the time.
  * [ ] Clean up the UI.
