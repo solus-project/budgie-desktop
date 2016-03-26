@@ -36,6 +36,13 @@ public enum PanelAction {
     MAX = 1 << 2
 }
 
+public enum AnimationState {
+    MAP         = 1 << 0,
+    MINIMIZE    = 1 << 1,
+    UNMINIMIZE  = 1 << 2,
+    DESTROY     = 1 << 3
+}
+
 public class ScreenTilePreview : Clutter.Actor
 {
 
@@ -93,6 +100,8 @@ public class BudgieWM : Meta.Plugin
     PanelRemote? panel_proxy = null;
     WindowMenu? winmenu = null;
     LoginDRemote? logind_proxy = null;
+
+    HashTable<Meta.WindowActor?,AnimationState?> state_map;
 
     static construct
     {
@@ -298,6 +307,8 @@ public class BudgieWM : Meta.Plugin
 
         var display = screen.get_display();
 
+        state_map = new HashTable<Meta.WindowActor?,AnimationState?>(GLib.direct_hash, GLib.direct_equal);
+
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_BUTTON_LAYOUT, WM_SCHEMA);
@@ -326,14 +337,11 @@ public class BudgieWM : Meta.Plugin
             get_logind();
         }
 
-
-
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
         Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
         Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
         Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
 
-                
         shim = new ShellShim(this);
         shim.serve();
 
@@ -456,20 +464,48 @@ public class BudgieWM : Meta.Plugin
     static const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
     static const int FADE_TIMEOUT = 165;
 
+    void finalize_animations(Meta.WindowActor? actor)
+    {
+        if (!state_map.contains(actor)) {
+            return;
+        }
+
+        actor.remove_all_transitions();
+
+        unowned AnimationState? state = state_map.lookup(actor);
+        switch (state) {
+            case AnimationState.MAP:
+                actor.set("pivot-point", PV_NORM, "opacity", 255U);
+                map_completed(actor);
+                break;
+            case AnimationState.DESTROY:
+                destroy_completed(actor);
+                break;
+            case AnimationState.MINIMIZE:
+                actor.set("pivot-point", PV_NORM, "opacity", 255U, "scale-x", 1.0, "scale-y", 1.0);
+                actor.hide();
+                minimize_completed(actor);
+                break;
+            case AnimationState.UNMINIMIZE:
+                actor.show();
+                unminimize_completed(actor);
+                break;
+            default:
+                break;
+        }
+        state_map.remove(actor);
+    }
+
     void map_done(Clutter.Actor? actor)
     {
-        actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
-        actor.set("pivot-point", PV_NORM, "opacity", 255U);
-        this.map_completed(actor as Meta.WindowActor);
+        finalize_animations(actor as Meta.WindowActor);
     }
 
     void notification_map_done(Clutter.Actor? actor)
     {
-        actor.remove_all_transitions();
-        SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
-        actor.set("pivot-point", PV_NORM, "opacity", 255U);
-        this.map_completed(actor as Meta.WindowActor);
+        SignalHandler.disconnect_by_func(actor, (void*)notification_map_done, this);
+        finalize_animations(actor as Meta.WindowActor);
     }
 
     public override void map(Meta.WindowActor actor)
@@ -491,10 +527,8 @@ public class BudgieWM : Meta.Plugin
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
                 actor.set_easing_duration(MAP_TIMEOUT);
-                actor.transitions_completed.connect(map_done);
 
                 actor.opacity = 255U;
-                actor.restore_easing_state();
                 break;
             case Meta.WindowType.NOTIFICATION:
                 actor.set("opacity", 0U, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
@@ -504,10 +538,8 @@ public class BudgieWM : Meta.Plugin
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUART);
                 actor.set_easing_duration(MAP_TIMEOUT);
-                actor.transitions_completed.connect(notification_map_done);
 
                 actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
-                actor.restore_easing_state();
                 break;
             case Meta.WindowType.NORMAL:
             case Meta.WindowType.DIALOG:
@@ -519,24 +551,23 @@ public class BudgieWM : Meta.Plugin
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
                 actor.set_easing_duration(MAP_TIMEOUT);
-                actor.transitions_completed.connect(map_done);
 
                 actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
-                actor.restore_easing_state();
                 break;
             default:
                 this.map_completed(actor);
-                break;
+                return;
         }
+
+        actor.transitions_completed.connect(map_done);
+        state_map.insert(actor, AnimationState.MAP);
+        actor.restore_easing_state();
     }
 
     void minimize_done(Clutter.Actor? actor)
     {
-        actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)minimize_done, this);
-        actor.set("pivot-point", PV_NORM, "opacity", 255U, "scale-x", 1.0, "scale-y", 1.0);
-        actor.hide();
-        this.minimize_completed(actor as Meta.WindowActor);
+        finalize_animations(actor as Meta.WindowActor);
     }
 
     static const int MINIMIZE_TIMEOUT = 200;
@@ -547,6 +578,7 @@ public class BudgieWM : Meta.Plugin
             this.minimize_completed(actor);
             return;
         }
+
         Meta.Rectangle icon;
         Meta.Window? window = actor.get_meta_window();
 
@@ -560,6 +592,9 @@ public class BudgieWM : Meta.Plugin
             icon.y = 0;
         }
 
+        finalize_animations(actor);
+
+        state_map.insert(actor, AnimationState.MINIMIZE);
         actor.set("pivot-point", PV_CENTER);
         actor.save_easing_state();
         actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
@@ -572,9 +607,8 @@ public class BudgieWM : Meta.Plugin
 
     void destroy_done(Clutter.Actor? actor)
     {
-        actor.remove_all_transitions();
         SignalHandler.disconnect_by_func(actor, (void*)destroy_done, this);
-        this.destroy_completed(actor as Meta.WindowActor);
+        finalize_animations(actor as Meta.WindowActor);
     }
 
     static const int DESTROY_TIMEOUT  = 170;
@@ -588,7 +622,7 @@ public class BudgieWM : Meta.Plugin
         }
 
         Meta.Window? window = actor.get_meta_window();
-        actor.remove_all_transitions();
+        finalize_animations(actor);
 
         switch (window.get_window_type()) {
             case Meta.WindowType.NOTIFICATION:
@@ -599,23 +633,23 @@ public class BudgieWM : Meta.Plugin
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
                 actor.set_easing_duration(DESTROY_TIMEOUT);
-                actor.transitions_completed.connect(destroy_done);
 
                 actor.set("scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0U);
-                actor.restore_easing_state();
                 break;
             case Meta.WindowType.MENU:
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
-                actor.transitions_completed.connect(destroy_done);
 
                 actor.set("opacity", 0U);
-                actor.restore_easing_state();
                 break;
             default:
                 this.destroy_completed(actor);
-                break;
+                return;
         }
+    
+        actor.transitions_completed.connect(destroy_done);
+        actor.restore_easing_state();
+        state_map.insert(actor, AnimationState.DESTROY);
     }
 
     private ScreenTilePreview? tile_preview = null;
