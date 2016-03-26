@@ -1,7 +1,7 @@
 budgie-desktop
 ==========
 
-The Budgie Desktop is the flagship desktop of Solus OS.
+The Budgie Desktop is the flagship desktop of the Solus Operating System.
 
 License
 -------
