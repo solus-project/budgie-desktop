@@ -731,6 +731,20 @@ public class FontSettings : Gtk.Box
     }
 }
 
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/background.ui")]
+public class BackgroundSettings : Gtk.Box
+{
+    [GtkChild]
+    private Gtk.Switch? switch_icons;
+
+    private GLib.Settings background_settings;
+
+    construct {
+        background_settings = new GLib.Settings("org.gnome.desktop.background");
+        background_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
+    }
+}
+
 [GtkTemplate (ui = "/com/solus-project/budgie/raven/appearance.ui")]
 public class AppearanceSettings : Gtk.Box
 {
@@ -921,6 +935,8 @@ public class SettingsView : Gtk.Box
         var appearance_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         var appearance = new AppearanceSettings();
         appearance_box.pack_start(appearance, false, false, 0);
+        var background_settings = new BackgroundSettings();
+        appearance_box.pack_start(background_settings, false, false, 0);
         var fonts = new FontSettings();
         appearance_box.pack_start(fonts, false, false, 0);
         stack.add_titled(appearance_box, "appearance", _("General"));
