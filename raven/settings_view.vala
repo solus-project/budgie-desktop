@@ -716,6 +716,19 @@ public class FontSettings : Gtk.Box
 
     [GtkChild]
     private Gtk.FontButton? fontbutton_monospace;
+
+    private GLib.Settings ui_settings;
+    private GLib.Settings wm_settings;
+
+    construct {
+        ui_settings = new GLib.Settings("org.gnome.desktop.interface");
+        wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
+
+        ui_settings.bind("document-font-name", fontbutton_document, "font-name", SettingsBindFlags.DEFAULT);
+        ui_settings.bind("font-name", fontbutton_interface, "font-name", SettingsBindFlags.DEFAULT);
+        ui_settings.bind("monospace-font-name", fontbutton_monospace, "font-name", SettingsBindFlags.DEFAULT);
+        wm_settings.bind("titlebar-font", fontbutton_title, "font-name", SettingsBindFlags.DEFAULT);
+    }
 }
 
 [GtkTemplate (ui = "/com/solus-project/budgie/raven/appearance.ui")]
