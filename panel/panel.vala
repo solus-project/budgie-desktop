@@ -96,6 +96,19 @@ public class Panel : Budgie.Toplevel
 
     public signal void panel_loaded();
 
+    /* Animation tracking */
+    private double render_scale = 0.0;
+    private bool initial_anim = false;
+    public double nscale {
+        public set {
+            render_scale = value;
+            queue_draw();
+        }
+        public get {
+            return render_scale;
+        }
+    }
+
     public bool activate_action(int remote_action)
     {
         unowned string? uuid = null;
@@ -194,6 +207,9 @@ public class Panel : Budgie.Toplevel
         unowned Budgie.AppletInfo? info = null;
 
         if (applets.size() < 1) {
+            if (!initial_anim) {
+                Idle.add(initial_animation);
+            }
             return;
         }
 
@@ -206,6 +222,35 @@ public class Panel : Budgie.Toplevel
 
         /* Let everyone else know we're in business */
         applets_changed();
+        if (!initial_anim) {
+            Idle.add(initial_animation);
+        }
+    }
+
+    private bool initial_animation()
+    {
+        this.initial_anim = true;
+
+        var anim = new Budgie.Animation();
+        anim.widget = this;
+        anim.length = 512 * Budgie.MSECOND;
+        anim.tween = Budgie.sine_ease_out;
+        anim.changes = new Budgie.PropChange[] {
+            Budgie.PropChange() {
+                property = "nscale",
+                old = 1.0,
+                @new = 0.0
+            }
+        };
+
+        anim.start((a)=> {
+            if ((a.widget as Budgie.Panel).nscale == 1.0) {
+                a.widget.hide();
+            } else {
+                (a.widget as Gtk.Window).show();
+            }
+        });
+        return false;
     }
 
     public Panel(Budgie.PanelManager? manager, string? uuid, Settings? settings)
@@ -221,6 +266,7 @@ public class Panel : Budgie.Toplevel
         skip_pager_hint = true;
     
         scale = get_scale_factor();
+        nscale = 1.0;
 
         popover_manager = new PopoverManagerImpl(this);
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
@@ -998,11 +1044,29 @@ public class Panel : Budgie.Toplevel
 
     public override bool draw(Cairo.Context cr)
     {
-        if (!this.is_fully_loaded) {
+        if (render_scale == 0.0) {
+            return base.draw(cr);
+        } else if (render_scale == 1.0) {
             return Gdk.EVENT_STOP;
         }
 
-        this.propagate_draw(this.get_child(), cr);
+        Gtk.Allocation alloc;
+        get_allocation(out alloc);
+        var buffer = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
+        var cr2 = new Cairo.Context(buffer);
+
+        propagate_draw(get_child(), cr2);
+        var d = (double) intended_size;
+        var y = d * render_scale;
+
+        /* Offset the buffer according to y-screen-edge */
+        if (position == PanelPosition.TOP) {
+            cr.set_source_surface(buffer, 0, -y);
+        } else {
+            cr.set_source_surface(buffer, 0, y);
+        }
+        cr.paint();
+
         return Gdk.EVENT_STOP;
     }
 }
