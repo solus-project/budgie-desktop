@@ -995,6 +995,16 @@ public class Panel : Budgie.Toplevel
             applets_changed();
         }
     }
+
+    public override bool draw(Cairo.Context cr)
+    {
+        if (!this.is_fully_loaded) {
+            return Gdk.EVENT_STOP;
+        }
+
+        this.propagate_draw(this.get_child(), cr);
+        return Gdk.EVENT_STOP;
+    }
 }
 
 } // End namespace
