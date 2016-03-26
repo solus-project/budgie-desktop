@@ -21,7 +21,7 @@ public class TrayApplet : Budgie.Applet
 {
     protected Na.Tray? tray = null;
     /* Fix this. Please. */
-    protected int icon_size = 24;
+    protected int icon_size = 22;
     Gtk.EventBox box;
 
     int width;
@@ -107,8 +107,6 @@ public class TrayApplet : Budgie.Applet
         Gdk.Color.parse("white", out success);
 
         tray.set_colors(fg, error, warning, success);
-
-        tray.set_padding(5);
         box.add(tray);
         show_all();
 

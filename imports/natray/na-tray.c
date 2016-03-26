@@ -27,8 +27,8 @@
 
 #include "na-tray.h"
 
-#define ICON_SPACING 1
-#define MIN_BOX_SIZE 24
+#define ICON_SPACING 5
+#define MIN_BOX_SIZE 22
 
 typedef struct
 {

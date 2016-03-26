@@ -30,7 +30,6 @@ public class SoundIndicator : Gtk.Bin
     {
         // Start off with at least some icon until we connect to pulseaudio */
         widget = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
-        margin = 2;
         var wrap = new Gtk.EventBox();
         wrap.add(widget);
         wrap.margin = 0;
