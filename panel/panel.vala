@@ -68,6 +68,8 @@ public class Panel : Budgie.Toplevel
 
     HashTable<string,Budgie.AppletInfo?> initial_config = null;
 
+    List<string?> expected_uuids;
+
     construct {
         position = PanelPosition.NONE;
     }
@@ -88,6 +90,9 @@ public class Panel : Budgie.Toplevel
 
     int current_icon_size;
     int current_small_icon_size;
+
+    /* Track initial load */
+    private bool is_fully_loaded = false;
 
     public bool activate_action(int remote_action)
     {
@@ -198,6 +203,7 @@ public class Panel : Budgie.Toplevel
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
+        expected_uuids = new List<string?>();
 
         var vis = screen.get_rgba_visual();
         if (vis == null) {
@@ -350,6 +356,11 @@ public class Panel : Budgie.Toplevel
             return;
         }
 
+        /* Two loops so we can track when we've fully loaded the panel */
+        for (int i = 0; i < applets.length; i++) {
+            this.expected_uuids.append(applets[i]);
+        }
+
         for (int i = 0; i < applets.length; i++) {
             string? name = null;
             Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
@@ -357,16 +368,21 @@ public class Panel : Budgie.Toplevel
             if (info == null) {
                 /* Faiiiil */
                 if (name == null) {
+                    unowned List<string?> g = expected_uuids.find_custom(applets[i], GLib.strcmp);
+                    /* TODO: No longer expecting this guy to load */
+                    if (g != null) {
+                        expected_uuids.remove_link(g);
+                    }
                     message("Unable to load invalid applet: %s", applets[i]);
-                    /* TODO: Trimmage */
                     continue;
                 }
                 this.add_pending(applets[i], name);
                 manager.modprobe(name);
-                continue;
+            } else {
+                /* um add this bro to the panel :o */
+                this.add_applet(info);
             }
-            /* um add this bro to the panel :o */
-            this.add_applet(info);
+
         }
     }
 
@@ -534,6 +550,17 @@ public class Panel : Budgie.Toplevel
             info.alignment = initial_info.alignment;
             info.position = initial_info.position;
             initial_config.remove(info.uuid);
+        }
+
+        if (!this.is_fully_loaded) {
+            unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, GLib.strcmp);
+            if (exp_fin != null) {
+                expected_uuids.remove_link(exp_fin);
+            }
+            if (expected_uuids.length() == 0) {
+                this.is_fully_loaded = true;
+                // message("Now fully loaded");
+            }
         }
 
         /* figure out the alignment */
