@@ -108,6 +108,7 @@
                 <property name="hexpand">True</property>
                 <property name="font">Sans 12</property>
                 <property name="preview_text"/>
+                <property name="show_size">False</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -123,6 +124,7 @@
                 <property name="hexpand">True</property>
                 <property name="font">Sans 12</property>
                 <property name="preview_text"/>
+                <property name="show_size">False</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -138,6 +140,7 @@
                 <property name="hexpand">True</property>
                 <property name="font">Sans 12</property>
                 <property name="preview_text"/>
+                <property name="show_size">False</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -153,6 +156,7 @@
                 <property name="hexpand">True</property>
                 <property name="font">Sans 12</property>
                 <property name="preview_text"/>
+                <property name="show_size">False</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
