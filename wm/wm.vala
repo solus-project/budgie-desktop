@@ -640,14 +640,15 @@ public class BudgieWM : Meta.Plugin
             return;
         }
 
+        var win_actor = window.get_compositor_private() as Clutter.Actor;
+
         tile_preview.remove_all_transitions();
-        tile_preview.set_position(tile_rect.x, tile_rect.y);
-        tile_preview.set_size(tile_rect.width, tile_rect.height);
+        tile_preview.set_position(win_actor.x, win_actor.y);
+        tile_preview.set_size(win_actor.width, win_actor.height);
         tile_preview.set("scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
             "pivot-point", PV_CENTER);
 
 
-        var win_actor = window.get_compositor_private() as Clutter.Actor;
         tile_preview.lower(win_actor);
         tile_preview.tile_rect = tile_rect;
 
@@ -656,6 +657,9 @@ public class BudgieWM : Meta.Plugin
         tile_preview.save_easing_state();
         tile_preview.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
         tile_preview.set_easing_duration(MAP_TIMEOUT);
+
+        tile_preview.set_position(tile_rect.x, tile_rect.y);
+        tile_preview.set_size(tile_rect.width, tile_rect.height);
 
         tile_preview.set("scale-x", 1.0, "scale-y", 1.0);
         tile_preview.restore_easing_state();
