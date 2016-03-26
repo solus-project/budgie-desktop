@@ -4,6 +4,7 @@ EXTRA_DIST = \
 	raven.vapi \
 	ui/budgie-raven.gresource.xml \
 	ui/appearance.ui \
+	ui/fonts.ui \
 	ui/panel.ui \
 	ui/applets.ui \
 	ui/applet_settings.ui \

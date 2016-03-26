@@ -701,6 +701,23 @@ public class SettingsHeader : Gtk.Box
     }
 }
 
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/fonts.ui")]
+public class FontSettings : Gtk.Box
+{
+
+    [GtkChild]
+    private Gtk.FontButton? fontbutton_title;
+
+    [GtkChild]
+    private Gtk.FontButton? fontbutton_document;
+
+    [GtkChild]
+    private Gtk.FontButton? fontbutton_interface;
+
+    [GtkChild]
+    private Gtk.FontButton? fontbutton_monospace;
+}
+
 [GtkTemplate (ui = "/com/solus-project/budgie/raven/appearance.ui")]
 public class AppearanceSettings : Gtk.Box
 {
@@ -888,8 +905,12 @@ public class SettingsView : Gtk.Box
         pack_start(stack, true, true, 0);
 
         stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
+        var appearance_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         var appearance = new AppearanceSettings();
-        stack.add_titled(appearance, "appearance", _("General"));
+        appearance_box.pack_start(appearance, false, false, 0);
+        var fonts = new FontSettings();
+        appearance_box.pack_start(fonts, false, false, 0);
+        stack.add_titled(appearance_box, "appearance", _("General"));
 
 
         panel_stack = new Gtk.Stack();
