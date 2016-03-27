@@ -79,6 +79,8 @@ public static const string PANEL_KEY_SIZE       = "size";
 /** Shadow */
 public static const string PANEL_KEY_SHADOW     = "enable-shadow";
 
+/** Theme regions permitted? */
+public static const string PANEL_KEY_REGIONS    = "theme-regions";
 
 [DBus (name = "com.solus_project.budgie.Panel")]
 public class PanelManagerIface

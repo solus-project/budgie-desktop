@@ -313,17 +313,19 @@ public class Panel : Budgie.Toplevel
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        start_box.get_style_context().add_class("start-region");
         start_box.halign = Gtk.Align.START;
         layout.pack_start(start_box, true, true, 0);
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        center_box.get_style_context().add_class("center-region");
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         end_box.margin = 2;
-        end_box.get_style_context().add_class("end-region");
         layout.pack_end(end_box, true, true, 0);
         end_box.halign = Gtk.Align.END;
+
+        this.theme_regions = this.settings.get_boolean(Budgie.PANEL_KEY_REGIONS);
+        this.notify["theme-regions"].connect(update_theme_regions);
+        this.settings.bind(Budgie.PANEL_KEY_REGIONS, this, "theme-regions", SettingsBindFlags.DEFAULT);
+        this.update_theme_regions();
 
         get_child().show_all();
         set_expanded(false);
@@ -333,6 +335,20 @@ public class Panel : Budgie.Toplevel
         /* bit of a no-op. */
         update_sizes();
         load_applets();
+    }
+
+    void update_theme_regions()
+    {
+        if (this.theme_regions) {
+            start_box.get_style_context().add_class("start-region");
+            center_box.get_style_context().add_class("center-region");
+            end_box.get_style_context().add_class("end-region");
+        } else {
+            start_box.get_style_context().remove_class("start-region");
+            center_box.get_style_context().remove_class("center-region");
+            end_box.get_style_context().remove_class("end-region");
+        }
+        this.queue_draw();
     }
 
     void update_sizes()

@@ -31,6 +31,12 @@
       <description>Whether to enable an aesthetic drop shadow for the panel</description>
     </key>
 
+    <key type="b" name="theme-regions">
+      <default>true</default>
+      <summary>Enable themed regions</summary>
+      <description>Whether to enable the theming of each specific panel region</description>
+    </key>
+
     <key type="as" name="applets">
       <default>[]</default>
       <summary>Configured applets</summary>

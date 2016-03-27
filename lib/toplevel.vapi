@@ -16,6 +16,7 @@ namespace Budgie {
         public int intended_size { set ; get; }
         public int shadow_depth { set ;  get; }
         public bool shadow_visible { set ; get; }
+        public bool theme_regions { set; get ; }
         public string uuid {  set ; get; }
 
         public Budgie.PanelPosition position { set; get; default = Budgie.PanelPosition.BOTTOM; }
