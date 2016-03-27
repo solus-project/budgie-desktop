@@ -648,8 +648,8 @@ public class BudgieWM : Meta.Plugin
         }
     
         actor.transitions_completed.connect(destroy_done);
-        actor.restore_easing_state();
         state_map.insert(actor, AnimationState.DESTROY);
+        actor.restore_easing_state();
     }
 
     private ScreenTilePreview? tile_preview = null;
