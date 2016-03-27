@@ -264,6 +264,7 @@ public class Panel : Budgie.Toplevel
 
         skip_taskbar_hint = true;
         skip_pager_hint = true;
+        set_decorated(false);
     
         scale = get_scale_factor();
         nscale = 1.0;
