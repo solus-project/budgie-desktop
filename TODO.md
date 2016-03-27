@@ -21,6 +21,8 @@ Panel
        feckin Raven. Notification icon + sound are sufficient.
  * [ ] Add intellihide.
  * [ ] More popovers.
+ * [ ] Add workaround for clicking on the desktop to allow dismissing of Raven
+       for when Nautilus isn't being used..
 
  ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
  
