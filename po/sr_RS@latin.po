@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Stefan Ric <stfric369@gmail.com>, 2015
+# Stefan Ric <stfric369@gmail.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-30 13:41+0000\n"
-"Last-Translator: dany 12 <dany12@archlinux.us>\n"
+"POT-Creation-Date: 2016-03-27 21:16+0100\n"
+"PO-Revision-Date: 2016-03-27 20:50+0000\n"
+"Last-Translator: Stefan Ric <stfric369@gmail.com>\n"
 "Language-Team: Serbian (Latin) (Serbia) (http://www.transifex.com/solus-project/budgie-desktop/language/sr_RS@latin/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Language: sr_RS@latin\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
 msgid "Applets"
 msgstr "Apleti"
 
@@ -27,52 +27,52 @@ msgstr "Apleti"
 msgid "Notifications"
 msgstr "Notifikacije"
 
-#: ../raven/settings_view.vala:354
+#: ../raven/settings_view.vala:364
 msgid "Top Panel"
 msgstr "Gornji panel"
 
-#: ../raven/settings_view.vala:356
+#: ../raven/settings_view.vala:366
 msgid "Right Panel"
 msgstr "Desni panel"
 
-#: ../raven/settings_view.vala:358
+#: ../raven/settings_view.vala:368
 msgid "Left Panel"
 msgstr "Levi panel"
 
-#: ../raven/settings_view.vala:360
+#: ../raven/settings_view.vala:370
 msgid "Bottom Panel"
 msgstr "Donji panel"
 
-#: ../raven/settings_view.vala:593
+#: ../raven/settings_view.vala:604
 msgid "Start"
 msgstr "Početak"
 
-#: ../raven/settings_view.vala:596
+#: ../raven/settings_view.vala:607
 msgid "Center"
 msgstr "Sredina"
 
-#: ../raven/settings_view.vala:599
+#: ../raven/settings_view.vala:610
 msgid "End"
 msgstr "Kraj"
 
-#: ../raven/settings_view.vala:877
+#: ../raven/settings_view.vala:960
 msgid "General"
 msgstr "Opšte"
 
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
 msgid "Panel"
 msgstr "Panel"
 
-#: ../raven/notifications_view.vala:410
+#: ../raven/notifications_view.vala:416
 #, c-format
 msgid "%u new notifications"
 msgstr "%u novih notifikacija"
 
-#: ../raven/notifications_view.vala:412
+#: ../raven/notifications_view.vala:418
 msgid "1 new notification"
 msgstr "1 nova notifikacija"
 
-#: ../raven/notifications_view.vala:414
+#: ../raven/notifications_view.vala:420
 msgid "No new notifications"
 msgstr "Bez novih notifikacija"
 
@@ -115,37 +115,41 @@ msgstr "Dodaj novi aplet"
 msgid "Appearance"
 msgstr "Izgled"
 
-#: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "Tamna tema"
-
-#: ../raven/ui/appearance.ui.h:3
+#: ../raven/ui/appearance.ui.h:2 ../raven/ui/background.ui.h:2
 msgid "Use the dark theme"
 msgstr "Koristi tamnu temu"
 
-#: ../raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
-msgstr "Vidžetska tema"
+#: ../raven/ui/appearance.ui.h:3
+msgid "Dark theme"
+msgstr "Tamna tema"
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Select a GTK+ theme"
 msgstr "Izaberi GTK+ temu"
 
-#: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "Tema ikona"
+#: ../raven/ui/appearance.ui.h:5
+msgid "Widget Theme"
+msgstr "Vidžetska tema"
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
 msgstr "Izaberi temu ikona"
 
+#: ../raven/ui/appearance.ui.h:7
+msgid "Icon Theme"
+msgstr "Tema ikona"
+
 #: ../raven/ui/appearance.ui.h:8
+msgid "Override defaults"
+msgstr "Preinači podrazumevane postavke"
+
+#: ../raven/ui/appearance.ui.h:9
 msgid "Built-in theme"
 msgstr "Ugradjena tema"
 
-#: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
-msgstr "Preinači podrazumevane postavke"
+#: ../raven/ui/appearance.ui.h:10
+msgid "Cursor Theme"
+msgstr "Tema pokazivača"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -171,6 +175,38 @@ msgstr "Senka"
 msgid "Autohide policy"
 msgstr "Postavka automatskog skrivanja"
 
+#: ../raven/ui/panel.ui.h:8
+msgid "Stylize regions"
+msgstr "Stilizuj oblasti"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Background"
+msgstr "Pozadina"
+
+#: ../raven/ui/background.ui.h:3
+msgid "Desktop Icons"
+msgstr "Desktop ikonice"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Fonts"
+msgstr "Fontovi"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Window Titles"
+msgstr "Naslovi prozora"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Interface"
+msgstr "Interfejs"
+
+#: ../raven/ui/fonts.ui.h:4
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: ../raven/ui/fonts.ui.h:5
+msgid "Monospace"
+msgstr "Monospejs"
+
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -179,6 +215,30 @@ msgstr "Badži desktop"
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Ova sesija te prijavljuje u Badži desktop"
+
+#: ../data/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Isključivanje"
+
+#: ../data/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Da li ste sigurni da želite da zatvorite vašu sesiju?"
+
+#: ../data/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: ../data/endsession.ui.h:4
+msgid "Logout"
+msgstr "Odjavi se"
+
+#: ../data/endsession.ui.h:5
+msgid "Restart"
+msgstr "Ponovo pokreni"
+
+#: ../data/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Isključi"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -225,6 +285,34 @@ msgstr "Bez nepročitanih notifikacija"
 msgid "Toggle the desktop"
 msgstr "Prikaži/Sakrij radnu površinu"
 
+#: ../panel/applets/status/BluetoothIndicator.vala:101
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth je onemogućen"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:105
+msgid "Bluetooth is active"
+msgstr "Bluetooth je aktivan"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:110
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Konektovan na %d uređaj"
+msgstr[1] "Konektovan na %d uređaja"
+msgstr[2] "Konektovan na %d uređaja"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:166
+msgid "Bluetooth Settings"
+msgstr "Bluetooth postavke"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:167
+msgid "Send Files"
+msgstr "Pošalji datoteke"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:168
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth režim letenja"
+
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
 msgstr "Minimiziraj"
@@ -253,11 +341,11 @@ msgstr "Uvek na vrhu"
 msgid "Close"
 msgstr "Zatvori"
 
-#: ../wm/wm.vala:363
+#: ../wm/wm.vala:444
 msgid "Change background\\u2026"
 msgstr "Promeni pozadinu\\u2026"
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:453
 msgid "Settings"
 msgstr "Podešavanja"
 
