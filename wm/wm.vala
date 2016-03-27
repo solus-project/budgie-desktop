@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -75,7 +75,7 @@ public interface LoginDRemote : GLib.Object
 {
     public signal void PrepareForSleep(bool suspending);
 }
-    
+
 public class BudgieWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
@@ -389,7 +389,7 @@ public class BudgieWM : Meta.Plugin
             return false;
         });
     }
-        
+
     bool on_button_release(Clutter.ButtonEvent? event)
     {
         if (event.button != 3) {
@@ -646,13 +646,15 @@ public class BudgieWM : Meta.Plugin
                 this.destroy_completed(actor);
                 return;
         }
-    
+
         actor.transitions_completed.connect(destroy_done);
         state_map.insert(actor, AnimationState.DESTROY);
         actor.restore_easing_state();
     }
 
     private ScreenTilePreview? tile_preview = null;
+    private Clutter.Actor? win_actor = null;
+    private uint8? current_tile_opacity = null;
 
     /* Ported from old budgie-wm, in turn ported from Mutter's default plugin */
     public override void show_tile_preview(Meta.Window window, Meta.Rectangle tile_rect, int tile_monitor_num)
@@ -661,6 +663,8 @@ public class BudgieWM : Meta.Plugin
 
         if (this.tile_preview == null) {
             this.tile_preview = new ScreenTilePreview();
+            this.tile_preview.transitions_completed.connect(do_transitions_completed);
+            current_tile_opacity = this.tile_preview.get_opacity();
             var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
             screen_group.add_child(this.tile_preview);
         }
@@ -674,14 +678,14 @@ public class BudgieWM : Meta.Plugin
             return;
         }
 
-        var win_actor = window.get_compositor_private() as Clutter.Actor;
+        win_actor = window.get_compositor_private() as Clutter.Actor;
 
         tile_preview.remove_all_transitions();
         tile_preview.set_position(win_actor.x, win_actor.y);
         tile_preview.set_size(win_actor.width, win_actor.height);
+
         tile_preview.set("scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
             "pivot-point", PV_CENTER);
-
 
         tile_preview.lower(win_actor);
         tile_preview.tile_rect = tile_rect;
@@ -697,17 +701,27 @@ public class BudgieWM : Meta.Plugin
 
         tile_preview.set("scale-x", 1.0, "scale-y", 1.0);
         tile_preview.restore_easing_state();
-
     }
 
     public override void hide_tile_preview()
     {
         if (tile_preview != null) {
             tile_preview.remove_all_transitions();
-            this.tile_preview.hide();
+            tile_preview.save_easing_state();
+            tile_preview.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+            tile_preview.set_easing_duration(FADE_TIMEOUT);
+            tile_preview.set_opacity(0);
         }
     }
 
+    private void do_transitions_completed() {
+        if (tile_preview.get_opacity() == 0x00) {
+            this.tile_preview.hide();
+            tile_preview.set_position(win_actor.x, win_actor.y);
+            tile_preview.set_size(win_actor.width, win_actor.height);
+            tile_preview.set_opacity(current_tile_opacity);
+        }
+    }
 
     /* SERIOUS LEVELS OF DERP FOLLOW: This is alt+Tab shite ported from old Budgie
      * MUST fix. */
