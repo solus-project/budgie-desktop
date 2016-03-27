@@ -654,9 +654,18 @@ popover scrollbar trough {
 
 // Session Dialog
 .budgie-session-dialog {
-    &.background { @extend .drop-shadow; }
+    color: $fg_color;
+    background-color: $panel_bg;
+
+    @extend %widgets;
+
+    decoration {
+      border-radius: 1px;
+      box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    }
 
     .linked.horizontal > button {
+        min-height: 20px;
         border-bottom: none;
         border-radius: 0;
         &:first-child { border-left: none; border-radius: 0; }
