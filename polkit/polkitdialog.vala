@@ -311,9 +311,24 @@ public class Agent : PolkitAgent.Listener
     private Settings? settings;
     private Gtk.CssProvider? css_provider = null;
 
+    /**
+     * Return the appropriate theme path at runtime for the currently running
+     * GTK. Currently only 3.18 is catered for, with 3.20 coming soon
+     */
+    private string get_theme_prefix()
+    {
+        switch (Gtk.get_minor_version()) {
+            case 20:
+                return "resource://com/solus-project/budgie/theme/3.20";
+            case 18:
+            default:
+                return "resource://com/solus-project/budgie/theme/3.18";
+        }
+    }
+
     public Agent()
     {
-        this.current_theme_uri = "resource://com/solus-project/budgie/theme/theme.css";
+        this.current_theme_uri = "%s/theme.css".printf(get_theme_prefix());
 
         /* Set up dark mode across the desktop */
         settings = new GLib.Settings("com.solus-project.budgie-panel");
@@ -371,7 +386,7 @@ public class Agent : PolkitAgent.Listener
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : "resource://com/solus-project/budgie/theme/theme_hc.css");
+            set_css_from_uri(this.current_theme_uri == null ? null : "%s/theme.css".printf(get_theme_prefix()));
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);
@@ -418,7 +433,7 @@ public class Agent : PolkitAgent.Listener
             return;
         }
         if (settings.get_boolean(key)) {
-            this.current_theme_uri = "resource://com/solus-project/budgie/theme.css";
+            this.current_theme_uri = "%s/theme.css".printf(get_theme_prefix());
         } else {
             this.current_theme_uri = null;
         }
