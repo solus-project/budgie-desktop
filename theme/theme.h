@@ -9,6 +9,8 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
+#include <glib.h>
+
 /**
  * This is genuinely needed. So the libbudgietheme shared library
  * really only has an __attribute__((constructor)), which we link
@@ -20,3 +22,15 @@
  * library via symbols.
  */
 void budgie_please_link_me_libtool_i_have_great_themes(void);
+
+/**
+ * Generate a dynamic resource path for the given suffix for a resource
+ * contained within the libbudgie-theme.
+ *
+ * This performs a runtime check to determine the currently used version
+ * of GTK+ to ensure that the appropriate theme-set is used. Currently
+ * we support 3.18 and 3.20
+ *
+ * @return a Newly allocated string
+ */
+gchar *budgie_form_theme_path(const gchar *suffix);

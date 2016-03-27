@@ -277,7 +277,7 @@ public class PanelManager : DesktopManager
             return;
         }
         if (settings.get_boolean(key)) {
-            this.current_theme_uri = "%s/theme.css".printf(get_theme_prefix());
+            this.current_theme_uri = Budgie.form_theme_path("theme.css");
         } else {
             this.current_theme_uri = null;
         }
@@ -331,21 +331,6 @@ public class PanelManager : DesktopManager
         });
     }
 
-    /**
-     * Return the appropriate theme path at runtime for the currently running
-     * GTK. Currently only 3.18 is catered for, with 3.20 coming soon
-     */
-    private string get_theme_prefix()
-    {
-        switch (Gtk.get_minor_version()) {
-            case 20:
-                return "resource://com/solus-project/budgie/theme/3.20";
-            case 18:
-            default:
-                return "resource://com/solus-project/budgie/theme/3.18";
-        }
-    }
-
     void set_css_from_uri(string? uri)
     {
         Budgie.please_link_me_libtool_i_have_great_themes();
@@ -385,7 +370,7 @@ public class PanelManager : DesktopManager
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : "%s/theme_hc.css".printf(get_theme_prefix()));
+            set_css_from_uri(this.current_theme_uri == null ? null : Budgie.form_theme_path("theme_hc.css"));
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);

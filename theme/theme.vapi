@@ -12,4 +12,7 @@
 namespace Budgie {
     [CCode (cheader_filename = "theme.h")]
     public static void please_link_me_libtool_i_have_great_themes();
+
+    [CCode (cheader_filename = "theme.h")]
+    public static string form_theme_path(string suffix);
 }
