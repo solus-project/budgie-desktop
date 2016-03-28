@@ -662,7 +662,7 @@ public class BudgieWM : Meta.Plugin
 
         if (this.tile_preview == null) {
             this.tile_preview = new ScreenTilePreview();
-            this.tile_preview.transitions_completed.connect(do_transitions_completed);
+            this.tile_preview.transitions_completed.connect(tile_preview_transition_complete);
 
             var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
 
@@ -718,7 +718,7 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    private void do_transitions_completed()
+    private void tile_preview_transition_complete()
     {
         if (tile_preview.get_opacity() == 0x00) {
             this.tile_preview.hide();
