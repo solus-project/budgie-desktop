@@ -5,8 +5,7 @@ This represents the immediately acknowledged issues on the path to the 10.3
 release. If you feel something needs to be added to this, make sure and poke
 us!!
 
-Panel
-=====
+**Panel**
 
  * [ ] Steal some PopoverManager changes from the wingpanel guys back into Budgie Panel
  * [ ] Steal the focus-manager trick from Wingpanel too (Nice work guys!)
@@ -32,16 +31,14 @@ Panel
  * [ ] Add workaround for clicking on the desktop to allow dismissing of Raven
        for when Nautilus isn't being used..
 
-Icon Tasklist
-=============
+**Icon Tasklist**
 
  * [ ] Make the world happy: Add drag and drop reordering of pinned icons
  * [ ] Switch to a GtkFlowBox for better sorting
 
  ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
  
-Raven
-=====
+**Raven**
 
  * [ ] Add proper Raven API for applets (single instance, unlike Budgie Panel)
  * [ ] Enforce constant sizes
@@ -55,8 +52,8 @@ Raven
    - Probably sign up with Spotify too. Sure as shit beats using YouTube all the time.
  * [ ] Clean up the UI.
 
-Window Manager
-==============
+**Window Manager**
+
 
  * [ ] Fix derpy-ass alt+tab
  * [ ] Add proper ibus support
@@ -67,8 +64,8 @@ Window Manager
    Sync with elementary + Jasper St Pierre over this) [Low Priority]
 
 
-General
-=======
+**General**
+
 
  * [ ] Make it suck less.
  * [ ] Need a sexy LightDM greeter.
