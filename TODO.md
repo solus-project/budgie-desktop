@@ -1,5 +1,13 @@
-Panel
+TODO:
 -----
+
+This represents the immediately acknowledged issues on the path to the 10.3
+release. If you feel something needs to be added to this, make sure and poke
+us!!
+
+Panel
+=====
+
  * [ ] Steal some PopoverManager changes from the wingpanel guys back into Budgie Panel
  * [ ] Steal the focus-manager trick from Wingpanel too (Nice work guys!)
  * [x] Fix startup issues:
@@ -25,7 +33,7 @@ Panel
        for when Nautilus isn't being used..
 
 Icon Tasklist
--------------
+=============
 
  * [ ] Make the world happy: Add drag and drop reordering of pinned icons
  * [ ] Switch to a GtkFlowBox for better sorting
@@ -33,7 +41,8 @@ Icon Tasklist
  ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
  
 Raven
-------
+=====
+
  * [ ] Add proper Raven API for applets (single instance, unlike Budgie Panel)
  * [ ] Enforce constant sizes
  * [ ] Enhance discoverability. People seem to not know that it exists ....
@@ -47,7 +56,8 @@ Raven
  * [ ] Clean up the UI.
 
 Window Manager
----------------
+==============
+
  * [ ] Fix derpy-ass alt+tab
  * [ ] Add proper ibus support
  * [ ] Add screen recording and screenshot support (see GNOME Shell)
@@ -58,7 +68,7 @@ Window Manager
 
 
 General
--------
+=======
 
  * [ ] Make it suck less.
  * [ ] Need a sexy LightDM greeter.
