@@ -24,6 +24,12 @@ Panel
  * [ ] Add workaround for clicking on the desktop to allow dismissing of Raven
        for when Nautilus isn't being used..
 
+Icon Tasklist
+-------------
+
+ * [ ] Make the world happy: Add drag and drop reordering of pinned icons
+ * [ ] Switch to a GtkFlowBox for better sorting
+
  ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
  
 Raven
