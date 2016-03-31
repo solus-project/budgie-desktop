@@ -295,7 +295,7 @@ popover scrollbar trough {
 
         background-image: -gtk-scaled(url("../assets/switch#{$asset_suffix}.png"),url("../assets/switch#{$asset_suffix}@2.png"));
 
-        &:active { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
+        &:checked { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
         &:disabled { opacity: 0.4; }
     }
 
