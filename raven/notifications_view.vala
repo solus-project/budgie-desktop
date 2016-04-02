@@ -515,8 +515,8 @@ public class NotificationsView : Gtk.Box
     {
         name = "Raven";
         vendor = "Solus Project";
-        version = "0.0.3";
-        spec_version = "1";
+        version = Budgie.VERSION;
+        spec_version = "1.2";
     }
 
 
