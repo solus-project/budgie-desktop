@@ -295,6 +295,8 @@ public class Raven : Gtk.Window
             }
         });
 
+        set_gravity(Gdk.Gravity.NORTH_EAST);
+
         this.get_child().show_all();
     }
 
