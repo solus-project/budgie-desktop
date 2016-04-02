@@ -23,6 +23,7 @@ public static const string DEFAULT_CONFIG   = "resource:///com/solus-project/bud
 /**
  * Available slots
  */
+[Compact]
 class Screen : Object {
     public PanelPosition slots;
     public Gdk.Rectangle area;

@@ -92,6 +92,7 @@ namespace Budgie {
     }
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
+    [Compact]
     public class Animation : GLib.Object {
         public Animation();
         public int64 start_time;
