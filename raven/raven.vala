@@ -477,11 +477,6 @@ public class Raven : Gtk.Window
                 property = "nscale",
                 old = old_op,
                 @new = new_op
-            },
-            Budgie.PropChange() {
-                property = "opacity",
-                old = old_op,
-                @new = new_op
             }
         };
 
