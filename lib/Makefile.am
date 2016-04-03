@@ -19,7 +19,8 @@ libtoplevel_la_CFLAGS = \
 libtoplevel_la_LIBADD = \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS) \
-	${top_builddir}/plugin/libbudgie-plugin.la
+	${top_builddir}/plugin/libbudgie-plugin.la \
+	-lm
 
 libtoplevel_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
