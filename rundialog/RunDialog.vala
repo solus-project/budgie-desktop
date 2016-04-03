@@ -1,8 +1,8 @@
 /*
- * RunDialog.vala
- *
- * Copyright: 2014 Ikey Doherty <ikey.doherty@gmail.com>
- *                 Leo Iannacone <info@leoiannacone.com>
+ * This file is part of budgie-desktop
+ * 
+ * Copyright (C) 2014-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright (C) 2014 Leo Iannacone <info@leoiannacone.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

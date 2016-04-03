@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2015 Ikey Doherty <ikey@solus-project.com>
+ * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie)
  * 
  * This program is free software; you can redistribute it and/or modify

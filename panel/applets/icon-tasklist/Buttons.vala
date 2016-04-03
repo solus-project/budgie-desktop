@@ -1,20 +1,12 @@
 /*
- * Buttons.vala
+ * This file is part of budgie-desktop
  * 
- * Copyright 2014 Ikey Doherty <ikey.doherty@gmail.com>
+ * Copyright (C) 2014-2016 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- */
-
-
-/**
- * Note: Please blame Joey for any insanity in this file. Launchers is
- * what he wanted. Consequently some of this seems to make sense at first
- * glance. Then you actually *look*. Honestly, just walk away now. File
- * a bug but pretend this is a git submodule we don't maintain. Cheers.
  */
 
 const string BUDGIE_STYLE_CLASS_BUTTON = "launcher";

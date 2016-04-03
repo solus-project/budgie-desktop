@@ -1,7 +1,7 @@
 /*
- * BluetoothIndicator.vala
- *
- * Copyright 2016 Ikey Doherty <ikey@solus-project.com>
+ * This file is part of budgie-desktop
+ * 
+ * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  * Copyright (C) 2015 Alberts Muktupāvels
  *
  * This program is free software; you can redistribute it and/or modify
