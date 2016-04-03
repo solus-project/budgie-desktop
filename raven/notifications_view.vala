@@ -82,6 +82,15 @@ public class NotificationWindow : Gtk.Window
         cancel = new GLib.Cancellable();
 
         set_default_size(NOTIFICATION_SIZE, -1);
+
+        button_release_event.connect(()=> {
+            if (!this.has_default_action) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            did_interact = true;
+            owner.ActionInvoked(this.id, "default");
+            return Gdk.EVENT_STOP;
+        });
     }
 
     void action_handler(Gtk.Button? button)
@@ -144,6 +153,7 @@ public class NotificationWindow : Gtk.Window
     public string? category = null;
 
     public bool did_interact = false;
+    private bool has_default_action = false;
 
     private async bool set_from_image_path()
     {
@@ -305,8 +315,8 @@ public class NotificationWindow : Gtk.Window
             string action = actions[i];
             string local = actions[++i];
 
-            /* We don't support an empty default yet */
             if (action == "default" && local == "") {
+                this.has_default_action = true;
                 continue;
             }
             if (icons) {
