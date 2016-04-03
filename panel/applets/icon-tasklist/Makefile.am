@@ -46,6 +46,7 @@ plugin_LTLIBRARIES = libicontasklistapplet.la
 
 libicontasklistapplet_la_SOURCES = \
 	IconTasklistApplet.vala \
+	Buttons.vala \
 	plugin-resources.h \
 	plugin-resources.c
 
