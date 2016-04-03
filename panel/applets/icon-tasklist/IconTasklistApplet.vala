@@ -121,7 +121,8 @@ public class DesktopHelper : Object
         derpers = new string[] {
             "google-chrome",
             "hexchat",
-            "telegram"
+            "telegram",
+            "atom"
         };
     }
 
