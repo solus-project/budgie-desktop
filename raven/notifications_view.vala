@@ -209,6 +209,14 @@ public class NotificationWindow : Gtk.Window
         this.timestamp = datetime.to_unix();
 
         bool is_img = yield this.set_from_image_path();
+        bool has_desktop = false;
+
+        if ("desktop-entry" in hints) {
+            this.app_name = hints.lookup("desktop-entry").get_string();
+            has_desktop = true;
+        } else {
+            this.app_name = app_name;
+        }
 
         /* Fallback to named icon if no image-path is specified */
         if (!is_img) {
@@ -219,8 +227,23 @@ public class NotificationWindow : Gtk.Window
                 image_icon.pixel_size = 48;
                 this.icon_name = app_icon;
             } else {
-                image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
-                this.icon_name = "mail-read-symbolic";
+                /* Use the .desktop icon if we can */
+                if (has_desktop) {
+                    try {
+                        string? did = this.app_name;
+                        if (!did.has_suffix(".desktop")) {
+                            did = "%s.desktop".printf(did);
+                        }
+                        var app_info = new DesktopAppInfo(did);
+                        image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+                    } catch (Error e) {
+                        image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+                        this.icon_name = "mail-unread-symbolic";
+                    }
+                } else {
+                    image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+                    this.icon_name = "mail-unread-symbolic";
+                }
                 image_icon.pixel_size = 48;
             }
         }
@@ -228,12 +251,6 @@ public class NotificationWindow : Gtk.Window
         if ("category" in hints) {
             this.category = hints.lookup("category").get_string();
         }
-        if ("desktop-entry" in hints) {
-            this.app_name = hints.lookup("desktop-entry").get_string();
-        } else {
-            this.app_name = app_name;
-        }
-
 
         if (summary == "") {
             label_title.set_text(app_name);
@@ -287,6 +304,11 @@ public class NotificationWindow : Gtk.Window
             Gtk.Button? button = null;
             string action = actions[i];
             string local = actions[++i];
+
+            /* We don't support an empty default yet */
+            if (action == "default" && local == "") {
+                continue;
+            }
             if (icons) {
                 if (!action.has_suffix("-symbolic")) {
                     button = new Gtk.Button.from_icon_name("%s-symbolic".printf(action), Gtk.IconSize.MENU);
