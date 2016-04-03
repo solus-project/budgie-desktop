@@ -448,6 +448,7 @@ public class IconButton : Gtk.ToggleButton
 
         // Handle clicking, etc.
         button_release_event.connect(on_button_release);
+        set_can_focus(false);
     }
 
     /**
@@ -577,6 +578,7 @@ public class PinnedIconButton : IconButton
         item.activate.connect(()=> {
             DesktopHelper.set_pinned(settings, this.app_info, false);
         });
+        set_can_focus(false);
     }
 
     protected override bool on_button_release(Gdk.EventButton event)
