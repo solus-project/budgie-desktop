@@ -133,6 +133,7 @@ public class DesktopHelper : Object
         simpletons["gnome-clocks"] = "org.gnome.clocks";
         simpletons["gnome-calendar"] = "org.gnome.Calendar";
         simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
+        simpletons["gnome-terminal"] = "org.gnome.Terminal";
         simpletons["nautilus"] = "org.gnome.Nautilus";
         simpletons["totem"] = "org.gnome.Totem";
         simpletons["gedit"] = "org.gnome.gedit";
