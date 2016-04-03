@@ -120,7 +120,8 @@ public class DesktopHelper : Object
     static construct {
         derpers = new string[] {
             "google-chrome",
-            "hexchat"
+            "hexchat",
+            "telegram"
         };
     }
 
