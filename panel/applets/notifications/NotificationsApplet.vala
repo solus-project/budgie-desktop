@@ -33,7 +33,7 @@ public interface RavenRemote : Object
 
 public class NotificationsApplet : Budgie.Applet
 {
-
+    bool show_notification_view = false;  // Show Applet View by default (show_notification_view false)
     Gtk.EventBox? widget;
     Gtk.Image? icon;
     RavenRemote? raven_proxy = null;
@@ -55,11 +55,13 @@ public class NotificationsApplet : Budgie.Applet
     void on_notifications_read()
     {
         this.icon.get_style_context().remove_class("alert");
+        this.show_notification_view = false; // No longer default to showing notification view
     }
 
     void on_notifications_unread()
     {
         this.icon.get_style_context().add_class("alert");
+        this.show_notification_view = true; // Default to showing notification view
     }
 
     void on_get_count(GLib.Object? o, AsyncResult? res)
@@ -97,7 +99,11 @@ public class NotificationsApplet : Budgie.Applet
             return Gdk.EVENT_PROPAGATE;
         }
         try {
-            raven_proxy.ToggleNotification();
+            if (!this.show_notification_view){ // If we should show Applet view
+                raven_proxy.Toggle();
+            } else {
+                raven_proxy.ToggleNotification();
+            }
         } catch (Error e) {
             message("Failed to toggle Raven: %s", e.message);
         }
