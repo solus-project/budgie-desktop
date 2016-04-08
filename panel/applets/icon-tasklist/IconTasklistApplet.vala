@@ -77,10 +77,12 @@ public class DesktopHelper : Object
         simpletons = new HashTable<string?,string?>(str_hash, str_equal);
         simpletons["google-chrome-stable"] = "google-chrome";
         /* Constency++ */
+        simpletons["gnome-builder"] = "org.gnome.Builder";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
         simpletons["gnome-calendar"] = "org.gnome.Calendar";
         simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
         simpletons["gnome-terminal"] = "org.gnome.Terminal";
+        simpletons["gnome-todo"] = "org.gnome.Todo";
         simpletons["nautilus"] = "org.gnome.Nautilus";
         simpletons["totem"] = "org.gnome.Totem";
         simpletons["gedit"] = "org.gnome.gedit";
