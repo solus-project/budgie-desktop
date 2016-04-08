@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 21:16+0100\n"
+"POT-Creation-Date: 2016-04-08 22:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,16 +63,16 @@ msgstr ""
 msgid "Panel"
 msgstr ""
 
-#: ../raven/notifications_view.vala:416
+#: ../raven/notifications_view.vala:448
 #, c-format
 msgid "%u new notifications"
 msgstr ""
 
-#: ../raven/notifications_view.vala:418
+#: ../raven/notifications_view.vala:450
 msgid "1 new notification"
 msgstr ""
 
-#: ../raven/notifications_view.vala:420
+#: ../raven/notifications_view.vala:452
 msgid "No new notifications"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Appearance"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:2 ../raven/ui/background.ui.h:2
+#: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
 msgstr ""
 
@@ -150,6 +150,10 @@ msgid "Built-in theme"
 msgstr ""
 
 #: ../raven/ui/appearance.ui.h:10
+msgid "Select a cursor theme"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:11
 msgid "Cursor Theme"
 msgstr ""
 
@@ -183,6 +187,10 @@ msgstr ""
 
 #: ../raven/ui/background.ui.h:1
 msgid "Background"
+msgstr ""
+
+#: ../raven/ui/background.ui.h:2
+msgid "Show desktop icons"
 msgstr ""
 
 #: ../raven/ui/background.ui.h:3
@@ -312,6 +320,22 @@ msgstr ""
 
 #: ../panel/applets/status/BluetoothIndicator.vala:168
 msgid "Bluetooth Airplane Mode"
+msgstr ""
+
+#: ../panel/applets/status/PowerIndicator.vala:95
+msgid "Battery fully charged."
+msgstr ""
+
+#: ../panel/applets/status/PowerIndicator.vala:98
+msgid "Unknown"
+msgstr ""
+
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Battery charging"
+msgstr ""
+
+#: ../panel/applets/status/PowerIndicator.vala:112
+msgid "Battery remaining"
 msgstr ""
 
 #: ../wm/windowmenu.vala:124
