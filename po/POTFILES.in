@@ -25,6 +25,7 @@ panel/applets/lock-keys/LockKeysApplet.vala
 panel/applets/notifications/NotificationsApplet.vala
 panel/applets/show-desktop/ShowDesktopApplet.vala
 panel/applets/status/BluetoothIndicator.vala
+panel/applets/status/PowerIndicator.vala
 
 wm/windowmenu.vala
 wm/wm.vala
