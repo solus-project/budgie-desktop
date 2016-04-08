@@ -53,16 +53,16 @@ public class CalendarWidget : Gtk.Box
         revealer.notify["child-revealed"].connect_after(()=> {
             this.get_toplevel().queue_draw();
         });
-		
-		cal.day_selected_double_click.connect(() => {
+
+        cal.day_selected_double_click.connect(() => {
             try {
-				GLib.DateTime cal_date = new DateTime.local(cal.year, cal.month+1, cal.day, 0, 0, 0); // Define cal_date as the local DateTime of cal props 
-				string local_formatted_date = cal_date.format("%x"); // Return Date formatted based on the user's locale
+                GLib.DateTime cal_date = new DateTime.local(cal.year, cal.month+1, cal.day, 0, 0, 0); // Define cal_date as the local DateTime of cal props 
+                string local_formatted_d1ate = cal_date.format("%x"); // Return Date formatted based on the user's locale
                 Process.spawn_command_line_async("gnome-calendar --date=" + local_formatted_date); // Attempt open gnome-calendar --date=date
             } catch (Error e) {
                 message("Error invoking gnome-calendar: %s", e.message);
             }			
-		});
+        });
     }
 
 } // End class
