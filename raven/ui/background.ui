@@ -52,7 +52,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Use the dark theme</property>
+                <property name="tooltip_text" translatable="yes">Show desktop icons</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="label" translatable="yes">Desktop Icons</property>
