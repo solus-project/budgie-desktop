@@ -75,6 +75,8 @@ public class PowerIndicator : Gtk.Bin
 
         // Update/add icon for each battery
         batteries.foreach((battery) => {
+            string tip = _("Battery") + " "; // Initially setting tooltip to Battery 
+
             // Determine the icon to use for this battery
             string image_name;
             if (battery.percentage <= 10) {
@@ -90,10 +92,24 @@ public class PowerIndicator : Gtk.Bin
             // Fully charged OR charging
             if (battery.state == 4) {
                     image_name = "battery-full-charged-symbolic";
+                    tip += _("fully charged") + "."; // Imply the battery is charged
             } else if (battery.state == 1) {
                     image_name += "-charging-symbolic";
+                    string time_to_full_str = _("Unknown"); // Default time_to_full_str to Unknown
+                    int time_to_full = (int)battery.time_to_full; // Seconds for battery time_to_full
+
+                    if (time_to_full > 0) { // If TimeToFull is known
+                            int hours = time_to_full / (60 * 60);
+                            int minutes = time_to_full / 60 - hours * 60;
+                            time_to_full_str = "%d:%02d".printf(hours, minutes); // Set inner charging duration to hours:minutes
+                    }
+
+                    tip += _("charging") + ": %d%% (%s)".printf((int)battery.percentage, time_to_full_str); // Set to charging: % (Unknown/Time)
             } else {
                     image_name += "-symbolic";
+                    int hours = (int)battery.time_to_empty / (60 * 60);
+                    int minutes = (int)battery.time_to_empty / 60 - hours * 60;
+                    tip += _("remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
             }
 
             // Determine BatteryIcon that corresponds to the battery
@@ -111,11 +127,8 @@ public class PowerIndicator : Gtk.Bin
             }
 
             // Set a handy tooltip until we gain a menu in StatusApplet
-            int hours = (int)battery.time_to_empty / (60 * 60);
-            int minutes = (int)battery.time_to_empty / 60 - hours * 60;
-            string tip = "Battery remaining: %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
-            icon.set_tooltip_text(tip);
 
+            icon.set_tooltip_text(tip);
             icon.set_from_icon_name(image_name, Gtk.IconSize.MENU);
         });
 
