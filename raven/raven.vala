@@ -42,20 +42,16 @@ public class RavenIface
         this.is_expanded = b;
     }
 
-    public void Toggle()
-    {
+    public void Toggle() {
         this.is_expanded = !this.is_expanded;
-        if (this.is_expanded) {
-            parent.expose_main_view();
-        }
-    }
 
-    public void ToggleNotification()
-    {
-        this.is_expanded = !this.is_expanded;
         if (this.is_expanded) {
-            parent.expose_notification();
-            this.ReadNotifications();
+            if (this.notifications == 0){
+                parent.expose_main_view();
+            } else {
+                parent.expose_notification();
+                this.ReadNotifications();
+            }
         }
     }
 

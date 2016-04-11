@@ -445,12 +445,13 @@ public class NotificationsView : Gtk.Box
 
         string? text = null;
         if (len > 1) {
-            text = _("%u new notifications".printf(len));
+            text = _("%u unread notifications").printf(len);
         } else if (len == 1) {
-            text = _("1 new notification");
+            text = _("1 unread notification");
         } else {
-            text = _("No new notifications");
-        }
+            text = _("No unread notifications");
+        }    
+
         Raven.get_instance().set_notification_count(len);
         header.text = text;
     }
