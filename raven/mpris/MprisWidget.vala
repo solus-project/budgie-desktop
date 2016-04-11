@@ -14,9 +14,6 @@ public class MprisWidget : Gtk.Box
     DBusImpl impl;
 
     HashTable<string,ClientWidget> ifaces;
-    string[] blacklist = {
-        "org.mpris.MediaPlayer2.spotify"    /* Doesn't obey MPRIS properly - breaks all the things */
-    };
 
     int our_width = 250;
 
@@ -48,10 +45,6 @@ public class MprisWidget : Gtk.Box
      */
     void add_iface(string name, MprisClient iface)
     {
-        if (name in blacklist) {
-            message("Not adding blacklisted MPRIS client: %s", name);
-            return;
-        }
         ClientWidget widg = new ClientWidget(iface, our_width);
         widg.show_all();
         pack_start(widg, false, false, 0);
