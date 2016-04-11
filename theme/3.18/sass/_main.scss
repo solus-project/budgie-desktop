@@ -461,6 +461,30 @@ GtkPopover GtkListBoxRow {
     .undershoot, .overshoot { background: none; }
 }
 
+// User Menu
+.user-menu {
+    @extend .list;
+    padding: 10px;
+
+    .content-box {
+        .indicator-item {
+            color: $fg_color;
+
+            &, &:selected, &:focus, &:active {
+                border: 0;
+            }
+
+            &:selected, &:active {
+                background-color: transparent;
+            }
+        }
+
+        GtkSeparator {
+            color: transparentize($fg_color, 0.85);
+        }
+    }
+}
+
 // Panel
 .budgie-panel {
     @extend %widgets;

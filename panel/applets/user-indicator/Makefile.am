@@ -13,34 +13,32 @@ plugin_DATA =
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
 CLEANFILES = \
-	StatusApplet.plugin
+	UserIndicator.plugin
 
 DISTCLEANFILES = \
-	StatusApplet.plugin
-
+	UserIndicator.plugin
 
 plugin_DATA += \
-	StatusApplet.plugin
+	UserIndicator.plugin
 
 EXTRA_DIST += \
-	StatusApplet.plugin.in
+	UserIndicator.plugin.in
 
-plugin_LTLIBRARIES = libstatusapplet.la
+plugin_LTLIBRARIES = libuserindicator.la
 
-libstatusapplet_la_SOURCES = \
-	BluetoothIndicator.vala \
-	StatusApplet.vala \
-	PowerIndicator.vala \
-	SoundIndicator.vala
+libuserindicator_la_SOURCES = \
+    DBusInterfaces.vala \
+    UserIndicator.vala \
+    UserIndicatorWindow.vala
 
-libstatusapplet_la_CFLAGS = \
+libuserindicator_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(STATUS_PLUGIN_CFLAGS) \
 	$(GVC_CFLAGS) \
 	$(DECLARATIONS)
 
-libstatusapplet_la_LIBADD = \
+libuserindicator_la_LIBADD = \
 	${top_builddir}/plugin/libbudgie-plugin.la \
 	${top_builddir}/gvc/libgvc.la \
 	$(BUDGIE_BASE_LIBS) \
@@ -49,20 +47,18 @@ libstatusapplet_la_LIBADD = \
 	$(STATUS_PLUGIN_LIBS) \
 	-lm
 
-libstatusapplet_la_LDFLAGS = \
+libuserindicator_la_LDFLAGS = \
 	$(MODULE_FLAGS) \
 	$(AM_LDFLAGS)
 
-libstatusapplet_la_VALAFLAGS = \
+libuserindicator_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gvc-1.0 \
-	--pkg upower-glib-1.0 \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
 	--pkg posix \
-	--pkg GnomeBluetooth-1.0 \
 	--pkg accountsservice \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/vapi

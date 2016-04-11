@@ -17,6 +17,7 @@ m4_define([gdesktop_required_version], [3.16.0])
 m4_define([pulse_required_version], [2.0])
 m4_define([gsettings_required_version], [3.16.0])
 m4_define([polkit_required_version], [0.105])
+m4_define([accountsservice_version], [0.6.40])
 
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
@@ -90,6 +91,7 @@ m4_include([panel/applets/show-desktop/configure.ac])
 m4_include([panel/applets/spacer/configure.ac])
 m4_include([panel/applets/status/configure.ac])
 m4_include([panel/applets/tray/configure.ac])
+m4_include([panel/applets/user-indicator/configure.ac])
 m4_include([panel/applets/workspaces/configure.ac])
 m4_include([polkit/configure.ac])
 
@@ -200,6 +202,7 @@ AC_MSG_RESULT([
         tasklist:               ${have_wnck}
         status:                 ${have_status}
         tray:                   ${have_natray}
+        user-indicator:         ${have_user_indicator}
         workspaces:             ${have_wnck}
 
         Polkit Agent:           always

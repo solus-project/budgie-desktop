@@ -52,7 +52,6 @@ public class StatusApplet : Budgie.Applet
 
         blue = new BluetoothIndicator();
         widget.pack_start(blue, false, false, 2);
-
         sound.button_release_event.connect(on_button_release);
 
         var power_image_wrap = new Gtk.EventBox();
@@ -87,7 +86,6 @@ public class StatusApplet : Budgie.Applet
         });
 
         show_all();
-
         setup_dbus();
     }
 

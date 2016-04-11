@@ -117,8 +117,7 @@ class PowerStrip : Gtk.EventBox
         });
     }
 
-    void lock_screen()
-    {
+    void lock_screen() {
 
         try {
             saver.lock();
