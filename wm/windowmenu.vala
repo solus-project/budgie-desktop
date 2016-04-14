@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -115,7 +115,7 @@ public class WindowMenu : Gtk.Menu
     new Gtk.MenuItem? unmaximize = null;
     new Gtk.MenuItem? move = null;
     new Gtk.MenuItem? resize = null;
-    new Gtk.MenuItem? always_on_top = null;
+    new Gtk.CheckMenuItem? always_on_top = null;
     new Gtk.MenuItem? close = null;
 
     construct {
@@ -146,8 +146,8 @@ public class WindowMenu : Gtk.Menu
         add(resize);
         resize.show_all();
 
-        always_on_top = new Gtk.MenuItem.with_label(_("Always On Top"));
-        always_on_top.activate.connect(always_on_top_cb);
+        always_on_top = new Gtk.CheckMenuItem.with_label(_("Always On Top"));
+        always_on_top.toggled.connect(always_on_top_cb);
         add(always_on_top);
         always_on_top.show_all();
 
