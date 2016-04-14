@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  * Copyright (C) 2015 Alberts Muktupāvels
  *
@@ -76,7 +76,7 @@ public class BluetoothIndicator : Gtk.Bin
         if (!model.iter_children(out iter, adapter)) {
             return 0;
         }
-        
+
         while (true) {
             bool con;
             model.get(iter, Bluetooth.Column.CONNECTED, out con, -1);
@@ -136,14 +136,19 @@ public class BluetoothIndicator : Gtk.Bin
 
     void on_send_file()
     {
-        var app_info = AppInfo.create_from_commandline("bluetooth-sendto", "Bluetooth Transfer", AppInfoCreateFlags.NONE);
-        if (app_info == null) {
-            return;
-        }
         try {
-            app_info.launch(null, null);
+            var app_info = AppInfo.create_from_commandline("bluetooth-sendto", "Bluetooth Transfer", AppInfoCreateFlags.NONE);
+            if (app_info == null) {
+                return;
+            }
+
+            try {
+                app_info.launch(null, null);
+            } catch (Error e) {
+                message("Unable to launch bluetooth-sendto: %s", e.message);
+            }
         } catch (Error e) {
-            message("Unable to launch bluetooth-sendto: %s", e.message);
+            message("Unable to create bluetooth-sendto AppInfo: %s", e.message);
         }
     }
 

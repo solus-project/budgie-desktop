@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -53,13 +53,17 @@ public class StatusApplet : Budgie.Applet
         blue = new BluetoothIndicator();
         widget.pack_start(blue, false, false, 2);
 
-        wrap.button_release_event.connect(on_button_release);
+        sound.button_release_event.connect(on_button_release);
 
-        var power = new Gtk.Image.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.MENU);
-        widget.pack_start(power, false, false, 2);
+        var power_image_wrap = new Gtk.EventBox();
+        widget.pack_start(power_image_wrap, false, false, 2);
+
+        var power_image = new Gtk.Image.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.MENU);
+        power_image_wrap.add(power_image);
+        power_image_wrap.button_release_event.connect(on_button_release);
 
         blue.ebox.button_press_event.connect((e)=> {
-            if (e.button != 3) {
+            if (e.button != 1) {
                 return Gdk.EVENT_PROPAGATE;
             }
             if (blue.popover.get_visible()) {
@@ -70,14 +74,26 @@ public class StatusApplet : Budgie.Applet
             return Gdk.EVENT_STOP;
         });
 
+        power.ebox.button_press_event.connect((e)=> {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            if (power.popover.get_visible()) {
+                power.popover.hide();
+            } else {
+                this.manager.show_popover(power.ebox);
+            }
+            return Gdk.EVENT_STOP;
+        });
+
         show_all();
 
         setup_dbus();
     }
 
-    bool on_button_release(Gdk.EventButton? button)
+    bool on_button_release(Gdk.EventButton? e)
     {
-        if (button.button != 1) {
+        if (e.button != 1) {
             return Gdk.EVENT_PROPAGATE;
         }
         try {
@@ -92,6 +108,7 @@ public class StatusApplet : Budgie.Applet
     {
         this.manager = manager;
         manager.register_popover(blue.ebox, blue.popover);
+        manager.register_popover(power.ebox, power.popover);
     }
 
     /* Hold onto our Raven proxy ref */
@@ -117,7 +134,7 @@ public class StatusApplet : Budgie.Applet
 } // End class
 
 [ModuleInit]
-public void peas_register_types(TypeModule module) 
+public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
