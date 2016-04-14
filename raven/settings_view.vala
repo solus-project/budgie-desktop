@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -146,7 +146,7 @@ public class AppletPicker : Gtk.Box {
         if (row == null) {
             button_add.sensitive = false;
         }
-        
+
         info = row.get_child().get_data("info");
         button_add.sensitive = true;
         current_info = info;
@@ -251,9 +251,9 @@ public class PanelEditor : Gtk.Box
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));
         Gtk.TreeIter iter;
         model.append(out iter);
-        model.set(iter, 0, "top", 1, "Top", -1);
+        model.set(iter, 0, "top", 1, _("Top"), -1);
         model.append(out iter);
-        model.set(iter, 0, "bottom", 1, "Bottom", -1);
+        model.set(iter, 0, "bottom", 1, _("Bottom"), -1);
         combobox_position.set_model(model);
         combobox_position.set_id_column(0);
         var render = new Gtk.CellRendererText();
@@ -296,7 +296,7 @@ public class PanelEditor : Gtk.Box
             if (current_applet != null && current_panel != null) {
                 current_panel.move_applet_left(current_applet);
             }
-        });  
+        });
         button_move_applet_right.clicked.connect(()=> {
             if (current_applet != null && current_panel != null) {
                 current_panel.move_applet_right(current_applet);
@@ -586,7 +586,7 @@ public class PanelEditor : Gtk.Box
         string? next = null;
         unowned Budgie.AppletInfo? before_info = null;
         unowned Budgie.AppletInfo? after_info = null;
-    
+
         if (before != null) {
             before_info = before.get_child().get_data("ainfo");
             prev = before_info.alignment;
@@ -596,7 +596,7 @@ public class PanelEditor : Gtk.Box
             after_info = after.get_child().get_data("ainfo");
             next = after_info.alignment;
         }
-        
+
         if (before == null || after == null || prev != next) {
             Gtk.Label? label = null;
             switch (prev) {
@@ -640,7 +640,7 @@ public class PanelEditor : Gtk.Box
             button_settings.sensitive = false;
             return;
         }
-        
+
         info = row.get_child().get_data("ainfo");
         button_move_applet_left.sensitive = current_panel.can_move_applet_left(info);
         button_move_applet_right.sensitive = current_panel.can_move_applet_right(info);
@@ -786,7 +786,7 @@ public class AppearanceSettings : Gtk.Box
         var render = new Gtk.CellRendererText();
         combobox_gtk.pack_start(render, true);
         combobox_gtk.add_attribute(render, "text", 0);
-    
+
         combobox_icon.pack_start(render, true);
         combobox_icon.add_attribute(render, "text", 0);
 
