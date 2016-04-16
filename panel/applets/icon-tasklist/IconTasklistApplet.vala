@@ -80,6 +80,7 @@ public class DesktopHelper : Object
         simpletons["gnome-builder"] = "org.gnome.Builder";
         simpletons["gnome-clocks"] = "org.gnome.clocks";
         simpletons["gnome-calendar"] = "org.gnome.Calendar";
+        simpletons["gnome-photos"] = "org.gnome.Photos";
         simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
         simpletons["gnome-terminal"] = "org.gnome.Terminal";
         simpletons["gnome-todo"] = "org.gnome.Todo";
