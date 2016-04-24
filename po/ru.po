@@ -1,26 +1,29 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Arman <arman0608@mail.ru>, 2015
 # Bogdan Cuza <boghison22@gmail.com>, 2015
 # Derpy Crabs <derpycrabs@gmail.com>, 2015
+# Ilya Bizyaev <bizyaev@lyceum62.ru>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-30 07:23+0000\n"
-"Last-Translator: Arman <arman0608@mail.ru>\n"
+"PO-Revision-Date: 2016-04-24 21:02+0300\n"
+"Last-Translator: Ilya <bizyaev@lyceum62.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/solus-project/budgie-desktop/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
 msgid "Applets"
 msgstr "Апплеты"
 
@@ -29,52 +32,52 @@ msgstr "Апплеты"
 msgid "Notifications"
 msgstr "Уведомления"
 
-#: ../raven/settings_view.vala:354
+#: ../raven/settings_view.vala:364
 msgid "Top Panel"
 msgstr "Верхняя Панель"
 
-#: ../raven/settings_view.vala:356
+#: ../raven/settings_view.vala:366
 msgid "Right Panel"
 msgstr "Правая Панель"
 
-#: ../raven/settings_view.vala:358
+#: ../raven/settings_view.vala:368
 msgid "Left Panel"
 msgstr "Левая Панель"
 
-#: ../raven/settings_view.vala:360
+#: ../raven/settings_view.vala:370
 msgid "Bottom Panel"
 msgstr "Нижняя Панель"
 
-#: ../raven/settings_view.vala:593
+#: ../raven/settings_view.vala:604
 msgid "Start"
 msgstr "Начало"
 
-#: ../raven/settings_view.vala:596
+#: ../raven/settings_view.vala:607
 msgid "Center"
 msgstr "Центр"
 
-#: ../raven/settings_view.vala:599
+#: ../raven/settings_view.vala:610
 msgid "End"
 msgstr "Конец"
 
-#: ../raven/settings_view.vala:877
+#: ../raven/settings_view.vala:960
 msgid "General"
 msgstr "Общие"
 
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
 msgid "Panel"
 msgstr "Панель"
 
-#: ../raven/notifications_view.vala:410
+#: ../raven/notifications_view.vala:448
 #, c-format
 msgid "%u new notifications"
 msgstr "%u новых уведомлений"
 
-#: ../raven/notifications_view.vala:412
+#: ../raven/notifications_view.vala:450
 msgid "1 new notification"
 msgstr "1 новое уведомление"
 
-#: ../raven/notifications_view.vala:414
+#: ../raven/notifications_view.vala:452
 msgid "No new notifications"
 msgstr "Нет новых уведомлений"
 
@@ -87,6 +90,7 @@ msgid "Input"
 msgstr "Ввод"
 
 #. End class
+#.
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
 #. * Local variables:
@@ -97,6 +101,7 @@ msgstr "Ввод"
 #. *
 #. * vi: set shiftwidth=4 tabstop=4 expandtab:
 #. * :indentSize=4:tabSize=4:noTabs=true:
+#.
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
 msgstr "Размер расширителя"
@@ -118,36 +123,44 @@ msgid "Appearance"
 msgstr "Вид"
 
 #: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "Тёмная тема"
-
-#: ../raven/ui/appearance.ui.h:3
 msgid "Use the dark theme"
 msgstr "Использовать темную тему"
 
+#: ../raven/ui/appearance.ui.h:3
+msgid "Dark theme"
+msgstr "Тёмная тема"
+
 #: ../raven/ui/appearance.ui.h:4
+msgid "Select a GTK+ theme"
+msgstr "Выбрать тему GTK+"
+
+#: ../raven/ui/appearance.ui.h:5
 msgid "Widget Theme"
 msgstr "Тема виджета"
 
-#: ../raven/ui/appearance.ui.h:5
-msgid "Select a GTK+ theme"
-msgstr "Выбрать GTK+тема"
-
 #: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "Тема Значков"
-
-#: ../raven/ui/appearance.ui.h:7
 msgid "Select an icon theme"
 msgstr "Выбрать тему значков"
 
+#: ../raven/ui/appearance.ui.h:7
+msgid "Icon Theme"
+msgstr "Тема Значков"
+
 #: ../raven/ui/appearance.ui.h:8
+msgid "Override defaults"
+msgstr "Восстановить по умолчанию "
+
+#: ../raven/ui/appearance.ui.h:9
 msgid "Built-in theme"
 msgstr "Встроенная тема"
 
-#: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
-msgstr "Восстановить по умолчанию "
+#: ../raven/ui/appearance.ui.h:10
+msgid "Select a cursor theme"
+msgstr "Выберите тему курсора"
+
+#: ../raven/ui/appearance.ui.h:11
+msgid "Cursor Theme"
+msgstr "Тема курсора"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -173,6 +186,42 @@ msgstr "Тени"
 msgid "Autohide policy"
 msgstr "Политика автоматического скрывания"
 
+#: ../raven/ui/panel.ui.h:8
+msgid "Stylize regions"
+msgstr "Стилизовать области"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Background"
+msgstr "Фон"
+
+#: ../raven/ui/background.ui.h:2
+msgid "Show desktop icons"
+msgstr "Показывать значки на рабочем столе"
+
+#: ../raven/ui/background.ui.h:3
+msgid "Desktop Icons"
+msgstr "Значки рабочего стола"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Fonts"
+msgstr "Шрифты"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Window Titles"
+msgstr "Заголовки окон"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Interface"
+msgstr "Интерфейс"
+
+#: ../raven/ui/fonts.ui.h:4
+msgid "Documents"
+msgstr "Документы"
+
+#: ../raven/ui/fonts.ui.h:5
+msgid "Monospace"
+msgstr "Моноширинный"
+
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -181,6 +230,30 @@ msgstr "Рабочий стол Budgie"
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Вход на рабочий стол Budgie"
+
+#: ../data/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Выключение"
+
+#: ../data/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Вы уверены, что хотите завершить сессию?"
+
+#: ../data/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../data/endsession.ui.h:4
+msgid "Logout"
+msgstr "Выход из системы"
+
+#: ../data/endsession.ui.h:5
+msgid "Restart"
+msgstr "Перезагрузка"
+
+#: ../data/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Выключение"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -192,7 +265,7 @@ msgstr "Календарь"
 
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
 msgid "All"
-msgstr "Всё"
+msgstr "Все"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
@@ -217,15 +290,59 @@ msgstr "%u непрочитанных уведомлений"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "1 unread notification"
-msgstr "1 непрочитанное уведомление "
+msgstr "1 непрочитанное уведомление"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:81
 msgid "No unread notifications"
-msgstr "Нет непрочитанных уведомлений "
+msgstr "Нет непрочитанных уведомлений"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
 msgstr "Переключить рабочий стол"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:101
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth отключен"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:105
+msgid "Bluetooth is active"
+msgstr "Bluetooth активен"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:110
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Подключен к %d устройству"
+msgstr[1] "Подключен к %d устройствам"
+msgstr[2] "Подключен к %d устройствам"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:166
+msgid "Bluetooth Settings"
+msgstr "Настройки Bluetooth"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:167
+msgid "Send Files"
+msgstr "Отправить файлы"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:168
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth режим в самолёте"
+
+#: ../panel/applets/status/PowerIndicator.vala:95
+msgid "Battery fully charged."
+msgstr "Батарея полностью заряжена."
+
+#: ../panel/applets/status/PowerIndicator.vala:98
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Battery charging"
+msgstr "Батарея заряжается"
+
+#: ../panel/applets/status/PowerIndicator.vala:112
+msgid "Battery remaining"
+msgstr "Осталось зарядки"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -255,15 +372,16 @@ msgstr "Всегда сверху "
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../wm/wm.vala:363
+#: ../wm/wm.vala:444
 msgid "Change background\\u2026"
 msgstr "Сменить фон\\u2026"
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:453
 msgid "Settings"
 msgstr "Настройки"
 
 #. End namespace
+#.
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
 #. * Local variables:
@@ -274,6 +392,7 @@ msgstr "Настройки"
 #. *
 #. * vi: set shiftwidth=4 tabstop=4 expandtab:
 #. * :indentSize=4:tabSize=4:noTabs=true:
+#.
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
 msgstr "Время"
