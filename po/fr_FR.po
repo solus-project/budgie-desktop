@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Benoit Bouyé <benoit.bouye@gmail.com>, 2016
 # Roro Titi <torburma@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-30 10:48+0000\n"
-"Last-Translator: Roro Titi <torburma@gmail.com>\n"
+"POT-Creation-Date: 2016-04-08 22:22+0100\n"
+"PO-Revision-Date: 2016-04-15 07:51+0000\n"
+"Last-Translator: Benoit Bouyé <benoit.bouye@gmail.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/solus-project/budgie-desktop/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
 msgid "Applets"
 msgstr "Applets"
 
@@ -27,52 +28,52 @@ msgstr "Applets"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: ../raven/settings_view.vala:354
+#: ../raven/settings_view.vala:364
 msgid "Top Panel"
 msgstr "Panneau du haut"
 
-#: ../raven/settings_view.vala:356
+#: ../raven/settings_view.vala:366
 msgid "Right Panel"
 msgstr "Panneau de droite"
 
-#: ../raven/settings_view.vala:358
+#: ../raven/settings_view.vala:368
 msgid "Left Panel"
 msgstr "Panneau de gauche"
 
-#: ../raven/settings_view.vala:360
+#: ../raven/settings_view.vala:370
 msgid "Bottom Panel"
 msgstr "Panneau du bas"
 
-#: ../raven/settings_view.vala:593
+#: ../raven/settings_view.vala:604
 msgid "Start"
 msgstr "Démarrer"
 
-#: ../raven/settings_view.vala:596
+#: ../raven/settings_view.vala:607
 msgid "Center"
 msgstr "Centre"
 
-#: ../raven/settings_view.vala:599
+#: ../raven/settings_view.vala:610
 msgid "End"
 msgstr "Fin"
 
-#: ../raven/settings_view.vala:877
+#: ../raven/settings_view.vala:960
 msgid "General"
 msgstr "Général"
 
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
 msgid "Panel"
 msgstr "Panneau"
 
-#: ../raven/notifications_view.vala:410
+#: ../raven/notifications_view.vala:448
 #, c-format
 msgid "%u new notifications"
 msgstr "%u nouvelles notification"
 
-#: ../raven/notifications_view.vala:412
+#: ../raven/notifications_view.vala:450
 msgid "1 new notification"
 msgstr "1 nouvelle notification"
 
-#: ../raven/notifications_view.vala:414
+#: ../raven/notifications_view.vala:452
 msgid "No new notifications"
 msgstr "Pas de nouvelle notification"
 
@@ -116,36 +117,44 @@ msgid "Appearance"
 msgstr "Apparence"
 
 #: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "Thème sombre"
-
-#: ../raven/ui/appearance.ui.h:3
 msgid "Use the dark theme"
 msgstr "Utiliser le thème sombre"
 
-#: ../raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
-msgstr "Thème du widget"
+#: ../raven/ui/appearance.ui.h:3
+msgid "Dark theme"
+msgstr "Thème sombre"
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Select a GTK+ theme"
 msgstr "Sélectionner un thème GTK+"
 
-#: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "Thème d'icônes"
+#: ../raven/ui/appearance.ui.h:5
+msgid "Widget Theme"
+msgstr "Thème du widget"
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
 msgstr "Sélectionner un thème d'icônes"
 
+#: ../raven/ui/appearance.ui.h:7
+msgid "Icon Theme"
+msgstr "Thème d'icônes"
+
 #: ../raven/ui/appearance.ui.h:8
+msgid "Override defaults"
+msgstr "Retourner aux réglages par défaut"
+
+#: ../raven/ui/appearance.ui.h:9
 msgid "Built-in theme"
 msgstr "Thème intégré"
 
-#: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
-msgstr "Retourner aux réglages par défaut"
+#: ../raven/ui/appearance.ui.h:10
+msgid "Select a cursor theme"
+msgstr "Sélectionner un thème de curseur"
+
+#: ../raven/ui/appearance.ui.h:11
+msgid "Cursor Theme"
+msgstr "Thème de Curseur"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -171,6 +180,42 @@ msgstr "Ombre"
 msgid "Autohide policy"
 msgstr "Cacher la police"
 
+#: ../raven/ui/panel.ui.h:8
+msgid "Stylize regions"
+msgstr "Styliser les régions"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Background"
+msgstr "Arrière-plan"
+
+#: ../raven/ui/background.ui.h:2
+msgid "Show desktop icons"
+msgstr "Afficher les icônes de bureau"
+
+#: ../raven/ui/background.ui.h:3
+msgid "Desktop Icons"
+msgstr "Icônes de Bureau"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Fonts"
+msgstr "Polices"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Window Titles"
+msgstr "Titres de Fenêtre"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Interface"
+msgstr "Interface"
+
+#: ../raven/ui/fonts.ui.h:4
+msgid "Documents"
+msgstr "Documents"
+
+#: ../raven/ui/fonts.ui.h:5
+msgid "Monospace"
+msgstr "Monospace"
+
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -179,6 +224,30 @@ msgstr "Bureau Budgie"
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Cette session pour permet d'accéder au Bureau Budgie"
+
+#: ../data/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Éteindre"
+
+#: ../data/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Êtes vous sûr de vouloir terminer votre session ?"
+
+#: ../data/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../data/endsession.ui.h:4
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: ../data/endsession.ui.h:5
+msgid "Restart"
+msgstr "Redémarrer"
+
+#: ../data/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Arrêter"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -225,6 +294,49 @@ msgstr "Pas de notification non lue"
 msgid "Toggle the desktop"
 msgstr "Basculer vers le bureau"
 
+#: ../panel/applets/status/BluetoothIndicator.vala:101
+msgid "Bluetooth is disabled"
+msgstr "Le Bluetooth est désactivé"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:105
+msgid "Bluetooth is active"
+msgstr "Le Bluetooth est activé"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:110
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Connecté à %d appareil"
+msgstr[1] "Connecté à %d appareils"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:166
+msgid "Bluetooth Settings"
+msgstr "Paramètres Bluetooth"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:167
+msgid "Send Files"
+msgstr "Envoyer les Fichiers"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:168
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth Mode Avion"
+
+#: ../panel/applets/status/PowerIndicator.vala:95
+msgid "Battery fully charged."
+msgstr "Batterie entièrement chargée."
+
+#: ../panel/applets/status/PowerIndicator.vala:98
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Battery charging"
+msgstr "Batterie en charge"
+
+#: ../panel/applets/status/PowerIndicator.vala:112
+msgid "Battery remaining"
+msgstr "Batterie restante"
+
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
 msgstr "Minimiser"
@@ -253,11 +365,11 @@ msgstr "Toujours au dessus"
 msgid "Close"
 msgstr "Fermer"
 
-#: ../wm/wm.vala:363
+#: ../wm/wm.vala:444
 msgid "Change background\\u2026"
 msgstr "Changer le fond d'écran\\u2026"
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:453
 msgid "Settings"
 msgstr "Paramètres"
 

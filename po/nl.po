@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Bram Van der Streeck <bram.vanderstreeck@gmail.com>, 2015
-# Geert Verheyde <geert.verheyde@gmail.com>, 2015-2016
-# Maxim Van Damme <maxim_vandamme@hotmail.com>, 2016
+# Geert Verheyde <geert.verheyde@gmail.com>, 2016
+# Jente Hidskes <Unia@users.noreply.github.com>, 2015
+# Kim Vande Walle, 2015
+# Maxim Van Damme <maxim_vandamme@hotmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-08 22:22+0100\n"
-"PO-Revision-Date: 2016-04-19 16:15+0000\n"
+"PO-Revision-Date: 2016-04-19 16:16+0000\n"
 "Last-Translator: Geert Verheyde <geert.verheyde@gmail.com>\n"
-"Language-Team: Dutch (Belgium) (http://www.transifex.com/solus-project/budgie-desktop/language/nl_BE/)\n"
+"Language-Team: Dutch (http://www.transifex.com/solus-project/budgie-desktop/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_BE\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
@@ -63,7 +64,7 @@ msgstr "Algemeen"
 
 #: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
 msgid "Panel"
-msgstr "Paneel"
+msgstr "Werkbalk"
 
 #: ../raven/notifications_view.vala:448
 #, c-format
@@ -111,7 +112,7 @@ msgstr "Sluiten"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Nieuwe applet toevoegen"
+msgstr "Voeg nieuwe applet toe"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
@@ -119,7 +120,7 @@ msgstr "Uiterlijk"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
-msgstr "Donker thema gebruiken"
+msgstr "Gebruik het donker thema"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Dark theme"
@@ -131,7 +132,7 @@ msgstr "Selecteer een GTK+ thema"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Widget Theme"
-msgstr "Widget Thema"
+msgstr "Widget thema"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
@@ -159,7 +160,7 @@ msgstr "Muisaanwijzer Thema"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
-msgstr "Paneel 1\n"
+msgstr "Paneel 1\\n"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
@@ -179,7 +180,7 @@ msgstr "Schaduw"
 
 #: ../raven/ui/panel.ui.h:7
 msgid "Autohide policy"
-msgstr "\"Automatisch verbergen\" beleid"
+msgstr "'Automatisch verbergen' beleid"
 
 #: ../raven/ui/panel.ui.h:8
 msgid "Stylize regions"
@@ -191,7 +192,7 @@ msgstr "Achtergrond"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Show desktop icons"
-msgstr "Toon  iconen op bureaublad"
+msgstr "Toon iconen op bureaublad"
 
 #: ../raven/ui/background.ui.h:3
 msgid "Desktop Icons"
@@ -203,7 +204,7 @@ msgstr "Lettertypes"
 
 #: ../raven/ui/fonts.ui.h:2
 msgid "Window Titles"
-msgstr "Venster titels"
+msgstr "Venster Titels"
 
 #: ../raven/ui/fonts.ui.h:3
 msgid "Interface"
@@ -252,7 +253,7 @@ msgstr "Afsluiten"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
-msgstr "Instellingen datum en tijd"
+msgstr "Datum en tijd instellingen"
 
 #: ../panel/applets/clock/ClockApplet.vala:57
 msgid "Calendar"
@@ -264,19 +265,19 @@ msgstr "Alle"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Caps lock ingeschakeld"
+msgstr "Caps  lock is ingeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Caps lock uitgeschakeld"
+msgstr "Caps lock is uitgeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Num lock ingeschakeld"
+msgstr "Num lock is ingeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Num lock uitgeschakeld"
+msgstr "Num lock is uitgeschakeld"
 
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 #, c-format
@@ -312,15 +313,15 @@ msgstr[1] "Verbonden met %d apparaten"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:166
 msgid "Bluetooth Settings"
-msgstr "Bluetooth Instellingen"
+msgstr "Bluetooth instellingen"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:167
 msgid "Send Files"
-msgstr "Zend Bestanden"
+msgstr "Zend bestanden"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:168
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth Vliegtuig Modus"
+msgstr "Bluetooth vliegtuig modus"
 
 #: ../panel/applets/status/PowerIndicator.vala:95
 msgid "Battery fully charged."
@@ -364,7 +365,7 @@ msgstr "Altijd Bovenop"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Sluiten"
+msgstr "Sluit"
 
 #: ../wm/wm.vala:444
 msgid "Change background\\u2026"
@@ -419,7 +420,7 @@ msgstr "Systeemvak"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Status Aanwijzer"
+msgstr "Status Indicator"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
