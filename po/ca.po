@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Davidmp <medipas@gmail.com>, 2015-2016
+# Davidmp <medipas@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-08 22:22+0100\n"
-"PO-Revision-Date: 2016-04-10 09:22+0000\n"
+"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"PO-Revision-Date: 2015-12-30 10:08+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/solus-project/budgie-desktop/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
 msgid "Applets"
 msgstr "Miniaplicacions"
 
@@ -27,52 +27,52 @@ msgstr "Miniaplicacions"
 msgid "Notifications"
 msgstr "Notificacions"
 
-#: ../raven/settings_view.vala:364
+#: ../raven/settings_view.vala:354
 msgid "Top Panel"
 msgstr "Plafó de dalt"
 
-#: ../raven/settings_view.vala:366
+#: ../raven/settings_view.vala:356
 msgid "Right Panel"
 msgstr "Plafó dret"
 
-#: ../raven/settings_view.vala:368
+#: ../raven/settings_view.vala:358
 msgid "Left Panel"
 msgstr "Plafó esquerre"
 
-#: ../raven/settings_view.vala:370
+#: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
 msgstr "Botó del plafó"
 
-#: ../raven/settings_view.vala:604
+#: ../raven/settings_view.vala:593
 msgid "Start"
 msgstr "Inici"
 
-#: ../raven/settings_view.vala:607
+#: ../raven/settings_view.vala:596
 msgid "Center"
 msgstr "Centre"
 
-#: ../raven/settings_view.vala:610
+#: ../raven/settings_view.vala:599
 msgid "End"
 msgstr "Final"
 
-#: ../raven/settings_view.vala:960
+#: ../raven/settings_view.vala:877
 msgid "General"
 msgstr "General"
 
-#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
+#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
 msgid "Panel"
 msgstr "Plafó"
 
-#: ../raven/notifications_view.vala:448
+#: ../raven/notifications_view.vala:410
 #, c-format
 msgid "%u new notifications"
 msgstr "%u notificacions noves"
 
-#: ../raven/notifications_view.vala:450
+#: ../raven/notifications_view.vala:412
 msgid "1 new notification"
 msgstr "1 notificació nova"
 
-#: ../raven/notifications_view.vala:452
+#: ../raven/notifications_view.vala:414
 msgid "No new notifications"
 msgstr "Cap notificació nova"
 
@@ -116,44 +116,36 @@ msgid "Appearance"
 msgstr "Aparença"
 
 #: ../raven/ui/appearance.ui.h:2
-msgid "Use the dark theme"
-msgstr "Usa el tema fosc"
-
-#: ../raven/ui/appearance.ui.h:3
 msgid "Dark theme"
 msgstr "Tema fosc"
 
-#: ../raven/ui/appearance.ui.h:4
-msgid "Select a GTK+ theme"
-msgstr "Seleccioneu un tema de GTK+"
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr "Usa el tema fosc"
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
 msgstr "Tema dels estris"
 
-#: ../raven/ui/appearance.ui.h:6
-msgid "Select an icon theme"
-msgstr "Seleccioneu un tema per a les icones"
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr "Seleccioneu un tema de GTK+"
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr "Tema de les icones"
 
-#: ../raven/ui/appearance.ui.h:8
-msgid "Override defaults"
-msgstr "Substitueix els valors per defecte"
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr "Seleccioneu un tema per a les icones"
 
-#: ../raven/ui/appearance.ui.h:9
+#: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
 msgstr "Tema incorporat"
 
-#: ../raven/ui/appearance.ui.h:10
-msgid "Select a cursor theme"
-msgstr "Seleccioneu un tema per al cursor"
-
-#: ../raven/ui/appearance.ui.h:11
-msgid "Cursor Theme"
-msgstr "Tema del cursor"
+#: ../raven/ui/appearance.ui.h:9
+msgid "Override defaults"
+msgstr "Substitueix els valors per defecte"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -179,42 +171,6 @@ msgstr "Ombra"
 msgid "Autohide policy"
 msgstr "Amaga automàticament"
 
-#: ../raven/ui/panel.ui.h:8
-msgid "Stylize regions"
-msgstr "Estilitza les regions"
-
-#: ../raven/ui/background.ui.h:1
-msgid "Background"
-msgstr "Fons"
-
-#: ../raven/ui/background.ui.h:2
-msgid "Show desktop icons"
-msgstr "Mostra icones a l'escriptori"
-
-#: ../raven/ui/background.ui.h:3
-msgid "Desktop Icons"
-msgstr "Icones de l'escriptori"
-
-#: ../raven/ui/fonts.ui.h:1
-msgid "Fonts"
-msgstr "Lletres"
-
-#: ../raven/ui/fonts.ui.h:2
-msgid "Window Titles"
-msgstr "Títols de les finestres"
-
-#: ../raven/ui/fonts.ui.h:3
-msgid "Interface"
-msgstr "Interfície"
-
-#: ../raven/ui/fonts.ui.h:4
-msgid "Documents"
-msgstr "Documents"
-
-#: ../raven/ui/fonts.ui.h:5
-msgid "Monospace"
-msgstr "Monoespai"
-
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -223,30 +179,6 @@ msgstr "Escriptori Budgie"
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Aquesta sessió us fa entrar a l'escriptori Budgie"
-
-#: ../data/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Apaga"
-
-#: ../data/endsession.ui.h:2
-msgid "Are you sure you want to end your session?"
-msgstr "Segur que voleu acabar la sessió?"
-
-#: ../data/endsession.ui.h:3
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: ../data/endsession.ui.h:4
-msgid "Logout"
-msgstr "Surt"
-
-#: ../data/endsession.ui.h:5
-msgid "Restart"
-msgstr "Reinicia"
-
-#: ../data/endsession.ui.h:6
-msgid "Shutdown"
-msgstr "Apaga"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -293,49 +225,6 @@ msgstr "No hi ha notificacions per llegir"
 msgid "Toggle the desktop"
 msgstr "Commuta l'escriptori"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:101
-msgid "Bluetooth is disabled"
-msgstr "El Bluetooth està inhabilitat"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:105
-msgid "Bluetooth is active"
-msgstr "El Bluetooth està actiu"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:110
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "Connectat a %d dispositiu"
-msgstr[1] "Connectat a %d dispostius"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:166
-msgid "Bluetooth Settings"
-msgstr "Paràmetres del "
-
-#: ../panel/applets/status/BluetoothIndicator.vala:167
-msgid "Send Files"
-msgstr "Envia fitxers"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:168
-msgid "Bluetooth Airplane Mode"
-msgstr "Mode d'avió del "
-
-#: ../panel/applets/status/PowerIndicator.vala:95
-msgid "Battery fully charged."
-msgstr "La bateria està totalment carregada."
-
-#: ../panel/applets/status/PowerIndicator.vala:98
-msgid "Unknown"
-msgstr "Desconegut"
-
-#: ../panel/applets/status/PowerIndicator.vala:107
-msgid "Battery charging"
-msgstr "Carregant la bateria"
-
-#: ../panel/applets/status/PowerIndicator.vala:112
-msgid "Battery remaining"
-msgstr "Càrrega de la bateria"
-
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
 msgstr "Minimitza"
@@ -364,11 +253,11 @@ msgstr "Sempre a dalt"
 msgid "Close"
 msgstr "Tanca"
 
-#: ../wm/wm.vala:444
+#: ../wm/wm.vala:363
 msgid "Change background\\u2026"
 msgstr "Canvia el fons\\u2026"
 
-#: ../wm/wm.vala:453
+#: ../wm/wm.vala:372
 msgid "Settings"
 msgstr "Paràmetres"
 

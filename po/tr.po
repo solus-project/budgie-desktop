@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Demiray Muhterem <mdemiray@msn.com>, 2015-2016
-# Egemen Metin Turan <emturan@gmail.com>, 2016
+# Demiray Muhterem <mdemiray@msn.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-08 22:22+0100\n"
-"PO-Revision-Date: 2016-04-17 20:29+0000\n"
+"POT-Creation-Date: 2015-12-29 22:01+0000\n"
+"PO-Revision-Date: 2015-12-31 01:21+0000\n"
 "Last-Translator: Demiray Muhterem <mdemiray@msn.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/solus-project/budgie-desktop/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
 msgid "Applets"
 msgstr "Seçenekler"
 
@@ -28,52 +27,52 @@ msgstr "Seçenekler"
 msgid "Notifications"
 msgstr "Bildirimler"
 
-#: ../raven/settings_view.vala:364
+#: ../raven/settings_view.vala:354
 msgid "Top Panel"
 msgstr "Üst Panel"
 
-#: ../raven/settings_view.vala:366
+#: ../raven/settings_view.vala:356
 msgid "Right Panel"
 msgstr "Sağ Panel"
 
-#: ../raven/settings_view.vala:368
+#: ../raven/settings_view.vala:358
 msgid "Left Panel"
 msgstr "Sol Panel"
 
-#: ../raven/settings_view.vala:370
+#: ../raven/settings_view.vala:360
 msgid "Bottom Panel"
 msgstr "Alt Panel"
 
-#: ../raven/settings_view.vala:604
+#: ../raven/settings_view.vala:593
 msgid "Start"
 msgstr "Panelin başına sabitle"
 
-#: ../raven/settings_view.vala:607
+#: ../raven/settings_view.vala:596
 msgid "Center"
 msgstr "Panelin ortasına sabitle"
 
-#: ../raven/settings_view.vala:610
+#: ../raven/settings_view.vala:599
 msgid "End"
 msgstr "Panelin sonuna sabitle"
 
-#: ../raven/settings_view.vala:960
+#: ../raven/settings_view.vala:877
 msgid "General"
 msgstr "Genel"
 
-#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
+#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
 msgid "Panel"
 msgstr "Panel"
 
-#: ../raven/notifications_view.vala:448
+#: ../raven/notifications_view.vala:410
 #, c-format
 msgid "%u new notifications"
 msgstr "%u yeni bildirim"
 
-#: ../raven/notifications_view.vala:450
+#: ../raven/notifications_view.vala:412
 msgid "1 new notification"
 msgstr "1 yeni bildirim"
 
-#: ../raven/notifications_view.vala:452
+#: ../raven/notifications_view.vala:414
 msgid "No new notifications"
 msgstr "Yeni bildirim yok"
 
@@ -117,44 +116,36 @@ msgid "Appearance"
 msgstr "Görünüm"
 
 #: ../raven/ui/appearance.ui.h:2
-msgid "Use the dark theme"
-msgstr "Koyu tema kullan"
-
-#: ../raven/ui/appearance.ui.h:3
 msgid "Dark theme"
 msgstr "Koyu tema"
 
-#: ../raven/ui/appearance.ui.h:4
-msgid "Select a GTK+ theme"
-msgstr "GTK+ tema seç"
+#: ../raven/ui/appearance.ui.h:3
+msgid "Use the dark theme"
+msgstr "Koyu tema kullan"
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
 msgstr "Gereç Teması"
 
-#: ../raven/ui/appearance.ui.h:6
-msgid "Select an icon theme"
-msgstr "Bir simge teması seç"
+#: ../raven/ui/appearance.ui.h:5
+msgid "Select a GTK+ theme"
+msgstr "GTK+ tema seç"
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr "Simge Teması"
 
-#: ../raven/ui/appearance.ui.h:8
-msgid "Override defaults"
-msgstr "Varsayılan tema aktif/pasif"
+#: ../raven/ui/appearance.ui.h:7
+msgid "Select an icon theme"
+msgstr "Bir simge teması seç"
 
-#: ../raven/ui/appearance.ui.h:9
+#: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
 msgstr "Tema etkin"
 
-#: ../raven/ui/appearance.ui.h:10
-msgid "Select a cursor theme"
-msgstr "İmleç teması seç"
-
-#: ../raven/ui/appearance.ui.h:11
-msgid "Cursor Theme"
-msgstr "İmleç Teması"
+#: ../raven/ui/appearance.ui.h:9
+msgid "Override defaults"
+msgstr "Varsayılan tema aktif/pasif"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Panel 1\n"
@@ -180,42 +171,6 @@ msgstr "Gölge"
 msgid "Autohide policy"
 msgstr "Otomatik gizleme seçeneği"
 
-#: ../raven/ui/panel.ui.h:8
-msgid "Stylize regions"
-msgstr "Bölge tarzı"
-
-#: ../raven/ui/background.ui.h:1
-msgid "Background"
-msgstr "Arkaplan"
-
-#: ../raven/ui/background.ui.h:2
-msgid "Show desktop icons"
-msgstr "Masaüstü simgelerini göster"
-
-#: ../raven/ui/background.ui.h:3
-msgid "Desktop Icons"
-msgstr "Masaüstü Simgeleri"
-
-#: ../raven/ui/fonts.ui.h:1
-msgid "Fonts"
-msgstr "Yazı Biçimleri"
-
-#: ../raven/ui/fonts.ui.h:2
-msgid "Window Titles"
-msgstr "Pencere Başlığı"
-
-#: ../raven/ui/fonts.ui.h:3
-msgid "Interface"
-msgstr "Arayüz"
-
-#: ../raven/ui/fonts.ui.h:4
-msgid "Documents"
-msgstr "Belgeler"
-
-#: ../raven/ui/fonts.ui.h:5
-msgid "Monospace"
-msgstr "Monospace"
-
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -224,30 +179,6 @@ msgstr "Budgie Masaüstü"
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Bu oturumu Budgie Masaüstüne log tut"
-
-#: ../data/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Gücü kapat"
-
-#: ../data/endsession.ui.h:2
-msgid "Are you sure you want to end your session?"
-msgstr "Oturumu kapatmak istediğinizden emin misiniz?"
-
-#: ../data/endsession.ui.h:3
-msgid "Cancel"
-msgstr "Vazgeç"
-
-#: ../data/endsession.ui.h:4
-msgid "Logout"
-msgstr "Çıkış"
-
-#: ../data/endsession.ui.h:5
-msgid "Restart"
-msgstr "Yeniden başlat"
-
-#: ../data/endsession.ui.h:6
-msgid "Shutdown"
-msgstr "Kapat"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -294,49 +225,6 @@ msgstr "Okunmamış bildirim yok"
 msgid "Toggle the desktop"
 msgstr "Masaüstü geçiş"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:101
-msgid "Bluetooth is disabled"
-msgstr "Bluetooth devre dışı"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:105
-msgid "Bluetooth is active"
-msgstr "Bluetooth etkin"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:110
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "%d aygıtına bağlı"
-msgstr[1] "%d aygıtına bağlandı"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:166
-msgid "Bluetooth Settings"
-msgstr "Bluetooth Ayarları"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:167
-msgid "Send Files"
-msgstr "Dosya Gönder"
-
-#: ../panel/applets/status/BluetoothIndicator.vala:168
-msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth Uçak Modu"
-
-#: ../panel/applets/status/PowerIndicator.vala:95
-msgid "Battery fully charged."
-msgstr "Pil tamamen doldu."
-
-#: ../panel/applets/status/PowerIndicator.vala:98
-msgid "Unknown"
-msgstr "Tanımsız"
-
-#: ../panel/applets/status/PowerIndicator.vala:107
-msgid "Battery charging"
-msgstr "Pil doluyor"
-
-#: ../panel/applets/status/PowerIndicator.vala:112
-msgid "Battery remaining"
-msgstr "Kalan pil"
-
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
 msgstr "Küçült"
@@ -365,11 +253,11 @@ msgstr "Daima yukarda"
 msgid "Close"
 msgstr "Kapat"
 
-#: ../wm/wm.vala:444
+#: ../wm/wm.vala:363
 msgid "Change background\\u2026"
 msgstr "Arkaplan değiştir\\u2026"
 
-#: ../wm/wm.vala:453
+#: ../wm/wm.vala:372
 msgid "Settings"
 msgstr "Ayarlar"
 
