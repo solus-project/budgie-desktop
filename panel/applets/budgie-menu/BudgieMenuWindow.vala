@@ -117,13 +117,13 @@ public class BudgieMenuWindow : Gtk.Popover
                 child.destroy();
             }
         }
-        try {
-            tree.load_sync();
-        } catch (Error e) {
-            stderr.printf("Error: %s\n", e.message);
-        }
-        load_menus(null);
-        apply_scores();
+        SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
+        this.tree = null;
+        Idle.add(()=> { 
+            load_menus(null);
+            apply_scores();
+            return false;
+        });
     }
 
     /**
