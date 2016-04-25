@@ -275,6 +275,31 @@ public class ClientWidget : Gtk.Box
         }
     }
 
+    /* Work around Spotify, etc */
+    string? get_meta_string(string key, string fallback)
+    {
+        if (key in client.player.metadata) {
+            var label = client.player.metadata[key];
+            string? lab = null;
+            unowned VariantType type = label.get_type();
+
+            /* Simple string */
+            if (type.is_subtype_of(VariantType.STRING)) {
+                lab = label.get_string();
+            /* string[] */
+            } else if (type.is_subtype_of(VariantType.STRING_ARRAY)) {
+                string[] vals = label.dup_strv();
+                lab = string.joinv(", ", vals);
+            }
+            /* Return if set */
+            if (lab != null && lab != "") {
+                return lab;
+            }
+        }
+        /* Fallback to sanity */
+        return fallback;
+    }
+
     /**
      * Update display info such as artist, the background image, etc.
      */
@@ -289,25 +314,9 @@ public class ClientWidget : Gtk.Box
             background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         }
 
-        if ("xesam:title" in client.player.metadata) {
-            title_label.set_text(client.player.metadata["xesam:title"].get_string());
-        } else {
-            title_label.set_text("Unknown Title");
-        }
-
-        if ("xesam:artist" in client.player.metadata) {
-            /* get_strv causes a segfault from multiple free's on vala's side. */
-            string[] artists = client.player.metadata["xesam:artist"].dup_strv();
-            artist_label.set_text(string.joinv(", ", artists));
-        } else {
-            artist_label.set_text("Unknown Artist");
-        }
-
-        if ("xesam:album" in client.player.metadata) {
-            album_label.set_text(client.player.metadata["xesam:album"].get_string());
-        } else {
-            album_label.set_text("Unknown Album");
-        }
+        title_label.set_text(get_meta_string("xesam:title", "Unknown Title"));
+        album_label.set_text(get_meta_string("xesam:album", "Unknown Album"));
+        artist_label.set_text(get_meta_string("xesam:artist", "Unknown Artist"));
     }
 }
 
