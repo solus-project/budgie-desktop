@@ -43,6 +43,7 @@ libraven_la_SOURCES = \
 	headerwidget.vala \
 	calender.vala \
 	sound.vala \
+	brightness.vala \
 	mpris/MprisClient.vala \
 	mpris/MprisGui.vala \
 	mpris/MprisWidget.vala
@@ -65,6 +66,7 @@ libraven_la_LIBADD = \
 
 libraven_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
+	--pkg gio-2.0 \
 	--pkg gio-unix-2.0 \
 	--pkg budgie-1.0 \
 	--pkg toplevel \
