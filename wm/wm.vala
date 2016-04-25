@@ -441,7 +441,7 @@ public class BudgieWM : Meta.Plugin
     {
         menu = new Gtk.Menu();
         menu.show();
-        var item = new Gtk.MenuItem.with_label(_("Change background\u2026"));
+        var item = new Gtk.MenuItem.with_label(_("Change background"));
         item.activate.connect(background_activate);
         item.show();
         menu.append(item);
