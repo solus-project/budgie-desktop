@@ -24,6 +24,7 @@ __attribute__ ((constructor)) void _budgie_config_init(void)
         BUDGIE_WEBSITE = PACKAGE_URL;
         BUDGIE_LOCALEDIR = LOCALEDIR;
         BUDGIE_GETTEXT_PACKAGE = GETTEXT_PACKAGE;
+        BUDGIE_CONFDIR = SYSCONFDIR;
 }
 
 #else

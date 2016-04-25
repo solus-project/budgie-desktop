@@ -20,6 +20,9 @@ namespace Budgie {
     public static extern const string DATADIR;
 
     [CCode (cheader_filename = "budgie-config.h")]
+    public static extern const string CONFDIR;
+
+    [CCode (cheader_filename = "budgie-config.h")]
     public static extern const string VERSION;
 
     [CCode (cheader_filename = "budgie-config.h")]

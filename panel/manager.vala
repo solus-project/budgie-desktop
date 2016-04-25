@@ -17,9 +17,6 @@ namespace Budgie
 public static const string DBUS_NAME        = "com.solus_project.budgie.Panel";
 public static const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
-public static const string DEFAULT_CONFIG   = "resource:///com/solus-project/budgie/panel/panel.ini";
-
-
 /**
  * Available slots
  */
@@ -859,15 +856,33 @@ public class PanelManager : DesktopManager
         string? line = null;
         PanelPosition pos;
 
-        try {
-            f = File.new_for_uri(DEFAULT_CONFIG);
-            var dis = new DataInputStream(f.read());
-            while ((line = dis.read_line()) != null) {
-                builder.append_printf("%s\n", line);
+        /**
+         * Try in order, and load the first one that exists:
+         *  - /etc/budgie-desktop/panel.ini
+         *  - /usr/share/budgie-desktop/panel.ini
+         *  - Built in panel.ini
+         */
+        string[] system_configs = {
+                @"file://$(Budgie.CONFDIR)/budgie-desktop/panel.ini",
+                @"file://$(Budgie.DATADIR)/budgie-desktop/panel.ini",
+                "resource:///com/solus-project/budgie/panel/panel.ini"
+        };
+
+        foreach (string? filepath in system_configs) {
+            try {
+                f = File.new_for_uri(filepath);
+                if (!f.query_exists()) {
+                    continue;
+                }
+                var dis = new DataInputStream(f.read());
+                while ((line = dis.read_line()) != null) {
+                    builder.append_printf("%s\n", line);
+                }
+                config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
+                break;
+            } catch (Error e) {
+                warning("Failed to load default config: %s", e.message);
             }
-            config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
-        } catch (Error e) {
-            warning("Failed to load default config: %s", e.message);
         }
 
         try {

@@ -18,7 +18,7 @@ const char *BUDGIE_MODULE_DIRECTORY;
 /* i.e. /usr/share/budgie-desktop/plugins */
 const char *BUDGIE_MODULE_DATA_DIRECTORY;
 
-/* i.e. /usr/share/budgie-desktop */
+/* i.e. /usr/share/ */
 const char *BUDGIE_DATADIR;
 
 const char *BUDGIE_VERSION;
@@ -28,5 +28,8 @@ const char *BUDGIE_WEBSITE;
 const char *BUDGIE_LOCALEDIR;
 
 const char *BUDGIE_GETTEXT_PACKAGE;
+
+/* sysconfdir */
+const char *BUDGIE_CONFDIR;
 
 #endif

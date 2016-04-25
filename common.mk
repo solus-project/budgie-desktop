@@ -5,7 +5,7 @@ AM_CFLAGS =  -fstack-protector -Wall -Wno-pedantic \
         -Wno-conversion \
         -Wunreachable-code \
         -std=c99 -Werror \
-        -DDATADIR=\"$(datadir)\"
+        -DDATADIR=\"$(datadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" 
 
 AM_CPPFLAGS += \
 	-I $(top_srcdir) \
