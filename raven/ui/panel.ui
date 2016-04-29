@@ -51,7 +51,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Panel 1
+        <col id="0">Panel 1
 </col>
       </row>
     </data>
