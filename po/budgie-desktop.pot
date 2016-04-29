@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-08 22:22+0100\n"
+"POT-Creation-Date: 2016-04-29 23:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:9
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
 msgstr ""
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
+msgstr ""
+
+#: ../raven/settings_view.vala:254
+msgid "Top"
+msgstr ""
+
+#: ../raven/settings_view.vala:256
+msgid "Bottom"
 msgstr ""
 
 #: ../raven/settings_view.vala:364
@@ -64,16 +72,19 @@ msgid "Panel"
 msgstr ""
 
 #: ../raven/notifications_view.vala:448
+#: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
-msgid "%u new notifications"
+msgid "%u unread notifications"
 msgstr ""
 
 #: ../raven/notifications_view.vala:450
-msgid "1 new notification"
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+msgid "1 unread notification"
 msgstr ""
 
 #: ../raven/notifications_view.vala:452
-msgid "No new notifications"
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "No unread notifications"
 msgstr ""
 
 #: ../raven/sound.vala:90
@@ -158,30 +169,26 @@ msgid "Cursor Theme"
 msgstr ""
 
 #: ../raven/ui/panel.ui.h:1
-msgid "Panel 1\n"
-msgstr ""
-
-#: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
 msgstr ""
 
-#: ../raven/ui/panel.ui.h:4
+#: ../raven/ui/panel.ui.h:2
 msgid "Position"
 msgstr ""
 
-#: ../raven/ui/panel.ui.h:5
+#: ../raven/ui/panel.ui.h:3
 msgid "Size"
 msgstr ""
 
-#: ../raven/ui/panel.ui.h:6
+#: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
 msgstr ""
 
-#: ../raven/ui/panel.ui.h:7
+#: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
 msgstr ""
 
-#: ../raven/ui/panel.ui.h:8
+#: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
 msgstr ""
 
@@ -278,19 +285,6 @@ msgstr ""
 msgid "Num lock is not active"
 msgstr ""
 
-#: ../panel/applets/notifications/NotificationsApplet.vala:77
-#, c-format
-msgid "%u unread notifications"
-msgstr ""
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:79
-msgid "1 unread notification"
-msgstr ""
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:81
-msgid "No unread notifications"
-msgstr ""
-
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
 msgstr ""
@@ -367,7 +361,7 @@ msgid "Close"
 msgstr ""
 
 #: ../wm/wm.vala:444
-msgid "Change background\\u2026"
+msgid "Change background"
 msgstr ""
 
 #: ../wm/wm.vala:453
