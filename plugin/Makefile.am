@@ -24,6 +24,7 @@ budgie_devdir = $(includedir)/budgie-desktop
 budgie_dev_HEADERS = \
 	plugin.h \
 	applet.h \
+	applet-info.h \
 	popover-manager.h \
 	budgie-enums.h
 
@@ -78,7 +79,9 @@ CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 
 
 vapidir = $(datadir)/vala/vapi
-vapi_DATA = budgie-1.0.vapi
+vapi_DATA = \
+	budgie-1.0.vapi \
+	budgie-1.0.deps
 
 CLEANFILES += $(nodist_vapi_DATA)
  
