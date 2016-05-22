@@ -85,7 +85,7 @@ public class Panel : Budgie.Toplevel
     Gtk.Box? end_box;
 
     int[] icon_sizes = {
-        16, 22, 24, 32, 48, 96, 128, 256
+        16, 24, 32, 48, 96, 128, 256
     };
 
     int current_icon_size;

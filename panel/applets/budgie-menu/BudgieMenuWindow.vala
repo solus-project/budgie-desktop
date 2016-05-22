@@ -102,7 +102,7 @@ public class BudgieMenuWindow : Gtk.Popover
     // Current search term
     protected string search_term = "";
 
-    protected int icon_size = 22;
+    protected int icon_size = 24;
 
     public unowned Settings settings { public get; public set; }
 
