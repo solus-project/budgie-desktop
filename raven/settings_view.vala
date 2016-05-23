@@ -76,9 +76,11 @@ public class AppletPicker : Gtk.Box {
 
     public AppletPicker() {
         listbox = new Gtk.ListBox();
+        listbox.set_selection_mode(Gtk.SelectionMode.SINGLE);
         listbox.set_sort_func(lb_sort);
         scrolledwindow.add(listbox);
-        listbox.row_activated.connect(on_row_activate);
+        listbox.row_selected.connect(on_row_selected);
+        listbox.set_activate_on_single_click(false);
     }
 
 
@@ -139,12 +141,14 @@ public class AppletPicker : Gtk.Box {
         listbox.invalidate_sort();
     }
 
-    void on_row_activate(Gtk.ListBoxRow? row)
+    void on_row_selected(Gtk.ListBoxRow? row)
     {
         unowned Peas.PluginInfo? info = null;
 
         if (row == null) {
             button_add.sensitive = false;
+            current_info = null;
+            return;
         }
 
         info = row.get_child().get_data("info");
