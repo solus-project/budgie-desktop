@@ -36,7 +36,7 @@ public class ClientImage : Gtk.Image
  */
 public class ClientWidget : Gtk.Box
 {
-    Gtk.Revealer player_revealer;
+    Budgie.RavenExpander player_revealer;
     Gtk.Image background;
     MprisClient client;
     Gtk.Label title_label;
@@ -48,16 +48,6 @@ public class ClientWidget : Gtk.Box
     string filename = "";
 
     int our_width = BACKGROUND_SIZE;
-
-    public bool expanded {
-        public set {
-            this.player_revealer.set_reveal_child(value);
-        }
-        public get {
-            return this.player_revealer.get_reveal_child();
-        }
-        default = true;
-    }
 
     Budgie.HeaderWidget? header = null;
 
@@ -75,14 +65,7 @@ public class ClientWidget : Gtk.Box
 
         this.client = client;
 
-        player_revealer = new Gtk.Revealer ();
-        player_revealer.reveal_child = true;
-        var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        get_style_context().add_class("raven-background");
-
-        player_revealer.notify["child-revealed"].connect_after(()=> {
-            this.get_toplevel().queue_draw();
-        });
+        /* Set up our header widget */
         header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
         header.closed.connect(()=> {
             try {
@@ -93,15 +76,14 @@ public class ClientWidget : Gtk.Box
                 warning("Error closing %s: %s", client.player.identity, e.message);
             }
         });
-        pack_start(header, false, false, 0);
+    
+        player_revealer = new Budgie.RavenExpander(header);
+        player_revealer.expanded = true;
+        var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        get_style_context().add_class("raven-background");
 
-        header.bind_property("expanded", this, "expanded");
         header.can_close = client.player.can_quit;
-        if (!header.can_close) {
-            expanded = false;
-        } else {
-            expanded = true;
-        }
+        player_revealer.expanded = header.can_close;
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = our_width;
@@ -217,8 +199,6 @@ public class ClientWidget : Gtk.Box
 
         player_revealer.add(player_box);
         pack_start(player_revealer);
-
-        this.expanded = true;
     }
 
     /**
