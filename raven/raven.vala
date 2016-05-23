@@ -59,6 +59,12 @@ public class RavenIface
         }
     }
 
+    public void Dismiss() {
+        if (this.is_expanded) {
+            this.is_expanded = !this.is_expanded;
+        }
+    }
+
     public signal void NotificationsChanged();
 
     public uint GetNotificationCount() {

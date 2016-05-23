@@ -62,6 +62,7 @@ public interface RavenRemote : Object
 {
     public abstract bool GetExpanded() throws Error;
     public abstract async void Toggle() throws Error;
+    public abstract async void Dismiss() throws Error;
 }
 
 [DBus (name = "com.solus_project.budgie.Panel")]
@@ -391,13 +392,21 @@ public class BudgieWM : Meta.Plugin
         });
     }
 
+    /* Dismiss raven from view. Consider in future tracking the visible
+     * state
+     */
+    void dismiss_raven()
+    {
+        if (raven_proxy != null) {
+            raven_proxy.Dismiss.begin();
+        }
+    }
+
     bool on_button_release(Clutter.ButtonEvent? event)
     {
 
         if (event.button == 1) {
-            if ((raven_proxy != null) && raven_proxy.GetExpanded()) { // If is expanded
-                raven_proxy.Toggle(); // Close
-            }
+            this.dismiss_raven();
         } else if (event.button == 3 ) {
             if (menu.get_visible()) {
                 menu.hide();
