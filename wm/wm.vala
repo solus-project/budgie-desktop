@@ -60,6 +60,7 @@ public class ScreenTilePreview : Clutter.Actor
 [DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenRemote : Object
 {
+    public abstract bool GetExpanded() throws Error;
     public abstract async void Toggle() throws Error;
 }
 
@@ -392,14 +393,21 @@ public class BudgieWM : Meta.Plugin
 
     bool on_button_release(Clutter.ButtonEvent? event)
     {
-        if (event.button != 3) {
+
+        if (event.button == 1) {
+            if ((raven_proxy != null) && raven_proxy.GetExpanded()) { // If is expanded
+                raven_proxy.Toggle(); // Close
+            }
+        } else if (event.button == 3 ) {
+            if (menu.get_visible()) {
+                menu.hide();
+            } else {
+                menu.popup(null, null, null, event.button, event.time);
+            }
+        } else {
             return CLUTTER_EVENT_PROPAGATE;
         }
-        if (menu.get_visible()) {
-            menu.hide();
-        } else {
-            menu.popup(null, null, null, event.button, event.time);
-        }
+
         return CLUTTER_EVENT_STOP;
     }
 
