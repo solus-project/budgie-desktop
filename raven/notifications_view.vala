@@ -27,6 +27,30 @@ public enum NotificationCloseReason {
     UNDEFINED = 4   /** Undefined/reserved reasons. */
 }
 
+/**
+ * Simple placeholder to use when there are no notifications
+ */
+public class NotificationPlaceholder : Gtk.Box
+{
+    public NotificationPlaceholder()
+    {
+        Object(spacing: 6, orientation: Gtk.Orientation.VERTICAL);
+
+        get_style_context().add_class("dim-label");
+        var image = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.DIALOG);
+        image.pixel_size = 64;
+        pack_start(image, false, false, 6);
+        var label = new Gtk.Label("<big>%s</big>".printf(_("Nothing to see here")));
+        label.use_markup = true;
+        pack_start(label, false, false, 0);
+
+        halign = Gtk.Align.CENTER;
+        valign = Gtk.Align.CENTER;
+
+        this.show_all();
+    }
+}
+
 
 [GtkTemplate (ui = "/com/solus-project/budgie/raven/notification_clone.ui")]
 public class NotificationClone : Gtk.Grid
@@ -592,6 +616,8 @@ public class NotificationsView : Gtk.Box
         pack_start(scrolledwindow, true, true, 0);
 
         listbox = new Gtk.ListBox();
+        var placeholder = new NotificationPlaceholder();
+        listbox.set_placeholder(placeholder);
         scrolledwindow.add(listbox);
 
         show_all();
