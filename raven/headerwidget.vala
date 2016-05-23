@@ -89,9 +89,11 @@ public class HeaderWidget : Gtk.Box
             string? iname = value;
             if (iname == null) {
                 this.image.hide();
+                this.label.margin_start = 8;
             } else {
                 this.image.set_from_icon_name(iname, Gtk.IconSize.MENU);
                 this.image.show();
+                this.label.margin_start = 0;
             }
         }
         public owned get {
@@ -176,6 +178,48 @@ public class HeaderWidget : Gtk.Box
         this.text = text;
         this.icon_name = icon_name;
         this.can_close = can_close;
+    }
+}
+
+/**
+ * Simplify use of the header and expansion logic by rolling them both
+ * into a custom widget
+ */
+public class RavenExpander : Gtk.Box
+{
+    public Gtk.Revealer? content;
+    private HeaderWidget? header = null;
+
+    public bool expanded {
+        public set {
+            content.set_reveal_child(value);
+        }
+        public get {
+            return content.get_reveal_child();
+        }
+        default = true;
+    }
+
+    public RavenExpander(HeaderWidget? header)
+    {
+        Object(orientation: Gtk.Orientation.VERTICAL, margin_top: 8);
+        this.header = header;
+
+        pack_start(this.header, false, false, 0);
+
+        content = new Gtk.Revealer();
+        pack_start(content, false, false, 0);
+
+        this.header.bind_property("expanded", this, "expanded");
+        content.notify["child-revealed"].connect_after(()=> {
+            this.get_toplevel().queue_draw();
+        });
+        expanded = true;
+    }
+
+    public override void add(Gtk.Widget widget)
+    {
+        this.content.add(widget);
     }
 }
 
