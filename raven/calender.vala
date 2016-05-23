@@ -14,13 +14,15 @@ public class CalendarWidget : Gtk.Box
 
     private Gtk.Calendar? cal = null;
 
+    private const string date_format = "%e %b %Y";
+
     public CalendarWidget()
     {
         Object(orientation: Gtk.Orientation.VERTICAL);
         /* TODO: Fix icon */
 
         var time = new DateTime.now_local();
-        var header = new Budgie.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
+        var header = new Budgie.HeaderWidget(time.format(date_format), "x-office-calendar-symbolic", false);
         var expander = new Budgie.RavenExpander(header);
         this.pack_start(expander, false, false, 0);
 
