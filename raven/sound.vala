@@ -12,7 +12,6 @@
 public class SoundWidget : Gtk.Box
 {
 
-    private Gtk.Revealer? revealer = null;
     private Gtk.Scale? scale = null;
     private ulong scale_id = 0;
 
@@ -34,16 +33,6 @@ public class SoundWidget : Gtk.Box
     private Gvc.MixerStream? input_stream = null;
     private ulong input_notify_id = 0;
 
-    public bool expanded {
-        public set {
-            this.revealer.set_reveal_child(value);
-        }
-        public get {
-            return this.revealer.get_reveal_child();
-        }
-        default = true;
-    }
-
     private Budgie.HeaderWidget? header = null;
 
     public SoundWidget()
@@ -57,14 +46,12 @@ public class SoundWidget : Gtk.Box
         scale.set_draw_value(false);
         scale.value_changed.connect(on_output_scale_change);
         header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, scale);
-        pack_start(header, false, false);
-
-        revealer = new Gtk.Revealer();
-        pack_start(revealer, false, false, 0);
+        var expander = new Budgie.RavenExpander(header);
+        pack_start(expander, false, false);
 
         var ebox = new Gtk.EventBox();
         ebox.get_style_context().add_class("raven-background");
-        revealer.add(ebox);
+        expander.add(ebox);
 
         outputs = new HashTable<uint,Gtk.RadioButton?>(direct_hash,direct_equal);
         inputs = new HashTable<uint,Gtk.RadioButton?>(direct_hash,direct_equal);
@@ -119,12 +106,7 @@ public class SoundWidget : Gtk.Box
         main_layout.pack_start(input_box, false, false, 0);
         input_box.margin_bottom = 6;
 
-        header.bind_property("expanded", this, "expanded");
-        expanded = true;
-
-        revealer.notify["child-revealed"].connect_after(()=> {
-            this.get_toplevel().queue_draw();
-        });
+        expander.expanded = true;
 
         mixer.open();
     }
