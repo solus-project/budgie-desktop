@@ -968,14 +968,25 @@ public class SettingsView : Gtk.Box
         stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         var appearance_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         var appearance = new AppearanceSettings();
-        appearance_box.pack_start(appearance, false, false, 0);
+
+        /* Appearance expander */
+        var app_exp = new RavenExpander(new HeaderWidget(_("Appearance"), null, false));
+        app_exp.add(appearance);
+        
+        appearance_box.pack_start(app_exp, false, false, 0);
         /* This option currently only affects Nautilus. */
         if (Environment.find_program_in_path("nautilus") != null) {
             var background_settings = new BackgroundSettings();
-            appearance_box.pack_start(background_settings, false, false, 0);
+            var back_exp = new RavenExpander(new HeaderWidget(_("Background"), null, false));
+            back_exp.add(background_settings);
+            appearance_box.pack_start(back_exp, false, false, 0);
         }
+
+        /* Font settings */
         var fonts = new FontSettings();
-        appearance_box.pack_start(fonts, false, false, 0);
+        var fonts_exp = new RavenExpander(new HeaderWidget(_("Fonts"), null, false));
+        fonts_exp.add(fonts);
+        appearance_box.pack_start(fonts_exp, false, false, 0);
         stack.add_titled(appearance_box, "appearance", _("General"));
 
 
