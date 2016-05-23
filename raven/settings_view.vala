@@ -81,6 +81,7 @@ public class AppletPicker : Gtk.Box {
         scrolledwindow.add(listbox);
         listbox.row_selected.connect(on_row_selected);
         listbox.set_activate_on_single_click(false);
+        listbox.row_activated.connect(on_row_activate);
     }
 
 
@@ -141,6 +142,20 @@ public class AppletPicker : Gtk.Box {
         listbox.invalidate_sort();
     }
 
+    /**
+     * Handle double click/enter usage
+     */
+    void on_row_activate(Gtk.ListBoxRow? row)
+    {
+        if (this.current_info == null) {
+            return;
+        }
+        this.add_clicked();
+    }
+
+    /**
+     * Handle row selection for setting the current applet info
+     */
     void on_row_selected(Gtk.ListBoxRow? row)
     {
         unowned Peas.PluginInfo? info = null;
