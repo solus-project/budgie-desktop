@@ -12,47 +12,24 @@
 public class CalendarWidget : Gtk.Box
 {
 
-    private Gtk.Revealer? revealer = null;
     private Gtk.Calendar? cal = null;
-
-    public bool expanded {
-        public set {
-            this.revealer.set_reveal_child(value);
-        }
-        public get {
-            return this.revealer.get_reveal_child();
-        }
-        default = true;
-    }
-
-    private Budgie.HeaderWidget? header = null;
 
     public CalendarWidget()
     {
         Object(orientation: Gtk.Orientation.VERTICAL);
+        /* TODO: Fix icon */
 
         var time = new DateTime.now_local();
-
-        /* TODO: Fix icon */
-        header = new Budgie.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
-        pack_start(header, false, false);
-
-        revealer = new Gtk.Revealer();
-        pack_start(revealer, false, false, 0);
+        var header = new Budgie.HeaderWidget(time.format("%x"), "x-office-calendar-symbolic", false);
+        var expander = new Budgie.RavenExpander(header);
+        this.pack_start(expander, false, false, 0);
 
         cal = new Gtk.Calendar();
         cal.get_style_context().add_class("raven-calendar");
         var ebox = new Gtk.EventBox();
-        ebox.add(cal);
         ebox.get_style_context().add_class("raven-background");
-        revealer.add(ebox);
-
-        header.bind_property("expanded", this, "expanded");
-        expanded = true;
-
-        revealer.notify["child-revealed"].connect_after(()=> {
-            this.get_toplevel().queue_draw();
-        });
+        ebox.add(cal);
+        expander.add(ebox);
     }
 
 } // End class

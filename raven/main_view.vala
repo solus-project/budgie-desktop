@@ -81,7 +81,6 @@ public class MainView : Gtk.Box
         scroll.add(box);
 
         cal = new CalendarWidget();
-        cal.margin_top = 6;
         box.pack_start(cal, false, false, 0);
 
         sound = new SoundWidget();
