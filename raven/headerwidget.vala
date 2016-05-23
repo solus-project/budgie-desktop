@@ -200,6 +200,8 @@ public class RavenExpander : Gtk.Box
         default = true;
     }
 
+    private bool track_animations = false;
+
     public RavenExpander(HeaderWidget? header)
     {
         Object(orientation: Gtk.Orientation.VERTICAL, margin_top: 8);
@@ -213,8 +215,30 @@ public class RavenExpander : Gtk.Box
         this.header.bind_property("expanded", this, "expanded");
         content.notify["child-revealed"].connect_after(()=> {
             this.get_toplevel().queue_draw();
+            this.track_animations = false;
         });
         expanded = true;
+
+        content.notify["reveal-child"].connect(()=> {
+            this.track_animations = true;
+        });
+
+        content.map.connect_after(()=> {
+            var clock = content.get_frame_clock();
+            clock.after_paint.connect(this.after_paint);
+        });
+    }
+
+    /**
+     * Repaint to address limitations in drawing model whereby animations
+     * cause artifacts in the revealer animation
+     */
+    void after_paint(Gdk.FrameClock clock)
+    {
+        if (!this.track_animations) {
+            return;
+        }
+        this.get_toplevel().queue_draw();
     }
 
     public override void add(Gtk.Widget widget)
