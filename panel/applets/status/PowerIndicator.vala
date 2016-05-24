@@ -16,6 +16,52 @@ public class BatteryIcon : Gtk.Image
 
     public BatteryIcon(Up.Device battery) {
         this.battery = battery;
+        this.update_ui();
+    }
+
+    public void update_ui()
+    {
+        string tip;
+
+        // Determine the icon to use for this battery
+        string image_name;
+        if (battery.percentage <= 10) {
+            image_name = "battery-empty";
+        } else if (battery.percentage <= 35) {
+            image_name = "battery-low";
+        } else if (battery.percentage <= 75) {
+            image_name = "battery-good";
+        } else {
+            image_name = "battery-full";
+        }
+
+        // Fully charged OR charging
+        if (battery.state == 4) {
+                image_name = "battery-full-charged-symbolic";
+                tip = _("Battery fully charged."); // Imply the battery is charged
+        } else if (battery.state == 1) {
+                image_name += "-charging-symbolic";
+                string time_to_full_str = _("Unknown"); // Default time_to_full_str to Unknown
+                int time_to_full = (int)battery.time_to_full; // Seconds for battery time_to_full
+
+                if (time_to_full > 0) { // If TimeToFull is known
+                        int hours = time_to_full / (60 * 60);
+                        int minutes = time_to_full / 60 - hours * 60;
+                        time_to_full_str = "%d:%02d".printf(hours, minutes); // Set inner charging duration to hours:minutes
+                }
+
+                tip = _("Battery charging") + ": %d%% (%s)".printf((int)battery.percentage, time_to_full_str); // Set to charging: % (Unknown/Time)
+        } else {
+                image_name += "-symbolic";
+                int hours = (int)battery.time_to_empty / (60 * 60);
+                int minutes = (int)battery.time_to_empty / 60 - hours * 60;
+                tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
+        }
+
+        // Set a handy tooltip until we gain a menu in StatusApplet
+
+        set_tooltip_text(tip);
+        set_from_icon_name(image_name, Gtk.IconSize.MENU);
     }
 }
 
@@ -28,110 +74,86 @@ public class PowerIndicator : Gtk.Bin
     /** Our upower client */
     public Up.Client client { protected set; public get; }
 
-    /** Device references */
-    protected List<unowned Up.Device> batteries;
+    private HashTable<string,BatteryIcon?> devices;
 
     public PowerIndicator()
     {
-        batteries = new List<Up.Device>();
+        devices = new HashTable<string,BatteryIcon?>(str_hash, str_equal);
 
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         add(widget);
 
         client = new Up.Client();
-        update_ui();
+
+        this.sync_devices();
+        client.device_added.connect(this.on_device_added);
+        client.device_removed.connect(this.on_device_removed);
+        toggle_show();
+    }
+
+    private bool is_interesting(Up.Device device)
+    {
+        /* TODO: Add support for mice, etc. */
+        if (device.kind != Up.DeviceKind.BATTERY) {
+            return false;
+        }
+        return true;
     }
 
     /**
-     * Update our UI as our battery (in interest) changed/w/e
+     * Add a new device to the tree
      */
-    protected void update_ui()
+    void on_device_added(Up.Device device)
+    {
+        if (devices.contains(device.serial)) {
+            /* Treated as a change event */
+            devices.lookup(device.serial).update_ui();
+            return;
+        }
+        if (!this.is_interesting(device)) {
+            return;
+        }
+        var icon = new BatteryIcon(device);
+        devices.insert(device.serial, icon);
+        widget.pack_start(icon);
+        toggle_show();
+    }
+
+
+    void toggle_show()
+    {
+        if (devices.size() < 1) {
+            hide();
+        } else {
+            show_all();
+        }
+    }
+
+    /**
+     * Remove a device from our display
+     */
+    void on_device_removed(Up.Device device) {
+        if (!devices.contains(device.serial)) {
+            return;
+        }
+        unowned BatteryIcon? icon = devices.lookup(device.serial);
+        widget.remove(icon);
+        devices.remove(device.serial);
+        toggle_show();
+    }
+
+    private void sync_devices()
     {
         // try to discover batteries
         var devices = client.get_devices();
 
         devices.foreach((device) => {
-            if (device.kind != Up.DeviceKind.BATTERY) {
-                return;
-            }
+            this.on_device_added(device);
 
-            bool alreadyContained = false;
-            batteries.foreach((battery) => {
-                if (device.serial == battery.serial) alreadyContained = true;
-            });
-
-            if (!alreadyContained) {
-            	batteries.append(device);
-                device.notify.connect(() => update_ui ());
-            }
         });
-        if (batteries.length() == 0) {
+        if (this.devices.size() == 0) {
             warning("Unable to discover a battery");
-            remove(widget);
-            hide();
-            return;
         }
-        hide();
-
-        // Update/add icon for each battery
-        batteries.foreach((battery) => {
-            string tip;
-
-            // Determine the icon to use for this battery
-            string image_name;
-            if (battery.percentage <= 10) {
-                image_name = "battery-empty";
-            } else if (battery.percentage <= 35) {
-                image_name = "battery-low";
-            } else if (battery.percentage <= 75) {
-                image_name = "battery-good";
-            } else {
-                image_name = "battery-full";
-            }
-
-            // Fully charged OR charging
-            if (battery.state == 4) {
-                    image_name = "battery-full-charged-symbolic";
-                    tip = _("Battery fully charged."); // Imply the battery is charged
-            } else if (battery.state == 1) {
-                    image_name += "-charging-symbolic";
-                    string time_to_full_str = _("Unknown"); // Default time_to_full_str to Unknown
-                    int time_to_full = (int)battery.time_to_full; // Seconds for battery time_to_full
-
-                    if (time_to_full > 0) { // If TimeToFull is known
-                            int hours = time_to_full / (60 * 60);
-                            int minutes = time_to_full / 60 - hours * 60;
-                            time_to_full_str = "%d:%02d".printf(hours, minutes); // Set inner charging duration to hours:minutes
-                    }
-
-                    tip = _("Battery charging") + ": %d%% (%s)".printf((int)battery.percentage, time_to_full_str); // Set to charging: % (Unknown/Time)
-            } else {
-                    image_name += "-symbolic";
-                    int hours = (int)battery.time_to_empty / (60 * 60);
-                    int minutes = (int)battery.time_to_empty / 60 - hours * 60;
-                    tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
-            }
-
-            // Determine BatteryIcon that corresponds to the battery
-            BatteryIcon icon = null;
-            widget.get_children().foreach((child) => {
-                BatteryIcon childIcon = (BatteryIcon) child;
-                if (childIcon.battery.serial == battery.serial) {
-                    icon = childIcon;
-                }
-            });
-            // If not already contained, create new BatteryIcon
-            if (icon == null) {
-                icon = new BatteryIcon(battery);
-                widget.pack_end(icon);
-            }
-
-            // Set a handy tooltip until we gain a menu in StatusApplet
-
-            icon.set_tooltip_text(tip);
-            icon.set_from_icon_name(image_name, Gtk.IconSize.MENU);
-        });
-
-        show_all();
+        toggle_show();
     }
 } // End class
