@@ -57,25 +57,6 @@ public class IconTasklistSettings : Gtk.Grid
  */
 public class DesktopHelper : Object
 {
-    static string[] derpers;
-
-    static construct {
-        derpers = new string[] {
-            "google-chrome",
-            "hexchat",
-            "telegram",
-            "atom"
-        };
-    }
-
-    public static bool has_derpy_icon(Wnck.Window? window)
-    {
-        if (window.get_class_instance_name() in DesktopHelper.derpers) {
-            return true;
-        }
-        return false;
-    }
-
     public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
     {
         string[] launchers = settings.get_strv("pinned-launchers");
@@ -178,7 +159,7 @@ public class IconTasklistApplet : Budgie.Applet
 
         // Fallback to new button.
         if (button == null) {
-            var btn = new IconButton(settings, window, icon_size, pinfo);
+            var btn = new IconButton(settings, window, icon_size, pinfo, this.helper);
             var button_wrap = new ButtonWrapper(btn);
 
             button = btn;
@@ -347,7 +328,7 @@ public class IconTasklistApplet : Budgie.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(settings, info, icon_size, ref this.context);
+            var button = new PinnedIconButton(settings, info, icon_size, ref this.context, this.helper);
             var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
@@ -388,7 +369,7 @@ public class IconTasklistApplet : Budgie.Applet
                 (btn.get_parent() as ButtonWrapper).gracefully_die();
             } else {
                 /* We need to move this fella.. */
-                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info);
+                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper);
                 var button_wrap = new ButtonWrapper(b2);
 
                 (btn.get_parent() as ButtonWrapper).gracefully_die();

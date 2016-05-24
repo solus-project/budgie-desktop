@@ -15,6 +15,7 @@ public class AppSystem : GLib.Object
     HashTable<string?,string?> startupids = null;
     HashTable<string?,string?> simpletons = null;
     HashTable<string?,DesktopAppInfo?> desktops = null;
+    string[]? derpers;
 
     public AppSystem()
     {
@@ -23,12 +24,37 @@ public class AppSystem : GLib.Object
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["calibre-gui"] = "calibre";
 
+        derpers = new string[] {
+            "google-chrome",
+            "hexchat",
+            "telegram",
+            "atom",
+            "spotify",
+        };
+
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(()=> {
             startupids = null;
             reload_ids();
         });
         reload_ids();
+    }
+
+    /**
+     * Determine if the app is forbidden from changing its icon through
+     * the icon-changed signal
+     */
+    public bool has_derpy_icon(Wnck.Window? window)
+    {
+        string? iname = window.get_class_instance_name();
+        if (iname == null) {
+            return false;
+        }
+        iname = iname.down();
+        if (iname in this.derpers) {
+            return true;
+        }
+        return false;
     }
 
     /**

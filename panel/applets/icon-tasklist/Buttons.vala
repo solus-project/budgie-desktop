@@ -77,35 +77,8 @@ public class IconButton : Gtk.ToggleButton
 
     unowned Settings? settings;
 
-    public void update_from_window()
+    private void update_app_info()
     {
-        we_urgent = false;
-        if (source_id > 0) {
-            remove_tick_callback(source_id);
-            source_id = 0;
-        }
-
-        if (window == null) {
-            if (this is PinnedIconButton) {
-                this.get_style_context().remove_class("running");
-            }
-            return;
-        }
-
-        if (this is PinnedIconButton) {
-            this.get_style_context().add_class("running");
-        }
-        set_tooltip_text(window.get_name());
-
-        // Things we can happily handle ourselves
-        window.icon_changed.connect(update_icon);
-        window.name_changed.connect(()=> {
-            set_tooltip_text(window.get_name());
-        });
-        update_icon();
-        set_active(window.is_active());
-        window.state_changed.connect(on_state_changed);
-
         // Actions menu
         menu = new Wnck.ActionMenu(window);
 
@@ -162,6 +135,39 @@ public class IconButton : Gtk.ToggleButton
                 menu.append(item);
             }
         }
+        this.update_icon();
+    }
+
+    public void update_from_window()
+    {
+        we_urgent = false;
+        if (source_id > 0) {
+            remove_tick_callback(source_id);
+            source_id = 0;
+        }
+
+        if (window == null) {
+            if (this is PinnedIconButton) {
+                this.get_style_context().remove_class("running");
+            }
+            return;
+        }
+
+        if (this is PinnedIconButton) {
+            this.get_style_context().add_class("running");
+        }
+        set_tooltip_text(window.get_name());
+
+        // Things we can happily handle ourselves
+        window.icon_changed.connect(update_icon);
+        window.name_changed.connect(()=> {
+            set_tooltip_text(window.get_name());
+        });
+        update_icon();
+        set_active(window.is_active());
+        window.state_changed.connect(on_state_changed);
+
+        this.update_app_info();
         queue_draw();
     }
 
@@ -242,9 +248,14 @@ public class IconButton : Gtk.ToggleButton
         return base.draw(cr);
     }
 
-    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo)
+    private string wclass_name = null;
+    private ulong wclass_id = 0;
+    private unowned AppSystem? helper = null;
+
+    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo, AppSystem? helper)
     {
         this.settings = settings;
+        this.helper = helper;
 
         image = new Gtk.Image();
         image.pixel_size = size;
@@ -254,6 +265,25 @@ public class IconButton : Gtk.ToggleButton
         this.window = window;
         relief = Gtk.ReliefStyle.NONE;
         this.ainfo = ainfo;
+
+        this.wclass_name = this.window.get_class_instance_name();
+
+        /* No app info, no class name, probably spotify */
+        if (this.wclass_name == null && this.ainfo == null) {
+            this.wclass_id = this.window.class_changed.connect(()=> {
+                string nclass_name = this.window.get_class_instance_name();
+                if (nclass_name != null && this.wclass_name == null) {
+                    this.window.disconnect(this.wclass_id);
+                    this.wclass_id = 0;
+
+                    this.wclass_name = nclass_name;
+                    this.ainfo = helper.query_window(this.window);
+                    this.update_app_info();
+                    /* Request re-assess of pin move ? */
+                }
+            });
+        }
+            
 
         // Replace styling with our own
         var st = get_style_context();
@@ -299,7 +329,7 @@ public class IconButton : Gtk.ToggleButton
             aicon = ainfo.get_icon();
         }
 
-        if (DesktopHelper.has_derpy_icon(window) && aicon != null) {
+        if (this.helper.has_derpy_icon(window) && aicon != null) {
             image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
         } else {
             if (window.get_icon_is_fallback()) {
@@ -377,9 +407,9 @@ public class PinnedIconButton : IconButton
 
     unowned Settings? settings;
 
-    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context)
+    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context, AppSystem? helper)
     {
-        base(settings, null, size, info);
+        base(settings, null, size, info, helper);
         this.app_info = info;
         this.settings = settings;
 
