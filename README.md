@@ -1,7 +1,7 @@
 budgie-desktop
 ==========
 
-The Budgie Desktop is the flagship desktop of the Solus Operating System.
+The Budgie Desktop is the flagship desktop of Solus.
 
 License
 -------
@@ -23,8 +23,8 @@ Building
 
 budgie-desktop has a number of build dependencies that must be present
 before attempting configuration. The names are different depending on
-distribution, so the pkg-config names, and the names within the Solus
-Operating System, are given:
+distribution, so the pkg-config names, and the names within Solus, are 
+given:
 
     - gobject-2.0 >= 2.44.0
     - gio-2.0 >= 2.44.0
