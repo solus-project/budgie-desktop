@@ -11,17 +11,96 @@
 
 public class AppSystem : GLib.Object
 {
+
+    HashTable<string?,string?> startupids = null;
+    HashTable<string?,string?> simpletons = null;
+    HashTable<string?,DesktopAppInfo?> desktops = null;
+
     public AppSystem()
     {
+        /* Initialize simpletons. */
+        simpletons = new HashTable<string?,string?>(str_hash, str_equal);
+        simpletons["google-chrome-stable"] = "google-chrome";
+        simpletons["calibre-gui"] = "calibre";
+
+        var monitor = AppInfoMonitor.get();
+        monitor.changed.connect(()=> {
+            startupids = null;
+            reload_ids();
+        });
+        reload_ids();
     }
 
-    public DesktopAppInfo? query_window(Wnck.Window window)
+    /**
+     * Reload and cache all the desktop IDS
+     */
+    private void reload_ids()
     {
-        return null;
+        startupids = new HashTable<string?,string?>(str_hash,str_equal);
+        desktops = new HashTable<string?,DesktopAppInfo?>(str_hash, str_equal);
+        foreach (var appinfo in AppInfo.get_all()) {
+            var dinfo = appinfo as DesktopAppInfo;
+            if (dinfo.get_startup_wm_class() != null) {
+                startupids[dinfo.get_startup_wm_class().down()] = dinfo.get_id();
+            }
+            desktops.insert(dinfo.get_id().down(), dinfo);
+        }
     }
 
-    public string? query_desktop_id(Wnck.Window window)
+    /**
+     * Attempt to gain the DesktopAppInfo relating to a given window
+     */
+    public DesktopAppInfo? query_window(Wnck.Window? window)
     {
+        ulong xid = window.get_xid();
+        if (window == null) {
+            return null;
+        }
+        string? cls_name = window.get_class_instance_name();
+        string? grp_name = window.get_class_group_name();
+
+        if (grp_name == null) {
+            return null;
+        }
+
+        string[] checks = new string[] { cls_name, grp_name };
+        foreach (string? check in checks) {
+            if (check == null) {
+                continue;
+            }
+            /* First, check if we have something in the startupids for this app */
+            check = check.down();
+            if (check in startupids) {
+                string dname = startupids[check];
+                if (dname in desktops) {
+                    return this.desktops[dname];
+                }
+            }
+            /* Wasnt a startupid match, try class -> desktop match */
+            string dname = check + ".desktop";
+            if (dname in this.desktops) {
+                return this.desktops[dname];
+            }
+        }
+
+        /* Next, attempt to get the application based on the GtkApplication ID */
+        string? gtk_id = this.query_gtk_application_id(xid);
+        if (gtk_id != null) {
+            gtk_id = gtk_id.down() + ".desktop";
+            if (gtk_id in this.desktops) {
+                return this.desktops[gtk_id];
+            }
+        }
+
+        /* Is the group name in the simpletons? */
+        if (grp_name in this.simpletons) {
+            string dname = this.simpletons[grp_name] + ".desktop";
+            if (dname in this.desktops) {
+                return this.desktops[dname];
+            }
+        }
+
+        /* IDK. Sorry. */
         return null;
     }
 
