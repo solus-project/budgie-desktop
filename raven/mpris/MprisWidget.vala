@@ -19,7 +19,7 @@ public class MprisWidget : Gtk.Box
 
     public MprisWidget()
     {
-        Object (orientation: Gtk.Orientation.VERTICAL, spacing: 1);
+        Object (orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
         ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
 

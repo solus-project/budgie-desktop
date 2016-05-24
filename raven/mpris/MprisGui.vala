@@ -80,7 +80,6 @@ public class ClientWidget : Gtk.Box
         player_revealer = new Budgie.RavenExpander(header);
         player_revealer.expanded = true;
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        get_style_context().add_class("raven-background");
 
         header.can_close = client.player.can_quit;
         player_revealer.expanded = header.can_close;
@@ -100,7 +99,7 @@ public class ClientWidget : Gtk.Box
 
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
         box.margin = 6;
-        box.margin_top =12;
+        box.margin_top = 12;
         top_box.pack_start(box, true, true, 0);
 
 
@@ -197,6 +196,7 @@ public class ClientWidget : Gtk.Box
             }
         });
 
+        player_box.get_style_context().add_class("raven-background");
         player_revealer.add(player_box);
         pack_start(player_revealer);
     }

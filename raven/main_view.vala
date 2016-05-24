@@ -84,11 +84,9 @@ public class MainView : Gtk.Box
         box.pack_start(cal, false, false, 0);
 
         sound = new SoundWidget();
-        sound.margin_top = 6;
         box.pack_start(sound, false, false, 0);
 
         mpris = new MprisWidget();
-        mpris.margin_top = 6;
         box.pack_start(mpris, false, false, 0);
 
         show_all();
