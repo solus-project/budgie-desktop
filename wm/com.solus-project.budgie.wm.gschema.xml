@@ -15,9 +15,15 @@
     </key>
 
     <key type="as" name="toggle-raven">
+      <default><![CDATA[['<Super>A']]]></default>
+      <summary>The binding to use to toggle Raven applets view</summary>
+      <description>The binding to use to toggle Raven applets view</description>
+    </key>
+
+    <key type="as" name="toggle-notifications">
       <default><![CDATA[['<Super>N']]]></default>
-      <summary>The binding to use to toggle Raven</summary>
-      <description>The binding to use to toggle Raven</description>
+      <summary>The binding to use to toggle Raven notifications</summary>
+      <description>The binding to use to toggle Raven notifications</description>
     </key>
 
     <key name="button-layout" type="s">

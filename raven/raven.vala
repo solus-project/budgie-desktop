@@ -59,6 +59,30 @@ public class RavenIface
         }
     }
 
+    /**
+     * Toggle Raven, opening only the "main" applet view
+     */
+    public void ToggleAppletView() {
+        if (this.is_expanded) {
+            this.is_expanded = !this.is_expanded;
+            return;
+        }
+        parent.expose_main_view();
+        this.is_expanded = !this.is_expanded;
+    }
+
+    /**
+     * Toggle Raven, opening only the "main" applet view
+     */
+    public void ToggleNotificationsView() {
+        if (this.is_expanded) {
+            this.is_expanded = !this.is_expanded;
+            return;
+        }
+        parent.expose_notification();
+        this.is_expanded = !this.is_expanded;
+    }
+
     public void Dismiss() {
         if (this.is_expanded) {
             this.is_expanded = !this.is_expanded;

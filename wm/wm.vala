@@ -62,6 +62,8 @@ public interface RavenRemote : Object
 {
     public abstract bool GetExpanded() throws Error;
     public abstract async void Toggle() throws Error;
+    public abstract async void ToggleNotificationsView() throws Error;
+    public abstract async void ToggleAppletView() throws Error;
     public abstract async void Dismiss() throws Error;
 }
 
@@ -193,18 +195,34 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for toggle-raven activated */
-    void on_raven_toggle(Meta.Display display, Meta.Screen screen,
-                         Meta.Window? window, Clutter.KeyEvent? event,
-                         Meta.KeyBinding binding)
+    void on_raven_main_toggle(Meta.Display display, Meta.Screen screen,
+                              Meta.Window? window, Clutter.KeyEvent? event,
+                              Meta.KeyBinding binding)
     {
         if (raven_proxy == null) {
             warning("Raven does not appear to be running!");
             return;
         }
         try {
-            raven_proxy.Toggle.begin();
+            raven_proxy.ToggleAppletView.begin();
         } catch (Error e) {
-            warning("Unable to Toggle() Raven: %s", e.message);
+            warning("Unable to ToggleAppletView() Raven: %s", e.message);
+        }
+    }
+
+    /* Binding for toggle-notifications activated */
+    void on_raven_notification_toggle(Meta.Display display, Meta.Screen screen,
+                                      Meta.Window? window, Clutter.KeyEvent? event,
+                                      Meta.KeyBinding binding)
+    {
+        if (raven_proxy == null) {
+            warning("Raven does not appear to be running!");
+            return;
+        }
+        try {
+            raven_proxy.ToggleNotificationsView.begin();
+        } catch (Error e) {
+            warning("Unable to ToggleNotificationsView() Raven: %s", e.message);
         }
     }
 
@@ -324,7 +342,8 @@ public class BudgieWM : Meta.Plugin
 
         settings = new Settings(WM_SCHEMA);
         /* Custom keybindings */
-        display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_toggle);
+        display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
+        display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
         display.overlay_key.connect(on_overlay_key);
 
         /* Hook up Raven handler.. */
