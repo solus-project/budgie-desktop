@@ -12,13 +12,6 @@
 namespace Budgie
 {
 
-public enum ThemeType {
-    ICON_THEME,
-    GTK_THEME,
-    WM_THEME,
-    CURSOR_THEME
-}
-
 public enum PanelColumn {
     UUID = 0,
     DESCRIPTION = 1,
@@ -801,6 +794,8 @@ public class AppearanceSettings : Gtk.Box
     private GLib.Settings ui_settings;
     private GLib.Settings budgie_settings;
 
+    private ThemeScanner? theme_scanner;
+
     construct {
         var render = new Gtk.CellRendererText();
         combobox_gtk.pack_start(render, true);
@@ -816,123 +811,70 @@ public class AppearanceSettings : Gtk.Box
         budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
         budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
         budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+        this.theme_scanner = new ThemeScanner();
     }
 
     public void load_themes()
     {
-        load_themes_by_type.begin(ThemeType.GTK_THEME, (obj,res)=> {
-            bool b = load_themes_by_type.end(res);
-            combobox_gtk.sensitive = b;
-            queue_resize();
-            if (b) {
-                ui_settings.bind("gtk-theme", combobox_gtk, "active-id", SettingsBindFlags.DEFAULT);
-            }
-        });
-        load_themes_by_type.begin(ThemeType.ICON_THEME, (obj,res)=> {
-            bool b = load_themes_by_type.end(res);
-            combobox_icon.sensitive = b;
-            queue_resize();
-            if (b) {
-                ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
-            }
-        });
-        load_themes_by_type.begin(ThemeType.CURSOR_THEME, (obj,res)=> {
-            bool b = load_themes_by_type.end(res);
-            combobox_cursor.sensitive = b;
-            queue_resize();
-            if (b) {
-                ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
-            }
-        });
-    }
-
-    /* Load theme list */
-    async bool load_themes_by_type(ThemeType type)
-    {
-        var spc = Environment.get_system_data_dirs();
-        spc += Environment.get_user_data_dir();
-        string[] search = {};
-        string? item = "";
-        string[]? suffixes;
-        string[] results = {};
-        FileTest test_type = FileTest.IS_DIR;
-
-        unowned Gtk.ComboBox? target = null;
-        Gtk.ListStore? model = null;
-        Gtk.TreeIter iter;
-
-        switch (type) {
-            case ThemeType.GTK_THEME:
-                item = "themes";
-                suffixes = new string[] {
-                        "gtk-%d.0".printf(Gtk.MAJOR_VERSION),
-                        "gtk-%d-%d".printf(Gtk.MAJOR_VERSION, Gtk.MINOR_VERSION)
-                };
-                target = this.combobox_gtk;
-                break;
-            case ThemeType.ICON_THEME:
-                item = "icons";
-                suffixes = new string[] { "index.theme" };
-                test_type = FileTest.IS_REGULAR;
-                target = this.combobox_icon;
-                break;
-            case ThemeType.CURSOR_THEME:
-                item = "icons";
-                suffixes = new string[] { "cursors" };
-                target = this.combobox_cursor;
-                break;
-            default:
-                return false;
-        }
-
-        if (target == null) {
-            return false;
-        }
-
-        model = new Gtk.ListStore(1, typeof(string));
-
-        foreach (var dir in spc) {
-            // Not making FS assumptions ftw.
-            dir = (dir + Path.DIR_SEPARATOR_S +  item);
-            if (FileUtils.test(dir, FileTest.IS_DIR)) {
-                search += dir;
-            }
-        }
-        string home = Environment.get_home_dir() + Path.DIR_SEPARATOR_S + "." + item;
-        if (FileUtils.test(home, FileTest.IS_DIR)) {
-            search += home;
-        }
-
-        foreach (var dir in search) {
-            File f = File.new_for_path(dir);
-            try {
-                var en = yield f.enumerate_children_async("standard::*", FileQueryInfoFlags.NOFOLLOW_SYMLINKS, Priority.DEFAULT, null);
-                while (true) {
-                    var files = yield en.next_files_async(10, Priority.DEFAULT, null);
-                    if (files == null) {
-                        break;
-                    }
-                    foreach (var file in files) {
-                        var display_name = file.get_display_name();
-                        foreach (var suffix in suffixes) {
-                            var test_path = dir + Path.DIR_SEPARATOR_S + display_name + Path.DIR_SEPARATOR_S + suffix;
-                            if (!(display_name in results) && FileUtils.test(test_path, test_type)) {
-                                results += display_name;
-                                model.append(out iter);
-                                model.set(iter, 0, display_name, -1);
-                                break;
-                            }
-                        }
-                    }
+        /* Scan teh themes */
+        this.theme_scanner.scan_themes.begin(()=> {
+            /* Gtk themes */
+            {
+                Gtk.TreeIter iter;
+                var model = new Gtk.ListStore(1, typeof(string));
+                bool hit = false;
+                foreach (var theme in theme_scanner.get_gtk_themes()) {
+                    model.append(out iter);
+                    model.set(iter, 0, theme, -1);
+                    hit = true;
                 }
-            } catch (Error e) {
-                message("Error: %s", e.message);
+                combobox_gtk.set_model(model);
+                combobox_gtk.set_id_column(0);
+                model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+                if (hit) {
+                    combobox_gtk.sensitive = true;
+                    ui_settings.bind("gtk-theme", combobox_gtk, "active-id", SettingsBindFlags.DEFAULT);
+                }
             }
-        }
-        target.set_id_column(0);
-        model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
-        target.set_model(model);
-        return true;
+            /* Icon themes */
+            {
+                Gtk.TreeIter iter;
+                var model = new Gtk.ListStore(1, typeof(string));
+                bool hit = false;
+                foreach (var theme in theme_scanner.get_icon_themes()) {
+                    model.append(out iter);
+                    model.set(iter, 0, theme, -1);
+                    hit = true;
+                }
+                combobox_icon.set_model(model);
+                combobox_icon.set_id_column(0);
+                model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+                if (hit) {
+                    combobox_icon.sensitive = true;
+                    ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
+                }
+            }
+
+            /* Cursor themes */
+            {
+                Gtk.TreeIter iter;
+                var model = new Gtk.ListStore(1, typeof(string));
+                bool hit = false;
+                foreach (var theme in theme_scanner.get_cursor_themes()) {
+                    model.append(out iter);
+                    model.set(iter, 0, theme, -1);
+                    hit = true;
+                }
+                combobox_cursor.set_model(model);
+                combobox_cursor.set_id_column(0);
+                model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+                if (hit) {
+                    combobox_cursor.sensitive = true;
+                    ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
+                }
+            }
+            queue_resize();
+        });
     }
 }
 
