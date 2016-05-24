@@ -94,7 +94,7 @@ public class AppSystem : GLib.Object
 
         /* Is the group name in the simpletons? */
         if (grp_name in this.simpletons) {
-            string dname = this.simpletons[grp_name] + ".desktop";
+            string dname = this.simpletons[grp_name.down()] + ".desktop";
             if (dname in this.desktops) {
                 return this.desktops[dname];
             }
