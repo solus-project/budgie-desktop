@@ -43,6 +43,7 @@ libraven_la_SOURCES = \
 	headerwidget.vala \
 	calender.vala \
 	sound.vala \
+	themes.vala \
 	mpris/MprisClient.vala \
 	mpris/MprisGui.vala \
 	mpris/MprisWidget.vala
