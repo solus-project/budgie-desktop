@@ -853,7 +853,7 @@ public class AppearanceSettings : Gtk.Box
         spc += Environment.get_user_data_dir();
         string[] search = {};
         string? item = "";
-        string? suffix = "";
+        string[]? suffixes;
         string[] results = {};
         FileTest test_type = FileTest.IS_DIR;
 
@@ -864,18 +864,21 @@ public class AppearanceSettings : Gtk.Box
         switch (type) {
             case ThemeType.GTK_THEME:
                 item = "themes";
-                suffix = "gtk-3.0";
+                suffixes = new string[] {
+                        "gtk-%d.0".printf(Gtk.MAJOR_VERSION),
+                        "gtk-%d-%d".printf(Gtk.MAJOR_VERSION, Gtk.MINOR_VERSION)
+                };
                 target = this.combobox_gtk;
                 break;
             case ThemeType.ICON_THEME:
                 item = "icons";
-                suffix = "index.theme";
+                suffixes = new string[] { "index.theme" };
                 test_type = FileTest.IS_REGULAR;
                 target = this.combobox_icon;
                 break;
             case ThemeType.CURSOR_THEME:
                 item = "icons";
-                suffix = "cursors";
+                suffixes = new string[] { "cursors" };
                 target = this.combobox_cursor;
                 break;
             default:
@@ -911,11 +914,14 @@ public class AppearanceSettings : Gtk.Box
                     }
                     foreach (var file in files) {
                         var display_name = file.get_display_name();
-                        var test_path = dir + Path.DIR_SEPARATOR_S + display_name + Path.DIR_SEPARATOR_S + suffix;
-                        if (!(display_name in results) && FileUtils.test(test_path, test_type)) {
-                            results += display_name;
-                            model.append(out iter);
-                            model.set(iter, 0, display_name, -1);
+                        foreach (var suffix in suffixes) {
+                            var test_path = dir + Path.DIR_SEPARATOR_S + display_name + Path.DIR_SEPARATOR_S + suffix;
+                            if (!(display_name in results) && FileUtils.test(test_path, test_type)) {
+                                results += display_name;
+                                model.append(out iter);
+                                model.set(iter, 0, display_name, -1);
+                                break;
+                            }
                         }
                     }
                 }
