@@ -30,6 +30,7 @@ public class AppSystem : GLib.Object
             "telegram",
             "atom",
             "spotify",
+            "steam",
         };
 
         var monitor = AppInfoMonitor.get();
