@@ -33,7 +33,7 @@
         <property name="wrap">True</property>
         <property name="wrap_mode">word-char</property>
         <property name="ellipsize">start</property>
-        <property name="max_width_chars">50</property>
+        <property name="max_width_chars">1</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="semibold"/>
