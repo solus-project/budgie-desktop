@@ -3,6 +3,41 @@ budgie-desktop
 
 The Budgie Desktop is the flagship desktop of Solus.
 
+Reporting issues & Project Integration.
+---------------------------------------
+
+If you are integrating Budgie into your project/distribution/whatever-it-is,
+then we are happy to accept valid bug reports, so long as would not corrupt
+the distro-agnostic aims of Budgie.
+
+Note that all projects and people are treated equally, every individual or
+project's name involved in contributing to, or reporting bugs against Budgie,
+carry precisely the same weight. There are no special exceptions.
+
+Under **no circumstance** should you use GitHub generated tarballs to integrate
+Budgie Desktop into your project/distro/whatever-it-is. These tarballs are not
+correct, and are not supported by the maintainer.
+
+If we determine your package uses GitHub generated tarballs, or bypasses our
+own release and build processes, your bug will be invalidated and no support
+will be received.
+
+Note that a valid generated tarball for use from git can be generated and
+hosted in your own infrastructure as follows:
+
+    ./autogen.sh
+    make distcheck
+
+Note bleeding-git builds may lack translations, so `make dist` is permitted.
+Build systems supporting building from specified git tags **must** use a recursive
+clone, due to use of git submodules. Failure to do so invalidates the release
+and build processes and will also invalidate your bug if this is discovered.
+
+**Long Story Short:**
+
+Don't make other users suffer because you failed to follow our established
+build and release processes. Use standard methods, and we all benefit.
+
 License
 -------
 
