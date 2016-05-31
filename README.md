@@ -7,7 +7,7 @@ Reporting issues & Project Integration.
 ---------------------------------------
 
 If you are integrating Budgie into your project/distribution/whatever-it-is,
-then we are happy to accept valid bug reports, so long as would not corrupt
+then we are happy to accept valid bug reports, so long as it does not corrupt
 the distro-agnostic aims of Budgie.
 
 Note that all projects and people are treated equally, every individual or
