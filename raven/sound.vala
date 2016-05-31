@@ -375,7 +375,7 @@ public class SoundWidget : Gtk.Box
     {
         Gtk.RadioButton? btn = outputs.lookup(id);
         if (btn == null) {
-            warning("Removing id we dont know about: %u", id);
+            warning("Removing id we don\'t know about: %u", id);
             return;
         }
         outputs.steal(id);
@@ -386,7 +386,7 @@ public class SoundWidget : Gtk.Box
     {
         Gtk.RadioButton? btn = inputs.lookup(id);
         if (btn == null) {
-            warning("Removing id we dont know about: %u", id);
+            warning("Removing id we don\'t know about: %u", id);
             return;
         }
         inputs.steal(id);
