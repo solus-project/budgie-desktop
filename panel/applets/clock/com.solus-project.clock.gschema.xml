@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="com.solus-project.clock">
+    <key type="b" name="show-week-day">
+      <default>false</default>
+      <summary>Show week day</summary>
+      <description>Show week day</description>
+    </key>
+    
+  </schema>
+</schemalist>
