@@ -25,7 +25,7 @@ BUILT_SOURCES = \
 	plugin-resources.c
 
 CLEANFILES = \
-    $(BUILT_SOURCES) \
+	$(BUILT_SOURCES) \
 	ClockApplet.plugin
 
 DISTCLEANFILES = \
@@ -35,7 +35,7 @@ plugin_DATA += \
 	ClockApplet.plugin
 
 EXTRA_DIST += \
-	ClockApplet.plugin.in
+	ClockApplet.plugin.in \
 	com.solus-project.clock.gschema.xml \
 	plugin.gresource.xml \
 	settings.ui
@@ -67,7 +67,7 @@ libclockapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
-	--vapidir=${top_srcdir}/plugin
+	--vapidir=${top_srcdir}/plugin \
 	--target-glib=2.38 \
 	--gresources=${srcdir}/plugin.gresource.xml
 

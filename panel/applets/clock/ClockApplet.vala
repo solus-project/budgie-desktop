@@ -191,7 +191,7 @@ public class ClockApplet : Budgie.Applet
                 show_date = settings.get_boolean(key);
                 break;
             case "show-week-day":
-                show_week_day = settings.get_boolean(key);
+                show_week_day = ui_settings.get_boolean(key);
                 break;
         }
         /* Lazy update on next clock sync */
@@ -220,7 +220,7 @@ public class ClockApplet : Budgie.Applet
         string ftime = " <big>%s</big> ".printf(format);
         
         if(show_week_day){
-            fdate = "%u %x"; 
+            fdate = "%A %x"; 
         } else {        
             fdate = "%x";
         }
