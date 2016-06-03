@@ -31,7 +31,6 @@ CLEANFILES = \
 DISTCLEANFILES = \
 	ClockApplet.plugin
 
-
 plugin_DATA += \
 	ClockApplet.plugin
 
@@ -44,7 +43,7 @@ EXTRA_DIST += \
 plugin_LTLIBRARIES = libclockapplet.la
 
 libclockapplet_la_SOURCES = \
-	ClockApplet.vala
+	ClockApplet.vala \
 	plugin-resources.h \
 	plugin-resources.c
 
