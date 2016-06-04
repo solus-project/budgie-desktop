@@ -266,7 +266,9 @@ public class IconButton : Gtk.ToggleButton
         relief = Gtk.ReliefStyle.NONE;
         this.ainfo = ainfo;
 
-        this.wclass_name = this.window.get_class_instance_name();
+        if (this.window != null) {
+            this.wclass_name = this.window.get_class_instance_name();
+        }
 
         /* No app info, no class name, probably spotify */
         if (this.wclass_name == null && this.ainfo == null) {
