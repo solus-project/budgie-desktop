@@ -7,7 +7,7 @@ experience.
 
 Budgie Desktop is a [Solus Project](https://solus-project.com/)
 
-![logo](https://build.solus-project.com/logo.pngg)
+![logo](https://build.solus-project.com/logo.png)
 
 
 Reporting issues & Project Integration.
