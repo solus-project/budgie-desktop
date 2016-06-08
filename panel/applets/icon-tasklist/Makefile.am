@@ -45,6 +45,7 @@ EXTRA_DIST += \
 plugin_LTLIBRARIES = libicontasklistapplet.la
 
 libicontasklistapplet_la_SOURCES = \
+	AppSystem.vala \
 	IconTasklistApplet.vala \
 	Buttons.vala \
 	plugin-resources.h \
@@ -69,6 +70,7 @@ libicontasklistapplet_la_LDFLAGS = \
 
 libicontasklistapplet_la_VALAFLAGS = \
 	--pkg gtk+-3.0 \
+	--pkg gdk-x11-3.0 \
 	--pkg libwnck-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg libpeas-1.0 \

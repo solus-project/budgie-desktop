@@ -45,20 +45,7 @@ public class SoundWidget : Gtk.Box
         scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
         scale.set_draw_value(false);
         scale.value_changed.connect(on_output_scale_change);
-
-        /* Output header widget */
-        var top_row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        top_row.halign = Gtk.Align.FILL;
-        top_row.pack_start(scale, true, true, 0);
-        scale.halign = Gtk.Align.FILL;
-        output_switch = new Gtk.Switch();
-        output_switch.vexpand = false;
-        output_switch.valign = Gtk.Align.CENTER;
-        output_switch.hexpand = false;
-        output_switch.halign = Gtk.Align.END;
-        output_switch.margin_start = 6;
-        top_row.pack_end(output_switch, false, false, 0);
-        header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, top_row);
+        header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, scale);
 
         var expander = new Budgie.RavenExpander(header);
         pack_start(expander, false, false);
@@ -93,9 +80,11 @@ public class SoundWidget : Gtk.Box
         row.pack_start(label, true, true, 0);
         label.halign = Gtk.Align.START;
 
+        output_switch = new Gtk.Switch();
         output_switch.active = false;
         output_switch_id = output_switch.notify["active"].connect(on_output_mute_changed);
 
+        row.pack_end(output_switch, false, false, 0);
         main_layout.pack_start(row, false, false, 0);
         output_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_layout.pack_start(output_box, false, false, 0);
