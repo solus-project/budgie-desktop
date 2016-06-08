@@ -1,7 +1,14 @@
 budgie-desktop
-==========
+==============
 
-The Budgie Desktop is the flagship desktop of Solus.
+The Budgie Desktop a modern desktop designed to keep out the way of the user.
+It features heavy integration with the GNOME stack in order for an enhanced
+experience.
+
+Budgie Desktop is a [Solus Project](https://solus-project.com/)
+
+![logo](https://build.solus-project.com/logo.pngg)
+
 
 Reporting issues & Project Integration.
 ---------------------------------------
