@@ -599,7 +599,7 @@ public class NotificationsView : Gtk.Box
         var btn = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         btn.relief = Gtk.ReliefStyle.NONE;
 
-        header = new HeaderWidget("No new notifications", "notification-alert-symbolic", false, null, btn);
+        header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, btn);
         header.margin_top = 6;
 
         btn.clicked.connect(this.clear_all);

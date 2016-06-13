@@ -57,105 +57,6 @@ public class IconTasklistSettings : Gtk.Grid
  */
 public class DesktopHelper : Object
 {
-
-    HashTable<string?,string?> simpletons;
-    HashTable<string?,string?> startupids;
-    static string[] derpers;
-
-    static construct {
-        derpers = new string[] {
-            "google-chrome",
-            "hexchat",
-            "telegram",
-            "atom"
-        };
-    }
-
-    public DesktopHelper()
-    {
-        /* Initialize simpletons. */
-        simpletons = new HashTable<string?,string?>(str_hash, str_equal);
-        simpletons["google-chrome-stable"] = "google-chrome";
-        /* Constency++ */
-        simpletons["gnome-builder"] = "org.gnome.Builder";
-        simpletons["gnome-clocks"] = "org.gnome.clocks";
-        simpletons["gnome-calendar"] = "org.gnome.Calendar";
-        simpletons["gnome-photos"] = "org.gnome.Photos";
-        simpletons["gnome-screenshot"] = "org.gnome.Screenshot";
-        simpletons["gnome-terminal"] = "org.gnome.Terminal";
-        simpletons["gnome-todo"] = "org.gnome.Todo";
-        simpletons["nautilus"] = "org.gnome.Nautilus";
-        simpletons["totem"] = "org.gnome.Totem";
-        simpletons["gedit"] = "org.gnome.gedit";
-        simpletons["calibre-gui"] = "calibre";
-
-        var monitor = AppInfoMonitor.get();
-        monitor.changed.connect(()=> {
-            startupids = null;
-            reload_ids();
-        });
-        reload_ids();
-    }
-
-    void reload_ids()
-    {
-        startupids = new HashTable<string?,string?>(str_hash,str_equal);
-        foreach (var appinfo in AppInfo.get_all()) {
-            var dinfo = appinfo as DesktopAppInfo;
-            if (dinfo.get_startup_wm_class() != null) {
-                startupids[dinfo.get_startup_wm_class()] = dinfo.get_id();
-            }
-        }
-    }
-
-    /**
-     * Obtain a DesktopAppInfo for a given window.
-     * @param window X11 window to obtain DesktopAppInfo for
-     *
-     * @return a DesktopAppInfo if found, otherwise null.
-     * 
-     * @note This is immensely inefficient. We still need to cache some
-     * lookups.
-     */
-    public DesktopAppInfo? get_app_info_for_window(Wnck.Window? window)
-    {
-        if (window == null) {
-            return null;
-        }
-        if (window.get_class_group_name() == null) {
-            return null;
-        }
-        var app_name = window.get_class_group_name();
-        string? app_name_clean;
-        // track suffix in case we use startup wm class to find id
-        string suffix = ".desktop";
-
-        if (window.get_class_instance_name() in startupids) {
-            app_name = startupids[window.get_class_instance_name()];
-            app_name_clean = app_name;
-            suffix = "";
-        } else {
-            var c = app_name[0].tolower();
-            app_name_clean = "%c%s".printf(c,app_name[1:app_name.length]);
-        }
-
-        var p1 = new DesktopAppInfo("%s%s".printf(app_name_clean, suffix));
-        if (p1 == null) {
-            if (app_name_clean in simpletons) {
-                p1 = new DesktopAppInfo("%s%s".printf(simpletons[app_name_clean], suffix));
-            }
-        }
-        return p1;
-    }
-
-    public static bool has_derpy_icon(Wnck.Window? window)
-    {
-        if (window.get_class_instance_name() in DesktopHelper.derpers) {
-            return true;
-        }
-        return false;
-    }
-
     public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
     {
         string[] launchers = settings.get_strv("pinned-launchers");
@@ -198,7 +99,7 @@ public class IconTasklistApplet : Budgie.Applet
     private Settings settings;
 
     protected Gdk.AppLaunchContext context;
-    protected DesktopHelper helper;
+    protected AppSystem? helper;
 
     private unowned IconButton? active_button;
 
@@ -225,7 +126,7 @@ public class IconTasklistApplet : Budgie.Applet
         if (window.get_application() != null) {
             launch_id = window.get_application().get_startup_id();
         }
-        var pinfo = helper.get_app_info_for_window(window);
+        var pinfo = helper.query_window(window);
 
         // Check whether its launched with startup notification, if so
         // attempt to use a pin button where appropriate.
@@ -258,7 +159,7 @@ public class IconTasklistApplet : Budgie.Applet
 
         // Fallback to new button.
         if (button == null) {
-            var btn = new IconButton(settings, window, icon_size, pinfo);
+            var btn = new IconButton(settings, window, icon_size, pinfo, this.helper);
             var button_wrap = new ButtonWrapper(btn);
 
             button = btn;
@@ -326,7 +227,7 @@ public class IconTasklistApplet : Budgie.Applet
         settings_schema = "com.solus-project.icon-tasklist";
         settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
 
-        helper = new DesktopHelper();
+        helper = new AppSystem();
 
         // Easy mapping :)
         buttons = new HashTable<Wnck.Window,IconButton>(direct_hash, direct_equal);
@@ -427,7 +328,7 @@ public class IconTasklistApplet : Budgie.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(settings, info, icon_size, ref this.context);
+            var button = new PinnedIconButton(settings, info, icon_size, ref this.context, this.helper);
             var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
@@ -468,7 +369,7 @@ public class IconTasklistApplet : Budgie.Applet
                 (btn.get_parent() as ButtonWrapper).gracefully_die();
             } else {
                 /* We need to move this fella.. */
-                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info);
+                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper);
                 var button_wrap = new ButtonWrapper(b2);
 
                 (btn.get_parent() as ButtonWrapper).gracefully_die();

@@ -3,104 +3,100 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Ademar Nowasky Junior <nowasky.jr@gmail.com>, 2015-2016
-# Brendo Maciel, 2015
-# Cleiton Floss, 2015-2016
-# Lara Maia <dev@lara.click>, 2015
-# Lara Maia <dev@lara.click>, 2015
-# Lucas Simões <inactive+kaslusimoes@transifex.com>, 2015
-# Marcelo Ferreira <marceloffdeoliveira@gmail.com>, 2016
-# Yuri Henrique Nery Silva <yurihenriq848@gmail.com>, 2015
+# Geert Verheyde <geert.verheyde@gmail.com>, 2016
+# Jente Hidskes <Unia@users.noreply.github.com>, 2015
+# Kim Vande Walle, 2015
+# Maxim Van Damme <maxim_vandamme@hotmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-29 23:18+0100\n"
-"PO-Revision-Date: 2016-06-01 14:37+0000\n"
-"Last-Translator: Marcelo Ferreira <marceloffdeoliveira@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/solus-project/budgie-desktop/language/pt_BR/)\n"
+"PO-Revision-Date: 2016-04-30 07:20+0000\n"
+"Last-Translator: Geert Verheyde <geert.verheyde@gmail.com>\n"
+"Language-Team: Dutch (http://www.transifex.com/solus-project/budgie-desktop/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "Aplicações"
+msgstr "Applets"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Notificações"
+msgstr "Meldingen"
 
 #: ../raven/settings_view.vala:254
 msgid "Top"
-msgstr "Topo"
+msgstr "Boven"
 
 #: ../raven/settings_view.vala:256
 msgid "Bottom"
-msgstr "Inferior"
+msgstr "Onder"
 
 #: ../raven/settings_view.vala:364
 msgid "Top Panel"
-msgstr "Painel superior"
+msgstr "Paneel Boven"
 
 #: ../raven/settings_view.vala:366
 msgid "Right Panel"
-msgstr "Painel direito"
+msgstr "Paneel Rechts"
 
 #: ../raven/settings_view.vala:368
 msgid "Left Panel"
-msgstr "Painel esquerdo"
+msgstr "Paneel Links"
 
 #: ../raven/settings_view.vala:370
 msgid "Bottom Panel"
-msgstr "Painel inferior"
+msgstr "Paneel Onder"
 
 #: ../raven/settings_view.vala:604
 msgid "Start"
-msgstr "Início"
+msgstr "Begin"
 
 #: ../raven/settings_view.vala:607
 msgid "Center"
-msgstr "Centro"
+msgstr "Midden"
 
 #: ../raven/settings_view.vala:610
 msgid "End"
-msgstr "Fim"
+msgstr "Einde"
 
 #: ../raven/settings_view.vala:960
 msgid "General"
-msgstr "Geral"
+msgstr "Algemeen"
 
 #: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
 msgid "Panel"
-msgstr "Painel"
+msgstr "Werkbalk"
 
 #: ../raven/notifications_view.vala:448
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u notificações não lidas"
+msgstr "%u ongelezen meldingen"
 
 #: ../raven/notifications_view.vala:450
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1 notificação não lida"
+msgstr "1 ongelezen melding"
 
 #: ../raven/notifications_view.vala:452
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "Nenhuma notificação não lida"
+msgstr "Geen ongelezen meldingen"
 
 #: ../raven/sound.vala:90
 msgid "Output"
-msgstr "Saída"
+msgstr "Uitvoer"
 
 #: ../raven/sound.vala:107
 msgid "Input"
-msgstr "Entrada"
+msgstr "Invoer"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -115,107 +111,107 @@ msgstr "Entrada"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Tamanho do espaçador"
+msgstr "Grootte Tussenstuk"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Configurações do Budgie"
+msgstr "Budgie Instellingen"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Sair"
+msgstr "Sluiten"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Adicionar novo miniaplicativo"
+msgstr "Voeg nieuwe applet toe"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Appearance"
-msgstr "Aparência"
+msgstr "Uiterlijk"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
-msgstr "Usar o tema escuro"
+msgstr "Gebruik het donker thema"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Dark theme"
-msgstr "Tema escuro"
+msgstr "Donker thema"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Select a GTK+ theme"
-msgstr "Selecione um tema GTK+"
+msgstr "Selecteer een GTK+ thema"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Widget Theme"
-msgstr "Tema do widget"
+msgstr "Widget thema"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
-msgstr "Selecione um tema de ícones"
+msgstr "Selecteer een icoon thema"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Icon Theme"
-msgstr "Tema de ícones"
+msgstr "Icoon Thema"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Override defaults"
-msgstr "Sobrepor padrões"
+msgstr "Standaardinstellingen opheffen"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Built-in theme"
-msgstr "Tema embutido"
+msgstr "Ingebouwd thema"
 
 #: ../raven/ui/appearance.ui.h:10
 msgid "Select a cursor theme"
-msgstr "Selecione um tema para o cursor"
+msgstr "Kies een muisaanwijzer thema"
 
 #: ../raven/ui/appearance.ui.h:11
 msgid "Cursor Theme"
-msgstr "Tema do cursor"
+msgstr "Muisaanwijzer Thema"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "Gerenciar painéis"
+msgstr "Panelen Beheren"
 
 #: ../raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "Posição"
+msgstr "Positie"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "Tamanho"
+msgstr "Grootte"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "Sombra"
+msgstr "Schaduw"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "Regra de ocultamento automático"
+msgstr "'Automatisch verbergen' beleid"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "Regiões estilizadas"
+msgstr "Opaciteit systeemvak"
 
 #: ../raven/ui/background.ui.h:1
 msgid "Background"
-msgstr "Plano de fundo"
+msgstr "Achtergrond"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Show desktop icons"
-msgstr "Exibir ícones na área de trabalho"
+msgstr "Toon iconen op bureaublad"
 
 #: ../raven/ui/background.ui.h:3
 msgid "Desktop Icons"
-msgstr "Ícones da área de trabalho"
+msgstr "Bureaublad Iconen"
 
 #: ../raven/ui/fonts.ui.h:1
 msgid "Fonts"
-msgstr "Fontes"
+msgstr "Lettertypes"
 
 #: ../raven/ui/fonts.ui.h:2
 msgid "Window Titles"
-msgstr "Títulos de janelas"
+msgstr "Venster Titels"
 
 #: ../raven/ui/fonts.ui.h:3
 msgid "Interface"
@@ -223,11 +219,11 @@ msgstr "Interface"
 
 #: ../raven/ui/fonts.ui.h:4
 msgid "Documents"
-msgstr "Documentos"
+msgstr "Documenten"
 
 #: ../raven/ui/fonts.ui.h:5
 msgid "Monospace"
-msgstr "Mono-espaçada"
+msgstr "Monospace"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -236,142 +232,142 @@ msgstr "Budgie Desktop"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Esta sessão loga você no Budgie Desktop"
+msgstr "Aanmelden in de Budgie Desktop"
 
 #: ../data/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Desligar"
+msgstr "Afsluiten"
 
 #: ../data/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Tem certeza que quer terminar a sessão "
+msgstr "Bent u zeker dat u uw sessie wilt beëindigen"
 
 #: ../data/endsession.ui.h:3
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Annuleren"
 
 #: ../data/endsession.ui.h:4
 msgid "Logout"
-msgstr "Sair"
+msgstr "Afmelden"
 
 #: ../data/endsession.ui.h:5
 msgid "Restart"
-msgstr "Reiniciar"
+msgstr "Herstart"
 
 #: ../data/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Desligar"
+msgstr "Afsluiten"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
-msgstr "Configurações de data e hora"
+msgstr "Datum en tijd instellingen"
 
 #: ../panel/applets/clock/ClockApplet.vala:57
 msgid "Calendar"
-msgstr "Calendário"
+msgstr "Kalender"
 
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
 msgid "All"
-msgstr "Todos"
+msgstr "Alle"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Caps lock está ativo"
+msgstr "Caps  lock is ingeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Caps lock não está ativo"
+msgstr "Caps lock is uitgeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Num lock está ativo"
+msgstr "Num lock is ingeschakeld"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Num lock não está ativo"
+msgstr "Num lock is uitgeschakeld"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Alternar a área de trabalho"
+msgstr "Bureaublad zichtbaar"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth está desligado"
+msgstr "Bluetooth is uitgeschakeld"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "Bluetooth está ligado"
+msgstr "Bluetooth is ingeschakeld"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Conectado à %d dispositivo"
-msgstr[1] "Conectado à %d dispositivos"
+msgstr[0] "Verbonden met %d apparaat"
+msgstr[1] "Verbonden met %d apparaten"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:166
 msgid "Bluetooth Settings"
-msgstr "Configurações do Bluetooth"
+msgstr "Bluetooth instellingen"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:167
 msgid "Send Files"
-msgstr "Enviar arquivos"
+msgstr "Zend bestanden"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:168
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth em modo avião"
+msgstr "Bluetooth vliegtuig modus"
 
 #: ../panel/applets/status/PowerIndicator.vala:95
 msgid "Battery fully charged."
-msgstr "Bateria totalmente carregada"
+msgstr "Accu vol"
 
 #: ../panel/applets/status/PowerIndicator.vala:98
 msgid "Unknown"
-msgstr "Desconhecido"
+msgstr "Onbekend"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Battery charging"
-msgstr "Bateria em carregamento"
+msgstr "Accu laadt op"
 
 #: ../panel/applets/status/PowerIndicator.vala:112
 msgid "Battery remaining"
-msgstr "Bateria restante"
+msgstr "Accu resterend"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimizar"
+msgstr "Minimaliseer"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Desmaximizar"
+msgstr "Normale grootte"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Maximizar"
+msgstr "Maximaliseer"
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Mover"
+msgstr "Verplaats"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Redimensionar"
+msgstr "Herschalen"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Sempre no topo"
+msgstr "Altijd Bovenop"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Fechar"
+msgstr "Sluit"
 
 #: ../wm/wm.vala:444
 msgid "Change background"
-msgstr "Alterar plano de fundo"
+msgstr "Achtergrond aanpassen"
 
 #: ../wm/wm.vala:453
 msgid "Settings"
-msgstr "Configurações"
+msgstr "Instellingen"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -386,44 +382,44 @@ msgstr "Configurações"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Relógio"
+msgstr "Klok"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Botão mostrar desktop"
+msgstr "Toon Bureaublad Knop"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Lista de tarefas"
+msgstr "Takenlijst"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Lista de tarefas em ícones"
+msgstr "Icoon Takenlijst"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indicador de teclas bloqueadas"
+msgstr "Toetsenblokkering Aanwijzer"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Espaçador"
+msgstr "Tussenstuk"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Alternador de Área de Trabalho"
+msgstr "Werkblad Wisselaar"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Área de notificação"
+msgstr "Systeemvak"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Indicador de status"
+msgstr "Status Indicator"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Menu Budgie"
+msgstr "Budgie Menu"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Separador"
+msgstr "Afscheider"
