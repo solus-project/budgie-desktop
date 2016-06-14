@@ -14,14 +14,16 @@ EXTRA_DIST = \
 	budgie-desktop.session.in.in \
 	budgie-desktop.desktop.in.in \
 	budgie-desktop.in \
-	budgie-desktop-nm-applet.desktop.in
+	budgie-desktop-nm-applet.desktop.in \
+	budgie-desktop-screensaver.desktop.in
 
 CLEANFILES = \
 	budgie-desktop.session.in \
 	budgie-desktop.session \
 	budgie-desktop.desktop.in \
 	budgie-desktop.desktop \
-	budgie-desktop-nm-applet.desktop
+	budgie-desktop-nm-applet.desktop \
+	budgie-desktop-screensaver.desktop
 
 DISTCLEANFILES = \
 	$(CLEANFILES)
@@ -41,7 +43,8 @@ gnomesession_DATA = \
 autostartdir = $(XDGDIR)/autostart
 
 autostart_DATA = \
-	budgie-desktop-nm-applet.desktop
+	budgie-desktop-nm-applet.desktop \
+	budgie-desktop-screensaver.desktop
 
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@

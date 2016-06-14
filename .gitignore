@@ -76,6 +76,7 @@ budgie-polkit-dialog
 /session/budgie-desktop.session
 /session/budgie-desktop.session.in
 /session/budgie-desktop-nm-applet.desktop
+/session/budgie-desktop-screensaver.desktop
 /session/budgie-desktop-polkit-gnome-authentication-agent-1.desktop
 
 /wm/budgie-wm
