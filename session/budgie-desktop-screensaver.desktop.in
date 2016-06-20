@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Screensaver (Budgie Desktop)
+Comment=Launch screensaver and locker program
+Icon=preferences-desktop-screensaver
+Exec=gnome-screensaver
+TryExec=gnome-screensaver
+OnlyShowIn=Budgie;
+NoDisplay=true
+X-GNOME-Autostart-Phase=Application
+X-GNOME-Autostart-Notify=true
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=gnome-screensaver
+X-GNOME-Bugzilla-Component=general

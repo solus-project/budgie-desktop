@@ -5,7 +5,7 @@ The Budgie Desktop a modern desktop designed to keep out the way of the user.
 It features heavy integration with the GNOME stack in order for an enhanced
 experience.
 
-Budgie Desktop is a [Solus Project](https://solus-project.com/)
+Budgie Desktop is a [Solus project](https://solus-project.com/)
 
 ![logo](https://build.solus-project.com/logo.png)
 
