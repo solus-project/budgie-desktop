@@ -15,13 +15,14 @@ public class BatteryIcon : Gtk.Image
     public unowned Up.Device battery { protected set; public get; }
 
     public BatteryIcon(Up.Device battery) {
-        this.battery = battery;
-        this.update_ui();
+        this.update_ui(battery);
     }
 
-    public void update_ui()
+    public void update_ui(Up.Device battery)
     {
         string tip;
+
+        this.battery = battery;
 
         // Determine the icon to use for this battery
         string image_name;
@@ -107,7 +108,7 @@ public class PowerIndicator : Gtk.Bin
     {
         if (devices.contains(device.serial)) {
             /* Treated as a change event */
-            devices.lookup(device.serial).update_ui();
+            devices.lookup(device.serial).update_ui(device);
             return;
         }
         if (!this.is_interesting(device)) {
