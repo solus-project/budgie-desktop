@@ -16,6 +16,15 @@ public class BatteryIcon : Gtk.Image
 
     public BatteryIcon(Up.Device battery) {
         this.update_ui(battery);
+
+        battery.notify.connect(this.on_battery_change);
+    }
+
+    private void on_battery_change(Object o, ParamSpec sp)
+    {
+        message("BATTERY CHANGE");
+        this.battery.refresh_sync(null);
+        this.update_ui(this.battery);
     }
 
     public void update_ui(Up.Device battery)
