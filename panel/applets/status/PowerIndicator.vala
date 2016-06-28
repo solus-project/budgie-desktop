@@ -13,6 +13,7 @@ public class BatteryIcon : Gtk.Image
 {
     /** The battery associated with this icon */
     public unowned Up.Device battery { protected set; public get; }
+    bool changing = false;
 
     public BatteryIcon(Up.Device battery) {
         this.update_ui(battery);
@@ -22,9 +23,13 @@ public class BatteryIcon : Gtk.Image
 
     private void on_battery_change(Object o, ParamSpec sp)
     {
-        message("BATTERY CHANGE");
+        if (this.changing) {
+            return;
+        }
+        this.changing = true;
         this.battery.refresh_sync(null);
         this.update_ui(this.battery);
+        this.changing = false;
     }
 
     public void update_ui(Up.Device battery)
