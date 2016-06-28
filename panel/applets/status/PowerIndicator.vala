@@ -63,6 +63,7 @@ public class BatteryIcon : Gtk.Image
 
         set_tooltip_text(tip);
         set_from_icon_name(image_name, Gtk.IconSize.MENU);
+        this.queue_draw();
     }
 }
 
