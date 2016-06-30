@@ -1,30 +1,9 @@
 -include $(top_srcdir)/common.mk
 
-rundialog_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/rundialog --generate-dependencies $(top_srcdir)/rundialog/rundialog.gresource.xml)
-
-BUILT_SOURCES = \
-	budgie-run-dialog-resources.h \
-	budgie-run-dialog-resources.c
-
-CLEANFILES = \
-	$(BUILT_SOURCES)
-
-EXTRA_DIST = \
-	rundialog.gresource.xml \
-	rundialog-style.css
-
-# resources
-budgie-run-dialog-resources.h: $(top_srcdir)/rundialog/rundialog.gresource.xml $(rundialog_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/rundialog --generate-header --c-name budgie_run_dialog $<
-
-budgie-run-dialog-resources.c: $(top_srcdir)/rundialog/rundialog.gresource.xml $(rundialog_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/rundialog --generate-source --c-name budgie_run_dialog $<
-
 bin_PROGRAMS = budgie-run-dialog
 
 budgie_run_dialog_SOURCES = \
-	RunDialog.vala \
-	budgie-run-dialog-resources.c
+	RunDialog.vala
 
 budgie_run_dialog_CFLAGS = \
 	$(RUNDIALOG_CFLAGS)
