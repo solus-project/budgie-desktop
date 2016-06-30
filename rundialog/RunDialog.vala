@@ -14,24 +14,43 @@ namespace Budgie {
 /**
  * Simple launcher button
  */
-public class AppLauncherButton : Gtk.Button
+public class AppLauncherButton : Gtk.Box
 {
     public AppInfo? app_info = null;
 
     public AppLauncherButton(AppInfo? info)
     {
+        Object(orientation: Gtk.Orientation.HORIZONTAL);
         this.app_info = info;
 
         get_style_context().add_class("launcher-button");
         var image = new Gtk.Image.from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
         image.pixel_size = 48;
-        add(image);
-        set_relief(Gtk.ReliefStyle.NONE);
+        pack_start(image, false, false, 0);
+
+        var nom = Markup.escape_text(info.get_name());
+        var sdesc = info.get_description();
+        if (sdesc == null) {
+            sdesc = "";
+        }
+        var desc = Markup.escape_text(sdesc);
+        var label = new Gtk.Label("<big>%s</big>\n<small>%s</small>".printf(nom, desc));
+        label.get_style_context().add_class("dim-label");
+        label.set_line_wrap(true);
+        label.set_property("xalign", 0.0);
+        label.use_markup = true;
+        label.set_margin_start(12);
+        label.set_max_width_chars(60);
+        label.set_halign(Gtk.Align.START);
+        pack_start(label, false, false, 0);
+
         set_hexpand(false);
         set_vexpand(false);
         set_halign(Gtk.Align.START);
         set_valign(Gtk.Align.START);
         set_tooltip_text(info.get_name());
+        set_margin_top(3);
+        set_margin_bottom(3);
     }
 }
 /**
@@ -44,7 +63,8 @@ public class RunDialog : Gtk.ApplicationWindow
     Gtk.CssProvider? css_provider = null;
     private string current_theme_uri;
     Gtk.Revealer bottom_revealer;
-    Gtk.FlowBox? app_box;
+    Gtk.ListBox? app_box;
+    Gtk.SearchEntry entry;
 
     string search_text = "";
 
@@ -84,14 +104,14 @@ public class RunDialog : Gtk.ApplicationWindow
         var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         main_layout.pack_start(hbox, false, false, 0);
 
-        var entry = new Gtk.SearchEntry();
-        entry.search_changed.connect(on_search_changed);
+        this.entry = new Gtk.SearchEntry();
+        entry.changed.connect(on_search_changed);
         entry.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
         hbox.pack_start(entry, true, true, 0);
 
         bottom_revealer = new Gtk.Revealer();
         main_layout.pack_start(bottom_revealer, true, true, 0);
-        app_box = new Gtk.FlowBox();
+        app_box = new Gtk.ListBox();
         app_box.set_filter_func(this.on_filter);
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
@@ -101,28 +121,49 @@ public class RunDialog : Gtk.ApplicationWindow
         bottom_revealer.add(scroll);
 
         /* Just so I can debug for now */
-        bottom_revealer.set_reveal_child(true);
+        bottom_revealer.set_reveal_child(false);
 
-        set_size_request(400, -1);
+        this.build_app_box();
+
+        set_size_request(240, -1);
         main_layout.show_all();
         set_border_width(0);
-
-        Idle.add(build_app_box);
+        set_resizable(false);
     }
 
-    void on_search_changed(Gtk.SearchEntry? entry)
+    void on_search_changed()
     {
         this.search_text = entry.get_text().down();
         this.app_box.invalidate_filter();
+        bool visible_kids = false;
+
+        foreach (var row in app_box.get_children()) {
+            if (row.get_visible() && row.get_child_visible()) {
+                visible_kids = true;
+                break;
+            }
+        }
+
+        if (!visible_kids) {
+            bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            bottom_revealer.set_reveal_child(false);
+        } else {
+            bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+            bottom_revealer.set_reveal_child(true);
+        }
     }
 
     /**
      * Filter the list
      */
-    bool on_filter(Gtk.FlowBoxChild row)
+    bool on_filter(Gtk.ListBoxRow row)
     {
         var button = row.get_child() as AppLauncherButton;
         var disp_name = button.app_info.get_name().down();
+
+        if (search_text == "") {
+            return false;
+        }
 
         if (this.search_text in disp_name) {
             return true;
@@ -133,13 +174,12 @@ public class RunDialog : Gtk.ApplicationWindow
     /**
      * Build the app box in the background
      */
-    bool build_app_box()
+    void build_app_box()
     {
         var apps = AppInfo.get_all();
         apps.foreach(this.add_application);
         app_box.show_all();
-        bottom_revealer.set_reveal_child(true);
-        return false;
+        this.entry.set_text("");
     }
 
     void add_application(AppInfo? app_info)
