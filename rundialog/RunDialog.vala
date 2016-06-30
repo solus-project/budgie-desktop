@@ -20,6 +20,8 @@ public class RunDialog : Gtk.ApplicationWindow
     Settings? settings = null;
     Gtk.CssProvider? css_provider = null;
     private string current_theme_uri;
+    Gtk.Revealer bottom_revealer;
+    Gtk.FlowBox? app_box;
 
     public RunDialog(Gtk.Application app)
     {
@@ -51,16 +53,28 @@ public class RunDialog : Gtk.ApplicationWindow
 
         key_release_event.connect(on_key_release);
 
+        var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        add(main_layout);
+
         /* Main layout, just a hbox with search-as-you-type */
         var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        // hbox.get_style_context().add_class("linked");
-        add(hbox);
+        main_layout.pack_start(hbox, false, false, 0);
 
         var entry = new Gtk.SearchEntry();
         hbox.pack_start(entry, true, true, 0);
 
+        bottom_revealer = new Gtk.Revealer();
+        main_layout.pack_start(bottom_revealer, false, false, 0);
+        app_box = new Gtk.FlowBox();
+        var scroll = new Gtk.ScrolledWindow(null, null);
+        scroll.add(app_box);
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        bottom_revealer.add(scroll);
+
+        /* Just so I can debug for now */
+        bottom_revealer.set_reveal_child(true);
         set_size_request(400, -1);
-        hbox.show_all();
+        main_layout.show_all();
         set_border_width(0);
     }
 
