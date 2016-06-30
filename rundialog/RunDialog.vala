@@ -12,6 +12,24 @@
 namespace Budgie {
 
 /**
+ * Simple launcher button
+ */
+public class AppLauncherButton : Gtk.Button
+{
+    unowned AppInfo? app_info = null;
+
+    public AppLauncherButton(AppInfo? info)
+    {
+        this.app_info = info;
+
+        get_style_context().add_class("launcher-button");
+        var image = new Gtk.Image.from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
+        image.pixel_size = 48;
+        add(image);
+        set_relief(Gtk.ReliefStyle.NONE);
+    }
+}
+/**
  * The meat of the operation
  */
 public class RunDialog : Gtk.ApplicationWindow
@@ -29,7 +47,6 @@ public class RunDialog : Gtk.ApplicationWindow
         set_keep_above(true);
         set_skip_pager_hint(true);
         set_skip_taskbar_hint(true);
-        set_resizable(false);
         set_position(Gtk.WindowPosition.CENTER);
         Gdk.Visual? visual = screen.get_rgba_visual();
         if (visual != null) {
@@ -61,21 +78,50 @@ public class RunDialog : Gtk.ApplicationWindow
         main_layout.pack_start(hbox, false, false, 0);
 
         var entry = new Gtk.SearchEntry();
+        entry.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
         hbox.pack_start(entry, true, true, 0);
 
         bottom_revealer = new Gtk.Revealer();
-        main_layout.pack_start(bottom_revealer, false, false, 0);
+        main_layout.pack_start(bottom_revealer, true, true, 0);
         app_box = new Gtk.FlowBox();
         var scroll = new Gtk.ScrolledWindow(null, null);
+        scroll.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
+        scroll.set_size_request(-1, 300);
         scroll.add(app_box);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         bottom_revealer.add(scroll);
 
         /* Just so I can debug for now */
         bottom_revealer.set_reveal_child(true);
+
         set_size_request(400, -1);
         main_layout.show_all();
         set_border_width(0);
+
+        Idle.add(build_app_box);
+    }
+
+    /**
+     * Build the app box in the background
+     */
+    bool build_app_box()
+    {
+        var apps = AppInfo.get_all();
+        apps.foreach(this.add_application);
+        app_box.show_all();
+        bottom_revealer.set_reveal_child(true);
+        return false;
+    }
+
+    void add_application(AppInfo? app_info)
+    {
+        var dinfo = app_info as DesktopAppInfo;
+        if (dinfo.get_nodisplay()) {
+            return;
+        }
+        var button = new AppLauncherButton(app_info);
+        app_box.add(button);
+        button.show_all();
     }
 
     /**
