@@ -106,12 +106,16 @@ public class RunDialog : Gtk.ApplicationWindow
 
         this.entry = new Gtk.SearchEntry();
         entry.changed.connect(on_search_changed);
+        entry.activate.connect(on_search_activate);
         entry.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
         hbox.pack_start(entry, true, true, 0);
 
         bottom_revealer = new Gtk.Revealer();
         main_layout.pack_start(bottom_revealer, true, true, 0);
         app_box = new Gtk.ListBox();
+        app_box.set_selection_mode(Gtk.SelectionMode.NONE);
+        app_box.set_activate_on_single_click(true);
+        app_box.row_activated.connect(on_row_activate);
         app_box.set_filter_func(this.on_filter);
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
@@ -129,6 +133,54 @@ public class RunDialog : Gtk.ApplicationWindow
         main_layout.show_all();
         set_border_width(0);
         set_resizable(false);
+    }
+
+    /**
+     * Handle click/<enter> activation on the main list
+     */
+    void on_row_activate(Gtk.ListBoxRow row)
+    {
+        var child = (row as Gtk.Bin).get_child() as AppLauncherButton;
+        this.launch_button(child);
+    }
+
+    /**
+     * Handle <enter> activation on the search
+     */
+    void on_search_activate()
+    {
+        AppLauncherButton? act = null;
+        foreach (var row in app_box.get_children()) {
+            if (row.get_visible() && row.get_child_visible()) {
+                act = (row as Gtk.Bin).get_child() as AppLauncherButton;
+                break;
+            }
+        }
+        if (act != null) {
+            this.launch_button(act);
+        }
+    }
+
+    /**
+     * Launch the given preconfigured button
+     */
+    void launch_button(AppLauncherButton button)
+    {
+        try {
+            var dinfo = button.app_info as DesktopAppInfo;
+            dinfo.launch_uris_as_manager(null, null,
+                SpawnFlags.SEARCH_PATH,
+                null, null);
+            this.hide();
+            /* Allow dbus activation to happen.. which we'll never be told about. Woo. */
+            Timeout.add(500, ()=> {
+                this.destroy();
+                return false;
+            });
+        } catch (Error e) {
+            message("Error: %s\n", e.message);
+            this.application.quit();
+        }
     }
 
     void on_search_changed()
