@@ -50,6 +50,18 @@ public class RunDialog : Gtk.ApplicationWindow
         get_style_context().add_class("budgie-run-dialog");
 
         key_release_event.connect(on_key_release);
+
+        /* Main layout, just a hbox with search-as-you-type */
+        var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        // hbox.get_style_context().add_class("linked");
+        add(hbox);
+
+        var entry = new Gtk.SearchEntry();
+        hbox.pack_start(entry, true, true, 0);
+
+        set_size_request(400, -1);
+        hbox.show_all();
+        set_border_width(0);
     }
 
     /**
