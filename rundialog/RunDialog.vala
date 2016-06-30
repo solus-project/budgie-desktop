@@ -54,6 +54,7 @@ public class RunDialogApp : Gtk.Application
 
 public static int main(string[] args)
 {
+    Budgie.please_link_me_libtool_i_have_great_themes();
     Budgie.RunDialogApp rd = new Budgie.RunDialogApp();
     return rd.run(args);
 }
