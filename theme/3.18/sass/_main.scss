@@ -610,3 +610,9 @@ GtkPopover .scrollbar .trough {
     .message { color: transparentize($fg_color, 0.3); }
     .failure { color: $alert_color; }
 }
+
+// Run Dialog
+.budgie-run-dialog {
+    @extend .budgie-session-dialog;
+    @extend %menu;
+}

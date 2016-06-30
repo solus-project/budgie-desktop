@@ -46,6 +46,8 @@ public class RunDialog : Gtk.ApplicationWindow
 
         gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
         on_settings_changed("builtin-theme");
+
+        get_style_context().add_class("budgie-run-dialog");
     }
 
     /**
