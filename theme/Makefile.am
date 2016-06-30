@@ -39,14 +39,14 @@ EXTRA_DIST = \
 	3.20/sass/theme_hc.scss \
 	3.20/theme.css \
 	3.20/theme_hc.css \
-	theme.vapi
+	theme.vapi \
+	budgie-theme-1.0.pc.in
 
 panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/theme --generate-dependencies $(top_srcdir)/theme/budgie-theme.gresource.xml)
 
 BUILT_SOURCES = \
 	budgie-theme-resources.h \
 	budgie-theme-resources.c
-
 
 # resources
 budgie-theme-resources.h: $(top_srcdir)/theme/budgie-theme.gresource.xml $(panel_resources)
@@ -66,3 +66,14 @@ libbudgietheme_la_SOURCES = \
 
 libbudgietheme_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS)
+
+# Theme headers
+budgie_devdir = $(includedir)/budgie-desktop
+budgie_dev_HEADERS = \
+	theme.h
+
+pkgconfigdir = \
+	$(libdir)/pkgconfig
+
+pkgconfig_DATA = \
+	budgie-theme-1.0.pc

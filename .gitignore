@@ -48,6 +48,7 @@ budgie-polkit-dialog
 
 /theme/*resources*.c
 /theme/*resources*.h
+/theme/budgie-theme-1.0.pc
 
 *.la
 *.lo
