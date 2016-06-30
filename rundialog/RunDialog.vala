@@ -16,7 +16,7 @@ namespace Budgie {
  */
 public class AppLauncherButton : Gtk.Button
 {
-    unowned AppInfo? app_info = null;
+    public AppInfo? app_info = null;
 
     public AppLauncherButton(AppInfo? info)
     {
@@ -27,6 +27,11 @@ public class AppLauncherButton : Gtk.Button
         image.pixel_size = 48;
         add(image);
         set_relief(Gtk.ReliefStyle.NONE);
+        set_hexpand(false);
+        set_vexpand(false);
+        set_halign(Gtk.Align.START);
+        set_valign(Gtk.Align.START);
+        set_tooltip_text(info.get_name());
     }
 }
 /**
@@ -40,6 +45,8 @@ public class RunDialog : Gtk.ApplicationWindow
     private string current_theme_uri;
     Gtk.Revealer bottom_revealer;
     Gtk.FlowBox? app_box;
+
+    string search_text = "";
 
     public RunDialog(Gtk.Application app)
     {
@@ -78,12 +85,14 @@ public class RunDialog : Gtk.ApplicationWindow
         main_layout.pack_start(hbox, false, false, 0);
 
         var entry = new Gtk.SearchEntry();
+        entry.search_changed.connect(on_search_changed);
         entry.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
         hbox.pack_start(entry, true, true, 0);
 
         bottom_revealer = new Gtk.Revealer();
         main_layout.pack_start(bottom_revealer, true, true, 0);
         app_box = new Gtk.FlowBox();
+        app_box.set_filter_func(this.on_filter);
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
         scroll.set_size_request(-1, 300);
@@ -99,6 +108,26 @@ public class RunDialog : Gtk.ApplicationWindow
         set_border_width(0);
 
         Idle.add(build_app_box);
+    }
+
+    void on_search_changed(Gtk.SearchEntry? entry)
+    {
+        this.search_text = entry.get_text().down();
+        this.app_box.invalidate_filter();
+    }
+
+    /**
+     * Filter the list
+     */
+    bool on_filter(Gtk.FlowBoxChild row)
+    {
+        var button = row.get_child() as AppLauncherButton;
+        var disp_name = button.app_info.get_name().down();
+
+        if (this.search_text in disp_name) {
+            return true;
+        }
+        return false;
     }
 
     /**
