@@ -29,6 +29,15 @@ public class RunDialog : Gtk.ApplicationWindow
         set_skip_taskbar_hint(true);
         set_resizable(false);
         set_position(Gtk.WindowPosition.CENTER);
+        Gdk.Visual? visual = screen.get_rgba_visual();
+        if (visual != null) {
+            this.set_visual(visual);
+        }
+
+        var header = new Gtk.EventBox();
+        set_titlebar(header);
+        header.get_style_context().remove_class("titlebar");
+
         var gtksettings = Gtk.Settings.get_default();
 
         settings = new GLib.Settings("com.solus-project.budgie-panel");
