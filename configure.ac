@@ -169,7 +169,7 @@ AM_GLIB_GNU_GETTEXT
 
 AC_MSG_RESULT([
         budgie-desktop $VERSION
-        ========
+        =====================
 
         prefix:                 ${prefix}
         libdir:                 ${libdir}
@@ -186,7 +186,7 @@ AC_MSG_RESULT([
         xdg directory:          ${XDGDIR}
 
         Plugins:
-        =======
+        ========
 
         natray:                 ${have_natray}
 
