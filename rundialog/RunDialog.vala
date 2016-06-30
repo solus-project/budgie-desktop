@@ -48,6 +48,23 @@ public class RunDialog : Gtk.ApplicationWindow
         on_settings_changed("builtin-theme");
 
         get_style_context().add_class("budgie-run-dialog");
+
+        key_release_event.connect(on_key_release);
+    }
+
+    /**
+     * Be a good citizen and pretend to be a dialog.
+     */
+    bool on_key_release(Gdk.EventKey btn)
+    {
+        if (btn.keyval == Gdk.Key.Escape) {
+            Idle.add(()=> {
+                this.application.quit();
+                return false;
+            });
+            return Gdk.EVENT_STOP;
+        }
+        return Gdk.EVENT_PROPAGATE;
     }
 
     /**
