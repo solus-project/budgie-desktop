@@ -23,6 +23,7 @@ public class AppSystem : GLib.Object
         simpletons = new HashTable<string?,string?>(str_hash, str_equal);
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["calibre-gui"] = "calibre";
+        simpletons["code - oss"] = "vscode-oss";
 
         derpers = new string[] {
             "google-chrome",
@@ -86,10 +87,6 @@ public class AppSystem : GLib.Object
         string? cls_name = window.get_class_instance_name();
         string? grp_name = window.get_class_group_name();
 
-        if (grp_name == null) {
-            return null;
-        }
-
         string[] checks = new string[] { cls_name, grp_name };
         foreach (string? check in checks) {
             if (check == null) {
@@ -120,8 +117,13 @@ public class AppSystem : GLib.Object
         }
 
         /* Is the group name in the simpletons? */
-        if (grp_name in this.simpletons) {
+        if (grp_name != null && grp_name.down() in this.simpletons) {
             string dname = this.simpletons[grp_name.down()] + ".desktop";
+            if (dname in this.desktops) {
+                return this.desktops[dname];
+            }
+        } else if (cls_name != null && cls_name.down() in this.simpletons) {
+            string dname = this.simpletons[cls_name.down()] + ".desktop";
             if (dname in this.desktops) {
                 return this.desktops[dname];
             }
