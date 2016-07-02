@@ -24,6 +24,7 @@ public class AppSystem : GLib.Object
         simpletons["google-chrome-stable"] = "google-chrome";
         simpletons["calibre-gui"] = "calibre";
         simpletons["code - oss"] = "vscode-oss";
+        simpletons["code"] = "vscode";
 
         derpers = new string[] {
             "google-chrome",
