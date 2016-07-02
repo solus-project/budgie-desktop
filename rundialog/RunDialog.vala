@@ -113,7 +113,7 @@ public class RunDialog : Gtk.ApplicationWindow
         bottom_revealer = new Gtk.Revealer();
         main_layout.pack_start(bottom_revealer, true, true, 0);
         app_box = new Gtk.ListBox();
-        app_box.set_selection_mode(Gtk.SelectionMode.NONE);
+        app_box.set_selection_mode(Gtk.SelectionMode.SINGLE);
         app_box.set_activate_on_single_click(true);
         app_box.row_activated.connect(on_row_activate);
         app_box.set_filter_func(this.on_filter);
@@ -187,21 +187,22 @@ public class RunDialog : Gtk.ApplicationWindow
     {
         this.search_text = entry.get_text().down();
         this.app_box.invalidate_filter();
-        bool visible_kids = false;
+        Gtk.Widget? active_row = null;
 
         foreach (var row in app_box.get_children()) {
             if (row.get_visible() && row.get_child_visible()) {
-                visible_kids = true;
+                active_row = row;
                 break;
             }
         }
 
-        if (!visible_kids) {
+        if (active_row == null) {
             bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
             bottom_revealer.set_reveal_child(false);
         } else {
             bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
             bottom_revealer.set_reveal_child(true);
+            app_box.select_row(active_row as Gtk.ListBoxRow);
         }
     }
 
