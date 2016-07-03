@@ -12,23 +12,24 @@
 namespace Budgie
 {
 
+
+[DBus (name="org.gnome.ScreenSaver")]
+public interface ScreenSaver : Object
+{
+    public abstract void lock() throws Error;
+}
+
 [DBus (name="org.gnome.SessionManager")]
 public interface SessionManager : Object
 {
     public abstract async void Shutdown() throws Error;
 }
 
-[DBus (name="org.freedesktop.DisplayManager.Seat")]
-public interface DMSeat : Object
-{
-    public abstract void lock() throws IOError;
-}
-
 
 class PowerStrip : Gtk.EventBox
 {
 
-    private DMSeat? saver = null;
+    private ScreenSaver? saver = null;
     private SessionManager? session = null;
 
     private Gtk.Button? lock_btn = null;
@@ -36,9 +37,8 @@ class PowerStrip : Gtk.EventBox
 
     async void setup_dbus()
     {
-        var path = Environment.get_variable("XDG_SEAT_PATH");
         try {
-            saver = yield Bus.get_proxy(BusType.SYSTEM, "org.freedesktop.DisplayManager", path);
+            saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
         } catch (Error e) {
             warning("Unable to contact login manager: %s", e.message);
             return;
