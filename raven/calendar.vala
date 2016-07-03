@@ -13,16 +13,15 @@ public class CalendarWidget : Gtk.Box
 {
 
     private Gtk.Calendar? cal = null;
+    private Budgie.HeaderWidget? header = null;
 
-    private const string date_format = "%e %b %Y";
+    private static const string date_format = "%e %b %Y";
 
     public CalendarWidget()
     {
         Object(orientation: Gtk.Orientation.VERTICAL);
-        /* TODO: Fix icon */
-
         var time = new DateTime.now_local();
-        var header = new Budgie.HeaderWidget(time.format(date_format), "x-office-calendar-symbolic", false);
+        header = new Budgie.HeaderWidget(time.format(date_format), "x-office-calendar-symbolic", false);
         var expander = new Budgie.RavenExpander(header);
         this.pack_start(expander, false, false, 0);
 
@@ -32,6 +31,16 @@ public class CalendarWidget : Gtk.Box
         ebox.get_style_context().add_class("raven-background");
         ebox.add(cal);
         expander.add(ebox);
+
+        Timeout.add_seconds_full(GLib.Priority.LOW, 30, this.update_date);
+    }
+
+    private bool update_date()
+    {
+        var time = new DateTime.now_local();
+        var strf = time.format(date_format);
+        header.text = strf;
+        return true;
     }
 
 } // End class
