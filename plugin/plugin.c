@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@
  * ]|
  *
  * In Vala we would achieve like so:
- * 
+ *
  * |[<!-- language="Vala" -->
  *
  *      public Budgie.Applet get_panel_widget(string uuid)
@@ -52,7 +52,7 @@ typedef BudgiePluginIface BudgiePluginInterface;
 
 G_DEFINE_INTERFACE(BudgiePlugin, budgie_plugin, G_TYPE_OBJECT)
 
-static void budgie_plugin_default_init(__attribute__ ((unused)) BudgiePluginIface *iface)
+static void budgie_plugin_default_init(__attribute__((unused)) BudgiePluginIface *iface)
 {
 }
 

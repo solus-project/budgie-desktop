@@ -18,9 +18,9 @@
 
 G_BEGIN_DECLS
 
-#define BUDGIE_APPLET_KEY_NAME  "name"
+#define BUDGIE_APPLET_KEY_NAME "name"
 #define BUDGIE_APPLET_KEY_ALIGN "alignment"
-#define BUDGIE_APPLET_KEY_POS   "position"
+#define BUDGIE_APPLET_KEY_POS "position"
 
 /**
  * BudgiePanelAction:
@@ -33,9 +33,8 @@ G_BEGIN_DECLS
 typedef enum {
         BUDGIE_PANEL_ACTION_NONE = 1 << 0,
         BUDGIE_PANEL_ACTION_MENU = 1 << 1,
-        BUDGIE_PANEL_ACTION_MAX  = 1 << 2
+        BUDGIE_PANEL_ACTION_MAX = 1 << 2
 } BudgiePanelAction;
-
 
 typedef struct _BudgieAppletPrivate BudgieAppletPrivate;
 typedef struct _BudgieApplet BudgieApplet;
@@ -46,7 +45,8 @@ typedef struct _BudgieAppletClass BudgieAppletClass;
 #define BUDGIE_IS_APPLET(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_APPLET))
 #define BUDGIE_APPLET_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_APPLET, BudgieAppletClass))
 #define BUDGIE_IS_APPLET_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_APPLET))
-#define BUDGIE_APPLET_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_APPLET, BudgieAppletClass))
+#define BUDGIE_APPLET_GET_CLASS(o)                                                                 \
+        (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_APPLET, BudgieAppletClass))
 
 /**
  * BudgieAppletClass:
@@ -59,11 +59,12 @@ typedef struct _BudgieAppletClass BudgieAppletClass;
 struct _BudgieAppletClass {
         GtkBinClass parent_class;
 
-        void        (*invoke_action)    (BudgieApplet *self, BudgiePanelAction action);
-        gboolean   (*supports_settings) (BudgieApplet *self);
-        GtkWidget *(*get_settings_ui)   (BudgieApplet *self);
-        void        (*panel_size_changed) (BudgieApplet *applet, int panel_size, int icon_size, int small_icon_size);
-        void        (*update_popovers)     (BudgieApplet *applet, BudgiePopoverManager *manager);
+        void (*invoke_action)(BudgieApplet *self, BudgiePanelAction action);
+        gboolean (*supports_settings)(BudgieApplet *self);
+        GtkWidget *(*get_settings_ui)(BudgieApplet *self);
+        void (*panel_size_changed)(BudgieApplet *applet, int panel_size, int icon_size,
+                                   int small_icon_size);
+        void (*update_popovers)(BudgieApplet *applet, BudgiePopoverManager *manager);
 
         gpointer padding[12];
 };
@@ -73,7 +74,6 @@ struct _BudgieApplet {
         BudgieAppletPrivate *priv;
 };
 
-
 BudgieApplet *budgie_applet_new(void);
 
 void budgie_applet_invoke_action(BudgieApplet *self, BudgiePanelAction action);
@@ -81,12 +81,11 @@ gboolean budgie_applet_supports_settings(BudgieApplet *self);
 GtkWidget *budgie_applet_get_settings_ui(BudgieApplet *self);
 GSettings *budgie_applet_get_applet_settings(BudgieApplet *self, gchar *uuid);
 
-
 void budgie_applet_set_settings_schema(BudgieApplet *self, const gchar *schema);
-const gchar*budgie_applet_get_settings_schema(BudgieApplet *self);
+const gchar *budgie_applet_get_settings_schema(BudgieApplet *self);
 
 void budgie_applet_set_settings_prefix(BudgieApplet *self, const gchar *prefix);
-const gchar*budgie_applet_get_settings_prefix(BudgieApplet *self);
+const gchar *budgie_applet_get_settings_prefix(BudgieApplet *self);
 
 void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *manager);
 
@@ -95,4 +94,3 @@ BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self);
 GType budgie_applet_get_type(void);
 
 G_END_DECLS
-

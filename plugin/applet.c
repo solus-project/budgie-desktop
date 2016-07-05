@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -34,17 +34,9 @@
  * when required.
  *
  */
-enum {
-        PROP_PREFIX = 1,
-        PROP_SCHEMA,
-        PROP_ACTIONS,
-        N_PROPS
-};
+enum { PROP_PREFIX = 1, PROP_SCHEMA, PROP_ACTIONS, N_PROPS };
 
-enum {
-        POSITION_CHANGED = 0,
-        N_SIGNALS
-};
+enum { POSITION_CHANGED = 0, N_SIGNALS };
 
 struct _BudgieAppletPrivate {
         char *prefix;
@@ -54,52 +46,57 @@ struct _BudgieAppletPrivate {
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_BIN);
 
-static GParamSpec *obj_properties[N_PROPS] = { NULL, };
+static GParamSpec *obj_properties[N_PROPS] = {
+        NULL,
+};
 static guint applet_signals[N_SIGNALS] = { 0 };
 
-#define FREE_IF_SET(x) { if (self->priv->x) { g_free(self->priv->x) ; self->priv->x = NULL; } }
+#define FREE_IF_SET(x)                                                                             \
+        {                                                                                          \
+                if (self->priv->x) {                                                               \
+                        g_free(self->priv->x);                                                     \
+                        self->priv->x = NULL;                                                      \
+                }                                                                                  \
+        }
 
-
-static void budgie_applet_set_property(GObject *object, guint id,
-                                        const GValue *value, GParamSpec* spec)
+static void budgie_applet_set_property(GObject *object, guint id, const GValue *value,
+                                       GParamSpec *spec)
 {
         BudgieApplet *self = BUDGIE_APPLET(object);
 
         switch (id) {
-                case PROP_PREFIX:
-                        budgie_applet_set_settings_prefix(self, g_value_get_string(value));
-                        break;
-                case PROP_SCHEMA:
-                        budgie_applet_set_settings_schema(self, g_value_get_string(value));
-                        break;
-                case PROP_ACTIONS:
-                        self->priv->actions = g_value_get_flags(value);
-                        break;
-                default:
-                        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
-                        break;
+        case PROP_PREFIX:
+                budgie_applet_set_settings_prefix(self, g_value_get_string(value));
+                break;
+        case PROP_SCHEMA:
+                budgie_applet_set_settings_schema(self, g_value_get_string(value));
+                break;
+        case PROP_ACTIONS:
+                self->priv->actions = g_value_get_flags(value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
         }
-                        
 }
 
-static void budgie_applet_get_property(GObject *object, guint id,
-                                        GValue *value, GParamSpec *spec)
+static void budgie_applet_get_property(GObject *object, guint id, GValue *value, GParamSpec *spec)
 {
         BudgieApplet *self = BUDGIE_APPLET(object);
 
         switch (id) {
-                case PROP_PREFIX:
-                        g_value_set_string(value, budgie_applet_get_settings_prefix(self));
-                        break;
-                case PROP_SCHEMA:
-                        g_value_set_string(value, budgie_applet_get_settings_schema(self));
-                        break;
-                case PROP_ACTIONS:
-                        g_value_set_flags(value, self->priv->actions);
-                        break;
-                default:
-                        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
-                        break;
+        case PROP_PREFIX:
+                g_value_set_string(value, budgie_applet_get_settings_prefix(self));
+                break;
+        case PROP_SCHEMA:
+                g_value_set_string(value, budgie_applet_get_settings_schema(self));
+                break;
+        case PROP_ACTIONS:
+                g_value_set_flags(value, self->priv->actions);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
         }
 }
 
@@ -182,7 +179,6 @@ gboolean budgie_applet_supports_settings(BudgieApplet *self)
         }
         return klazz->supports_settings(self);
 }
-
 
 /**
  * budgie_applet_get_settings_ui:
@@ -291,8 +287,10 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
          * `/com/solus-project/budgie-panel/instance/budgie-menu/{$UUID}`
          */
         obj_properties[PROP_PREFIX] = g_param_spec_string("settings-prefix",
-                "GSettings schema prefix", "Set the GSettings schema prefix",
-                NULL, G_PARAM_READWRITE);
+                                                          "GSettings schema prefix",
+                                                          "Set the GSettings schema prefix",
+                                                          NULL,
+                                                          G_PARAM_READWRITE);
 
         /**
          * BudgieApplet:settings-schema:
@@ -311,8 +309,10 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
          * schema ID is considered programmer error.
          */
         obj_properties[PROP_SCHEMA] = g_param_spec_string("settings-schema",
-                "GSettings relocatable schema ID", "Set the GSettings relocatable schema ID",
-                NULL, G_PARAM_READWRITE);
+                                                          "GSettings relocatable schema ID",
+                                                          "Set the GSettings relocatable schema ID",
+                                                          NULL,
+                                                          G_PARAM_READWRITE);
 
         /**
          * BudgieApplet:supported-actions:
@@ -320,8 +320,11 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
          * The actions supported by this applet instance
          */
         obj_properties[PROP_ACTIONS] = g_param_spec_flags("supported-actions",
-                "Supported panel actions", "Get/set the supported panel actions",
-                BUDGIE_TYPE_PANEL_ACTION, BUDGIE_PANEL_ACTION_NONE, G_PARAM_READWRITE);
+                                                          "Supported panel actions",
+                                                          "Get/set the supported panel actions",
+                                                          BUDGIE_TYPE_PANEL_ACTION,
+                                                          BUDGIE_PANEL_ACTION_NONE,
+                                                          G_PARAM_READWRITE);
 
         /**
          * BudgieApplet::panel-size-changed:
@@ -332,17 +335,21 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
          *
          * Used to notify this applet of a change in the panel size
          */
-        applet_signals[POSITION_CHANGED] = g_signal_new("panel-size-changed", BUDGIE_TYPE_APPLET,
-                G_SIGNAL_RUN_LAST|G_SIGNAL_ACTION,
-                G_STRUCT_OFFSET(BudgieAppletClass, panel_size_changed),
-                NULL, NULL, NULL,
-                G_TYPE_NONE,
-                3,
-                G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
-
+        applet_signals[POSITION_CHANGED] =
+            g_signal_new("panel-size-changed",
+                         BUDGIE_TYPE_APPLET,
+                         G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                         G_STRUCT_OFFSET(BudgieAppletClass, panel_size_changed),
+                         NULL,
+                         NULL,
+                         NULL,
+                         G_TYPE_NONE,
+                         3,
+                         G_TYPE_INT,
+                         G_TYPE_INT,
+                         G_TYPE_INT);
 
         g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
-
 }
 
 /**
@@ -373,7 +380,7 @@ const gchar *budgie_applet_get_settings_prefix(BudgieApplet *self)
         if (!self) {
                 return NULL;
         }
-        return (const gchar*)self->priv->prefix;
+        return (const gchar *)self->priv->prefix;
 }
 
 /**
@@ -387,7 +394,8 @@ void budgie_applet_set_settings_schema(BudgieApplet *self, const gchar *schema)
                 return;
         }
 
-        BudgieAppletPrivate *priv = self->priv;;
+        BudgieAppletPrivate *priv = self->priv;
+        ;
         if (priv->schema) {
                 g_free(priv->schema);
         }
@@ -404,7 +412,7 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self)
         if (!self) {
                 return NULL;
         }
-        return (const gchar*)self->priv->schema;
+        return (const gchar *)self->priv->schema;
 }
 
 /**
@@ -437,11 +445,11 @@ void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *man
         }
 }
 
- /**
-  * budgie_applet_get_supported_actions:
-  * 
-  * Utility function for Python bindings. See #BudgieApplet:supported-actions
-  */
+/**
+ * budgie_applet_get_supported_actions:
+ *
+ * Utility function for Python bindings. See #BudgieApplet:supported-actions
+ */
 BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self)
 {
         if (!self) {
