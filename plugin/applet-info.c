@@ -53,7 +53,7 @@ static void budgie_applet_info_unbind_settings(BudgieAppletInfo *info);
                 }                                                                                  \
         }
 
-G_DEFINE_TYPE_WITH_PRIVATE(BudgieAppletInfo, budgie_applet_info, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE(BudgieAppletInfo, budgie_applet_info, G_TYPE_OBJECT)
 
 static GParamSpec *obj_properties[N_PROPS] = {
         NULL,

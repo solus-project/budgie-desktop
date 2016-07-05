@@ -44,7 +44,7 @@ struct _BudgieAppletPrivate {
         BudgiePanelAction actions;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_BIN);
+G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_BIN)
 
 static GParamSpec *obj_properties[N_PROPS] = {
         NULL,
