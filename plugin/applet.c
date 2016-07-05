@@ -417,6 +417,7 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self)
 
 /**
  * budgie_applet_update_popovers:
+ * @manager: (nullable)
  *
  * This virtual method should be implemented by panel applets that wish
  * to support #GtkPopover's natively. As each Budgie Panel may house multiple
@@ -431,7 +432,6 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self)
  * know when to expand and collapse the main panel harness to accomdate
  * the GtkPopover.
  *
- * @manager: (nullable)
  */
 void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *manager)
 {
