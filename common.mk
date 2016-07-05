@@ -1,10 +1,10 @@
-AM_CFLAGS =  -fstack-protector -Wall -Wno-pedantic \
-        -Wstrict-prototypes -Wundef -fno-common \
-        -Werror-implicit-function-declaration \
-        -Wformat -Wformat-security -Werror=format-security \
-        -Wno-conversion \
-        -Wunreachable-code \
-        -std=c99 -Werror \
+AM_CFLAGS = \
+	-fstack-protector -Wall -pedantic			\
+	-Wstrict-prototypes -Wundef -fno-common 		\
+	-Werror-implicit-function-declaration 			\
+	-Wformat -Wformat-security -Werror=format-security 	\
+	-Wconversion -Wunused-variable -Wunreachable-code 	\
+	-Wall -W -D_FORTIFY_SOURCE=2 -std=c11			\
         -DDATADIR=\"$(datadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" 
 
 AM_CPPFLAGS += \
