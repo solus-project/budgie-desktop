@@ -10,7 +10,7 @@ AC_CONFIG_MACRO_DIR([m4])
 GLIB_GSETTINGS
 
 m4_define([mutter_required_version], [3.16.0])
-m4_define([glib_required_version], [2.42.0])
+m4_define([glib_required_version], [2.44.0])
 m4_define([gtk_required_version], [3.16.0])
 m4_define([peas_required_version], [1.8.0])
 m4_define([gdesktop_required_version], [3.16.0])
