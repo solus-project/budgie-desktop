@@ -40,6 +40,7 @@ public class CalendarWidget : Gtk.Box
         var time = new DateTime.now_local();
         var strf = time.format(date_format);
         header.text = strf;
+        cal.day = time.get_day_of_month();
         return true;
     }
 
