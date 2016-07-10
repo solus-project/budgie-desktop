@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -14,8 +14,7 @@
 #ifndef CONFIG_H_INCLUDED
 #include "config.h"
 
-
-__attribute__ ((constructor)) void _budgie_config_init(void)
+__attribute__((constructor)) void _budgie_config_init(void)
 {
         BUDGIE_MODULE_DIRECTORY = MODULEDIR;
         BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;

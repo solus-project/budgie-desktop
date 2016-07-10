@@ -179,7 +179,7 @@ public class NotificationWindow : Gtk.Window
     public bool did_interact = false;
     private bool has_default_action = false;
 
-    private async bool set_from_image_path()
+    private async bool set_from_image_path(string? app_icon)
     {
         if (this.cancel.is_cancelled()) {
             return false;
@@ -193,6 +193,13 @@ public class NotificationWindow : Gtk.Window
                 img_path = vimg_path.get_string();
                 break;
             }
+        }
+
+        /* This is so fucking unbelievably wrong I can't believe I'm
+         * supporting this abuse.
+         */
+        if (app_icon != null && "/" in app_icon) {
+            img_path = app_icon;
         }
 
         /* Take the img_path */
@@ -242,7 +249,7 @@ public class NotificationWindow : Gtk.Window
         var datetime = new DateTime.now_local();
         this.timestamp = datetime.to_unix();
 
-        bool is_img = yield this.set_from_image_path();
+        bool is_img = yield this.set_from_image_path(app_icon);
         bool has_desktop = false;
 
         if ("desktop-entry" in hints) {

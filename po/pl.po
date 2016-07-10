@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-29 23:18+0100\n"
-"PO-Revision-Date: 2016-06-03 00:32+0000\n"
-"Last-Translator: Patrycjusz Dolega <patrick.dolega@outlook.com>\n"
+"PO-Revision-Date: 2016-06-11 07:34+0000\n"
+"Last-Translator: Piotr Sokół <psokol.l10n@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/solus-project/budgie-desktop/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,7 +124,7 @@ msgstr "Ustawienia Budgie"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Wyjdź"
+msgstr "Zakończ"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
@@ -136,15 +136,15 @@ msgstr "Wygląd"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
-msgstr "Użyj ciemnego motywu"
+msgstr "Użyj ciemnego stylu"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Dark theme"
-msgstr "Ciemny motyw"
+msgstr "Ciemny styl"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Select a GTK+ theme"
-msgstr "Wybierz styl widżetów GTK+"
+msgstr "Wybiera styl widżetów GTK+"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Widget Theme"
@@ -152,7 +152,7 @@ msgstr "Styl widżetów"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Select an icon theme"
-msgstr "Wybierz styl ikon"
+msgstr "Wybiera styl ikon"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Icon Theme"
@@ -168,7 +168,7 @@ msgstr "Standardowy motyw"
 
 #: ../raven/ui/appearance.ui.h:10
 msgid "Select a cursor theme"
-msgstr "Wybierz styl wskaźnika myszy"
+msgstr "Wybiera styl wskaźnika myszy"
 
 #: ../raven/ui/appearance.ui.h:11
 msgid "Cursor Theme"
@@ -204,7 +204,7 @@ msgstr "Tło pulpitu"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Show desktop icons"
-msgstr "Pokaż ikony na pulpicie"
+msgstr "Ikony na pulpicie"
 
 #: ../raven/ui/background.ui.h:3
 msgid "Desktop Icons"
@@ -285,11 +285,11 @@ msgstr "Klawisz Caps lock jest wyłaczony"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Klawiatura numeryczna włączona"
+msgstr "Klawiatura numeryczna jest włączona"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Klawiatura numeryczna wyłączona"
+msgstr "Klawiatura numeryczna jest wyłączona"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
@@ -392,15 +392,15 @@ msgstr "Zegar"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Przycisk Pokaż Pulpit"
+msgstr "Przycisk wyświetlania pulpitu"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Lista zadań"
+msgstr "Lista okien"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Ikona Listy Zadań"
+msgstr "Ikony okien"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"

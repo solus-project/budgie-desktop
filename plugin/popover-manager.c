@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +15,8 @@ typedef BudgiePopoverManagerIface BudgiePopoverManagerInterface;
 
 G_DEFINE_INTERFACE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
 
-static void budgie_popover_manager_default_init(__attribute__ ((unused)) BudgiePopoverManagerIface *iface)
+static void budgie_popover_manager_default_init(__attribute__((unused))
+                                                BudgiePopoverManagerIface *iface)
 {
 }
 
@@ -26,7 +27,8 @@ static void budgie_popover_manager_default_init(__attribute__ ((unused)) BudgieP
  *
  * Register a popover with this popover manager
  */
-void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidget *widget, GtkPopover *popover)
+void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidget *widget,
+                                             GtkPopover *popover)
 {
         if (!self) {
                 return;
