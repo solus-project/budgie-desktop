@@ -20,29 +20,27 @@ public class CategoryButton : Gtk.RadioButton
 
     public new unowned GMenu.TreeDirectory? group { public get ; protected set; }
 
-    public CategoryButton(GMenu.TreeDirectory? parent, int icon_size)
+    public CategoryButton(GMenu.TreeDirectory? parent)
     {
-        Gtk.Image img;
         Gtk.Label lab;
 
         if (parent != null) {
-            img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
             lab = new Gtk.Label(parent.get_name());
         } else {
             // Special case, "All"
-            img = new Gtk.Image.from_icon_name("applications-system", Gtk.IconSize.INVALID);
             lab = new Gtk.Label(_("All"));
         }
-        img.pixel_size = icon_size;
         lab.halign = Gtk.Align.START;
         lab.valign = Gtk.Align.CENTER;
+        lab.margin_start = 10;
+        lab.margin_end = 15;
 
-        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-        layout.pack_start(img, false, false, 5);
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.pack_start(lab, true, true, 0);
         add(layout);
 
         get_style_context().add_class("flat");
+        get_style_context().add_class("category-button");
         // Makes us look like a normal button :)
         set_property("draw-indicator", false);
         set_can_focus(false);
@@ -65,12 +63,13 @@ public class MenuButton : Gtk.Button
     {
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
         img.pixel_size = icon_size;
+        img.margin_end = 7;
         var lab = new Gtk.Label(parent.get_display_name());
         lab.halign = Gtk.Align.START;
         lab.valign = Gtk.Align.CENTER;
 
-        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-        layout.pack_start(img, false, false, 5);
+        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.pack_start(img, false, false, 0);
         layout.pack_start(lab, true, true, 0);
         add(layout);
 
@@ -93,7 +92,6 @@ public class BudgieMenuWindow : Gtk.Popover
     protected Gtk.ScrolledWindow categories_scroll;
     protected Gtk.ScrolledWindow content_scroll;
     protected CategoryButton all_categories;
-    protected Gtk.Separator side_sep;
 
     // The current group 
     protected GMenu.TreeDirectory? group = null;
@@ -159,7 +157,7 @@ public class BudgieMenuWindow : Gtk.Popover
         while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
             if (type == GMenu.TreeItemType.DIRECTORY) {
                 var dir = it.get_directory();
-                var btn = new CategoryButton(dir, icon_size);
+                var btn = new CategoryButton(dir);
                 btn.join_group(all_categories);
                 categories.pack_start(btn, false, false, 0);
 
@@ -269,8 +267,6 @@ public class BudgieMenuWindow : Gtk.Popover
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
 
-        border_width = 6;
-
         icon_size = settings.get_int("menu-icons-size");
 
         // search entry up north
@@ -279,26 +275,27 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // middle holds the categories and applications
         var middle = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        master_layout.pack_start(middle, true, true, 5);
+        master_layout.pack_start(middle, true, true, 0);
 
         // clickable categories
         categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        categories.margin_top = 3;
+        categories.margin_bottom = 3;
         categories_scroll = new Gtk.ScrolledWindow(null, null);
         categories_scroll.set_overlay_scrolling(false);
+        categories_scroll.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
+        categories_scroll.get_style_context().add_class("categories");
+        categories_scroll.get_style_context().add_class("sidebar");
         categories_scroll.add(categories);
         categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
         middle.pack_start(categories_scroll, false, false, 0);
 
         // "All" button"
-        all_categories = new CategoryButton(null, icon_size);
+        all_categories = new CategoryButton(null);
         all_categories.toggled.connect(()=> {
             update_category(all_categories);
         });
         categories.pack_start(all_categories, false, false, 0);
-
-        // vis sep
-        side_sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-        middle.pack_start(side_sep, false, false, 5);
 
         var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         middle.pack_start(right_layout, true, true, 0);
@@ -315,9 +312,9 @@ public class BudgieMenuWindow : Gtk.Popover
         // placeholder in case of no results
         var placeholder = new Gtk.Label("<big>Sorry, no items found</big>");
         placeholder.use_markup = true;
+        placeholder.get_style_context().add_class("dim-label");
         placeholder.show();
         placeholder.margin = 6;
-        content.halign = Gtk.Align.START;
         content.valign = Gtk.Align.START;
         content.set_placeholder(placeholder);
 
@@ -363,9 +360,7 @@ public class BudgieMenuWindow : Gtk.Popover
         switch (key) {
             case "menu-compact":
                 var vis = settings.get_boolean(key);
-                side_sep.no_show_all = vis;
                 categories_scroll.no_show_all = vis;
-                side_sep.set_visible(vis);
                 categories_scroll.set_visible(vis);
                 compact_mode = vis;
                 break;
@@ -593,10 +588,8 @@ public class BudgieMenuWindow : Gtk.Popover
         base.show();
         if (!compact_mode) {
             categories_scroll.show_all();
-            side_sep.show_all();
         } else {
             categories_scroll.hide();
-            side_sep.hide();
         }
     }
 
