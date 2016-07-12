@@ -67,6 +67,9 @@ libbudgietheme_la_SOURCES = \
 libbudgietheme_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS)
 
+libbudgietheme_la_LIBADD = \
+	$(BUDGIE_BASE_LIBS)
+
 # Theme headers
 budgie_devdir = $(includedir)/budgie-desktop
 budgie_dev_HEADERS = \
