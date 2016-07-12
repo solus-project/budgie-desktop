@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-29 23:18+0100\n"
+"POT-Creation-Date: 2016-07-12 19:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,71 +27,93 @@ msgstr ""
 msgid "Notifications"
 msgstr ""
 
-#: ../raven/settings_view.vala:254
+#: ../raven/settings_view.vala:266
 msgid "Top"
 msgstr ""
 
-#: ../raven/settings_view.vala:256
+#: ../raven/settings_view.vala:268
 msgid "Bottom"
 msgstr ""
 
-#: ../raven/settings_view.vala:364
+#: ../raven/settings_view.vala:376
 msgid "Top Panel"
 msgstr ""
 
-#: ../raven/settings_view.vala:366
+#: ../raven/settings_view.vala:378
 msgid "Right Panel"
 msgstr ""
 
-#: ../raven/settings_view.vala:368
+#: ../raven/settings_view.vala:380
 msgid "Left Panel"
 msgstr ""
 
-#: ../raven/settings_view.vala:370
+#: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
 msgstr ""
 
-#: ../raven/settings_view.vala:604
+#: ../raven/settings_view.vala:616
 msgid "Start"
 msgstr ""
 
-#: ../raven/settings_view.vala:607
+#: ../raven/settings_view.vala:619
 msgid "Center"
 msgstr ""
 
-#: ../raven/settings_view.vala:610
+#: ../raven/settings_view.vala:622
 msgid "End"
 msgstr ""
 
-#: ../raven/settings_view.vala:960
+#. Appearance expander
+#: ../raven/settings_view.vala:921
+msgid "Appearance"
+msgstr ""
+
+#: ../raven/settings_view.vala:928
+msgid "Background"
+msgstr ""
+
+#: ../raven/settings_view.vala:935
+msgid "Fonts"
+msgstr ""
+
+#: ../raven/settings_view.vala:938
 msgid "General"
 msgstr ""
 
-#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
+#: ../raven/settings_view.vala:950 ../raven/settings_view.vala:951
 msgid "Panel"
 msgstr ""
 
-#: ../raven/notifications_view.vala:448
+#: ../raven/notifications_view.vala:43
+#, c-format
+msgid "Nothing to see here"
+msgstr ""
+
+#: ../raven/notifications_view.vala:479
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr ""
 
-#: ../raven/notifications_view.vala:450
+#: ../raven/notifications_view.vala:481
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr ""
 
-#: ../raven/notifications_view.vala:452
+#: ../raven/notifications_view.vala:483
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr ""
 
-#: ../raven/sound.vala:90
+#: ../raven/notifications_view.vala:609
+msgid "No new notifications"
+msgstr ""
+
+#: ../raven/sound.vala:78
 msgid "Output"
 msgstr ""
 
-#: ../raven/sound.vala:107
+#: ../raven/sound.vala:95
 msgid "Input"
 msgstr ""
 
@@ -125,46 +147,42 @@ msgid "Add new applet"
 msgstr ""
 
 #: ../raven/ui/appearance.ui.h:1
-msgid "Appearance"
-msgstr ""
-
-#: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:3
+#: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:4
+#: ../raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:5
+#: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:6
+#: ../raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:7
+#: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:8
+#: ../raven/ui/appearance.ui.h:7
 msgid "Override defaults"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:9
+#: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:10
+#: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
 msgstr ""
 
-#: ../raven/ui/appearance.ui.h:11
+#: ../raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
 msgstr ""
 
@@ -193,34 +211,26 @@ msgid "Stylize regions"
 msgstr ""
 
 #: ../raven/ui/background.ui.h:1
-msgid "Background"
-msgstr ""
-
-#: ../raven/ui/background.ui.h:2
 msgid "Show desktop icons"
 msgstr ""
 
-#: ../raven/ui/background.ui.h:3
+#: ../raven/ui/background.ui.h:2
 msgid "Desktop Icons"
 msgstr ""
 
 #: ../raven/ui/fonts.ui.h:1
-msgid "Fonts"
-msgstr ""
-
-#: ../raven/ui/fonts.ui.h:2
 msgid "Window Titles"
 msgstr ""
 
-#: ../raven/ui/fonts.ui.h:3
+#: ../raven/ui/fonts.ui.h:2
 msgid "Interface"
 msgstr ""
 
-#: ../raven/ui/fonts.ui.h:4
+#: ../raven/ui/fonts.ui.h:3
 msgid "Documents"
 msgstr ""
 
-#: ../raven/ui/fonts.ui.h:5
+#: ../raven/ui/fonts.ui.h:4
 msgid "Monospace"
 msgstr ""
 
@@ -265,7 +275,8 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+#. Special case, "All"
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
 msgstr ""
 
@@ -316,19 +327,19 @@ msgstr ""
 msgid "Bluetooth Airplane Mode"
 msgstr ""
 
-#: ../panel/applets/status/PowerIndicator.vala:95
+#: ../panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
 msgstr ""
 
-#: ../panel/applets/status/PowerIndicator.vala:98
+#: ../panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
 msgstr ""
 
-#: ../panel/applets/status/PowerIndicator.vala:107
+#: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
 msgstr ""
 
-#: ../panel/applets/status/PowerIndicator.vala:112
+#: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
 msgstr ""
 
@@ -360,11 +371,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../wm/wm.vala:444
+#: ../wm/wm.vala:480
 msgid "Change background"
 msgstr ""
 
-#: ../wm/wm.vala:453
+#: ../wm/wm.vala:489
 msgid "Settings"
 msgstr ""
 
