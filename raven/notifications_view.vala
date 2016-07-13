@@ -74,8 +74,9 @@ public class NotificationClone : Gtk.Grid
             this.image_icon.set_from_pixbuf(target.pixbuf);
         } else {
             this.image_icon.set_from_icon_name(target.icon_name, Gtk.IconSize.INVALID);
-            this.image_icon.pixel_size = 32;
         }
+
+        this.image_icon.pixel_size = 32;
 
         label_title.set_markup(target.title);
         label_body.set_markup(target.body);
