@@ -214,11 +214,11 @@ public class NotificationWindow : Gtk.Window
         }
 
         this.image_path = img_path;
-    
+
         try {
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
-            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
+            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 32, 32, true, cancel);
             this.pixbuf = pbuf;
             image_icon.set_from_pixbuf(pbuf);
         } catch (Error e) {
