@@ -82,6 +82,7 @@ public class NotificationClone : Gtk.Grid
 
         var date = new DateTime.from_unix_local(target.timestamp);
         label_timestamp.set_text(date.format("%H:%M"));
+        label_timestamp.margin_start = 5;
     }
 }
 
