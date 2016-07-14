@@ -118,6 +118,14 @@ msgstr "Adicionar novo aplicativo"
 msgid "Appearance"
 msgstr "Aspecto"
 
+#: ../raven/settings_view.vala:928
+msgid "Background"
+msgstr "Fundo"
+
+#: ../raven/settings_view.vala:935
+msgid "Fonts"
+msgstr "Fontes"
+
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
 msgstr "Tema escuro"
@@ -137,6 +145,14 @@ msgstr "Selecione um tema GTK+"
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr "Tema de Ícones"
+
+#: ../raven/ui/appearance.ui.h:9
+msgid "Selecione um tema para o cursor"
+msgstr ""
+
+#: ../raven/ui/appearance.ui.h:10
+msgid "Tema do cursor"
+msgstr ""
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Select an icon theme"
@@ -173,6 +189,30 @@ msgstr "Sombra"
 #: ../raven/ui/panel.ui.h:7
 msgid "Autohide policy"
 msgstr "ocultar automaticamente"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Stylize regions"
+msgstr "Colorir regiões"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Show desktop icons"
+msgstr "Mostrar ícones na area de trabalho"
+
+#: ../raven/ui/background.ui.h:2
+msgid "Desktop Icons"
+msgstr "Ícones na area de trabalho"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Window Titles"
+msgstr "Título das janelas"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Interface"
+msgstr "Interface"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Documents"
+msgstr "Documentos"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -318,3 +358,5 @@ msgstr "Menu Budgie"
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
 msgstr "Separador"
+
+
