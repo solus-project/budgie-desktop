@@ -15,6 +15,7 @@ namespace Budgie {
 public static const string MUTTER_EDGE_TILING  = "edge-tiling";
 public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 public static const string MUTTER_BUTTON_LAYOUT = "button-layout";
+public static const string WM_FORCE_UNREDIRECT = "force-unredirect";
 public static const string WM_SCHEMA           = "com.solus-project.budgie-wm";
 
 public static const bool CLUTTER_EVENT_PROPAGATE = false;
@@ -104,6 +105,8 @@ public class BudgieWM : Meta.Plugin
     PanelRemote? panel_proxy = null;
     WindowMenu? winmenu = null;
     LoginDRemote? logind_proxy = null;
+
+    private Settings? wm_settings = null;
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
 
@@ -327,6 +330,10 @@ public class BudgieWM : Meta.Plugin
 
         var display = screen.get_display();
 
+        this.settings = new Settings(WM_SCHEMA);
+        this.settings.connect("changed", this.on_wm_schema_changed);
+        this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
+
         state_map = new HashTable<Meta.WindowActor?,AnimationState?>(GLib.direct_hash, GLib.direct_equal);
 
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
@@ -393,6 +400,21 @@ public class BudgieWM : Meta.Plugin
 
         keyboard = new KeyboardManager(this);
         keyboard.hook_extra();
+    }
+
+    private void on_wm_schema_changed(string key)
+    {
+        if (key != WM_FORCE_UNREDIRECT) {
+            return;
+        }
+        bool enab = this.settings.get_boolean(key);
+
+        var screen = this.get_screen();
+        if (enab) {
+            Meta.Util.disable_unredirect_for_screen(screen);
+        } else {
+            Meta.Util.enable_unredirect_for_screen(screen);
+        }
     }
 
     public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y)
