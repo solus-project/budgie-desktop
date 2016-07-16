@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-12 19:53+0100\n"
+"POT-Creation-Date: 2016-07-16 20:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,6 +275,14 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
+#: ../panel/applets/icon-tasklist/Buttons.vala:88
+msgid "Pin to panel"
+msgstr ""
+
+#: ../panel/applets/icon-tasklist/Buttons.vala:89
+msgid "Unpin from panel"
+msgstr ""
+
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
@@ -371,11 +379,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../wm/wm.vala:480
+#: ../wm/wm.vala:502
 msgid "Change background"
 msgstr ""
 
-#: ../wm/wm.vala:489
+#: ../wm/wm.vala:511
 msgid "Settings"
 msgstr ""
 
