@@ -4,13 +4,13 @@
 # 
 # Translators:
 # John Doe <voidboxmail@gmail.com>, 2015
-# Moo, 2015
+# Moo, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-31 17:42+0000\n"
+"POT-Creation-Date: 2016-07-12 19:53+0100\n"
+"PO-Revision-Date: 2016-07-13 22:01+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/solus-project/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
 msgstr "Programėlės"
 
@@ -28,60 +28,93 @@ msgstr "Programėlės"
 msgid "Notifications"
 msgstr "Pranešimai"
 
-#: ../raven/settings_view.vala:354
+#: ../raven/settings_view.vala:266
+msgid "Top"
+msgstr "Viršuje"
+
+#: ../raven/settings_view.vala:268
+msgid "Bottom"
+msgstr "Apačioje"
+
+#: ../raven/settings_view.vala:376
 msgid "Top Panel"
 msgstr "Viršutinis skydelis"
 
-#: ../raven/settings_view.vala:356
+#: ../raven/settings_view.vala:378
 msgid "Right Panel"
 msgstr "Dešinysis skydelis"
 
-#: ../raven/settings_view.vala:358
+#: ../raven/settings_view.vala:380
 msgid "Left Panel"
 msgstr "Kairysis skydelis"
 
-#: ../raven/settings_view.vala:360
+#: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
 msgstr "Apatinis skydelis"
 
-#: ../raven/settings_view.vala:593
+#: ../raven/settings_view.vala:616
 msgid "Start"
 msgstr "Pradžia"
 
-#: ../raven/settings_view.vala:596
+#: ../raven/settings_view.vala:619
 msgid "Center"
 msgstr "Centras"
 
-#: ../raven/settings_view.vala:599
+#: ../raven/settings_view.vala:622
 msgid "End"
 msgstr "Pabaiga"
 
-#: ../raven/settings_view.vala:877
+#. Appearance expander
+#: ../raven/settings_view.vala:921
+msgid "Appearance"
+msgstr "Išvaizda"
+
+#: ../raven/settings_view.vala:928
+msgid "Background"
+msgstr "Fonas"
+
+#: ../raven/settings_view.vala:935
+msgid "Fonts"
+msgstr "Šriftai"
+
+#: ../raven/settings_view.vala:938
 msgid "General"
 msgstr "Bendri"
 
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+#: ../raven/settings_view.vala:950 ../raven/settings_view.vala:951
 msgid "Panel"
 msgstr "Skydelis"
 
-#: ../raven/notifications_view.vala:410
+#: ../raven/notifications_view.vala:43
 #, c-format
-msgid "%u new notifications"
-msgstr "%u nauji pranešimai"
+msgid "Nothing to see here"
+msgstr "Čia nėra ką matyti"
 
-#: ../raven/notifications_view.vala:412
-msgid "1 new notification"
-msgstr "1 naujas pranešimas"
+#: ../raven/notifications_view.vala:479
+#: ../panel/applets/notifications/NotificationsApplet.vala:75
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u neperskaityti pranešimai"
 
-#: ../raven/notifications_view.vala:414
+#: ../raven/notifications_view.vala:481
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+msgid "1 unread notification"
+msgstr "1 neperskaitytas pranešimas"
+
+#: ../raven/notifications_view.vala:483
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "No unread notifications"
+msgstr "Nėra neperskaitytų pranešimų"
+
+#: ../raven/notifications_view.vala:609
 msgid "No new notifications"
-msgstr "Nėra naujų pranešimų"
+msgstr "Naujų pranešimų nėra"
 
-#: ../raven/sound.vala:90
+#: ../raven/sound.vala:78
 msgid "Output"
 msgstr "Išvestis"
 
-#: ../raven/sound.vala:107
+#: ../raven/sound.vala:95
 msgid "Input"
 msgstr "Įvestis"
 
@@ -113,73 +146,125 @@ msgid "Add new applet"
 msgstr "Pridėti naują programėlę"
 
 #: ../raven/ui/appearance.ui.h:1
-msgid "Appearance"
-msgstr "Išvaizda"
+msgid "Use the dark theme"
+msgstr "Naudoti tamsią temą"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
 msgstr "Tamsi tema"
 
 #: ../raven/ui/appearance.ui.h:3
-msgid "Use the dark theme"
-msgstr "Naudoti tamsią temą"
+msgid "Select a GTK+ theme"
+msgstr "Pasirinkite GTK+ temą"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
 msgstr "Valdiklių tema"
 
 #: ../raven/ui/appearance.ui.h:5
-msgid "Select a GTK+ theme"
-msgstr "Pasirinkite GTK+ temą"
+msgid "Select an icon theme"
+msgstr "Pasirinkite piktogramų temą"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr "Piktogramų tema"
 
 #: ../raven/ui/appearance.ui.h:7
-msgid "Select an icon theme"
-msgstr "Pasirinkite piktogramų temą"
-
-#: ../raven/ui/appearance.ui.h:8
-msgid "Built-in theme"
-msgstr "Įmontuota tema"
-
-#: ../raven/ui/appearance.ui.h:9
 msgid "Override defaults"
 msgstr "Nustelbti numatytąsias reikšmes"
 
-#: ../raven/ui/panel.ui.h:1
-msgid "Panel 1\n"
-msgstr "Skydelis 1\n"
+#: ../raven/ui/appearance.ui.h:8
+msgid "Built-in theme"
+msgstr "Įtaisyta tema"
 
-#: ../raven/ui/panel.ui.h:3
+#: ../raven/ui/appearance.ui.h:9
+msgid "Select a cursor theme"
+msgstr "Pasirinkite žymeklio temą"
+
+#: ../raven/ui/appearance.ui.h:10
+msgid "Cursor Theme"
+msgstr "Žymeklio tema"
+
+#: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
 msgstr "Skydelių tvarkymas"
 
-#: ../raven/ui/panel.ui.h:4
+#: ../raven/ui/panel.ui.h:2
 msgid "Position"
 msgstr "Vieta"
 
-#: ../raven/ui/panel.ui.h:5
+#: ../raven/ui/panel.ui.h:3
 msgid "Size"
 msgstr "Dydis"
 
-#: ../raven/ui/panel.ui.h:6
+#: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
 msgstr "Šešėlis"
 
-#: ../raven/ui/panel.ui.h:7
+#: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
 msgstr "Automatinio slėpimo elgsena"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Stylize regions"
+msgstr "Stilizuoti sritis"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Show desktop icons"
+msgstr "Rodyti darbalaukio piktogramas"
+
+#: ../raven/ui/background.ui.h:2
+msgid "Desktop Icons"
+msgstr "Darbalaukio piktogramos"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Window Titles"
+msgstr "Langų antraštės"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Interface"
+msgstr "Sąsaja"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Documents"
+msgstr "Dokumentai"
+
+#: ../raven/ui/fonts.ui.h:4
+msgid "Monospace"
+msgstr "Lygiaplotis"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie darbastalis"
+msgstr "Budgie darbalaukis"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Ši sesija įkels jus į Budgie darbastalį"
+msgstr "Ši sesija įkels jus į Budgie darbalaukį"
+
+#: ../data/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Išjungti"
+
+#: ../data/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Ar tikrai norite užbaigti savo seansą?"
+
+#: ../data/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Atsisakyti"
+
+#: ../data/endsession.ui.h:4
+msgid "Logout"
+msgstr "Atsijungti"
+
+#: ../data/endsession.ui.h:5
+msgid "Restart"
+msgstr "Paleisti iš naujo"
+
+#: ../data/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Išjungti"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Time and date settings"
@@ -189,7 +274,8 @@ msgstr "Laiko ir datos nustatymai"
 msgid "Calendar"
 msgstr "Kalendorius"
 
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+#. Special case, "All"
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
 msgstr "Visos"
 
@@ -209,22 +295,53 @@ msgstr "Skaitmenys įjungti"
 msgid "Num lock is not active"
 msgstr "Skaitmenys išjungti"
 
-#: ../panel/applets/notifications/NotificationsApplet.vala:77
-#, c-format
-msgid "%u unread notifications"
-msgstr "%u neperskaityti pranešimai"
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:79
-msgid "1 unread notification"
-msgstr "1 neperskaitytas pranešimas"
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:81
-msgid "No unread notifications"
-msgstr "Nėra neperskaitytų pranešimų"
-
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Perjungti darbastalį"
+msgstr "Perjungti darbalaukį"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:101
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth išjungtas"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:105
+msgid "Bluetooth is active"
+msgstr "Bluetooth aktyvus"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:110
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Prisijungta prie %d įrenginio"
+msgstr[1] "Prisijungta prie %d įrenginių"
+msgstr[2] "Prisijungta prie %d įrenginių"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:166
+msgid "Bluetooth Settings"
+msgstr "Bluetooth nustatymai"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:167
+msgid "Send Files"
+msgstr "Siųsti failus"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:168
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth lėktuvo veiksena"
+
+#: ../panel/applets/status/PowerIndicator.vala:56
+msgid "Battery fully charged."
+msgstr "Baterija pilnai įkrauta."
+
+#: ../panel/applets/status/PowerIndicator.vala:59
+msgid "Unknown"
+msgstr "Nežinoma"
+
+#: ../panel/applets/status/PowerIndicator.vala:68
+msgid "Battery charging"
+msgstr "Baterija įkraunama"
+
+#: ../panel/applets/status/PowerIndicator.vala:73
+msgid "Battery remaining"
+msgstr "Liko baterijos"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -254,11 +371,11 @@ msgstr "Visada viršuje"
 msgid "Close"
 msgstr "Užverti"
 
-#: ../wm/wm.vala:363
-msgid "Change background\\u2026"
-msgstr "Keisti foną\\u2026"
+#: ../wm/wm.vala:480
+msgid "Change background"
+msgstr "Keisti foną"
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:489
 msgid "Settings"
 msgstr "Nustatymai"
 
@@ -279,7 +396,7 @@ msgstr "Laikrodis"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Mygtukas rodyti darbastalį"
+msgstr "Mygtukas rodyti darbalaukį"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
@@ -299,7 +416,7 @@ msgstr "Tarpiklis"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Darbalaukio perjungiklis"
+msgstr "Darbo srities perjungiklis"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
