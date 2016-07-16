@@ -85,8 +85,8 @@ public class IconButton : Gtk.ToggleButton
         var sep = new Gtk.SeparatorMenuItem();
         menu.append(sep);
         sep_item = sep;
-        pinnage = new Gtk.MenuItem.with_label("Pin to panel");
-        unpinnage = new Gtk.MenuItem.with_label("Unpin from panel");
+        pinnage = new Gtk.MenuItem.with_label(_("Pin to panel"));
+        unpinnage = new Gtk.MenuItem.with_label(_("Unpin from panel"));
         sep.show();
         menu.append(pinnage);
         menu.append(unpinnage);
