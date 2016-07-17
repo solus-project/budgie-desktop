@@ -553,7 +553,7 @@ popover row {
 
 // User Menu
 .user-menu {
-    @extend .list;
+    @extend list;
     padding: 10px;
 
     .content-box {
