@@ -54,13 +54,6 @@ public class StatusApplet : Budgie.Applet
         widget.pack_start(blue, false, false, 2);
         sound.button_release_event.connect(on_button_release);
 
-        var power_image_wrap = new Gtk.EventBox();
-        widget.pack_start(power_image_wrap, false, false, 2);
-
-        var power_image = new Gtk.Image.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.MENU);
-        power_image_wrap.add(power_image);
-        power_image_wrap.button_release_event.connect(on_button_release);
-
         blue.ebox.button_press_event.connect((e)=> {
             if (e.button != 1) {
                 return Gdk.EVENT_PROPAGATE;
