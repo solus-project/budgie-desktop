@@ -126,7 +126,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             return Gdk.EVENT_PROPAGATE;
         }
         if (grabbed) {
-            if (widgets.contains(w)) {
+            if (widgets.contains(w) && w.get_visible()) {
                 if (visible_popover != widgets[w] && visible_popover != null) {
                     /* Hide current popover, re-open next */
                     mousing = true;

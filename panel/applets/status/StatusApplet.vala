@@ -44,15 +44,20 @@ public class StatusApplet : Budgie.Applet
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         wrap.add(widget);
 
+        show_all();
+
         power = new PowerIndicator();
         widget.pack_start(power, false, false, 0);
+        /* Power shows itself - we dont control that */
 
         sound = new SoundIndicator();
         widget.pack_start(sound, false, false, 2);
+        sound.show_all();
 
         blue = new BluetoothIndicator();
         widget.pack_start(blue, false, false, 2);
         sound.button_release_event.connect(on_button_release);
+        blue.show_all();
 
         blue.ebox.button_press_event.connect((e)=> {
             if (e.button != 1) {
@@ -78,7 +83,6 @@ public class StatusApplet : Budgie.Applet
             return Gdk.EVENT_STOP;
         });
 
-        show_all();
         setup_dbus();
     }
 
