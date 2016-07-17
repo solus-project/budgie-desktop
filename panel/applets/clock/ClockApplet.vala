@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2014-2016 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -51,7 +51,6 @@ public class ClockApplet : Budgie.Applet
         time = new DateTime.now_local();
         widget.add(clock);
 
-
         var menu = new GLib.Menu();
         menu.append(_("Time and date settings"), "clock.time_and_date");
         menu.append(_("Calendar"), "clock.calendar");
@@ -60,7 +59,7 @@ public class ClockApplet : Budgie.Applet
         popover.get_child().show_all();
 
         widget.button_press_event.connect((e)=> {
-            if (e.button != 3) {
+            if (e.button != 1) {
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
