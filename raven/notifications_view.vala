@@ -71,7 +71,8 @@ public class NotificationClone : Gtk.Grid
     public NotificationClone(NotificationWindow? target)
     {
         if (target.pixbuf != null) {
-            this.image_icon.set_from_pixbuf(target.pixbuf);
+            Gdk.Pixbuf scaled_pixbuf = target.pixbuf.scale_simple(32, 32, Gdk.InterpType.NEAREST);
+            this.image_icon.set_from_pixbuf(scaled_pixbuf);
         } else {
             this.image_icon.set_from_icon_name(target.icon_name, Gtk.IconSize.INVALID);
             this.image_icon.pixel_size = 32;
@@ -213,7 +214,7 @@ public class NotificationWindow : Gtk.Window
         }
 
         this.image_path = img_path;
-    
+
         try {
             var file = File.new_for_path(image_path);
             var ins = yield file.read_async(Priority.DEFAULT, null);
