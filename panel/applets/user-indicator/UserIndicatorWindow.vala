@@ -329,6 +329,7 @@ public class IndicatorItem : Gtk.Button {
 
         set_image(image_source); // Set the image
         set_label(label_string); // Set the label
+        set_can_focus(false);
 
         menu_item.pack_start(button_image, false, false, 0);
         menu_item.pack_start(button_label, false, false, 0);
@@ -341,6 +342,7 @@ public class IndicatorItem : Gtk.Button {
         add(menu_item);
         get_style_context().add_class("indicator-item");
         get_style_context().add_class("flat");
+        get_style_context().add_class("menuitem");
     }
 
     public void set_arrow(string direction) {

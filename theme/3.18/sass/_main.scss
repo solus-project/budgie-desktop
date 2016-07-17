@@ -466,12 +466,16 @@ GtkPopover GtkListBoxRow {
     @extend .list;
     padding: 10px;
 
+    .list-row.activatable:selected,
+    .list-row.activatable:selected .button { color: inherit; }
+
     .content-box {
         .indicator-item {
-            color: $fg_color;
+            color: $selected_fg_color;
 
             &, &:selected, &:focus, &:active {
                 border: 0;
+                color: inherit;
             }
 
             &:selected, &:active {
