@@ -38,6 +38,21 @@ public class EndSessionDialog : Gtk.Window
     public signal void Canceled();
     public signal void Closed();
 
+    [GtkChild]
+    private Gtk.Button? button_cancel;
+
+    [GtkChild]
+    private Gtk.Button? button_logout;
+
+    [GtkChild]
+    private Gtk.Button? button_restart;
+
+    [GtkChild]
+    private Gtk.Button? button_shutdown;
+
+    [GtkChild]
+    private Gtk.Label? label_end_title;
+
     [GtkCallback]
     [DBus (visible=false)]
     void cancel_clicked()
@@ -108,6 +123,60 @@ public class EndSessionDialog : Gtk.Window
     public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters)
     {
         /* Right now we ignore type, time and inhibitors. Shush */
+        unowned Gtk.Widget? main_show = null;
+
+        Gtk.Widget? all_widgets[] = {
+            this.button_logout,
+            this.button_restart,
+            this.button_shutdown
+        };
+
+        string? title = null;
+
+        switch (type) {
+            case DialogType.LOGOUT:
+                main_show = this.button_logout;
+                title = _("Log out");
+                break;
+            case DialogType.RESTART:
+            case DialogType.UPDATE_RESTART:
+                title = _("Restart device");
+                main_show = this.button_restart;
+                break;
+            case DialogType.SHUTDOWN:
+                main_show = this.button_shutdown;
+                break;
+            default:
+                main_show = null;
+                break;
+        }
+
+        if (title == null) {
+            title = _("Power Off");
+        }
+
+        /* Update the label */
+        this.label_end_title.set_text(title);
+
+        if (main_show != null) {
+            /* We have a specific type.. */
+            for (int i = 0; i < all_widgets.length; i++) {
+                unowned Gtk.Widget? w = all_widgets[i];
+                if (main_show == w) {
+                    continue;
+                }
+                w.hide();
+            }
+            main_show.show();
+            (main_show as Gtk.Bin).get_child().show();
+        } else {
+            for (int i = 0; i < all_widgets.length; i++) {
+                unowned Gtk.Widget? w = all_widgets[i];
+                w.show();
+                (w as Gtk.Bin).get_child().show();
+            }
+        }
+
         this.present();
     }
 

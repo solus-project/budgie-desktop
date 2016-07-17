@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <template class="BudgieEndSessionDialog" parent="GtkWindow">
@@ -35,7 +35,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="label_end_title">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
@@ -84,7 +84,7 @@
             <property name="margin_top">35</property>
             <property name="layout_style">expand</property>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="button_cancel">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -98,14 +98,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="button_logout">
                 <property name="label" translatable="yes">Logout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
                 <signal name="clicked" handler="logout_clicked" swapped="no"/>
                 <style>
-                  <class name="logout"/>
+                  <class name="suggested-action"/>
                 </style>
               </object>
               <packing>
@@ -115,14 +116,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="button_restart">
                 <property name="label" translatable="yes">Restart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
                 <signal name="clicked" handler="restart_clicked" swapped="no"/>
                 <style>
-                  <class name="restart"/>
+                  <class name="destructive-action"/>
                 </style>
               </object>
               <packing>
@@ -132,11 +134,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button4">
+              <object class="GtkButton" id="button_shutdown">
                 <property name="label" translatable="yes">Shutdown</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
                 <signal name="clicked" handler="shutdown_clicked" swapped="no"/>
                 <style>
                   <class name="destructive-action"/>
