@@ -133,6 +133,11 @@ public class RunDialog : Gtk.ApplicationWindow
         main_layout.show_all();
         set_border_width(0);
         set_resizable(false);
+
+        focus_out_event.connect(()=> {
+            this.application.quit();
+            return Gdk.EVENT_STOP;
+        });
     }
 
     /**
