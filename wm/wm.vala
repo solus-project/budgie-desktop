@@ -106,7 +106,7 @@ public class BudgieWM : Meta.Plugin
     WindowMenu? winmenu = null;
     LoginDRemote? logind_proxy = null;
 
-    private Settings? wm_settings = null;
+    private bool force_unredirect = false;
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
 
@@ -330,10 +330,6 @@ public class BudgieWM : Meta.Plugin
 
         var display = screen.get_display();
 
-        this.settings = new Settings(WM_SCHEMA);
-        this.settings.connect("changed", this.on_wm_schema_changed);
-        this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
-
         state_map = new HashTable<Meta.WindowActor?,AnimationState?>(GLib.direct_hash, GLib.direct_equal);
 
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
@@ -348,6 +344,9 @@ public class BudgieWM : Meta.Plugin
         }
 
         settings = new Settings(WM_SCHEMA);
+        this.settings.changed.connect(this.on_wm_schema_changed);
+        this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
+
         /* Custom keybindings */
         display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
         display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
@@ -408,6 +407,9 @@ public class BudgieWM : Meta.Plugin
             return;
         }
         bool enab = this.settings.get_boolean(key);
+        if (enab == this.force_unredirect) {
+            return;
+        }
 
         var screen = this.get_screen();
         if (enab) {
@@ -415,6 +417,7 @@ public class BudgieWM : Meta.Plugin
         } else {
             Meta.Util.enable_unredirect_for_screen(screen);
         }
+        this.force_unredirect = enab;
     }
 
     public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y)
