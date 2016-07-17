@@ -11,7 +11,6 @@
 
 public const string ACCOUNTSSERVICE_ACC = "org.freedesktop.Accounts";
 public const string ACCOUNTSSERVICE_USER = "org.freedesktop.Accounts.User";
-public const string FD_DM = "org.freedesktop.DisplayManager";
 public const string LOGIND_LOGIN = "org.freedesktop.login1";
 public const string G_SESSION = "org.gnome.SessionManager";
 
@@ -21,7 +20,7 @@ public class UserIndicatorWindow : Gtk.Popover {
     public Gtk.Box? menu = null;
     public Gtk.Revealer? user_section = null;
 
-    private DMSeat? saver = null;
+    private ScreenSaver? saver = null;
     private SessionManager? session = null;
     private LogindInterface? logind_interface = null;
 
@@ -64,9 +63,9 @@ public class UserIndicatorWindow : Gtk.Popover {
         }
 
         try {
-            saver = yield Bus.get_proxy(BusType.SYSTEM, FD_DM, path);
+            saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
         } catch (Error e) {
-            warning(UNABLE_CONTACT + "login manager: %s", e.message);
+            warning(UNABLE_CONTACT + "gnome-screensaver: %s", e.message);
             return;
         }
 

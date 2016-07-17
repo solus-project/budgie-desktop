@@ -39,10 +39,10 @@ public interface SessionManager : Object
     public abstract async void Shutdown() throws Error;
 }
 
-[DBus (name="org.freedesktop.DisplayManager.Seat")]
-public interface DMSeat : Object
+[DBus (name="org.gnome.ScreenSaver")]
+public interface ScreenSaver : Object
 {
-    public abstract void lock() throws IOError;
+    public abstract void lock() throws Error;
 }
 
 /*
