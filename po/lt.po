@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-12 19:53+0100\n"
-"PO-Revision-Date: 2016-07-13 22:01+0000\n"
+"POT-Creation-Date: 2016-07-16 20:44+0100\n"
+"PO-Revision-Date: 2016-07-16 21:49+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/solus-project/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -274,6 +274,14 @@ msgstr "Laiko ir datos nustatymai"
 msgid "Calendar"
 msgstr "Kalendorius"
 
+#: ../panel/applets/icon-tasklist/Buttons.vala:88
+msgid "Pin to panel"
+msgstr "Prisegti prie skydelio"
+
+#: ../panel/applets/icon-tasklist/Buttons.vala:89
+msgid "Unpin from panel"
+msgstr "Atsegti nuo skydelio"
+
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
@@ -371,11 +379,11 @@ msgstr "Visada viršuje"
 msgid "Close"
 msgstr "Užverti"
 
-#: ../wm/wm.vala:480
+#: ../wm/wm.vala:502
 msgid "Change background"
 msgstr "Keisti foną"
 
-#: ../wm/wm.vala:489
+#: ../wm/wm.vala:511
 msgid "Settings"
 msgstr "Nustatymai"
 

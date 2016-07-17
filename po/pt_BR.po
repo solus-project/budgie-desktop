@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-12 19:53+0100\n"
-"PO-Revision-Date: 2016-07-16 02:37+0000\n"
+"POT-Creation-Date: 2016-07-16 20:44+0100\n"
+"PO-Revision-Date: 2016-07-16 19:55+0000\n"
 "Last-Translator: Marcelo Ferreira <marceloffdeoliveira@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/solus-project/budgie-desktop/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -280,6 +280,14 @@ msgstr "Configurações de data e hora"
 msgid "Calendar"
 msgstr "Calendário"
 
+#: ../panel/applets/icon-tasklist/Buttons.vala:88
+msgid "Pin to panel"
+msgstr "Manter no Painel"
+
+#: ../panel/applets/icon-tasklist/Buttons.vala:89
+msgid "Unpin from panel"
+msgstr "Remover do Painel"
+
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
@@ -376,11 +384,11 @@ msgstr "Sempre no topo"
 msgid "Close"
 msgstr "Fechar"
 
-#: ../wm/wm.vala:480
+#: ../wm/wm.vala:502
 msgid "Change background"
 msgstr "Alterar plano de fundo"
 
-#: ../wm/wm.vala:489
+#: ../wm/wm.vala:511
 msgid "Settings"
 msgstr "Configurações"
 
