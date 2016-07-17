@@ -15,7 +15,8 @@ EXTRA_DIST = \
 	${top_srcdir}/vapi/upower-glib-1.0.vapi \
 	${top_srcdir}/vapi/polkit-gobject-1.vapi \
 	${top_srcdir}/vapi/polkit-agent-1.vapi \
-	${top_srcdir}/vapi/GnomeBluetooth-1.0.vapi
+	${top_srcdir}/vapi/GnomeBluetooth-1.0.vapi \
+	${top_srcdir}/vapi/accountsservice.vapi
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 

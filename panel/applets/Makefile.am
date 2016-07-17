@@ -4,6 +4,7 @@ SUBDIRS = \
 	icon-tasklist \
 	lock-keys \
 	tasklist \
+	user-indicator \
 	notifications \
 	separator \
 	show-desktop \

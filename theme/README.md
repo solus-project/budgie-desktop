@@ -6,7 +6,7 @@
 
 * Run `npm i` from the directory containing `gulpfile.js`. It's the same directory as the one that contains `.nvmrc` in this case.
 
-* Install `gulp` with `npm i -g gulp`
+* Install `gulp`, `gulp-filter`, and `gulp-sass` with `npm i -g gulp gulp-filter gulp-sass`
 
 * Edit the sass/*.scss files
 
