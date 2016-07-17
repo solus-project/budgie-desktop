@@ -9,6 +9,11 @@ Budgie Desktop is a [Solus project](https://solus-project.com/)
 
 ![logo](https://build.solus-project.com/logo.png)
 
+NOTICE TO CONTRIBUTORS
+-----------------------
+
+Budgie is *NO LONGER* accepting any contributions that *ADD* Vala code to the
+Budgie codebase. Please see [this bug](https://github.com/solus-project/budgie-desktop/issues/501) for further details.
 
 Reporting issues & Project Integration.
 ---------------------------------------
