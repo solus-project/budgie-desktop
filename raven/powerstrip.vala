@@ -22,7 +22,7 @@ public interface ScreenSaver : Object
 [DBus (name="org.gnome.SessionManager")]
 public interface SessionManager : Object
 {
-    public abstract async void Shutdown() throws Error;
+    public abstract async void Logout(uint mode) throws IOError;
 }
 
 
@@ -97,8 +97,7 @@ class PowerStrip : Gtk.EventBox
                 if (session == null) {
                     return;
                 }
-                /* TODO: Swap this out for gnome-session stuff */
-                session.Shutdown.begin();
+                session.Logout.begin(0);
             } catch (Error e) {
                 message("Error invoking end session dialog: %s", e.message);
             }
