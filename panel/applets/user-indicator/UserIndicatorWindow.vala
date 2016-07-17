@@ -357,7 +357,6 @@ public class IndicatorItem : Gtk.Button {
         bool is_user_image = (has_slash_prefix && !source.has_suffix(".face"));
 
         source = (has_slash_prefix && !is_user_image) ? USER_SYMBOLIC_ICON : source;
-        int image_size = (is_user_image || (source == USER_SYMBOLIC_ICON)) ? 24 : 16;
 
         if (button_image == null) {
             button_image = new Gtk.Image();
@@ -365,22 +364,13 @@ public class IndicatorItem : Gtk.Button {
 
         if (is_user_image) { // Valid user image
             try {
-                pixbuf = new Gdk.Pixbuf.from_file_at_size(source, image_size, image_size);
+                pixbuf = new Gdk.Pixbuf.from_file_at_size(source, 24, 24);
+                button_image.set_from_pixbuf(pixbuf);
             } catch (Error e) {
                 message("File does not exist: %s", e.message);
             }
         } else {
-            try {
-                Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default(); // Get the icon theme
-                Gtk.IconInfo icon_info = icon_theme.lookup_icon(source, image_size, 0);
-                pixbuf = icon_info.load_icon();
-            } catch (Error e) {
-                message("Unable to get the default icon theme: %s", e.message);
-            }
-        }
-
-        if (pixbuf != null) {
-            button_image.set_from_pixbuf(pixbuf);
+            button_image.set_from_icon_name(source, Gtk.IconSize.SMALL_TOOLBAR);
         }
     }
 

@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public static const string USER_SYMBOLIC_ICON = "system-users-symbolic";
+public static const string USER_SYMBOLIC_ICON = "system-shutdown-symbolic";
 
 public class UserIndicator : Budgie.Plugin, Peas.ExtensionBase
 {
