@@ -9,6 +9,17 @@
  * (at your option) any later version.
  */
 
+public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
+
+[DBus (name="com.solus_project.budgie.Raven")]
+public interface RavenTriggerProxy : Object
+{
+    public abstract async void ToggleAppletView() throws Error;
+    public abstract bool GetExpanded() throws Error;
+    public abstract signal void ExpansionChanged(bool expanded);
+}
+
 public class RavenTriggerPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
@@ -22,14 +33,84 @@ public class RavenTriggerApplet : Budgie.Applet
     protected Gtk.Button widget;
     protected Gtk.Image img;
 
+    private RavenTriggerProxy? raven_proxy = null;
+    private bool raven_expanded = false;
+
     public RavenTriggerApplet()
     {
         widget = new Gtk.Button();
+        widget.clicked.connect_after(on_button_clicked);
         widget.relief = Gtk.ReliefStyle.NONE;
         img = new Gtk.Image.from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
         widget.add(img);
         add(widget);
         show_all();
+
+        get_raven();
+    }
+
+    /**
+     * Schedule toggle_raven on the idle loop
+     */
+    void on_button_clicked()
+    {
+        Idle.add(this.toggle_raven);
+    }
+
+    /**
+     * Toggle the Raven Applet View, we'll update view state on callback
+     */
+    private bool toggle_raven()
+    {
+        if (raven_proxy == null) {
+            return false;
+        }
+        try {
+            raven_proxy.ToggleAppletView.begin();
+        } catch (Error e) {
+            message("Error in dbus: %s", e.message);
+        }
+        return false;
+    }
+
+    /**
+     * Asynchronously fetch a Raven proxy
+     */
+    void get_raven()
+    {
+        if (raven_proxy == null) {
+            Bus.get_proxy.begin<RavenTriggerProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
+        }
+    }
+
+    /**
+     * Handle Raven expansion state changing
+     */
+    void on_prop_changed(bool expanded)
+    {
+        raven_expanded = expanded;
+
+        if (raven_expanded) {
+            img.set_from_icon_name("pane-hide-symbolic", Gtk.IconSize.BUTTON);
+        } else {
+            img.set_from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
+        }
+    }
+
+    /* Hold onto our Raven proxy ref */
+    void on_raven_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            raven_proxy = Bus.get_proxy.end(res);
+            raven_proxy.ExpansionChanged.connect_after((e)=> {
+                Idle.add(()=> {
+                    on_prop_changed(e);
+                    return false;
+                });
+            });
+        } catch (Error e) {
+            warning("Failed to gain Raven proxy: %s", e.message);
+        }
     }
 }
 

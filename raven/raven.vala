@@ -38,6 +38,8 @@ public class RavenIface
         }
     }
 
+    public signal void ExpansionChanged(bool expanded);
+
     public bool GetExpanded() {
         return this.is_expanded;
     }
@@ -499,6 +501,7 @@ public class Raven : Gtk.Window
         }
 
         this.expanded = exp;
+        this.iface.ExpansionChanged(this.expanded);
 
         var anim = new Budgie.Animation();
         anim.widget = this;
