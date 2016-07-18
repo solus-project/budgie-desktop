@@ -31,7 +31,9 @@ public class RavenTriggerPlugin : Budgie.Plugin, Peas.ExtensionBase
 public class RavenTriggerApplet : Budgie.Applet
 {
     protected Gtk.Button widget;
-    protected Gtk.Image img;
+    protected Gtk.Image img_expanded;
+    protected Gtk.Image img_hidden;
+    protected Gtk.Stack img_stack;
 
     private RavenTriggerProxy? raven_proxy = null;
     private bool raven_expanded = false;
@@ -41,8 +43,16 @@ public class RavenTriggerApplet : Budgie.Applet
         widget = new Gtk.Button();
         widget.clicked.connect_after(on_button_clicked);
         widget.relief = Gtk.ReliefStyle.NONE;
-        img = new Gtk.Image.from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
-        widget.add(img);
+
+        img_hidden = new Gtk.Image.from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
+        img_expanded = new Gtk.Image.from_icon_name("pane-hide-symbolic", Gtk.IconSize.BUTTON);
+
+        img_stack = new Gtk.Stack();
+        img_stack.add_named(img_hidden, "hidden");
+        img_stack.add_named(img_expanded, "expanded");
+        img_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
+
+        widget.add(img_stack);
         add(widget);
         show_all();
 
@@ -91,9 +101,9 @@ public class RavenTriggerApplet : Budgie.Applet
         raven_expanded = expanded;
 
         if (raven_expanded) {
-            img.set_from_icon_name("pane-hide-symbolic", Gtk.IconSize.BUTTON);
+            img_stack.set_visible_child_name("expanded");
         } else {
-            img.set_from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
+            img_stack.set_visible_child_name("hidden");
         }
     }
 
