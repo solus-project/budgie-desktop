@@ -16,15 +16,6 @@ public class StatusPlugin : Budgie.Plugin, Peas.ExtensionBase
     }
 }
 
-[DBus (name="com.solus_project.budgie.Raven")]
-public interface RavenProxy : Object
-{
-    public abstract async void Toggle() throws Error;
-}
-
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
-
 public class StatusApplet : Budgie.Applet
 {
 
@@ -33,7 +24,6 @@ public class StatusApplet : Budgie.Applet
     protected SoundIndicator sound;
     protected PowerIndicator power;
     protected Gtk.EventBox? wrap;
-    protected RavenProxy? raven_proxy = null;
     private Budgie.PopoverManager? manager = null;
 
     public StatusApplet()
@@ -56,7 +46,6 @@ public class StatusApplet : Budgie.Applet
 
         blue = new BluetoothIndicator();
         widget.pack_start(blue, false, false, 2);
-        sound.button_release_event.connect(on_button_release);
         blue.show_all();
 
         blue.ebox.button_press_event.connect((e)=> {
@@ -82,21 +71,6 @@ public class StatusApplet : Budgie.Applet
             }
             return Gdk.EVENT_STOP;
         });
-
-        setup_dbus();
-    }
-
-    bool on_button_release(Gdk.EventButton? e)
-    {
-        if (e.button != 1) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-        try {
-            raven_proxy.Toggle.begin();
-        } catch (Error e) {
-            message("Unable to toggle Raven");
-        }
-        return Gdk.EVENT_STOP;
     }
 
     public override void update_popovers(Budgie.PopoverManager? manager)
@@ -105,27 +79,6 @@ public class StatusApplet : Budgie.Applet
         manager.register_popover(blue.ebox, blue.popover);
         manager.register_popover(power.ebox, power.popover);
     }
-
-    /* Hold onto our Raven proxy ref */
-    void on_raven_get(GLib.Object? o, GLib.AsyncResult? res)
-    {
-        try {
-            raven_proxy = Bus.get_proxy.end(res);
-        } catch (Error e) {
-            warning("Failed to gain Raven proxy: %s", e.message);
-        }
-    }
-
-
-    /* Set up the proxy when raven appears */
-    void setup_dbus()
-    {
-        if (raven_proxy == null) {
-            Bus.get_proxy.begin<RavenProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
-            return;
-        }
-    }
-
 } // End class
 
 [ModuleInit]
