@@ -28,6 +28,7 @@ public class AppSystem : GLib.Object
 
         derpers = new string[] {
             "atom",
+            "freeorion",
             "google-chrome",
             "hexchat",
             "spotify",
