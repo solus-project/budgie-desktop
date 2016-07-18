@@ -1,8 +1,8 @@
 [Plugin]
 Module=raventriggerapplet.so
 Name=Raven Trigger
-_Description=Open Raven
+_Description=Raven Sidebar Control
 Authors=Ikey Doherty
 Copyright=Copyright © 2016 Ikey Doherty
 Website=https://solus-project.com
-Icon=view-more-symbolic
+Icon=pane-show-symbolic
