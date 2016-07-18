@@ -23,7 +23,7 @@ public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/R
 [DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenRemote : Object
 {
-    public abstract async void Toggle() throws Error;
+    public abstract async void ToggleNotificationsView() throws Error;
     public signal void NotificationsChanged();
     public abstract async uint GetNotificationCount() throws Error;
     public signal void UnreadNotifications();
@@ -95,7 +95,7 @@ public class NotificationsApplet : Budgie.Applet
             return Gdk.EVENT_PROPAGATE;
         }
         try {
-            raven_proxy.Toggle();
+            raven_proxy.ToggleNotificationsView();
         } catch (Error e) {
             message("Failed to toggle Raven: %s", e.message);
         }
