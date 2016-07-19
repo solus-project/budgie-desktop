@@ -67,7 +67,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         /* Image */
         img = new Gtk.Image.from_icon_name("input-keyboard-symbolic", Gtk.IconSize.MENU);
         layout.pack_start(img, false, false, 0);
-        img.set_margin_end(2);
+        img.set_margin_end(4);
         add(widget);
 
         /* Stack o' labels */
@@ -102,6 +102,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
             /* Firstly we create our display label.. */
             Gtk.Label displ_label = new Gtk.Label(kbinfo.layout);
+            displ_label.set_halign(Gtk.Align.START);
             displ_label.get_style_context().add_class("keyboard-label");
 
             /* Pack the display label */
@@ -112,10 +113,11 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
     private void on_settings_changed(string key)
     {
-        if (key != "sources") {
-            return;
+        if (key == "sources") {
+            update_sources();
+        } else if (key == "current") {
+            update_current();
         }
-        update_sources();
     }
 
     /*
@@ -182,6 +184,22 @@ public class KeyboardLayoutApplet : Budgie.Applet
         } else {
             fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
         }
+    }
+
+    /**
+     * Update our knowledge of the currently selected keyboard layout
+     */
+    private void update_current()
+    {
+        uint id = settings.get_uint("current");
+        /* Safety: Check we have this guy :] */
+        Gtk.Widget? child = label_stack.get_child_by_name(id.to_string());
+        if (child == null) {
+            message("WARNING: Missing child in layout!!");
+            return;
+        }
+        /* Update to the new kid */
+        label_stack.set_visible_child(child);
     }
 }
 
