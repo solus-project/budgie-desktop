@@ -224,7 +224,7 @@ public class KeyboardManager : GLib.Object
     private void on_current_source_changed()
     {
         uint new_source = this.settings.get_uint("current");
-        message("new source became %u", new_source);
+        apply_layout(new_source);
     }
 }
 
