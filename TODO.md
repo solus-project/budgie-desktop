@@ -32,7 +32,8 @@ us!!
 **Icon Tasklist**
 
  * [ ] Make the world happy: Add drag and drop reordering of pinned icons
- * [ ] Switch to a GtkFlowBox for better sorting
+ * [x] Switch to a GtkFlowBox for better sorting:
+       This is no longer neccessary, sorting issues were resolved
 
  ![Popovers Everywhere](http://cdn.meme.am/instances/500x/63501402.jpg)
 
