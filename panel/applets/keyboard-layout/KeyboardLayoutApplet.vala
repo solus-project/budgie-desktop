@@ -169,6 +169,18 @@ public class KeyboardLayoutApplet : Budgie.Applet
     }
 
     /**
+     * Tell the WM to change the keyboard to the current selection
+     */
+    private void on_row_activate(Gtk.Button item)
+    {
+        var btn = item as InputSourceMenuItem;
+        uint idx = btn.idx;
+
+        this.settings.set_uint("current", idx);
+        popover.hide();
+    }
+
+    /**
      * Reset the menu/stack
      */
     private void reset_keyboards()
@@ -196,6 +208,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
             /* Add a menu item in the popover.. */
             InputSourceMenuItem menu_label = new InputSourceMenuItem(kbinfo.description, kbinfo.idx);
+            menu_label.clicked.connect(on_row_activate);
             menu_label.show_all();
 
             listbox.add(menu_label);
