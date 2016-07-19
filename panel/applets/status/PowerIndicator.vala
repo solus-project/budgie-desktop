@@ -195,9 +195,6 @@ public class PowerIndicator : Gtk.Bin
             this.on_device_added(device);
 
         });
-        if (this.devices.size() == 0) {
-            warning("Unable to discover a battery");
-        }
         toggle_show();
     }
 } // End class
