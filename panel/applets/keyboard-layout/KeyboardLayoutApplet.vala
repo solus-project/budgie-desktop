@@ -59,10 +59,28 @@ public class KeyboardLayoutApplet : Budgie.Applet
     /* Allow showing ie/gb/ type labels */
     private Gtk.Stack label_stack;
 
+    /* For left click interaction... */
+    private Gtk.Popover popover;
+    private Gtk.ListBox listbox;
+    private Budgie.PopoverManager? manager = null;
+
     public KeyboardLayoutApplet()
     {
         /* Graphical stuff */
         widget = new Gtk.EventBox();
+
+        /* Hook up the popover clicks */
+        widget.button_press_event.connect((e)=> {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            if (popover.get_visible()) {
+                popover.hide();
+            } else {
+                this.manager.show_popover(widget);
+            }
+            return Gdk.EVENT_STOP;
+        });
 
         get_style_context().add_class("keyboard-indicator");
 
@@ -80,6 +98,14 @@ public class KeyboardLayoutApplet : Budgie.Applet
         label_stack = new Gtk.Stack();
         label_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN);
         layout.pack_start(label_stack, false, false, 0);
+
+        /* Popover menu magicks */
+        popover = new Gtk.Popover(widget);
+        popover.get_style_context().add_class("user-menu");
+        listbox = new Gtk.ListBox();
+        listbox.get_style_context().add_class("content-box");
+        popover.add(listbox);
+        popover.get_child().show_all();
 
         /* Settings/init */
         xkb = new Gnome.XkbInfo();
@@ -102,6 +128,9 @@ public class KeyboardLayoutApplet : Budgie.Applet
         foreach (Gtk.Widget child in label_stack.get_children()) {
             child.destroy();
         }
+        foreach (Gtk.Widget child in listbox.get_children()) {
+            child.destroy();
+        }
 
         for (int i = 0; i < sources.length; i++) {
             var kbinfo = sources.index(i);
@@ -116,6 +145,20 @@ public class KeyboardLayoutApplet : Budgie.Applet
             /* Pack the display label */
             label_stack.add_named(wrap, kbinfo.idx.to_string());
             wrap.show_all();
+
+            /* Add a menu item in the popover.. */
+            Gtk.Button menu_label = new Gtk.Button.with_label(kbinfo.description);
+            menu_label.set_relief(Gtk.ReliefStyle.NONE);
+            menu_label.set_data("_kb_id", kbinfo.idx.to_string());
+            menu_label.set_halign(Gtk.Align.START);
+            menu_label.get_style_context().add_class("indicator-item");
+            menu_label.get_style_context().add_class("menuitem");
+            menu_label.halign = Gtk.Align.FILL;
+            menu_label.get_child().halign = Gtk.Align.START;
+
+            menu_label.show_all();
+
+            listbox.add(menu_label);
         }
     }
 
@@ -220,6 +263,12 @@ public class KeyboardLayoutApplet : Budgie.Applet
         }
         /* Update to the new kid */
         label_stack.set_visible_child(child);
+    }
+
+    public override void update_popovers(Budgie.PopoverManager? manager)
+    {
+        this.manager = manager;
+        manager.register_popover(widget, popover);
     }
 }
 
