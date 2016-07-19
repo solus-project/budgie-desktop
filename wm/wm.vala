@@ -656,13 +656,15 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor);
 
         state_map.insert(actor, AnimationState.MINIMIZE);
-        actor.set("pivot-point", PV_CENTER);
         actor.save_easing_state();
         actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
         actor.set_easing_duration(MINIMIZE_TIMEOUT);
         actor.transitions_completed.connect(minimize_done);
 
-        actor.set("opacity", 0U, "x", (double)icon.x, "y", (double)icon.y, "scale-x", 0.0, "scale-y", 0.0);
+        actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
+                  "x", (double)icon.x, "y", (double)icon.y,
+                  "scale-x", (double)(icon.width / actor.width),
+                  "scale-y", (double)(icon.height / actor.height));
         actor.restore_easing_state();
     }
 
