@@ -297,7 +297,24 @@ public class IconButton : Gtk.ToggleButton
 
         // Handle clicking, etc.
         button_release_event.connect(on_button_release);
+
         set_can_focus(false);
+    }
+
+
+    /**
+     * After allocation to ensure we go to the right place
+     */
+    public void icon_mapped()
+    {
+        if (window == null) {
+            return;
+        }
+        int x, y;
+        var toplevel = get_toplevel();
+        translate_coordinates(toplevel, 0, 0, out x, out y);
+        toplevel.get_window().get_root_coords(x, y, out x, out y);
+        window.set_icon_geometry(x, y, our_alloc.width, our_alloc.height);
     }
 
     /**

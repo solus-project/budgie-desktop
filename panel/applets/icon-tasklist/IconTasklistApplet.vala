@@ -167,6 +167,10 @@ public class IconTasklistApplet : Budgie.Applet
         }
         buttons[window] = button;
         (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
+        Idle.add(()=> {
+            button.icon_mapped();
+            return false;
+        });
     }
 
     protected void window_closed(Wnck.Window window)
@@ -357,6 +361,10 @@ public class IconTasklistApplet : Budgie.Applet
             }
 
             (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
+            Idle.add(()=> {
+                button.icon_mapped();
+                return false;
+            });
         }
         string[] removals = {};
         /* Conversely, remove ones which have been unset. */
