@@ -30,10 +30,13 @@ libkeyboardlayoutapplet_la_SOURCES = \
 libkeyboardlayoutapplet_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
 	$(BUDGIE_PLUGIN_CFLAGS) \
+	$(KEYBOARD_INDICATOR_CFLAGS) \
+	-DGNOME_DESKTOP_USE_UNSTABLE_API \
 	$(DECLARATIONS)
 
 libkeyboardlayoutapplet_la_LIBADD = \
 	${top_builddir}/plugin/libbudgie-plugin.la \
+	$(KEYBOARD_INDICATOR_LIBS) \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS)
 
@@ -47,4 +50,7 @@ libkeyboardlayoutapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
-	--vapidir=${top_srcdir}/plugin
+	--pkg gnome-desktop-3.0 \
+	--pkg gsettings-desktop-schemas \
+	--vapidir=${top_srcdir}/plugin \
+	--vapidir=${top_srcdir}/vapi
