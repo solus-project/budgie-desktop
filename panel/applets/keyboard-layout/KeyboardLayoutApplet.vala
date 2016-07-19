@@ -149,6 +149,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         popover = new Gtk.Popover(img_wrap);
         popover.get_style_context().add_class("user-menu");
         listbox = new Gtk.ListBox();
+        listbox.set_can_focus(false);
         listbox.set_selection_mode(Gtk.SelectionMode.NONE);
         listbox.get_style_context().add_class("content-box");
         popover.add(listbox);
