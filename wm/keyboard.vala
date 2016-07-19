@@ -143,7 +143,10 @@ public class KeyboardManager : GLib.Object
         }
 
         this.apply_layout_group();
-        this.apply_layout(0);
+
+        /* Always start up with the last selected index if possible */
+        var default_idx = this.settings.get_uint("current");
+        this.apply_layout(default_idx);
     }
 
     /* Apply our given layout groups to mutter */
