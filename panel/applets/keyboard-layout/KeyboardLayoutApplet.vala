@@ -43,6 +43,49 @@ class InputSource
     }
 }
 
+class InputSourceMenuItem : Gtk.Button
+{
+
+    private Gtk.Label tick_label;
+    public uint idx;
+
+    public InputSourceMenuItem(string? description, uint idx)
+    {
+        Object();
+
+        this.idx = idx;
+
+        set_relief(Gtk.ReliefStyle.NONE);
+        set_halign(Gtk.Align.FILL);
+
+        Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        add(layout);
+        Gtk.Label desc_label = new Gtk.Label(description);
+        layout.pack_start(desc_label, false, false, 0);
+        desc_label.halign = Gtk.Align.START;
+
+        show_all();
+        set_no_show_all(true);
+
+        tick_label = new Gtk.Label("  ✓");
+        layout.pack_end(tick_label, false, false, 0);
+        tick_label.hide();
+
+        get_style_context().add_class("indicator-item");
+        get_style_context().add_class("menuitem");
+
+        set_can_focus(false);
+    }
+
+    public void set_ticked(bool ticked) {
+        if (ticked) {
+            tick_label.show();
+        } else {
+            tick_label.hide();
+        }
+    }
+}
+
 public class KeyboardLayoutApplet : Budgie.Applet
 {
     private Gtk.EventBox widget;
@@ -119,6 +162,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
         /* Forcibly init ourselves */
         on_settings_changed("sources");
+        on_settings_changed("current");
 
         /* Go show up */
         show_all();
@@ -151,15 +195,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
             wrap.show_all();
 
             /* Add a menu item in the popover.. */
-            Gtk.Button menu_label = new Gtk.Button.with_label(kbinfo.description);
-            menu_label.set_relief(Gtk.ReliefStyle.NONE);
-            menu_label.set_data("_kb_id", kbinfo.idx.to_string());
-            menu_label.set_halign(Gtk.Align.START);
-            menu_label.get_style_context().add_class("indicator-item");
-            menu_label.get_style_context().add_class("menuitem");
-            menu_label.halign = Gtk.Align.FILL;
-            menu_label.get_child().halign = Gtk.Align.START;
-
+            InputSourceMenuItem menu_label = new InputSourceMenuItem(kbinfo.description, kbinfo.idx);
             menu_label.show_all();
 
             listbox.add(menu_label);
@@ -264,6 +300,16 @@ public class KeyboardLayoutApplet : Budgie.Applet
         if (child == null) {
             message("WARNING: Missing child in layout!!");
             return;
+        }
+
+        /* Use fake menu item selection effect */
+        foreach (Gtk.Widget? row in listbox.get_children()) {
+            InputSourceMenuItem item = ((Gtk.Bin)row).get_child() as InputSourceMenuItem;
+            if (item.idx == id) {
+                item.set_ticked(true);
+            } else {
+                item.set_ticked(false);
+            }
         }
         /* Update to the new kid */
         label_stack.set_visible_child(child);
