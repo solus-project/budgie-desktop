@@ -43,6 +43,7 @@ public class KeyboardManager : GLib.Object
     InputSource fallback;
 
     uint current_source = 0;
+    ulong sig_id = 0;
 
     public KeyboardManager(Budgie.BudgieWM? wm)
     {
@@ -51,6 +52,10 @@ public class KeyboardManager : GLib.Object
         xkb = new Gnome.XkbInfo();
 
         settings = new Settings("org.gnome.desktop.input-sources");
+
+        /* Special handling of the current source. */
+        sig_id = settings.changed["current"].connect(on_current_source_changed);
+
         settings.changed.connect(on_settings_changed);
         update_fallback();
 
@@ -98,6 +103,8 @@ public class KeyboardManager : GLib.Object
                 /* Update our xkb-options */
                 this.options = settings.get_strv(key);
                 break;
+            default:
+                return;
         }
     }
 
@@ -165,6 +172,8 @@ public class KeyboardManager : GLib.Object
         }
         this.current_source = idx;
         Meta.Backend.get_backend().lock_layout_group(idx);
+        /* Send this off to gsettings so that clients know what our idx is */
+        this.write_source_index(idx);
     }
 
 
@@ -191,6 +200,26 @@ public class KeyboardManager : GLib.Object
         } else {
             fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
         }
+    }
+
+    /**
+     * Update the index in gsettings so that clients know the current
+     */
+    private void write_source_index(uint index)
+    {
+        SignalHandler.block(this.settings, this.sig_id);
+        this.settings.set_uint("current", index);
+        this.settings.apply();
+        SignalHandler.unblock(this.settings, this.sig_id);
+    }
+
+    /**
+     * Someone else changed the current source, do somethin' about it
+     */
+    private void on_current_source_changed()
+    {
+        uint new_source = this.settings.get_uint("current");
+        message("new source became %u", new_source);
     }
 }
 
