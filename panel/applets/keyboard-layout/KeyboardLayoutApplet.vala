@@ -26,14 +26,20 @@ class InputSource
     public bool xkb = false;
     public string? layout = null;
     public string? variant = null;
+    public string? description = null;
     public uint idx = 0;
 
-    public InputSource(uint idx, string? layout, string? variant, bool xkb = false)
+    public InputSource(uint idx, string? layout, string? variant, string? description = null, bool xkb = false)
     {
         this.idx = idx;
         this.layout = layout;
         this.variant = variant;
         this.xkb = xkb;
+        if (description != null) {
+            this.description = description;
+        } else {
+            this.description = this.layout;
+        }
     }
 }
 
@@ -147,7 +153,8 @@ public class KeyboardLayoutApplet : Budgie.Applet
                 if (spl.length > 1) {
                     variant = spl[1];
                 }
-                source = new InputSource((uint)i, spl[0], variant, true);
+                string desc = this.get_xkb_description(type);
+                source = new InputSource((uint)i, spl[0], variant, desc, true);
                 sources.append_val(source);
             } else {
                 warning("FIXME: Budgie does not yet support IBUS!");
@@ -163,6 +170,15 @@ public class KeyboardLayoutApplet : Budgie.Applet
         }
 
         this.reset_keyboards();
+    }
+
+    private string get_xkb_description(string id)
+    {
+        string display_name, short_name, xkb_layout, xkb_variant = null;
+        if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
+            return display_name;
+        }
+        return id;
     }
 
     void update_fallback()
@@ -184,9 +200,9 @@ public class KeyboardLayoutApplet : Budgie.Applet
         }
 
         if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-            fallback = new InputSource(0, xkb_layout, xkb_variant, true);
+            fallback = new InputSource(0, xkb_layout, xkb_variant, display_name, true);
         } else {
-            fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
+            fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);
         }
     }
 
