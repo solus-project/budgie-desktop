@@ -7,8 +7,6 @@ us!!
 
 **Panel**
 
- * [ ] Steal some PopoverManager changes from the wingpanel guys back into Budgie Panel
- * [ ] Steal the focus-manager trick from Wingpanel too (Nice work guys!)
  * [x] Fix startup issues:
     * [x] Only expose when startup is complete
     * [x] Reveal the Panel using an animation (cairo+buffer offset)
@@ -18,13 +16,13 @@ us!!
  * [ ] Add garbage collection for unloaded modules
  * [ ] Approved "new" applets needed:
    * [ ] Screencast indicator for integration with WM (Status Applet?)
-   * [ ] Keyboard layout indicator
+   * [x] Keyboard layout indicator
  * [ ] Add pinning capabilities to the Budgie Menu itself
  * [x] Disallow Ugly Apps from overriding the icon (main chrome instance, hexchat, etc)
- * [ ] Turn Power Icon into a user menu (Hibernate, Switch User, etc)
+ * [x] Turn Power Icon into a user menu (Hibernate, Switch User, etc)
  * [x] Ensure all popover-associated applets use this as  the *primary* action, no
        more right-click left-click nonsense. Left click only.
- * [ ] Just because it's at the end of the panel, doesn't mean it needs to launch
+ * [x] Just because it's at the end of the panel, doesn't mean it needs to launch
        feckin Raven. Notification icon + sound are sufficient.
  * [ ] Add intellihide.
  * [x] More popovers.
