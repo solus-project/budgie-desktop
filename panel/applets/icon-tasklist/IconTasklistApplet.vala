@@ -243,6 +243,9 @@ public class IconTasklistApplet : Budgie.Applet
         widget.get_style_context().add_class("unpinned");
         main_layout.pack_start(widget, false, false, 0);
 
+        add(main_layout);
+        show_all();
+
         settings = this.get_applet_settings(uuid);
         settings.changed.connect(on_settings_change);
 
@@ -259,7 +262,6 @@ public class IconTasklistApplet : Budgie.Applet
 
         get_style_context().add_class("icon-tasklist");
 
-        add(main_layout);
         show_all();
     }
 
@@ -316,6 +318,7 @@ public class IconTasklistApplet : Budgie.Applet
         } else if (key != "pinned-launchers") {
             return;
         }
+
         string[] files = settings.get_strv(key);
         /* We don't actually remove anything >_> */
         foreach (string desktopfile in settings.get_strv(key)) {
@@ -379,12 +382,21 @@ public class IconTasklistApplet : Budgie.Applet
             }
             removals += key_name;
         }
+
         foreach (string rkey in removals) {
             pin_buttons.remove(rkey);
         }
 
-        for (int i=0; i<files.length; i++) {
-            pinned.reorder_child(pin_buttons[files[i]], i);
+        /* Properly reorder the children */
+        int j = 0;
+        for (int i = 0; i < files.length; i++) {
+            string lkey = files[i];
+            if (!pin_buttons.contains(lkey)) {
+                continue;
+            }
+            unowned Gtk.Widget? parent = pin_buttons[lkey].get_parent();
+            pinned.reorder_child(parent, j);
+            ++j;
         }
     }
 } // End class
