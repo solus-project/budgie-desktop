@@ -78,7 +78,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
             if (popover.get_visible()) {
                 popover.hide();
             } else {
-                this.manager.show_popover(img_wrap);
+                this.manager.show_popover(widget);
             }
             return Gdk.EVENT_STOP;
         });
@@ -106,6 +106,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         popover = new Gtk.Popover(img_wrap);
         popover.get_style_context().add_class("user-menu");
         listbox = new Gtk.ListBox();
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE);
         listbox.get_style_context().add_class("content-box");
         popover.add(listbox);
         popover.get_child().show_all();
@@ -271,7 +272,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
     public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
-        manager.register_popover(img_wrap, popover);
+        manager.register_popover(widget, popover);
     }
 }
 
