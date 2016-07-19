@@ -46,6 +46,7 @@ class InputSource
 public class KeyboardLayoutApplet : Budgie.Applet
 {
     private Gtk.EventBox widget;
+    private Gtk.EventBox img_wrap;
     private Gtk.Image img;
 
     /* Tracking input-source settings */
@@ -77,7 +78,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
             if (popover.get_visible()) {
                 popover.hide();
             } else {
-                this.manager.show_popover(widget);
+                this.manager.show_popover(img_wrap);
             }
             return Gdk.EVENT_STOP;
         });
@@ -90,7 +91,9 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
         /* Image */
         img = new Gtk.Image.from_icon_name("input-keyboard-symbolic", Gtk.IconSize.MENU);
-        layout.pack_start(img, false, false, 0);
+        img_wrap = new Gtk.EventBox();
+        img_wrap.add(img);
+        layout.pack_start(img_wrap, false, false, 0);
         img.set_margin_end(4);
         add(widget);
 
@@ -100,7 +103,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         layout.pack_start(label_stack, false, false, 0);
 
         /* Popover menu magicks */
-        popover = new Gtk.Popover(widget);
+        popover = new Gtk.Popover(img_wrap);
         popover.get_style_context().add_class("user-menu");
         listbox = new Gtk.ListBox();
         listbox.get_style_context().add_class("content-box");
@@ -268,7 +271,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
     public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
-        manager.register_popover(widget, popover);
+        manager.register_popover(img_wrap, popover);
     }
 }
 
