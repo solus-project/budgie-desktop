@@ -50,19 +50,34 @@ public class KeyboardLayoutApplet : Budgie.Applet
     InputSource fallback;
     private Gnome.XkbInfo? xkb;
 
+    /* Allow showing ie/gb/ type labels */
+    private Gtk.Stack label_stack;
+
     public KeyboardLayoutApplet()
     {
         /* Graphical stuff */
         widget = new Gtk.EventBox();
-        img = new Gtk.Image.from_icon_name("input-keyboard-symbolic", Gtk.IconSize.MENU);
 
-        widget.add(img);
+        get_style_context().add_class("keyboard-indicator");
+
+        /* Layout */
+        Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        widget.add(layout);
+
+        /* Image */
+        img = new Gtk.Image.from_icon_name("input-keyboard-symbolic", Gtk.IconSize.MENU);
+        layout.pack_start(img, false, false, 0);
+        img.set_margin_end(2);
         add(widget);
 
-        xkb = new Gnome.XkbInfo();
-        update_fallback();
+        /* Stack o' labels */
+        label_stack = new Gtk.Stack();
+        label_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN);
+        layout.pack_start(label_stack, false, false, 0);
 
         /* Settings/init */
+        xkb = new Gnome.XkbInfo();
+        update_fallback();
         settings = new Settings("org.gnome.desktop.input-sources");
         settings.changed.connect(on_settings_changed);
 
@@ -71,6 +86,28 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
         /* Go show up */
         show_all();
+    }
+
+    /**
+     * Reset the menu/stack
+     */
+    private void reset_keyboards()
+    {
+        foreach (Gtk.Widget child in label_stack.get_children()) {
+            child.destroy();
+        }
+
+        for (int i = 0; i < sources.length; i++) {
+            var kbinfo = sources.index(i);
+
+            /* Firstly we create our display label.. */
+            Gtk.Label displ_label = new Gtk.Label(kbinfo.layout);
+            displ_label.get_style_context().add_class("keyboard-label");
+
+            /* Pack the display label */
+            label_stack.add_named(displ_label, kbinfo.idx.to_string());
+            displ_label.show();
+        }
     }
 
     private void on_settings_changed(string key)
@@ -118,6 +155,8 @@ public class KeyboardLayoutApplet : Budgie.Applet
          * source and we use the locale guessed source */
         fallback.idx = sources.length;
         sources.append_val(fallback);
+
+        this.reset_keyboards();
     }
 
     void update_fallback()
