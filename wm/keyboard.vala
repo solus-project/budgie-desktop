@@ -135,10 +135,12 @@ public class KeyboardManager : GLib.Object
             }
         }
 
-        /* Always add fallback last, at the very worst it's the only available
-         * source and we use the locale guessed source */
-        fallback.idx = sources.length;
-        sources.append_val(fallback);
+        if (sources.length == 0) {
+            /* Always add fallback last, at the very worst it's the only available
+             * source and we use the locale guessed source */
+            fallback.idx = sources.length;
+            sources.append_val(fallback);
+        }
 
         this.apply_layout_group();
         this.apply_layout(0);
