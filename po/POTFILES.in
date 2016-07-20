@@ -1,4 +1,5 @@
 panel/main.vala
+panel/endsession.vala
 raven/main_view.vala
 raven/settings_view.vala
 raven/notifications_view.vala
@@ -27,7 +28,7 @@ panel/applets/notifications/NotificationsApplet.vala
 panel/applets/show-desktop/ShowDesktopApplet.vala
 panel/applets/status/BluetoothIndicator.vala
 panel/applets/status/PowerIndicator.vala
-
+panel/applets/user-indicator/UserIndicatorWindow.vala
 wm/windowmenu.vala
 wm/wm.vala
 

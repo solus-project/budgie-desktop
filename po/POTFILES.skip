@@ -1,5 +1,6 @@
 gvc/gvc-mixer-control.c
 panel/budgie-panel.desktop.in
+panel/endsession.c
 session/budgie-desktop.desktop.in
 panel/budgie-panel.desktop.in.in
 panel/budgie-panel.desktop.in
@@ -16,6 +17,7 @@ panel/applets/notifications/NotificationsApplet.c
 panel/applets/show-desktop/ShowDesktopApplet.c
 panel/applets/status/BluetoothIndicator.c
 panel/applets/status/PowerIndicator.c
+panel/applets/user-indicator/UserIndicatorWindow.c
 
 raven/main_view.c
 raven/notifications_view.c
