@@ -81,6 +81,16 @@ public interface LoginDRemote : GLib.Object
     public signal void PrepareForSleep(bool suspending);
 }
 
+[CompactClass]
+class MinimizeData {
+    public double scale_x;
+    public double scale_y;
+    public double place_x;
+    public double place_y;
+    public double old_x;
+    public double old_y;
+}
+
 public class BudgieWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
@@ -548,6 +558,7 @@ public class BudgieWM : Meta.Plugin
                 minimize_completed(actor);
                 break;
             case AnimationState.UNMINIMIZE:
+                actor.set("pivot-point", PV_NORM, "opacity", 255U, "scale-x", 1.0, "scale-y", 1.0);
                 actor.show();
                 unminimize_completed(actor);
                 break;
@@ -661,11 +672,65 @@ public class BudgieWM : Meta.Plugin
         actor.set_easing_duration(MINIMIZE_TIMEOUT);
         actor.transitions_completed.connect(minimize_done);
 
+        /* Save the minimize state for later restoration */
+        MinimizeData d = new MinimizeData();
+        d.scale_x = (double)(icon.width / actor.width);
+        d.scale_y = (double)(icon.height / actor.height);
+        d.place_x = (double)icon.x;
+        d.place_y = (double)icon.y;
+        d.old_x = actor.x;
+        d.old_y = actor.y;
+
+        actor.set_data("_minimize_data", d);
         actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
-                  "x", (double)icon.x, "y", (double)icon.y,
-                  "scale-x", (double)(icon.width / actor.width),
-                  "scale-y", (double)(icon.height / actor.height));
+                  "x", d.place_x, "y", d.place_y, "scale-x",
+                  d.scale_x, "scale-y", d.scale_y);
         actor.restore_easing_state();
+    }
+
+    /**
+     * Unminimize now done
+     */
+    void unminimize_done(Clutter.Actor? actor)
+    {
+        SignalHandler.disconnect_by_func(actor, (void*)unminimize_done, this);
+        finalize_animations(actor as Meta.WindowActor);
+    }
+
+    /**
+     * Handle unminimize animation
+     */
+    public override void unminimize(Meta.WindowActor actor)
+    {
+        if (!this.use_animations) {
+            this.unminimize_completed(actor);
+            return;
+        }
+
+        MinimizeData? d = actor.get_data("_minimize_data");
+        if (d == null) {
+            this.unminimize_completed(actor);
+            return;
+        }
+
+        actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
+                  "x", d.place_x, "y", d.place_y, "scale-x",
+                  d.scale_x, "scale-y", d.scale_y);
+
+        actor.show();
+
+        actor.save_easing_state();
+        actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUART);
+        actor.set_easing_duration(MINIMIZE_TIMEOUT);
+
+        actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U,
+                  "x", d.old_x, "y", d.old_y);
+
+        actor.transitions_completed.connect(unminimize_done);
+        state_map.insert(actor, AnimationState.UNMINIMIZE);
+        actor.restore_easing_state();
+
+        actor.set_data("_minimize_data", null);
     }
 
     void destroy_done(Clutter.Actor? actor)
