@@ -530,7 +530,10 @@ public class BudgieWM : Meta.Plugin
     }
 
     static const int MAP_TIMEOUT  = 170;
+    static const int MENU_MAP_TIMEOUT = 120;
     static const float MAP_SCALE  = 0.8f;
+    static const float MENU_MAP_SCALE_X = 0.98f;
+    static const float MENU_MAP_SCALE_Y = 0.95f;
     static const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
     static const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
     static const int FADE_TIMEOUT = 165;
@@ -593,14 +596,16 @@ public class BudgieWM : Meta.Plugin
             case Meta.WindowType.POPUP_MENU:
             case Meta.WindowType.DROPDOWN_MENU:
             case Meta.WindowType.MENU:
-                actor.opacity = 0U;
+                actor.set("opacity", 0U, "scale-x", MENU_MAP_SCALE_X, "scale-y", MENU_MAP_SCALE_Y,
+                    "pivot-point", PV_CENTER);
                 actor.show();
 
                 actor.save_easing_state();
-                actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
-                actor.set_easing_duration(MAP_TIMEOUT);
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_CIRC);
+                actor.set_easing_duration(MENU_MAP_TIMEOUT);
 
-                actor.opacity = 255U;
+                actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
+                break;
                 break;
             case Meta.WindowType.NOTIFICATION:
                 actor.set("opacity", 0U, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
