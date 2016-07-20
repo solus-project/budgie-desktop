@@ -621,7 +621,7 @@ public class BudgieWM : Meta.Plugin
                 actor.show();
 
                 actor.save_easing_state();
-                actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_CIRC);
                 actor.set_easing_duration(MAP_TIMEOUT);
 
                 actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
