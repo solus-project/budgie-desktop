@@ -505,8 +505,8 @@ public class Raven : Gtk.Window
 
         var anim = new Budgie.Animation();
         anim.widget = this;
-        anim.length = 270 * Budgie.MSECOND;
-        anim.tween = Budgie.sine_ease_in;
+        anim.length = 170 * Budgie.MSECOND;
+        anim.tween = Budgie.sine_ease_in_out;
         anim.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
                 property = "nscale",
