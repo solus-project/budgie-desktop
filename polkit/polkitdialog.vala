@@ -324,7 +324,7 @@ public class Agent : PolkitAgent.Listener
         settings.changed.connect(on_settings_changed);
 
         gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
-        on_theme_changed();
+        on_settings_changed("builtin-theme");
 
         register_with_session.begin((o,res)=> {
             bool success = register_with_session.end(res);
