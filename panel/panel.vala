@@ -390,7 +390,7 @@ public class Panel : Budgie.Toplevel
 
         var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
-            info.applet.panel_size_changed(intended_size, size, small_size);
+            info.applet.panel_size_changed(intended_size - 5, size, small_size);
         }
     }
 
