@@ -49,7 +49,7 @@ public class BudgieMenuSettings : Gtk.Grid
 public class BudgieMenuApplet : Budgie.Applet
 {
 
-    protected Gtk.EventBox widget;
+    protected Gtk.ToggleButton widget;
     protected BudgieMenuWindow? popover;
     protected Settings settings;
     Gtk.Image img;
@@ -80,7 +80,8 @@ public class BudgieMenuApplet : Budgie.Applet
 
         settings.changed.connect(on_settings_changed);
 
-        widget = new Gtk.EventBox();
+        widget = new Gtk.ToggleButton();
+        widget.relief = Gtk.ReliefStyle.NONE;
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
         img.pixel_size = 32;
         img.no_show_all = true;
@@ -94,9 +95,11 @@ public class BudgieMenuApplet : Budgie.Applet
         widget.add(layout);
 
         // Better styling to fit in with the budgie-panel
-        var st = img.get_style_context();
-        st.add_class("primary-control");
-        popover = new BudgieMenuWindow(settings, img);
+        var st = widget.get_style_context();
+        st.add_class("budgie-menu-launcher");
+        st.add_class("panel-button");
+        popover = new BudgieMenuWindow(settings, widget);
+        popover.bind_property("visible", widget, "active");
 
         widget.button_press_event.connect((e)=> {
             if (e.button != 1) {
