@@ -295,7 +295,7 @@ public class IconTasklistApplet : Budgie.Applet
             var iter2 = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
             while (iter2.next(out str_key, out pin_val)) {
                 pin_val.icon_size = icon_size;
-                val.panel_size = panel_size;
+                pin_val.panel_size = panel_size;
                 pin_val.update_icon();
             }
             return false;
