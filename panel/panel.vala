@@ -200,12 +200,32 @@ public class Panel : Budgie.Toplevel
         return ret;
     }
 
-    /* Handle being "fully" loaded */
-    private void on_fully_loaded()
+    /**
+     * Loop the applets, performing a reparent or reposition
+     */
+    private void initial_applet_placement(bool repar = false, bool repos = false)
     {
+        if (!repar && !repos) {
+            return;
+        }
         unowned string? uuid = null;
         unowned Budgie.AppletInfo? info = null;
 
+        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
+
+        while (iter.next(out uuid, out info)) {
+            if (repar) {
+                applet_reparent(info);
+            }
+            if (repos) {
+                applet_reposition(info);
+            }
+        }
+    }
+
+    /* Handle being "fully" loaded */
+    private void on_fully_loaded()
+    {
         if (applets.size() < 1) {
             if (!initial_anim) {
                 Idle.add(initial_animation);
@@ -214,11 +234,8 @@ public class Panel : Budgie.Toplevel
         }
 
         /* All applets loaded and positioned, now re-sort them */
-        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
-        while (iter.next(out uuid, out info)) {
-            applet_reparent(info);
-            applet_reposition(info);
-        }
+        initial_applet_placement(true, false);
+        initial_applet_placement(false, true);
 
         /* Let everyone else know we're in business */
         applets_changed();
@@ -518,6 +535,17 @@ public class Panel : Budgie.Toplevel
         uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
         info = new AppletInfo(null, uuid, null, null);
         info.alignment = align;
+
+        /* Safety clamp */
+        var kids = target.get_children();
+        uint nkids = kids.length();
+        if (position >= nkids) {
+            position = (int) (nkids - 1);
+        }
+        if (position < 0) {
+            position = 0;
+        }
+
         info.position = position;
 
         initial_config.insert(uuid, info);
