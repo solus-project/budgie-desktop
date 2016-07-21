@@ -77,6 +77,8 @@ public class IconButton : Gtk.ToggleButton
 
     unowned Settings? settings;
 
+    public int panel_size = 10;
+
     private void update_app_info()
     {
         // Actions menu
@@ -252,7 +254,7 @@ public class IconButton : Gtk.ToggleButton
     private ulong wclass_id = 0;
     private unowned AppSystem? helper = null;
 
-    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo, AppSystem? helper)
+    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo, AppSystem? helper, int panel_size)
     {
         this.settings = settings;
         this.helper = helper;
@@ -260,6 +262,7 @@ public class IconButton : Gtk.ToggleButton
         image = new Gtk.Image();
         image.pixel_size = size;
         icon_size = size;
+        this.panel_size = panel_size;
         add(image);
 
         this.window = window;
@@ -299,6 +302,17 @@ public class IconButton : Gtk.ToggleButton
         button_release_event.connect(on_button_release);
 
         set_can_focus(false);
+    }
+
+    /**
+     * Enforce a 1:1.1 aspect ratio
+     */
+    public override void get_preferred_width(out int min, out int nat)
+    {
+        Gtk.Allocation alloc;
+        int norm = (int) ((double)panel_size * 1.1);
+        min = norm;
+        nat = norm;
     }
 
 
@@ -362,6 +376,7 @@ public class IconButton : Gtk.ToggleButton
             }
         }
         image.pixel_size = icon_size;
+        queue_resize();
     }
 
     /**
@@ -426,9 +441,9 @@ public class PinnedIconButton : IconButton
 
     unowned Settings? settings;
 
-    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context, AppSystem? helper)
+    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, ref Gdk.AppLaunchContext context, AppSystem? helper, int panel_size)
     {
-        base(settings, null, size, info, helper);
+        base(settings, null, size, info, helper, panel_size);
         this.app_info = info;
         this.settings = settings;
 

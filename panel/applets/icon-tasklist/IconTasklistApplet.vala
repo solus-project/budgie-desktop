@@ -159,7 +159,7 @@ public class IconTasklistApplet : Budgie.Applet
 
         // Fallback to new button.
         if (button == null) {
-            var btn = new IconButton(settings, window, icon_size, pinfo, this.helper);
+            var btn = new IconButton(settings, window, icon_size, pinfo, this.helper, panel_size);
             var button_wrap = new ButtonWrapper(btn);
 
             button = btn;
@@ -288,12 +288,14 @@ public class IconTasklistApplet : Budgie.Applet
             var iter = HashTableIter<Wnck.Window?,IconButton?>(buttons);
             while (iter.next(out btn_key, out val)) {
                 val.icon_size = icon_size;
+                val.panel_size = panel_size;
                 val.update_icon();
             }
 
             var iter2 = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
             while (iter2.next(out str_key, out pin_val)) {
                 pin_val.icon_size = icon_size;
+                val.panel_size = panel_size;
                 pin_val.update_icon();
             }
             return false;
@@ -302,12 +304,14 @@ public class IconTasklistApplet : Budgie.Applet
 
     int small_icons = 32;
     int large_icons = 32;
+    int panel_size = 10;
     bool larger_icons = false;
 
     void on_panel_size_changed(int panel, int icon, int small_icon)
     {
         this.small_icons = small_icon;
         this.large_icons = icon;
+        this.panel_size = panel;
 
         set_icons_size();
     }
@@ -335,7 +339,7 @@ public class IconTasklistApplet : Budgie.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(settings, info, icon_size, ref this.context, this.helper);
+            var button = new PinnedIconButton(settings, info, icon_size, ref this.context, this.helper, panel_size);
             var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
@@ -380,7 +384,7 @@ public class IconTasklistApplet : Budgie.Applet
                 (btn.get_parent() as ButtonWrapper).gracefully_die();
             } else {
                 /* We need to move this fella.. */
-                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper);
+                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper, panel_size);
                 var button_wrap = new ButtonWrapper(b2);
 
                 (btn.get_parent() as ButtonWrapper).gracefully_die();
