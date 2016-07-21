@@ -2,7 +2,7 @@
  * This file is part of budgie-desktop
  * 
  * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
- * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie)
+ * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie 10)
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,15 @@ public enum NotificationCloseReason {
     DISMISSED = 2,  /** The notification was dismissed by the user. */
     CLOSED = 3,     /** The notification was closed by a call to CloseNotification. */
     UNDEFINED = 4   /** Undefined/reserved reasons. */
+}
+
+/**
+ * We only want to make the input safe, we still need actual markup
+ * support, so markup_escape won't be useful here.
+ */
+public static string safe_markup_string(string inp)
+{
+    return inp.replace("&", "&amp;").replace("'", "&apos;").replace("\"", "&quot;");
 }
 
 /**
@@ -78,8 +87,8 @@ public class NotificationClone : Gtk.Grid
             this.image_icon.pixel_size = 32;
         }
 
-        label_title.set_markup(target.title);
-        label_body.set_markup(target.body);
+        label_title.set_markup(safe_markup_string(target.title));
+        label_body.set_markup(safe_markup_string(target.body));
 
         var date = new DateTime.from_unix_local(target.timestamp);
         label_timestamp.set_text(date.format("%H:%M"));
@@ -295,14 +304,14 @@ public class NotificationWindow : Gtk.Window
         }
 
         if (summary == "") {
-            label_title.set_text(app_name);
+            label_title.set_markup(safe_markup_string(app_name));
             this.title = app_name;
         } else {
-            label_title.set_markup(summary);
+            label_title.set_markup(safe_markup_string(summary));
             this.title = summary;
         }
     
-        label_body.set_markup(body);
+        label_body.set_markup(safe_markup_string(body));
         this.body = body;
 
         this.timeout = expire_timeout;
