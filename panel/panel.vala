@@ -463,32 +463,33 @@ public class Panel : Budgie.Toplevel
         }
 
         /* Two loops so we can track when we've fully loaded the panel */
-        for (int i = 0; i < applets.length; i++) {
-            this.expected_uuids.append(applets[i]);
-        }
-
-        for (int i = 0; i < applets.length; i++) {
-            string? name = null;
-            Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
-
-            if (info == null) {
-                /* Faiiiil */
-                if (name == null) {
-                    unowned List<string?> g = expected_uuids.find_custom(applets[i], GLib.strcmp);
-                    /* TODO: No longer expecting this guy to load */
-                    if (g != null) {
-                        expected_uuids.remove_link(g);
-                    }
-                    message("Unable to load invalid applet: %s", applets[i]);
-                    continue;
-                }
-                this.add_pending(applets[i], name);
-                manager.modprobe(name);
-            } else {
-                /* um add this bro to the panel :o */
-                this.add_applet(info);
+        lock (expected_uuids) {
+            for (int i = 0; i < applets.length; i++) {
+                this.expected_uuids.append(applets[i]);
             }
 
+            for (int i = 0; i < applets.length; i++) {
+                string? name = null;
+                Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
+
+                if (info == null) {
+                    /* Faiiiil */
+                    if (name == null) {
+                        unowned List<string?> g = expected_uuids.find_custom(applets[i], GLib.strcmp);
+                        /* TODO: No longer expecting this guy to load */
+                        if (g != null) {
+                            expected_uuids.remove_link(g);
+                        }
+                        message("Unable to load invalid applet: %s", applets[i]);
+                        continue;
+                    }
+                    this.add_pending(applets[i], name);
+                    manager.modprobe(name);
+                } else {
+                    /* um add this bro to the panel :o */
+                    this.add_applet(info);
+                }
+            }
         }
     }
 
@@ -670,13 +671,11 @@ public class Panel : Budgie.Toplevel
         }
 
         if (!this.is_fully_loaded) {
-            unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, GLib.strcmp);
-            if (exp_fin != null) {
-                expected_uuids.remove_link(exp_fin);
-            }
-            if (expected_uuids.length() == 0) {
-                this.is_fully_loaded = true;
-                this.panel_loaded();
+            lock (expected_uuids) {
+                unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, GLib.strcmp);
+                if (exp_fin != null) {
+                    expected_uuids.remove_link(exp_fin);
+                }
             }
         }
 
@@ -704,6 +703,17 @@ public class Panel : Budgie.Toplevel
         ulong id = info.notify.connect(applet_updated);
         info.set_data("notify_id", id);
         this.applet_added(info);
+
+        if (this.is_fully_loaded) {
+            return;
+        }
+
+        lock (expected_uuids) {
+            if (expected_uuids.length() == 0) {
+                this.is_fully_loaded = true;
+                this.panel_loaded();
+            }
+        }
     }
 
     void applet_reparent(Budgie.AppletInfo? info)
