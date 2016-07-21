@@ -43,6 +43,7 @@ public class RavenTriggerApplet : Budgie.Applet
         widget = new Gtk.Button();
         widget.clicked.connect_after(on_button_clicked);
         widget.relief = Gtk.ReliefStyle.NONE;
+        widget.set_can_focus(false);
 
         img_hidden = new Gtk.Image.from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
         img_expanded = new Gtk.Image.from_icon_name("pane-hide-symbolic", Gtk.IconSize.BUTTON);
