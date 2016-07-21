@@ -540,7 +540,7 @@ public class Panel : Budgie.Toplevel
         var kids = target.get_children();
         uint nkids = kids.length();
         if (position >= nkids) {
-            position = (int) (nkids - 1);
+            position = (int) nkids;
         }
         if (position < 0) {
             position = 0;
