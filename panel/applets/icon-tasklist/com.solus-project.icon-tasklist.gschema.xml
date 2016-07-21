@@ -6,12 +6,5 @@
       <summary>Pinned launchers</summary>
       <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
     </key>
-
-    <key type="b" name="larger-icons">
-      <default>false</default>
-      <summary>Use larger icons by default</summary>
-      <description>Use larger icons by default</description>
-    </key>
-
   </schema>
 </schemalist>

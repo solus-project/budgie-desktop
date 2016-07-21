@@ -34,24 +34,6 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
     }
 }
 
-[GtkTemplate (ui = "/com/solus-project/icon-tasklist/settings.ui")]
-public class IconTasklistSettings : Gtk.Grid
-{
-
-
-    [GtkChild]
-    private Gtk.Switch? switch_large_icons;
-
-    private Settings? settings;
-
-    public IconTasklistSettings(Settings? settings)
-    {
-        this.settings = settings;
-        settings.bind("larger-icons", switch_large_icons, "active", SettingsBindFlags.DEFAULT);
-    }
-
-}
-
 /**
  * Trivial helper for IconTasklist - i.e. desktop lookups
  */
@@ -104,16 +86,6 @@ public class IconTasklistApplet : Budgie.Applet
     private unowned IconButton? active_button;
 
     public string uuid { public set ; public get ; }
-
-    public override Gtk.Widget? get_settings_ui()
-    {
-        return new IconTasklistSettings(this.get_applet_settings(uuid));
-    }
-
-    public override bool supports_settings()
-    {
-        return true;
-    }
 
     protected void window_opened(Wnck.Window window)
     {
@@ -254,7 +226,6 @@ public class IconTasklistApplet : Budgie.Applet
         settings.changed.connect(on_settings_change);
 
         on_settings_change("pinned-launchers");
-        on_settings_change("larger-icons");
 
         // Init wnck
         screen = Wnck.Screen.get_default();
@@ -276,12 +247,7 @@ public class IconTasklistApplet : Budgie.Applet
         unowned IconButton? val = null;
         unowned PinnedIconButton? pin_val = null;
 
-        if (this.larger_icons) {
-            icon_size = large_icons;
-        } else {
-            icon_size = small_icons;
-        }
-    
+        icon_size = small_icons;    
         Wnck.set_default_icon_size(icon_size);
 
         Idle.add(()=> {
@@ -303,14 +269,11 @@ public class IconTasklistApplet : Budgie.Applet
     }
 
     int small_icons = 32;
-    int large_icons = 32;
     int panel_size = 10;
-    bool larger_icons = false;
 
     void on_panel_size_changed(int panel, int icon, int small_icon)
     {
         this.small_icons = small_icon;
-        this.large_icons = icon;
         this.panel_size = panel;
 
         set_icons_size();
@@ -319,11 +282,7 @@ public class IconTasklistApplet : Budgie.Applet
 
     protected void on_settings_change(string key)
     {
-        if (key == "larger-icons") {
-            this.larger_icons = settings.get_boolean(key);
-            set_icons_size();
-            return;
-        } else if (key != "pinned-launchers") {
+        if (key != "pinned-launchers") {
             return;
         }
 

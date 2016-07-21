@@ -12,20 +12,6 @@ plugin_DATA =
 	$(MKDIR_P) "$(dir $@)"; \
 	$(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
-
-plugin_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist  --generate-dependencies $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml)
-
-# resources
-plugin-resources.h: $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml $(plugin_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist --generate-header --c-name budgie_menu $<
-
-plugin-resources.c: $(top_srcdir)/panel/applets/icon-tasklist/plugin.gresource.xml $(plugin_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/panel/applets/icon-tasklist --generate-source --c-name budgie_menu $<
-
-BUILT_SOURCES = \
-	plugin-resources.h \
-	plugin-resources.c
-
 CLEANFILES = \
 	$(BUILT_SOURCES) \
 	IconTasklistApplet.plugin
@@ -38,18 +24,14 @@ plugin_DATA += \
 
 EXTRA_DIST += \
 	IconTasklistApplet.plugin.in \
-	com.solus-project.icon-tasklist.gschema.xml \
-	plugin.gresource.xml \
-	settings.ui
+	com.solus-project.icon-tasklist.gschema.xml
 
 plugin_LTLIBRARIES = libicontasklistapplet.la
 
 libicontasklistapplet_la_SOURCES = \
 	AppSystem.vala \
 	IconTasklistApplet.vala \
-	Buttons.vala \
-	plugin-resources.h \
-	plugin-resources.c
+	Buttons.vala
 
 libicontasklistapplet_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
@@ -76,9 +58,7 @@ libicontasklistapplet_la_VALAFLAGS = \
 	--pkg libpeas-1.0 \
 	--pkg PeasGtk-1.0 \
 	--pkg budgie-1.0 \
-	--vapidir=${top_srcdir}/plugin \
-	--target-glib=2.38 \
-	--gresources=${srcdir}/plugin.gresource.xml
+	--vapidir=${top_srcdir}/plugin
 
 gsettings_SCHEMAS = \
 	com.solus-project.icon-tasklist.gschema.xml

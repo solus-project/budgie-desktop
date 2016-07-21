@@ -20,7 +20,6 @@ session/budgie-desktop.desktop.in.in
 
 panel/applets/budgie-menu/settings.ui
 panel/applets/clock/ClockApplet.vala
-[type: gettext/keys]panel/applets/icon-tasklist/settings.ui
 panel/applets/icon-tasklist/Buttons.vala
 panel/applets/budgie-menu/BudgieMenuWindow.vala
 panel/applets/lock-keys/LockKeysApplet.vala
