@@ -97,6 +97,9 @@ public class BudgieMenuWindow : Gtk.Popover
     protected GMenu.TreeDirectory? group = null;
     protected bool compact_mode;
 
+    /* Whether we allow rollover category switch */
+    protected bool rollover_menus = true;
+
     // Current search term
     protected string search_term = "";
 
@@ -113,6 +116,7 @@ public class BudgieMenuWindow : Gtk.Popover
         foreach (var child in categories.get_children()) {
             if (child != all_categories) {
                 child.destroy();
+                SignalHandler.disconnect_by_func(child, (void*)on_mouse_enter, this);
             }
         }
         SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
@@ -123,6 +127,26 @@ public class BudgieMenuWindow : Gtk.Popover
             return false;
         });
     }
+
+    /**
+     * Permits "rolling" over categories
+     */
+    private bool on_mouse_enter(Gtk.Widget source_widget, Gdk.EventCrossing e)
+    {
+        if (!this.rollover_menus) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        /* If it's not valid, don't use it. */
+        Gtk.ToggleButton? b = source_widget as Gtk.ToggleButton;
+        if (!b.get_sensitive() || !b.get_visible()) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        /* Activate the source_widget category */
+        (source_widget as Gtk.ToggleButton).set_active(true);
+        return Gdk.EVENT_PROPAGATE;
+    }
+
 
     /**
      * Load "menus" (.desktop's) recursively (ripped from our RunDialog)
@@ -159,6 +183,7 @@ public class BudgieMenuWindow : Gtk.Popover
                 var dir = it.get_directory();
                 var btn = new CategoryButton(dir);
                 btn.join_group(all_categories);
+                btn.enter_notify_event.connect(this.on_mouse_enter);
                 categories.pack_start(btn, false, false, 0);
 
                 // Ensures we find the correct button
@@ -292,6 +317,7 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // "All" button"
         all_categories = new CategoryButton(null);
+        all_categories.enter_notify_event.connect(this.on_mouse_enter);
         all_categories.toggled.connect(()=> {
             update_category(all_categories);
         });
@@ -321,6 +347,7 @@ public class BudgieMenuWindow : Gtk.Popover
         settings.changed.connect(on_settings_changed);
         on_settings_changed("menu-compact");
         on_settings_changed("menu-headers");
+        on_settings_changed("menu-categories-hover");
 
         // management of our listbox
         content.set_filter_func(do_filter_list);
@@ -371,6 +398,10 @@ public class BudgieMenuWindow : Gtk.Popover
                     content.set_header_func(null);
                 }
                 content.invalidate_headers();
+                break;
+            case "menu-categories-hover":
+                /* Category hover */
+                this.rollover_menus = settings.get_boolean(key);
                 break;
             default:
                 // not interested

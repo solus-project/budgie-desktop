@@ -43,6 +43,12 @@
       <summary>Whether to show menu headers</summary>
       <description>Enable menu category headers</description>
     </key>
+
+    <key type="b" name="menu-categories-hover">
+      <default>false</default>
+      <summary>Activate menu categories by rolling over them</summary>
+      <description>Activate menu categories by rolling over them</description>
+    </key>
   </schema>
 
 </schemalist>
