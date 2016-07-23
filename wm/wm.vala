@@ -562,7 +562,6 @@ public class BudgieWM : Meta.Plugin
                 break;
             case AnimationState.UNMINIMIZE:
                 actor.set("pivot-point", PV_NORM, "opacity", 255U, "scale-x", 1.0, "scale-y", 1.0);
-                actor.show();
                 unminimize_completed(actor);
                 break;
             default:
@@ -717,6 +716,8 @@ public class BudgieWM : Meta.Plugin
             this.unminimize_completed(actor);
             return;
         }
+
+        finalize_animations(actor);
 
         actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
                   "x", d.place_x, "y", d.place_y, "scale-x",
