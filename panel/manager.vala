@@ -398,10 +398,17 @@ public class PanelManager : DesktopManager
         engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
 
         /* User path */
-        var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "modules");
+        var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "plugins");
         var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
+        engine.add_search_path(user_mod, hdata);
 
-        engine.add_search_path(hmod, hdata);
+        /* Legacy path */
+        var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "modules");
+        if (FileUtils.test(hmod, FileTest.EXISTS)) {
+            warning("Using legacy path %s, please migrate to %s", hmod, user_mod);
+            message("Legacy %s path will not be supported in next major version", hmod);
+            engine.add_search_path(hmod, hdata);
+        }
         engine.rescan_plugins();
 
         extensions = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
