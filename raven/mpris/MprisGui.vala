@@ -38,6 +38,7 @@ public class ClientWidget : Gtk.Box
 {
     Budgie.RavenExpander player_revealer;
     Gtk.Image background;
+    Gtk.EventBox background_wrap;
     MprisClient client;
     Gtk.Label title_label;
     Gtk.Label artist_label;
@@ -86,11 +87,14 @@ public class ClientWidget : Gtk.Box
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = our_width;
+        background_wrap = new Gtk.EventBox();
+        background_wrap.add(background);
+        background_wrap.button_release_event.connect(this.on_raise_player);
 
         var layout = new Gtk.Overlay();
         player_box.pack_start(layout, true, true, 0);
 
-        layout.add(background);
+        layout.add(background_wrap);
 
         /* normal info */
         var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -199,6 +203,22 @@ public class ClientWidget : Gtk.Box
         player_box.get_style_context().add_class("raven-background");
         player_revealer.add(player_box);
         pack_start(player_revealer);
+    }
+
+    /**
+     * You raise me up ...
+     */
+    private bool on_raise_player()
+    {
+        if (client == null || !client.player.can_raise) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        try {
+            client.player.raise.begin();
+        } catch (Error e) {
+            message(e.message);
+        }
+        return Gdk.EVENT_STOP;
     }
 
     /**

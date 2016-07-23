@@ -49,7 +49,7 @@ public interface DbusPropIface : Object
 [DBus (name="org.mpris.MediaPlayer2")]
 public interface MprisIface : Object
 {
-    public abstract void raise() throws IOError;
+    public abstract async void raise() throws IOError;
     public abstract async void quit() throws IOError;
 
     public abstract bool can_quit { get; set; }
