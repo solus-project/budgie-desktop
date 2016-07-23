@@ -112,6 +112,10 @@ public class BudgieMenuWindow : Gtk.Popover
     /* Reload menus, essentially. */
     public void refresh_tree()
     {
+        if (reloading) {
+            return;
+        }
+        reloading = true;
         foreach (var child in content.get_children()) {
             child.destroy();
         }
@@ -128,6 +132,7 @@ public class BudgieMenuWindow : Gtk.Popover
             apply_scores();
             return false;
         });
+        reloading = false;
     }
 
     /**
@@ -157,11 +162,6 @@ public class BudgieMenuWindow : Gtk.Popover
      */
     private void load_menus(GMenu.TreeDirectory? tree_root = null)
     {
-        if (reloading) {
-            return;
-        }
-        reloading = true;
-
         GMenu.TreeDirectory root;
     
         // Load the tree for the first time
@@ -223,7 +223,6 @@ public class BudgieMenuWindow : Gtk.Popover
                 }
             }
         }
-        reloading = false;
     }
 
     protected void unwrap_score(Variant v, out string s, out int i)
