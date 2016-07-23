@@ -107,6 +107,8 @@ public class BudgieMenuWindow : Gtk.Popover
 
     public unowned Settings settings { public get; public set; }
 
+    private bool reloading = false;
+
     /* Reload menus, essentially. */
     public void refresh_tree()
     {
@@ -115,8 +117,8 @@ public class BudgieMenuWindow : Gtk.Popover
         }
         foreach (var child in categories.get_children()) {
             if (child != all_categories) {
-                child.destroy();
                 SignalHandler.disconnect_by_func(child, (void*)on_mouse_enter, this);
+                child.destroy();
             }
         }
         SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
@@ -155,6 +157,11 @@ public class BudgieMenuWindow : Gtk.Popover
      */
     private void load_menus(GMenu.TreeDirectory? tree_root = null)
     {
+        if (reloading) {
+            return;
+        }
+        reloading = true;
+
         GMenu.TreeDirectory root;
     
         // Load the tree for the first time
@@ -165,9 +172,14 @@ public class BudgieMenuWindow : Gtk.Popover
                 tree.load_sync();
             } catch (Error e) {
                 stderr.printf("Error: %s\n", e.message);
+                reloading = false;
                 return;
             }
-            tree.changed.connect(refresh_tree);
+            /* Think of deferred routines.. */
+            Idle.add(()=> {
+                tree.changed.connect(refresh_tree);
+                return false;
+            });
         }
         if (tree_root == null) {
             root = tree.get_root_directory();
@@ -211,6 +223,7 @@ public class BudgieMenuWindow : Gtk.Popover
                 }
             }
         }
+        reloading = false;
     }
 
     protected void unwrap_score(Variant v, out string s, out int i)
