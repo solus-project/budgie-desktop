@@ -341,6 +341,7 @@ public class BudgieMenuWindow : Gtk.Popover
         // holds all the applications
         content = new Gtk.ListBox();
         content.row_activated.connect(on_row_activate);
+        content.set_selection_mode(Gtk.SelectionMode.NONE);
         content_scroll = new Gtk.ScrolledWindow(null, null);
         content_scroll.set_overlay_scrolling(false);
         content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
