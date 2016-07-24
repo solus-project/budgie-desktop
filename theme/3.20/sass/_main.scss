@@ -511,11 +511,28 @@ popover row {
 
 }
 
+// Menu Button
+button.budgie-menu-launcher {
+    padding: 0 2px;
+}
+
+// Raven Trigger
+button.raven-trigger {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 // Panel
 .budgie-panel {
     @extend %widgets;
     color: $fg_color;
     background-color: $panel_bg;
+
+    button {
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-radius: 0;
+    }
 
     separator { background-color: transparentize($fg_color, 0.85) }
 

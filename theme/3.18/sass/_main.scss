@@ -459,6 +459,17 @@ GtkPopover GtkListBoxRow {
     .undershoot, .overshoot { background: none; }
 }
 
+// Menu Button
+.budgie-menu-launcher.button {
+    padding: 0 2px;
+}
+
+// Raven Trigger
+.raven-trigger.button {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 // User Menu
 .user-menu {
     @extend .list;
@@ -492,6 +503,23 @@ GtkPopover GtkListBoxRow {
     @extend %widgets;
     color: $fg_color;
     background-color: $panel_bg;
+
+    .button {
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-radius: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+
+      .top & {
+          padding-top: 1px;
+          border-bottom: 1px solid transparentize($panel_bg, 1);
+      }
+      .bottom & {
+          padding-bottom: 1px;
+          border-top: 1px solid transparentize($panel_bg, 1);
+      }
+    }
 
     .separator { color: transparentize($fg_color, 0.85) }
 
