@@ -479,9 +479,6 @@ popover row {
         }
     }
 
-    row.activatable:selected,
-    row.activatable:selected button { color: inherit; }
-
     .categories {
         border-width: 0;
 
@@ -508,12 +505,20 @@ popover row {
     }
 
     undershoot, overshoot { background: none; }
-
 }
 
 // Menu Button
 button.budgie-menu-launcher {
     padding: 0 2px;
+}
+
+// User Menu
+.user-menu {
+    padding: 10px;
+
+    .content-box separator {
+        background-color: #{"alpha(@theme_fg_color, 0.15)"};
+    }
 }
 
 // Raven Trigger
@@ -564,34 +569,6 @@ button.raven-trigger {
     }
 
     &:drop(active) { box-shadow: inset 0 0 0 1px $selected_bg_color; }
-}
-
-// User Menu
-.user-menu {
-    @extend list;
-    padding: 10px;
-
-    row.activatable:selected,
-    row.activatable:selected button { color: inherit; }
-
-    .content-box {
-        .indicator-item {
-            color: $selected_fg_color;
-
-            &, &:selected, &:focus, &:active {
-                border: 0;
-                color: inherit;
-            }
-
-            &:selected, &:active {
-                background-color: transparent;
-            }
-        }
-
-        GtkSeparator {
-            color: transparentize($fg_color, 0.85);
-        }
-    }
 }
 
 // Icon Tasklist

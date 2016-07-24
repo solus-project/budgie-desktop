@@ -428,9 +428,6 @@ GtkPopover GtkListBoxRow {
         }
     }
 
-    .list-row.activatable:selected,
-    .list-row.activatable:selected .button { color: inherit; }
-
     .categories {
         border-width: 0;
 
@@ -464,38 +461,19 @@ GtkPopover GtkListBoxRow {
     padding: 0 2px;
 }
 
+// User Menu
+.user-menu {
+    padding: 10px;
+
+    .content-box GtkSeparator {
+        color: #{"alpha(@theme_fg_color, 0.15)"};
+    }
+}
+
 // Raven Trigger
 .raven-trigger.button {
     padding-left: 2px;
     padding-right: 2px;
-}
-
-// User Menu
-.user-menu {
-    @extend .list;
-    padding: 10px;
-
-    .list-row.activatable:selected,
-    .list-row.activatable:selected .button { color: inherit; }
-
-    .content-box {
-        .indicator-item {
-            color: $selected_fg_color;
-
-            &, &:selected, &:focus, &:active {
-                border: 0;
-                color: inherit;
-            }
-
-            &:selected, &:active {
-                background-color: transparent;
-            }
-        }
-
-        GtkSeparator {
-            color: transparentize($fg_color, 0.85);
-        }
-    }
 }
 
 // Panel
