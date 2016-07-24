@@ -719,13 +719,15 @@ button.raven-trigger {
 
     @extend %widgets;
 
+    .dialog-title { font-size: 120%; }
+
     decoration {
       border-radius: 1px;
       box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
     }
 
     .linked.horizontal > button {
-        min-height: 20px;
+        padding: 8px;
         border-bottom: none;
         border-radius: 0;
         &:first-child { border-left: none; border-radius: 0; }
@@ -745,5 +747,20 @@ button.raven-trigger {
 // Run Dialog
 .budgie-run-dialog {
     @extend .budgie-session-dialog;
-    @extend %menu;
+
+    entry.search, entry.search:focus {
+        font-size: 120%;
+        padding: 8px 5px;
+        border: none;
+        box-shadow: none;
+
+        image {
+            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
+            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
+        }
+    }
+
+    list row:selected .dim-label { opacity: 1; }
+
+    scrolledwindow { border-top: 1px solid darken($entry_border, 5%); }
 }

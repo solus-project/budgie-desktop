@@ -663,9 +663,12 @@ GtkPopover GtkListBoxRow {
 .budgie-session-dialog {
     &.background { @extend .drop-shadow; }
 
+    .dialog-title { font-size: 120%; }
+
     .linked.horizontal > .button {
         border-bottom: none;
         border-radius: 0;
+        padding: 8px;
         &:first-child { border-left: none; border-radius: 0; }
         &:last-child { border-right: none; border-radius: 0; }
     }
@@ -682,6 +685,26 @@ GtkPopover GtkListBoxRow {
 
 // Run Dialog
 .budgie-run-dialog {
-    @extend .budgie-session-dialog;
-    @extend %menu;
+    @extend .drop-shadow;
+
+    GtkSearchEntry.entry,
+    GtkSearchEntry.entry:focus {
+        font-size: 120%;
+        padding: 8px 5px;
+        border: none;
+        box-shadow: none;
+
+        &.image {
+            color: currentColor;
+
+            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
+            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
+        }
+    }
+
+    .list .list-row:selected .dim-label { opacity: 1; }
+
+    GtkScrolledWindow { border-top: 1px solid darken($entry_border, 5%); }
+
+    .undershoot, .overshoot { border: none; }
 }
