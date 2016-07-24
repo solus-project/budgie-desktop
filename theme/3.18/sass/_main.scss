@@ -692,7 +692,7 @@ GtkPopover GtkListBoxRow {
 }
 
 // Run Dialog
-.budgie-run-dialog {
+.budgie-run-dialog.background {
     @extend .drop-shadow;
 
     GtkSearchEntry.entry,
