@@ -31,7 +31,7 @@ public class StatusApplet : Budgie.Applet
         wrap = new Gtk.EventBox();
         add(wrap);
 
-        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         wrap.add(widget);
 
         show_all();

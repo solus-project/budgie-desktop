@@ -391,16 +391,12 @@ popover row {
             menuitem {
                 padding: 5px;
                 color: $fg_color;
-                border: solid transparent;
-                border-width: 1px 0 1px 0;
                 &:hover {
                     color: $selected_fg_color;
-                    background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
-                    border: solid if($variant == 'hc', $selected_bg_color, transparentize(white, 0.93));
-                    border-width: 1px 0 1px 0;
-              }
-              &:disabled { color: transparentize($fg_color, 0.65); }
-              separator { background-color: transparentize($raven_bg, 1); }
+                    background-color: $selected_bg_color;
+                }
+                &:disabled { color: transparentize($fg_color, 0.65); }
+                separator { background-color: transparentize($raven_bg, 1); }
             }
             arrow {
                 border: none;
@@ -483,9 +479,6 @@ popover row {
         }
     }
 
-    row.activatable:selected,
-    row.activatable:selected button { color: inherit; }
-
     .categories {
         border-width: 0;
 
@@ -511,8 +504,29 @@ popover row {
         }
     }
 
-    undershoot, overshoot { background: none; }
+    button:not(.category-button) { padding-top: 5px; padding-bottom: 5px; }
 
+    undershoot, overshoot { background: none; }
+}
+
+// Menu Button
+button.budgie-menu-launcher {
+    padding: 0 2px;
+}
+
+// User Menu
+.user-menu {
+    padding: 10px;
+
+    .content-box separator {
+        background-color: #{"alpha(@theme_fg_color, 0.15)"};
+    }
+}
+
+// Raven Trigger
+button.raven-trigger {
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 // Panel
@@ -521,13 +535,21 @@ popover row {
     color: $fg_color;
     background-color: $panel_bg;
 
+    button {
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-radius: 0;
+    }
+
+    separator { background-color: transparentize($fg_color, 0.85) }
+
     // End Section needs to be fancy
     @if $variant == 'default' {
         .end-region {
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 2px;
+            background-color: rgba(0,0,0,0.2);
 
-            separator { background-color: transparentize($fg_color, 0.85) }
+            &:dir(ltr) { border-left: 1px solid rgba(0,0,0,0.2); }
+            &:dir(rtl) { border-right: 1px solid rgba(0,0,0,0.2); }
         }
     }
 }
@@ -551,34 +573,6 @@ popover row {
     &:drop(active) { box-shadow: inset 0 0 0 1px $selected_bg_color; }
 }
 
-// User Menu
-.user-menu {
-    @extend list;
-    padding: 10px;
-
-    row.activatable:selected,
-    row.activatable:selected button { color: inherit; }
-
-    .content-box {
-        .indicator-item {
-            color: $selected_fg_color;
-
-            &, &:selected, &:focus, &:active {
-                border: 0;
-                color: inherit;
-            }
-
-            &:selected, &:active {
-                background-color: transparent;
-            }
-        }
-
-        GtkSeparator {
-            color: transparentize($fg_color, 0.85);
-        }
-    }
-}
-
 // Icon Tasklist
 .budgie-panel {
 
@@ -587,23 +581,32 @@ popover row {
 
         outline-color: transparent;
         transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        padding: 1px 0px;
         border-color: transparentize($panel_bg,1); // fixes the transition
         border-radius: 0;
-
-        &:hover { -gtk-icon-effect: highlight; }
+        padding: 0;
+        background-clip: padding-box;
     }
     .unpinned button.flat.launcher,
     .pinned button.flat.launcher.running { @extend %underscores; }
+
+    .pinned button.flat.launcher:not(.running):hover {
+        background-color: transparentize(black, 0.8);
+        box-shadow: inset 1px 0 transparentize(black, 0.8),
+                    inset -1px 0 transparentize(black, 0.8);
+    }
 }
 
 %underscores {
-    &:hover { background-color: transparentize(black, 0.9); }
-    &:active, &:checked { background-color: transparentize(black, 0.8); }
+    &:hover,
+    &:active, &:checked {
+        background-color: transparentize(black, 0.8);
+        box-shadow: inset 1px 0 transparentize(black, 0.8),
+                    inset -1px 0 transparentize(black, 0.8);
+    }
 
     @each $pos, $b_pos in $pos_list {
         .#{$pos} & {
-            border-#{$b_pos}: 2px solid transparentize($panel_bg,1);
+            padding-#{$b_pos}: 2px;
             border-#{$pos}: 2px solid transparentize($panel_bg,1);
 
             @at-root {
@@ -611,11 +614,9 @@ popover row {
                 .#{$pos} .budgie-panel .pinned button.flat.launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
             }
             &:hover {
-                border-#{$b_pos}: 2px solid transparentize(black, 0.9);
                 border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
             }
             &:active, &:checked {
-                border-#{$b_pos}: 2px solid transparentize(black, 0.8);
                 border-#{$pos}: 2px solid $selected_bg_color;
             }
         }
@@ -727,13 +728,15 @@ popover row {
 
     @extend %widgets;
 
+    .dialog-title { font-size: 120%; }
+
     decoration {
       border-radius: 1px;
       box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
     }
 
     .linked.horizontal > button {
-        min-height: 20px;
+        padding: 8px;
         border-bottom: none;
         border-radius: 0;
         &:first-child { border-left: none; border-radius: 0; }
@@ -753,5 +756,20 @@ popover row {
 // Run Dialog
 .budgie-run-dialog {
     @extend .budgie-session-dialog;
-    @extend %menu;
+
+    entry.search, entry.search:focus {
+        font-size: 120%;
+        padding: 8px 5px;
+        border: none;
+        box-shadow: none;
+
+        image {
+            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
+            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
+        }
+    }
+
+    list row:selected .dim-label { opacity: 1; }
+
+    scrolledwindow { border-top: 1px solid darken($entry_border, 5%); }
 }

@@ -88,6 +88,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         get_style_context().add_class("user-menu");
         items.get_style_context().add_class("content-box");
+        items.set_selection_mode(Gtk.SelectionMode.NONE);
 
         // User Menu Creation
 

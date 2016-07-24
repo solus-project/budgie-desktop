@@ -26,6 +26,7 @@ public class AppLauncherButton : Gtk.Box
         get_style_context().add_class("launcher-button");
         var image = new Gtk.Image.from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
         image.pixel_size = 48;
+        image.set_margin_start(8);
         pack_start(image, false, false, 0);
 
         var nom = Markup.escape_text(info.get_name());

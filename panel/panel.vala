@@ -330,13 +330,12 @@ public class Panel : Budgie.Toplevel
         this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
-        start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         start_box.halign = Gtk.Align.START;
         layout.pack_start(start_box, true, true, 0);
-        center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-        end_box.margin = 2;
         layout.pack_end(end_box, true, true, 0);
         end_box.halign = Gtk.Align.END;
 
