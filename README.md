@@ -50,6 +50,14 @@ and build processes and will also invalidate your bug if this is discovered.
 Don't make other users suffer because you failed to follow our established
 build and release processes. Use standard methods, and we all benefit.
 
+Please note that the **master** branch is the active development branch. Note that
+`master` is ever-changing! This means if you provide some form of magical package
+that builds directly from git master (which you should never do, there is no
+form of reproducability) - bugs, features, dependencies and issues change
+with *every build.* You also remove my freedom to break my own branch, so
+please ensure you use specific *git shas* and test your packages, and then
+update to the newest commit and freezing there.
+
 License
 -------
 
