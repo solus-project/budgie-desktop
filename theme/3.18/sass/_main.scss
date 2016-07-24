@@ -353,9 +353,7 @@ GtkPopover GtkListBoxRow {
                 color: $fg_color;
                 &:hover {
                     color: $selected_fg_color;
-                    background-color: if($variant == 'hc',$selected_bg_color, transparentize(white, 0.95));
-                    border: solid if($variant == 'hc', $selected_bg_color, transparentize(white, 0.93));
-                    border-width: 1px 0 1px 0;
+                    background-color: $selected_bg_color;
               }
               &:insensitive { color: transparentize($fg_color, 0.65); }
               &.separator { color: transparentize($raven_bg, 1); }
