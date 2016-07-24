@@ -47,6 +47,9 @@
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
+                <style>
+                  <class name="dialog-title"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">1</property>
