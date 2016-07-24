@@ -29,7 +29,6 @@ public class TrayApplet : Budgie.Applet
 
     public TrayApplet()
     {
-        margin = 1;
         box = new Gtk.EventBox();
         add(box);
 
