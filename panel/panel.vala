@@ -336,7 +336,6 @@ public class Panel : Budgie.Toplevel
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-        end_box.margin = 2;
         layout.pack_end(end_box, true, true, 0);
         end_box.halign = Gtk.Align.END;
 
