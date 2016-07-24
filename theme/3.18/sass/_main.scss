@@ -534,20 +534,30 @@ GtkPopover GtkListBoxRow {
     .launcher {
         transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
         border-color: transparentize($panel_bg,1); // fixes the transition
-
-        &:hover { -gtk-image-effect: highlight; }
+        padding: 0;
+        background-clip: padding-box;
     }
     .unpinned .launcher,
     .pinned .launcher.running { @extend %underscores; }
+
+    .pinned .launcher:not(.running):hover {
+        background-color: transparentize(black, 0.8);
+        box-shadow: inset 1px 0 transparentize(black, 0.8),
+                    inset -1px 0 transparentize(black, 0.8);
+    }
 }
 
 %underscores {
-    &:hover { background-color: transparentize(black, 0.9); }
-    &:active, &:checked { background-color: transparentize(black, 0.8); }
+    &:hover,
+    &:active, &:checked {
+        background-color: transparentize(black, 0.8);
+        box-shadow: inset 1px 0 transparentize(black, 0.8),
+                    inset -1px 0 transparentize(black, 0.8);
+    }
 
     @each $pos, $b_pos in $pos_list {
         .#{$pos} & {
-            border-#{$b_pos}: 2px solid transparentize($panel_bg,1);
+            padding-#{$b_pos}: 2px;
             border-#{$pos}: 2px solid transparentize($panel_bg,1);
 
             @at-root {
@@ -555,11 +565,9 @@ GtkPopover GtkListBoxRow {
                 .#{$pos} .budgie-panel .pinned .launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
             }
             &:hover {
-                border-#{$b_pos}: 2px solid transparentize(black, 0.9);
                 border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
             }
             &:active, &:checked {
-                border-#{$b_pos}: 2px solid transparentize(black, 0.8);
                 border-#{$pos}: 2px solid $selected_bg_color;
             }
         }
