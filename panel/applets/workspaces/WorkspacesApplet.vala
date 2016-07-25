@@ -21,29 +21,12 @@ public class WorkspacesApplet : Budgie.Applet
 {
 
     Wnck.Pager? widget;
-    Gtk.EventBox? box;
 
     public WorkspacesApplet()
     {
-        box = new Gtk.EventBox();
-        add(box);
-
-        show_all();
-
-        realize.connect_after(()=> {
-            maybe_integrate_pager();
-        });
-    }
-
-    public void maybe_integrate_pager()
-    {
-        if (widget != null) {
-            return;
-        }
-
         widget = new Wnck.Pager();
-
-        box.add(widget);
+        widget.set_size_request(0, 0);
+        add(widget);
         show_all();
     }
 }
