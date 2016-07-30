@@ -105,6 +105,20 @@ public class BudgieMenuWindow : Gtk.Popover
 
     protected int icon_size = 24;
 
+    /* Whether we allow full menu height */
+    protected bool full_height = true;
+    /* default menu width */
+    protected int default_width = 300;
+    /* sensible vertical height */
+    protected int default_height = 510;
+    /**
+     * default_diff = value subtracted from Gdk.Screen.height()
+     * a value of 28 seems to be a sensible one 
+     * this value can be increased if the menu is automatically pushed to the right
+     * (happens if the menu height is too big - it just looks ugly; avoid this!)
+     */
+    protected int default_diff = 28; 
+
     public unowned Settings settings { public get; public set; }
 
     private bool reloading = false;
@@ -361,6 +375,7 @@ public class BudgieMenuWindow : Gtk.Popover
         on_settings_changed("menu-compact");
         on_settings_changed("menu-headers");
         on_settings_changed("menu-categories-hover");
+        on_settings_changed("menu-full-height");
 
         // management of our listbox
         content.set_filter_func(do_filter_list);
@@ -381,8 +396,13 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // Enabling activation by search entry
         search_entry.activate.connect(on_entry_activate);
-        // sensible vertical height
-        set_size_request(300, 510);
+        // set proper vertical height
+        if (settings.get_boolean("menu-full-height")) {
+            this.set_size_request(default_width, (Gdk.Screen.height() - default_diff));
+        } else {
+            this.set_size_request(default_width, default_height);
+        }
+
         // load them in the background
         Idle.add(()=> {
             load_menus(null);
@@ -415,6 +435,15 @@ public class BudgieMenuWindow : Gtk.Popover
             case "menu-categories-hover":
                 /* Category hover */
                 this.rollover_menus = settings.get_boolean(key);
+                break;
+            case "menu-full-height":
+                /* extend popover height */
+                this.full_height = settings.get_boolean(key);
+                if (settings.get_boolean(key)) {
+                    this.set_size_request(default_width, (Gdk.Screen.height() - default_diff));
+                } else {
+                    this.set_size_request(default_width, default_height);
+                }
                 break;
             default:
                 // not interested
