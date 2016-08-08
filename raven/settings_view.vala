@@ -625,6 +625,7 @@ public class PanelEditor : Gtk.Box
             label.get_style_context().add_class("dim-label");
             label.halign = Gtk.Align.START;
             var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+            sep.set_valign(Gtk.Align.CENTER);
             label.margin_start = 8;
             label.margin_end = 6;
             label.margin_top = 3;
