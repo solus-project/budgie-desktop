@@ -83,7 +83,7 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
         case PanelPosition.TOP:
             struts = { 0, 0, primary_monitor_rect.y+panel_size, 0,
                 0, 0, 0, 0,
-                primary_monitor_rect.x, primary_monitor_rect.x+primary_monitor_rect.width,
+                primary_monitor_rect.x, (primary_monitor_rect.x+primary_monitor_rect.width) - 1,
                 0, 0
             };
             break;
@@ -105,7 +105,7 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
             struts = { 0, 0, 0, 
                 (screen.get_height()-primary_monitor_rect.height-primary_monitor_rect.y) + panel_size,
                 0, 0, 0, 0, 0, 0, 
-                primary_monitor_rect.x, primary_monitor_rect.x + primary_monitor_rect.width
+                primary_monitor_rect.x, (primary_monitor_rect.x + primary_monitor_rect.width) - 1
             };
             break;
     }
