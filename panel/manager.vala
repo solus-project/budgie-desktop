@@ -760,6 +760,11 @@ public class PanelManager : DesktopManager
 
     public override void delete_panel(string uuid)
     {
+        if (this.slots_used() <= 1) {
+            warning("Asked to delete final panel");
+            return;
+        }
+
         unowned Budgie.Panel? panel = panels.lookup(uuid);
         if (panel == null) {
             warning("Asked to delete non-existent panel: %s", uuid);
