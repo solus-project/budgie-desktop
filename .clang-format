@@ -38,7 +38,7 @@ Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
-ForEachMacros: [ NC_LIST_FOREACH ]
+ForEachMacros: [ ]
 #Uncomment for clang 3.9
 #IncludeCategories:
 #  - Regex: '^"'
