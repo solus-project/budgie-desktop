@@ -817,7 +817,7 @@ public class AppearanceSettings : Gtk.Box
 
     public void load_themes()
     {
-        /* Scan teh themes */
+        /* Scan the themes */
         this.theme_scanner.scan_themes.begin(()=> {
             /* Gtk themes */
             {

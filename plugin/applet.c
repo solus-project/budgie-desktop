@@ -328,7 +328,7 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
 
         /**
          * BudgieApplet::panel-size-changed:
-         * @applet: The applet recieving the signal
+         * @applet: The applet receiving the signal
          * @panel_size: The new panel size
          * @icon_size: Larget possible icon size for the panel
          * @small_icon_size: Smaller icon that will still fit on the panel
@@ -429,7 +429,7 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self)
  *
  * Each registered popover joins the global menu system of popovers in the
  * panel. It is a requirement to register, otherwise the panel will not
- * know when to expand and collapse the main panel harness to accomdate
+ * know when to expand and collapse the main panel harness to accommodate
  * the GtkPopover.
  *
  */

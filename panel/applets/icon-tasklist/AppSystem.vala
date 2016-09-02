@@ -103,7 +103,7 @@ public class AppSystem : GLib.Object
                     return this.desktops[dname];
                 }
             }
-            /* Wasnt a startupid match, try class -> desktop match */
+            /* Wasn't a startupid match, try class -> desktop match */
             string dname = check + ".desktop";
             if (dname in this.desktops) {
                 return this.desktops[dname];
