@@ -9,6 +9,7 @@ SUBDIRS = \
 	notifications \
 	raven-trigger \
 	separator \
+	sensors \
 	show-desktop \
 	spacer \
 	status \

@@ -88,6 +88,7 @@ m4_include([panel/applets/lock-keys/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
 m4_include([panel/applets/raven-trigger/configure.ac])
+m4_include([panel/applets/sensors/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
 m4_include([panel/applets/show-desktop/configure.ac])
 m4_include([panel/applets/spacer/configure.ac])
@@ -198,6 +199,7 @@ AC_MSG_RESULT([
         clock:                  always
         icon-tasklist           ${have_wnck}
         notifications           always
+	sensors:              	always
         separator:              always
         spacer:                 always
         show-desktop:           ${have_wnck}
