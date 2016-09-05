@@ -91,7 +91,12 @@ public class NotificationClone : Gtk.Grid
         label_body.set_markup(safe_markup_string(target.body));
 
         var date = new DateTime.from_unix_local(target.timestamp);
-        label_timestamp.set_text(date.format("%H:%M"));
+
+        var gnome_settings = new Settings("org.gnome.desktop.interface");
+        string clock_format = gnome_settings.get_string("clock-format");
+        clock_format = (clock_format == "12h") ? date.format("%l:%M %p") : date.format("%H:%M");
+
+        label_timestamp.set_text(clock_format);
     }
 }
 
