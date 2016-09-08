@@ -10,6 +10,7 @@ AC_CONFIG_MACRO_DIR([m4])
 GLIB_GSETTINGS
 
 m4_define([mutter_required_version], [3.16.0])
+m4_define([mutter_goes_private_version], [3.21.0])
 m4_define([glib_required_version], [2.44.0])
 m4_define([gtk_required_version], [3.16.0])
 m4_define([peas_required_version], [1.8.0])
@@ -75,6 +76,18 @@ PKG_CHECK_MODULES([RUNDIALOG],
                  gtk+-3.0 >= gtk_required_version
                 ]
 )
+
+# Check if we have the mutter private API cruft.
+PKG_CHECK_MODULES(MUTTER_PRIVATE, libmutter >= mutter_goes_private_version,
+        [have_cranky_mutter=yes], [have_cranky_mutter=no]
+)
+
+if test x$have_cranky_mutter = "xyes"; then
+        MUTTER_TYPELIB_DIR=`$PKG_CONFIG --variable=typelibdir libmutter`
+        AC_SUBST(MUTTER_TYPELIB_DIR)
+fi
+
+AM_CONDITIONAL(HAVE_CRANKY_MUTTER, test x$have_cranky_mutter = xyes)
 
 m4_include([config/configure.ac])
 
@@ -188,6 +201,8 @@ AC_MSG_RESULT([
 
         stateless:              ${enable_stateless}
         xdg directory:          ${XDGDIR}
+
+        mutter private api:     ${have_cranky_mutter}
 
         Plugins:
         ========

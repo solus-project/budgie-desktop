@@ -27,6 +27,11 @@ budgie_wm_CFLAGS = \
 	$(DECLARATIONS) \
 	-DGNOME_DESKTOP_USE_UNSTABLE_API
 
+if HAVE_CRANKY_MUTTER
+budgie_wm_LDFLAGS = \
+	-rpath $(MUTTER_TYPELIB_DIR)
+endif
+
 budgie_wm_LDADD = \
 	${top_builddir}/config/libbudgie-config.la \
 	$(BUDGIE_BASE_LIBS) \
