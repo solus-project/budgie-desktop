@@ -97,6 +97,9 @@ public class SessionHandler : GLib.Object
     }
 }
 
+/**
+ * Wrap the EndSessionDialog type inside Budgie itself
+ */
 [DBus (name = "com.solus_project.Session.EndSessionDialog")]
 public interface EndSessionDialog : GLib.Object
 {
@@ -112,6 +115,24 @@ public interface EndSessionDialog : GLib.Object
     public abstract void Close() throws Error;
 }
 
+/**
+ * Expose the BudgieOSD functionality for proxying of the Shell OSD Functionality
+ */
+[DBus (name = "com.solus_project.BudgieOSD")]
+public interface BudgieOSD : GLib.Object
+{
+    /**
+     * Budgie GTK+ On Screen Display
+     *
+     * Valid params:
+     *  icon: string
+     *  label: string
+     *  level: int32
+     *  monitor: int32
+     */
+    public abstract async void ShowOSD(HashTable<string,Variant> params) throws Error;
+}
+
 [DBus (name = "org.gnome.Shell")]
 public class ShellShim : GLib.Object
 {
@@ -122,6 +143,9 @@ public class ShellShim : GLib.Object
 
     private SessionHandler? handler = null;
 
+    /* Proxy off the OSD Calls */
+    private BudgieOSD? osd_proxy = null;
+
     protected ShellShim(Budgie.BudgieWM? wm)
     {
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
@@ -131,6 +155,40 @@ public class ShellShim : GLib.Object
         display.accelerator_activated.connect(on_accelerator_activated);
 
         handler = new SessionHandler();
+
+        Bus.watch_name(BusType.SESSION, "com.solus_project.BudgieOSD",
+            BusNameWatcherFlags.NONE, has_osd_proxy, lost_osd_proxy);
+    }
+
+    /**
+     * BudgieOSD known to be present, now try to get the proxy
+     */
+    void on_osd_proxy_get(Object? o, AsyncResult? res)
+    {
+        try {
+            osd_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            osd_proxy = null;
+        }
+    }
+
+    /**
+     * BudgieOSD appeared, schedule a proxy-get
+     */
+    void has_osd_proxy()
+    {
+        if (osd_proxy  != null) {
+            return;
+        }
+        Bus.get_proxy.begin<EndSessionDialog>(BusType.SESSION, "com.solus_project.BudgieOSD", "/com/solus_project/BudgieOSD", 0, null, on_osd_proxy_get);
+    }
+
+    /**
+     * BudgieOSD disappeared, drop the reference
+     */
+    void lost_osd_proxy()
+    {
+        osd_proxy = null;
     }
 
     private void on_accelerator_activated(uint action, uint device_id)
@@ -224,6 +282,16 @@ public class ShellShim : GLib.Object
             return true;
         }
         return false;
+    }
+
+    /**
+     * Show the OSD when requested.
+     */
+    public void ShowOSD(HashTable<string,Variant> params)
+    {
+        if (osd_proxy != null) {
+            osd_proxy.ShowOSD.begin(params);
+        }
     }
         
     public signal void accelerator_activated(uint action, HashTable<string,Variant> parameters);
