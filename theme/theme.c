@@ -11,15 +11,6 @@
 
 #include <gtk/gtk.h>
 
-/* So gcc doesn't optimise the function out entirely */
-static int dummy = 0;
-
-void budgie_please_link_me_libtool_i_have_great_themes(void)
-{
-        int j = 1;
-        dummy = j;
-}
-
 #define THEME_PREFIX "resource://com/solus-project/budgie/theme"
 
 gchar *budgie_form_theme_path(const gchar *suffix)

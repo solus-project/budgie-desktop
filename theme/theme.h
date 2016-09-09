@@ -12,18 +12,6 @@
 #include <glib.h>
 
 /**
- * This is genuinely needed. So the libbudgietheme shared library
- * really only has an __attribute__((constructor)), which we link
- * against to gain the shared theme assets in all of our binaries.
- *
- * However, -Wl,-as-needed will break this as there's no explicit
- * dependency, so we have this dummy function which won't be optimised
- * out by GCC, to enforce a dependency between the programs and
- * library via symbols.
- */
-void budgie_please_link_me_libtool_i_have_great_themes(void);
-
-/**
  * Generate a dynamic resource path for the given suffix for a resource
  * contained within the libbudgie-theme.
  *
