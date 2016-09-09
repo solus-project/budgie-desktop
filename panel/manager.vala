@@ -17,6 +17,11 @@ namespace Budgie
 public static const string DBUS_NAME        = "com.solus_project.budgie.Panel";
 public static const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
+public static const string MIGRATION_1_APPLETS[] = {
+    "User Indicator",
+    "Raven Trigger",
+};
+
 /**
  * Available slots
  */
@@ -80,6 +85,15 @@ public static const string PANEL_KEY_SHADOW     = "enable-shadow";
 /** Theme regions permitted? */
 public static const string PANEL_KEY_REGIONS    = "theme-regions";
 
+/** Current migration level in settings */
+public static const string PANEL_KEY_MIGRATION  = "migration-level";
+
+/**
+ * The current migration level of Budgie, or format change, if you will.
+ */
+public static const int BUDGIE_MIGRATION_LEVEL = 1;
+
+
 [DBus (name = "com.solus_project.budgie.Panel")]
 public class PanelManagerIface
 {
@@ -129,6 +143,11 @@ public class PanelManager : DesktopManager
     private string current_theme_uri;
 
     private EndSessionDialog? end_dialog = null;
+
+    /**
+     * Updated when specific names are queried
+     */
+    private bool migrate_load_requirements_met = false;
 
     public void activate_action(int action)
     {
@@ -316,10 +335,17 @@ public class PanelManager : DesktopManager
 
         end_dialog = new Budgie.EndSessionDialog();
 
+        int current_migration_level = settings.get_int(PANEL_KEY_MIGRATION);
         if (!load_panels()) {
             message("Creating default panel layout");
             create_default();
+        } else {
+            /* Migration required */
+            perform_migration(current_migration_level);
         }
+
+        /* Whatever route we took, set the migration level to the current now */
+        settings.set_int(PANEL_KEY_MIGRATION, BUDGIE_MIGRATION_LEVEL);
 
         register_with_session.begin((o,res)=> {
             bool success = register_with_session.end(res);
@@ -327,6 +353,48 @@ public class PanelManager : DesktopManager
                 message("Failed to register with Session manager");
             }
         });
+    }
+
+    /**
+     * Attempts to perform the relevant migration operations by
+     * finding a migratable panel and calling its migratory function
+     */
+    private void perform_migration(int current_migration_level)
+    {
+        Budgie.Toplevel? top = null;
+        Budgie.Toplevel? last = null;
+
+        /* Minimum migration level met, proceed as normal. */
+        if (current_migration_level >= BUDGIE_MIGRATION_LEVEL) {
+            return;
+        }
+
+        /* Manual configuration from user met the expected migration path. Proceed as normal. */
+        if (migrate_load_requirements_met) {
+            message("Budgie Migration skipped due to user meeting migration requirements");
+            return;
+        }
+
+        message("Budgie Migration initiated");
+
+        string? key = null;
+        Budgie.Panel? val = null;
+        Screen? area = screens.lookup(primary_monitor);
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
+        while (iter.next(out key, out val)) {
+            if (val.position == Budgie.PanelPosition.TOP) {
+                top = val;
+            }
+            last = val;
+        }
+
+        /* Prefer the top panel for consistency */
+        if (top != null) {
+            last = top;
+        }
+
+        /* Ask this panel to perform migratory tasks (add applets) */
+        (last as Budgie.Panel).perform_migration(current_migration_level);
     }
 
     void set_css_from_uri(string? uri)
@@ -443,6 +511,9 @@ public class PanelManager : DesktopManager
 
     public bool is_extension_loaded(string name)
     {
+        if (name in MIGRATION_1_APPLETS) {
+            migrate_load_requirements_met = true;
+        }
         return plugins.contains(name);
     }
 
@@ -451,6 +522,9 @@ public class PanelManager : DesktopManager
      */
     public bool is_extension_valid(string name)
     {
+        if (name in MIGRATION_1_APPLETS) {
+            migrate_load_requirements_met = true;
+        }
         if (this.get_plugin_info(name) == null) {
             return false;
         }

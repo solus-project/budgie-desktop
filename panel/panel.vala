@@ -93,6 +93,7 @@ public class Panel : Budgie.Toplevel
 
     /* Track initial load */
     private bool is_fully_loaded = false;
+    private bool need_migratory = false;
 
     public signal void panel_loaded();
 
@@ -242,6 +243,13 @@ public class Panel : Budgie.Toplevel
         if (!initial_anim) {
             Idle.add(initial_animation);
         }
+        lock (need_migratory) {
+            if (!need_migratory) {
+                return;
+            }
+        }
+        /* In half a second, add_migratory so the user sees them added */
+        Timeout.add(500, add_migratory);
     }
 
     private bool initial_animation()
@@ -1140,6 +1148,41 @@ public class Panel : Budgie.Toplevel
         cr.paint();
 
         return Gdk.EVENT_STOP;
+    }
+
+    /**
+     * Specialist operation, perform a migration after we changed applet configurations
+     * See: https://github.com/solus-project/budgie-desktop/issues/555
+     */
+    public void perform_migration(int current_migration_level)
+    {
+        if (current_migration_level != 0) {
+            GLib.warning("Unknown migration level: %d", current_migration_level);
+            return;
+        }
+        this.need_migratory = true;
+        if (this.is_fully_loaded) {
+            GLib.message("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
+            this.add_migratory();
+        }
+    }
+
+    /**
+     * Very simple right now. Just add the applets to the end of the panel
+     */
+    private bool add_migratory()
+    {
+        lock (need_migratory) {
+            if (!need_migratory) {
+                return false;
+            }
+            need_migratory = false;
+            foreach (var new_applet in MIGRATION_1_APPLETS) {
+                message("Adding migratory applet: %s", new_applet);
+                add_new_applet_at(new_applet, end_box);
+            }
+        }
+        return false;
     }
 }
 
