@@ -27,10 +27,10 @@ DISTCLEANFILES = \
 
 # resources
 budgie-polkit-resources.h: $(top_srcdir)/polkit/budgie-polkit.gresource.xml $(polkit_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/polkit --generate-header --c-name budgie_raven $<
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/polkit --generate-header --c-name budgie_polkit $<
 
 budgie-polkit-resources.c: $(top_srcdir)/polkit/budgie-polkit.gresource.xml $(polkit_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/polkit --generate-source --c-name budgie_raven $<
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/polkit --generate-source --c-name budgie_polkit $<
 
 EXTRA_DIST = \
 	dialog.ui \
