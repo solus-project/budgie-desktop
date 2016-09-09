@@ -499,8 +499,10 @@ public class Panel : Budgie.Toplevel
      * and add the applet there. Determine a suitable position,
      * set the alignment+position, stuff an initial config in,
      * and hope for the best when we initiate add_new
+     *
+     * If the @target_region is set, we'll use that instead
      */
-    public override void add_new_applet(string id)
+    private void add_new_applet_at(string id, Gtk.Box? target_region)
     {
         /* First, determine a panel to place this guy */
         int position = (int) applets.size() + 1;
@@ -515,12 +517,20 @@ public class Panel : Budgie.Toplevel
             end_box
         };
 
-        foreach (var region in regions) {
-            var kids = region.get_children();
-            var len = kids.length();
-            if (len < position) {
-                position = (int)len;
-                target = region;
+        /* Use the requested target_region for internal migration adds */
+        if (target_region != null) {
+            var kids = target_region.get_children();
+            position = (int) (kids.length());
+            target = target_region;
+        } else {
+            /* No region specified, find the first available slot */
+            foreach (var region in regions) {
+                var kids = region.get_children();
+                var len = kids.length();
+                if (len < position) {
+                    position = (int)len;
+                    target = region;
+                }
             }
         }
 
@@ -550,6 +560,14 @@ public class Panel : Budgie.Toplevel
 
         initial_config.insert(uuid, info);
         add_new(id, uuid);
+    }
+
+    /**
+     * Add a new applet to the panel (Raven UI)
+     */
+    public override void add_new_applet(string id)
+    {
+        add_new_applet_at(id, null);
     }
 
     public void create_default_layout(string name, KeyFile config)
