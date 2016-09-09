@@ -25,9 +25,11 @@ public class AppSystem : GLib.Object
         simpletons["calibre-gui"] = "calibre";
         simpletons["code - oss"] = "vscode-oss";
         simpletons["code"] = "vscode";
+        simpletons["psppire"] = "pspp";
 
         derpers = new string[] {
             "atom",
+            "dia",
             "freeorion",
             "google-chrome",
             "hexchat",
