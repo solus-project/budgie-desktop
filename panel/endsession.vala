@@ -104,6 +104,8 @@ public class EndSessionDialog : Gtk.Window
         Bus.own_name(BusType.SESSION, "com.solus_project.Session.EndSessionDialog", BusNameOwnerFlags.NONE,
             on_bus_acquired, null, null);
         set_keep_above(true);
+        set_has_resize_grip(false);
+        set_resizable(false);
 
         Gdk.Visual? visual = screen.get_rgba_visual();
         if (visual != null) {
