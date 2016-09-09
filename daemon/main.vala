@@ -15,6 +15,15 @@
 public static int main(string[] args)
 {
     Gtk.init(ref args);
+    Budgie.ServiceManager? manager = null;
+
+    manager = new Budgie.ServiceManager();
+
+    /* Enter main loop */
+    Gtk.main();
+
+    /* Deref - clean */
+    manager = null;
 
     return 0;
 }
