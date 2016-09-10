@@ -18,6 +18,11 @@ namespace Budgie
 public static const int OSD_SIZE = 250;
 
 /**
+ * How long before the visible OSD expires, default is 2.5 seconds
+ */
+public static const int OSD_EXPIRE_TIME = 2500;
+
+/**
  * Our name on the session bus. Reserved for Budgie use
  */
 public static const string OSD_DBUS_NAME        = "com.solus_project.BudgieOSD";
@@ -165,8 +170,7 @@ public class OSD : Gtk.Window
         osd_icon = null;
         osd_progress = -1;
 
-        /* Temp! */
-        show_all();
+        get_child().show_all();
     }
 
     /**
@@ -199,6 +203,7 @@ public class OSD : Gtk.Window
 public class OSDManager
 {
     private OSD? osd_window = null;
+    private uint32 expire_timeout = 0;
 
     [DBus (visible = false)]
     public OSDManager()
@@ -255,11 +260,39 @@ public class OSDManager
         osd_window.osd_icon = icon_name;
         osd_window.osd_progress = level;
 
+        this.reset_osd_expire(OSD_EXPIRE_TIME);
+
         /*
         if (params.contains("monitor")) {
             int32 monitor = params.lookup("monitor").get_int32();
             message("monitor: %d", monitor);
         }*/
+    }
+
+    /**
+     * Reset and update the expiration for the OSD timeout
+     */
+    private void reset_osd_expire(int timeout_length)
+    {
+        if (expire_timeout > 0) {
+            Source.remove(expire_timeout);
+            expire_timeout = 0;
+        }
+        osd_window.show();
+        expire_timeout = Timeout.add(timeout_length, this.osd_expire);
+    }
+
+    /**
+     * Expiration timeout was met, so hide the OSD Window
+     */
+    private bool osd_expire()
+    {
+        if (expire_timeout == 0) {
+            return false;
+        }
+        osd_window.hide();
+        expire_timeout = 0;
+        return false;
     }
 } /* End class OSDManager (BudgieOSDManager) */
 
