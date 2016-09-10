@@ -180,7 +180,7 @@ public class ShellShim : GLib.Object
         if (osd_proxy  != null) {
             return;
         }
-        Bus.get_proxy.begin<EndSessionDialog>(BusType.SESSION, "com.solus_project.BudgieOSD", "/com/solus_project/BudgieOSD", 0, null, on_osd_proxy_get);
+        Bus.get_proxy.begin<BudgieOSD>(BusType.SESSION, "com.solus_project.BudgieOSD", "/com/solus_project/BudgieOSD", 0, null, on_osd_proxy_get);
     }
 
     /**
