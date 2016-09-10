@@ -782,12 +782,33 @@ public class WmSettings : Gtk.Box
     [GtkChild]
     private Gtk.Switch? switch_unredirect;
 
+    /** Button layout */
+    [GtkChild]
+    private Gtk.ComboBox? combo_layouts;
+
     private GLib.Settings wm_settings;
 
     construct {
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
         /* Force unredirect of the display, i.e. nvidia folks */
         wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
+
+        /* Button layout */
+        var model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        Gtk.TreeIter iter;
+        model.append(out iter);
+        model.set(iter, 0, "appmenu:minimize,maximize,close", 1, _("Right (standard)"), -1);
+        model.append(out iter);
+        model.set(iter, 0, "close,minimize,maximize:appmenu", 1, _("Left"), -1);
+        combo_layouts.set_model(model);
+        combo_layouts.set_id_column(0);
+        var render = new Gtk.CellRendererText();
+        combo_layouts.pack_start(render, true);
+        combo_layouts.add_attribute(render, "text", 1);
+        combo_layouts.set_id_column(0);
+
+        /* Hook them up to gsettings */
+        wm_settings.bind("button-layout", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
     }
 }
 
