@@ -266,6 +266,8 @@ public class IconTasklistApplet : Budgie.Applet
             }
             return false;
         });
+        queue_resize();
+        queue_draw();
     }
 
     int small_icons = 32;
