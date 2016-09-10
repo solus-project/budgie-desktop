@@ -12,7 +12,7 @@
 namespace Budgie
 {
 
-public static const int OSD_SIZE = 400;
+public static const int OSD_SIZE = 250;
 
 /**
  * The BudgieOSD provides a very simplistic On Screen Display service, complying with the
@@ -77,7 +77,7 @@ public class OSD : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((bounds.height / 2) - (alloc.height / 2));
+        int y = bounds.y + ((int)(bounds.height * 0.85));
         move(x, y);
     }
 } /* End class OSD (BudgieOSD) */
