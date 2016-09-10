@@ -24,7 +24,7 @@ public class ServiceManager : GLib.Object
     private LibSession.SessionClient? sclient;
 
     /* On Screen Display */
-    Budgie.OSD? osd;
+    Budgie.OSDManager? osd;
 
     /**
      * Construct a new ServiceManager and initialiase appropriately
@@ -49,7 +49,8 @@ public class ServiceManager : GLib.Object
                 message("Failed to register with Session manager");
             }
         });
-        osd = new Budgie.OSD();
+        osd = new Budgie.OSDManager();
+        osd.setup_dbus();
     }
 
     /**

@@ -12,7 +12,21 @@
 namespace Budgie
 {
 
+/**
+ * Default width for an OSD notification
+ */
 public static const int OSD_SIZE = 250;
+
+/**
+ * Our name on the session bus. Reserved for Budgie use
+ */
+public static const string OSD_DBUS_NAME        = "com.solus_project.BudgieOSD";
+
+/**
+ * Unique object path on OSD_DBUS_NAME
+ */
+public static const string OSD_DBUS_OBJECT_PATH = "/com/solus_project/BudgieOSD";
+
 
 /**
  * The BudgieOSD provides a very simplistic On Screen Display service, complying with the
@@ -81,5 +95,71 @@ public class OSD : Gtk.Window
         move(x, y);
     }
 } /* End class OSD (BudgieOSD) */
+
+/**
+ * BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, recieving
+ * requests, for example, from budgie-wm
+ */
+[DBus (name = "com.solus_project.BudgieOSD")]
+public class OSDManager
+{
+    private OSD? osd_window = null;
+
+    [DBus (visible = false)]
+    public OSDManager()
+    {
+        osd_window = new OSD();
+    }
+
+    /**
+     * Own the OSD_DBUS_NAME
+     */
+    [DBus (visible = false)]
+    public void setup_dbus()
+    {
+        Bus.own_name(BusType.SESSION, Budgie.OSD_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+            on_bus_acquired, ()=> {}, ()=> { warning("BudgieOSD could not take dbus!"); });
+    }
+
+    /**
+     * Acquired OSD_DBUS_NAME, register ourselves on the bus
+     */
+    private void on_bus_acquired(DBusConnection conn)
+    {
+        try {
+            conn.register_object(Budgie.OSD_DBUS_OBJECT_PATH, this);
+        } catch (Error e) {
+            stderr.printf("Error registering BudgieOSD: %s\n", e.message);
+        }
+    }
+
+    /**
+     * Show the OSD on screen with the given parameters:
+     * icon: string Icon-name to use
+     * label: string Text to display, if any
+     * level: int32 Progress-level to display in the OSD
+     * monitor: int32 The monitor to display the OSD on
+     */
+    public void ShowOSD(HashTable<string,Variant> params)
+    {
+        message("New ShowOSD contact");
+        if (params.contains("icon")) {
+            string icon_name = params.lookup("icon").get_string();
+            message("icon: %s", icon_name);
+        }
+        if (params.contains("label")) {
+            string label = params.lookup("label").get_string();
+            message("label: %s", label);
+        }
+        if (params.contains("level")) {
+            int32 level = params.lookup("level").get_int32();
+            message("level: %d", level);
+        }
+        if (params.contains("monitor")) {
+            int32 monitor = params.lookup("monitor").get_int32();
+            message("monitor: %d", monitor);
+        }
+    }
+} /* End class OSDManager (BudgieOSDManager) */
 
 } /* End namespace Budgie */
