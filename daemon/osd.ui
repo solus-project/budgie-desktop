@@ -25,7 +25,7 @@
                 <property name="valign">start</property>
                 <property name="margin_left">8</property>
                 <property name="margin_right">8</property>
-                <property name="margin_top">8</property>
+                <property name="margin_top">3</property>
                 <property name="pixel_size">48</property>
                 <property name="icon_name">audio-volume-low-symbolic</property>
                 <property name="icon_size">6</property>
@@ -46,7 +46,7 @@
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="margin_left">5</property>
-                <property name="margin_top">8</property>
+                <property name="margin_top">3</property>
                 <property name="hexpand">True</property>
                 <property name="label">OSD Text</property>
                 <property name="wrap">True</property>
