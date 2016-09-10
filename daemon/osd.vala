@@ -48,6 +48,97 @@ public static const string OSD_DBUS_OBJECT_PATH = "/com/solus_project/BudgieOSD"
 [GtkTemplate (ui = "/com/solus-project/budgie/daemon/osd.ui")]
 public class OSD : Gtk.Window
 {
+
+    /**
+     * Main text display
+     */
+    [GtkChild]
+    private Gtk.Label label_title;
+
+    /**
+     * Main display image. Prefer symbolic icons!
+     */
+    [GtkChild]
+    private Gtk.Image image_icon;
+
+    /**
+     * Optional progressbar
+     */
+    [GtkChild]
+    private Gtk.ProgressBar progressbar;
+
+    /**
+     * Current text to display. NULL hides the widget.
+     */
+    public string? osd_title {
+        public set {
+            string? r = value;
+            if (r == null) {
+                label_title.set_visible(false);
+            } else {
+                label_title.set_visible(true);
+                label_title.set_markup(r);
+            }
+        }
+        public owned get {
+            if (!label_title.get_visible()) {
+                return null;
+            }
+            return label_title.get_label();
+        }
+    }
+
+    /**
+     * Current icon to display. NULL hides the widget
+     */
+    public string? osd_icon {
+        public set {
+            string? r = value;
+            if (r == null) {
+                image_icon.set_visible(false);
+            } else {
+                image_icon.set_from_icon_name(r, Gtk.IconSize.INVALID);
+                image_icon.pixel_size = 32;
+                image_icon.set_visible(true);
+            }
+        }
+        public owned get {
+            if (!image_icon.get_visible()) {
+                return null;
+            }
+            string ret;
+            Gtk.IconSize _icon_size;
+            image_icon.get_icon_name(out ret, out _icon_size);
+            return ret;
+        }
+    }
+
+    /**
+     * Current value for the progressbar. Values less than 1 hide the bar
+     */
+    public int32 osd_progress {
+        public set {
+            int32 v = value;
+            if (v < 0) {
+                progressbar.set_visible(false);
+            } else {
+                double fraction = v.clamp(0, 100) / 100.0;
+                progressbar.set_fraction(fraction);
+                progressbar.set_visible(true);
+            }
+        }
+        public get {
+            if (!progressbar.get_visible()) {
+                return -1;
+            } else {
+                return (int32)(progressbar.get_fraction() * 100);
+            }
+        }
+    }
+
+    /**
+     * Construct a new BudgieOSD widget
+     */
     public OSD()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
@@ -69,6 +160,10 @@ public class OSD : Gtk.Window
         set_default_size(OSD_SIZE, -1);
         realize();
         move_osd();
+
+        osd_title = null;
+        osd_icon = null;
+        osd_progress = -1;
 
         /* Temp! */
         show_all();
@@ -142,23 +237,29 @@ public class OSDManager
      */
     public void ShowOSD(HashTable<string,Variant> params)
     {
-        message("New ShowOSD contact");
+        string? icon_name = null;
+        string? label = null;
+        int32 level = -1;
+
         if (params.contains("icon")) {
-            string icon_name = params.lookup("icon").get_string();
-            message("icon: %s", icon_name);
+            icon_name = params.lookup("icon").get_string();
         }
         if (params.contains("label")) {
-            string label = params.lookup("label").get_string();
-            message("label: %s", label);
+            label = params.lookup("label").get_string();
         }
         if (params.contains("level")) {
-            int32 level = params.lookup("level").get_int32();
-            message("level: %d", level);
+            level = params.lookup("level").get_int32();
         }
+        /* Update the OSD accordingly */
+        osd_window.osd_title = label;
+        osd_window.osd_icon = icon_name;
+        osd_window.osd_progress = level;
+
+        /*
         if (params.contains("monitor")) {
             int32 monitor = params.lookup("monitor").get_int32();
             message("monitor: %d", monitor);
-        }
+        }*/
     }
 } /* End class OSDManager (BudgieOSDManager) */
 
