@@ -52,8 +52,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
                 <property name="tooltip_text" translatable="yes">Change the layout of the window buttons</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
@@ -66,8 +66,8 @@
             </child>
             <child>
               <object class="GtkComboBox" id="combo_layouts">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
