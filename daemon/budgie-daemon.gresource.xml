@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+        <gresource prefix="/com/solus-project/budgie/daemon">
+                <file preprocess="xml-stripblanks">osd.ui</file>
+        </gresource>
+</gresources>

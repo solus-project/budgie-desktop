@@ -658,6 +658,21 @@ GtkPopover GtkListBoxRow {
     .notification-body { color: transparentize($fg_color, 0.3); }
 }
 
+// On Screen Display in Budgie
+.budgie-osd-window {
+    @extend .budgie-notification-window;
+}
+
+// Internal part of the OSD
+.budgie-osd {
+    @extend .budgie-notification;
+
+    .budgie-osd-text {
+        font-size: 110%;
+        color: $fg_color;
+    }
+}
+
 .drop-shadow {
     @extend %widgets;
 

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <template class="BudgieOSD" parent="GtkWindow">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">5</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="margin_top">3</property>
+            <property name="margin_bottom">3</property>
+            <child>
+              <object class="GtkImage" id="image_icon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="valign">start</property>
+                <property name="margin_left">8</property>
+                <property name="margin_right">8</property>
+                <property name="margin_top">3</property>
+                <property name="pixel_size">48</property>
+                <property name="icon_name">audio-volume-low-symbolic</property>
+                <property name="icon_size">6</property>
+                <style>
+                  <class name="budgie-osd-icon"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="height">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_title">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="margin_left">5</property>
+                <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
+                <property name="hexpand">True</property>
+                <property name="label">OSD Text</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="ellipsize">start</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="weight" value="semibold"/>
+                </attributes>
+                <style>
+                  <class name="budgie-osd-text"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="progressbar">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">10</property>
+                <property name="margin_bottom">5</property>
+                <style>
+                  <class name="budgie-osd-progressbar"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <style>
+              <class name="budgie-osd"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <style>
+          <class name="drop-shadow"/>
+        </style>
+      </object>
+    </child>
+    <style>
+      <class name="budgie-osd-window"/>
+    </style>
+  </template>
+</interface>
