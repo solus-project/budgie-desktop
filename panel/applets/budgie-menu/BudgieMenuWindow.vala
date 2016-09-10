@@ -112,10 +112,12 @@ public class BudgieMenuWindow : Gtk.Popover
     /* Reload menus, essentially. */
     public void refresh_tree()
     {
-        if (reloading) {
-            return;
+        lock (reloading) {
+            if (reloading) {
+                return;
+            }
+            reloading = true;
         }
-        reloading = true;
         foreach (var child in content.get_children()) {
             child.destroy();
         }
@@ -132,7 +134,9 @@ public class BudgieMenuWindow : Gtk.Popover
             apply_scores();
             return false;
         });
-        reloading = false;
+        lock (reloading) {
+            reloading = false;
+        }
     }
 
     /**
@@ -172,7 +176,9 @@ public class BudgieMenuWindow : Gtk.Popover
                 tree.load_sync();
             } catch (Error e) {
                 stderr.printf("Error: %s\n", e.message);
-                reloading = false;
+                lock (reloading) {
+                    reloading = false;
+                }
                 return;
             }
             /* Think of deferred routines.. */
