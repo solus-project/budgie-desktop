@@ -10,5 +10,6 @@
                 <file preprocess="xml-stripblanks">applet_settings.ui</file>
                 <file preprocess="xml-stripblanks">notification.ui</file>
                 <file preprocess="xml-stripblanks">notification_clone.ui</file>
+                <file preprocess="xml-stripblanks">wm.ui</file>
         </gresource>
 </gresources>

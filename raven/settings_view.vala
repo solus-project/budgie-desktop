@@ -773,6 +773,24 @@ public class BackgroundSettings : Gtk.Box
     }
 }
 
+/**
+ * Window manager settings pane
+ */
+[GtkTemplate (ui = "/com/solus-project/budgie/raven/wm.ui")]
+public class WmSettings : Gtk.Box
+{
+    [GtkChild]
+    private Gtk.Switch? switch_unredirect;
+
+    private GLib.Settings wm_settings;
+
+    construct {
+        wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+        /* Force unredirect of the display, i.e. nvidia folks */
+        wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
+    }
+}
+
 [GtkTemplate (ui = "/com/solus-project/budgie/raven/appearance.ui")]
 public class AppearanceSettings : Gtk.Box
 {
@@ -936,8 +954,14 @@ public class SettingsView : Gtk.Box
         var fonts_exp = new RavenExpander(new HeaderWidget(_("Fonts"), null, false));
         fonts_exp.add(fonts);
         appearance_box.pack_start(fonts_exp, false, false, 0);
-        stack.add_titled(appearance_box, "appearance", _("General"));
 
+        /* WM Settings */
+        var wm = new WmSettings();
+        var wm_exp = new RavenExpander(new HeaderWidget(_("Windows"), null, false));
+        wm_exp.add(wm);
+        appearance_box.pack_start(wm_exp, false, false, 0);
+
+        stack.add_titled(appearance_box, "appearance", _("General"));
 
         panel_stack = new Gtk.Stack();
         panel_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE);

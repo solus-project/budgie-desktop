@@ -11,6 +11,7 @@ raven/sound.vala
 [type: gettext/glade]raven/ui/panel.ui
 [type: gettext/glade]raven/ui/background.ui
 [type: gettext/glade]raven/ui/fonts.ui
+[type: gettext/glade]raven/ui/wm.ui
 
 session/budgie-desktop.desktop.in.in
 [type: gettext/keys]session/budgie-desktop.session.in.in
