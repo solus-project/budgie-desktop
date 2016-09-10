@@ -23,6 +23,9 @@ public class ServiceManager : GLib.Object
     /* Keep track of our SessionManager */
     private LibSession.SessionClient? sclient;
 
+    /* On Screen Display */
+    Budgie.OSD? osd;
+
     /**
      * Construct a new ServiceManager and initialiase appropriately
      */
@@ -46,6 +49,7 @@ public class ServiceManager : GLib.Object
                 message("Failed to register with Session manager");
             }
         });
+        osd = new Budgie.OSD();
     }
 
     /**

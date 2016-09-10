@@ -26,7 +26,8 @@ bin_PROGRAMS = \
 
 budgie_daemon_SOURCES = \
 	main.vala \
-	manager.vala
+	manager.vala \
+	osd.vala
 
 budgie_daemon_CFLAGS = \
 	$(BUDGIE_DAEMON_CFLAGS) \
