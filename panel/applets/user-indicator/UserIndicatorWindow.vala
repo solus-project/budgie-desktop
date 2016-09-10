@@ -97,6 +97,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         // The rest
         Gtk.Separator separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        separator.set_can_focus(false);
 
         IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
         IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "media-playback-pause-symbolic", false);
