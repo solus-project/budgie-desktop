@@ -721,6 +721,21 @@ button.raven-trigger {
     border-radius: 1px;
 }
 
+// On Screen Display in Budgie
+.budgie-osd-window {
+    @extend .budgie-notification-window;
+}
+
+// Internal part of the OSD
+.budgie-osd {
+    @extend .budgie-notification;
+
+    .budgie-osd-text {
+        font-size: 110%;
+        color: $fg_color;
+    }
+}
+
 // Session Dialog
 .budgie-session-dialog {
     color: $fg_color;
