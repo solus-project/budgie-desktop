@@ -100,7 +100,7 @@ public class ServiceManager : GLib.Object
         var gtksettings = Gtk.Settings.get_default();
 
         if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : Budgie.form_theme_path("theme.css"));
+            set_css_from_uri(this.current_theme_uri == null ? null : Budgie.form_theme_path("theme_hc.css"));
         } else {
             /* In future we'll actually support custom themes.. */
             set_css_from_uri(this.current_theme_uri);
