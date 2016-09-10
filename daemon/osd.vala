@@ -73,6 +73,11 @@ public class OSD : Gtk.Window
     private Gtk.ProgressBar progressbar;
 
     /**
+     * Track the primary monitor to show on
+     */
+    private int primary_monitor;
+
+    /**
      * Current text to display. NULL hides the widget.
      */
     public string? osd_title {
@@ -161,16 +166,30 @@ public class OSD : Gtk.Window
             this.set_visual(vis);
         }
 
+        /* Update the primary monitor notion */
+        screen.monitors_changed.connect(on_monitors_changed);
+
         /* Set up size */
         set_default_size(OSD_SIZE, -1);
         realize();
-        move_osd();
 
         osd_title = null;
         osd_icon = null;
         osd_progress = -1;
 
         get_child().show_all();
+
+        /* Get everything into position prior to the first showing */
+        on_monitors_changed();
+    }
+
+    /**
+     * Monitors changed, find out the primary monitor, and schedule move of OSD
+     */
+    private void on_monitors_changed()
+    {
+        primary_monitor = screen.get_primary_monitor();
+        move_osd();
     }
 
     /**
@@ -180,10 +199,9 @@ public class OSD : Gtk.Window
     {
         /* Find the primary monitor bounds */
         Gdk.Screen sc = get_screen();
-        int monitor = sc.get_primary_monitor();
         Gdk.Rectangle bounds;
 
-        sc.get_monitor_geometry(monitor, out bounds);
+        sc.get_monitor_geometry(primary_monitor, out bounds);
         Gtk.Allocation alloc;
 
         get_allocation(out alloc);
@@ -193,6 +211,7 @@ public class OSD : Gtk.Window
         int y = bounds.y + ((int)(bounds.height * 0.85));
         move(x, y);
     }
+
 } /* End class OSD (BudgieOSD) */
 
 /**
@@ -238,7 +257,7 @@ public class OSDManager
      * icon: string Icon-name to use
      * label: string Text to display, if any
      * level: int32 Progress-level to display in the OSD
-     * monitor: int32 The monitor to display the OSD on
+     * monitor: int32 The monitor to display the OSD on (currently ignored)
      */
     public void ShowOSD(HashTable<string,Variant> params)
     {
@@ -261,12 +280,6 @@ public class OSDManager
         osd_window.osd_progress = level;
 
         this.reset_osd_expire(OSD_EXPIRE_TIME);
-
-        /*
-        if (params.contains("monitor")) {
-            int32 monitor = params.lookup("monitor").get_int32();
-            message("monitor: %d", monitor);
-        }*/
     }
 
     /**
