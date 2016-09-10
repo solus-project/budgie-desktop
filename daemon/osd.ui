@@ -49,6 +49,7 @@
                 <property name="valign">start</property>
                 <property name="margin_left">5</property>
                 <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
                 <property name="hexpand">True</property>
                 <property name="label">OSD Text</property>
                 <property name="wrap">True</property>
