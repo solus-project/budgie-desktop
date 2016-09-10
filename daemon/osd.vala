@@ -14,6 +14,23 @@ namespace Budgie
 
 public static const int OSD_SIZE = 400;
 
+/**
+ * The BudgieOSD provides a very simplistic On Screen Display service, complying with the
+ * private GNOME Settings Daemon -> GNOME Shell protocol.
+ *
+ * In short, all elements of the permanently present window should be able to hide or show
+ * depending on the updated ShowOSD message, including support for a progress bar (level),
+ * icon, optional label.
+ *
+ * This OSD is used by gnome-settings-daemon to portray special events, such as brightness/volume
+ * changes, physical volume changes (disk eject/mount), etc. This special window should remain
+ * above all other windows and be non-interactive, allowing unobtrosive overlay of information
+ * even in full screen movies and games.
+ *
+ * Each request to ShowOSD will reset the expiration timeout for the OSD's current visibility,
+ * meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
+ * users to "hold down" the volume change buttons, for example.
+ */
 public class OSD : Gtk.Window
 {
     public OSD()
@@ -64,7 +81,7 @@ public class OSD : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((bounds.height / 2) - (alloc.height / 2));
+        int y = bounds.y + ((bounds.height / 2) - (child_alloc.height / 2));
         move(x, y);
     }
 } /* End class OSD (BudgieOSD) */
