@@ -125,6 +125,7 @@ test-driver
 /daemon/budgie-daemon.desktop
 # Temporary, using Vala.
 /daemon/*.c
+/daemon/*.h
 
 # Main daemon binary
 /daemon/budgie-daemon

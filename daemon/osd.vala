@@ -31,6 +31,7 @@ public static const int OSD_SIZE = 400;
  * meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
  * users to "hold down" the volume change buttons, for example.
  */
+[GtkTemplate (ui = "/com/solus-project/budgie/daemon/osd.ui")]
 public class OSD : Gtk.Window
 {
     public OSD()
@@ -50,13 +51,8 @@ public class OSD : Gtk.Window
             this.set_visual(vis);
         }
 
-        /* Set up size and style context */
+        /* Set up size */
         set_default_size(OSD_SIZE, -1);
-        get_style_context().add_class("budgie-osd");
-
-        /* Temporary, we'll add proper widgets soon.. */
-        Gtk.Box child = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        add(child);
         realize();
         move_osd();
 
@@ -81,7 +77,7 @@ public class OSD : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((bounds.height / 2) - (child_alloc.height / 2));
+        int y = bounds.y + ((bounds.height / 2) - (alloc.height / 2));
         move(x, y);
     }
 } /* End class OSD (BudgieOSD) */
