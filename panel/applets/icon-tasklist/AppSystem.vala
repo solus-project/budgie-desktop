@@ -102,7 +102,7 @@ public class AppSystem : GLib.Object
             /* First, check if we have something in the startupids for this app */
             check = check.down();
             if (check in startupids) {
-                string dname = startupids[check];
+                string dname = startupids[check].down();
                 if (dname in desktops) {
                     return this.desktops[dname];
                 }
