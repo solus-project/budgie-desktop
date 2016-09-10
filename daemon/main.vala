@@ -16,14 +16,16 @@ public static int main(string[] args)
 {
     Gtk.init(ref args);
     Budgie.ServiceManager? manager = null;
+    Budgie.EndSessionDialog? end_dialog = null;
 
     manager = new Budgie.ServiceManager();
+    end_dialog = new Budgie.EndSessionDialog();
 
     /* Enter main loop */
     Gtk.main();
 
     /* Deref - clean */
     manager = null;
-
+    end_dialog = null;
     return 0;
 }

@@ -3,7 +3,6 @@ EXTRA_DIST = \
 	com.solus-project.budgie-panel.gschema.xml \
 	budgie-panel.gresource.xml \
 	icons/notification-alert-symbolic.svg \
-	endsession.ui \
 	panel.ini
 
 gsettings_SCHEMAS = \

@@ -3,7 +3,4 @@
         <gresource prefix="/com/solus-project/budgie/panel">
                 <file>panel.ini</file>
         </gresource>
-        <gresource prefix="/com/solus-project/budgie/endsession">
-                <file>endsession.ui</file>
-        </gresource>
 </gresources>

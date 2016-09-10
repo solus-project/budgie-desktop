@@ -49,8 +49,7 @@ budgie_panel_SOURCES = \
 	manager.vala \
 	panel.vala \
 	popovers.vala \
-	uuid.vala \
-	endsession.vala
+	uuid.vala
 
 budgie_panel_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \

@@ -1,6 +1,6 @@
 gvc/gvc-mixer-control.c
 panel/budgie-panel.desktop.in
-panel/endsession.c
+daemon/endsession.c
 session/budgie-desktop.desktop.in
 panel/budgie-panel.desktop.in.in
 panel/budgie-panel.desktop.in

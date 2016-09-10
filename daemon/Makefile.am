@@ -32,6 +32,7 @@ budgie-daemon-resources.c: $(top_srcdir)/daemon/budgie-daemon.gresource.xml $(da
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/daemon --generate-source --c-name budgie_daemon $<
 
 EXTRA_DIST = \
+	endsession.ui \
 	osd.ui \
 	budgie-daemon.gresource.xml \
 	budgie-daemon.desktop.in.in
@@ -43,6 +44,7 @@ bin_PROGRAMS = \
 budgie_daemon_SOURCES = \
 	budgie-daemon-resources.h \
 	budgie-daemon-resources.c \
+	endsession.vala \
 	main.vala \
 	manager.vala \
 	osd.vala

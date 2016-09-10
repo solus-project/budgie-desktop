@@ -1,5 +1,5 @@
 panel/main.vala
-panel/endsession.vala
+daemon/endsession.vala
 raven/main_view.vala
 raven/settings_view.vala
 raven/notifications_view.vala
@@ -15,7 +15,7 @@ raven/sound.vala
 session/budgie-desktop.desktop.in.in
 [type: gettext/keys]session/budgie-desktop.session.in.in
 
-[type: gettext/glade]data/endsession.ui
+[type: gettext/glade]daemon/endsession.ui
 
 
 panel/applets/budgie-menu/settings.ui

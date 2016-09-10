@@ -142,8 +142,6 @@ public class PanelManager : DesktopManager
 
     private string current_theme_uri;
 
-    private EndSessionDialog? end_dialog = null;
-
     /**
      * Updated when specific names are queried
      */
@@ -332,8 +330,6 @@ public class PanelManager : DesktopManager
         raven.setup_dbus();
 
         setup_plugins();
-
-        end_dialog = new Budgie.EndSessionDialog();
 
         int current_migration_level = settings.get_int(PANEL_KEY_MIGRATION);
         if (!load_panels()) {
