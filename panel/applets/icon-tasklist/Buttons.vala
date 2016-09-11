@@ -498,6 +498,7 @@ public class PinnedIconButton : IconButton
             return;
         }
         image.pixel_size = icon_size;
+        queue_resize();
     }
 
     public void reset()
