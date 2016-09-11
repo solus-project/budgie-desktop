@@ -23,28 +23,92 @@ public class SoundIndicator : Gtk.Bin
     /** Default stream */
     private Gvc.MixerStream? stream;
 
+    /** EventBox for popover management */
+    public Gtk.EventBox? ebox;
+
+    /** GtkPopover in which to show a volume control */
+    public Gtk.Popover popover;
+
+    /** Display scale for le volume controls */
+    private Gtk.Scale volume_scale;
+
     private double step_size;
     private ulong notify_id;
+
+    /** Track the scale value_changed to prevent cross-noise */
+    private ulong scale_id;
 
     public SoundIndicator()
     {
         // Start off with at least some icon until we connect to pulseaudio */
         widget = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
-        var wrap = new Gtk.EventBox();
-        wrap.add(widget);
-        wrap.margin = 0;
-        wrap.border_width = 0;
-        add(wrap);
+        ebox = new Gtk.EventBox();
+        ebox.add(widget);
+        ebox.margin = 0;
+        ebox.border_width = 0;
+        add(ebox);
 
         mixer = new Gvc.MixerControl(MIXER_NAME);
         mixer.state_changed.connect(on_state_change);
         mixer.default_sink_changed.connect(on_sink_changed);
         mixer.open();
 
+        /* Sort out our popover */
+        this.create_sound_popover();
+
         /* Catch scroll wheel events */
-        wrap.add_events(Gdk.EventMask.SCROLL_MASK);
-        wrap.scroll_event.connect(on_scroll_event);
+        ebox.add_events(Gdk.EventMask.SCROLL_MASK);
+        ebox.scroll_event.connect(on_scroll_event);
         show_all();
+    }
+
+    /**
+     * Create the GtkPopover to display on primary click action, with an adjustable
+     * scale
+     */
+    private void create_sound_popover()
+    {
+        popover = new Gtk.Popover(ebox);
+        Gtk.Box? popover_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        popover.add(popover_box);
+        Gtk.Button? sub_button = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
+        Gtk.Button? plus_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+
+        /* + button */
+        popover_box.pack_start(plus_button, false, false, 1);
+        plus_button.clicked.connect(()=> {
+            adjust_volume_increment(+step_size);
+        });
+
+        volume_scale = new Gtk.Scale.with_range(Gtk.Orientation.VERTICAL, 0, 100, 1);
+        popover_box.pack_start(volume_scale, false, false, 0);
+
+        /* Hook up the value_changed event */
+        scale_id = volume_scale.value_changed.connect(on_scale_changed);
+
+        /* - button */
+        popover_box.pack_start(sub_button, false, false, 1);
+        sub_button.clicked.connect(()=> {
+            adjust_volume_increment(-step_size);
+        });
+
+        /* Refine visual appearance of the scale.. */
+        volume_scale.set_draw_value(false);
+        volume_scale.set_size_request(-1, 100);
+
+        /* Flat buttons only pls :) */
+        sub_button.get_style_context().add_class("flat");
+        sub_button.get_style_context().add_class("image-button");
+        plus_button.get_style_context().add_class("flat");
+        plus_button.get_style_context().add_class("image-button");
+
+        /* Focus ring is ugly and unnecessary */
+        sub_button.set_can_focus(false);
+        plus_button.set_can_focus(false);
+        volume_scale.set_can_focus(false);
+        volume_scale.set_inverted(true);
+
+        popover.get_child().show_all();
     }
 
     void on_sink_changed(uint id)
@@ -123,9 +187,11 @@ public class SoundIndicator : Gtk.Bin
             vol = (uint32)norm;
         }
 
+        SignalHandler.block(volume_scale, scale_id);
         if (stream.set_volume(vol)) {
             Gvc.push_volume(stream);
         }
+        SignalHandler.unblock(volume_scale, scale_id);
 
         return true;
     }
@@ -171,9 +237,62 @@ public class SoundIndicator : Gtk.Bin
         var ipct = (uint)pct;
         widget.set_tooltip_text(@"$ipct%");
 
-        // Gtk 3.12 issue, ensure we show all..
+        /* We're ignoring anything beyond our vol_norm.. */
+        SignalHandler.block(volume_scale, scale_id);
+        volume_scale.set_range(0, vol_norm);
+        if (vol > vol_norm) {
+            volume_scale.set_value(vol);
+        } else {
+            volume_scale.set_value(vol);
+        }
+        volume_scale.get_adjustment().set_page_increment(step_size);
+        SignalHandler.unblock(volume_scale, scale_id);
+
         show_all();
         queue_draw();
+    }
+
+    /**
+     * The scale changed value - update the stream volume to match
+     */
+    private void on_scale_changed()
+    {
+        if (stream == null || mixer == null) {
+            return;
+        }
+        double scale_value = volume_scale.get_value();
+
+        /* Avoid recursion ! */
+        SignalHandler.block(volume_scale, scale_id);
+        if (stream.set_volume((uint32)scale_value)) {
+            Gvc.push_volume(stream);
+        }
+        SignalHandler.unblock(volume_scale, scale_id);
+    }
+
+    /**
+     * Adjust the volume by a given +/- increment and bounds limit it
+     */
+    private void adjust_volume_increment(double increment)
+    {
+        if (stream == null || mixer == null) {
+            return;
+        }
+        int32 vol = (int32)stream.get_volume();
+        var max_norm = mixer.get_vol_max_norm();
+        vol += (int32)increment;
+
+        if (vol < 0) {
+            vol = 0;
+        } else if (vol > max_norm) {
+            vol = (int32) max_norm;
+        }
+
+        SignalHandler.block(volume_scale, scale_id);
+        if (stream.set_volume((uint32)vol)) {
+            Gvc.push_volume(stream);
+        }
+        SignalHandler.unblock(volume_scale, scale_id);
     }
 
 } // End class

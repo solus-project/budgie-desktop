@@ -26,6 +26,24 @@ public class StatusApplet : Budgie.Applet
     protected Gtk.EventBox? wrap;
     private Budgie.PopoverManager? manager = null;
 
+    /**
+     * Set up an EventBox for popovers
+     */
+    private void setup_popover(Gtk.Widget? parent_widget, Gtk.Popover? popover)
+    {
+        parent_widget.button_press_event.connect((e)=> {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            if (popover.get_visible()) {
+                popover.hide();
+            } else {
+                this.manager.show_popover(parent_widget);
+            }
+            return Gdk.EVENT_STOP;
+        });
+    }
+
     public StatusApplet()
     {
         wrap = new Gtk.EventBox();
@@ -48,29 +66,10 @@ public class StatusApplet : Budgie.Applet
         widget.pack_start(blue, false, false, 2);
         blue.show_all();
 
-        blue.ebox.button_press_event.connect((e)=> {
-            if (e.button != 1) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            if (blue.popover.get_visible()) {
-                blue.popover.hide();
-            } else {
-                this.manager.show_popover(blue.ebox);
-            }
-            return Gdk.EVENT_STOP;
-        });
-
-        power.ebox.button_press_event.connect((e)=> {
-            if (e.button != 1) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            if (power.popover.get_visible()) {
-                power.popover.hide();
-            } else {
-                this.manager.show_popover(power.ebox);
-            }
-            return Gdk.EVENT_STOP;
-        });
+        /* Hook up the popovers */
+        this.setup_popover(blue.ebox, blue.popover);
+        this.setup_popover(power.ebox, power.popover);
+        this.setup_popover(sound.ebox, sound.popover);
     }
 
     public override void update_popovers(Budgie.PopoverManager? manager)
@@ -78,6 +77,7 @@ public class StatusApplet : Budgie.Applet
         this.manager = manager;
         manager.register_popover(blue.ebox, blue.popover);
         manager.register_popover(power.ebox, power.popover);
+        manager.register_popover(sound.ebox, sound.popover);
     }
 } // End class
 
