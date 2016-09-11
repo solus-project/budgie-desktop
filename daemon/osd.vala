@@ -195,7 +195,7 @@ public class OSD : Gtk.Window
     /**
      * Move the OSD into the correct position
      */
-    private void move_osd()
+    public void move_osd()
     {
         /* Find the primary monitor bounds */
         Gdk.Screen sc = get_screen();
@@ -290,6 +290,9 @@ public class OSDManager
         if (expire_timeout > 0) {
             Source.remove(expire_timeout);
             expire_timeout = 0;
+        }
+        if (!osd_window.get_visible()) {
+            osd_window.move_osd();
         }
         osd_window.show();
         expire_timeout = Timeout.add(timeout_length, this.osd_expire);
