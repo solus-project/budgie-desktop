@@ -35,6 +35,7 @@ public class AppSystem : GLib.Object
             "fbreader",
             "google-chrome",
             "hexchat",
+            "pale moon",
             "spotify",
             "steam",
             "telegram",
