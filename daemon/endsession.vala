@@ -98,6 +98,34 @@ public class EndSessionDialog : Gtk.Window
         }
     }
 
+    /**
+     * Attempt to set the RGBA visual
+     */
+    [DBus (visible = false)]
+    private void on_realized()
+    {
+        Gdk.Visual? visual = screen.get_rgba_visual();
+        if (visual != null) {
+            this.set_visual(visual);
+        }
+    }
+
+    /**
+     * Update the RGBA visual if its available when compositing changes
+     * This is required as we may be constructed before the window manager
+     * springs into life
+     */
+    [DBus (visible = false)]
+    private void on_composite_changed()
+    {
+        Gdk.Visual? visual = screen.get_rgba_visual();
+        if (visual != null) {
+            this.set_visual(visual);
+        } else {
+            this.set_visual(screen.get_system_visual());
+        }
+    }
+
     [DBus (visible = false)]
     public EndSessionDialog()
     {
@@ -107,10 +135,8 @@ public class EndSessionDialog : Gtk.Window
         set_has_resize_grip(false);
         set_resizable(false);
 
-        Gdk.Visual? visual = screen.get_rgba_visual();
-        if (visual != null) {
-            this.set_visual(visual);
-        }
+        realize.connect(on_realized);
+        screen.composited_changed.connect(on_composite_changed);
 
         var header = new Gtk.EventBox();
         set_titlebar(header);
