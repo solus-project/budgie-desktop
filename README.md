@@ -15,7 +15,7 @@ NOTICE TO CONTRIBUTORS
 Budgie is *NO LONGER* accepting any contributions that *ADD* Vala code to the
 Budgie codebase. Please see [this bug](https://github.com/solus-project/budgie-desktop/issues/501) for further details.
 
-Reporting issues & Project Integration.
+Reporting issues & Project Integration.[test]
 ---------------------------------------
 
 If you are integrating Budgie into your project/distribution/whatever-it-is,
