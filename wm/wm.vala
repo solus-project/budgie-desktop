@@ -423,9 +423,9 @@ public class BudgieWM : Meta.Plugin
 
         var screen = this.get_screen();
         if (enab) {
-            Meta.Util.disable_unredirect_for_screen(screen);
-        } else {
             Meta.Util.enable_unredirect_for_screen(screen);
+        } else {
+            Meta.Util.disable_unredirect_for_screen(screen);
         }
         this.force_unredirect = enab;
     }
