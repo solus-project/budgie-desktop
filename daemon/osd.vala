@@ -204,14 +204,13 @@ public class OSD : Gtk.Window
         sc.get_monitor_geometry(primary_monitor, out bounds);
         Gtk.Allocation alloc;
 
-        get_allocation(out alloc);
+        get_child().get_allocation(out alloc);
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
         int y = bounds.y + ((int)(bounds.height * 0.85));
         move(x, y);
     }
-
 } /* End class OSD (BudgieOSD) */
 
 /**
