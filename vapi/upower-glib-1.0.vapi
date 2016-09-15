@@ -56,8 +56,7 @@ namespace Up {
 		public bool on_low_battery { get; }
 		public virtual signal void changed ();
 		public virtual signal void device_added (Up.Device device);
-		public virtual signal void device_changed (Up.Device device);
-		public virtual signal void device_removed (Up.Device device);
+		public virtual signal void device_removed (string object_path);
 		public virtual signal void notify_resume (uint sleep_kind);
 		public virtual signal void notify_sleep (uint sleep_kind);
 	}

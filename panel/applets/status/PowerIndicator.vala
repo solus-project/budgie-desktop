@@ -149,16 +149,17 @@ public class PowerIndicator : Gtk.Bin
      */
     void on_device_added(Up.Device device)
     {
-        if (devices.contains(device.serial)) {
+        string object_path = device.get_object_path();
+        if (devices.contains(object_path)) {
             /* Treated as a change event */
-            devices.lookup(device.serial).update_ui(device);
+            devices.lookup(object_path).update_ui(device);
             return;
         }
         if (!this.is_interesting(device)) {
             return;
         }
         var icon = new BatteryIcon(device);
-        devices.insert(device.serial, icon);
+        devices.insert(object_path, icon);
         widget.pack_start(icon);
         toggle_show();
     }
@@ -176,13 +177,13 @@ public class PowerIndicator : Gtk.Bin
     /**
      * Remove a device from our display
      */
-    void on_device_removed(Up.Device device) {
-        if (!devices.contains(device.serial)) {
+    void on_device_removed(string object_path) {
+        if (!devices.contains(object_path)) {
             return;
         }
-        unowned BatteryIcon? icon = devices.lookup(device.serial);
+        unowned BatteryIcon? icon = devices.lookup(object_path);
         widget.remove(icon);
-        devices.remove(device.serial);
+        devices.remove(object_path);
         toggle_show();
     }
 
