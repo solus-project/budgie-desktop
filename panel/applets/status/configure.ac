@@ -1,5 +1,5 @@
 m4_define([accountsservice_version], [0.6.40])
-m4_define([upower_required_version], [0.9.20])
+m4_define([upower_required_version], [0.99.0])
 m4_define([bt_required_version], [3.16.0])
 
 PKG_CHECK_MODULES(STATUS_PLUGIN,
