@@ -108,7 +108,7 @@ public class OSD : Gtk.Window
                 image_icon.set_visible(false);
             } else {
                 image_icon.set_from_icon_name(r, Gtk.IconSize.INVALID);
-                image_icon.pixel_size = 32;
+                image_icon.pixel_size = 48;
                 image_icon.set_visible(true);
             }
         }
