@@ -15,7 +15,7 @@ namespace Budgie
 /**
  * Default width for an OSD notification
  */
-public static const int OSD_SIZE = 250;
+public static const int OSD_SIZE = 350;
 
 /**
  * How long before the visible OSD expires, default is 2.5 seconds
