@@ -100,6 +100,7 @@ m4_include([panel/applets/keyboard-layout/configure.ac])
 m4_include([panel/applets/lock-keys/configure.ac])
 m4_include([panel/applets/tasklist/configure.ac])
 m4_include([panel/applets/notifications/configure.ac])
+m4_include([panel/applets/places-indicator/configure.ac])
 m4_include([panel/applets/raven-trigger/configure.ac])
 m4_include([panel/applets/separator/configure.ac])
 m4_include([panel/applets/show-desktop/configure.ac])
@@ -218,6 +219,7 @@ AC_MSG_RESULT([
         spacer:                 always
         show-desktop:           ${have_wnck}
         tasklist:               ${have_wnck}
+        places-indicator:       always
         raven-trigger:          always
         status:                 ${have_status}
         tray:                   ${have_natray}

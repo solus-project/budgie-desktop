@@ -470,6 +470,38 @@ GtkPopover GtkListBoxRow {
     }
 }
 
+// Places Menu
+.places-menu {
+    padding: 0;
+
+    .message-bar {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .name-button {
+        border: 0;
+        border-radius: 0;
+        padding: 2px 6px;
+    }
+
+    .unmount-button {
+        padding: 2px 2px;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .places-section-header {
+        padding: 5px;
+        border-bottom: 1px solid $raven_expander_border;
+    }
+
+    .places-list {
+        background: transparentize($fg_color, 0.96);
+        border-bottom: 1px solid $raven_expander_border;
+    }
+}
+
 // Raven Trigger
 .raven-trigger.button {
     padding-left: 2px;
