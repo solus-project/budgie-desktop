@@ -666,11 +666,6 @@ GtkPopover GtkListBoxRow {
 // Internal part of the OSD
 .budgie-osd {
     @extend .budgie-notification;
-
-    .budgie-osd-text {
-        font-size: 110%;
-        color: $fg_color;
-    }
 }
 
 .drop-shadow {
