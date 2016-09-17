@@ -14,19 +14,17 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">3</property>
-            <property name="margin_right">3</property>
-            <property name="margin_top">3</property>
-            <property name="margin_bottom">3</property>
+            <property name="margin_left">15</property>
+            <property name="margin_right">15</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
+            <property name="column_spacing">15</property>
             <child>
               <object class="GtkImage" id="image_icon">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="valign">start</property>
-                <property name="margin_left">8</property>
-                <property name="margin_right">8</property>
-                <property name="margin_top">3</property>
+                <property name="valign">center</property>
                 <property name="pixel_size">48</property>
                 <property name="icon_name">audio-volume-low-symbolic</property>
                 <property name="icon_size">6</property>
@@ -46,11 +44,9 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="halign">start</property>
-                <property name="valign">start</property>
-                <property name="margin_left">5</property>
-                <property name="margin_top">3</property>
+                <property name="valign">center</property>
                 <property name="margin_bottom">3</property>
-                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="label">OSD Text</property>
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
@@ -74,9 +70,9 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="valign">center</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">10</property>
-                <property name="margin_bottom">5</property>
+                <property name="margin_top">3</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <style>
                   <class name="budgie-osd-progressbar"/>
                 </style>
