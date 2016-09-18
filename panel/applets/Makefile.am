@@ -7,6 +7,7 @@ SUBDIRS = \
 	tasklist \
 	user-indicator \
 	notifications \
+	places-indicator \
 	raven-trigger \
 	separator \
 	show-desktop \
