@@ -464,17 +464,17 @@ public class PinnedIconButton : IconButton
         // Drag and drop
         Gtk.drag_source_set(this, Gdk.ModifierType.BUTTON1_MASK, DesktopHelper.targets, Gdk.DragAction.MOVE);
         
-		drag_begin.connect((context)=> {			
-			if(ainfo != null) {
-				Gtk.drag_set_icon_gicon(context, this.app_info.get_icon(), 0, 0);
-			} else {
-				Gtk.drag_set_icon_default(context);
-			}
-		});
-		
-		drag_data_get.connect((widget, context, selection_data, info, time)=> {
-			selection_data.set(selection_data.get_target(), 8, (uchar []) this.app_info.get_id().to_utf8());
-		});
+        drag_begin.connect((context)=> {
+            if(ainfo != null) {
+                Gtk.drag_set_icon_gicon(context, this.app_info.get_icon(), 0, 0);
+            } else {
+                Gtk.drag_set_icon_default(context);
+            }
+        });
+
+        drag_data_get.connect((widget, context, selection_data, info, time)=> {
+            selection_data.set(selection_data.get_target(), 8, (uchar []) this.app_info.get_id().to_utf8());
+        });
     }
 
     protected override bool on_button_release(Gdk.EventButton event)

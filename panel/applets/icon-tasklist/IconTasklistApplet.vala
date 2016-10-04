@@ -39,10 +39,10 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
  */
 public class DesktopHelper : Object
 {
-	public static const Gtk.TargetEntry[] targets = {
-		{ "application/x-icon-tasklist-launcher-id", 0, 0 }
-	};
-	
+    public static const Gtk.TargetEntry[] targets = {
+        { "application/x-icon-tasklist-launcher-id", 0, 0 }
+    };
+
     public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
     {
         string[] launchers = settings.get_strv("pinned-launchers");
@@ -239,9 +239,9 @@ public class IconTasklistApplet : Budgie.Applet
 
         panel_size_changed.connect(on_panel_size_changed);
 
-		Gtk.drag_dest_set(pinned, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.MOVE);
-		
-		pinned.drag_data_received.connect(on_drag_data_received);
+        Gtk.drag_dest_set(pinned, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.MOVE);
+
+        pinned.drag_data_received.connect(on_drag_data_received);
 
         get_style_context().add_class("icon-tasklist");
 
@@ -289,102 +289,102 @@ public class IconTasklistApplet : Budgie.Applet
         set_icons_size();
     }
 
-	private void move_launcher(string app_id, int position)
-	{
-		string[] launchers = settings.get_strv("pinned-launchers");
-		
-		if(position > launchers.length || position < 0) {
-			return;
-		}
-		
-		// Create a new list for holding the launchers
-		var temp_launchers = new List<string>();
-		
-		var old_index = 0;
-		var new_position = position;
-		
-		for(var i = 0; i < launchers.length; i++) {
-			
-			// Add launcher to the next position if it is not the one that has to be moved
-			if(launchers[i] != app_id) {
-				temp_launchers.append(launchers[i]);
-			} else {
-				old_index = i;
-			}
-		}
-		
-		// Check if the indexes changed after removing the launcher from the list
-		if(new_position > old_index) {
-			new_position--;
-		}
+    private void move_launcher(string app_id, int position)
+    {
+        string[] launchers = settings.get_strv("pinned-launchers");
 
-		temp_launchers.insert(app_id, new_position);
-		
-		// Convert launchers list back to array
-		for(var i = 0; i < launchers.length; i++) {
-			launchers[i] = temp_launchers.nth_data(i);
-		}
-		
-		// Save pinned launchers
-		settings.set_strv("pinned-launchers", launchers);
-	}
-	
-	private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint item, uint time)
-	{
-		string[] launchers = settings.get_strv("pinned-launchers");
-		Gtk.Allocation main_layout_allocation;
-		
-		// Get allocation of main layout
-		main_layout.get_allocation(out main_layout_allocation);
-		
-		if(item != 0) {
-			message("Invalid target type");
-			return;
-		}
-		
-		// id of app that is currently being dragged
-		var app_id = (string) selection_data.get_data();
-		
-		// Iterate through launchers
-		for(var i = 0; i < launchers.length; i++) {
-			
-			Gtk.Allocation alloc;
-			
-			var launcher = launchers[i];
-			
-			(pin_buttons[launchers[i]].get_parent() as ButtonWrapper).get_allocation(out alloc);
-			
-			if(x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) {
-				
-				// Check if launcher is being moved left to the same position as it currently is
-				if(launchers[i] == app_id) {
-					break;
-				}
-				
-				// Check if launcher is being moved right to the same position as it currently is
-				if(i > 0 && launchers[i - 1] == app_id) {
-					break;
-				}
-				
-				move_launcher(app_id, i);
-				
-				break;
-			}
-			
-			// Move launcher to the very end
-			if(i == launchers.length - 1) {
-				
-				// Check if launcher is already at the end
-				if(launchers[i] == app_id) {
-					break;
-				}
-								
-				move_launcher(app_id, launchers.length);
-			}
-		}
-		
-		Gtk.drag_finish(context, true, true, time);
-	}
+        if(position > launchers.length || position < 0) {
+            return;
+        }
+
+        // Create a new list for holding the launchers
+        var temp_launchers = new List<string>();
+
+        var old_index = 0;
+        var new_position = position;
+
+        for(var i = 0; i < launchers.length; i++) {
+
+            // Add launcher to the next position if it is not the one that has to be moved
+            if(launchers[i] != app_id) {
+                temp_launchers.append(launchers[i]);
+            } else {
+                old_index = i;
+            }
+        }
+
+        // Check if the indexes changed after removing the launcher from the list
+        if(new_position > old_index) {
+            new_position--;
+        }
+
+        temp_launchers.insert(app_id, new_position);
+
+        // Convert launchers list back to array
+        for(var i = 0; i < launchers.length; i++) {
+            launchers[i] = temp_launchers.nth_data(i);
+        }
+
+        // Save pinned launchers
+        settings.set_strv("pinned-launchers", launchers);
+    }
+
+    private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint item, uint time)
+    {
+        string[] launchers = settings.get_strv("pinned-launchers");
+        Gtk.Allocation main_layout_allocation;
+
+        // Get allocation of main layout
+        main_layout.get_allocation(out main_layout_allocation);
+
+        if(item != 0) {
+            message("Invalid target type");
+            return;
+        }
+
+        // id of app that is currently being dragged
+        var app_id = (string) selection_data.get_data();
+
+        // Iterate through launchers
+        for(var i = 0; i < launchers.length; i++) {
+
+            Gtk.Allocation alloc;
+
+            var launcher = launchers[i];
+
+            (pin_buttons[launchers[i]].get_parent() as ButtonWrapper).get_allocation(out alloc);
+
+            if(x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) {
+
+                // Check if launcher is being moved left to the same position as it currently is
+                if(launchers[i] == app_id) {
+                    break;
+                }
+
+                // Check if launcher is being moved right to the same position as it currently is
+                if(i > 0 && launchers[i - 1] == app_id) {
+                    break;
+                }
+
+                move_launcher(app_id, i);
+
+                break;
+            }
+
+            // Move launcher to the very end
+            if(i == launchers.length - 1) {
+
+                // Check if launcher is already at the end
+                if(launchers[i] == app_id) {
+                    break;
+                }
+
+                move_launcher(app_id, launchers.length);
+            }
+        }
+
+        Gtk.drag_finish(context, true, true, time);
+    }
 
     protected void on_settings_change(string key)
     {
