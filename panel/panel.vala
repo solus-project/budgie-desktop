@@ -871,22 +871,30 @@ public class Panel : Budgie.Toplevel
 
     public override void get_preferred_width(out int m, out int n)
     {
+        int x, j;
+        base.get_preferred_width(out x, out j);
         m = scr.width;
         n = scr.width;
     }
     public override void get_preferred_width_for_height(int h, out int m, out int n)
     {
+        int x, j;
+        base.get_preferred_width_for_height(h, out x, out j);
         m = scr.width;
         n = scr.width;
     }
 
     public override void get_preferred_height(out int m, out int n)
     {
+        int x, j;
+        base.get_preferred_height(out x, out j);
         m = scr.height;
         n = scr.height;
     }
     public override void get_preferred_height_for_width(int w, out int m, out int n)
     {
+        int x, j;
+        base.get_preferred_height_for_width(w, out x, out j);
         m = scr.height;
         n = scr.height;
     }
