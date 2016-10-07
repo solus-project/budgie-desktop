@@ -3,7 +3,7 @@
 [CCode (cprefix = "Budgie", gir_namespace = "Budgie", gir_version = "1.0", lower_case_cprefix = "budgie_")]
 namespace Budgie {
 	[CCode (cheader_filename = "plugin.h", type_id = "budgie_applet_get_type ()")]
-	public class Applet : Gtk.Bin, Atk.Implementor, Gtk.Buildable {
+	public class Applet : Gtk.EventBox, Atk.Implementor, Gtk.Buildable {
 		[CCode (has_construct_function = false)]
 		public Applet ();
 		public GLib.Settings get_applet_settings (string uuid);

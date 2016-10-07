@@ -26,7 +26,7 @@
  * you should at least ensure that your applet respects the sizes exposed by
  * the managing panel, via the #BudgieApplet::panel-size-changed signal.
  *
- * BudgieApplet extends #GtkBin to leave you free to make your own choices
+ * BudgieApplet extends #GtkEventBox to leave you free to make your own choices
  * on internal applet layout and configuration. Do note, however, that the
  * panel implementation will not call #gtk_widget_show_all, it is solely
  * your responsibility to ensure all of your contents are displayed. This
@@ -44,7 +44,7 @@ struct _BudgieAppletPrivate {
         BudgiePanelAction actions;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_EVENT_BOX)
 
 static GParamSpec *obj_properties[N_PROPS] = {
         NULL,

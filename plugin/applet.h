@@ -57,7 +57,7 @@ typedef struct _BudgieAppletClass BudgieAppletClass;
  * @update_popovers: Virtual update_popovers method
  */
 struct _BudgieAppletClass {
-        GtkBinClass parent_class;
+        GtkEventBoxClass parent_class;
 
         void (*invoke_action)(BudgieApplet *self, BudgiePanelAction action);
         gboolean (*supports_settings)(BudgieApplet *self);
@@ -70,7 +70,7 @@ struct _BudgieAppletClass {
 };
 
 struct _BudgieApplet {
-        GtkBin parent_instance;
+        GtkEventBox parent_instance;
         BudgieAppletPrivate *priv;
 };
 
