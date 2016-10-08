@@ -16,9 +16,8 @@ public class MountItem : ListItem
     public MountItem(GLib.Mount mount, string class)
     {
         item_class = class;
-        item_location = mount.get_root().get_uri();
 
-        switch (class) {
+        switch (item_class) {
             case "device":
                 category_name = _("Removable drives");
                 break;
@@ -35,6 +34,11 @@ public class MountItem : ListItem
         unmount_button.get_style_context().add_class("unmount-button");
         unmount_button.set_relief(Gtk.ReliefStyle.NONE);
         unmount_button.set_can_focus(false);
+        pack_start(unmount_button, false, false, 0);
+
+        unmount_button.clicked.connect(()=> {
+            do_unmount(mount);
+        });
 
         if (mount.can_eject()) {
             unmount_button.set_tooltip_text(_("Eject"));
@@ -42,37 +46,40 @@ public class MountItem : ListItem
             unmount_button.set_tooltip_text(_("Unmount"));
         }
 
-        pack_start(unmount_button, false, false, 0);
+        name_button.set_tooltip_text(_("Open \"%s\"".printf(mount.get_name())));
 
-        unmount_button.clicked.connect(()=> {
-            do_unmount(mount);
+        name_button.clicked.connect(()=> {
+            open_directory(mount.get_root().get_uri());
         });
     }
 
     /*
      * Figure out if we should eject or unmount
      */
-    private void do_unmount(GLib.Mount mount)
+    private void do_unmount(GLib.Mount? mount)
     {
+        GLib.MountOperation operation = new GLib.MountOperation();
+        operation.set_password_save(GLib.PasswordSave.FOR_SESSION);
+
         if (mount.can_eject()) {
-            mount.eject_with_operation.begin(GLib.MountUnmountFlags.NONE, null, null, (obj, res)=> {
+            mount.eject_with_operation.begin(GLib.MountUnmountFlags.NONE, operation, null, (obj, res)=> {
                 try {
                     mount.eject_with_operation.end(res);
                 } catch (GLib.Error e) {
                     send_message(e.message, Gtk.MessageType.ERROR);
-                    message(e.message);
+                    warning(e.message);
                 }
             });
             string safe_remove = _("You can now safely remove");
             string device_name = mount.get_drive().get_name();
             send_message(@"$safe_remove \"$device_name\"", Gtk.MessageType.INFO);
         } else {
-            mount.unmount_with_operation.begin(GLib.MountUnmountFlags.NONE, null, null, (obj, res)=> {
+            mount.unmount_with_operation.begin(GLib.MountUnmountFlags.NONE, operation, null, (obj, res)=> {
                 try {
                     mount.unmount_with_operation.end(res);
                 } catch (GLib.Error e) {
                     send_message(e.message, Gtk.MessageType.ERROR);
-                    message(e.message);
+                    warning(e.message);
                 }
             });
         }
