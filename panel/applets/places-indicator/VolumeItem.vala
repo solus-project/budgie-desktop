@@ -33,7 +33,7 @@ public class VolumeItem : ListItem
         GLib.MountOperation operation = new GLib.MountOperation();
         operation.set_password_save(GLib.PasswordSave.FOR_SESSION);
 
-        name_button.set_tooltip_text(_("Mount and open \"%s\"".printf(volume.get_name())));
+        name_button.set_tooltip_text(_("Mount and open \"%s\"").printf(volume.get_name()));
         name_button.clicked.connect(()=> {
             volume.mount.begin(GLib.MountMountFlags.NONE, operation, null, (obj, res)=>{
                 try {

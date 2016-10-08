@@ -46,7 +46,7 @@ public class MountItem : ListItem
             unmount_button.set_tooltip_text(_("Unmount"));
         }
 
-        name_button.set_tooltip_text(_("Open \"%s\"".printf(mount.get_name())));
+        name_button.set_tooltip_text(_("Open \"%s\"").printf(mount.get_name()));
 
         name_button.clicked.connect(()=> {
             open_directory(mount.get_root().get_uri());
