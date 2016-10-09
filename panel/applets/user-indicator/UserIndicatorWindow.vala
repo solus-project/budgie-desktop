@@ -100,6 +100,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
         IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "media-playback-pause-symbolic", false);
+        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "system-suspend-hibernate", false);
         IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "media-playlist-repeat-symbolic", false);
         IndicatorItem shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 
@@ -109,6 +110,7 @@ public class UserIndicatorWindow : Gtk.Popover {
         items.add(separator);
         items.add(lock_menu);
         items.add(suspend_menu);
+        items.add(hibernate_menu);
         items.add(reboot_menu);
         items.add(shutdown_menu);
 
@@ -135,6 +137,14 @@ public class UserIndicatorWindow : Gtk.Popover {
             return Gdk.EVENT_STOP;
         });
 
+        suspend_menu.button_release_event.connect((e) => {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            suspend();
+            return Gdk.EVENT_STOP;
+        });
+
         reboot_menu.button_release_event.connect((e) => {
             if (e.button != 1) {
                 return Gdk.EVENT_PROPAGATE;
@@ -143,19 +153,19 @@ public class UserIndicatorWindow : Gtk.Popover {
             return Gdk.EVENT_STOP;
         });
 
+        hibernate_menu.button_release_event.connect((e) => {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+            hibernate();
+            return Gdk.EVENT_STOP;
+        });
+
         shutdown_menu.button_release_event.connect((e) => {
             if (e.button != 1) {
                 return Gdk.EVENT_PROPAGATE;
             }
             shutdown();
-            return Gdk.EVENT_STOP;
-        });
-
-        suspend_menu.button_release_event.connect((e) => {
-            if (e.button != 1) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-            suspend();
             return Gdk.EVENT_STOP;
         });
 
@@ -258,6 +268,19 @@ public class UserIndicatorWindow : Gtk.Popover {
             session.Logout(0);
         } catch (Error e) {
             warning("Failed to logout: %s", e.message);
+        }
+    }
+
+    private void hibernate() {
+        if (logind_interface == null) {
+            return;
+        }
+
+        try {
+            lock_screen();
+            logind_interface.hibernate(false);
+        } catch (Error e) {
+            warning("Cannot hibernate: %s", e.message);
         }
     }
 

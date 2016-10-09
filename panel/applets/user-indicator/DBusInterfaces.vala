@@ -29,6 +29,7 @@ interface PropertiesInterface : Object {
 [DBus (name = "org.freedesktop.login1.Manager")]
 public interface LogindInterface : Object {
     public abstract void suspend(bool interactive) throws IOError;
+    public abstract void hibernate(bool interactive) throws IOError;
 }
 
 [DBus (name="org.gnome.SessionManager")]
