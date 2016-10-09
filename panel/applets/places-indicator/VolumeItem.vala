@@ -28,7 +28,7 @@ public class VolumeItem : ListItem
                 break;
         }
 
-        set_button(volume.get_name(), get_icon(volume.get_symbolic_icon()));
+        set_button(volume.get_name(), get_icon(volume.get_symbolic_icon()), true);
 
         GLib.MountOperation operation = new GLib.MountOperation();
         operation.set_password_save(GLib.PasswordSave.FOR_SESSION);
@@ -59,6 +59,7 @@ public class VolumeItem : ListItem
 
         name_button.set_tooltip_text(_("Mount and open \"%s\"").printf(volume.get_name()));
         name_button.clicked.connect(()=> {
+            spin.start();
             volume.mount.begin(GLib.MountMountFlags.NONE, operation, null, (obj, res)=>{
                 try {
                     volume.mount.end(res);
@@ -67,6 +68,7 @@ public class VolumeItem : ListItem
                     send_message(e.message, Gtk.MessageType.ERROR);
                     warning(e.message);
                 }
+                spin.stop();
             });
         });
     }
