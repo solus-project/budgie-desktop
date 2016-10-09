@@ -14,6 +14,7 @@ public class ListItem : Gtk.Box
     protected string item_class;
     protected string category_name;
     protected Gtk.ToolButton name_button;
+    protected Gtk.Overlay overlay;
 
     construct
     {
@@ -23,7 +24,11 @@ public class ListItem : Gtk.Box
         name_button = new Gtk.ToolButton(null, null);
         name_button.get_child().get_style_context().add_class("name-button");
         name_button.set_can_focus(false);
-        pack_start(name_button, true, true, 0);
+
+        overlay = new Gtk.Overlay();
+        overlay.add(name_button);
+
+        pack_start(overlay, true, true, 0);
     }
 
     /*

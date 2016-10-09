@@ -34,7 +34,8 @@ public class MountItem : ListItem
         unmount_button.get_style_context().add_class("unmount-button");
         unmount_button.set_relief(Gtk.ReliefStyle.NONE);
         unmount_button.set_can_focus(false);
-        pack_start(unmount_button, false, false, 0);
+        unmount_button.set_halign(Gtk.Align.END);
+        overlay.add_overlay(unmount_button);
 
         unmount_button.clicked.connect(()=> {
             do_unmount(mount);
