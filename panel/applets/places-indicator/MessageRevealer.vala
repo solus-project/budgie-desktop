@@ -13,7 +13,7 @@ public class MessageRevealer : Gtk.Revealer
 {
     private Gtk.InfoBar info_bar;
     private Gtk.Label message_label;
-    private uint expire_id;
+    private uint expire_id = 0;
 
     public MessageRevealer()
     {
@@ -29,11 +29,6 @@ public class MessageRevealer : Gtk.Revealer
         message_label.set_max_width_chars(35);
         Gtk.Container info_bar_container = info_bar.get_content_area();
         info_bar_container.add(message_label);
-
-        info_bar.response.connect(()=> {
-            GLib.Source.remove(expire_id);
-            hide_it();
-        });
     }
 
     private void show_it()
@@ -45,6 +40,7 @@ public class MessageRevealer : Gtk.Revealer
 
     private bool hide_it()
     {
+        expire_id = 0;
         ulong connection = this.notify["child-revealed"].connect_after(() => {
             set_no_show_all(true);
             hide();
@@ -63,7 +59,9 @@ public class MessageRevealer : Gtk.Revealer
         info_bar.set_message_type(message_type);
         show_it();
 
-        GLib.Source.remove(expire_id);
+        if (expire_id != 0) {
+            GLib.Source.remove(expire_id);
+        }
         expire_id = GLib.Timeout.add(5000, hide_it);
     }
 }

@@ -13,8 +13,8 @@ public class ListItem : Gtk.Box
 {
     protected string item_class;
     protected string category_name;
-    protected string item_location;
     protected Gtk.ToolButton name_button;
+    protected Gtk.Overlay overlay;
 
     construct
     {
@@ -24,18 +24,11 @@ public class ListItem : Gtk.Box
         name_button = new Gtk.ToolButton(null, null);
         name_button.get_child().get_style_context().add_class("name-button");
         name_button.set_can_focus(false);
-        name_button.set_tooltip_text(_("Open location"));
 
-        // Open the location in the file manager
-        name_button.clicked.connect(()=> {
-            try {
-                Gtk.show_uri(Gdk.Screen.get_default(), item_location, Gdk.CURRENT_TIME);
-            } catch (GLib.Error e) {
-                message(e.message);
-            }
-        });
+        overlay = new Gtk.Overlay();
+        overlay.add(name_button);
 
-        pack_start(name_button, true, true, 0);
+        pack_start(overlay, true, true, 0);
     }
 
     /*
@@ -91,5 +84,14 @@ public class ListItem : Gtk.Box
      */
     public string get_item_category() {
         return category_name;
+    }
+
+    protected void open_directory(string location)
+    {
+        try {
+            Gtk.show_uri(Gdk.Screen.get_default(), location, Gdk.CURRENT_TIME);
+        } catch (GLib.Error e) {
+            warning(e.message);
+        }
     }
 }

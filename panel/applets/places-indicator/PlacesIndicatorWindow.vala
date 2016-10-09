@@ -179,7 +179,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
                 }
             });
         } catch (GLib.IOError e) {
-            message(e.message);
+            warning(e.message);
         }
     }
 
@@ -267,7 +267,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
                 add_place(line, "bookmark");
             }
         } catch (GLib.Error e) {
-            message(e.message);
+            warning(e.message);
         }
     }
 
@@ -296,7 +296,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
      */
     private bool is_interesting(GLib.Mount? mount)
     {
-        if (mount == null || mount.is_shadowed()) {
+        if (mount.is_shadowed()) {
             return false;
         }
         return true;
@@ -315,10 +315,11 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         foreach (GLib.Drive drive in volume_monitor.get_connected_drives()) {
             foreach (GLib.Volume volume in drive.get_volumes()) {
                 GLib.Mount mount = volume.get_mount();
-                if (!is_interesting(mount)) {
-                    continue;
+                if (mount == null) {
+                    add_volume(volume);
+                } else {
+                    add_mount(mount, volume.get_identifier("class"));
                 }
-                add_mount(mount, volume.get_identifier("class"));
             }
         }
 
@@ -328,23 +329,35 @@ public class PlacesIndicatorWindow : Gtk.Popover {
                 continue;
             }
             GLib.Mount mount = volume.get_mount();
-            if (!is_interesting(mount)) {
-                continue;
+            if (mount == null) {
+                add_volume(volume);
+            } else {
+                add_mount(mount, volume.get_identifier("class"));
             }
-            add_mount(mount, volume.get_identifier("class"));
-        }
-
-        // Add the rest of the mounts (network, fstab, etc.)
-        foreach (GLib.Mount mount in volume_monitor.get_mounts()) {
-            if (mount.get_volume() != null) continue;
-            if (!is_interesting(mount)) continue;
-            GLib.File root = mount.get_root();
-            string class = (root.is_native()) ? "device" : "network";
-            add_mount(mount, class);
         }
 
         get_child().show_all();
         check_expand();
+    }
+
+    /*
+     * Adds a volume to the view
+     */
+    private void add_volume(GLib.Volume volume)
+    {
+        if ((volume.get_identifier("class") == "network" && !show_networks) ||
+            (volume.get_identifier("class") == "device" && !show_drives))
+        {
+            return;
+        }
+
+        VolumeItem volume_item = new VolumeItem(volume);
+        mounts_listbox.add(volume_item);
+        volume_item.get_parent().set_can_focus(false);
+
+        volume_item.send_message.connect((message_content, message_type)=> {
+            message_bar.set_content(message_content, message_type);
+        });
     }
 
     /*
@@ -357,6 +370,10 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         }
 
         if (!mount.can_unmount() && !mount.can_eject()) {
+            return;
+        }
+
+        if (!is_interesting(mount)) {
             return;
         }
 

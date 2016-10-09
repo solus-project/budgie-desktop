@@ -47,6 +47,7 @@ libplacesindicator_la_SOURCES = \
 	MessageRevealer.vala \
 	PlacesSection.vala \
 	ListItem.vala \
+	VolumeItem.vala \
 	MountItem.vala \
 	PlaceItem.vala \
 	plugin-resources.h \

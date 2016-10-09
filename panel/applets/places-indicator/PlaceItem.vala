@@ -14,7 +14,6 @@ public class PlaceItem : ListItem
     public PlaceItem(GLib.File file, string class)
     {
         item_class = class;
-        item_location = file.get_uri();
 
         // Get and set the appropriate icon
         try {
@@ -22,7 +21,13 @@ public class PlaceItem : ListItem
             set_button(file.get_basename(), get_icon(info.get_symbolic_icon()));
         } catch (GLib.Error e) {
             set_button(file.get_basename(), get_icon(null));
-            message(e.message);
+            warning(e.message);
         }
+
+        name_button.set_tooltip_text(_("Open \"%s\"".printf(file.get_basename())));
+
+        name_button.clicked.connect(()=> {
+            open_directory(file.get_uri());
+        });
     }
 }
