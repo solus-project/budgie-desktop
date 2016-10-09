@@ -519,6 +519,9 @@ GtkPopover GtkListBoxRow {
     @extend %widgets;
     color: $fg_color;
     background-color: $panel_bg;
+    background-image: none;
+    box-shadow: none;
+    border: none;
 
     .button {
       border-top-width: 0;
