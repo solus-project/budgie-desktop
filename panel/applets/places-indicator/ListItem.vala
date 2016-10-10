@@ -15,6 +15,7 @@ public class ListItem : Gtk.Box
     protected string category_name;
     protected Gtk.ToolButton name_button;
     protected Gtk.Overlay overlay;
+    protected Gtk.Spinner spin;
 
     construct
     {
@@ -34,7 +35,7 @@ public class ListItem : Gtk.Box
     /*
      * Add content to our name button
      */
-    protected void set_button(string label, Gtk.Image image)
+    protected void set_button(string label, Gtk.Image image, bool spinner = false)
     {
         Gtk.Box box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
@@ -46,6 +47,12 @@ public class ListItem : Gtk.Box
         label_w.set_ellipsize(Pango.EllipsizeMode.END);
         label_w.set_halign(Gtk.Align.START);
         box.pack_start(label_w, true, true, 0);
+
+        if (spinner) {
+            spin = new Gtk.Spinner();
+            spin.set_halign(Gtk.Align.END);
+            box.pack_end(spin, false, false, 2);
+        }
 
         name_button.set_label_widget(box);
     }
