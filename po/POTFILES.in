@@ -45,3 +45,12 @@ wm/wm.vala
 [type: gettext/keys]panel/applets/budgie-menu/BudgieMenu.plugin.in
 [type: gettext/keys]panel/applets/separator/SeparatorApplet.plugin.in
 [type: gettext/keys]panel/applets/notifications/NotificationsApplet.plugin.in
+
+panel/applets/places-indicator/MountItem.vala
+panel/applets/places-indicator/PlaceItem.vala
+panel/applets/places-indicator/PlacesIndicator.vala
+panel/applets/places-indicator/PlacesIndicatorWindow.vala
+panel/applets/places-indicator/PlacesSection.vala
+panel/applets/places-indicator/VolumeItem.vala
+[type: gettext/glade]panel/applets/places-indicator/settings.ui
+

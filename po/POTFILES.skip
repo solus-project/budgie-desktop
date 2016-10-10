@@ -40,5 +40,11 @@ wm/wm.c
 ./panel/applets/separator/SeparatorApplet.plugin
 ./panel/applets/notifications/NotificationsApplet.plugin
 
+panel/applets/places-indicator/MountItem.c
+panel/applets/places-indicator/PlacesIndicator.c
+panel/applets/places-indicator/PlacesIndicatorWindow.c
+panel/applets/places-indicator/PlacesSection.c
+panel/applets/places-indicator/VolumeItem.c
+
 polkit/dialog.ui
 polkit/polkitdialog.c
