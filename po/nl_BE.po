@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Bram Van der Streeck <bram.vanderstreeck@gmail.com>, 2015
-# Geert Verheyde <geert.verheyde@gmail.com>, 2015
+# Geert Verheyde <geert.verheyde@gmail.com>, 2015-2016
+# Maxim Van Damme <maxim_vandamme@hotmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-29 22:49+0000\n"
-"Last-Translator: Bram Van der Streeck <bram.vanderstreeck@gmail.com>\n"
+"POT-Creation-Date: 2016-10-10 22:09+0100\n"
+"PO-Revision-Date: 2016-10-10 21:14+0000\n"
+"Last-Translator: Ikey Doherty <ikey@evolve-os.com>\n"
 "Language-Team: Dutch (Belgium) (http://www.transifex.com/solus-project/budgie-desktop/language/nl_BE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +20,19 @@ msgstr ""
 "Language: nl_BE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
+#: ../daemon/endsession.vala:167
+msgid "Log out"
+msgstr ""
+
+#: ../daemon/endsession.vala:171
+msgid "Restart device"
+msgstr ""
+
+#: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Afsluiten"
+
+#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
 msgstr "Applets"
 
@@ -28,60 +41,96 @@ msgstr "Applets"
 msgid "Notifications"
 msgstr "Meldingen"
 
-#: ../raven/settings_view.vala:354
+#: ../raven/settings_view.vala:266
+msgid "Top"
+msgstr "Boven"
+
+#: ../raven/settings_view.vala:268
+msgid "Bottom"
+msgstr "Onder"
+
+#: ../raven/settings_view.vala:376
 msgid "Top Panel"
 msgstr "Paneel Boven"
 
-#: ../raven/settings_view.vala:356
+#: ../raven/settings_view.vala:378
 msgid "Right Panel"
 msgstr "Paneel Rechts"
 
-#: ../raven/settings_view.vala:358
+#: ../raven/settings_view.vala:380
 msgid "Left Panel"
 msgstr "Paneel Links"
 
-#: ../raven/settings_view.vala:360
+#: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
 msgstr "Paneel Onder"
 
-#: ../raven/settings_view.vala:593
+#: ../raven/settings_view.vala:616
 msgid "Start"
 msgstr "Begin"
 
-#: ../raven/settings_view.vala:596
+#: ../raven/settings_view.vala:619
 msgid "Center"
 msgstr "Midden"
 
-#: ../raven/settings_view.vala:599
+#: ../raven/settings_view.vala:622
 msgid "End"
 msgstr "Einde"
 
-#: ../raven/settings_view.vala:877
+#. Appearance expander
+#: ../raven/settings_view.vala:960
+msgid "Appearance"
+msgstr "Uiterlijk"
+
+#: ../raven/settings_view.vala:967
+msgid "Background"
+msgstr "Achtergrond"
+
+#: ../raven/settings_view.vala:974
+msgid "Fonts"
+msgstr "Lettertypes"
+
+#: ../raven/settings_view.vala:980
+msgid "Windows"
+msgstr ""
+
+#: ../raven/settings_view.vala:984
 msgid "General"
 msgstr "Algemeen"
 
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
+#: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
 msgstr "Paneel"
 
-#: ../raven/notifications_view.vala:410
+#: ../raven/notifications_view.vala:52
+msgid "Nothing to see here"
+msgstr "Helemaal niets"
+
+#: ../raven/notifications_view.vala:494
+#: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
-msgid "%u new notifications"
-msgstr "%u nieuwe meldingen"
+msgid "%u unread notifications"
+msgstr "%u ongelezen meldingen"
 
-#: ../raven/notifications_view.vala:412
-msgid "1 new notification"
-msgstr "1 nieuwe melding"
+#: ../raven/notifications_view.vala:496
+#: ../panel/applets/notifications/NotificationsApplet.vala:77
+msgid "1 unread notification"
+msgstr "1 ongelezen melding"
 
-#: ../raven/notifications_view.vala:414
+#: ../raven/notifications_view.vala:498
+#: ../panel/applets/notifications/NotificationsApplet.vala:79
+msgid "No unread notifications"
+msgstr "Geen ongelezen meldingen"
+
+#: ../raven/notifications_view.vala:624
 msgid "No new notifications"
 msgstr "Geen nieuwe meldingen"
 
-#: ../raven/sound.vala:90
+#: ../raven/sound.vala:78
 msgid "Output"
 msgstr "Uitvoer"
 
-#: ../raven/sound.vala:107
+#: ../raven/sound.vala:95
 msgid "Input"
 msgstr "Invoer"
 
@@ -113,64 +162,108 @@ msgid "Add new applet"
 msgstr "Nieuwe applet toevoegen"
 
 #: ../raven/ui/appearance.ui.h:1
-msgid "Appearance"
-msgstr "Uiterlijk"
+msgid "Use the dark theme"
+msgstr "Donker thema gebruiken"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Donker Thema"
+msgstr "Donker thema"
 
 #: ../raven/ui/appearance.ui.h:3
-msgid "Use the dark theme"
-msgstr "Donker thema gebruiken"
+msgid "Select a GTK+ theme"
+msgstr "Selecteer een GTK+ thema"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
 msgstr "Widget Thema"
 
 #: ../raven/ui/appearance.ui.h:5
-msgid "Select a GTK+ theme"
-msgstr "Selecteer een GTK+ thema"
+msgid "Select an icon theme"
+msgstr "Selecteer een icoon thema"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
 msgstr "Icoon Thema"
 
 #: ../raven/ui/appearance.ui.h:7
-msgid "Select an icon theme"
-msgstr "Selecteer een icoon thema"
+msgid "Override defaults"
+msgstr "Standaardinstellingen opheffen"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
 msgstr "Ingebouwd thema"
 
 #: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
-msgstr "Standaardinstellingen opheffen"
+msgid "Select a cursor theme"
+msgstr "Kies een muisaanwijzer thema"
+
+#: ../raven/ui/appearance.ui.h:10
+msgid "Cursor Theme"
+msgstr "Muisaanwijzer Thema"
 
 #: ../raven/ui/panel.ui.h:1
-msgid "Panel 1\n"
-msgstr "Paneel 1\n"
-
-#: ../raven/ui/panel.ui.h:3
 msgid "Manage Panels"
 msgstr "Panelen Beheren"
 
-#: ../raven/ui/panel.ui.h:4
+#: ../raven/ui/panel.ui.h:2
 msgid "Position"
 msgstr "Positie"
 
-#: ../raven/ui/panel.ui.h:5
+#: ../raven/ui/panel.ui.h:3
 msgid "Size"
 msgstr "Grootte"
 
-#: ../raven/ui/panel.ui.h:6
+#: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
 msgstr "Schaduw"
 
-#: ../raven/ui/panel.ui.h:7
+#: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
 msgstr "\"Automatisch verbergen\" beleid"
+
+#: ../raven/ui/panel.ui.h:6
+msgid "Stylize regions"
+msgstr "Opaciteit systeemvak"
+
+#: ../raven/ui/background.ui.h:1
+msgid "Show desktop icons"
+msgstr "Toon  iconen op bureaublad"
+
+#: ../raven/ui/background.ui.h:2
+msgid "Desktop Icons"
+msgstr "Bureaublad Iconen"
+
+#: ../raven/ui/fonts.ui.h:1
+msgid "Window Titles"
+msgstr "Venster titels"
+
+#: ../raven/ui/fonts.ui.h:2
+msgid "Interface"
+msgstr "Interface"
+
+#: ../raven/ui/fonts.ui.h:3
+msgid "Documents"
+msgstr "Documenten"
+
+#: ../raven/ui/fonts.ui.h:4
+msgid "Monospace"
+msgstr "Monospace"
+
+#: ../raven/ui/wm.ui.h:1
+msgid "Disable unredirect of fullscreen windows"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:2
+msgid "Disable unredirect"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:3
+msgid "Change the layout of the window buttons"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:4
+msgid "Button layout"
+msgstr ""
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -181,15 +274,49 @@ msgstr "Budgie Desktop"
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Aanmelden in de Budgie Desktop"
 
-#: ../panel/applets/clock/ClockApplet.vala:56
+#: ../daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Bent u zeker dat u uw sessie wilt beëindigen"
+
+#: ../daemon/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Annuleren"
+
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: ../daemon/endsession.ui.h:4
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
+msgid "Logout"
+msgstr "Afmelden"
+
+#: ../daemon/endsession.ui.h:5
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
+msgid "Restart"
+msgstr "Herstart"
+
+#: ../daemon/endsession.ui.h:6
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
+msgid "Shutdown"
+msgstr "Afsluiten"
+
+#: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
 msgstr "Instellingen datum en tijd"
 
-#: ../panel/applets/clock/ClockApplet.vala:57
+#: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
 msgstr "Kalender"
 
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+#: ../panel/applets/icon-tasklist/Buttons.vala:90
+msgid "Pin to panel"
+msgstr "Op het paneel vastpinnen"
+
+#: ../panel/applets/icon-tasklist/Buttons.vala:91
+msgid "Unpin from panel"
+msgstr "Van het paneel losmaken"
+
+#. Special case, "All"
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
 msgstr "Alle"
 
@@ -209,22 +336,76 @@ msgstr "Num lock ingeschakeld"
 msgid "Num lock is not active"
 msgstr "Num lock uitgeschakeld"
 
-#: ../panel/applets/notifications/NotificationsApplet.vala:77
-#, c-format
-msgid "%u unread notifications"
-msgstr "%u ongelezen meldingen"
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:79
-msgid "1 unread notification"
-msgstr "1 ongelezen melding"
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:81
-msgid "No unread notifications"
-msgstr "Geen ongelezen meldingen"
-
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
 msgstr "Bureaublad zichtbaar"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:101
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth is uitgeschakeld"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:105
+msgid "Bluetooth is active"
+msgstr "Bluetooth is ingeschakeld"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:110
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Verbonden met %d apparaat"
+msgstr[1] "Verbonden met %d apparaten"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:171
+msgid "Bluetooth Settings"
+msgstr "Bluetooth Instellingen"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:172
+msgid "Send Files"
+msgstr "Zend Bestanden"
+
+#: ../panel/applets/status/BluetoothIndicator.vala:173
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth Vliegtuig Modus"
+
+#: ../panel/applets/status/PowerIndicator.vala:56
+msgid "Battery fully charged."
+msgstr "Accu vol"
+
+#: ../panel/applets/status/PowerIndicator.vala:59
+msgid "Unknown"
+msgstr "Onbekend"
+
+#. Set inner charging duration to hours:minutes
+#: ../panel/applets/status/PowerIndicator.vala:68
+msgid "Battery charging"
+msgstr "Accu laadt op"
+
+#: ../panel/applets/status/PowerIndicator.vala:73
+msgid "Battery remaining"
+msgstr "Accu resterend"
+
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Power settings"
+msgstr ""
+
+#. User Menu Creation
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
+msgid "User"
+msgstr ""
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
+msgid "Lock"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
+msgid "Suspend"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "Hibernate"
+msgstr ""
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -248,17 +429,17 @@ msgstr "Herschalen"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Altijd bovenop"
+msgstr "Altijd Bovenop"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../wm/wm.vala:363
-msgid "Change background\\u2026"
-msgstr "Wijzig achtergrond\\u2026"
+#: ../wm/wm.vala:515
+msgid "Change background"
+msgstr "Achtergrond aanpassen"
 
-#: ../wm/wm.vala:372
+#: ../wm/wm.vala:524
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -316,3 +497,76 @@ msgstr "Budgie Menu"
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
 msgstr "Afscheider"
+
+#: ../panel/applets/places-indicator/MountItem.vala:23
+#: ../panel/applets/places-indicator/VolumeItem.vala:23
+msgid "Removable devices"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:25
+#: ../panel/applets/places-indicator/VolumeItem.vala:25
+msgid "Local volumes"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:29
+#: ../panel/applets/places-indicator/VolumeItem.vala:29
+msgid "Network folders"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:49
+#: ../panel/applets/places-indicator/VolumeItem.vala:46
+msgid "Eject"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:51
+msgid "Unmount"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/PlaceItem.vala:27
+#, c-format
+msgid "Open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:78
+#: ../panel/applets/places-indicator/VolumeItem.vala:53
+msgid "You can now safely remove"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
+msgid "Nothing to display right now"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Mount some drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Enable more sections"
+msgstr ""
+
+#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:3
+msgid "Show removable drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:4
+msgid "Show network folders"
+msgstr ""

@@ -8,15 +8,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-16 20:44+0100\n"
-"PO-Revision-Date: 2016-07-16 20:03+0000\n"
-"Last-Translator: Stefan Ric <stfric369@gmail.com>\n"
+"POT-Creation-Date: 2016-10-10 22:09+0100\n"
+"PO-Revision-Date: 2016-10-10 21:14+0000\n"
+"Last-Translator: Ikey Doherty <ikey@evolve-os.com>\n"
 "Language-Team: Serbian (Latin) (Serbia) (http://www.transifex.com/solus-project/budgie-desktop/language/sr_RS@latin/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sr_RS@latin\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../daemon/endsession.vala:167
+msgid "Log out"
+msgstr ""
+
+#: ../daemon/endsession.vala:171
+msgid "Restart device"
+msgstr ""
+
+#: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Isključivanje"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
@@ -64,48 +76,51 @@ msgid "End"
 msgstr "Kraj"
 
 #. Appearance expander
-#: ../raven/settings_view.vala:921
+#: ../raven/settings_view.vala:960
 msgid "Appearance"
 msgstr "Izgled"
 
-#: ../raven/settings_view.vala:928
+#: ../raven/settings_view.vala:967
 msgid "Background"
 msgstr "Pozadina"
 
-#: ../raven/settings_view.vala:935
+#: ../raven/settings_view.vala:974
 msgid "Fonts"
 msgstr "Fontovi"
 
-#: ../raven/settings_view.vala:938
+#: ../raven/settings_view.vala:980
+msgid "Windows"
+msgstr ""
+
+#: ../raven/settings_view.vala:984
 msgid "General"
 msgstr "Opšte"
 
-#: ../raven/settings_view.vala:950 ../raven/settings_view.vala:951
+#: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
 msgstr "Panel"
 
-#: ../raven/notifications_view.vala:43
-#, c-format
+#: ../raven/notifications_view.vala:52
 msgid "Nothing to see here"
 msgstr "Ništa za prikazati"
 
-#: ../raven/notifications_view.vala:479
+#: ../raven/notifications_view.vala:494
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u nepročitanih obaveštenja"
 
-#: ../raven/notifications_view.vala:481
+#: ../raven/notifications_view.vala:496
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 nepročitano obaveštenje"
 
-#: ../raven/notifications_view.vala:483
+#: ../raven/notifications_view.vala:498
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Nema nepročitanih obaveštenja"
 
-#: ../raven/notifications_view.vala:609
+#: ../raven/notifications_view.vala:624
 msgid "No new notifications"
 msgstr "Nema novih obaveštenja"
 
@@ -232,6 +247,22 @@ msgstr "Dokumenti"
 msgid "Monospace"
 msgstr "Monospejs"
 
+#: ../raven/ui/wm.ui.h:1
+msgid "Disable unredirect of fullscreen windows"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:2
+msgid "Disable unredirect"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:3
+msgid "Change the layout of the window buttons"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:4
+msgid "Button layout"
+msgstr ""
+
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
@@ -241,43 +272,44 @@ msgstr "Badži desktop"
 msgid "This session logs you into the Budgie Desktop"
 msgstr "Ova sesija te prijavljuje u Badži desktop"
 
-#: ../data/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Isključivanje"
-
-#: ../data/endsession.ui.h:2
+#: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr "Da li ste sigurni da želite da okončate vašu sesiju?"
 
-#: ../data/endsession.ui.h:3
+#: ../daemon/endsession.ui.h:3
 msgid "Cancel"
 msgstr "Otkaži"
 
-#: ../data/endsession.ui.h:4
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: ../daemon/endsession.ui.h:4
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
 msgstr "Odjavi se"
 
-#: ../data/endsession.ui.h:5
+#: ../daemon/endsession.ui.h:5
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
 msgstr "Ponovo pokreni"
 
-#: ../data/endsession.ui.h:6
+#: ../daemon/endsession.ui.h:6
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
 msgstr "Isključi"
 
-#: ../panel/applets/clock/ClockApplet.vala:56
+#: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
 msgstr "Postavke vremena i datuma"
 
-#: ../panel/applets/clock/ClockApplet.vala:57
+#: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
 msgstr "Kalendar"
 
-#: ../panel/applets/icon-tasklist/Buttons.vala:88
+#: ../panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
 msgstr "Zakači na panel"
 
-#: ../panel/applets/icon-tasklist/Buttons.vala:89
+#: ../panel/applets/icon-tasklist/Buttons.vala:91
 msgid "Unpin from panel"
 msgstr "Otkači sa panela"
 
@@ -322,15 +354,15 @@ msgstr[0] "Konektovan na %d uređaj"
 msgstr[1] "Konektovan na %d uređaja"
 msgstr[2] "Konektovan na %d uređaja"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:166
+#: ../panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
 msgstr "Bluetooth postavke"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:167
+#: ../panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
 msgstr "Pošalji datoteke"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:168
+#: ../panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
 msgstr "Bluetooth režim letenja"
 
@@ -342,6 +374,7 @@ msgstr "Baterija je puna"
 msgid "Unknown"
 msgstr "Nepoznato"
 
+#. Set inner charging duration to hours:minutes
 #: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
 msgstr "Baterija se puni"
@@ -349,6 +382,29 @@ msgstr "Baterija se puni"
 #: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
 msgstr "Preostalo baterije"
+
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Power settings"
+msgstr ""
+
+#. User Menu Creation
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
+msgid "User"
+msgstr ""
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
+msgid "Lock"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
+msgid "Suspend"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "Hibernate"
+msgstr ""
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -378,11 +434,11 @@ msgstr "Uvek na vrhu"
 msgid "Close"
 msgstr "Zatvori"
 
-#: ../wm/wm.vala:502
+#: ../wm/wm.vala:515
 msgid "Change background"
 msgstr "Promeni pozadinu"
 
-#: ../wm/wm.vala:511
+#: ../wm/wm.vala:524
 msgid "Settings"
 msgstr "Podešavanja"
 
@@ -440,3 +496,76 @@ msgstr "Badži meni"
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
 msgstr "Odvajač"
+
+#: ../panel/applets/places-indicator/MountItem.vala:23
+#: ../panel/applets/places-indicator/VolumeItem.vala:23
+msgid "Removable devices"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:25
+#: ../panel/applets/places-indicator/VolumeItem.vala:25
+msgid "Local volumes"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:29
+#: ../panel/applets/places-indicator/VolumeItem.vala:29
+msgid "Network folders"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:49
+#: ../panel/applets/places-indicator/VolumeItem.vala:46
+msgid "Eject"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:51
+msgid "Unmount"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/PlaceItem.vala:27
+#, c-format
+msgid "Open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:78
+#: ../panel/applets/places-indicator/VolumeItem.vala:53
+msgid "You can now safely remove"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
+msgid "Nothing to display right now"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Mount some drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Enable more sections"
+msgstr ""
+
+#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:3
+msgid "Show removable drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:4
+msgid "Show network folders"
+msgstr ""

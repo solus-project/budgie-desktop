@@ -8,15 +8,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-29 23:18+0100\n"
-"PO-Revision-Date: 2016-06-25 11:58+0000\n"
-"Last-Translator: Ville Kivelä <vkivela@hotmail.com>\n"
+"POT-Creation-Date: 2016-10-10 22:09+0100\n"
+"PO-Revision-Date: 2016-10-10 21:14+0000\n"
+"Last-Translator: Ikey Doherty <ikey@evolve-os.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/solus-project/budgie-desktop/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../daemon/endsession.vala:167
+msgid "Log out"
+msgstr ""
+
+#: ../daemon/endsession.vala:171
+msgid "Restart device"
+msgstr ""
+
+#: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Sammuta"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
@@ -27,71 +39,96 @@ msgstr "Appletit"
 msgid "Notifications"
 msgstr "Ilmoitukset"
 
-#: ../raven/settings_view.vala:254
+#: ../raven/settings_view.vala:266
 msgid "Top"
 msgstr "Ylä"
 
-#: ../raven/settings_view.vala:256
+#: ../raven/settings_view.vala:268
 msgid "Bottom"
 msgstr "Ala"
 
-#: ../raven/settings_view.vala:364
+#: ../raven/settings_view.vala:376
 msgid "Top Panel"
 msgstr "Yläpaneeli"
 
-#: ../raven/settings_view.vala:366
+#: ../raven/settings_view.vala:378
 msgid "Right Panel"
 msgstr "Oikea paneeli"
 
-#: ../raven/settings_view.vala:368
+#: ../raven/settings_view.vala:380
 msgid "Left Panel"
 msgstr "Vasen paneeli"
 
-#: ../raven/settings_view.vala:370
+#: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
 msgstr "Alapaneeli"
 
-#: ../raven/settings_view.vala:604
+#: ../raven/settings_view.vala:616
 msgid "Start"
 msgstr "Alku"
 
-#: ../raven/settings_view.vala:607
+#: ../raven/settings_view.vala:619
 msgid "Center"
 msgstr "Keski"
 
-#: ../raven/settings_view.vala:610
+#: ../raven/settings_view.vala:622
 msgid "End"
 msgstr "Loppu"
 
+#. Appearance expander
 #: ../raven/settings_view.vala:960
+msgid "Appearance"
+msgstr "Ulkoasu"
+
+#: ../raven/settings_view.vala:967
+msgid "Background"
+msgstr "Tausta"
+
+#: ../raven/settings_view.vala:974
+msgid "Fonts"
+msgstr "Kirjasintyyppi"
+
+#: ../raven/settings_view.vala:980
+msgid "Windows"
+msgstr ""
+
+#: ../raven/settings_view.vala:984
 msgid "General"
 msgstr "Yleiset"
 
-#: ../raven/settings_view.vala:972 ../raven/settings_view.vala:973
+#: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
 msgstr "Paneeli"
 
-#: ../raven/notifications_view.vala:448
+#: ../raven/notifications_view.vala:52
+msgid "Nothing to see here"
+msgstr "Ei mitään nähtävää"
+
+#: ../raven/notifications_view.vala:494
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u lukematonta ilmoitusta"
 
-#: ../raven/notifications_view.vala:450
+#: ../raven/notifications_view.vala:496
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 lukematon ilmoitus"
 
-#: ../raven/notifications_view.vala:452
+#: ../raven/notifications_view.vala:498
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Ei lukemattomia ilmoituksia"
 
-#: ../raven/sound.vala:90
+#: ../raven/notifications_view.vala:624
+msgid "No new notifications"
+msgstr "Ei uusia ilmoituksia"
+
+#: ../raven/sound.vala:78
 msgid "Output"
 msgstr "Ulostulo"
 
-#: ../raven/sound.vala:107
+#: ../raven/sound.vala:95
 msgid "Input"
 msgstr "Sisääntulo"
 
@@ -123,48 +160,44 @@ msgid "Add new applet"
 msgstr "Lisää appletti"
 
 #: ../raven/ui/appearance.ui.h:1
-msgid "Appearance"
-msgstr "Ulkonäkö"
-
-#: ../raven/ui/appearance.ui.h:2
 msgid "Use the dark theme"
 msgstr "Käytä tummaa teemaa"
 
-#: ../raven/ui/appearance.ui.h:3
+#: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
 msgstr "Tumma teema"
 
-#: ../raven/ui/appearance.ui.h:4
+#: ../raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "Valitse GTK+ teema"
+msgstr "Valitse GTK+-teema"
+
+#: ../raven/ui/appearance.ui.h:4
+msgid "Widget Theme"
+msgstr "Widgettiteema"
 
 #: ../raven/ui/appearance.ui.h:5
-msgid "Widget Theme"
-msgstr "Widgetti teema"
+msgid "Select an icon theme"
+msgstr "Valitse kuvaketeema"
 
 #: ../raven/ui/appearance.ui.h:6
-msgid "Select an icon theme"
-msgstr "Valitse kuvake teema"
+msgid "Icon Theme"
+msgstr "Kuvaketeema"
 
 #: ../raven/ui/appearance.ui.h:7
-msgid "Icon Theme"
-msgstr "Kuvake teema"
-
-#: ../raven/ui/appearance.ui.h:8
 msgid "Override defaults"
 msgstr "Ohita oletukset"
 
-#: ../raven/ui/appearance.ui.h:9
+#: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
 msgstr "Sisäänrakennettu teema"
 
-#: ../raven/ui/appearance.ui.h:10
+#: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "Valitse kursori teema"
+msgstr "Valitse kursoriteema"
 
-#: ../raven/ui/appearance.ui.h:11
+#: ../raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "Kursori teema"
+msgstr "Kursoriteema"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
@@ -184,86 +217,104 @@ msgstr "Varjo"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "Automaattisen piiloituksen tapa"
+msgstr "Automaattisen piilotuksen tapa"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
 msgstr "Muotoile alueet"
 
 #: ../raven/ui/background.ui.h:1
-msgid "Background"
-msgstr "Tausta"
-
-#: ../raven/ui/background.ui.h:2
 msgid "Show desktop icons"
 msgstr "Näytä työpöydän kuvakkeet"
 
-#: ../raven/ui/background.ui.h:3
+#: ../raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "Työpöytä kuvakkeet"
+msgstr "Työpöytäkuvakkeet"
 
 #: ../raven/ui/fonts.ui.h:1
-msgid "Fonts"
-msgstr "Kirjasintyyppi"
-
-#: ../raven/ui/fonts.ui.h:2
 msgid "Window Titles"
 msgstr "Ikkunoiden otsikot"
 
-#: ../raven/ui/fonts.ui.h:3
+#: ../raven/ui/fonts.ui.h:2
 msgid "Interface"
 msgstr "Käyttöliittymä"
 
-#: ../raven/ui/fonts.ui.h:4
+#: ../raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "Dokumentit"
+msgstr "Asiakirjat"
 
-#: ../raven/ui/fonts.ui.h:5
+#: ../raven/ui/fonts.ui.h:4
 msgid "Monospace"
 msgstr "Tasalevyinen kirjasin"
+
+#: ../raven/ui/wm.ui.h:1
+msgid "Disable unredirect of fullscreen windows"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:2
+msgid "Disable unredirect"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:3
+msgid "Change the layout of the window buttons"
+msgstr ""
+
+#: ../raven/ui/wm.ui.h:4
+msgid "Button layout"
+msgstr ""
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie työpöytä"
+msgstr "Budgie-työpöytä"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Tämä istunto kirjaa sinut Budgie työpöydälle"
+msgstr "Tämä istunto kirjaa sinut Budgie-työpöydälle"
 
-#: ../data/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Sammuta"
-
-#: ../data/endsession.ui.h:2
+#: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr "Haluatko varmasti päättää istunnon?"
 
-#: ../data/endsession.ui.h:3
+#: ../daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "Peruuta"
+msgstr "Peru"
 
-#: ../data/endsession.ui.h:4
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: ../daemon/endsession.ui.h:4
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
 msgstr "Kirjaudu ulos"
 
-#: ../data/endsession.ui.h:5
+#: ../daemon/endsession.ui.h:5
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "Uudelleenkäynnistys"
+msgstr "Käynnistä uudelleen"
 
-#: ../data/endsession.ui.h:6
+#: ../daemon/endsession.ui.h:6
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: ../panel/applets/clock/ClockApplet.vala:56
+#: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
 msgstr "Päivä- ja aika-asetukset"
 
-#: ../panel/applets/clock/ClockApplet.vala:57
+#: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
 msgstr "Kalenteri"
 
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
+#: ../panel/applets/icon-tasklist/Buttons.vala:90
+msgid "Pin to panel"
+msgstr "Kiinnitä paneeliin"
+
+#: ../panel/applets/icon-tasklist/Buttons.vala:91
+msgid "Unpin from panel"
+msgstr "Poista paneelista"
+
+#. Special case, "All"
+#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
 msgstr "Kaikki"
 
@@ -289,7 +340,7 @@ msgstr "Näytä työpöytä"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth on poissa käytöstä"
+msgstr "Bluetooth on pois käytöstä"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
@@ -302,41 +353,65 @@ msgid_plural "Connected to %d devices"
 msgstr[0] "Yhdistetty %d laitteeseen"
 msgstr[1] "Yhdistetty %d laitteeseen"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:166
+#: ../panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "Bluetooth asetukset"
+msgstr "Bluetooth-asetukset"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:167
+#: ../panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
 msgstr "Lähetä tiedostoja"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:168
+#: ../panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
 msgstr "Bluetoothin lentokonetila"
 
-#: ../panel/applets/status/PowerIndicator.vala:95
+#: ../panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "Akku täynnä"
+msgstr "Akku ladattu täyteen."
 
-#: ../panel/applets/status/PowerIndicator.vala:98
+#: ../panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../panel/applets/status/PowerIndicator.vala:107
+#. Set inner charging duration to hours:minutes
+#: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
 msgstr "Akku latautuu"
 
-#: ../panel/applets/status/PowerIndicator.vala:112
+#: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
 msgstr "Akkua jäljellä"
 
+#: ../panel/applets/status/PowerIndicator.vala:107
+msgid "Power settings"
+msgstr ""
+
+#. User Menu Creation
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
+msgid "User"
+msgstr ""
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
+msgid "Lock"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
+msgid "Suspend"
+msgstr ""
+
+#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "Hibernate"
+msgstr ""
+
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimoi"
+msgstr "Pienennä"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Pienennä"
+msgstr "Palauta koko"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
@@ -358,11 +433,11 @@ msgstr "Aina päällimmäisenä"
 msgid "Close"
 msgstr "Sulje"
 
-#: ../wm/wm.vala:444
+#: ../wm/wm.vala:515
 msgid "Change background"
 msgstr "Vaihda tausta"
 
-#: ../wm/wm.vala:453
+#: ../wm/wm.vala:524
 msgid "Settings"
 msgstr "Asetukset"
 
@@ -383,7 +458,7 @@ msgstr "Kello"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Näytä työpöytänäppäin"
+msgstr "Näytä työpöytä -painike"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
@@ -395,7 +470,7 @@ msgstr "Tehtävälista kuvakkeilla"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Lukitusnäppäin indikaattori"
+msgstr "Lukitusnäppäinilmaisin"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
@@ -415,8 +490,81 @@ msgstr "Tilailmaisin"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budgie valikko"
+msgstr "Budgie-valikko"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
 msgstr "Erotin"
+
+#: ../panel/applets/places-indicator/MountItem.vala:23
+#: ../panel/applets/places-indicator/VolumeItem.vala:23
+msgid "Removable devices"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:25
+#: ../panel/applets/places-indicator/VolumeItem.vala:25
+msgid "Local volumes"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:29
+#: ../panel/applets/places-indicator/VolumeItem.vala:29
+msgid "Network folders"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:49
+#: ../panel/applets/places-indicator/VolumeItem.vala:46
+msgid "Eject"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:51
+msgid "Unmount"
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/PlaceItem.vala:27
+#, c-format
+msgid "Open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/MountItem.vala:78
+#: ../panel/applets/places-indicator/VolumeItem.vala:53
+msgid "You can now safely remove"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
+msgid "Nothing to display right now"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Mount some drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
+msgid "Enable more sections"
+msgstr ""
+
+#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:3
+msgid "Show removable drives"
+msgstr ""
+
+#: ../panel/applets/places-indicator/settings.ui.h:4
+msgid "Show network folders"
+msgstr ""
