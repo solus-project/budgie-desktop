@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class ListItem : Gtk.Box
+public abstract class ListItem : Gtk.Box
 {
     protected string item_class;
     protected string category_name;
@@ -17,7 +17,7 @@ public class ListItem : Gtk.Box
     protected Gtk.Overlay overlay;
     protected Gtk.Spinner spin;
 
-    construct
+    public ListItem()
     {
         orientation = Gtk.Orientation.HORIZONTAL;
         spacing = 0;

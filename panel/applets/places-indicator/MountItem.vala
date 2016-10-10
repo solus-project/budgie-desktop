@@ -19,7 +19,11 @@ public class MountItem : ListItem
 
         switch (item_class) {
             case "device":
-                category_name = _("Removable drives");
+                if (mount.can_eject()) {
+                    category_name = _("Removable devices");
+                } else {
+                    category_name = _("Local volumes");
+                }
                 break;
             case "network":
                 category_name = _("Network folders");
