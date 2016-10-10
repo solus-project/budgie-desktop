@@ -3,6 +3,8 @@ EXTRA_DIST = \
 	com.solus-project.budgie-panel.gschema.xml \
 	budgie-panel.gresource.xml \
 	icons/notification-alert-symbolic.svg \
+	icons/pane-hide-symbolic.svg \
+	icons/pane-show-symbolic.svg \
 	panel.ini
 
 gsettings_SCHEMAS = \
@@ -17,4 +19,6 @@ app_DATA = \
 
 iconsdir = $(datadir)/icons/hicolor/scalable/actions
 icons_DATA = \
-	icons/notification-alert-symbolic.svg
+	icons/notification-alert-symbolic.svg \
+	icons/pane-hide-symbolic.svg \
+	icons/pane-show-symbolic.svg
