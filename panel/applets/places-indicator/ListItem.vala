@@ -9,14 +9,14 @@
  * (at your option) any later version.
  */
 
-public class ListItem : Gtk.Box
+public abstract class ListItem : Gtk.Box
 {
     protected string item_class;
     protected string category_name;
     protected Gtk.ToolButton name_button;
     protected Gtk.Overlay overlay;
 
-    construct
+    public ListItem()
     {
         orientation = Gtk.Orientation.HORIZONTAL;
         spacing = 0;
