@@ -49,6 +49,11 @@
       <summary>Activate menu categories by rolling over them</summary>
       <description>Activate menu categories by rolling over them</description>
     </key>
+    <key type="b" name="menu-full-height">
+      <default>false</default>
+      <summary>Extend menu height to screen height</summary>
+      <description>Extend menu height to screen height</description>
+    </key>
   </schema>
 
 </schemalist>
