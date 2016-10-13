@@ -3,135 +3,134 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# GenghisKhan <genghiskhan@gmx.ca>, 2016
-# Moriel Ever, 2016
+# Nazar Mokrynskyi <nazar@mokrynskyi.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-10 23:49+0000\n"
-"Last-Translator: Moriel Ever\n"
-"Language-Team: Hebrew (http://www.transifex.com/solus-project/budgie-desktop/language/he/)\n"
+"PO-Revision-Date: 2016-10-11 03:23+0000\n"
+"Last-Translator: Nazar Mokrynskyi <nazar@mokrynskyi.com>\n"
+"Language-Team: Ukrainian (http://www.transifex.com/solus-project/budgie-desktop/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr "יציאה"
+msgstr "Завершити сеанс"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "הפעל מכשיר מחדש"
+msgstr "Перезавантажити пристрій"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "כיבוי"
+msgstr "Вимкнути"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "יישומונים"
+msgstr "Аплети"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "התראות"
+msgstr "Сповіщення"
 
 #: ../raven/settings_view.vala:266
 msgid "Top"
-msgstr "עליון"
+msgstr "Верх"
 
 #: ../raven/settings_view.vala:268
 msgid "Bottom"
-msgstr "תחתון"
+msgstr "Низ"
 
 #: ../raven/settings_view.vala:376
 msgid "Top Panel"
-msgstr "לוח עליון"
+msgstr "Верхня панель"
 
 #: ../raven/settings_view.vala:378
 msgid "Right Panel"
-msgstr "לוח ימני"
+msgstr "Права панель"
 
 #: ../raven/settings_view.vala:380
 msgid "Left Panel"
-msgstr "לוח שמאלי"
+msgstr "Ліва панель"
 
 #: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
-msgstr "לוח תחתון"
+msgstr "Нижня панель"
 
 #: ../raven/settings_view.vala:616
 msgid "Start"
-msgstr "התחל"
+msgstr "Початок"
 
 #: ../raven/settings_view.vala:619
 msgid "Center"
-msgstr "מרכז"
+msgstr "Центр"
 
 #: ../raven/settings_view.vala:622
 msgid "End"
-msgstr "סוף"
+msgstr "Кінець"
 
 #. Appearance expander
 #: ../raven/settings_view.vala:960
 msgid "Appearance"
-msgstr "הופעה"
+msgstr "Зовнішній вигляд"
 
 #: ../raven/settings_view.vala:967
 msgid "Background"
-msgstr "רקע"
+msgstr "Тло"
 
 #: ../raven/settings_view.vala:974
 msgid "Fonts"
-msgstr "גופנים"
+msgstr "Шрифти"
 
 #: ../raven/settings_view.vala:980
 msgid "Windows"
-msgstr "חלונות"
+msgstr "Вікна"
 
 #: ../raven/settings_view.vala:984
 msgid "General"
-msgstr "כללי"
+msgstr "Загальні"
 
 #: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
-msgstr "לוח"
+msgstr "Панель"
 
 #: ../raven/notifications_view.vala:52
 msgid "Nothing to see here"
-msgstr "אין מה לראות כאן"
+msgstr "Тут нічого немає"
 
 #: ../raven/notifications_view.vala:494
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u התראות שלא נקראו"
+msgstr "%u непрочитаних повідомлень"
 
 #: ../raven/notifications_view.vala:496
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "התראה 1 שלא נקראה"
+msgstr "1 непрочитане повідомлення"
 
 #: ../raven/notifications_view.vala:498
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "אין התראות שלא נקראו"
+msgstr "Немає непрочитаних повідомлень"
 
 #: ../raven/notifications_view.vala:624
 msgid "No new notifications"
-msgstr "אין התראות חדשות"
+msgstr "Немає нових повідомлень"
 
 #: ../raven/sound.vala:78
 msgid "Output"
-msgstr "פלט"
+msgstr "Вивід"
 
 #: ../raven/sound.vala:95
 msgid "Input"
-msgstr "קלט"
+msgstr "Вхід"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -146,301 +145,302 @@ msgstr "קלט"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "מידת מרווח"
+msgstr "Ширина розпірки"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "הגדרות Budgie"
+msgstr "Налаштування Budgie"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "יציאה"
+msgstr "Вихід"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "הוסף יישומון חדש"
+msgstr "Додати новий аплет"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "השתמש בערכת נושא האפלה"
+msgstr "Використовувати темну тему"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "ערכת נושא אפל"
+msgstr "Темна тема"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "בחר ערכת נושא +GTK"
+msgstr "Оберіть GTK+ тему"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "ערכת נושא וידג׳ט"
+msgstr "Тема віджету"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
-msgstr "בחר ערכת נושא סמל"
+msgstr "Оберіть тему піктограм"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "ערכת נושא סמל"
+msgstr "Тема піктограм"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "עקוב ברירות מחדל"
+msgstr "Перезаписати замовчування"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "ערכת נושא מובנית"
+msgstr "Вбудована тема"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "בחר ערכת נושא סמן"
+msgstr "Оберіть тему курсора"
 
 #: ../raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "ערכת נושא סמן"
+msgstr "Тема курсора"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "נהל לוחות"
+msgstr "Керувати панелями"
 
 #: ../raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "מיקום"
+msgstr "Розташування"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "גודל"
+msgstr "Розмір"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "צל"
+msgstr "Тінь"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "מדיניות הסתרה אוטומטית"
+msgstr "Поведінка автоматичного приховування"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "עיצוב אזורים"
+msgstr "Стилізувати регіони"
 
 #: ../raven/ui/background.ui.h:1
 msgid "Show desktop icons"
-msgstr "הצג סמלי שולחן עבודה"
+msgstr "Показати піктограми стільниці"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "סמלי שולחן עבודה"
+msgstr "Піктограми стільниці"
 
 #: ../raven/ui/fonts.ui.h:1
 msgid "Window Titles"
-msgstr "כותרות חלון"
+msgstr "Заголовки вікон"
 
 #: ../raven/ui/fonts.ui.h:2
 msgid "Interface"
-msgstr "ממשק"
+msgstr "Інтерфейс"
 
 #: ../raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "מסמכים"
+msgstr "Документи"
 
 #: ../raven/ui/fonts.ui.h:4
 msgid "Monospace"
-msgstr "Monospace"
+msgstr "Моноширинний"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Вимкнути непрямий вивід для повноекранних вікон"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr "בטל כיוון מחדש"
+msgstr "Вимкнути непрямий вивід"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Змінити компонування кнопок заголовку вікна"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Компонування кнопок"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "שולחן עבודה Budgie"
+msgstr "Budgie Desktop"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "סשן זה מכניס אותך לתוך שולחן עבודה Budgie"
+msgstr "Ця сесія завантажить вас в Budgie Desktop"
 
 #: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "האם אתה בטוח כי ברצונך לסיים את הסשן שלך?"
+msgstr "Ви впевнені що бажаєте завершити сесію?"
 
 #: ../daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "ביטול"
+msgstr "Скасувати"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: ../daemon/endsession.ui.h:4
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
-msgstr "התנתק"
+msgstr "Вийти"
 
 #: ../daemon/endsession.ui.h:5
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "הפעל מחדש"
+msgstr "Перезавантажити"
 
 #: ../daemon/endsession.ui.h:6
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
-msgstr "כבה"
+msgstr "Вимкнути"
 
 #: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
-msgstr "הגדרות זמן ותאריך"
+msgstr "Налаштування часу та дати"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
-msgstr "לוח שנה"
+msgstr "Календар"
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
-msgstr "הצמד לתוך לוח"
+msgstr "Прикріпити до панелі"
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:91
 msgid "Unpin from panel"
-msgstr "שחרר מתוך לוח"
+msgstr "Відкріпити від панелі"
 
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
-msgstr "הכל"
+msgstr "Всі"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "מקש Caps lock הינו פעיל"
+msgstr "Caps lock активний"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "מקש Caps lock אינו פעיל"
+msgstr "Caps lock неактивний"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "מקש Num lock הינו פעיל"
+msgstr "Num lock активний"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "מקש Num lock אינו פעיל"
+msgstr "Num lock неактивний"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "החלף את שולחן העבודה"
+msgstr "Показати стільницю"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "‏Bluetooth מנוטרל"
+msgstr "Bluetooth вимкнено"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "‏Bluetooth מופעל"
+msgstr "Bluetooth увімкнено"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "מחובר עם התקן %d"
-msgstr[1] "מחובר עם %d התקנים"
+msgstr[0] "Підключено до %d пристрою"
+msgstr[1] "Підключено до %d пристроїв"
+msgstr[2] "Підключено до %d пристроїв"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "הגדרות Bluetooth"
+msgstr "Налаштування Bluetooth"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
-msgstr "שלח קובץ"
+msgstr "Надіслати файли"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth מצב מטוס"
+msgstr "Bluetooth в режимі польоту"
 
 #: ../panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "סוללה טעונה במלואה."
+msgstr "Акумулятор повністю заряджений"
 
 #: ../panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
-msgstr "לא ידוע"
+msgstr "Невідомо"
 
 #. Set inner charging duration to hours:minutes
 #: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
-msgstr "סוללה נטענת"
+msgstr "Акумулятор заряджається"
 
 #: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "סוללה נותרה"
+msgstr "Залишилось акумулятора"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr "הגדרות צריכת חשמל"
+msgstr "Налаштування живлення"
 
 #. User Menu Creation
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "משתמש"
+msgstr "Користувач"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "נעילה"
+msgstr "Заблокувати"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr ""
+msgstr "Режим очікування"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr ""
+msgstr "Глибокий сон"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "מזער"
+msgstr "Згорнути"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "שחזר"
+msgstr "Звичайний розмір"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "הגדל"
+msgstr "Розгорнути на весь екран"
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "הזז"
+msgstr "Перемістити"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "שנה גודל"
+msgstr "Змінити розмір"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "תמיד עליון"
+msgstr "Завжди згори"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "סגור"
+msgstr "Закрити"
 
 #: ../wm/wm.vala:515
 msgid "Change background"
-msgstr "החלף רקע"
+msgstr "Змінити тло"
 
 #: ../wm/wm.vala:524
 msgid "Settings"
-msgstr "הגדרות"
+msgstr "Налаштування"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -455,117 +455,117 @@ msgstr "הגדרות"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "שעון"
+msgstr "Годинник"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "הצג לחצן שולחן עבודה"
+msgstr "Кнопка показу стільниці"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "רשימת משימות"
+msgstr "Список запущених додатків"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "סמל רשימת משימות"
+msgstr "Іконки списку запущених додатків"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "מחוון קלידי נעילה"
+msgstr "Індикатор Lock клавіш"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "מרווח"
+msgstr "Розпірка"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "מחליף מרחב עבודה"
+msgstr "Перемикання робочих місць"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "מגש מערכת"
+msgstr "Системний лоток"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "מחוון מצב"
+msgstr "Інтикатор статусу"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "תפריט Budgie"
+msgstr "Меню Budgie"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "חוצץ"
+msgstr "Розділювач"
 
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr "התקנים נשלפים"
+msgstr "Зовнішні пристрої"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr "אמצעי אחסון מקומיים"
+msgstr "Локальні томи"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr "תיקיות רשת"
+msgstr "Мережеві теки"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr "הוצא"
+msgstr "Вийняти"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
-msgstr "בטל טעינה"
+msgstr "Демонтувати"
 
 #: ../panel/applets/places-indicator/MountItem.vala:54
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr "פתח \"%s\""
+msgstr "Відкрити \"%s\""
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr "אתה יכול כעת להוציא בבטחה"
+msgstr "Тепер ви можете безпечно видалити"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr "מקומות"
+msgstr "Місця"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr "אין מה להציג כעת"
+msgstr "На разі показати нічого"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Змонтувати якісь носії"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Увімкнути більше розділів"
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "טען ופתח \"%s\""
+msgstr "Змонтувати та відкрити \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "הצג תווית"
+msgstr "Показати мітки"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "הצג מקומות"
+msgstr "Показати місця"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr "הצג כוננים נשלפים"
+msgstr "Показати зовнішні носії"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "הצג תיקיות רשת"
+msgstr "Показати мережеві теки"

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Daniel Dietrich <dietrich.daniel.96@gmail.com>, 2016
 # Gosciu Goscicki <g1485232@trbvm.com>, 2015
 # Grass Hopper <1301grasshopper@gmail.com>, 2016
 # Marcin <marcino451@gmail.com>, 2015
@@ -17,8 +18,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-10 21:14+0000\n"
-"Last-Translator: Ikey Doherty <ikey@evolve-os.com>\n"
+"PO-Revision-Date: 2016-10-11 09:54+0000\n"
+"Last-Translator: Daniel Dietrich <dietrich.daniel.96@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/solus-project/budgie-desktop/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,11 +29,11 @@ msgstr ""
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr ""
+msgstr "Wyloguj się"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr ""
+msgstr "Zrestartuj urządzenie"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
@@ -98,7 +99,7 @@ msgstr "Czcionki"
 
 #: ../raven/settings_view.vala:980
 msgid "Windows"
-msgstr ""
+msgstr "Okna"
 
 #: ../raven/settings_view.vala:984
 msgid "General"
@@ -265,11 +266,11 @@ msgstr ""
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Zmień układ przycisków w oknach"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Układ przycisków"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -393,26 +394,26 @@ msgstr "Pozostały czas"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr ""
+msgstr "Ustawienia zasilania"
 
 #. User Menu Creation
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr ""
+msgstr "Użytkownik"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr ""
+msgstr "Zablokuj"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr ""
+msgstr "Uśpij"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr ""
+msgstr "Hibernuj"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -508,72 +509,72 @@ msgstr "Separator"
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr ""
+msgstr "Urządzenie przenośne"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr ""
+msgstr "Lokalne partycje"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr ""
+msgstr "Foldery sieciowe"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr ""
+msgstr "Wysuń"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
-msgstr ""
+msgstr "Odmontuj"
 
 #: ../panel/applets/places-indicator/MountItem.vala:54
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr ""
+msgstr "Otwórz \"%s\""
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr ""
+msgstr "Można teraz bezpiecznie usunąć"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr ""
+msgstr "Miejsca"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr ""
+msgstr "Nie ma nic do wyświetlenia"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Zamontuj kilka dysków"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Włącz więcej sekcji"
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr ""
+msgstr "Zamontuj i otwórz \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr ""
+msgstr "Pokaż etykietę"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr ""
+msgstr "Pokaż miejsca"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr ""
+msgstr "Pokaż urządzenia przenośne"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr ""
+msgstr "Pokaż foldery sieciowe"

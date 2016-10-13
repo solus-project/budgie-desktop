@@ -3,135 +3,134 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# GenghisKhan <genghiskhan@gmx.ca>, 2016
-# Moriel Ever, 2016
+# John Smith <aboutafteragain@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-10 23:49+0000\n"
-"Last-Translator: Moriel Ever\n"
-"Language-Team: Hebrew (http://www.transifex.com/solus-project/budgie-desktop/language/he/)\n"
+"PO-Revision-Date: 2016-10-11 00:16+0000\n"
+"Last-Translator: John Smith <aboutafteragain@gmail.com>\n"
+"Language-Team: Basque (http://www.transifex.com/solus-project/budgie-desktop/language/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he\n"
+"Language: eu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr "יציאה"
+msgstr "Saiotik irten"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "הפעל מכשיר מחדש"
+msgstr "Gailua berrabiarazi"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "כיבוי"
+msgstr "Itzali"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "יישומונים"
+msgstr "Applet-ak"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "התראות"
+msgstr "Jakinarazpenak"
 
 #: ../raven/settings_view.vala:266
 msgid "Top"
-msgstr "עליון"
+msgstr "Goian"
 
 #: ../raven/settings_view.vala:268
 msgid "Bottom"
-msgstr "תחתון"
+msgstr "Behean"
 
 #: ../raven/settings_view.vala:376
 msgid "Top Panel"
-msgstr "לוח עליון"
+msgstr "Goiko Panela"
 
 #: ../raven/settings_view.vala:378
 msgid "Right Panel"
-msgstr "לוח ימני"
+msgstr "Eskuineko Panela"
 
 #: ../raven/settings_view.vala:380
 msgid "Left Panel"
-msgstr "לוח שמאלי"
+msgstr "Ezkerreko Panela"
 
 #: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
-msgstr "לוח תחתון"
+msgstr "Beheko Panela"
 
 #: ../raven/settings_view.vala:616
 msgid "Start"
-msgstr "התחל"
+msgstr "Hasiera"
 
 #: ../raven/settings_view.vala:619
 msgid "Center"
-msgstr "מרכז"
+msgstr "Erdia"
 
 #: ../raven/settings_view.vala:622
 msgid "End"
-msgstr "סוף"
+msgstr "Amaiera"
 
 #. Appearance expander
 #: ../raven/settings_view.vala:960
 msgid "Appearance"
-msgstr "הופעה"
+msgstr "Itxura"
 
 #: ../raven/settings_view.vala:967
 msgid "Background"
-msgstr "רקע"
+msgstr "Atzeko planoa"
 
 #: ../raven/settings_view.vala:974
 msgid "Fonts"
-msgstr "גופנים"
+msgstr "Letra tipoak"
 
 #: ../raven/settings_view.vala:980
 msgid "Windows"
-msgstr "חלונות"
+msgstr "Lehioak "
 
 #: ../raven/settings_view.vala:984
 msgid "General"
-msgstr "כללי"
+msgstr "Orokorra"
 
 #: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
-msgstr "לוח"
+msgstr "Panela"
 
 #: ../raven/notifications_view.vala:52
 msgid "Nothing to see here"
-msgstr "אין מה לראות כאן"
+msgstr "Ezer ez ikusteko hemen"
 
 #: ../raven/notifications_view.vala:494
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u התראות שלא נקראו"
+msgstr "%u irakurri gabeko jakinarazpen"
 
 #: ../raven/notifications_view.vala:496
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "התראה 1 שלא נקראה"
+msgstr "irakurri gabeko jakinarazpen 1"
 
 #: ../raven/notifications_view.vala:498
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "אין התראות שלא נקראו"
+msgstr "Ez dago irakurri gabeko jakinarazpenik"
 
 #: ../raven/notifications_view.vala:624
 msgid "No new notifications"
-msgstr "אין התראות חדשות"
+msgstr "Jakinarazpen berririk ez"
 
 #: ../raven/sound.vala:78
 msgid "Output"
-msgstr "פלט"
+msgstr "Irteera"
 
 #: ../raven/sound.vala:95
 msgid "Input"
-msgstr "קלט"
+msgstr "Sarrera"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -146,103 +145,103 @@ msgstr "קלט"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "מידת מרווח"
+msgstr "Banatzailearen tamaina"
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "הגדרות Budgie"
+msgstr "Budgie-ren aukerak"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "יציאה"
+msgstr "Atera"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "הוסף יישומון חדש"
+msgstr "Applet berria gehitu"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "השתמש בערכת נושא האפלה"
+msgstr "Gai iluna erabili"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "ערכת נושא אפל"
+msgstr "Gai iluna"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "בחר ערכת נושא +GTK"
+msgstr "GTK+ gai bat aukeratu"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "ערכת נושא וידג׳ט"
+msgstr "Widget Gaia"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
-msgstr "בחר ערכת נושא סמל"
+msgstr "Ikono gai bat aukeratu"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "ערכת נושא סמל"
+msgstr "Ikono Gaia"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "עקוב ברירות מחדל"
+msgstr "Lehenetsiak ez ikusi"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "ערכת נושא מובנית"
+msgstr "Built-in gaia"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "בחר ערכת נושא סמן"
+msgstr "Kurtsore gai bat aukeratu"
 
 #: ../raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "ערכת נושא סמן"
+msgstr "Kurtsore Gaia"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "נהל לוחות"
+msgstr "Panelak Kudeatu"
 
 #: ../raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "מיקום"
+msgstr "Kokalekua"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "גודל"
+msgstr "Tamaina"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "צל"
+msgstr "Itzala"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "מדיניות הסתרה אוטומטית"
+msgstr "Auto-ezkutatu politika"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "עיצוב אזורים"
+msgstr "Estilizatu eskualdeak"
 
 #: ../raven/ui/background.ui.h:1
 msgid "Show desktop icons"
-msgstr "הצג סמלי שולחן עבודה"
+msgstr "Mahaigaineko ikonoak erakutsi"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "סמלי שולחן עבודה"
+msgstr "Mahaigaineko Ikonoak"
 
 #: ../raven/ui/fonts.ui.h:1
 msgid "Window Titles"
-msgstr "כותרות חלון"
+msgstr "Leihoen Izenburuak"
 
 #: ../raven/ui/fonts.ui.h:2
 msgid "Interface"
-msgstr "ממשק"
+msgstr "Interfazea"
 
 #: ../raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "מסמכים"
+msgstr "Dokumentuak"
 
 #: ../raven/ui/fonts.ui.h:4
 msgid "Monospace"
@@ -250,197 +249,197 @@ msgstr "Monospace"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Disable unredirect of fullscreen windows"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr "בטל כיוון מחדש"
+msgstr "Disable unredirect"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Leihoen botoien diseinua aldatu"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Botoien diseinua"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "שולחן עבודה Budgie"
+msgstr "Budgie Mahaigaina"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "סשן זה מכניס אותך לתוך שולחן עבודה Budgie"
+msgstr "Saio honek Budgie Mahaigainera sartzen zaitu"
 
 #: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "האם אתה בטוח כי ברצונך לסיים את הסשן שלך?"
+msgstr "Zure saioa amaitu nahi duzula ziur zaude?"
 
 #: ../daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "ביטול"
+msgstr "Utzi"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: ../daemon/endsession.ui.h:4
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
-msgstr "התנתק"
+msgstr "Saiotik atera"
 
 #: ../daemon/endsession.ui.h:5
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "הפעל מחדש"
+msgstr "Berrabiarazi"
 
 #: ../daemon/endsession.ui.h:6
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
-msgstr "כבה"
+msgstr "Itzali"
 
 #: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
-msgstr "הגדרות זמן ותאריך"
+msgstr "Ordua eta egunaren ezarpenak "
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
-msgstr "לוח שנה"
+msgstr "Egutegia "
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
-msgstr "הצמד לתוך לוח"
+msgstr "Panelera finkatu"
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:91
 msgid "Unpin from panel"
-msgstr "שחרר מתוך לוח"
+msgstr "Paneletik askatu"
 
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
-msgstr "הכל"
+msgstr "Denak"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "מקש Caps lock הינו פעיל"
+msgstr "Maius blokeoa aktibatuta dago"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "מקש Caps lock אינו פעיל"
+msgstr "Maius blokeoa ez dago aktibatuta"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "מקש Num lock הינו פעיל"
+msgstr "Bloq Num aktibatuta dago"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "מקש Num lock אינו פעיל"
+msgstr "Bloq Num ez dago aktibatuta "
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "החלף את שולחן העבודה"
+msgstr "Mahaigaina erakutsi/ezkutatu"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "‏Bluetooth מנוטרל"
+msgstr "Bluetooth-a desgaituta"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "‏Bluetooth מופעל"
+msgstr "Bluetooth-a aktibatuta"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "מחובר עם התקן %d"
-msgstr[1] "מחובר עם %d התקנים"
+msgstr[0] "Gailu %d -era konektatuta"
+msgstr[1] "%d gailuetara konektatuta"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "הגדרות Bluetooth"
+msgstr "Bluetooth-aren ezarpenak"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
-msgstr "שלח קובץ"
+msgstr "Fitxategiak Bidali"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth מצב מטוס"
+msgstr "Bluetooth Hegazkin Modua"
 
 #: ../panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "סוללה טעונה במלואה."
+msgstr "Bateria guztiz kargatuta."
 
 #: ../panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
-msgstr "לא ידוע"
+msgstr "Ezezaguna"
 
 #. Set inner charging duration to hours:minutes
 #: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
-msgstr "סוללה נטענת"
+msgstr "Bateria kargatzen"
 
 #: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "סוללה נותרה"
+msgstr "Gainerako bateria"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr "הגדרות צריכת חשמל"
+msgstr "Argi-indar ezarpenak"
 
 #. User Menu Creation
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "משתמש"
+msgstr "Erabiltzailea"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "נעילה"
+msgstr "Blokeatu"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr ""
+msgstr "Eseki"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr ""
+msgstr "Hibernatu"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "מזער"
+msgstr "Minimizatu"
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "שחזר"
+msgstr "Unmaximize"
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "הגדל"
+msgstr "Maximizatu"
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "הזז"
+msgstr "Mugitu"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "שנה גודל"
+msgstr "Tamaina aldatu"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "תמיד עליון"
+msgstr "Beti gainean"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "סגור"
+msgstr "Itxi"
 
 #: ../wm/wm.vala:515
 msgid "Change background"
-msgstr "החלף רקע"
+msgstr "Atzeko planoa aldatu"
 
 #: ../wm/wm.vala:524
 msgid "Settings"
-msgstr "הגדרות"
+msgstr "Ezarpenak"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -455,117 +454,117 @@ msgstr "הגדרות"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "שעון"
+msgstr "Erlojua"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "הצג לחצן שולחן עבודה"
+msgstr "Mahaigaina Erakutsi Botoia"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "רשימת משימות"
+msgstr "Zeregin Zerrenda"
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "סמל רשימת משימות"
+msgstr "Ikonoen Zeregin Zerrenda"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "מחוון קלידי נעילה"
+msgstr "Lock Keys Indicator"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "מרווח"
+msgstr "Spacer"
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "מחליף מרחב עבודה"
+msgstr "Laneko-Areen Aldatzailea"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "מגש מערכת"
+msgstr "Sistema Erretilua"
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "מחוון מצב"
+msgstr "Egoeraren Adierazlea"
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "תפריט Budgie"
+msgstr "Budgie Menua"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "חוצץ"
+msgstr "Banatzailea"
 
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr "התקנים נשלפים"
+msgstr "Aldagarri gailuak"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr "אמצעי אחסון מקומיים"
+msgstr "Tokiko bolumenak"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr "תיקיות רשת"
+msgstr "Sareko fitxategiak"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr "הוצא"
+msgstr "Egotzi"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
-msgstr "בטל טעינה"
+msgstr "Desmontatu "
 
 #: ../panel/applets/places-indicator/MountItem.vala:54
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr "פתח \"%s\""
+msgstr "\"%s\" ireki"
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr "אתה יכול כעת להוציא בבטחה"
+msgstr "Era seguruan kendu dezakezu orain"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr "מקומות"
+msgstr "Lekuak"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr "אין מה להציג כעת"
+msgstr "Erakusteko ezer ez dago orain"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Unitate batzuk muntatu"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Atal gehiago gaitu"
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "טען ופתח \"%s\""
+msgstr "Muntatu eta ireki \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "הצג תווית"
+msgstr "Etiketa erakutsi"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "הצג מקומות"
+msgstr "Lekuak erakutsi"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr "הצג כוננים נשלפים"
+msgstr "Aldagarri gailuak erakutsi"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "הצג תיקיות רשת"
+msgstr "Sareko fitxategiak erakutsi"
