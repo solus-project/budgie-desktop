@@ -3,134 +3,134 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Davidmp <medipas@gmail.com>, 2015-2016
+# Levente Krisztián Büte (Chris) <chris020891@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-13 13:25+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>\n"
-"Language-Team: Catalan (http://www.transifex.com/solus-project/budgie-desktop/language/ca/)\n"
+"PO-Revision-Date: 2016-10-13 20:55+0000\n"
+"Last-Translator: Levente Krisztián Büte (Chris) <chris020891@gmail.com>\n"
+"Language-Team: Hungarian (http://www.transifex.com/solus-project/budgie-desktop/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr "Surt"
+msgstr "Kijelentkezés"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "Reinicia el dispositiu"
+msgstr "Eszköz újraindítása"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Apaga"
+msgstr "Kikapcsolás"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "Miniaplicacions"
+msgstr "Appletek"
 
 #: ../raven/main_view.vala:75
 #: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Notificacions"
+msgstr "Értesítések"
 
 #: ../raven/settings_view.vala:266
 msgid "Top"
-msgstr "A dalt"
+msgstr "Felső"
 
 #: ../raven/settings_view.vala:268
 msgid "Bottom"
-msgstr "A baix"
+msgstr "Alsó"
 
 #: ../raven/settings_view.vala:376
 msgid "Top Panel"
-msgstr "Plafó de dalt"
+msgstr "Felső panel"
 
 #: ../raven/settings_view.vala:378
 msgid "Right Panel"
-msgstr "Plafó dret"
+msgstr "Jobb oldali panel"
 
 #: ../raven/settings_view.vala:380
 msgid "Left Panel"
-msgstr "Plafó esquerre"
+msgstr "Bal oldali panel"
 
 #: ../raven/settings_view.vala:382
 msgid "Bottom Panel"
-msgstr "Botó del plafó"
+msgstr "Alsó panel"
 
 #: ../raven/settings_view.vala:616
 msgid "Start"
-msgstr "Inici"
+msgstr ""
 
 #: ../raven/settings_view.vala:619
 msgid "Center"
-msgstr "Centre"
+msgstr "Közép"
 
 #: ../raven/settings_view.vala:622
 msgid "End"
-msgstr "Final"
+msgstr "Vég"
 
 #. Appearance expander
 #: ../raven/settings_view.vala:960
 msgid "Appearance"
-msgstr "Aparença"
+msgstr "Kinézet"
 
 #: ../raven/settings_view.vala:967
 msgid "Background"
-msgstr "Fons"
+msgstr "Háttér"
 
 #: ../raven/settings_view.vala:974
 msgid "Fonts"
-msgstr "Lletres"
+msgstr "Betűtípusok"
 
 #: ../raven/settings_view.vala:980
 msgid "Windows"
-msgstr "Finestres"
+msgstr "Ablakok"
 
 #: ../raven/settings_view.vala:984
 msgid "General"
-msgstr "General"
+msgstr "Általános"
 
 #: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
 msgid "Panel"
-msgstr "Plafó"
+msgstr "Panel"
 
 #: ../raven/notifications_view.vala:52
 msgid "Nothing to see here"
-msgstr "Aqui no hi ha res per veure."
+msgstr "Itt nincs látnivaló"
 
 #: ../raven/notifications_view.vala:494
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u notificacions per llegir"
+msgstr "%u olvasatlan értesítés"
 
 #: ../raven/notifications_view.vala:496
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1 notificació per llegir"
+msgstr "1 olvasatlan értesítés"
 
 #: ../raven/notifications_view.vala:498
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "No hi ha notificacions per llegir"
+msgstr "Nincs olvasatlan értesítés"
 
 #: ../raven/notifications_view.vala:624
 msgid "No new notifications"
-msgstr "No hi ha notificacions noves."
+msgstr "Nincs új értesítés"
 
 #: ../raven/sound.vala:78
 msgid "Output"
-msgstr "Sortida"
+msgstr "Kimenet"
 
 #: ../raven/sound.vala:95
 msgid "Input"
-msgstr "Entrada"
+msgstr "Bemenet"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -145,301 +145,301 @@ msgstr "Entrada"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Mida de l'espaiador"
+msgstr ""
 
 #: ../raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Paràmetres del Budgie"
+msgstr "Budgie beállítások"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Surt"
+msgstr "Kilépés"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Afegeix una miniaplicació nova"
+msgstr "Új applet hozzáadása"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "Usa el tema fosc"
+msgstr "Sötét téma használata"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Tema fosc"
+msgstr "Sötét téma"
 
 #: ../raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "Seleccioneu un tema de GTK+"
+msgstr "Válasszon egy GTK+ témát"
 
 #: ../raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "Tema dels estris"
+msgstr "Widget téma"
 
 #: ../raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
-msgstr "Seleccioneu un tema per a les icones"
+msgstr "Válasszon egy ikon témát"
 
 #: ../raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "Tema de les icones"
+msgstr "Ikon téma"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "Substitueix els valors per defecte"
+msgstr "Alapértelmezések felülírása"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Tema incorporat"
+msgstr "Beépített téma"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "Seleccioneu un tema per al cursor"
+msgstr "Válasszon egy kurzor témát"
 
 #: ../raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "Tema del cursor"
+msgstr "Kurzor téma"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "Gestió dels plafons"
+msgstr "Panelek szerkesztése"
 
 #: ../raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "Posició"
+msgstr "Pozíció"
 
 #: ../raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "Mida"
+msgstr "Méret"
 
 #: ../raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "Ombra"
+msgstr "Árnyék"
 
 #: ../raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "Amaga automàticament"
+msgstr "Automatikus rejtés szabályai"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "Estilitza les regions"
+msgstr "Terület testreszabása"
 
 #: ../raven/ui/background.ui.h:1
 msgid "Show desktop icons"
-msgstr "Mostra icones a l'escriptori"
+msgstr "Asztali ikonok mutatása"
 
 #: ../raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "Icones de l'escriptori"
+msgstr "Asztali ikonok"
 
 #: ../raven/ui/fonts.ui.h:1
 msgid "Window Titles"
-msgstr "Títols de les finestres"
+msgstr "Ablak címek"
 
 #: ../raven/ui/fonts.ui.h:2
 msgid "Interface"
-msgstr "Interfície"
+msgstr "Felület"
 
 #: ../raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "Documents"
+msgstr "Dokumentumok"
 
 #: ../raven/ui/fonts.ui.h:4
 msgid "Monospace"
-msgstr "Monoespai"
+msgstr "Fix szélességű"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr "Inhabilita la no-redirecció de finestres de pantalla completa"
+msgstr ""
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr "Inhabilita la no-redirecció"
+msgstr ""
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr "Canvia la disposició dels botons de les finestres"
+msgstr ""
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr "Disposició dels botons"
+msgstr ""
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Escriptori Budgie"
+msgstr ""
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Aquesta sessió us fa entrar a l'escriptori Budgie"
+msgstr ""
 
 #: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Segur que voleu acabar la sessió?"
+msgstr ""
 
 #: ../daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "Cancel·la"
+msgstr "Mégse"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: ../daemon/endsession.ui.h:4
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
-msgstr "Surt"
+msgstr "Kilépés"
 
 #: ../daemon/endsession.ui.h:5
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "Reinicia"
+msgstr "Újraindítás"
 
 #: ../daemon/endsession.ui.h:6
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
-msgstr "Apaga"
+msgstr "Leállítás"
 
 #: ../panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
-msgstr "Paràmetres de la data i l'hora"
+msgstr "Idő és dátum beállításai"
 
 #: ../panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
-msgstr "Calendari"
+msgstr "Naptár"
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
-msgstr "Encasta al plafó"
+msgstr "Rögzítés a panelre"
 
 #: ../panel/applets/icon-tasklist/Buttons.vala:91
 msgid "Unpin from panel"
-msgstr "Desencasta del plafó"
+msgstr "Rögzítés feloldása"
 
 #. Special case, "All"
 #: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
-msgstr "Tot"
+msgstr "Minden"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "El bloqueig de majúscules està activat"
+msgstr "A Caps Lock aktív"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "El bloqueig de majúscules no està activat"
+msgstr "A Caps Lock nem aktív"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "El bloqueig numèric està activat"
+msgstr "A Num Lock aktív"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "El bloqueig numèric no està activat"
+msgstr "A Num Lock nem aktív"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Commuta l'escriptori"
+msgstr ""
 
 #: ../panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "El Bluetooth està inhabilitat"
+msgstr "Bluetooth letiltva"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "El Bluetooth està actiu"
+msgstr "A Bluetooth aktív"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Connectat a %d dispositiu"
-msgstr[1] "Connectat a %d dispostius"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "Paràmetres del "
+msgstr "Bluetooth beállítások"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
-msgstr "Envia fitxers"
+msgstr "Fájlok küldése"
 
 #: ../panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
-msgstr "Mode d'avió del "
+msgstr "Bluetooth repülő üzemmódja"
 
 #: ../panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "La bateria està totalment carregada."
+msgstr ""
 
 #: ../panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
-msgstr "Desconegut"
+msgstr "Ismeretlen"
 
 #. Set inner charging duration to hours:minutes
 #: ../panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
-msgstr "Carregant la bateria"
+msgstr ""
 
 #: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "Càrrega de la bateria"
+msgstr ""
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr "Paràmetres de l'energia"
+msgstr "Energiagadálkodás"
 
 #. User Menu Creation
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "Usuari"
+msgstr "Felhasználó"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "Bloqueja"
+msgstr ""
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Suspèn"
+msgstr ""
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Hiberna"
+msgstr ""
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimitza"
+msgstr ""
 
 #: ../wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Desmaximitza"
+msgstr ""
 
 #: ../wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Maximitza"
+msgstr ""
 
 #: ../wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Mou"
+msgstr "Mozgatás"
 
 #: ../wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Redimensiona"
+msgstr "Átméretezés"
 
 #: ../wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Sempre a dalt"
+msgstr "Mindig előtérben"
 
 #: ../wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Tanca"
+msgstr "Bezár"
 
 #: ../wm/wm.vala:515
 msgid "Change background"
-msgstr "Canvia el fons"
+msgstr "Háttérkép cseréje"
 
 #: ../wm/wm.vala:524
 msgid "Settings"
-msgstr "Paràmetres"
+msgstr "Beállítások"
 
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -454,117 +454,117 @@ msgstr "Paràmetres"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Rellotge"
+msgstr "Óra"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Mostra el botó de l'escriptori"
+msgstr "Asztal gomb mutatása"
 
 #: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Llista de tasques"
+msgstr ""
 
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Icona de la llista de tasques"
+msgstr ""
 
 #: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indicador de bloqueig de tecles"
+msgstr "Billentyű indikátor zárolása"
 
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Espaiador"
+msgstr ""
 
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Canviador d'espais de treball"
+msgstr "Munkaterület váltó"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Safata del sistema"
+msgstr ""
 
 #: ../panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Indicador d'estat"
+msgstr ""
 
 #: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Menú del Budgie"
+msgstr "Budgie menü"
 
 #: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Separador"
+msgstr "Elválasztó"
 
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr "Dispositius extraïbles"
+msgstr "Eltávolítható eszközök"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr "Volums locals"
+msgstr "Helyi kötetek"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr "Carpetes de xarxa"
+msgstr "Hálózati mappák"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr "Expulsa"
+msgstr "Kiadás"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
-msgstr "Desmunta"
+msgstr "Leválasztás"
 
 #: ../panel/applets/places-indicator/MountItem.vala:54
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr "Obre %s"
+msgstr "\"%s\" megnyitása"
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr "Ara podeu desconnectar amb seguretat"
+msgstr "Mostmár biztonságosan eltávolíthatja"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr "Llocs"
+msgstr "Helyek"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr "Ara no hi ha res per mostrar"
+msgstr "Most nincs mit megjeleníteni"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr "Munta alguns dispositius"
+msgstr "Néhány meghajtó csatolása"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr "Habilita més seccions"
+msgstr ""
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Munta i obre %s"
+msgstr ""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Mostra'n l'etiqueta"
+msgstr "Címke mutatása"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Mostra els llocs"
+msgstr "Helyek mutatása"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr "Mostra els dispositius extraïbles"
+msgstr "Eltávolítható eszközök mutatása"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "Mostra les carpetes de xarxa"
+msgstr "Hálózati mappák mutatása"
