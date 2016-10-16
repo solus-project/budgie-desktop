@@ -51,7 +51,7 @@ class InputSourceMenuItem : Gtk.Button
 
     public InputSourceMenuItem(string? description, uint idx)
     {
-        Object();
+        Object(can_focus: false);
 
         this.idx = idx;
 
