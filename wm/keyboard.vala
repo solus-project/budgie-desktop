@@ -18,6 +18,10 @@ public static const string DEFAULT_VARIANT = "";
 /* Default ibus engine to use */
 public static const string DEFAULT_ENGINE = "xkb:us::eng";
 
+errordomain InputMethodError {
+    UNKNOWN_IME
+}
+
 class InputSource
 {
     public bool xkb = false;
@@ -26,7 +30,7 @@ class InputSource
     public uint idx = 0;
     public string? ibus_engine = null;
 
-    public InputSource(Budgie.IBusManager? iman, string id, uint idx, string? layout, string? variant, bool xkb = false)
+    public InputSource(Budgie.IBusManager? iman, string id, uint idx, string? layout, string? variant, bool xkb = false) throws Error
     {
         this.idx = idx;
         this.layout = layout;
@@ -35,6 +39,9 @@ class InputSource
 
         var engine = iman.get_engine(id);
         if (engine == null) {
+            if (!xkb) {
+                throw new InputMethodError.UNKNOWN_IME("Unknown input method: id");
+            }
             message("No ibus for %s", id);
             return;
         }
@@ -168,9 +175,13 @@ public class KeyboardManager : GLib.Object
                 source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
-                message("Adding ibus source %s", type);
-                source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
-                sources.append_val(source);
+                try {
+                    message("Adding ibus source %s", type);
+                    source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
+                    sources.append_val(source);
+                } catch (Error e) {
+                    message("Error adding source %s|%s: %s", id, type, e.message);
+                }
             }
         }
 
