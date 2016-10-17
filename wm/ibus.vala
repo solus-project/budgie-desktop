@@ -37,7 +37,23 @@ public class IBusManager : GLib.Object
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
 
-        /* TODO: Go make the bus start up */
+        /* Start the ibus daemon
+         * TODO: Actually check ibus is available on the system
+        */
+        this.startup_ibus();
+    }
+
+    /**
+     * Launch the daemon as a child process so that it dies when we die
+     */
+    private void startup_ibus()
+    {
+        string[] cmdline = {"ibus-daemon", "--xim", "--panel", "disable"};
+        try {
+            new Subprocess.newv(cmdline, SubprocessFlags.NONE);
+        } catch (Error e) {
+            GLib.message("Failed to launch ibus: %s", e.message);
+        }
     }
 
     /**
