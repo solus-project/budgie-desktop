@@ -25,6 +25,9 @@ public class IBusManager : GLib.Object
     /* Current engine name for ibus */
     private string ibus_engine_name;
 
+    private bool did_ibus_init = false;
+
+
     /**
      * Construct a new IBusManager which will begin setting up the
      * ibus daemon, as well as registering events to connect to it
@@ -68,14 +71,13 @@ public class IBusManager : GLib.Object
 
     private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
     {
-        GLib.List<weak IBus.EngineDesc>? engines = null;
         try {
-            engines = this.bus.list_engines_async_finish(res);
+            var engines = this.bus.list_engines_async_finish(res);
+            GLib.message("Got %u engines", engines.length());
         } catch (Error e) {
             GLib.message("Failed to get engines: %s", e.message);
             return;
         }
-        GLib.message("Got engines");
     }
 
     /**
@@ -85,7 +87,11 @@ public class IBusManager : GLib.Object
     {
         /* Do nothing for now */
         GLib.message("ibus connected");
-        // this.bus.list_engines_async.begin(-1, null, on_engines_get);
+        if (!did_ibus_init) {
+            IBus.init();
+            did_ibus_init = true;
+        }
+        this.bus.list_engines_async.begin(-1, null, on_engines_get);
     }
 
     /**
