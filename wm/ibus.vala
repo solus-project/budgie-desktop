@@ -40,7 +40,9 @@ public class IBusManager : GLib.Object
 
         /* No ibus-daemon = no ibus manager */
         if (Environment.find_program_in_path("ibus-daemon") == null) {
+            GLib.message("ibus-daemon unsupported on this system");
             this.ibus_available = false;
+            return;
         }
 
         this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
