@@ -27,7 +27,6 @@ public class IBusManager : GLib.Object
 
     private bool did_ibus_init = false;
 
-
     /**
      * Construct a new IBusManager which will begin setting up the
      * ibus daemon, as well as registering events to connect to it
