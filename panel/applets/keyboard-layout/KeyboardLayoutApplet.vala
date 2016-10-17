@@ -165,8 +165,9 @@ class InputSource
             return;
         }
 
-        /* TODO: Add better description for i-bus layouts ! */
-        this.description = "%s (%s)".printf(engine.language, engine.name);
+        /* Get useful display string */
+        string language = Gnome.get_language_from_code(engine.language, null);
+        this.description = "%s (%s)".printf(language, engine.name);
 
         string? e_variant = engine.layout_variant;
         if (e_variant != null && e_variant.length > 0) {
