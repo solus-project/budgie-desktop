@@ -135,7 +135,7 @@ public class KeyboardManager : GLib.Object
                 source = new InputSource((uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
-                warning("FIXME: Budgie does not yet support IBUS!");
+                warning("FIXME: Budgie does not yet support IBUS: %s|%s", id, type);
                 continue;
             }
         }
