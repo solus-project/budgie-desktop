@@ -22,6 +22,9 @@ public class IBusManager : GLib.Object
     private IBus.Bus? bus = null;
     private bool ibus_available = true;
 
+    /* Current engine name for ibus */
+    private string ibus_engine_name;
+
     /**
      * Construct a new IBusManager which will begin setting up the
      * ibus daemon, as well as registering events to connect to it
@@ -42,6 +45,7 @@ public class IBusManager : GLib.Object
         /* Hook up basic signals */
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
+        bus.global_engine_changed.connect(this.ibus_engine_changed);
 
         /* Start the ibus daemon */
         this.startup_ibus();
@@ -61,6 +65,18 @@ public class IBusManager : GLib.Object
         }
     }
 
+    private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        GLib.List<weak IBus.EngineDesc>? engines = null;
+        try {
+            engines = this.bus.list_engines_async_finish(res);
+        } catch (Error e) {
+            GLib.message("Failed to get engines: %s", e.message);
+            return;
+        }
+        GLib.message("Got engines");
+    }
+
     /**
      * We gained connection to the ibus daemon
      */
@@ -68,6 +84,7 @@ public class IBusManager : GLib.Object
     {
         /* Do nothing for now */
         GLib.message("ibus connected");
+        // this.bus.list_engines_async.begin(-1, null, on_engines_get);
     }
 
     /**
@@ -77,6 +94,16 @@ public class IBusManager : GLib.Object
     {
         /* Also do nothing for now */
         GLib.message("ibus disconnected");
+    }
+
+    /**
+     * The global ibus engine changed
+     */
+    private void ibus_engine_changed(string new_engine)
+    {
+        /* Do nothing but spam the engine name */
+        this.ibus_engine_name = new_engine;
+        GLib.message("new engine: %s", this.ibus_engine_name);
     }
 }
 
