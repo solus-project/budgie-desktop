@@ -67,7 +67,7 @@ PKG_CHECK_MODULES([BUDGIE_WM],
                 [
                  libmutter >= mutter_required_version,
                  gnome-desktop-3.0 >= gdesktop_required_version,
-                 gsettings-desktop-schemas >= gsettings_required_version
+                 gsettings-desktop-schemas >= gsettings_required_version,
                  ibus-1.0 >= ibus_required_version
                 ]
 )
