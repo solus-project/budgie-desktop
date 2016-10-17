@@ -147,11 +147,13 @@ public class KeyboardManager : GLib.Object
             sources.append_val(fallback);
         }
 
+        this.hold_keyboard();
         this.apply_layout_group();
 
         /* Always start up with the last selected index if possible */
         var default_idx = this.settings.get_uint("current");
         this.apply_layout(default_idx);
+        this.apply_ibus();
     }
 
     /* Apply our given layout groups to mutter */
@@ -229,7 +231,18 @@ public class KeyboardManager : GLib.Object
     private void on_current_source_changed()
     {
         uint new_source = this.settings.get_uint("current");
+        this.hold_keyboard();
         apply_layout(new_source);
+        this.apply_ibus();
+    }
+
+    /**
+     * Apply the ibus engine and then release the keyboard
+     */
+    private void apply_ibus()
+    {
+        /* TODO: Apply the ibus daemon configuration */
+        this.release_keyboard();
     }
 
     /**
