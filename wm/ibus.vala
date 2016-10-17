@@ -120,6 +120,7 @@ public class IBusManager : GLib.Object
     {
         /* Also do nothing for now */
         GLib.message("ibus disconnected");
+        this.reset_ibus();
     }
 
     /**
