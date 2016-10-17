@@ -2,6 +2,7 @@
  * This file is part of budgie-desktop
  *
  * Copyright (C) 2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
