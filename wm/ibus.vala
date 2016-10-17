@@ -20,6 +20,7 @@ namespace Budgie {
 public class IBusManager : GLib.Object
 {
     private IBus.Bus? bus = null;
+    private bool ibus_available = true;
 
     /**
      * Construct a new IBusManager which will begin setting up the
@@ -30,6 +31,11 @@ public class IBusManager : GLib.Object
     {
         Object();
 
+        /* No ibus-daemon = no ibus manager */
+        if (Environment.find_program_in_path("ibus-daemon") == null) {
+            this.ibus_available = false;
+        }
+
         /* Get the bus */
         bus = new IBus.Bus.async();
 
@@ -37,9 +43,7 @@ public class IBusManager : GLib.Object
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
 
-        /* Start the ibus daemon
-         * TODO: Actually check ibus is available on the system
-        */
+        /* Start the ibus daemon */
         this.startup_ibus();
     }
 
@@ -53,6 +57,7 @@ public class IBusManager : GLib.Object
             new Subprocess.newv(cmdline, SubprocessFlags.NONE);
         } catch (Error e) {
             GLib.message("Failed to launch ibus: %s", e.message);
+            this.ibus_available = false;
         }
     }
 
