@@ -52,5 +52,6 @@ libkeyboardlayoutapplet_la_VALAFLAGS = \
 	--pkg budgie-1.0 \
 	--pkg gnome-desktop-3.0 \
 	--pkg gsettings-desktop-schemas \
+	--pkg ibus-1.0 \
 	--vapidir=${top_srcdir}/plugin \
 	--vapidir=${top_srcdir}/vapi

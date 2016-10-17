@@ -21,6 +21,116 @@ public static const string DEFAULT_LOCALE = "en_US";
 public static const string DEFAULT_LAYOUT = "us";
 public static const string DEFAULT_VARIANT = "";
 
+errordomain InputMethodError {
+    UNKNOWN_IME
+}
+
+/**
+ * Reflects the ibus-manager in budgie-wm, with very limited functionality,
+ * simply to enable us to mimick the behaviour over there.
+ */
+class AppletIBusManager : GLib.Object
+{
+    private HashTable<string,weak IBus.EngineDesc> engines = null;
+
+    private bool did_ibus_init = false;
+    private bool ibus_available = true;
+    private IBus.Bus? bus = null;
+
+    public AppletIBusManager()
+    {
+        Object();
+        this.reset_ibus();
+    }
+
+    /**
+     * Run init separately so that the owner can connect to the ready() signal
+     */
+    public void do_init()
+    {
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
+        if (Environment.find_program_in_path("ibus-daemon") == null) {
+            GLib.message("ibus-daemon unsupported on this system");
+            this.ibus_available = false;
+            this.ready();
+            return;
+        }
+
+        /* Get the bus */
+        bus = new IBus.Bus.async();
+
+        /* Hook up basic signals */
+        bus.connected.connect(this.ibus_connected);
+        bus.disconnected.connect(this.ibus_disconnected);
+        bus.set_watch_dbus_signal(true);
+
+        /* Should have ibus running already */
+        if (bus.is_connected()) {
+            this.ibus_connected();
+        }
+    }
+
+    public signal void ready();
+
+    /**
+     * Something on ibus changed so we'll reset our state
+     */
+    private void reset_ibus()
+    {
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
+    }
+
+    private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            var engines = this.bus.list_engines_async_finish(res);
+            this.reset_ibus();
+            /* Store reference to the engines */
+            foreach (var engine in engines) {
+                this.engines[engine.get_name()] = engine;
+            }
+        } catch (Error e) {
+            GLib.message("Failed to get engines: %s", e.message);
+            this.reset_ibus();
+            return;
+        }
+        this.ready();
+    }
+
+    /**
+     * We gained connection to the ibus daemon
+     */
+    private void ibus_connected()
+    {
+        /*
+         * Init ibus if necessary, to ensure we have the types available to
+         * glib. After this, try and gain all the engines
+         */
+        if (!did_ibus_init) {
+            IBus.init();
+            did_ibus_init = true;
+        }
+        this.bus.list_engines_async.begin(-1, null, on_engines_get);
+    }
+
+    /**
+     * Lost connection to ibus
+     */
+    private void ibus_disconnected()
+    {
+        this.reset_ibus();
+    }
+
+    /**
+     * Attempt to grab the ibus engine for the given name if it
+     * exists, or returns null
+     */
+    public weak IBus.EngineDesc? get_engine(string name)
+    {
+        return this.engines.lookup(name);
+    }
+}
+
 class InputSource
 {
     public bool xkb = false;
@@ -28,20 +138,45 @@ class InputSource
     public string? variant = null;
     public string? description = null;
     public uint idx = 0;
+    public string? ibus_engine = null;
 
-    public InputSource(uint idx, string? layout, string? variant, string? description = null, bool xkb = false)
+    public InputSource(AppletIBusManager? iman, string id, uint idx, string? layout, string? variant, string? description = null, bool xkb = false) throws Error
     {
         this.idx = idx;
         this.layout = layout;
         this.variant = variant;
         this.xkb = xkb;
+
         if (description != null) {
             this.description = description;
         } else {
             this.description = this.layout;
         }
+
+        /* Attempt to fetch engine in the ibus daemon engine list */
+        if (iman == null) {
+            return;
+        }
+        var engine = iman.get_engine(id);
+        if (engine == null) {
+            if (!xkb) {
+                throw new InputMethodError.UNKNOWN_IME("Unknown input method: id");
+            }
+            return;
+        }
+
+        /* TODO: Add better description for i-bus layouts ! */
+        this.description = "%s (%s)".printf(engine.language, engine.name);
+
+        string? e_variant = engine.layout_variant;
+        if (e_variant != null && e_variant.length > 0) {
+            this.variant = e_variant;
+        }
+        this.layout = engine.layout;
+        this.ibus_engine = id;
     }
 }
+
 
 class InputSourceMenuItem : Gtk.Button
 {
@@ -108,6 +243,9 @@ public class KeyboardLayoutApplet : Budgie.Applet
     private Gtk.ListBox listbox;
     private Budgie.PopoverManager? manager = null;
 
+    /* ibus interfacing */
+    private AppletIBusManager? ibus_manager = null;
+
     public KeyboardLayoutApplet()
     {
         /* Graphical stuff */
@@ -157,16 +295,29 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
         /* Settings/init */
         xkb = new Gnome.XkbInfo();
-        update_fallback();
         settings = new Settings("org.gnome.desktop.input-sources");
+
+        /* Hook up the ibus manager */
+        this.ibus_manager = new AppletIBusManager();
+        update_fallback();
+        this.ibus_manager.ready.connect(this.on_ibus_ready);
+        this.ibus_manager.do_init();
+
+        /* Go show up */
+        show_all();
+    }
+
+    /**
+     * Only begin listing sources and such when ibus becomes available
+     * or we explicitly find it won't work
+     */
+    private void on_ibus_ready()
+    {
         settings.changed.connect(on_settings_changed);
 
         /* Forcibly init ourselves */
         on_settings_changed("sources");
         on_settings_changed("current");
-
-        /* Go show up */
-        show_all();
     }
 
     /**
@@ -251,11 +402,15 @@ public class KeyboardLayoutApplet : Budgie.Applet
                     variant = spl[1];
                 }
                 string desc = this.get_xkb_description(type);
-                source = new InputSource((uint)i, spl[0], variant, desc, true);
+                source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, desc, true);
                 sources.append_val(source);
             } else {
-                warning("FIXME: Budgie does not yet support IBUS!");
-                continue;
+                try {
+                    source = new InputSource(this.ibus_manager, type, (uint)i, null, null, null, false);
+                    sources.append_val(source);
+                } catch (Error e) {
+                    message("Error adding source %s|%s: %s", id, type, e.message);
+                }
             }
         }
 
@@ -297,9 +452,9 @@ public class KeyboardLayoutApplet : Budgie.Applet
         }
 
         if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-            fallback = new InputSource(0, xkb_layout, xkb_variant, display_name, true);
+            fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, display_name, true);
         } else {
-            fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);
+            fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);
         }
     }
 
