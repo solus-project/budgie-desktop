@@ -173,7 +173,7 @@ class InputSource
         if (e_variant != null && e_variant.length > 0) {
             this.variant = e_variant;
         }
-        this.layout = engine.layout;
+        this.layout = engine.language;
         this.ibus_engine = id;
     }
 }
