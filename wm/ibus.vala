@@ -45,6 +45,7 @@ public class IBusManager : GLib.Object
         /* Hook up basic signals */
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
+        bus.set_watch_dbus_signal(true);
         bus.global_engine_changed.connect(this.ibus_engine_changed);
 
         /* Start the ibus daemon */
