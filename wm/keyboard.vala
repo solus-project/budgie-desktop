@@ -231,6 +231,22 @@ public class KeyboardManager : GLib.Object
         uint new_source = this.settings.get_uint("current");
         apply_layout(new_source);
     }
+
+    /**
+     * Unfreeze the keyboard
+     */
+    public void release_keyboard()
+    {
+        wm.get_screen().get_display().ungrab_keyboard(wm.get_screen().get_display().get_current_time());
+    }
+
+    /**
+     * Freeze the keyboard so we don't loose input events
+     */
+    public void hold_keyboard()
+    {
+        wm.get_screen().get_display().freeze_keyboard(wm.get_screen().get_display().get_current_time());
+    }
 }
 
 } /* End namespace */
