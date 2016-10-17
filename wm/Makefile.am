@@ -43,6 +43,7 @@ budgie_wm_VALAFLAGS = \
 	--pkg gsettings-desktop-schemas \
 	--pkg gnome-desktop-3.0 \
 	--pkg budgie-config \
+	--pkg ibus-1.0 \
 	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	$(VALAFLAGS)

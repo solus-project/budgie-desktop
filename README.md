@@ -98,6 +98,7 @@ given:
     - polkit-gobject-1 >= 0.110
     - gnome-bluetooth-1.0 >= 3.16.0
     - accountsservice >= 0.6
+    - ibus-1.0 >= 1.5.13
 
 And:
 
@@ -108,7 +109,7 @@ To install these on Solus:
 
 ```bash
 
-    sudo eopkg it glib2-devel libgtk-3-devel gtk-doc libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel gnome-bluetooth-devel mutter-devel polkit-devel libwnck-devel upower-devel accountsservice-devel vala
+    sudo eopkg it glib2-devel libgtk-3-devel gtk-doc libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel gnome-bluetooth-devel mutter-devel polkit-devel libwnck-devel upower-devel accountsservice-devel ibus-devel vala
     sudo eopkg it -c system.devel
 ```
 
