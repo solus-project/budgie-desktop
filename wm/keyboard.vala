@@ -37,26 +37,20 @@ class InputSource
         this.variant = variant;
         this.xkb = xkb;
 
+        /* Attempt to fetch engine in the ibus daemon engine list */
         var engine = iman.get_engine(id);
         if (engine == null) {
             if (!xkb) {
                 throw new InputMethodError.UNKNOWN_IME("Unknown input method: id");
             }
-            message("No ibus for %s", id);
             return;
         }
-        message("Have ibus for %s: %s", id, engine.get_name());
 
         string? e_variant = engine.layout_variant;
         if (e_variant != null && e_variant.length > 0) {
-            //this.variant = e_variant;
-            message("Layout variant: %s", e_variant);
-        } else {
-            message("No layout variant");
+            this.variant = e_variant;
         }
-        message("Layout is %s", engine.layout);
         this.layout = engine.layout;
-        this.variant = e_variant;
         this.ibus_engine = id;
     }
 }
@@ -174,12 +168,10 @@ public class KeyboardManager : GLib.Object
                 if (spl.length > 1) {
                     variant = spl[1];
                 }
-                message("Got %s: %s", id, type);
                 source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
                 try {
-                    message("Adding ibus source %s", type);
                     source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
                     sources.append_val(source);
                 } catch (Error e) {
@@ -296,7 +288,6 @@ public class KeyboardManager : GLib.Object
         } else {
             engine_name = DEFAULT_ENGINE;
         }
-        message("Applying to %s", current.layout);
         this.ibus_manager.set_engine(engine_name);
     }
 
