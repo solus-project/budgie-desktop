@@ -2,7 +2,8 @@
 PKG_CHECK_MODULES([KEYBOARD_INDICATOR],
                 [
                  gnome-desktop-3.0 >= gdesktop_required_version,
-                 gsettings-desktop-schemas >= gsettings_required_version
+                 gsettings-desktop-schemas >= gsettings_required_version,
+                 ibus-1.0 >= ibus_required_version
                 ]
 )
 
