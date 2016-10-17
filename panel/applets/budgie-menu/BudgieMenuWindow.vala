@@ -18,7 +18,7 @@ const string LOGOUT_BINARY = "budgie-session-dialog";
 public class CategoryButton : Gtk.RadioButton
 {
 
-    public new unowned GMenu.TreeDirectory? group { public get ; protected set; }
+    public new GMenu.TreeDirectory? group { public get ; protected set; }
 
     public CategoryButton(GMenu.TreeDirectory? parent)
     {
@@ -54,8 +54,8 @@ public class CategoryButton : Gtk.RadioButton
 public class MenuButton : Gtk.Button
 {
 
-    public unowned DesktopAppInfo info { public get ; protected set ; }
-    public unowned GMenu.TreeDirectory parent_menu { public get ; protected set ; }
+    public DesktopAppInfo info { public get ; protected set ; }
+    public GMenu.TreeDirectory parent_menu { public get ; protected set ; }
 
     public int score { public set ; public get; }
 
