@@ -54,7 +54,7 @@ public class KeyboardManager : GLib.Object
 
         xkb = new Gnome.XkbInfo();
 
-        ibus_manager = new IBusManager();
+        ibus_manager = new IBusManager(this);
 
         settings = new Settings("org.gnome.desktop.input-sources");
 

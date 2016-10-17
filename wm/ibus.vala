@@ -24,6 +24,8 @@ public class IBusManager : GLib.Object
 
     private HashTable<string,weak IBus.EngineDesc> engines = null;
 
+    public unowned Budgie.KeyboardManager? kbm { construct set ; public get; }
+
     /* Current engine name for ibus */
     private string ibus_engine_name;
 
@@ -34,9 +36,9 @@ public class IBusManager : GLib.Object
      * ibus daemon, as well as registering events to connect to it
      * and monitor it.
      */
-    public IBusManager()
+    public IBusManager(Budgie.KeyboardManager? kbm)
     {
-        Object();
+        Object(kbm: kbm);
 
         /* No ibus-daemon = no ibus manager */
         if (Environment.find_program_in_path("ibus-daemon") == null) {
