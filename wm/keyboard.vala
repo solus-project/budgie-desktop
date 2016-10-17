@@ -45,11 +45,16 @@ public class KeyboardManager : GLib.Object
     uint current_source = 0;
     ulong sig_id = 0;
 
+    /* Used to spawn and manage ibus */
+    IBusManager? ibus_manager;
+
     public KeyboardManager(Budgie.BudgieWM? wm)
     {
         Object(wm: wm);
 
         xkb = new Gnome.XkbInfo();
+
+        ibus_manager = new IBusManager();
 
         settings = new Settings("org.gnome.desktop.input-sources");
 

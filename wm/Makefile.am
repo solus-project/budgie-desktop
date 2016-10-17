@@ -17,6 +17,7 @@ budgie_wm_SOURCES = \
 	background.vala \
 	main.vala \
 	keyboard.vala \
+	ibus.vala \
 	shim.vala \
 	windowmenu.vala \
 	wm.vala
