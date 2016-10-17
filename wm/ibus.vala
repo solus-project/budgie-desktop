@@ -32,6 +32,11 @@ public class IBusManager : GLib.Object
     private bool did_ibus_init = false;
 
     /**
+     * Ensure that owning process knows we're up and running
+     */
+    public signal void ready();
+
+    /**
      * Construct a new IBusManager which will begin setting up the
      * ibus daemon, as well as registering events to connect to it
      * and monitor it.
@@ -39,11 +44,15 @@ public class IBusManager : GLib.Object
     public IBusManager(Budgie.KeyboardManager? kbm)
     {
         Object(kbm: kbm);
+    }
 
+    public void do_init()
+    {
         /* No ibus-daemon = no ibus manager */
         if (Environment.find_program_in_path("ibus-daemon") == null) {
             GLib.message("ibus-daemon unsupported on this system");
             this.ibus_available = false;
+            this.ready();
             return;
         }
 
@@ -99,6 +108,7 @@ public class IBusManager : GLib.Object
             this.reset_ibus();
             return;
         }
+        this.ready();
     }
 
     /**
@@ -133,6 +143,31 @@ public class IBusManager : GLib.Object
         /* Do nothing but spam the engine name */
         this.ibus_engine_name = new_engine;
         GLib.message("new engine: %s", this.ibus_engine_name);
+    }
+
+    /**
+     * Attempt to grab the ibus engine for the given name if it
+     * exists, or returns null
+     */
+    public weak IBus.EngineDesc? get_engine(string name)
+    {
+        return this.engines.lookup(name);
+    }
+
+    static const int ENGINE_SET_TIMEOUT = 4000;
+
+    public void set_engine(string name)
+    {
+        if (!this.ibus_available) {
+            this.kbm.release_keyboard();
+            return;
+        }
+
+        message("Beginning set of engine %s", name);
+        this.bus.set_global_engine_async.begin(name, ENGINE_SET_TIMEOUT, null, ()=> {
+            message("Set the layout..?");
+            this.kbm.release_keyboard();
+        });
     }
 }
 

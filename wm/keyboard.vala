@@ -15,6 +15,8 @@ namespace Budgie {
 public static const string DEFAULT_LOCALE = "en_US";
 public static const string DEFAULT_LAYOUT = "us";
 public static const string DEFAULT_VARIANT = "";
+/* Default ibus engine to use */
+public static const string DEFAULT_ENGINE = "xkb:us::eng";
 
 class InputSource
 {
@@ -23,12 +25,25 @@ class InputSource
     public string? variant = null;
     public uint idx = 0;
 
-    public InputSource(uint idx, string? layout, string? variant, bool xkb = false)
+    public InputSource(Budgie.IBusManager? iman, string id, uint idx, string? layout, string? variant, bool xkb = false)
     {
         this.idx = idx;
         this.layout = layout;
         this.variant = variant;
         this.xkb = xkb;
+
+        var engine = iman.get_engine(id);
+        if (engine == null) {
+            message("No ibus for %s", id);
+            return;
+        }
+        message("Have ibus for %s: %s", id, engine.get_name());
+
+        string? e_variant = engine.get_layout_variant();
+        if (e_variant != null && e_variant.length > 0) {
+            this.variant = e_variant;
+        }
+        this.layout = engine.get_layout();
     }
 }
 
@@ -54,8 +69,14 @@ public class KeyboardManager : GLib.Object
 
         xkb = new Gnome.XkbInfo();
 
+        /* Only hook things up when ibus is setup, whether it failed or not */
         ibus_manager = new IBusManager(this);
+        ibus_manager.ready.connect(on_ibus_ready);
+        ibus_manager.do_init();
+    }
 
+    private void on_ibus_ready()
+    {
         settings = new Settings("org.gnome.desktop.input-sources");
 
         /* Special handling of the current source. */
@@ -75,7 +96,9 @@ public class KeyboardManager : GLib.Object
                              Meta.KeyBinding binding)
     {
         current_source = (current_source+1) % sources.length;
+        this.hold_keyboard();
         this.apply_layout(current_source);
+        this.apply_ibus();
     }
 
     void switch_input_source_backward(Meta.Display display, Meta.Screen screen,
@@ -83,7 +106,9 @@ public class KeyboardManager : GLib.Object
                                       Meta.KeyBinding binding)
     {
         current_source = (current_source-1) % sources.length;
+        this.hold_keyboard();
         this.apply_layout(current_source);
+        this.apply_ibus();
     }
 
     public void hook_extra()
@@ -132,7 +157,8 @@ public class KeyboardManager : GLib.Object
                 if (spl.length > 1) {
                     variant = spl[1];
                 }
-                source = new InputSource((uint)i, spl[0], variant, true);
+                message("Got %s: %s", id, type);
+                source = new InputSource(this.ibus_manager, id, (uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
                 warning("FIXME: Budgie does not yet support IBUS: %s|%s", id, type);
@@ -208,9 +234,9 @@ public class KeyboardManager : GLib.Object
         }
 
         if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-            fallback = new InputSource(0, xkb_layout, xkb_variant, true);
+            fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, true);
         } else {
-            fallback = new InputSource(0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
+            fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
         }
     }
 
@@ -241,8 +267,7 @@ public class KeyboardManager : GLib.Object
      */
     private void apply_ibus()
     {
-        /* TODO: Apply the ibus daemon configuration */
-        this.release_keyboard();
+        this.ibus_manager.set_engine(DEFAULT_ENGINE);
     }
 
     /**
