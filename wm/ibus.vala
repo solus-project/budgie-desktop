@@ -26,9 +26,6 @@ public class IBusManager : GLib.Object
 
     public unowned Budgie.KeyboardManager? kbm { construct set ; public get; }
 
-    /* Current engine name for ibus */
-    private string ibus_engine_name;
-
     private bool did_ibus_init = false;
 
     /**
@@ -65,7 +62,6 @@ public class IBusManager : GLib.Object
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
         bus.set_watch_dbus_signal(true);
-        bus.global_engine_changed.connect(this.ibus_engine_changed);
 
         /* Start the ibus daemon */
         this.startup_ibus();
@@ -102,7 +98,6 @@ public class IBusManager : GLib.Object
             foreach (var engine in engines) {
                 this.engines[engine.get_name()] = engine;
             }
-            GLib.message("Got %u engines", this.engines.length);
         } catch (Error e) {
             GLib.message("Failed to get engines: %s", e.message);
             this.reset_ibus();
@@ -116,8 +111,10 @@ public class IBusManager : GLib.Object
      */
     private void ibus_connected()
     {
-        /* Do nothing for now */
-        GLib.message("ibus connected");
+        /*
+         * Init ibus if necessary, to ensure we have the types available to
+         * glib. After this, try and gain all the engines
+         */
         if (!did_ibus_init) {
             IBus.init();
             did_ibus_init = true;
@@ -130,19 +127,7 @@ public class IBusManager : GLib.Object
      */
     private void ibus_disconnected()
     {
-        /* Also do nothing for now */
-        GLib.message("ibus disconnected");
         this.reset_ibus();
-    }
-
-    /**
-     * The global ibus engine changed
-     */
-    private void ibus_engine_changed(string new_engine)
-    {
-        /* Do nothing but spam the engine name */
-        this.ibus_engine_name = new_engine;
-        GLib.message("new engine: %s", this.ibus_engine_name);
     }
 
     /**
@@ -156,6 +141,9 @@ public class IBusManager : GLib.Object
 
     static const int ENGINE_SET_TIMEOUT = 4000;
 
+    /**
+     * Set the ibus engine to the specified engine name
+     */
     public void set_engine(string name)
     {
         if (!this.ibus_available) {
@@ -163,9 +151,7 @@ public class IBusManager : GLib.Object
             return;
         }
 
-        message("Beginning set of engine %s", name);
         this.bus.set_global_engine_async.begin(name, ENGINE_SET_TIMEOUT, null, ()=> {
-            message("Set the layout..?");
             this.kbm.release_keyboard();
         });
     }
