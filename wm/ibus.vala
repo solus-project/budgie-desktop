@@ -22,6 +22,8 @@ public class IBusManager : GLib.Object
     private IBus.Bus? bus = null;
     private bool ibus_available = true;
 
+    private HashTable<string,weak IBus.EngineDesc> engines = null;
+
     /* Current engine name for ibus */
     private string ibus_engine_name;
 
@@ -40,6 +42,8 @@ public class IBusManager : GLib.Object
         if (Environment.find_program_in_path("ibus-daemon") == null) {
             this.ibus_available = false;
         }
+
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 
         /* Get the bus */
         bus = new IBus.Bus.async();
@@ -68,13 +72,27 @@ public class IBusManager : GLib.Object
         }
     }
 
+    /**
+     * Something on ibus changed so we'll reset our state
+     */
+    private void reset_ibus()
+    {
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
+    }
+
     private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
     {
         try {
             var engines = this.bus.list_engines_async_finish(res);
-            GLib.message("Got %u engines", engines.length());
+            this.reset_ibus();
+            /* Store reference to the engines */
+            foreach (var engine in engines) {
+                this.engines[engine.get_name()] = engine;
+            }
+            GLib.message("Got %u engines", this.engines.length);
         } catch (Error e) {
             GLib.message("Failed to get engines: %s", e.message);
+            this.reset_ibus();
             return;
         }
     }
