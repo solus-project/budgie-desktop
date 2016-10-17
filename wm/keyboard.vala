@@ -24,6 +24,7 @@ class InputSource
     public string? layout = null;
     public string? variant = null;
     public uint idx = 0;
+    public string? ibus_engine = null;
 
     public InputSource(Budgie.IBusManager? iman, string id, uint idx, string? layout, string? variant, bool xkb = false)
     {
@@ -39,11 +40,17 @@ class InputSource
         }
         message("Have ibus for %s: %s", id, engine.get_name());
 
-        string? e_variant = engine.get_layout_variant();
+        string? e_variant = engine.layout_variant;
         if (e_variant != null && e_variant.length > 0) {
-            this.variant = e_variant;
+            //this.variant = e_variant;
+            message("Layout variant: %s", e_variant);
+        } else {
+            message("No layout variant");
         }
-        this.layout = engine.get_layout();
+        message("Layout is %s", engine.layout);
+        this.layout = engine.layout;
+        this.variant = e_variant;
+        this.ibus_engine = id;
     }
 }
 
@@ -158,11 +165,12 @@ public class KeyboardManager : GLib.Object
                     variant = spl[1];
                 }
                 message("Got %s: %s", id, type);
-                source = new InputSource(this.ibus_manager, id, (uint)i, spl[0], variant, true);
+                source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
                 sources.append_val(source);
             } else {
-                warning("FIXME: Budgie does not yet support IBUS: %s|%s", id, type);
-                continue;
+                message("Adding ibus source %s", type);
+                source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
+                sources.append_val(source);
             }
         }
 
@@ -257,9 +265,9 @@ public class KeyboardManager : GLib.Object
     private void on_current_source_changed()
     {
         uint new_source = this.settings.get_uint("current");
-        this.hold_keyboard();
+        //this.hold_keyboard();
         apply_layout(new_source);
-        this.apply_ibus();
+        //this.apply_ibus();
     }
 
     /**
@@ -267,7 +275,15 @@ public class KeyboardManager : GLib.Object
      */
     private void apply_ibus()
     {
-        this.ibus_manager.set_engine(DEFAULT_ENGINE);
+        string engine_name;
+        InputSource? current = sources.index(current_source);
+        if (current.ibus_engine != null) {
+            engine_name = current.ibus_engine;
+        } else {
+            engine_name = DEFAULT_ENGINE;
+        }
+        message("Applying to %s", current.layout);
+        this.ibus_manager.set_engine(engine_name);
     }
 
     /**
