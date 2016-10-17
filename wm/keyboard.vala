@@ -77,6 +77,9 @@ public class KeyboardManager : GLib.Object
     /* Used to spawn and manage ibus */
     IBusManager? ibus_manager;
 
+    /* Guard ourselves from any future potential derps */
+    private bool is_keyboard_held = false;
+
     public KeyboardManager(Budgie.BudgieWM? wm)
     {
         Object(wm: wm);
@@ -276,9 +279,9 @@ public class KeyboardManager : GLib.Object
     private void on_current_source_changed()
     {
         uint new_source = this.settings.get_uint("current");
-        //this.hold_keyboard();
+        this.hold_keyboard();
         apply_layout(new_source);
-        //this.apply_ibus();
+        this.apply_ibus();
     }
 
     /**
@@ -302,7 +305,11 @@ public class KeyboardManager : GLib.Object
      */
     public void release_keyboard()
     {
+        if (!is_keyboard_held) {
+            return;
+        }
         wm.get_screen().get_display().ungrab_keyboard(wm.get_screen().get_display().get_current_time());
+        is_keyboard_held = false;
     }
 
     /**
@@ -310,7 +317,11 @@ public class KeyboardManager : GLib.Object
      */
     public void hold_keyboard()
     {
+        if (is_keyboard_held) {
+            return;
+        }
         wm.get_screen().get_display().freeze_keyboard(wm.get_screen().get_display().get_current_time());
+        is_keyboard_held = true;
     }
 }
 
