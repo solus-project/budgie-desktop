@@ -260,66 +260,89 @@ public class UserIndicatorWindow : Gtk.Popover {
     }
 
     private void logout() {
+        hide();
         if (session == null) {
             return;
         }
 
-        try {
-            session.Logout(0);
-        } catch (Error e) {
-            warning("Failed to logout: %s", e.message);
-        }
+        Idle.add(()=> {
+            try {
+                session.Logout(0);
+            } catch (Error e) {
+                warning("Failed to logout: %s", e.message);
+            }
+            return Source.REMOVE;
+        });
     }
 
     private void hibernate() {
+        hide();
         if (logind_interface == null) {
             return;
         }
 
-        try {
-            lock_screen();
-            logind_interface.hibernate(false);
-        } catch (Error e) {
-            warning("Cannot hibernate: %s", e.message);
-        }
+        Idle.add(()=> {
+            try {
+                lock_screen();
+                logind_interface.hibernate(false);
+            } catch (Error e) {
+                warning("Cannot hibernate: %s", e.message);
+            }
+            return Source.REMOVE;
+        });
     }
 
     private void reboot() {
+        hide();
         if (session == null) {
             return;
         }
 
-        session.Reboot.begin();
+        Idle.add(()=> {
+            session.Reboot.begin();
+            return Source.REMOVE;
+        });
     }
 
     private void shutdown() {
+        hide();
         if (session == null) {
             return;
         }
 
-        session.Shutdown.begin();
+        Idle.add(()=> {
+            session.Shutdown.begin();
+            return Source.REMOVE;
+        });
     }
 
     private void suspend() {
+        hide();
         if (logind_interface == null) {
             return;
         }
 
-        try {
-            lock_screen();
-            logind_interface.suspend(false);
-        } catch (Error e) {
-            warning("Cannot suspend: %s", e.message);
-        }
+        Idle.add(()=> {
+            try {
+                lock_screen();
+                logind_interface.suspend(false);
+            } catch (Error e) {
+                warning("Cannot suspend: %s", e.message);
+            }
+            return Source.REMOVE;
+        });
     }
 
     private void lock_screen() {
-        try {
-            this.hide();
-            saver.lock();
-        } catch (Error e) {
-            warning("Cannot lock screen: %s", e.message);
-        }
+        hide();
+        Idle.add(()=> {
+            try {
+                saver.lock();
+            } catch (Error e) {
+                warning("Cannot lock screen: %s", e.message);
+            }
+            return Source.REMOVE;
+        });
     }
 }
 

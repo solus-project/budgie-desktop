@@ -67,6 +67,7 @@ budgie_daemon_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg theme \
 	--pkg libsession \
+	--pkg gdk-x11-3.0 \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/theme \
 	--vapidir=${top_srcdir}/libsession \

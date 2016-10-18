@@ -205,7 +205,17 @@ public class EndSessionDialog : Gtk.Window
             }
         }
 
+        if (!get_realized()) {
+            realize();
+        }
+
         this.present();
+
+        unowned Gdk.Window? win = get_window();
+        if (win != null) {
+            Gdk.Display? display = screen.get_display();
+            win.focus(Gdk.X11Display.get_user_time(display));
+        }
     }
 
     public void Close()
