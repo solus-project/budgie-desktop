@@ -83,7 +83,7 @@ public class ClientWidget : Gtk.Box
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         header.can_close = client.player.can_quit;
-        player_revealer.expanded = header.can_close;
+        player_revealer.expanded = true;
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = our_width;
