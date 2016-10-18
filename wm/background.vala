@@ -31,6 +31,7 @@ public class BudgieBackground : Meta.BackgroundGroup
 
     private Clutter.Actor? bg = null;
     private Clutter.Actor? old_bg = null;
+    Meta.BackgroundImageCache? cache = null;
 
     static const int BACKGROUND_TIMEOUT = 850;
 
@@ -55,6 +56,8 @@ public class BudgieBackground : Meta.BackgroundGroup
     {
         Object(screen: screen, index: index);
         Meta.Rectangle rect;
+
+        cache = Meta.BackgroundImageCache.get_default();
 
         settings = new Settings("org.gnome.desktop.background");
         gnome_bg = new Gnome.BG();
@@ -98,7 +101,6 @@ public class BudgieBackground : Meta.BackgroundGroup
             images = new HashTable<string,Meta.BackgroundImage>(str_hash, str_equal);
         }
 
-        unowned Meta.BackgroundImageCache? cache = Meta.BackgroundImageCache.get_default();
         File f = File.new_for_uri(uri);
         Meta.BackgroundImage? image = cache.load(f);
         if (image.is_loaded()) {
