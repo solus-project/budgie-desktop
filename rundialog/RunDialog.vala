@@ -247,9 +247,6 @@ public class RunDialog : Gtk.ApplicationWindow
             return;
         }
         var dinfo = app_info as DesktopAppInfo;
-        if (dinfo.get_nodisplay()) {
-            return;
-        }
         var button = new AppLauncherButton(app_info);
         app_box.add(button);
         button.show_all();
