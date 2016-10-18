@@ -61,9 +61,13 @@ class ThemeInfo : GLib.Object {
 public class ThemeScanner : GLib.Object
 {
     string[]? xdg_paths = null;
-    string[] suffixes = {
+    string[] normal_suffixes = {
         "themes",
         "icons"
+    };
+    string[] legacy_suffixes = {
+        ".themes",
+        ".icons"
     };
     string[]? gtk_theme_paths = null;
 
@@ -101,21 +105,26 @@ public class ThemeScanner : GLib.Object
     public async void scan_themes()
     {
         foreach (string xdg_path in this.xdg_paths) {
-            yield scan_themes_dir(xdg_path);
+            yield scan_themes_dir(xdg_path, this.normal_suffixes);
         }
+        var home_dir = Environment.get_home_dir();
+        if (home_dir == null || home_dir.length < 1) {
+            return;
+        }
+        yield scan_themes_dir(home_dir, this.legacy_suffixes);
     }
 
     /**
      * Scan a directory for all theme types
      */
-    private async void scan_themes_dir(string base_dir)
+    private async void scan_themes_dir(string base_dir, string[] suffixes)
     {
         if (!FileUtils.test(base_dir, FileTest.IS_DIR)) {
             return;
         }
 
         try {
-            foreach (string suffix in this.suffixes) {
+            foreach (string suffix in suffixes) {
                 var full_path = "%s%s%s".printf(base_dir, Path.DIR_SEPARATOR_S, suffix);
                 if (!FileUtils.test(full_path, FileTest.IS_DIR)) {
                     continue;
