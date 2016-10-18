@@ -38,7 +38,7 @@ app_DATA = \
 
 actions_iconsdir = $(datadir)/icons/hicolor/scalable/actions
 actions_icons_DATA = \
-	$(APPS_ICONS)
+	$(ACTIONS_ICONS)
 
 app_iconsdir = $(datadir)/icons/hicolor/scalable/apps
 app_icons_DATA = \
