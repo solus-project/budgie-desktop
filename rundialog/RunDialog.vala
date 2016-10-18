@@ -218,16 +218,40 @@ public class RunDialog : Gtk.ApplicationWindow
     bool on_filter(Gtk.ListBoxRow row)
     {
         var button = row.get_child() as AppLauncherButton;
-        var disp_name = button.app_info.get_name().down();
 
         if (search_text == "") {
             return false;
         }
 
-        if (this.search_text in disp_name) {
-            return true;
+        string? app_name, desc, name, exec;
+
+        /* Ported across from budgie menu */
+        app_name = button.app_info.get_display_name();
+        if (app_name != null) {
+            app_name = app_name.down();
+        } else {
+            app_name = "";
         }
-        return false;
+        desc = button.app_info.get_description();
+        if (desc != null) {
+            desc = desc.down();
+        } else {
+            desc = "";
+        }
+        name = button.app_info.get_name();
+        if (name != null) {
+            name = name.down();
+        } else {
+            name = "";
+        };
+        exec = button.app_info.get_executable();
+        if (exec != null) {
+            exec = exec.down();
+        } else {
+            exec = "";
+        }
+        return (search_text in app_name || search_text in desc ||
+                search_text in name || search_text in exec);
     }
 
     /**
