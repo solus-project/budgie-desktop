@@ -33,7 +33,22 @@ public enum NotificationCloseReason {
  */
 public static string safe_markup_string(string inp)
 {
-    return inp.replace("&", "&amp;").replace("'", "&apos;").replace("\"", "&quot;");
+    /* Explicit copy */
+    string inp2 = "" + inp;
+    if (!("&amp;" in inp2)) {
+        inp2 = inp2.replace("&", "&amp;");
+    }
+    inp2 = inp2.replace("'", "&apos;");
+    inp2 = inp2.replace("\"", "&quot;");
+
+    try {
+        if (Pango.parse_markup(inp2, -1, 0, null, null, null)) {
+            return inp2;
+        }
+    } catch (Error e) {}
+
+    string escaped = Markup.escape_text(inp2);
+    return escaped;
 }
 
 /**
