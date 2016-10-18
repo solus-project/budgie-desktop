@@ -15,6 +15,8 @@ public class AppSystem : GLib.Object
     HashTable<string?,string?> startupids = null;
     HashTable<string?,string?> simpletons = null;
     HashTable<string?,DesktopAppInfo?> desktops = null;
+    /* Mapping of based TryExec to desktop ID */
+    HashTable<string?,string?> exec_cache = null;
     AppInfoMonitor? monitor = null;
 
     string[]? derpers;
@@ -99,14 +101,29 @@ public class AppSystem : GLib.Object
      */
     private void reload_ids()
     {
-        startupids = new HashTable<string?,string?>(str_hash,str_equal);
+        startupids = new HashTable<string?,string?>(str_hash, str_equal);
         desktops = new HashTable<string?,DesktopAppInfo?>(str_hash, str_equal);
+        exec_cache = new HashTable<string?,string?>(str_hash, str_equal);
         foreach (var appinfo in AppInfo.get_all()) {
             var dinfo = appinfo as DesktopAppInfo;
             if (dinfo.get_startup_wm_class() != null) {
                 startupids[dinfo.get_startup_wm_class().down()] = dinfo.get_id();
             }
             desktops.insert(dinfo.get_id().down(), dinfo);
+
+            /* Get TryExec if we can, otherwise main "executable" */
+            string? try_exec = dinfo.get_string("TryExec");
+            if (try_exec == null) {
+                try_exec = dinfo.get_executable();
+            }
+            if (try_exec == null) {
+                continue;
+            }
+            /* Sanitize it */
+            try_exec = Uri.unescape_string(try_exec);
+            try_exec = Path.get_basename(try_exec);
+
+            exec_cache.insert(try_exec, dinfo.get_id());
         }
     }
 
@@ -163,6 +180,22 @@ public class AppSystem : GLib.Object
             string dname = this.simpletons[cls_name.down()] + ".desktop";
             if (dname in this.desktops) {
                 return this.desktops[dname];
+            }
+        }
+
+        /* Last shot in the dark, try to match an exec line */
+        foreach (string? check in checks) {
+            if (check == null) {
+                continue;
+            }
+            check = check.down();
+            string? id = exec_cache.lookup(check);
+            if (id == null) {
+                continue;
+            }
+            unowned DesktopAppInfo? a = this.desktops.lookup(id);
+            if (a != null) {
+                return a;
             }
         }
 
