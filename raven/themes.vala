@@ -256,13 +256,14 @@ public class ThemeScanner : GLib.Object
             icon_theme = false;
         }
 
-        if (!icon_theme) {
-            var cursor_path = "%s%s%s".printf(path, Path.DIR_SEPARATOR_S, "cursors");
-            if (FileUtils.test(cursor_path, FileTest.EXISTS)) {
-                yield maybe_add_cursors(path, theme_name);
-            }
-        } else {
+        if (icon_theme) {
             yield maybe_add_icons(path, theme_name);
+        }
+
+        /* Test if we have cursors here too */
+        var cursor_path = "%s%s%s".printf(path, Path.DIR_SEPARATOR_S, "cursors");
+        if (FileUtils.test(cursor_path, FileTest.EXISTS)) {
+            yield maybe_add_cursors(path, theme_name);
         }
     }
 
