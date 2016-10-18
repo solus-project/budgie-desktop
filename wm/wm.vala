@@ -782,12 +782,17 @@ public class BudgieWM : Meta.Plugin
 
     public override void destroy(Meta.WindowActor actor)
     {
+        Meta.Window? window = actor.get_meta_window();
+
+        if (focused_window == window) {
+            focused_window = null;
+        }
+
         if (!this.use_animations) {
             this.destroy_completed(actor);
             return;
         }
 
-        Meta.Window? window = actor.get_meta_window();
         finalize_animations(actor);
 
         switch (window.get_window_type()) {
