@@ -12,17 +12,19 @@ STATUS_ICONS = \
 	icons/status/num-lock-symbolic.svg \
 	icons/status/caps-lock-symbolic.svg
 
+ACTIONS_ICONS = \
+	icons/actions/notification-alert-symbolic.svg \
+	icons/actions/pane-hide-symbolic.svg \
+	icons/actions/pane-show-symbolic.svg
 
 EXTRA_DIST = \
 	budgie-panel.desktop.in \
 	com.solus-project.budgie-panel.gschema.xml \
 	budgie-panel.gresource.xml \
-	icons/notification-alert-symbolic.svg \
-	icons/pane-hide-symbolic.svg \
-	icons/pane-show-symbolic.svg \
 	panel.ini \
 	$(APPS_ICONS) \
-	$(STATUS_ICONS)
+	$(STATUS_ICONS) \
+	$(ACTIONS_ICONS)
 
 gsettings_SCHEMAS = \
 	com.solus-project.budgie-panel.gschema.xml
@@ -34,11 +36,9 @@ appdir = $(datadir)/applications
 app_DATA = \
 	budgie-panel.desktop
 
-iconsdir = $(datadir)/icons/hicolor/scalable/actions
-icons_DATA = \
-	icons/notification-alert-symbolic.svg \
-	icons/pane-hide-symbolic.svg \
-	icons/pane-show-symbolic.svg
+actions_iconsdir = $(datadir)/icons/hicolor/scalable/actions
+actions_icons_DATA = \
+	$(APPS_ICONS)
 
 app_iconsdir = $(datadir)/icons/hicolor/scalable/apps
 app_icons_DATA = \
