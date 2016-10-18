@@ -35,9 +35,17 @@ public static string safe_markup_string(string inp)
 {
     /* Explicit copy */
     string inp2 = "" + inp;
+
+    /* is it markup? */
+    if (!(("<" in inp2) && (">" in inp2))) {
+        return Markup.escape_text(inp2);
+    }
+
+    /* Ensure it's now sane */
     if (!("&amp;" in inp2)) {
         inp2 = inp2.replace("&", "&amp;");
     }
+
     inp2 = inp2.replace("'", "&apos;");
     inp2 = inp2.replace("\"", "&quot;");
 
@@ -47,8 +55,7 @@ public static string safe_markup_string(string inp)
         }
     } catch (Error e) {}
 
-    string escaped = Markup.escape_text(inp2);
-    return escaped;
+    return Markup.escape_text(inp2);
 }
 
 /**
