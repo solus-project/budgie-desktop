@@ -5,6 +5,7 @@
 # Translators:
 # Federico Damián Schonborn <federicodamians@gmail.com>, 2016
 # Federico Damián Schonborn <federicodamians@gmail.com>, 2016
+# Federico Damián Schonborn <federico.d.schonborn@gmail.com>, 2016
 # Federico Damián Schonborn <federicodamians@gmail.com>, 2015-2016
 # Joni Lusso <karusinsania@gmail.com>, 2016
 msgid ""
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-11 02:32+0000\n"
-"Last-Translator: Joni Lusso <karusinsania@gmail.com>\n"
+"PO-Revision-Date: 2016-10-17 01:04+0000\n"
+"Last-Translator: Federico Damián Schonborn <federico.d.schonborn@gmail.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/solus-project/budgie-desktop/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +24,7 @@ msgstr ""
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr "Cerrar Sesión"
+msgstr "Cerrar sesión"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
@@ -252,28 +253,28 @@ msgstr "Monoespacio"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Redirección de ventanas en pantalla completa"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr ""
+msgstr "Habilitar redirección"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Cambiar la disposición de los botones de ventana"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Disposición de los botones"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie"
+msgstr "Escritorio Budgie"
 
 #: ../session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Esta sesión te logueará en el escritorio Budgie"
+msgstr "Esta sesión te logueará en el Escritorio Budgie"
 
 #: ../daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -323,19 +324,19 @@ msgstr "Todo"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Bloq. Mayús. está activo"
+msgstr "Bloq. Mayús. está activado"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Bloq. Mayús. está inactivo"
+msgstr "Bloq. Mayús. está desactivado"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Bloq. Núm. está activo"
+msgstr "Bloq. Núm. está activado"
 
 #: ../panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Bloq. Núm. está inactivo"
+msgstr "Bloq. Núm. está desactivado"
 
 #: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
@@ -502,22 +503,22 @@ msgstr "Separador"
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr ""
+msgstr "Dispositivos removibles"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr ""
+msgstr "Dispositivos locales"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr ""
+msgstr "Carpetas en red"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr ""
+msgstr "Expulsar"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
@@ -527,47 +528,47 @@ msgstr "Desmontar"
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr ""
+msgstr "Abrir \"%s\""
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr ""
+msgstr "Ahora puedes removerlo de forma segura"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr ""
+msgstr "Lugares"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr ""
+msgstr "Nada que mostrar ahora"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Montar algunos discos"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Habilitar más secciones"
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr ""
+msgstr "Montar y abrir \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr ""
+msgstr "Mostrar nombre"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr ""
+msgstr "Mostrar lugares"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr ""
+msgstr "Mostrar dispositivos removibles"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr ""
+msgstr "Mostrar carpetas en red"
