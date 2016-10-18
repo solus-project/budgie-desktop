@@ -31,7 +31,7 @@ us!!
 
 **Icon Tasklist**
 
- * [ ] Make the world happy: Add drag and drop reordering of pinned icons
+ * [x] Make the world happy: Add drag and drop reordering of pinned icons
  * [x] Switch to a GtkFlowBox for better sorting:
        This is no longer neccessary, sorting issues were resolved
 
@@ -41,7 +41,7 @@ us!!
 
  * [ ] Add proper Raven API for applets (single instance, unlike Budgie Panel)
  * [ ] Enforce constant sizes
- * [ ] Enhance discoverability. People seem to not know that it exists ....
+ * [x] Enhance discoverability. People seem to not know that it exists ....
  * [ ] Actually add some applets:
    * [ ] "System Monitor"
    * [ ] Ticker?
@@ -55,7 +55,7 @@ us!!
 
 
  * [ ] Fix derpy-ass alt+tab
- * [ ] Add proper ibus support
+ * [x] Add proper ibus support
  * [ ] Add screen recording and screenshot support (see GNOME Shell)
  * [ ] Low Priority: "Blur Behind" effect based on wm_class
  * [ ] Extend the d-bus API so that the Panel and Raven are positioned by us for future
