@@ -15,7 +15,11 @@ public class AppSystem : GLib.Object
     HashTable<string?,string?> startupids = null;
     HashTable<string?,string?> simpletons = null;
     HashTable<string?,DesktopAppInfo?> desktops = null;
+    AppInfoMonitor? monitor = null;
+
     string[]? derpers;
+
+    bool invalidated = false;
 
     public AppSystem()
     {
@@ -42,10 +46,14 @@ public class AppSystem : GLib.Object
             "zim",
         };
 
-        var monitor = AppInfoMonitor.get();
+        monitor = AppInfoMonitor.get();
         monitor.changed.connect(()=> {
-            startupids = null;
-            reload_ids();
+            Idle.add(()=> {
+                lock(invalidated) {
+                    invalidated = true;
+                }
+                return Source.REMOVE;
+            });
         });
         reload_ids();
     }
@@ -65,6 +73,25 @@ public class AppSystem : GLib.Object
             return true;
         }
         return false;
+    }
+
+    /**
+     * We lazily check if at some point we became invalidated. In most cases
+     * a package operation or similar modified a desktop file, i.e. making it
+     * available or unavailable.
+     *
+     * Instead of immediately reloading the appsystem we wait until something
+     * is actually requested again, check if we're invalidated, reload and then
+     * set us validated again.
+     */
+    private void check_invalidated()
+    {
+        if (invalidated) {
+            lock (invalidated) {
+                reload_ids();
+                invalidated = false;
+            }
+        }
     }
 
     /**
@@ -94,6 +121,8 @@ public class AppSystem : GLib.Object
         }
         string? cls_name = window.get_class_instance_name();
         string? grp_name = window.get_class_group_name();
+
+        check_invalidated();
 
         string[] checks = new string[] { cls_name, grp_name };
         foreach (string? check in checks) {
