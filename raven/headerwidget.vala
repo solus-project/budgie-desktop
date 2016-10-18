@@ -66,6 +66,7 @@ public class HeaderWidget : Gtk.Box
     private Gtk.Label? label = null;
     private Gtk.Button? close_button = null;
     private Gtk.Box? header_box = null;
+    private HeaderExpander? expander_btn = null;
 
     /** Display text */
     public string? text {
@@ -156,8 +157,8 @@ public class HeaderWidget : Gtk.Box
 
         /* No custom end-widget, use an expander */
         if (end_widget == null) {
-            var expander = new HeaderExpander(this);
-            header_box.pack_end(expander, false, false, 0);
+            expander_btn = new HeaderExpander(this);
+            header_box.pack_end(expander_btn, false, false, 0);
         } else {
             header_box.pack_end(end_widget, false, false, 0);
         }
@@ -179,6 +180,13 @@ public class HeaderWidget : Gtk.Box
         this.icon_name = icon_name;
         this.can_close = can_close;
     }
+
+    public void notify_expanded_change(bool value)
+    {
+        if (expander_btn != null) {
+            expander_btn.expanded = value;
+        }
+    }
 }
 
 /**
@@ -193,6 +201,7 @@ public class RavenExpander : Gtk.Box
     public bool expanded {
         public set {
             content.set_reveal_child(value);
+            header.notify_expanded_change(value);
         }
         public get {
             return content.get_reveal_child();
