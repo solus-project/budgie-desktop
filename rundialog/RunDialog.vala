@@ -243,6 +243,9 @@ public class RunDialog : Gtk.ApplicationWindow
 
     void add_application(AppInfo? app_info)
     {
+        if (!app_info.should_show()) {
+            return;
+        }
         var dinfo = app_info as DesktopAppInfo;
         if (dinfo.get_nodisplay()) {
             return;
