@@ -6,7 +6,7 @@ datarootdir=${prefix}/share
 
 Name: Budgie Theme
 Description: Budgie Theme Library
-Version: 1
+Version: 2
 Requires: gtk+-3.0 >= 3.16.0
 Libs: -L${libdir} -lbudgietheme
 Cflags: -I${includedir}/budgie-desktop
