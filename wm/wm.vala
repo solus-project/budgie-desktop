@@ -112,6 +112,7 @@ public class BudgieWM : Meta.Plugin
     Settings? settings = null;
     RavenRemote? raven_proxy = null;
     ShellShim? shim = null;
+    BudgieWMDBUS? focus_interface = null;
     PanelRemote? panel_proxy = null;
     WindowMenu? winmenu = null;
     LoginDRemote? logind_proxy = null;
@@ -382,6 +383,9 @@ public class BudgieWM : Meta.Plugin
         shim = new ShellShim(this);
         shim.serve();
 
+        focus_interface = new BudgieWMDBUS(this);
+        focus_interface.serve();
+
         background_group = new Meta.BackgroundGroup();
         background_group.set_reactive(true);
         screen_group.insert_child_below(background_group, null);
@@ -580,6 +584,34 @@ public class BudgieWM : Meta.Plugin
     {
         SignalHandler.disconnect_by_func(actor, (void*)notification_map_done, this);
         finalize_animations(actor as Meta.WindowActor);
+    }
+
+    private unowned Meta.Window? focused_window = null;
+
+    /**
+     * Store the focused window
+     */
+    public void store_focused()
+    {
+        var workspace = get_screen().get_active_workspace();
+        foreach (var window in workspace.list_windows()) {
+            if (window.has_focus()) {
+                focused_window = window;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Restore the focused window
+     */
+    public void restore_focused()
+    {
+        if (focused_window == null) {
+            return;
+        }
+        focused_window.focus(get_screen().get_display().get_current_time());
+        focused_window = null;
     }
 
     public override void map(Meta.WindowActor actor)
@@ -1066,6 +1098,51 @@ public class BudgieWM : Meta.Plugin
         out_group.restore_easing_state();
     }
 }
+
+/**
+ * Store/restore focused window for use of the popover manager in budgie.
+ * This part of the equation is inspired by wingpanel, which uses our
+ * popover manager.
+ */
+[DBus (name = "com.solus_project.budgie.BudgieWM")]
+public class BudgieWMDBUS : GLib.Object
+{
+
+    unowned Budgie.BudgieWM? wm;
+
+    protected BudgieWMDBUS(Budgie.BudgieWM? wm)
+    {
+        this.wm = wm;
+    }
+
+    void on_bus_acquired(DBusConnection conn)
+    {
+        try {
+            conn.register_object("/com/solus_project/budgie/BudgieWM", this);
+        } catch (Error e) {
+            message("Unable to register BudgieWMDBUS: %s", e.message);
+        }
+    }
+
+    [DBus (visible = false)]
+    public void serve()
+    {
+        Bus.own_name(BusType.SESSION, "com.solus_project.budgie.BudgieWM",
+            BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+            on_bus_acquired, null, null);
+    }
+
+    public void store_focused()
+    {
+        this.wm.store_focused();
+    }
+
+    public void restore_focused()
+    {
+        this.wm.restore_focused();
+    }
+
+} /* End BudgieWMDBUS */
 
 } /* End namespace */
 /*
