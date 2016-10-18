@@ -32,8 +32,8 @@ public class LockKeysApplet : Budgie.Applet
 
         get_style_context().add_class("lock-keys");
         /* Pretty labels, probably use icons in future */
-        caps = new Gtk.Image.from_icon_name("format-text-bold-symbolic", Gtk.IconSize.MENU);
-        num = new Gtk.Image.from_icon_name("zoom-original-symbolic", Gtk.IconSize.MENU);
+        caps = new Gtk.Image.from_icon_name("caps-lock-symbolic", Gtk.IconSize.MENU);
+        num = new Gtk.Image.from_icon_name("num-lock-symbolic", Gtk.IconSize.MENU);
         widget.pack_start(caps, false, false, 0);
         widget.pack_start(num, false, false, 0);
 
