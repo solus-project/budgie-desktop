@@ -57,15 +57,20 @@ public class IBusManager : GLib.Object
         this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 
         /* Get the bus */
-        bus = new IBus.Bus.async();
+        bus = new IBus.Bus();
 
         /* Hook up basic signals */
         bus.connected.connect(this.ibus_connected);
         bus.disconnected.connect(this.ibus_disconnected);
         bus.set_watch_dbus_signal(true);
 
-        /* Start the ibus daemon */
-        this.startup_ibus();
+        /* Should have ibus running already */
+        if (bus.is_connected()) {
+            this.ibus_connected();
+        } else {
+            /* Start the ibus daemon */
+            this.startup_ibus();
+        }
     }
 
     /**
