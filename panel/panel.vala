@@ -986,8 +986,14 @@ public class Panel : Budgie.Toplevel
 
         if (expanded) {
             Idle.add(()=> {
-                if (get_window() != null) {
-                    get_window().focus(Gdk.CURRENT_TIME);
+                Gdk.Window? panel_window = get_window();
+                if (panel_window != null) {
+                    Gdk.Display? display = screen.get_display();
+                    if (display is Gdk.X11Display) {
+                        panel_window.focus(Gdk.X11Display.get_user_time(display));
+                    } else {
+                        panel_window.focus(Gtk.get_current_event_time());
+                    }
                 }
                 present();
                 return false;
