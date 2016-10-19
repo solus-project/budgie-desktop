@@ -214,7 +214,7 @@ public class OSD : Gtk.Window
 } /* End class OSD (BudgieOSD) */
 
 /**
- * BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, recieving
+ * BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, receiving
  * requests, for example, from budgie-wm
  */
 [DBus (name = "com.solus_project.BudgieOSD")]
