@@ -952,22 +952,22 @@ public class Panel : Budgie.Toplevel
         }
         this.expanded = expanded;
         if (!expanded) {
-            if (wm_proxy != null) {
+            /*if (wm_proxy != null) {
                 try {
                     this.wm_proxy.restore_focused();
                 } catch (Error e) {
                     message("Error with wm_proxy: %s", e.message);
                 }
-            }
+            }*/
             scr = small_scr;
         } else {
-            if (wm_proxy != null) {
+            /*if (wm_proxy != null) {
                 try {
                     this.wm_proxy.store_focused();
                 } catch (Error e) {
                     message("Error with wm_proxy: %s", e.message);
                 }
-            }
+            }*/
             scr = orig_scr;
         }
 
