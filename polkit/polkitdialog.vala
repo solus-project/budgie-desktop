@@ -120,12 +120,7 @@ public class AgentDialog : Gtk.Window
         if ((win = get_window()) == null) {
             return;
         }
-        Gdk.Display? display = screen.get_display();
-        if (display is Gdk.X11Display) {
-            win.focus(Gdk.X11Display.get_user_time(display));
-        } else {
-            win.focus(Gtk.get_current_event_time());
-        }
+        win.focus(Gdk.CURRENT_TIME);
         entry_auth.grab_focus();
     }
 
