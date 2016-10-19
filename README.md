@@ -98,7 +98,7 @@ given:
     - polkit-gobject-1 >= 0.110
     - gnome-bluetooth-1.0 >= 3.16.0
     - accountsservice >= 0.6
-    - ibus-1.0 >= 1.5.13
+    - ibus-1.0 >= 1.5.11
 
 And:
 
