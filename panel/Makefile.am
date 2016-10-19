@@ -70,7 +70,6 @@ budgie_panel_LDADD = \
 
 budgie_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
-	--pkg gdk-x11-3.0 \
 	--pkg gio-unix-2.0 \
 	--pkg libuuid \
 	--pkg libpeas-gtk-1.0 \
