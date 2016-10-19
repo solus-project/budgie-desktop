@@ -62,6 +62,7 @@ applications_DATA = \
 
 budgie_polkit_dialog_VALAFLAGS = \
 	--pkg gtk+-3.0 \
+	--pkg gdk-x11-3.0 \
 	--pkg polkit-gobject-1 \
 	--pkg polkit-agent-1 \
 	--pkg posix \
