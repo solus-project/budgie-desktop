@@ -363,7 +363,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     /*
      * Adds a mount to the view
      */
-    private void add_mount(GLib.Mount mount, string class)
+    private void add_mount(GLib.Mount mount, string? class)
     {
         if ((class == "network" && !show_networks) || (class == "device" && !show_drives)) {
             return;

@@ -11,7 +11,7 @@
 
 public abstract class ListItem : Gtk.Box
 {
-    protected string item_class;
+    protected string? item_class;
     protected string category_name;
     protected Gtk.ToolButton name_button;
     protected Gtk.Overlay overlay;

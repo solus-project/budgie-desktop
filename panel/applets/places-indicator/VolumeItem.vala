@@ -28,6 +28,9 @@ public class VolumeItem : ListItem
             case "network":
                 category_name = _("Network folders");
                 break;
+            case null:
+                category_name = _("Other");
+                break;
             default:
                 break;
         }
