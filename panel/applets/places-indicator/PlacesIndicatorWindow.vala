@@ -395,6 +395,14 @@ public class PlacesIndicatorWindow : Gtk.Popover {
             return;
         }
 
+        /*
+         * Check if $path is "file:/// /" because nautilus saves the
+         * root directory as that for some (stupid, I'm sure) reason.
+        */
+        if (path == "file:/// /") {
+            path = "file:///";
+        }
+
         GLib.File file = GLib.File.new_for_uri(path);
         PlaceItem place_item = new PlaceItem(file, "place");
         places_list.add(path);
