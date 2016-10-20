@@ -363,7 +363,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     /*
      * Adds a mount to the view
      */
-    private void add_mount(GLib.Mount mount, string class)
+    private void add_mount(GLib.Mount mount, string? class)
     {
         if ((class == "network" && !show_networks) || (class == "device" && !show_drives)) {
             return;
@@ -393,6 +393,14 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     {
         if (places_list.contains(path)) {
             return;
+        }
+
+        /*
+         * Check if $path is "file:/// /" because nautilus saves the
+         * root directory as that for some (stupid, I'm sure) reason.
+        */
+        if (path == "file:/// /") {
+            path = "file:///";
         }
 
         GLib.File file = GLib.File.new_for_uri(path);

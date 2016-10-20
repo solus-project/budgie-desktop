@@ -13,7 +13,7 @@ public class MountItem : ListItem
 {
     public signal void send_message(string message_content, Gtk.MessageType message_type);
 
-    public MountItem(GLib.Mount mount, string class)
+    public MountItem(GLib.Mount mount, string? class)
     {
         item_class = class;
 
@@ -27,6 +27,9 @@ public class MountItem : ListItem
                 break;
             case "network":
                 category_name = _("Network folders");
+                break;
+            case null:
+                category_name = _("Other");
                 break;
             default:
                 break;
