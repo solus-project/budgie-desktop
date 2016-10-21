@@ -32,19 +32,23 @@ panel/applets/user-indicator/UserIndicatorWindow.vala
 wm/windowmenu.vala
 wm/wm.vala
 
-
 [type: gettext/keys]panel/applets/clock/ClockApplet.plugin.in
 [type: gettext/keys]panel/applets/show-desktop/ShowDesktopApplet.plugin.in
 [type: gettext/keys]panel/applets/tasklist/TasklistApplet.plugin.in
+[type: gettext/keys]panel/applets/places-indicator/PlacesIndicator.plugin.in
 [type: gettext/keys]panel/applets/icon-tasklist/IconTasklistApplet.plugin.in
 [type: gettext/keys]panel/applets/lock-keys/LockKeysApplet.plugin.in
+[type: gettext/keys]panel/applets/raven-trigger/RavenTriggerApplet.plugin.in
 [type: gettext/keys]panel/applets/spacer/SpacerApplet.plugin.in
+[type: gettext/keys]panel/applets/user-indicator/UserIndicator.plugin.in
 [type: gettext/keys]panel/applets/workspaces/WorkspacesApplet.plugin.in
+[type: gettext/keys]panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in
 [type: gettext/keys]panel/applets/tray/TrayApplet.plugin.in
 [type: gettext/keys]panel/applets/status/StatusApplet.plugin.in
 [type: gettext/keys]panel/applets/budgie-menu/BudgieMenu.plugin.in
 [type: gettext/keys]panel/applets/separator/SeparatorApplet.plugin.in
 [type: gettext/keys]panel/applets/notifications/NotificationsApplet.plugin.in
+
 
 panel/applets/places-indicator/MountItem.vala
 panel/applets/places-indicator/PlaceItem.vala
