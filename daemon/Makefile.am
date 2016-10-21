@@ -55,6 +55,7 @@ budgie_daemon_CFLAGS = \
 
 budgie_daemon_LDADD = \
 	$(BUDGIE_DAEMON_LIBS) \
+	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/libsession/libsession.la \
 	${top_builddir}/theme/libbudgietheme.la
 
@@ -68,6 +69,8 @@ budgie_daemon_VALAFLAGS = \
 	--pkg theme \
 	--pkg libsession \
 	--pkg gdk-x11-3.0 \
+	--pkg budgie-config \
+	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/theme \
 	--vapidir=${top_srcdir}/libsession \

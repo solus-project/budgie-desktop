@@ -434,6 +434,11 @@ public static int main(string[] args)
 {
     Gtk.init(ref args);
 
+    Intl.setlocale(LocaleCategory.ALL, "");
+    Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+    Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+
     Budgie.Agent? agent = new Budgie.Agent();
     Polkit.Subject? subject = null;
 

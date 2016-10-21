@@ -52,6 +52,7 @@ budgie_polkit_dialog_CFLAGS = \
 
 budgie_polkit_dialog_LDADD = \
 	$(POLKIT_DIALOG_LIBS) \
+	${top_builddir}/config/libbudgie-config.la \
 	${top_builddir}/libsession/libsession.la \
 	${top_builddir}/theme/libbudgietheme.la
 
@@ -67,6 +68,8 @@ budgie_polkit_dialog_VALAFLAGS = \
 	--pkg posix \
 	--pkg theme \
 	--pkg libsession \
+	--pkg budgie-config \
+	--vapidir=${top_srcdir}/config \
 	--vapidir=${top_srcdir}/vapi \
 	--vapidir=${top_srcdir}/theme \
 	--vapidir=${top_srcdir}/libsession \

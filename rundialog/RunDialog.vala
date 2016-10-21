@@ -386,6 +386,11 @@ public class RunDialogApp : Gtk.Application
 
 public static int main(string[] args)
 {
+    Intl.setlocale(LocaleCategory.ALL, "");
+    Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+    Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+
     Budgie.RunDialogApp rd = new Budgie.RunDialogApp();
     return rd.run(args);
 }

@@ -18,6 +18,11 @@ public static int main(string[] args)
     Budgie.ServiceManager? manager = null;
     Budgie.EndSessionDialog? end_dialog = null;
 
+    Intl.setlocale(LocaleCategory.ALL, "");
+    Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+    Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+
     manager = new Budgie.ServiceManager();
     end_dialog = new Budgie.EndSessionDialog();
 
