@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-17 10:36+0000\n"
+"POT-Creation-Date: 2016-10-21 08:11+0100\n"
+"PO-Revision-Date: 2016-10-21 07:32+0000\n"
 "Last-Translator: BALLOON a.k.a. Fu-sen.\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/solus-project/budgie-desktop/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -101,27 +101,27 @@ msgstr "基本設定"
 msgid "Panel"
 msgstr "パネル"
 
-#: ../raven/notifications_view.vala:52
+#: ../raven/notifications_view.vala:74
 msgid "Nothing to see here"
 msgstr "表示する内容はありません"
 
-#: ../raven/notifications_view.vala:494
+#: ../raven/notifications_view.vala:516
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "未読通知 %u"
 
-#: ../raven/notifications_view.vala:496
+#: ../raven/notifications_view.vala:518
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "未読通知 1"
 
-#: ../raven/notifications_view.vala:498
+#: ../raven/notifications_view.vala:520
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "未読通知なし"
 
-#: ../raven/notifications_view.vala:624
+#: ../raven/notifications_view.vala:646
 msgid "No new notifications"
 msgstr "新たな通知 なし"
 
@@ -433,14 +433,15 @@ msgstr "常に上へ表示"
 msgid "Close"
 msgstr "閉じる"
 
-#: ../wm/wm.vala:515
+#: ../wm/wm.vala:519
 msgid "Change background"
 msgstr "背景の変更"
 
-#: ../wm/wm.vala:524
+#: ../wm/wm.vala:528
 msgid "Settings"
 msgstr "設定"
 
+#. End BudgieWMDBUS
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
@@ -464,6 +465,12 @@ msgstr "デスクトップボタンの表示"
 msgid "Task List"
 msgstr "タスク一覧"
 
+#: ../panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr "場所"
+
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
 msgstr "タスク一覧アイコン"
@@ -472,13 +479,25 @@ msgstr "タスク一覧アイコン"
 msgid "Lock Keys Indicator"
 msgstr "キーロック表示"
 
+#: ../panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Ravan サイドバー管理"
+
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
 msgstr "余白"
 
+#: ../panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "ユーザーインジケータ"
+
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
 msgstr "ワークスペースの切替"
+
+#: ../panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "キーボードレイアウトインジケータ"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
@@ -511,30 +530,30 @@ msgstr "ローカルボジューム"
 msgid "Network folders"
 msgstr "ネットワークフォルダー"
 
-#: ../panel/applets/places-indicator/MountItem.vala:49
-#: ../panel/applets/places-indicator/VolumeItem.vala:46
+#: ../panel/applets/places-indicator/MountItem.vala:32
+#: ../panel/applets/places-indicator/VolumeItem.vala:32
+msgid "Other"
+msgstr "その他"
+
+#: ../panel/applets/places-indicator/MountItem.vala:52
+#: ../panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
 msgstr "取り出し"
 
-#: ../panel/applets/places-indicator/MountItem.vala:51
+#: ../panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
 msgstr "マウント解除"
 
-#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/MountItem.vala:57
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
 msgstr "\"%s\" を開く"
 
-#: ../panel/applets/places-indicator/MountItem.vala:78
-#: ../panel/applets/places-indicator/VolumeItem.vala:53
+#: ../panel/applets/places-indicator/MountItem.vala:81
+#: ../panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
 msgstr "安全に取り出す事ができます"
-
-#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr "場所"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
@@ -548,7 +567,7 @@ msgstr "特定ドライブのマウント"
 msgid "Enable more sections"
 msgstr "複数のセッションを有効にする"
 
-#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#: ../panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
 msgstr "\"%s\" をマウントし開く"
