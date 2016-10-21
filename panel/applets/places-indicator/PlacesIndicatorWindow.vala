@@ -391,7 +391,8 @@ public class PlacesIndicatorWindow : Gtk.Popover {
      */
     private void add_place(string path, string class)
     {
-        if (places_list.contains(path)) {
+        string unescaped_path = GLib.Uri.unescape_string(path);
+        if (places_list.contains(unescaped_path)) {
             return;
         }
 
@@ -405,7 +406,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
 
         GLib.File file = GLib.File.new_for_uri(path);
         PlaceItem place_item = new PlaceItem(file, "place");
-        places_list.add(path);
+        places_list.add(unescaped_path);
         places_section.add_item(place_item);
     }
 }
