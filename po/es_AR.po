@@ -7,13 +7,13 @@
 # Federico Damián Schonborn <federicodamians@gmail.com>, 2016
 # Federico Damián Schonborn <federico.d.schonborn@gmail.com>, 2016
 # Federico Damián Schonborn <federicodamians@gmail.com>, 2015-2016
-# Joni Lusso <karusinsania@gmail.com>, 2016
+# Karus Insania <karusinsania@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-17 01:04+0000\n"
+"POT-Creation-Date: 2016-10-21 08:11+0100\n"
+"PO-Revision-Date: 2016-10-21 14:31+0000\n"
 "Last-Translator: Federico Damián Schonborn <federico.d.schonborn@gmail.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/solus-project/budgie-desktop/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
@@ -104,27 +104,27 @@ msgstr "General"
 msgid "Panel"
 msgstr "Panel"
 
-#: ../raven/notifications_view.vala:52
+#: ../raven/notifications_view.vala:74
 msgid "Nothing to see here"
 msgstr "Nada que ver aquí"
 
-#: ../raven/notifications_view.vala:494
+#: ../raven/notifications_view.vala:516
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u notificaciones sin leer"
 
-#: ../raven/notifications_view.vala:496
+#: ../raven/notifications_view.vala:518
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 notificación sin leer"
 
-#: ../raven/notifications_view.vala:498
+#: ../raven/notifications_view.vala:520
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "No hay notificaciones sin leer"
 
-#: ../raven/notifications_view.vala:624
+#: ../raven/notifications_view.vala:646
 msgid "No new notifications"
 msgstr "No hay nuevas notificaciones"
 
@@ -437,14 +437,15 @@ msgstr "Siempre encima"
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../wm/wm.vala:515
+#: ../wm/wm.vala:519
 msgid "Change background"
 msgstr "Cambiar el fondo"
 
-#: ../wm/wm.vala:524
+#: ../wm/wm.vala:528
 msgid "Settings"
 msgstr "Ajustes"
 
+#. End BudgieWMDBUS
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
@@ -468,6 +469,12 @@ msgstr "Mostrar/ocultar escritorio"
 msgid "Task List"
 msgstr "Gestor de tareas"
 
+#: ../panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr "Lugares"
+
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
 msgstr "Gestor de tareas de solo iconos"
@@ -476,13 +483,25 @@ msgstr "Gestor de tareas de solo iconos"
 msgid "Lock Keys Indicator"
 msgstr "Indicador de teclas de bloqueo"
 
+#: ../panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Control de barra lateral Raven"
+
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
 msgstr "Espaciador"
 
+#: ../panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Indicador de usuario"
+
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
 msgstr "Selector de escritorio"
+
+#: ../panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Indicador de disposición del teclado"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
@@ -515,30 +534,30 @@ msgstr "Dispositivos locales"
 msgid "Network folders"
 msgstr "Carpetas en red"
 
-#: ../panel/applets/places-indicator/MountItem.vala:49
-#: ../panel/applets/places-indicator/VolumeItem.vala:46
+#: ../panel/applets/places-indicator/MountItem.vala:32
+#: ../panel/applets/places-indicator/VolumeItem.vala:32
+msgid "Other"
+msgstr "Otros"
+
+#: ../panel/applets/places-indicator/MountItem.vala:52
+#: ../panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
 msgstr "Expulsar"
 
-#: ../panel/applets/places-indicator/MountItem.vala:51
+#: ../panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
 msgstr "Desmontar"
 
-#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/MountItem.vala:57
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
 msgstr "Abrir \"%s\""
 
-#: ../panel/applets/places-indicator/MountItem.vala:78
-#: ../panel/applets/places-indicator/VolumeItem.vala:53
+#: ../panel/applets/places-indicator/MountItem.vala:81
+#: ../panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
 msgstr "Ahora puedes removerlo de forma segura"
-
-#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr "Lugares"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
@@ -552,7 +571,7 @@ msgstr "Montar algunos discos"
 msgid "Enable more sections"
 msgstr "Habilitar más secciones"
 
-#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#: ../panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
 msgstr "Montar y abrir \"%s\""

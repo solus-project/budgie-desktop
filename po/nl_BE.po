@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-11 16:41+0000\n"
+"POT-Creation-Date: 2016-10-21 08:11+0100\n"
+"PO-Revision-Date: 2016-10-21 10:15+0000\n"
 "Last-Translator: Geert Verheyde <geert.verheyde@gmail.com>\n"
 "Language-Team: Dutch (Belgium) (http://www.transifex.com/solus-project/budgie-desktop/language/nl_BE/)\n"
 "MIME-Version: 1.0\n"
@@ -103,27 +103,27 @@ msgstr "Algemeen"
 msgid "Panel"
 msgstr "Paneel"
 
-#: ../raven/notifications_view.vala:52
+#: ../raven/notifications_view.vala:74
 msgid "Nothing to see here"
 msgstr "Helemaal niets"
 
-#: ../raven/notifications_view.vala:494
+#: ../raven/notifications_view.vala:516
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u ongelezen meldingen"
 
-#: ../raven/notifications_view.vala:496
+#: ../raven/notifications_view.vala:518
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 ongelezen melding"
 
-#: ../raven/notifications_view.vala:498
+#: ../raven/notifications_view.vala:520
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Geen ongelezen meldingen"
 
-#: ../raven/notifications_view.vala:624
+#: ../raven/notifications_view.vala:646
 msgid "No new notifications"
 msgstr "Geen nieuwe meldingen"
 
@@ -436,14 +436,15 @@ msgstr "Altijd Bovenop"
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../wm/wm.vala:515
+#: ../wm/wm.vala:519
 msgid "Change background"
 msgstr "Achtergrond aanpassen"
 
-#: ../wm/wm.vala:524
+#: ../wm/wm.vala:528
 msgid "Settings"
 msgstr "Instellingen"
 
+#. End BudgieWMDBUS
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
@@ -467,6 +468,12 @@ msgstr "Toon Bureaublad Knop"
 msgid "Task List"
 msgstr "Takenlijst"
 
+#: ../panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr "Locaties"
+
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
 msgstr "Icoon Takenlijst"
@@ -475,13 +482,25 @@ msgstr "Icoon Takenlijst"
 msgid "Lock Keys Indicator"
 msgstr "Toetsenblokkering Aanwijzer"
 
+#: ../panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Raven zijpaneel Bediener"
+
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
 msgstr "Tussenstuk"
 
+#: ../panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Gebruikersindicator"
+
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
 msgstr "Werkblad Wisselaar"
+
+#: ../panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Toetsenbordindeling Indicator"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
@@ -514,34 +533,34 @@ msgstr "Lokale schijven"
 msgid "Network folders"
 msgstr "Netwerk mappen"
 
-#: ../panel/applets/places-indicator/MountItem.vala:49
-#: ../panel/applets/places-indicator/VolumeItem.vala:46
+#: ../panel/applets/places-indicator/MountItem.vala:32
+#: ../panel/applets/places-indicator/VolumeItem.vala:32
+msgid "Other"
+msgstr "Andere"
+
+#: ../panel/applets/places-indicator/MountItem.vala:52
+#: ../panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
 msgstr "Uitwerpen"
 
-#: ../panel/applets/places-indicator/MountItem.vala:51
+#: ../panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
 msgstr "Ontkoppelen"
 
-#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/MountItem.vala:57
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
 msgstr "Open \"%s\""
 
-#: ../panel/applets/places-indicator/MountItem.vala:78
-#: ../panel/applets/places-indicator/VolumeItem.vala:53
+#: ../panel/applets/places-indicator/MountItem.vala:81
+#: ../panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
 msgstr "Nu veilig verwijderen"
 
-#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr "Locaties"
-
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr "Momenteel niets te tonen "
+msgstr "Momenteel niets weer te geven "
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
@@ -551,23 +570,23 @@ msgstr "Schijven aankoppelen"
 msgid "Enable more sections"
 msgstr "Meer secties activeren"
 
-#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#: ../panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
 msgstr "Aankoppelen en \"%s\" openen"
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Label tonen"
+msgstr "Label weergeven"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Locaties tonen"
+msgstr "Locaties weergeven"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr "Verwijderbare schijven tonen"
+msgstr "Verwijderbare schijven weergeven"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "Netwerkmappen tonen"
+msgstr "Netwerkmappen weergeven"

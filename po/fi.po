@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Puppelimies, 2016
 # Ville Kivelä <vkivela@hotmail.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-12 07:41+0000\n"
-"Last-Translator: Ville Kivelä <vkivela@hotmail.com>\n"
+"POT-Creation-Date: 2016-10-21 08:11+0100\n"
+"PO-Revision-Date: 2016-10-21 13:05+0000\n"
+"Last-Translator: Puppelimies\n"
 "Language-Team: Finnish (http://www.transifex.com/solus-project/budgie-desktop/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,27 +101,27 @@ msgstr "Yleiset"
 msgid "Panel"
 msgstr "Paneeli"
 
-#: ../raven/notifications_view.vala:52
+#: ../raven/notifications_view.vala:74
 msgid "Nothing to see here"
 msgstr "Ei mitään nähtävää"
 
-#: ../raven/notifications_view.vala:494
+#: ../raven/notifications_view.vala:516
 #: ../panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u lukematonta ilmoitusta"
 
-#: ../raven/notifications_view.vala:496
+#: ../raven/notifications_view.vala:518
 #: ../panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 lukematon ilmoitus"
 
-#: ../raven/notifications_view.vala:498
+#: ../raven/notifications_view.vala:520
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Ei lukemattomia ilmoituksia"
 
-#: ../raven/notifications_view.vala:624
+#: ../raven/notifications_view.vala:646
 msgid "No new notifications"
 msgstr "Ei uusia ilmoituksia"
 
@@ -249,19 +250,19 @@ msgstr "Tasalevyinen kirjasin"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Poista käytöstä kokoruututilan uudelleenohjauksen ohitus"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr ""
+msgstr "Poista käytöstä uudelleenohjauksen ohitus"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Muuta ikkunoiden painikkeiden asettelu"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Painikkeiden asettelu"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -399,7 +400,7 @@ msgstr "Lukitse"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr ""
+msgstr "Virransäästötila"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
@@ -433,14 +434,15 @@ msgstr "Aina päällimmäisenä"
 msgid "Close"
 msgstr "Sulje"
 
-#: ../wm/wm.vala:515
+#: ../wm/wm.vala:519
 msgid "Change background"
 msgstr "Vaihda tausta"
 
-#: ../wm/wm.vala:524
+#: ../wm/wm.vala:528
 msgid "Settings"
 msgstr "Asetukset"
 
+#. End BudgieWMDBUS
 #. End namespace
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 #. *
@@ -464,6 +466,12 @@ msgstr "Näytä työpöytä -painike"
 msgid "Task List"
 msgstr "Tehtävälista"
 
+#: ../panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
+#: ../panel/applets/places-indicator/PlacesSection.vala:32
+msgid "Places"
+msgstr "Sijainnit"
+
 #: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
 msgstr "Tehtävälista kuvakkeilla"
@@ -472,13 +480,25 @@ msgstr "Tehtävälista kuvakkeilla"
 msgid "Lock Keys Indicator"
 msgstr "Lukitusnäppäinilmaisin"
 
+#: ../panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Raven sivupalkki hallinta"
+
 #: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
 msgstr "Väli"
 
+#: ../panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Käyttäjä indikaattori"
+
 #: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
 msgstr "Työtilanvaihdin"
+
+#: ../panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Näppäimistön asetusten indikaattori"
 
 #: ../panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
@@ -499,42 +519,42 @@ msgstr "Erotin"
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr ""
+msgstr "Irrotettavat laitteet"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr ""
+msgstr "Paikalliset asemat"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
 msgstr "Verkkokansiot"
 
-#: ../panel/applets/places-indicator/MountItem.vala:49
-#: ../panel/applets/places-indicator/VolumeItem.vala:46
+#: ../panel/applets/places-indicator/MountItem.vala:32
+#: ../panel/applets/places-indicator/VolumeItem.vala:32
+msgid "Other"
+msgstr "Muu"
+
+#: ../panel/applets/places-indicator/MountItem.vala:52
+#: ../panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
 msgstr "Poista"
 
-#: ../panel/applets/places-indicator/MountItem.vala:51
+#: ../panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
 msgstr "Irroita"
 
-#: ../panel/applets/places-indicator/MountItem.vala:54
+#: ../panel/applets/places-indicator/MountItem.vala:57
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
 msgstr "Avaa \"%s\""
 
-#: ../panel/applets/places-indicator/MountItem.vala:78
-#: ../panel/applets/places-indicator/VolumeItem.vala:53
+#: ../panel/applets/places-indicator/MountItem.vala:81
+#: ../panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
 msgstr "Voit nyt turvallisesti poistaa"
-
-#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr ""
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
@@ -542,29 +562,29 @@ msgstr "Ei näytettävää tällä hetkellä"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Liitä asemia"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Käytä lisää kohtia"
 
-#: ../panel/applets/places-indicator/VolumeItem.vala:64
+#: ../panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr ""
+msgstr "Liitä ja avaa \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr ""
+msgstr "Näytä nimike"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr ""
+msgstr "Näytä sijainnit"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr ""
+msgstr "Näytä irrotettavat asemat"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr ""
+msgstr "Näytä verkko kansiot"
