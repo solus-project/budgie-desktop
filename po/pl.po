@@ -7,6 +7,7 @@
 # Gosciu Goscicki <g1485232@trbvm.com>, 2015
 # Grass Hopper <1301grasshopper@gmail.com>, 2016
 # Marcin <marcino451@gmail.com>, 2015
+# Olaf Górski <grski1337@gmail.com>, 2016
 # Patrycjusz Dolega <patrick.dolega@outlook.com>, 2016
 # Piotr Browko <admin@manjaro.net>, 2015-2016
 # Piotr Sokół <psokol.l10n@gmail.com>, 2015
@@ -18,8 +19,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-11 09:54+0000\n"
-"Last-Translator: Daniel Dietrich <dietrich.daniel.96@gmail.com>\n"
+"PO-Revision-Date: 2016-10-19 21:05+0000\n"
+"Last-Translator: Olaf Górski <grski1337@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/solus-project/budgie-desktop/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,11 +30,11 @@ msgstr ""
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr "Wyloguj się"
+msgstr "Wyloguj"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "Zrestartuj urządzenie"
+msgstr "Uruchom ponownie"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
@@ -78,7 +79,7 @@ msgstr "Początek"
 
 #: ../raven/settings_view.vala:619
 msgid "Center"
-msgstr "Na środku"
+msgstr "Środek"
 
 #: ../raven/settings_view.vala:622
 msgid "End"
@@ -135,11 +136,11 @@ msgstr "Brak nowych powiadomień"
 
 #: ../raven/sound.vala:78
 msgid "Output"
-msgstr "Wyjścia"
+msgstr "Wyjście"
 
 #: ../raven/sound.vala:95
 msgid "Input"
-msgstr "Wejścia"
+msgstr "Wejście"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -162,7 +163,7 @@ msgstr "Ustawienia Budgie"
 
 #: ../raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Zakończ"
+msgstr "Zamknij"
 
 #: ../raven/ui/applets.ui.h:1
 msgid "Add new applet"
@@ -170,7 +171,7 @@ msgstr "Dodaj nowy aplet"
 
 #: ../raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "Użyj ciemnego stylu"
+msgstr "Używa ciemnego stylu"
 
 #: ../raven/ui/appearance.ui.h:2
 msgid "Dark theme"
@@ -194,11 +195,11 @@ msgstr "Styl ikon"
 
 #: ../raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "Zastąp domyślne"
+msgstr "Zastępuje domyślne"
 
 #: ../raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Standardowy motyw"
+msgstr "Wbudowany styl"
 
 #: ../raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
@@ -210,7 +211,7 @@ msgstr "Styl wskaźnika myszy"
 
 #: ../raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "Zarządzaj panelami"
+msgstr "Zarządzanie panelami"
 
 #: ../raven/ui/panel.ui.h:2
 msgid "Position"
@@ -230,7 +231,7 @@ msgstr "Reguły automatycznego ukrywania"
 
 #: ../raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "Stylizuj obszar powiadamień"
+msgstr "Stylizowanie obszarów"
 
 #: ../raven/ui/background.ui.h:1
 msgid "Show desktop icons"
@@ -258,11 +259,11 @@ msgstr "Czcionka o stałej szerokości"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Włącz przekierowanie dla okien w trybie pełnego ekranu"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr ""
+msgstr "Włącz przekierowanie"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
@@ -390,7 +391,7 @@ msgstr "Ładowanie"
 
 #: ../panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "Pozostały czas"
+msgstr "Pozostały czas działania"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
@@ -409,11 +410,11 @@ msgstr "Zablokuj"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Uśpij"
+msgstr "Wstrzymaj"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Hibernuj"
+msgstr "Zahibernuj"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -514,12 +515,12 @@ msgstr "Urządzenie przenośne"
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr "Lokalne partycje"
+msgstr "Lokalne wolumeny"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr "Foldery sieciowe"
+msgstr "Katalogi sieciowe"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
@@ -534,12 +535,12 @@ msgstr "Odmontuj"
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr "Otwórz \"%s\""
+msgstr "Otwórz „%s”"
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr "Można teraz bezpiecznie usunąć"
+msgstr "Można teraz bezpiecznie wysunąć nośnik"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
@@ -552,7 +553,7 @@ msgstr "Nie ma nic do wyświetlenia"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr "Zamontuj kilka dysków"
+msgstr "Zamontuj jakiś nośnik"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
@@ -561,7 +562,7 @@ msgstr "Włącz więcej sekcji"
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Zamontuj i otwórz \"%s\""
+msgstr "Zamontuj i otwórz „%s”"
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
@@ -577,4 +578,4 @@ msgstr "Pokaż urządzenia przenośne"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "Pokaż foldery sieciowe"
+msgstr "Pokaż katalogi sieciowe"

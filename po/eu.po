@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-11 00:16+0000\n"
+"PO-Revision-Date: 2016-10-19 11:03+0000\n"
 "Last-Translator: John Smith <aboutafteragain@gmail.com>\n"
 "Language-Team: Basque (http://www.transifex.com/solus-project/budgie-desktop/language/eu/)\n"
 "MIME-Version: 1.0\n"
@@ -249,11 +249,11 @@ msgstr "Monospace"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr "Disable unredirect of fullscreen windows"
+msgstr "Pantaila osoko leihoen \"unredirect\"-a ezgaitu"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr "Disable unredirect"
+msgstr "\"Unredirect\"-a desgaitu"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
