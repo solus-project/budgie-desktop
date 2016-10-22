@@ -452,7 +452,7 @@ public class PinnedIconButton : IconButton
         image.set_from_gicon(info.get_icon(), Gtk.IconSize.INVALID);
 
         alt_menu = new Gtk.Menu();
-        var item = new Gtk.MenuItem.with_label("Unpin from panel");
+        var item = new Gtk.MenuItem.with_label(_("Unpin from panel"));
         alt_menu.add(item);
         item.show_all();
 
