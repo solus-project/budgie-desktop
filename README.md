@@ -17,24 +17,24 @@ before attempting configuration. The names are different depending on
 distribution, so the pkg-config names, and the names within Solus, are
 given:
 
-- gobject-2.0 >= 2.44.0
+- accountsservice >= 0.6
 - gio-2.0 >= 2.44.0
-- gtk+-3.0 >= 3.16.0
 - gio-unix-2.0 >= 2.44.0
-- uuid
-- libpeas-gtk-1.0 >= 1.8.0
-- libgnome-menu-3.0 >= 3.10.1
-- gobject-introspection-1.0 >= 1.44.0
-- libpulse >= 2
-- mutter >= 3.18.0
+- gnome-bluetooth-1.0 >= 3.16.0
 - gnome-desktop-3.0 >= 3.18.0
+- gobject-2.0 >= 2.44.0
+- gobject-introspection-1.0 >= 1.44.0
+- gtk+-3.0 >= 3.16.0
+- ibus-1.0 >= 1.5.11
+- libgnome-menu-3.0 >= 3.10.1
+- libpeas-gtk-1.0 >= 1.8.0
+- libpulse >= 2
 - libwnck >= 3.14.0
-- upower-glib >= 0.9.20
+- mutter >= 3.18.0
 - polkit-agent-1 >= 0.110
 - polkit-gobject-1 >= 0.110
-- gnome-bluetooth-1.0 >= 3.16.0
-- accountsservice >= 0.6
-- ibus-1.0 >= 1.5.11
+- upower-glib >= 0.9.20
+- uuid
 
 And:
 
