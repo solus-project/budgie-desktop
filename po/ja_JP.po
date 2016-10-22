@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-21 08:11+0100\n"
-"PO-Revision-Date: 2016-10-21 07:32+0000\n"
+"PO-Revision-Date: 2016-10-22 01:33+0000\n"
 "Last-Translator: BALLOON a.k.a. Fu-sen.\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/solus-project/budgie-desktop/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "ログアウト"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "再起動デバイス"
+msgstr "デバイスの再起動"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
@@ -119,7 +119,7 @@ msgstr "未読通知 1"
 #: ../raven/notifications_view.vala:520
 #: ../panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "未読通知なし"
+msgstr "未読通知 なし"
 
 #: ../raven/notifications_view.vala:646
 msgid "No new notifications"
