@@ -31,7 +31,16 @@ plugin_LTLIBRARIES = libicontasklistapplet.la
 libicontasklistapplet_la_SOURCES = \
 	AppSystem.vala \
 	IconTasklistApplet.vala \
-	Buttons.vala
+    Buttons.vala \
+    ButtonManager.vala \
+    WindowManager.vala \
+    WindowListView.vala \
+    WindowListItem.vala \
+    ApplicationWindow.vala \
+    WindowMenu.vala \
+    ApplicationWindowListeners.vala \
+    Application.vala \
+    UrgencyAnimation.vala
 
 libicontasklistapplet_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
