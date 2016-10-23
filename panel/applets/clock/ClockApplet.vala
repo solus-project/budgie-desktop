@@ -13,8 +13,30 @@ public class ClockPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
     {
-        return new ClockApplet();
+        return new ClockApplet(uuid);
     }
+}
+
+[GtkTemplate (ui = "/com/solus-project/clock/settings.ui")]
+public class ClockSettings : Gtk.Grid
+{
+    Settings? settings = null;
+    Settings sys_settings = new Settings("org.gnome.desktop.interface");
+    
+    [GtkChild]
+    private Gtk.Switch? week_day_switch;
+    
+    [GtkChild]
+    private Gtk.Switch? date_switch;
+
+    public ClockSettings(Settings? settings)
+    {
+        this.settings = settings;
+        sys_settings.bind("clock-show-date", date_switch, "active", SettingsBindFlags.DEFAULT);
+        date_switch.bind_property("active", week_day_switch, "sensitive");
+        settings.bind("show-week-day", week_day_switch, "active", SettingsBindFlags.DEFAULT);
+        week_day_switch.sensitive = date_switch.active; //Sensitive state isn't right w/o this line
+   }
 }
 
 enum ClockFormat {
@@ -27,12 +49,16 @@ public static const string CALENDAR_MIME = "text/calendar";
 public class ClockApplet : Budgie.Applet
 {
 
+    public string uuid { public set; public get; }
+    private Settings? ui_settings;
+
     protected Gtk.EventBox widget;
     protected Gtk.Label clock;
 
     protected bool ampm = false;
     protected bool show_seconds = false;
     protected bool show_date = false;
+    protected bool show_week_day = false;
 
     private DateTime time;
 
@@ -44,8 +70,20 @@ public class ClockApplet : Budgie.Applet
 
     private unowned Budgie.PopoverManager? manager = null;
 
-    public ClockApplet()
+    public override bool supports_settings()
     {
+        return true;
+    }
+    
+    public override Gtk.Widget? get_settings_ui()
+    {
+        return new ClockSettings(this.get_applet_settings(uuid));
+    }
+
+    public ClockApplet(string uuid)
+    {
+        Object(uuid: uuid);
+
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
         time = new DateTime.now_local();
@@ -78,6 +116,12 @@ public class ClockApplet : Budgie.Applet
         on_settings_change("clock-show-seconds");
         on_settings_change("clock-show-date");
 
+        settings_schema = "com.solus-project.clock";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/clock";
+        ui_settings = this.get_applet_settings(uuid);
+        ui_settings.changed.connect(on_settings_change);
+        on_settings_change("show-week-day");
+
         var group = new GLib.SimpleActionGroup();
         var date = new GLib.SimpleAction("time_and_date", null);
         date.activate.connect(on_date_activate);
@@ -95,8 +139,8 @@ public class ClockApplet : Budgie.Applet
         group.add_action(cal);
 
         update_cal();
-
         update_clock();
+
         add(widget);
         show_all();
     }
@@ -151,6 +195,12 @@ public class ClockApplet : Budgie.Applet
                 break;
             case "clock-show-date":
                 show_date = settings.get_boolean(key);
+                if(show_date == false){
+                    ui_settings.set_boolean("show-week-day",show_date);
+                }
+                break;
+            case "show-week-day":
+                show_week_day = ui_settings.get_boolean(key);
                 break;
         }
         /* Lazy update on next clock sync */
@@ -163,7 +213,7 @@ public class ClockApplet : Budgie.Applet
     {
         time = new DateTime.now_local();
         string format;
-
+        string fdate;
 
         if (ampm) {
             format = "%l:%M";
@@ -177,6 +227,13 @@ public class ClockApplet : Budgie.Applet
             format += " %p";
         }
         string ftime = " <big>%s</big> ".printf(format);
+
+        if(show_week_day) {
+            fdate = "%A %x"; 
+        } else {        
+            fdate = "%x";
+        }
+        
         if (show_date) {
             ftime += " <big>%x</big>";
         }
