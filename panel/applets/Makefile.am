@@ -10,6 +10,7 @@ SUBDIRS = \
 	places-indicator \
 	raven-trigger \
 	separator \
+	sensors \
 	show-desktop \
 	spacer \
 	status \

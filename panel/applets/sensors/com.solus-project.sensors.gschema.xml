@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="com.solus-project.sensors">
+     <key type="b" name="fahrenheit">
+      <default>false</default>
+      <summary>Enable "Displayed Unit" in Fahrenheit</summary>
+      <description>in which unit the temperatur is displayed</description>
+    </key>
+  </schema>
+</schemalist>
