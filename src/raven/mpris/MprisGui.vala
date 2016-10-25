@@ -47,6 +47,7 @@ public class ClientWidget : Gtk.Box
     Gtk.Button play_btn;
     Gtk.Button next_btn;
     string filename = "";
+    GLib.Cancellable? cancel;
 
     int our_width = BACKGROUND_SIZE;
 
@@ -61,6 +62,7 @@ public class ClientWidget : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
         Gtk.Widget? row = null;
+        cancel = new GLib.Cancellable();
 
         our_width = width;
 
@@ -77,13 +79,12 @@ public class ClientWidget : Gtk.Box
                 warning("Error closing %s: %s", client.player.identity, e.message);
             }
         });
-    
+
         player_revealer = new Budgie.RavenExpander(header);
         player_revealer.expanded = true;
         var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         header.can_close = client.player.can_quit;
-        player_revealer.expanded = true;
 
         background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = our_width;
@@ -205,6 +206,13 @@ public class ClientWidget : Gtk.Box
         pack_start(player_revealer);
     }
 
+    public void update_width(int new_width)
+    {
+        this.our_width = new_width;
+        // force the reload of the current art
+        update_art(filename, true);
+    }
+
     /**
      * You raise me up ...
      */
@@ -257,21 +265,59 @@ public class ClientWidget : Gtk.Box
     /**
      * Utility, handle updating the album art
      */
-    void update_art(string uri)
+    void update_art(string uri, bool force_reload = false)
     {
-        if (!uri.has_prefix("file://")) {
-            background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-            background.pixel_size = this.our_width;
+        // Only load the same art again if a force reload was requested
+        if (uri == this.filename && !force_reload) {
             return;
         }
-        string fname = uri.split("file://")[1];
+
+        if (uri.has_prefix("http")) {
+            // Cancel the previous fetch if necessary
+            if (!this.cancel.is_cancelled()) {
+                this.cancel.cancel();
+            }
+            this.cancel.reset();
+
+            download_art.begin(uri);
+        } else if (uri.has_prefix("file://")) {
+            // local
+            string fname = uri.split("file://")[1];
+            try {
+                var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
+                background.set_from_pixbuf(pbuf);
+            } catch (Error e) {
+                update_art_fallback();
+            }
+        } else {
+            update_art_fallback();
+        }
+
+        // record the current uri
+        this.filename = uri;
+    }
+
+    void update_art_fallback()
+    {
+        background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+        background.pixel_size = this.our_width;
+    }
+
+    /**
+     * Fetch the cover art asynchronously and set it as the background image
+     */
+    async void download_art(string uri)
+    {
         try {
-            this.filename = fname;
-            var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
+            // open the stream
+            var art_file = GLib.File.new_for_uri(uri);
+            // download the art
+            var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
+            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
+                this.our_width, this.our_width, true, cancel);
             background.set_from_pixbuf(pbuf);
         } catch (Error e) {
-            background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-            background.pixel_size = BACKGROUND_SIZE;
+            update_art_fallback();
         }
     }
 
@@ -310,8 +356,7 @@ public class ClientWidget : Gtk.Box
             var url = client.player.metadata["mpris:artUrl"].get_string();
             update_art(url);
         } else {
-            background.pixel_size = BACKGROUND_SIZE;
-            background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+            update_art_fallback();
         }
 
         title_label.set_text(get_meta_string("xesam:title", "Unknown Title"));
