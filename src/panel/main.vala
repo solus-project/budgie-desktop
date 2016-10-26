@@ -10,9 +10,11 @@
  */
 
 static bool replace = false;
+static bool reset = false;
 
 const GLib.OptionEntry[] options = {
     { "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" },
+    { "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" },
     { null }
 };
 
@@ -38,7 +40,7 @@ public static int main(string[] args)
         return 0;
     }
 
-    var manager = new Budgie.PanelManager();
+    var manager = new Budgie.PanelManager(reset);
     manager.serve(replace);
 
     Gtk.main();

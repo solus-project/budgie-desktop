@@ -122,6 +122,7 @@ public class PanelManager : DesktopManager
 {
     private PanelManagerIface? iface;
     bool setup = false;
+    bool reset = false;
 
     /* Keep track of our SessionManager */
     private LibSession.SessionClient? sclient;
@@ -194,9 +195,10 @@ public class PanelManager : DesktopManager
         return true;
     }
 
-    public PanelManager()
+    public PanelManager(bool reset)
     {
         Object();
+        this.reset = reset;
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
         panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
         plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
@@ -301,11 +303,25 @@ public class PanelManager : DesktopManager
     }
 
     /**
+     * Reset the entire panel configuration
+     */
+    void do_reset()
+    {
+        GLib.message("Reseting budgie-panel configuration to defaults");
+        Settings s = new Settings(Budgie.ROOT_SCHEMA);
+        s.reset(null);
+        s.sync();
+    }
+
+    /**
      * Initial setup, once we've owned the dbus name
      * i.e. no risk of dying
      */
     void do_setup()
     {
+        if (this.reset) {
+            this.do_reset();
+        }
         var scr = Gdk.Screen.get_default();
         primary_monitor = scr.get_primary_monitor();
         scr.monitors_changed.connect(this.on_monitors_changed);
