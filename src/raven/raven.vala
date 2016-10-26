@@ -266,6 +266,12 @@ public class Raven : Gtk.Window
             set_visual(vis);
         }
 
+        // Response to a scale factor change
+        notify["scale-factor"].connect(()=> {
+            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
+            queue_resize();
+        });
+
         leave_notify_event.connect(on_leave_notify);
         enter_notify_event.connect(on_enter_notify);
         focus_out_event.connect(on_focus_out);

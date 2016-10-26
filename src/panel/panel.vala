@@ -338,6 +338,12 @@ public class Panel : Budgie.Toplevel
         scale = get_scale_factor();
         nscale = 1.0;
 
+        // Respond to a scale factor change
+        notify["scale-factor"].connect(()=> {
+            this.scale = get_scale_factor();
+            this.placement();
+        });
+
         popover_manager = new PopoverManagerImpl(this);
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
