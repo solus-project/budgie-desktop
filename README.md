@@ -76,7 +76,7 @@ budgie-panel --gtk-debug=interactive --replace
 If you are validating changes from a git clone, then:
 
 ```bash
-./panel/budgie-panel --gtk-debug=interactive --replace
+./src/panel/budgie-panel --gtk-debug=interactive --replace
 ```
 
 Note that for local changes, GSettings schemas and applets are expected to be installed first with `make install`.
@@ -91,7 +91,7 @@ Testing
 As and when new features are implemented - it can be helpful to reset the configuration to the defaults to ensure everything is still working ok. To reset the entire configuration tree, issue:
 
 ```bash
-dconf reset -f /com/solus-project/budgie-panel/  
+budgie-panel --reset --replace &
 ```
 
 Distro Integration
