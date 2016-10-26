@@ -862,6 +862,7 @@ public class PanelManager : DesktopManager
         panels.steal(panel.uuid);
         set_panels();
         update_screen();
+        panel.destroy_children();
         panel.destroy();
 
 

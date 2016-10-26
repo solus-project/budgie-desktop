@@ -455,8 +455,17 @@ public class Panel : Budgie.Toplevel
         var iter = HashTableIter<string?,AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
             Settings? app_settings = info.applet.get_applet_settings(info.uuid);
+
+            // Stop it screaming when it dies
+            ulong notify_id = info.get_data("notify_id");
+
+            SignalHandler.disconnect(info, notify_id);
+            info.applet.get_parent().remove(info.applet);
+
+            // Nuke our settings for it 8
             info.settings.reset(null);
 
+            // Nuke it's own settings
             if (app_settings != null) {
                 app_settings.reset(null);
             }
