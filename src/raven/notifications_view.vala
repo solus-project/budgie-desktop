@@ -196,6 +196,10 @@ public class NotificationWindow : Gtk.Window
 
     public signal void Closed(NotificationCloseReason reason);
 
+    private string [] raw_img_search = {
+        "image-data", "image_data"
+    };
+
     /* Allow deprecated usage */
     private string[] img_search = {
         "image-path", "image_path"
@@ -215,6 +219,32 @@ public class NotificationWindow : Gtk.Window
 
     public bool did_interact = false;
     private bool has_default_action = false;
+
+    /**
+     * Follow the priority list for loading notification images
+     * specified in the DesktopNotification spec
+     */
+    private async bool set_image(string? app_icon)
+    {
+        // try the raw hints
+        foreach (string key in raw_img_search) {
+            if (hints.contains(key)) {
+                // if this fails for some reason, we can still fallback to the
+                // other elements in the priority list
+                if (yield set_image_from_data(hints.lookup(key))) {
+                    return true;
+                }
+            }
+        }
+
+        if (yield set_from_image_path(app_icon)) {
+            return true;
+        } else if (hints.contains("icon_data")) { // compatibility
+            return yield set_image_from_data(hints.lookup("icon_data"));
+        } else {
+            return false;
+        }
+    }
 
     private async bool set_from_image_path(string? app_icon)
     {
@@ -264,6 +294,39 @@ public class NotificationWindow : Gtk.Window
         return true;
     }
 
+    /**
+     * Decode a raw image (iiibiiay) sent through 'hints'
+     */
+    private async bool set_image_from_data(Variant img)
+    {
+        if (this.cancel.is_cancelled()) {
+            return false;
+        }
+
+        // Read the image fields
+        int width           = img.get_child_value(0).get_int32();
+        int height          = img.get_child_value(1).get_int32();
+        int rowstride       = img.get_child_value(2).get_int32();
+        bool has_alpha      = img.get_child_value(3).get_boolean();
+        int bits_per_sample = img.get_child_value(4).get_int32();
+        int n_channels      = img.get_child_value(5).get_int32();
+        // read the raw data
+        unowned uint8[] raw = (uint8[]) img.get_child_value (6).get_data();
+
+        // rebuild and scale the image
+		var pixbuf = new Gdk.Pixbuf.with_unowned_data (raw, Gdk.Colorspace.RGB,
+            has_alpha, bits_per_sample, width, height, rowstride, null);
+        var scaled_pixbuf = pixbuf.scale_simple(48, 48,  Gdk.InterpType.BILINEAR);
+
+        // set the image
+        if (scaled_pixbuf != null) {
+            image_icon.set_from_pixbuf(scaled_pixbuf);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     bool do_expire()
     {
         this.Closed(NotificationCloseReason.EXPIRED);
@@ -286,7 +349,7 @@ public class NotificationWindow : Gtk.Window
         var datetime = new DateTime.now_local();
         this.timestamp = datetime.to_unix();
 
-        bool is_img = yield this.set_from_image_path(app_icon);
+        bool is_img = yield this.set_image(app_icon);
         bool has_desktop = false;
 
         if ("desktop-entry" in hints) {
