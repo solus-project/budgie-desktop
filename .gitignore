@@ -29,22 +29,22 @@ m4/lt~obsolete.m4
 /data/budgie-panel.desktop
 
 # panel
-/panel/budgie-panel
-/panel/*.c
+/src/panel/budgie-panel
+/src/panel/*.c
 budgie-panel-resources.*
-/panel/budgie-panel.desktop
-/panel/budgie-panel.desktop.in
+/src/panel/budgie-panel.desktop
+/src/panel/budgie-panel.desktop.in
 
-/polkit/*.c
-/polkit/*.h
+/src/polkit/*.c
+/src/polkit/*.h
 budgie-polkit-dialog
 
 # plugin
 *.gir
 *.typelib
-/plugin/budgie-1.0.pc
-/plugin/budgie-enums.c
-/plugin/budgie-enums.h
+/src/plugin/budgie-1.0.pc
+/src/plugin/budgie-enums.c
+/src/plugin/budgie-enums.h
 
 /theme/*resources*.c
 /theme/*resources*.h
@@ -52,37 +52,37 @@ budgie-polkit-dialog
 
 *.la
 *.lo
-/panel/applets/*/*.c
+/src/panel/applets/*/*.c
 *.stamp*
 
-/raven/*.c
-/raven/BudgieRaven.h
-/raven/mpris/*.c
-/raven/*.h
+/src/raven/*.c
+/src/raven/BudgieRaven.h
+/src/raven/mpris/*.c
+/src/raven/*.h
 
-/lib/toplevel.c
-/lib/shadow.c
-/lib/animation.c
-/lib/BudgieToplevel.h
-/lib/manager.c
+/src/lib/toplevel.c
+/src/lib/shadow.c
+/src/lib/animation.c
+/src/lib/BudgieToplevel.h
+/src/lib/manager.c
 
-/libsession/*.c
-/libsession/*.h
+/src/libsession/*.c
+/src/libsession/*.h
 
 *.ui~
 
-/session/budgie-desktop
-/session/budgie-desktop.desktop
-/session/budgie-desktop.desktop.in
-/session/budgie-desktop.session
-/session/budgie-desktop.session.in
-/session/budgie-desktop-nm-applet.desktop
-/session/budgie-desktop-screensaver.desktop
-/session/budgie-desktop-polkit-gnome-authentication-agent-1.desktop
+/src/session/budgie-desktop
+/src/session/budgie-desktop.desktop
+/src/session/budgie-desktop.desktop.in
+/src/session/budgie-desktop.session
+/src/session/budgie-desktop.session.in
+/src/session/budgie-desktop-nm-applet.desktop
+/src/session/budgie-desktop-screensaver.desktop
+/src/session/budgie-desktop-polkit-gnome-authentication-agent-1.desktop
 
-/wm/budgie-wm
-/wm/budgie-wm.desktop
-/wm/*.c
+/src/wm/budgie-wm
+/src/wm/budgie-wm.desktop
+/src/wm/*.c
 
 *.gschema.valid
 
@@ -92,18 +92,18 @@ budgie-polkit-dialog
 /po/.intltool-merge-cache
 /po/*.gmo
 
-/polkit/*.desktop.in
-/polkit/*.desktop
+/src/polkit/*.desktop.in
+/src/polkit/*.desktop
 
 plugin-resources.c
 plugin-resources.h
 
-rundialog/*.c
-rundialog/*.h
+/src/rundialog/*.c
+/src/rundialog/*.h
 budgie-run-dialog
 
 # Applet translations
-/panel/applets/*/*.plugin
+/src/panel/applets/*/*.plugin
 
 
 gtk-doc.make
@@ -121,11 +121,11 @@ docs/xml/
 test-driver
 
 # Daemon
-/daemon/budgie-daemon.desktop.in
-/daemon/budgie-daemon.desktop
+/src/daemon/budgie-daemon.desktop.in
+/src/daemon/budgie-daemon.desktop
 # Temporary, using Vala.
-/daemon/*.c
-/daemon/*.h
+/src/daemon/*.c
+/src/daemon/*.h
 
 # Main daemon binary
-/daemon/budgie-daemon
+/src/daemon/budgie-daemon

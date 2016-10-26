@@ -24,20 +24,9 @@ NULL =
 CLEANFILES =
 
 SUBDIRS = \
-	config \
 	data \
 	gvc \
-	plugin \
-	lib \
 	theme \
-	raven \
-	imports \
-	libsession \
-	panel \
-	polkit \
-	rundialog \
-	session \
-	wm \
-	daemon \
+	src \
 	po \
 	docs

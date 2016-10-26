@@ -91,28 +91,28 @@ fi
 
 AM_CONDITIONAL(HAVE_CRANKY_MUTTER, test x$have_cranky_mutter = xyes)
 
-m4_include([config/configure.ac])
+m4_include([src/config/configure.ac])
 
 # Got this idea from gnome-builder :)
-m4_include([imports/configure.ac])
-m4_include([panel/applets/budgie-menu/configure.ac])
-m4_include([panel/applets/clock/configure.ac])
-m4_include([panel/applets/icon-tasklist/configure.ac])
-m4_include([panel/applets/keyboard-layout/configure.ac])
-m4_include([panel/applets/lock-keys/configure.ac])
-m4_include([panel/applets/tasklist/configure.ac])
-m4_include([panel/applets/notifications/configure.ac])
-m4_include([panel/applets/places-indicator/configure.ac])
-m4_include([panel/applets/raven-trigger/configure.ac])
-m4_include([panel/applets/separator/configure.ac])
-m4_include([panel/applets/show-desktop/configure.ac])
-m4_include([panel/applets/spacer/configure.ac])
-m4_include([panel/applets/status/configure.ac])
-m4_include([panel/applets/tray/configure.ac])
-m4_include([panel/applets/user-indicator/configure.ac])
-m4_include([panel/applets/workspaces/configure.ac])
-m4_include([polkit/configure.ac])
-m4_include([daemon/configure.ac])
+m4_include([src/imports/configure.ac])
+m4_include([src/panel/applets/budgie-menu/configure.ac])
+m4_include([src/panel/applets/clock/configure.ac])
+m4_include([src/panel/applets/icon-tasklist/configure.ac])
+m4_include([src/panel/applets/keyboard-layout/configure.ac])
+m4_include([src/panel/applets/lock-keys/configure.ac])
+m4_include([src/panel/applets/tasklist/configure.ac])
+m4_include([src/panel/applets/notifications/configure.ac])
+m4_include([src/panel/applets/places-indicator/configure.ac])
+m4_include([src/panel/applets/raven-trigger/configure.ac])
+m4_include([src/panel/applets/separator/configure.ac])
+m4_include([src/panel/applets/show-desktop/configure.ac])
+m4_include([src/panel/applets/spacer/configure.ac])
+m4_include([src/panel/applets/status/configure.ac])
+m4_include([src/panel/applets/tray/configure.ac])
+m4_include([src/panel/applets/user-indicator/configure.ac])
+m4_include([src/panel/applets/workspaces/configure.ac])
+m4_include([src/polkit/configure.ac])
+m4_include([src/daemon/configure.ac])
 
 # Find the libraries containing animation functions we need.
 BACKLIBS="$LIBS"
@@ -152,27 +152,28 @@ AC_SUBST(XDGDIR)
 AM_CONDITIONAL([STATELESS_CONFIG], [test x$enable_stateless = "xyes"])
 
 AC_CONFIG_FILES([Makefile
-                config/Makefile
+                src/config/Makefile
                 data/budgie-panel.desktop
                 data/Makefile
                 gvc/Makefile
-                lib/Makefile
-                libsession/Makefile
-                plugin/Makefile
-                plugin/budgie-1.0.pc
+                src/Makefile
+                src/lib/Makefile
+                src/libsession/Makefile
+                src/plugin/Makefile
+                src/plugin/budgie-1.0.pc
+                src/raven/Makefile
+                src/panel/budgie-panel.desktop.in
+                src/panel/Makefile
+                src/panel/applets/Makefile
+                src/rundialog/Makefile
+                src/session/budgie-desktop.desktop.in
+                src/session/budgie-desktop.session.in
+                src/session/budgie-desktop
+                src/session/Makefile
+                src/wm/budgie-wm.desktop
+                src/wm/Makefile
                 theme/budgie-theme-1.0.pc
                 theme/Makefile
-                raven/Makefile
-                panel/budgie-panel.desktop.in
-                panel/Makefile
-                panel/applets/Makefile
-                rundialog/Makefile
-                session/budgie-desktop.desktop.in
-                session/budgie-desktop.session.in
-                session/budgie-desktop
-                session/Makefile
-                wm/budgie-wm.desktop
-                wm/Makefile
                 po/Makefile.in
                 docs/Makefile])
 
