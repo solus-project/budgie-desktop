@@ -224,6 +224,11 @@ public class PanelEditor : Gtk.Box
     [GtkChild]
     private Gtk.Button? button_settings;
 
+    /* Removal confirmation so nobody kicks themselves in the teeth.. */
+    private Gtk.Popover removal_popover;
+    private Gtk.Button removal_ok;
+    private Gtk.Button removal_cancel;
+
     [GtkCallback]
     void settings_clicked()
     {
@@ -253,8 +258,50 @@ public class PanelEditor : Gtk.Box
         button_add_panel.clicked.connect(()=> {
             this.manager.create_new_panel();
         });
+
+        /* Removal confirmation for panels */
+        removal_popover = new Gtk.Popover(button_remove_panel);
+        removal_ok = new Gtk.Button.with_label(_("Remove panel"));
+        removal_ok.get_style_context().add_class("destructive-action");
+        removal_ok.set_property("margin", 3);
+        removal_cancel = new Gtk.Button.with_label(_("Cancel"));
+        removal_cancel.get_style_context().add_class("suggested-action");
+        removal_cancel.set_property("margin", 3);
+        var size_group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget(removal_ok);
+        size_group.add_widget(removal_cancel);
+
+        // Confirmation prompt: Does the user really wish to remove the given panel?
+        var removal_label = new Gtk.Label("<b>%s</b>".printf(_("Really remove this panel?")));
+        removal_label.set_halign(Gtk.Align.START);
+        removal_label.set_property("xalign", 0.0);
+        removal_label.set_use_markup(true);
+        removal_label.set_property("margin", 5);
+        var removal_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        var removal_box2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        removal_box.pack_start(removal_label, false, false, 2);
+        removal_box.pack_start(removal_box2, false, false, 2);
+        removal_box2.pack_start(removal_cancel, false, false, 2);
+        removal_box2.pack_start(removal_ok, false, false, 2);
+
+        removal_box.show_all();
+        removal_popover.add(removal_box);
+
+        /* When clicking remove, show the confirmation UI */
         button_remove_panel.clicked.connect(()=> {
-            this.manager.delete_panel(current_panel.uuid);
+            this.removal_popover.show();
+        });
+
+        /* User confirmed removal */
+        removal_ok.clicked.connect(()=> {
+            this.removal_popover.hide();
+            if (this.current_panel != null) {
+                this.manager.delete_panel(current_panel.uuid);
+            }
+        });
+        /* User declined removal */
+        removal_cancel.clicked.connect(()=> {
+            this.removal_popover.hide();
         });
 
         applets = new HashTable<string?,Gtk.Widget?>(str_hash, str_equal);
