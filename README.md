@@ -3,6 +3,8 @@ budgie-desktop
 
 The Budgie Desktop a modern desktop designed to keep out the way of the user. It features heavy integration with the GNOME stack in order for an enhanced experience.
 
+![main_desktop](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainDesktop.png)
+
 Budgie is **not currently accepting** any contributions that **add** significant Vala code to the Budgie codebase. Please see [this bug](https://github.com/solus-project/budgie-desktop/issues/501) for further details. Our next steps involve cleaning up the code and porting to C for more control, flexibility, and ultimately a more stable and established desktop.
 
 Budgie Desktop is a [Solus project](https://solus-project.com/).
