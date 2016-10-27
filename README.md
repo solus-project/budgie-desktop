@@ -9,6 +9,59 @@ Budgie Desktop is a [Solus project](https://solus-project.com/).
 
 ![logo](https://build.solus-project.com/logo.png)
 
+Components
+==========
+
+Budgie Desktop consists of a number of components to provide a more complete desktop experience.
+
+Main Menu
+---------
+
+The main Budgie menu provides a quick and easy to use menu, suitable for both mouse and keyboard driven users. Features type-as-you-search and category based filtering.
+
+![main_menu](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainMenu.png)
+
+End Session Dialog
+------------------
+
+The session dialog provides the usual shutdown, logout, options which can be activated using the User Indicator.
+
+![end_session_dialog](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/EndSession.png)
+
+Run Dialog
+----------
+
+The run dialog provides the means to quickly find an application in a popup window. This window by default is activated with the `ALT+F2` keyboard shortcut, providing keyboard driven launcher facilities.
+
+![run_dialog](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/RunDialog.png)
+
+Raven
+------
+
+Raven provides an all-in-one center for the Budgie Desktop. With built in applets, a notification center to archive missed notifications, and a settings view to control all elements of the Budgie Desktop, it's truly the one stop shop.
+
+![raven](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Raven.png) ![raven_settings](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Raven_Settings.png)
+
+Notifications
+-------------
+
+Budgie Desktop supports the freedesktop notifications specification, enabling applications to send visual alerts to the user. These notifications support actions, icons as well as passive modes.
+
+![notification](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Notification.png)
+
+To ensure the user doesn't miss the notification, it's automatically archived into the Raven Notification view for quick and easy access.
+
+![raven_mpris](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/ArchivedNotification.png)
+
+Media Integration
+------------------
+
+As well as supporting the usual level of media integration you'd expect, such as media player controls on notifications, support for cover artwork, and global media key support for keyboards, Raven supports all MPRIS compliant media players.
+
+When one of these players are running, such as VLC, Rhythmbox, VLC or even Spotify, an MPRIS controller is made available in Raven for quick and simple control of the player, as well as data on the current media selection.
+
+![raven_mpris](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Raven_Mpris.png)
+
 Building
 --------
 
