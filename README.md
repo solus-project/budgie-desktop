@@ -26,7 +26,7 @@ The main Budgie menu provides a quick and easy to use menu, suitable for both mo
 End Session Dialog
 ------------------
 
-The session dialog provides the usual shutdown, logout, options which can be activated using the User Indicator.
+The session dialog provides the usual shutdown, logout, options which can be activated using the User Indicator applet.
 
 ![end_session_dialog](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/EndSession.png)
 
@@ -67,7 +67,7 @@ When one of these players are running, such as VLC, Rhythmbox, VLC or even Spoti
 PolicyKit integration
 ---------------------
 
-The `budgie-polkit-dialog` provides a PolicyKit agent for the session, ensuring a cohesive and integrated experience whilst authenticationg for actions on modern Linux desktop systems.
+The `budgie-polkit-dialog` provides a PolicyKit agent for the session, ensuring a cohesive and integrated experience whilst authenticating for actions on modern Linux desktop systems.
 
 ![budgie_polkit](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Polkit.png)
 
