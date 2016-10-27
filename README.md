@@ -64,6 +64,13 @@ When one of these players are running, such as VLC, Rhythmbox, VLC or even Spoti
 
 ![raven_mpris](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Raven_Mpris.png)
 
+PolicyKit integration
+---------------------
+
+The `budgie-polkit-dialog` provides a PolicyKit agent for the session, ensuring a cohesive and integrated experience whilst authenticationg for actions on modern Linux desktop systems.
+
+![budgie_polkit](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Polkit.png)
+
 Building
 --------
 
