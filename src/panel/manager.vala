@@ -311,6 +311,7 @@ public class PanelManager : DesktopManager
         scr.monitors_changed.connect(this.on_monitors_changed);
         scr.size_changed.connect(this.on_monitors_changed);
 
+        settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
         theme_manager = new Budgie.ThemeManager();
         raven = new Budgie.Raven(this);
 
