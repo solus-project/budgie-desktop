@@ -1,5 +1,5 @@
 /*
- * This file is part of budgie-next
+ * This file is part of budgie-desktop
  *
  * Copyright © 2016 Ikey Doherty <ikey@solus-project.com>
  *
