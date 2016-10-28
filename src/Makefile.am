@@ -1,5 +1,6 @@
 SUBDIRS = \
 	config \
+	theme \
 	plugin \
 	lib \
 	raven \

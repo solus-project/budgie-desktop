@@ -66,7 +66,7 @@ budgie_panel_LDADD = \
 	${top_builddir}/src/lib/libtoplevel.la \
 	${top_builddir}/src/libsession/libsession.la \
 	${top_builddir}/src/raven/libraven.la \
-	${top_builddir}/theme/libbudgietheme.la
+	${top_builddir}/src/theme/libbudgietheme.la
 
 budgie_panel_VALAFLAGS = \
 	--pkg gtk+-3.0 \
@@ -86,7 +86,7 @@ budgie_panel_VALAFLAGS = \
 	--vapidir=${top_srcdir}/src/raven \
 	--vapidir=${top_srcdir}/src/lib \
 	--vapidir=${top_srcdir}/src/libsession \
-	--vapidir=${top_srcdir}/theme \
+	--vapidir=${top_srcdir}/src/theme \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/data/budgie-panel.gresource.xml \
 	$(VALAFLAGS)

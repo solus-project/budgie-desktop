@@ -26,7 +26,6 @@ CLEANFILES =
 SUBDIRS = \
 	data \
 	gvc \
-	theme \
 	src \
 	po \
 	docs

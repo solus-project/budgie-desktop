@@ -57,7 +57,7 @@ budgie_daemon_LDADD = \
 	$(BUDGIE_DAEMON_LIBS) \
 	${top_builddir}/src/config/libbudgie-config.la \
 	${top_builddir}/src/libsession/libsession.la \
-	${top_builddir}/theme/libbudgietheme.la
+	${top_builddir}/src/theme/libbudgietheme.la
 
 
 applicationsdir = $(datadir)/applications
@@ -72,7 +72,7 @@ budgie_daemon_VALAFLAGS = \
 	--pkg budgie-config \
 	--vapidir=${top_srcdir}/src/config \
 	--vapidir=${top_srcdir}/vapi \
-	--vapidir=${top_srcdir}/theme \
+	--vapidir=${top_srcdir}/src/theme \
 	--vapidir=${top_srcdir}/src/libsession \
 	--target-glib=2.38 \
 	--gresources=${top_srcdir}/src/daemon/budgie-daemon.gresource.xml

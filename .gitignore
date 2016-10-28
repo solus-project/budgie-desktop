@@ -46,9 +46,9 @@ budgie-polkit-dialog
 /src/plugin/budgie-enums.c
 /src/plugin/budgie-enums.h
 
-/theme/*resources*.c
-/theme/*resources*.h
-/theme/budgie-theme-1.0.pc
+/src/theme/*resources*.c
+/src/theme/*resources*.h
+/src/theme/budgie-theme-1.0.pc
 
 *.la
 *.lo

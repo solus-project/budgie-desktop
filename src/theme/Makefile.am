@@ -44,18 +44,18 @@ EXTRA_DIST = \
 	theme.vapi \
 	budgie-theme-1.0.pc.in
 
-panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/theme --generate-dependencies $(top_srcdir)/theme/budgie-theme.gresource.xml)
+panel_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/theme --generate-dependencies $(top_srcdir)/src/theme/budgie-theme.gresource.xml)
 
 BUILT_SOURCES = \
 	budgie-theme-resources.h \
 	budgie-theme-resources.c
 
 # resources
-budgie-theme-resources.h: $(top_srcdir)/theme/budgie-theme.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/theme --generate-header --c-name budgie_desktop_theme $<
+budgie-theme-resources.h: $(top_srcdir)/src/theme/budgie-theme.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/theme --generate-header --c-name budgie_desktop_theme $<
 
-budgie-theme-resources.c: $(top_srcdir)/theme/budgie-theme.gresource.xml $(panel_resources)
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/theme --generate-source --c-name budgie_desktop_theme $<
+budgie-theme-resources.c: $(top_srcdir)/src/theme/budgie-theme.gresource.xml $(panel_resources)
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/theme --generate-source --c-name budgie_desktop_theme $<
 
 
 noinst_LTLIBRARIES = \
