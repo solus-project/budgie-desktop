@@ -22,12 +22,17 @@ struct _BudgieThemeManagerClass {
 struct _BudgieThemeManager {
         GObject parent;
         GtkCssProvider *css_provider;
+        GSettings *desktop_settings;
+        gboolean builtin_enabled;
 };
 
 static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self,
                                                const gchar *theme_portion);
 static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, GParamSpec *prop,
                                                GtkSettings *settings);
+static void budgie_theme_manager_builtin_changed(BudgieThemeManager *self, const gchar *key,
+                                                 GSettings *settings);
+
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
 /**
@@ -50,6 +55,8 @@ static void budgie_theme_manager_dispose(GObject *obj)
         /* Ensure we nuke the style provider */
         budgie_theme_manager_set_theme_css(self, NULL);
 
+        g_clear_object(&self->desktop_settings);
+
         G_OBJECT_CLASS(budgie_theme_manager_parent_class)->dispose(obj);
 }
 
@@ -70,6 +77,16 @@ static void budgie_theme_manager_class_init(BudgieThemeManagerClass *klazz)
 static void budgie_theme_manager_init(BudgieThemeManager *self)
 {
         GtkSettings *settings = NULL;
+
+        /* TODO: Stop using .budgie-panel for desktop-wide schema ! */
+        self->desktop_settings = g_settings_new("com.solus-project.budgie-panel");
+        self->builtin_enabled = g_settings_get_boolean(self->desktop_settings, "builtin-theme");
+
+        /* Update whether we can use the builtin theme or not */
+        g_signal_connect_swapped(self->desktop_settings,
+                                 "changed::builtin-theme",
+                                 G_CALLBACK(budgie_theme_manager_builtin_changed),
+                                 self);
 
         settings = gtk_settings_get_default();
         g_signal_connect_swapped(settings,
@@ -148,16 +165,26 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, GParamS
         gchar *theme_name = NULL;
         const gchar *theme_css = NULL;
 
-        /* TODO: Set theme_css NULL if internal theming is disabled */
-        g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
-        if (theme_name && g_str_equal(theme_name, "HighContrast")) {
-                theme_css = "theme_hc.css";
-        } else {
-                theme_css = "theme.css";
+        /* Set theme_css NULL if internal theming is disabled */
+        if (self->builtin_enabled) {
+                g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
+                if (theme_name && g_str_equal(theme_name, "HighContrast")) {
+                        theme_css = "theme_hc.css";
+                } else {
+                        theme_css = "theme.css";
+                }
+                g_free(theme_name);
         }
-        g_free(theme_name);
 
         budgie_theme_manager_set_theme_css(self, theme_css);
+}
+
+static void budgie_theme_manager_builtin_changed(BudgieThemeManager *self, const gchar *key,
+                                                 GSettings *settings)
+{
+        self->builtin_enabled = g_settings_get_boolean(settings, key);
+        /* Update now based on whether we can use the built-in */
+        budgie_theme_manager_theme_changed(self, NULL, gtk_widget_get_settings(GTK_WIDGET(self)));
 }
 
 /*
