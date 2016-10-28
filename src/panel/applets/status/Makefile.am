@@ -42,7 +42,7 @@ libstatusapplet_la_CFLAGS = \
 
 libstatusapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \
-	${top_builddir}/gvc/libgvc.la \
+	${top_builddir}/src/gvc/libgvc.la \
 	$(BUDGIE_BASE_LIBS) \
 	$(BUDGIE_PLUGIN_LIBS) \
 	$(GVC_LIBS) \

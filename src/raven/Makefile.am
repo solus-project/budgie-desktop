@@ -62,7 +62,7 @@ libraven_la_LIBADD = \
 	${top_builddir}/src/config/libbudgie-config.la \
 	${top_builddir}/src/lib/libtoplevel.la \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \
-	${top_builddir}/gvc/libgvc.la \
+	${top_builddir}/src/gvc/libgvc.la \
 	-lm
 
 libraven_la_VALAFLAGS = \

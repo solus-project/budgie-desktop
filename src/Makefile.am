@@ -1,4 +1,5 @@
 SUBDIRS = \
+	gvc \
 	config \
 	theme \
 	plugin \
