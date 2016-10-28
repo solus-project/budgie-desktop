@@ -62,7 +62,9 @@ libbudgietheme_la_SOURCES = \
 	budgie-theme-resources.h \
 	budgie-theme-resources.c \
 	theme.h \
-	theme.c
+	theme.c \
+	theme-manager.h \
+	theme-manager.c
 
 libbudgietheme_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS)

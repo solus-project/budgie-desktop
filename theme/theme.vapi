@@ -12,4 +12,10 @@
 namespace Budgie {
     [CCode (cheader_filename = "theme.h")]
     public static string form_theme_path(string suffix);
+
+    [CCode (cheader_filename = "theme-manager.h")]
+    public class ThemeManager : GLib.Object {
+		[CCode (has_construct_function = false)]
+        public ThemeManager();
+    }
 }
