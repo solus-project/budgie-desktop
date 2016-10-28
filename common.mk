@@ -14,7 +14,7 @@ AM_CFLAGS = \
 
 AM_CPPFLAGS += \
 	-I $(top_srcdir) \
-	-I $(top_srcdir)/gvc \
+	-I $(top_srcdir)/src/gvc \
 	-I $(top_srcdir)/src/config \
 	-I $(top_srcdir)/src/lib \
 	-I $(top_srcdir)/src/libsession \

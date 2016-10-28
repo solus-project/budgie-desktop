@@ -1,4 +1,4 @@
-gvc/gvc-mixer-control.c
+src/gvc/gvc-mixer-control.c
 src/panel/budgie-panel.desktop.in
 src/daemon/endsession.c
 src/panel/budgie-panel.desktop.in.in

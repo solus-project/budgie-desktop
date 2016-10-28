@@ -14,7 +14,7 @@ prevdir="$PWD"
 cd "$srcdir"
 
 # Fetch submodules if needed
-if test ! -f gvc/Makefile.am;
+if test ! -f src/gvc/Makefile.am;
 then
   echo "+ Setting up submodules"
   git submodule init
