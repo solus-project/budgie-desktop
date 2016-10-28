@@ -137,11 +137,9 @@ public class PanelManager : DesktopManager
 
     HashTable<string, Peas.PluginInfo?> plugins;
 
-    private Gtk.CssProvider? css_provider = null;
-
     private Budgie.Raven? raven = null;
 
-    private string current_theme_uri;
+    private Budgie.ThemeManager theme_manager;
 
     /**
      * Updated when specific names are queried
@@ -288,20 +286,6 @@ public class PanelManager : DesktopManager
         do_setup();
     }
 
-    void on_settings_changed(string key)
-    {
-        if (key != "builtin-theme") {
-            return;
-        }
-        if (settings.get_boolean(key)) {
-            this.current_theme_uri = Budgie.form_theme_path("theme.css");
-        } else {
-            this.current_theme_uri = null;
-        }
-
-        on_theme_changed();
-    }
-
     /**
      * Reset the entire panel configuration
      */
@@ -327,20 +311,10 @@ public class PanelManager : DesktopManager
         scr.monitors_changed.connect(this.on_monitors_changed);
         scr.size_changed.connect(this.on_monitors_changed);
 
-        /* Set up dark mode across the desktop */
-        settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
-        var gtksettings = Gtk.Settings.get_default();
-        this.settings.bind(Budgie.PANEL_KEY_DARK_THEME, gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
-
-        settings.changed.connect(on_settings_changed);
-
+        theme_manager = new Budgie.ThemeManager();
         raven = new Budgie.Raven(this);
 
         this.on_monitors_changed();
-
-        gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
-
-        on_settings_changed("builtin-theme");
 
         /* Some applets might want raven */
         raven.setup_dbus();
@@ -407,51 +381,6 @@ public class PanelManager : DesktopManager
 
         /* Ask this panel to perform migratory tasks (add applets) */
         (last as Budgie.Panel).perform_migration(current_migration_level);
-    }
-
-    void set_css_from_uri(string? uri)
-    {
-        var screen = Gdk.Screen.get_default();
-        Gtk.CssProvider? new_provider = null;
-
-        if (uri == null) {
-            if (this.css_provider != null) {
-                Gtk.StyleContext.remove_provider_for_screen(screen, this.css_provider);
-                this.css_provider = null;
-            }
-            return;
-        }
-    
-        try {
-            var f = File.new_for_uri(uri);
-            new_provider = new Gtk.CssProvider();
-            new_provider.load_from_file(f);
-        } catch (Error e) {
-            warning("Error loading theme: %s", e.message);
-            new_provider = null;
-            return;
-        }
-
-        if (css_provider != null) {
-            Gtk.StyleContext.remove_provider_for_screen(screen, css_provider);
-            css_provider = null;
-        }
-
-        css_provider = new_provider;
-
-        Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-    void on_theme_changed()
-    {
-        var gtksettings = Gtk.Settings.get_default();
-
-        if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : Budgie.form_theme_path("theme_hc.css"));
-        } else {
-            /* In future we'll actually support custom themes.. */
-            set_css_from_uri(this.current_theme_uri);
-        }
     }
 
     /**
