@@ -94,6 +94,13 @@ static void budgie_theme_manager_init(BudgieThemeManager *self)
                                  G_CALLBACK(budgie_theme_manager_theme_changed),
                                  self);
 
+        /* Bind the dark-theme option for the whole process */
+        g_settings_bind(self->desktop_settings,
+                        "dark-theme",
+                        settings,
+                        "gtk-application-prefer-dark-theme",
+                        G_SETTINGS_BIND_GET);
+
         /* Trigger theme changed */
         budgie_theme_manager_theme_changed(self, NULL, settings);
 }
