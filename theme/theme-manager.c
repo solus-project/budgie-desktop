@@ -191,7 +191,7 @@ static void budgie_theme_manager_builtin_changed(BudgieThemeManager *self, const
 {
         self->builtin_enabled = g_settings_get_boolean(settings, key);
         /* Update now based on whether we can use the built-in */
-        budgie_theme_manager_theme_changed(self, NULL, gtk_widget_get_settings(GTK_WIDGET(self)));
+        budgie_theme_manager_theme_changed(self, NULL, gtk_settings_get_default());
 }
 
 /*
