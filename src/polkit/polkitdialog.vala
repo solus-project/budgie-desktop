@@ -83,8 +83,6 @@ public class AgentDialog : Gtk.Window
         set_titlebar(header);
         header.get_style_context().remove_class("titlebar");
 
-        get_settings().set_property("gtk-application-prefer-dark-theme", true);
-
         combobox_idents.changed.connect(on_ident_changed);
         var render = new Gtk.CellRendererText();
         combobox_idents.pack_start(render, true);
@@ -283,6 +281,9 @@ public class Agent : PolkitAgent.Listener
     /* Keep track of our SessionManager */
     private LibSession.SessionClient? sclient;
 
+    /* Theme management */
+    private Budgie.ThemeManager theme_manager;
+
     public override async bool initiate_authentication(string action_id, string message, string icon_name,
         Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable)
     {
@@ -307,24 +308,9 @@ public class Agent : PolkitAgent.Listener
         return true;
     }
 
-    private string? current_theme_uri;
-    private Settings? settings;
-    private Gtk.CssProvider? css_provider = null;
-
-
     public Agent()
     {
-        this.current_theme_uri = Budgie.form_theme_path("theme.css");
-
-        /* Set up dark mode across the desktop */
-        settings = new GLib.Settings("com.solus-project.budgie-panel");
-        var gtksettings = Gtk.Settings.get_default();
-        this.settings.bind("dark-theme", gtksettings, "gtk-application-prefer-dark-theme", SettingsBindFlags.GET);
-
-        settings.changed.connect(on_settings_changed);
-
-        gtksettings.notify["gtk-theme-name"].connect(on_theme_changed);
-        on_settings_changed("builtin-theme");
+        theme_manager = new Budgie.ThemeManager();
 
         register_with_session.begin((o,res)=> {
             bool success = register_with_session.end(res);
@@ -365,65 +351,6 @@ public class Agent : PolkitAgent.Listener
         } catch (Error e) {
             warning("Unable to respond to session manager! %s", e.message);
         }
-    }
-
-    void on_theme_changed()
-    {
-        var gtksettings = Gtk.Settings.get_default();
-
-        if (gtksettings.gtk_theme_name == "HighContrast") {
-            set_css_from_uri(this.current_theme_uri == null ? null : Budgie.form_theme_path("theme.css"));
-        } else {
-            /* In future we'll actually support custom themes.. */
-            set_css_from_uri(this.current_theme_uri);
-        }
-    }
-
-    void set_css_from_uri(string? uri)
-    {
-        var screen = Gdk.Screen.get_default();
-        Gtk.CssProvider? new_provider = null;
-
-        if (uri == null) {
-            if (this.css_provider != null) {
-                Gtk.StyleContext.remove_provider_for_screen(screen, this.css_provider);
-                this.css_provider = null;
-            }
-            return;
-        }
-    
-        try {
-            var f = File.new_for_uri(uri);
-            new_provider = new Gtk.CssProvider();
-            new_provider.load_from_file(f);
-        } catch (Error e) {
-            warning("Error loading theme: %s", e.message);
-            new_provider = null;
-            return;
-        }
-
-        if (css_provider != null) {
-            Gtk.StyleContext.remove_provider_for_screen(screen, css_provider);
-            css_provider = null;
-        }
-
-        css_provider = new_provider;
-
-        Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-    void on_settings_changed(string key)
-    {
-        if (key != "builtin-theme") {
-            return;
-        }
-        if (settings.get_boolean(key)) {
-            this.current_theme_uri = Budgie.form_theme_path("theme.css");
-        } else {
-            this.current_theme_uri = null;
-        }
-
-        on_theme_changed();
     }
 }
 
