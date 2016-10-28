@@ -55,22 +55,40 @@ budgie-theme-resources.h: $(top_srcdir)/theme/budgie-theme.gresource.xml $(panel
 budgie-theme-resources.c: $(top_srcdir)/theme/budgie-theme.gresource.xml $(panel_resources)
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/theme --generate-source --c-name budgie_desktop_theme $<
 
+
+noinst_LTLIBRARIES = \
+	libbudgietheme-resources.la
+
+
 lib_LTLIBRARIES = \
 	libbudgietheme.la
 
-libbudgietheme_la_SOURCES = \
+# Resources is built separately due to mental amount of warnings
+libbudgietheme_resources_la_SOURCES = \
 	budgie-theme-resources.h \
-	budgie-theme-resources.c \
+	budgie-theme-resources.c
+
+libbudgietheme_resources_la_CFLAGS = \
+	$(BUDGIE_BASE_CFLAGS)
+
+libbudgietheme_resources_la_LIBADD = \
+	$(BUDGIE_BASE_LIBS)
+
+
+# libbudgietheme is the real shared library with API functions
+libbudgietheme_la_SOURCES = \
 	theme.h \
 	theme.c \
 	theme-manager.h \
 	theme-manager.c
 
 libbudgietheme_la_CFLAGS = \
-	$(BUDGIE_BASE_CFLAGS)
+	$(BUDGIE_BASE_CFLAGS) \
+	$(AM_CFLAGS)
 
 libbudgietheme_la_LIBADD = \
-	$(BUDGIE_BASE_LIBS)
+	$(BUDGIE_BASE_LIBS) \
+	libbudgietheme-resources.la
 
 # Theme headers
 budgie_devdir = $(includedir)/budgie-desktop
