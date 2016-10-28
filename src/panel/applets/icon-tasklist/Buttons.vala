@@ -448,7 +448,7 @@ public class PinnedIconButton : IconButton
         this.settings = settings;
 
         this.context = context;
-        set_tooltip_text("Launch %s".printf(info.get_display_name()));
+        set_tooltip_text(info.get_display_name());
         image.set_from_gicon(info.get_icon(), Gtk.IconSize.INVALID);
 
         alt_menu = new Gtk.Menu();
@@ -519,7 +519,7 @@ public class PinnedIconButton : IconButton
     public void reset()
     {
         image.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
-        set_tooltip_text("Launch %s".printf(app_info.get_display_name()));
+        set_tooltip_text(app_info.get_display_name());
         get_style_context().remove_class("running");
         set_active(false);
         // Actions menu
