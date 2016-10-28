@@ -1,5 +1,5 @@
 #!/bin/bash
-CI_EXCLUDES="! -path */gvc/* ! -path */imports/natray/*"
+CI_EXCLUDES="! -path */gvc/* ! -path */src/imports/natray/*"
 
 # Ensure we're formatted everywhere.
 clang-format -i $(find . $CI_EXCLUDES -name '*.[ch]')
