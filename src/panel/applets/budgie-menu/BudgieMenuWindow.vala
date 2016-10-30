@@ -105,7 +105,7 @@ public class BudgieMenuWindow : Gtk.Popover
 
     protected int icon_size = 24;
 
-    public unowned Settings settings { public get; public set; }
+    public Settings settings { public get; public set; }
 
     private bool reloading = false;
 
