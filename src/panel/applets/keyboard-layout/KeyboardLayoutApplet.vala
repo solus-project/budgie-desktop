@@ -166,7 +166,10 @@ class InputSource
         }
 
         /* Get useful display string */
-        string language = Gnome.get_language_from_code(engine.language, null);
+        string? language = Gnome.get_language_from_code(engine.language, null);
+        if (language == null) {
+            language = Gnome.get_language_from_locale(engine.language, null);
+        }
         this.description = "%s (%s)".printf(language, engine.name);
 
         string? e_variant = engine.layout_variant;
