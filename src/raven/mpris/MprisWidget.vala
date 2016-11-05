@@ -34,7 +34,21 @@ public class MprisWidget : Gtk.Box
         int w = get_allocated_width();
         if (w > our_width) {
             our_width = w;
+
+            // Notify every client of the updated size. Idle needs to be used
+            // to prevent any 'queue_resize' triggered from being ignored
+            Idle.add(notify_clients_on_width_change);
         }
+    }
+
+    bool notify_clients_on_width_change()
+    {
+        var iter = HashTableIter<string,ClientWidget>(ifaces);
+        ClientWidget? widget = null;
+        while (iter.next(null, out widget)) {
+            widget.update_width(our_width);
+        }
+        return false;
     }
 
     /**
