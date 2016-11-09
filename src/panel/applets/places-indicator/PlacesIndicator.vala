@@ -36,10 +36,10 @@ public class PlacesIndicatorSettings : Gtk.Grid
     public PlacesIndicatorSettings(GLib.Settings? settings)
     {
         this.settings = settings;
-        settings.bind("show-label", switch_label, "active", SettingsBindFlags.DEFAULT);
-        settings.bind("show-places", switch_places, "active", SettingsBindFlags.DEFAULT);
-        settings.bind("show-drives", switch_drives, "active", SettingsBindFlags.DEFAULT);
-        settings.bind("show-networks", switch_networks, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("show-label", switch_label, "active", GLib.SettingsBindFlags.DEFAULT);
+        settings.bind("show-places", switch_places, "active", GLib.SettingsBindFlags.DEFAULT);
+        settings.bind("show-drives", switch_drives, "active", GLib.SettingsBindFlags.DEFAULT);
+        settings.bind("show-networks", switch_networks, "active", GLib.SettingsBindFlags.DEFAULT);
     }
 }
 

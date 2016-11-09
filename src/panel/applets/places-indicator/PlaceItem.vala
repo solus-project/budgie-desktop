@@ -15,19 +15,28 @@ public class PlaceItem : ListItem
     {
         item_class = class;
 
+        string name = "";
+        if (file.get_basename() == "/" && file.get_uri() != "file:///") {
+            name = file.get_uri().split("://")[1];
+            if (name.has_suffix("/")) {
+                name = name[0:name.length - 1];
+            }
+        } else {
+            name = file.get_basename();
+        }
+
         // Get and set the appropriate icon
         try {
             GLib.FileInfo info = file.query_info("standard::symbolic-icon", GLib.FileQueryInfoFlags.NONE, null);
-            set_button(file.get_basename(), get_icon(info.get_symbolic_icon()));
+            set_button(name.strip(), get_icon(info.get_symbolic_icon()));
         } catch (GLib.Error e) {
-            set_button(file.get_basename(), get_icon(null));
-            warning(e.message);
+            set_button(name.strip(), get_icon(null));
         }
 
-        name_button.set_tooltip_text(_("Open \"%s\"".printf(file.get_basename())));
+        name_button.set_tooltip_text(_("Open \"%s\"".printf(name.strip())));
 
         name_button.clicked.connect(()=> {
-            open_directory(file.get_uri());
+            open_directory(file);
         });
     }
 }

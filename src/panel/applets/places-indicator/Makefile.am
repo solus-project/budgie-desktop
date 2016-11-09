@@ -50,6 +50,7 @@ libplacesindicator_la_SOURCES = \
 	VolumeItem.vala \
 	MountItem.vala \
 	PlaceItem.vala \
+	MountHelper.vala \
 	plugin-resources.h \
 	plugin-resources.c
 

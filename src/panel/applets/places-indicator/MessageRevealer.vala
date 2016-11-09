@@ -26,7 +26,7 @@ public class MessageRevealer : Gtk.Revealer
         message_label = new Gtk.Label("");
         message_label.set_halign(Gtk.Align.START);
         message_label.set_line_wrap(true);
-        message_label.set_max_width_chars(35);
+        message_label.set_max_width_chars(30);
         Gtk.Container info_bar_container = info_bar.get_content_area();
         info_bar_container.add(message_label);
     }
@@ -38,8 +38,12 @@ public class MessageRevealer : Gtk.Revealer
         set_reveal_child(true);
     }
 
-    private bool hide_it()
+    public bool hide_it()
     {
+        if (expire_id != 0) {
+            GLib.Source.remove(expire_id);
+        }
+
         expire_id = 0;
         ulong connection = this.notify["child-revealed"].connect_after(() => {
             set_no_show_all(true);
@@ -53,10 +57,9 @@ public class MessageRevealer : Gtk.Revealer
         return false;
     }
 
-    public void set_content(string message, Gtk.MessageType message_type)
+    public void set_content(string message)
     {
         message_label.set_text(message);
-        info_bar.set_message_type(message_type);
         show_it();
 
         if (expire_id != 0) {
