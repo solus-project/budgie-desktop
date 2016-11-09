@@ -64,7 +64,7 @@ Media Integration
 
 As well as supporting the usual level of media integration you'd expect, such as media player controls on notifications, support for cover artwork, and global media key support for keyboards, Raven supports all MPRIS compliant media players.
 
-When one of these players are running, such as VLC, Rhythmbox, VLC or even Spotify, an MPRIS controller is made available in Raven for quick and simple control of the player, as well as data on the current media selection.
+When one of these players are running, such as VLC, Rhythmbox or even Spotify, an MPRIS controller is made available in Raven for quick and simple control of the player, as well as data on the current media selection.
 
 ![raven_mpris](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Raven_Mpris.png)
 
