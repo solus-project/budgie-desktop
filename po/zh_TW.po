@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: budgie-desktop master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-21 23:31+0800\n"
-"PO-Revision-Date: 2016-11-21 23:57+0800\n"
+"PO-Revision-Date: 2016-11-22 00:05+0800\n"
 "Language-Team: chinese-l10n <chinese-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -512,7 +512,7 @@ msgstr "狀態指示器"
 
 #: ../src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budegie 選單"
+msgstr "Budgie 選單"
 
 #: ../src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
