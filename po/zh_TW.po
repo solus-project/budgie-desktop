@@ -3,143 +3,134 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Benoit Bouyé <benoit.bouye@gmail.com>, 2016
-# Birame Sene <birame.sene@businessdecision.com>, 2015
-# fredbezies <fredbezies@gmail.com>, 2015-2016
-# Fred Tempez <ftempez@gmail.com>, 2016
-# Jonathan Chevalier <jonathan.chevalier@icloud.com>, 2016
-# Lothaire B <translations@lothai.re>, 2015
-# Lothaire B <translations@lothai.re>, 2016
-# Patrycjusz Dolega <patrick.dolega@outlook.com>, 2016
-# Philippe Loctaux <loctauxphilippe@gmail.com>, 2015
-# Roro Titi <inactive+RoroTiti@transifex.com>, 2015
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-26 04:02+0100\n"
-"PO-Revision-Date: 2016-11-29 10:02+0000\n"
-"Last-Translator: Jonathan Chevalier <jonathan.chevalier@icloud.com>\n"
-"Language-Team: French (http://www.transifex.com/budgie-desktop/budgie-desktop/language/fr/)\n"
+"PO-Revision-Date: 2016-11-21 16:12+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../src/daemon/endsession.vala:167
 msgid "Log out"
-msgstr "Déconnexion"
+msgstr "登出"
 
 #: ../src/daemon/endsession.vala:171
 msgid "Restart device"
-msgstr " Redémarrer le périphérique"
+msgstr "重新開機"
 
 #: ../src/daemon/endsession.vala:183 ../src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Éteindre"
+msgstr "關機"
 
 #: ../src/raven/main_view.vala:72 ../src/raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "Applets"
+msgstr "面板程式"
 
 #: ../src/raven/main_view.vala:75
 #: ../src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Notifications"
+msgstr "通知"
 
 #: ../src/raven/settings_view.vala:266
 msgid "Top"
-msgstr "Haut"
+msgstr "頂端"
 
 #: ../src/raven/settings_view.vala:268
 msgid "Bottom"
-msgstr "Bas"
+msgstr "底部"
 
 #: ../src/raven/settings_view.vala:376
 msgid "Top Panel"
-msgstr "Panneau du haut"
+msgstr "頂端面板"
 
 #: ../src/raven/settings_view.vala:378
 msgid "Right Panel"
-msgstr "Panneau de droite"
+msgstr "右側面板"
 
 #: ../src/raven/settings_view.vala:380
 msgid "Left Panel"
-msgstr "Panneau de gauche"
+msgstr "左側面板"
 
 #: ../src/raven/settings_view.vala:382
 msgid "Bottom Panel"
-msgstr "Panneau du bas"
+msgstr "底部面板"
 
 #: ../src/raven/settings_view.vala:616
 msgid "Start"
-msgstr "Démarrer"
+msgstr "開頭"
 
 #: ../src/raven/settings_view.vala:619
 msgid "Center"
-msgstr "Centre"
+msgstr "中心"
 
 #: ../src/raven/settings_view.vala:622
 msgid "End"
-msgstr "Fin"
+msgstr "結尾"
 
 #. Appearance expander
 #: ../src/raven/settings_view.vala:960
 msgid "Appearance"
-msgstr "Apparence"
+msgstr "外觀"
 
 #: ../src/raven/settings_view.vala:967
 msgid "Background"
-msgstr "Fond d'écran"
+msgstr "背景"
 
 #: ../src/raven/settings_view.vala:974
 msgid "Fonts"
-msgstr "Polices"
+msgstr "字型"
 
 #: ../src/raven/settings_view.vala:980
 msgid "Windows"
-msgstr "Fenêtres"
+msgstr "視窗"
 
 #: ../src/raven/settings_view.vala:984
 msgid "General"
-msgstr "Général"
+msgstr "一般"
 
 #: ../src/raven/settings_view.vala:995 ../src/raven/settings_view.vala:996
 msgid "Panel"
-msgstr "Panneau"
+msgstr "面板"
 
 #: ../src/raven/notifications_view.vala:74
 msgid "Nothing to see here"
-msgstr "Rien à voir ici"
+msgstr "這裡沒有什麼可看"
 
 #: ../src/raven/notifications_view.vala:516
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u notifications non lues"
+msgstr "%u 則未讀通知"
 
 #: ../src/raven/notifications_view.vala:518
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1 notification non lue"
+msgstr "1 則未讀通知"
 
 #: ../src/raven/notifications_view.vala:520
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "Aucune notification non lue"
+msgstr "沒有未讀通知"
 
 #: ../src/raven/notifications_view.vala:646
 msgid "No new notifications"
-msgstr "Aucune nouvelle notification"
+msgstr "沒有新通知"
 
 #: ../src/raven/sound.vala:78
 msgid "Output"
-msgstr "Sortie"
+msgstr "輸出"
 
 #: ../src/raven/sound.vala:95
 msgid "Input"
-msgstr "Entrée"
+msgstr "輸入"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -154,302 +145,301 @@ msgstr "Entrée"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Taille de l’espacement"
+msgstr "佔位填空大小"
 
 #: ../src/raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Paramètres de Budgie"
+msgstr "Budgie 設定"
 
 #: ../src/raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Quitter"
+msgstr "離開"
 
 #: ../src/raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Ajouter un nouvel applet"
+msgstr "加入新的面板程式"
 
 #: ../src/raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "Utiliser le thème sombre"
+msgstr "使用暗黑主題"
 
 #: ../src/raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Thème sombre"
+msgstr "暗黑主題"
 
 #: ../src/raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "Sélectionner un thème GTK+"
+msgstr "選取 GTK+ 主題"
 
 #: ../src/raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "Thème des widgets"
+msgstr "工具組主題"
 
 #: ../src/raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
-msgstr "Sélectionner un thème d'icônes"
+msgstr "選取圖示主題"
 
 #: ../src/raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "Thème d'icônes"
+msgstr "圖示主題"
 
 #: ../src/raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "Remplacer les choix par défaut"
+msgstr "凌駕預設值"
 
 #: ../src/raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Thème par défaut"
+msgstr "內建主題"
 
 #: ../src/raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "Sélectionner un thème de curseur"
+msgstr "選取游標主題"
 
 #: ../src/raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "Thème du curseur"
+msgstr "游標主題"
 
 #: ../src/raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "Gérer les panneaux"
+msgstr "管理面板"
 
 #: ../src/raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "Position"
+msgstr "位置"
 
 #: ../src/raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "Taille"
+msgstr "大小"
 
 #: ../src/raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "Ombre"
+msgstr "陰影"
 
 #: ../src/raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "Masquage automatique"
+msgstr "自動隱藏方針"
 
 #: ../src/raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "Styliser les régions"
+msgstr "個人區塊風格"
 
 #: ../src/raven/ui/background.ui.h:1
 msgid "Show desktop icons"
-msgstr "Afficher les icônes du bureau"
+msgstr "顯示桌面圖示"
 
 #: ../src/raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "Icônes du bureau"
+msgstr "桌面圖示"
 
 #: ../src/raven/ui/fonts.ui.h:1
 msgid "Window Titles"
-msgstr "Titre des fenêtres"
+msgstr "視窗題名"
 
 #: ../src/raven/ui/fonts.ui.h:2
 msgid "Interface"
-msgstr "Interface"
+msgstr "介面"
 
 #: ../src/raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "Documents"
+msgstr "文件"
 
 #: ../src/raven/ui/fonts.ui.h:4
 msgid "Monospace"
-msgstr "Espacement fixe"
+msgstr "等寬字"
 
 #: ../src/raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr " Désactiver la non-redirection des fenêtres plein écran"
+msgstr "停用全螢幕視窗的非重導"
 
 #: ../src/raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr " Désactiver la non-redirection"
+msgstr "停用非重導"
 
 #: ../src/raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr " Changer la disposition de la fenêtre des boutons"
+msgstr "變更視窗按鈕的配置"
 
 #: ../src/raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr " Disposition du bouton"
+msgstr "按鈕配置"
 
 #: ../src/session/budgie-desktop.desktop.in.in.h:1
 #: ../src/session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie Desktop"
+msgstr "Budgie 桌面"
 
 #: ../src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Cette session vous connecte au bureau Budgie"
+msgstr "本作業階段會讓您使用 Budgie 桌面登入"
 
 #: ../src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Êtes-vous sûr de vouloir mettre fin à votre session ?"
+msgstr "您確定要結束您的作業階段？"
 
 #: ../src/daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "取消"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: ../src/daemon/endsession.ui.h:4
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
-msgstr "Déconnexion"
+msgstr "登出"
 
 #: ../src/daemon/endsession.ui.h:5
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "Redémarrer"
+msgstr "重啟"
 
 #: ../src/daemon/endsession.ui.h:6
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
-msgstr "Arrêter"
+msgstr "關機"
 
 #: ../src/panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
-msgstr "Réglages de la date et de l'heure"
+msgstr "時間和日期設定"
 
 #: ../src/panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
-msgstr "Agenda"
+msgstr "行事曆"
 
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
-msgstr "Épingler au panneau"
+msgstr "固定到面板上"
 
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:91
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:455
 msgid "Unpin from panel"
-msgstr "Détacher du panneau"
+msgstr "取消面板固定"
 
 #. Special case, "All"
 #: ../src/panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
-msgstr "Tout"
+msgstr "全部"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "La touche Verrouillage Majuscule est activée"
+msgstr "Caps lock 大寫鎖啟用中"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "La touche Verrouillage Majuscule est désactivée"
+msgstr "Caps lock 大寫鎖停用中"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "La touche Verrouillage Numérique est activée"
+msgstr "Num lock 數字鎖啟用中"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "La touche Verrouillage Numérique est désactivée"
+msgstr "Num lock 數字鎖停用中"
 
 #: ../src/panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Basculer vers le bureau"
+msgstr "切換桌面"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth désactivé"
+msgstr "藍牙已停用"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "Bluetooth activé"
+msgstr "藍牙啟用中"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Connecté à %d appareil"
-msgstr[1] "Connecté à %d appareils"
+msgstr[0] "已連接 %d 個裝置"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "Paramètres Bluetooth"
+msgstr "藍牙設定"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
-msgstr "Envoyer des fichiers"
+msgstr "傳送檔案"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth en mode avion"
+msgstr "藍牙飛航模式"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "Batterie entièrement chargée."
+msgstr "電池完全充滿。"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
-msgstr "Inconnu"
+msgstr "未知"
 
 #. Set inner charging duration to hours:minutes
 #: ../src/panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
-msgstr "Batterie en charge"
+msgstr "電池充電中"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "Batterie restante"
+msgstr "電池還剩下"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr " Paramètres d'alimentation"
+msgstr "電源設定"
 
 #. User Menu Creation
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "Utilisateur"
+msgstr "使用者"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "Verrouiller"
+msgstr "上鎖"
 
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Suspendre"
+msgstr "暫停"
 
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Hiberner"
+msgstr "休眠"
 
 #: ../src/wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimiser"
+msgstr "最小化"
 
 #: ../src/wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Démaximiser"
+msgstr "取消最小化"
 
 #: ../src/wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Maximiser"
+msgstr "最大化"
 
 #: ../src/wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Déplacer"
+msgstr "移動"
 
 #: ../src/wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Redimensionner"
+msgstr "重新調整大小"
 
 #: ../src/wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Toujours au premier plan"
+msgstr "總是在最上層"
 
 #: ../src/wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Fermer"
+msgstr "關閉"
 
 #: ../src/wm/wm.vala:519
 msgid "Change background"
-msgstr "Changer l'arrière-plan"
+msgstr "更換背景"
 
 #: ../src/wm/wm.vala:528
 msgid "Settings"
-msgstr "Réglages"
+msgstr "設定"
 
 #. End BudgieWMDBUS
 #. End namespace
@@ -465,135 +455,135 @@ msgstr "Réglages"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Horloge"
+msgstr "時鐘"
 
 #: ../src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Afficher le bouton d'accès au bureau"
+msgstr "顯示桌面按鈕"
 
 #: ../src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Liste des tâches"
+msgstr "工作列表"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 #: ../src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../src/panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr "Emplacements"
+msgstr "位置"
 
 #: ../src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Icône de la liste des tâches"
+msgstr "圖示化工作列表"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indicateur de verrouillage des touches"
+msgstr "鎖定鍵指示器"
 
 #: ../src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "Contrôleur de la barre latérale Raven"
+msgstr "Raven 側邊欄控制"
 
 #: ../src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Espacement"
+msgstr "填空佔位"
 
 #: ../src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"
-msgstr "Indicateur utilisateur"
+msgstr "使用者指示器"
 
 #: ../src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Changeur d'espace de travail"
+msgstr "工作區切換器"
 
 #: ../src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"
-msgstr " Indicateur de configuration du clavier"
+msgstr "鍵盤配置指示器"
 
 #: ../src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Zone de notification système"
+msgstr "系統匣"
 
 #: ../src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Indicateur de statut"
+msgstr "狀態指示器"
 
 #: ../src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Menu Budgie"
+msgstr "Budgie 選單"
 
 #: ../src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Séparateur"
+msgstr "分隔線"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:23
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr "Périphériques amovibles"
+msgstr "卸除式裝置"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:25
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr " Disques locaux"
+msgstr "本地端儲存區"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:29
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr " Dossiers réseau"
+msgstr "網路資料夾"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:32
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:32
 msgid "Other"
-msgstr "Autre"
+msgstr "其他"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:52
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
-msgstr "Éjecter"
+msgstr "退出"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
-msgstr "Démonter"
+msgstr "卸載"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:57
 #: ../src/panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr " Ouvrir \"%s\""
+msgstr "開啟「%s」"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:81
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
-msgstr " Vous pouvez retirer le média en toute sécurité"
+msgstr "您現在可以安全移除"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr " Rien à afficher pour le moment"
+msgstr "現在沒有什麼可顯示"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr " Monter des disques"
+msgstr "掛載一些裝置"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr " Activer plus de sections"
+msgstr "啟用更多區塊"
 
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr " Monter et ouvrir \"%s\""
+msgstr "掛載並開啟「%s」"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr " Montrer le nom"
+msgstr "顯示標籤"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr " Montrer emplacements"
+msgstr "顯示位置"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr " Montrer les disques amovibles"
+msgstr "顯示卸除式裝置"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr " Montrer les dossiers réseau"
+msgstr "顯示網路資料夾"
