@@ -12,6 +12,16 @@
 namespace Budgie {
 
 /**
+ * We need to probe the dbus daemon directly, hence this interface
+ */
+[DBus (name="org.freedesktop.DBus")]
+public interface DBusImpl : Object
+{
+    public abstract async string[] list_names() throws IOError;
+    public signal void name_owner_changed(string name, string old_owner, string new_owner);
+}
+
+/**
  * Simple launcher button
  */
 public class AppLauncherButton : Gtk.Box
@@ -54,6 +64,7 @@ public class AppLauncherButton : Gtk.Box
         set_margin_bottom(3);
     }
 }
+
 /**
  * The meat of the operation
  */
@@ -64,8 +75,17 @@ public class RunDialog : Gtk.ApplicationWindow
     Gtk.ListBox? app_box;
     Gtk.SearchEntry entry;
     Budgie.ThemeManager theme_manager;
+    Gdk.AppLaunchContext context;
+    bool focus_quit = true;
+    DBusImpl? impl = null;
 
     string search_text = "";
+
+    /* The .desktop file without the .desktop */
+    string wanted_dbus_id = "";
+
+    /* Active dbus names */
+    HashTable<string,bool> active_names = null;
 
     public RunDialog(Gtk.Application app)
     {
@@ -78,6 +98,13 @@ public class RunDialog : Gtk.ApplicationWindow
         if (visual != null) {
             this.set_visual(visual);
         }
+
+        /* Quicker than a list lookup */
+        active_names = new HashTable<string,bool>(str_hash, str_equal);
+
+        context = get_display().get_app_launch_context();
+        context.launched.connect(on_launched);
+        context.launch_failed.connect(on_launch_failed);
 
         /* Handle all theme management */
         this.theme_manager = new Budgie.ThemeManager();
@@ -128,9 +155,14 @@ public class RunDialog : Gtk.ApplicationWindow
         set_resizable(false);
 
         focus_out_event.connect(()=> {
+            if (!this.focus_quit) {
+                return Gdk.EVENT_STOP;
+            }
             this.application.quit();
             return Gdk.EVENT_STOP;
         });
+
+        setup_dbus.begin();
     }
 
     /**
@@ -166,17 +198,19 @@ public class RunDialog : Gtk.ApplicationWindow
     {
         try {
             var dinfo = button.app_info as DesktopAppInfo;
-            dinfo.launch_uris_as_manager(null, null,
-                SpawnFlags.SEARCH_PATH,
-                null, null);
+
+            context.set_screen(get_screen());
+            context.set_timestamp(Gdk.CURRENT_TIME);
+            this.focus_quit = false;
+            var splits = dinfo.get_id().split(".desktop");
+            if (dinfo.get_boolean("DBusActivatable")) {
+                this.wanted_dbus_id = string.joinv(".desktop", splits[0:splits.length-1]);
+            }
+            dinfo.launch(null, context);
+            this.check_dbus_name();
+            /* Some apps are slow to open so hide and quit when they're done */
             this.hide();
-            /* Allow dbus activation to happen.. which we'll never be told about. Woo. */
-            Timeout.add(500, ()=> {
-                this.destroy();
-                return false;
-            });
         } catch (Error e) {
-            message("Error: %s\n", e.message);
             this.application.quit();
         }
     }
@@ -262,7 +296,6 @@ public class RunDialog : Gtk.ApplicationWindow
         if (!app_info.should_show()) {
             return;
         }
-        var dinfo = app_info as DesktopAppInfo;
         var button = new AppLauncherButton(app_info);
         app_box.add(button);
         button.show_all();
@@ -282,6 +315,89 @@ public class RunDialog : Gtk.ApplicationWindow
         }
         return Gdk.EVENT_PROPAGATE;
     }
+
+    /**
+     * Handle startup notification, mark it done, quit
+     * We may not get the ID but we'll be told it's launched
+     */
+    private void on_launched(GLib.AppInfo info, Variant v)
+    {
+        Variant? elem;
+
+        var iter = v.iterator();
+
+        while ((elem = iter.next_value()) != null) {
+            string? key = null;
+            Variant? val = null;
+
+            elem.get("{sv}", out key, out val);
+
+            if (key == null) {
+                continue;
+            }
+
+            if (!val.is_of_type(VariantType.STRING)) {
+                continue;
+            }
+
+            if (key != "startup-notification-id") {
+                continue;
+            }
+            get_display().notify_startup_complete(val.get_string());
+        }
+        this.application.quit();
+    }
+
+    /**
+     * Set the ID if it exists, quit regardless
+     */
+    private void on_launch_failed(string id)
+    {
+        get_display().notify_startup_complete(id);
+        this.application.quit();
+    }
+
+
+    void on_name_owner_changed(string? n, string? o, string? ne)
+    {
+        if (o == "") {
+            this.active_names[n] = true;
+            this.check_dbus_name();
+        } else {
+            if (n in this.active_names) {
+                this.active_names.remove(n);
+            }
+        }
+    }
+
+    /**
+     * Check if our dbus name appeared. if it did, bugger off.
+     */
+    void check_dbus_name() {
+        if (this.wanted_dbus_id != "" && this.wanted_dbus_id in this.active_names) {
+            this.application.quit();
+        }
+    }
+
+    /**
+     * Do basic dbus initialisation
+     */
+    public async void setup_dbus()
+    {
+        try {
+            impl = yield Bus.get_proxy(BusType.SESSION, "org.freedesktop.DBus", "/org/freedesktop/DBus");
+
+            /* Cache the names already active */
+            foreach (string name in yield impl.list_names()) {
+                this.active_names[name] = true;
+            }
+            /* Watch for new names */
+            impl.name_owner_changed.connect(on_name_owner_changed);
+        } catch (Error e) {
+            warning("Failed to initialise dbus: %s", e.message);
+        }
+    }
+
 }
 
 /**
