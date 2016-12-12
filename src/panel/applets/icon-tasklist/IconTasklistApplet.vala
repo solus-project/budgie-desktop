@@ -9,23 +9,6 @@
  * (at your option) any later version.
  */
 
-/**
- * Attempt to match startup notification IDs
- */
-public static bool startupid_match(string id1, string id2)
-{
-    /* Simple. If id1 == id2, or id1(WINID+1) == id2 */
-    if (id1 == id2) {
-        return true;
-    }
-    string[] spluts = id1.split("_");
-    string[] splits = spluts[0].split("-");
-    int winid = int.parse(splits[splits.length-1])+1;
-    string id3 = "%s-%d_%s".printf(string.joinv("-", splits[0:splits.length-1]), winid, string.joinv("_", spluts[1:spluts.length]));
-
-    return (id2 == id3);
-}
-
 public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
@@ -84,7 +67,6 @@ public class IconTasklistApplet : Budgie.Applet
     protected int icon_size = 32;
     private Settings settings;
 
-    protected Gdk.AppLaunchContext context;
     protected AppSystem? helper;
 
     private unowned IconButton? active_button;
@@ -111,7 +93,7 @@ public class IconTasklistApplet : Budgie.Applet
             PinnedIconButton? pbtn = null;
             var iter = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
             while (iter.next(null, out pbtn)) {
-                if (pbtn.id != null && startupid_match(pbtn.id, launch_id)) {
+                if (pbtn.id != null && pbtn.id == launch_id) {
                     btn = pbtn;
                     break;
                 }
@@ -201,8 +183,6 @@ public class IconTasklistApplet : Budgie.Applet
     public IconTasklistApplet(string uuid)
     {
         Object(uuid: uuid);
-
-        this.context = Gdk.Screen.get_default().get_display().get_app_launch_context();
 
         settings_schema = "com.solus-project.icon-tasklist";
         settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
@@ -350,8 +330,6 @@ public class IconTasklistApplet : Budgie.Applet
 
             Gtk.Allocation alloc;
 
-            var launcher = launchers[i];
-
             (pin_buttons[launchers[i]].get_parent() as ButtonWrapper).get_allocation(out alloc);
 
             if(x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) {
@@ -404,7 +382,7 @@ public class IconTasklistApplet : Budgie.Applet
                 message("Invalid application! %s", desktopfile);
                 continue;
             }
-            var button = new PinnedIconButton(settings, info, icon_size, ref this.context, this.helper, panel_size);
+            var button = new PinnedIconButton(settings, info, icon_size, this.helper, panel_size);
             var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
