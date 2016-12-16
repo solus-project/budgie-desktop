@@ -7,7 +7,7 @@
 DOC_MODULE=budgie-desktop
 
 # Uncomment for versioned docs and specify the version of the module, e.g. '2'.
-DOC_MODULE_VERSION=10.2.8
+DOC_MODULE_VERSION=10.2.9
 
 # The top-level XML file.
 DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
