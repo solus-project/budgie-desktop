@@ -19,7 +19,7 @@ m4_define([pulse_required_version], [2.0])
 m4_define([gsettings_required_version], [3.16.0])
 m4_define([polkit_required_version], [0.105])
 m4_define([accountsservice_version], [0.6.40])
-m4_define([ibus_required_version], [1.5.11])
+m4_define([ibus_required_version], [1.5.10])
 
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
