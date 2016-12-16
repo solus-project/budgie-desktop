@@ -54,7 +54,7 @@ public class AppSystem : GLib.Object
                 lock(invalidated) {
                     invalidated = true;
                 }
-                return Source.REMOVE;
+                return false;
             });
         });
         reload_ids();

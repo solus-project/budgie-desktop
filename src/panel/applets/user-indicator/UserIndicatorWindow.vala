@@ -271,7 +271,7 @@ public class UserIndicatorWindow : Gtk.Popover {
             } catch (Error e) {
                 warning("Failed to logout: %s", e.message);
             }
-            return Source.REMOVE;
+            return false;
         });
     }
 
@@ -288,7 +288,7 @@ public class UserIndicatorWindow : Gtk.Popover {
             } catch (Error e) {
                 warning("Cannot hibernate: %s", e.message);
             }
-            return Source.REMOVE;
+            return false;
         });
     }
 
@@ -300,7 +300,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         Idle.add(()=> {
             session.Reboot.begin();
-            return Source.REMOVE;
+            return false;
         });
     }
 
@@ -312,7 +312,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         Idle.add(()=> {
             session.Shutdown.begin();
-            return Source.REMOVE;
+            return false;
         });
     }
 
@@ -329,7 +329,7 @@ public class UserIndicatorWindow : Gtk.Popover {
             } catch (Error e) {
                 warning("Cannot suspend: %s", e.message);
             }
-            return Source.REMOVE;
+            return false;
         });
     }
 
@@ -341,7 +341,7 @@ public class UserIndicatorWindow : Gtk.Popover {
             } catch (Error e) {
                 warning("Cannot lock screen: %s", e.message);
             }
-            return Source.REMOVE;
+            return false;
         });
     }
 }
