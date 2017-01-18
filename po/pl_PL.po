@@ -3,105 +3,98 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexander Nordahl <alexnordahl@gmail.com>, 2016
-# aldorgan <d.ubuntu@gmail.com>, 2016
-# Eduard Drehner <i.am@k0nsl.org>, 2016
-# Eduard Drehner <i.am@k0nsl.org>, 2016
-# Michael Svensson <m.svensson@operamail.com>, 2016
-# Puppelimies, 2016
-# tobcro <tobias@croby.se>, 2016
-# tompa <tompatulpan@gmail.com>, 2017
+# Patrycjusz Dolega <patrick.dolega@outlook.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-26 04:02+0100\n"
-"PO-Revision-Date: 2017-01-05 14:41+0000\n"
-"Last-Translator: tompa <tompatulpan@gmail.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/sv_SE/)\n"
+"PO-Revision-Date: 2017-01-07 14:02+0000\n"
+"Last-Translator: Patrycjusz Dolega <patrick.dolega@outlook.com>\n"
+"Language-Team: Polish (Poland) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/pl_PL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/daemon/endsession.vala:167
 msgid "Log out"
-msgstr "Logga ut"
+msgstr "Wyloguj"
 
 #: ../src/daemon/endsession.vala:171
 msgid "Restart device"
-msgstr "Starta om enhet"
+msgstr "Uruchom ponownie"
 
 #: ../src/daemon/endsession.vala:183 ../src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Stäng av"
+msgstr "Wyłącz"
 
 #: ../src/raven/main_view.vala:72 ../src/raven/ui/panel.ui.h:7
 msgid "Applets"
-msgstr "Applets"
+msgstr "Aplety"
 
 #: ../src/raven/main_view.vala:75
 #: ../src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Meddelanden"
+msgstr "Powiadomienia"
 
 #: ../src/raven/settings_view.vala:266
 msgid "Top"
-msgstr "Topp"
+msgstr "Góra"
 
 #: ../src/raven/settings_view.vala:268
 msgid "Bottom"
-msgstr "Ner"
+msgstr "Dół"
 
 #: ../src/raven/settings_view.vala:376
 msgid "Top Panel"
-msgstr "Topp Panel"
+msgstr "Górny panel"
 
 #: ../src/raven/settings_view.vala:378
 msgid "Right Panel"
-msgstr "Höger Panel"
+msgstr "Prawy panel"
 
 #: ../src/raven/settings_view.vala:380
 msgid "Left Panel"
-msgstr "Vänster Panel"
+msgstr "Lewy panel"
 
 #: ../src/raven/settings_view.vala:382
 msgid "Bottom Panel"
-msgstr "Nedre Panel"
+msgstr "Dolny panel"
 
 #: ../src/raven/settings_view.vala:616
 msgid "Start"
-msgstr "Start"
+msgstr "Początek"
 
 #: ../src/raven/settings_view.vala:619
 msgid "Center"
-msgstr "Mitten"
+msgstr "Środek"
 
 #: ../src/raven/settings_view.vala:622
 msgid "End"
-msgstr "Slutet"
+msgstr "Koniec"
 
 #. Appearance expander
 #: ../src/raven/settings_view.vala:960
 msgid "Appearance"
-msgstr "Utseende"
+msgstr "Wygląd"
 
 #: ../src/raven/settings_view.vala:967
 msgid "Background"
-msgstr "Bakgrund"
+msgstr "Tło"
 
 #: ../src/raven/settings_view.vala:974
 msgid "Fonts"
-msgstr "Typsnitt"
+msgstr "Czcionki"
 
 #: ../src/raven/settings_view.vala:980
 msgid "Windows"
-msgstr "Fönster"
+msgstr "Okna"
 
 #: ../src/raven/settings_view.vala:984
 msgid "General"
-msgstr "Allmänt"
+msgstr "Ogólne"
 
 #: ../src/raven/settings_view.vala:995 ../src/raven/settings_view.vala:996
 msgid "Panel"
@@ -109,35 +102,35 @@ msgstr "Panel"
 
 #: ../src/raven/notifications_view.vala:74
 msgid "Nothing to see here"
-msgstr "Inget att se här"
+msgstr "Nic do wyświetlenia"
 
 #: ../src/raven/notifications_view.vala:516
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u olästa meddelanden"
+msgstr "%u nieprzeczytanych powiadomień"
 
 #: ../src/raven/notifications_view.vala:518
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1 oläst meddelande"
+msgstr "1 nieprzeczytane powiadomienie"
 
 #: ../src/raven/notifications_view.vala:520
 #: ../src/panel/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "Inga olästa meddelanden"
+msgstr "Brak nieprzeczytanych powiadomień"
 
 #: ../src/raven/notifications_view.vala:646
 msgid "No new notifications"
-msgstr "Inga nya meddelanden"
+msgstr "Brak nowych powiadomień"
 
 #: ../src/raven/sound.vala:78
 msgid "Output"
-msgstr "Utmatning"
+msgstr "Wyjście"
 
 #: ../src/raven/sound.vala:95
 msgid "Input"
-msgstr "Inmatning"
+msgstr "Wejście"
 
 #. End class
 #. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
@@ -152,302 +145,303 @@ msgstr "Inmatning"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "mellanrums storlek"
+msgstr "Rozmiar odstępu"
 
 #: ../src/raven/ui/settings.ui.h:1
 msgid "Budgie Settings"
-msgstr "Budgie Inställningar"
+msgstr "Ustawienia Budgie"
 
 #: ../src/raven/ui/settings.ui.h:2
 msgid "Exit"
-msgstr "Avsluta"
+msgstr "Wyjdź"
 
 #: ../src/raven/ui/applets.ui.h:1
 msgid "Add new applet"
-msgstr "Lägg till en ny applet"
+msgstr "Dodaj nowy aplet"
 
 #: ../src/raven/ui/appearance.ui.h:1
 msgid "Use the dark theme"
-msgstr "Använd det svarta temat"
+msgstr "Użyj ciemnego motywu"
 
 #: ../src/raven/ui/appearance.ui.h:2
 msgid "Dark theme"
-msgstr "Svart tema"
+msgstr "Ciemny motyw"
 
 #: ../src/raven/ui/appearance.ui.h:3
 msgid "Select a GTK+ theme"
-msgstr "Välj ett GTK+ tema"
+msgstr "Wybierz motyw GTK+"
 
 #: ../src/raven/ui/appearance.ui.h:4
 msgid "Widget Theme"
-msgstr "Widget Tema"
+msgstr "Motyw widgetów"
 
 #: ../src/raven/ui/appearance.ui.h:5
 msgid "Select an icon theme"
-msgstr "Välj ett tema för ikoner"
+msgstr "Wybierz motyw ikon"
 
 #: ../src/raven/ui/appearance.ui.h:6
 msgid "Icon Theme"
-msgstr "Ikon Tema"
+msgstr "Motyw ikon"
 
 #: ../src/raven/ui/appearance.ui.h:7
 msgid "Override defaults"
-msgstr "åsidosätta standard inställning"
+msgstr "Użyj domyślnego motywu"
 
 #: ../src/raven/ui/appearance.ui.h:8
 msgid "Built-in theme"
-msgstr "Inbyggt tema"
+msgstr "Domyślny motyw"
 
 #: ../src/raven/ui/appearance.ui.h:9
 msgid "Select a cursor theme"
-msgstr "Välj ett pekartema"
+msgstr "Wybierz motyw wskaźnika myszy"
 
 #: ../src/raven/ui/appearance.ui.h:10
 msgid "Cursor Theme"
-msgstr "Pekartema"
+msgstr "Motyw wskaźnika myszy"
 
 #: ../src/raven/ui/panel.ui.h:1
 msgid "Manage Panels"
-msgstr "Hantera Paneler"
+msgstr "Zarządzanie panelami"
 
 #: ../src/raven/ui/panel.ui.h:2
 msgid "Position"
-msgstr "Position"
+msgstr "Położenie"
 
 #: ../src/raven/ui/panel.ui.h:3
 msgid "Size"
-msgstr "Storlek"
+msgstr "Rozmiar"
 
 #: ../src/raven/ui/panel.ui.h:4
 msgid "Shadow"
-msgstr "Skuggor"
+msgstr "Cień"
 
 #: ../src/raven/ui/panel.ui.h:5
 msgid "Autohide policy"
-msgstr "Göm principer automatiskt"
+msgstr "Zasada automatycznego chowania"
 
 #: ../src/raven/ui/panel.ui.h:6
 msgid "Stylize regions"
-msgstr "Stilisera regioner"
+msgstr "Stylizowanie obszarów"
 
 #: ../src/raven/ui/background.ui.h:1
 msgid "Show desktop icons"
-msgstr "Visa skrivbordsikoner"
+msgstr "Pokaż ikony na pulpicie"
 
 #: ../src/raven/ui/background.ui.h:2
 msgid "Desktop Icons"
-msgstr "Skrivbordsikoner"
+msgstr "Ikony pulpitu"
 
 #: ../src/raven/ui/fonts.ui.h:1
 msgid "Window Titles"
-msgstr "Fönstertitlar"
+msgstr "Nagłówki okien"
 
 #: ../src/raven/ui/fonts.ui.h:2
 msgid "Interface"
-msgstr "Gränssnitt"
+msgstr "Interfejs"
 
 #: ../src/raven/ui/fonts.ui.h:3
 msgid "Documents"
-msgstr "Dokument"
+msgstr "Dokumenty"
 
 #: ../src/raven/ui/fonts.ui.h:4
 msgid "Monospace"
-msgstr "Monospace"
+msgstr "Czcionka o stałej szerokości"
 
 #: ../src/raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr "Inaktivera avomdirigering av fullskärmsfönster"
+msgstr "Wyłącz nieprzekierowanie okien w trybie pełnoekranowym"
 
 #: ../src/raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr "Inaktivera avomdirigering"
+msgstr "Wyłącz nieprzekierowanie"
 
 #: ../src/raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr "Ändra arrangemang av fönsterknappar"
+msgstr "Zmień układ przycisków okna"
 
 #: ../src/raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr "Knapplacering"
+msgstr "Układ przycisków"
 
 #: ../src/session/budgie-desktop.desktop.in.in.h:1
 #: ../src/session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie Skrivbord"
+msgstr "Budgie Desktop"
 
 #: ../src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Denna sessionen loggar in till Budgie Skrivbordet"
+msgstr "Ta sesja zaloguje Cię do Budgie Desktop"
 
 #: ../src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Vill du säkert avsluta sessionen?"
+msgstr "Czy na pewno chcesz zakończyć Twoją sesję ?"
 
 #: ../src/daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "Ångra"
+msgstr "Anuluj"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: ../src/daemon/endsession.ui.h:4
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:179
 msgid "Logout"
-msgstr "Logga ut"
+msgstr "Wyloguj"
 
 #: ../src/daemon/endsession.ui.h:5
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Restart"
-msgstr "Starta om"
+msgstr "Uruchom ponownie"
 
 #: ../src/daemon/endsession.ui.h:6
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Shutdown"
-msgstr "Stänga av"
+msgstr "Wyłącz"
 
 #: ../src/panel/applets/clock/ClockApplet.vala:55
 msgid "Time and date settings"
-msgstr "Datum och Tid inställningar"
+msgstr "Ustawienia daty i czasu"
 
 #: ../src/panel/applets/clock/ClockApplet.vala:56
 msgid "Calendar"
-msgstr "Kalender"
+msgstr "Kalendarz"
 
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:90
 msgid "Pin to panel"
-msgstr "Fäst i panel"
+msgstr "Przypnij do panelu"
 
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:91
 #: ../src/panel/applets/icon-tasklist/Buttons.vala:455
 msgid "Unpin from panel"
-msgstr "Ta bort från panel"
+msgstr "Odepnij od panelu"
 
 #. Special case, "All"
 #: ../src/panel/applets/budgie-menu/BudgieMenuWindow.vala:31
 msgid "All"
-msgstr "Alla"
+msgstr "Wszystkie"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:53
 msgid "Caps lock is active"
-msgstr "Caps Lock är aktiverat"
+msgstr "Klawisz Caps Lock jest włączony"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:56
 msgid "Caps lock is not active"
-msgstr "Caps lock är inte aktivt"
+msgstr "Klawisz Caps Lock jest wyłączony"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:66
 msgid "Num lock is active"
-msgstr "Num Lock är aktiverat"
+msgstr "Klawiatura numeryczna jest włączona"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.vala:69
 msgid "Num lock is not active"
-msgstr "Num Lock är inte aktiverat"
+msgstr "Klawiatura numeryczna jest wyłączona"
 
 #: ../src/panel/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Visa skrivbordet"
+msgstr "Pokaż pulpit"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:101
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth är deaktiverat"
+msgstr "Bluetooth jest wyłączony"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is active"
-msgstr "Bluetooth är aktivt"
+msgstr "Bluetooth jest włączony"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:110
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Ansluten till %d enhet"
-msgstr[1] "Ansluten till %d enheter"
+msgstr[0] "Połączono z %d urządzeniem"
+msgstr[1] "Połączono z %d urządzeniami"
+msgstr[2] "Połączono z %d urządzeniami"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:171
 msgid "Bluetooth Settings"
-msgstr "Bluetooth inställningar"
+msgstr "Ustawienia Bluetooth"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:172
 msgid "Send Files"
-msgstr "Skicka filer"
+msgstr "Wyślij plik"
 
 #: ../src/panel/applets/status/BluetoothIndicator.vala:173
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth flygplansläge"
+msgstr "Bluetooth Tryb Samolotowy"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:56
 msgid "Battery fully charged."
-msgstr "Batteriet fulladdat"
+msgstr "Bateria w pełni naładowana."
 
 #: ../src/panel/applets/status/PowerIndicator.vala:59
 msgid "Unknown"
-msgstr "Okänt"
+msgstr "Nieznany"
 
 #. Set inner charging duration to hours:minutes
 #: ../src/panel/applets/status/PowerIndicator.vala:68
 msgid "Battery charging"
-msgstr "Batteriet laddas"
+msgstr "Ładowanie baterii"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:73
 msgid "Battery remaining"
-msgstr "Batteri kvar"
+msgstr "Pozostało baterii"
 
 #: ../src/panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr "Ströminställningar"
+msgstr "Ustawienia zasilania"
 
 #. User Menu Creation
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "Användare"
+msgstr "Użytkownik"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "Lås"
+msgstr "Zablokuj"
 
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Strömsparläge"
+msgstr "Wstrzymaj"
 
 #: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Viloläge"
+msgstr "Uśpij"
 
 #: ../src/wm/windowmenu.vala:124
 msgid "Minimize"
-msgstr "Minimera"
+msgstr "Zminimalizuj"
 
 #: ../src/wm/windowmenu.vala:129
 msgid "Unmaximize"
-msgstr "Återställ"
+msgstr "Cofnij maksymalizację"
 
 #: ../src/wm/windowmenu.vala:134
 msgid "Maximize"
-msgstr "Maximera"
+msgstr "Zmaksymalizuj"
 
 #: ../src/wm/windowmenu.vala:139
 msgid "Move"
-msgstr "Flytta"
+msgstr "Przenieś"
 
 #: ../src/wm/windowmenu.vala:144
 msgid "Resize"
-msgstr "Ändra storlek"
+msgstr "Zmień rozmiar"
 
 #: ../src/wm/windowmenu.vala:149
 msgid "Always On Top"
-msgstr "Alltid överst"
+msgstr "Zawsze na wierzchu"
 
 #: ../src/wm/windowmenu.vala:154
 msgid "Close"
-msgstr "Stäng"
+msgstr "Zamknij"
 
 #: ../src/wm/wm.vala:519
 msgid "Change background"
-msgstr "Byt bakgrund"
+msgstr "Zmień tło"
 
 #: ../src/wm/wm.vala:528
 msgid "Settings"
-msgstr "Inställningar"
+msgstr "Ustawienia"
 
 #. End BudgieWMDBUS
 #. End namespace
@@ -463,135 +457,135 @@ msgstr "Inställningar"
 #. * :indentSize=4:tabSize=4:noTabs=true:
 #: ../src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Klocka"
+msgstr "Zegar"
 
 #: ../src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Visa skrivbordet"
+msgstr "Pokaż / Ukryj pulpit"
 
 #: ../src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Program lista"
+msgstr "Lista okien"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 #: ../src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../src/panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr "Platser"
+msgstr "Miejsca"
 
 #: ../src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Ikon lista"
+msgstr "Ikony okien"
 
 #: ../src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Låsta nycklar indikator"
+msgstr "Wskaźnik klawiszy przełączających"
 
 #: ../src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "Raven sidofält kontroll"
+msgstr "Panel sterowania Raven"
 
 #: ../src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Tomrum"
+msgstr "Odstęp"
 
 #: ../src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"
-msgstr "Användarindikator"
+msgstr "Użytkownik"
 
 #: ../src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Växla mellan Arbetsytor"
+msgstr "Przełącznik obszarów roboczych"
 
 #: ../src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"
-msgstr "Tangentbordslayout indikator"
+msgstr "Wskaźnik układu klawiatury"
 
 #: ../src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Aktivitetsfält"
+msgstr "Obszar powiadomień"
 
 #: ../src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Statusindikator"
+msgstr "Wskaźnik stanu"
 
 #: ../src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budgie Meny"
+msgstr "Menu Budgie"
 
 #: ../src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Tomrum"
+msgstr "Odstęp"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:23
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr "Flyttbara enheter"
+msgstr "Urządzenia przenośne"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:25
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr "Lokala volymer"
+msgstr "Lokalne partycje"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:29
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr "Nätverksmappar"
+msgstr "Katalogi sieciowe"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:32
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:32
 msgid "Other"
-msgstr "Annat"
+msgstr "Inne"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:52
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:49
 msgid "Eject"
-msgstr "Mata ut"
+msgstr "Wysuń"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:54
 msgid "Unmount"
-msgstr "Avmontera"
+msgstr "Odmontuj"
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:57
 #: ../src/panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr "Öppna \"%s\""
+msgstr "Otwórz \"%s\""
 
 #: ../src/panel/applets/places-indicator/MountItem.vala:81
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:56
 msgid "You can now safely remove"
-msgstr "Du kan nu säkert ta bort"
+msgstr "Można teraz bezpiecznie wysunąć nośnik"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr "Inget att visa just nu"
+msgstr "Nic do wyświetlenia"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr "Montera diskar"
+msgstr "Zamontuj nośniki"
 
 #: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr "Aktivera flera sektioner"
+msgstr "Włącz więcej sekcji"
 
 #: ../src/panel/applets/places-indicator/VolumeItem.vala:67
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Montera och öppna \"%s\""
+msgstr "Zamontuj i otwórz \"%s\""
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Visa etikett"
+msgstr "Pokaż opis"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Visa platser"
+msgstr "Pokaż miejsca"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr "Visa flyttbara diskar"
+msgstr "Pokaż urządzenia przenośne"
 
 #: ../src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr "Visa nätverksmappar"
+msgstr "Pokaż katalogi sieciowe"
