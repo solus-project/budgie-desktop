@@ -39,6 +39,7 @@ src/wm/wm.c
 ./src/panel/applets/separator/SeparatorApplet.plugin
 ./src/panel/applets/notifications/NotificationsApplet.plugin
 
+src/panel/applets/places-indicator/MountHelper.c
 src/panel/applets/places-indicator/MountItem.c
 src/panel/applets/places-indicator/PlacesIndicator.c
 src/panel/applets/places-indicator/PlacesIndicatorWindow.c

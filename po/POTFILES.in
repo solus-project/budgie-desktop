@@ -50,6 +50,7 @@ src/wm/wm.vala
 [type: gettext/keys]src/panel/applets/notifications/NotificationsApplet.plugin.in
 
 
+src/panel/applets/places-indicator/MountHelper.vala
 src/panel/applets/places-indicator/MountItem.vala
 src/panel/applets/places-indicator/PlaceItem.vala
 src/panel/applets/places-indicator/PlacesIndicator.vala
