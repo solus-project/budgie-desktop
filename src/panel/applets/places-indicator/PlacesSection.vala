@@ -16,7 +16,6 @@ public class PlacesSection : Gtk.Box
     private Gtk.Button toggler_button;
     private Gtk.Image arrow_right;
     private Gtk.Image arrow_down;
-    public string expanded_by;
 
     public PlacesSection()
     {
@@ -58,8 +57,7 @@ public class PlacesSection : Gtk.Box
 
     private void toggle_revealer()
     {
-        expanded_by = "user";
-        if (!revealer.child_revealed) { // If the User Section is not revealed
+        if (!revealer.child_revealed) {
             expand_revealer();
         } else {
             contract_revealer();
@@ -69,12 +67,13 @@ public class PlacesSection : Gtk.Box
     private void expand_revealer()
     {
         if (!revealer.get_child_revealed()) {
+            revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
             revealer.set_reveal_child(true);
             toggler_button.image = arrow_down;
         }
     }
 
-    private void contract_revealer()
+    public void contract_revealer()
     {
         if (revealer.get_child_revealed()) {
             revealer.set_reveal_child(false);
@@ -107,12 +106,14 @@ public class PlacesSection : Gtk.Box
      */
     public void reveal(bool state) {
         if (state) {
-            if (!revealer.get_child_revealed()) {
-                expanded_by = "code";
-            }
             expand_revealer();
         } else {
+            revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
             contract_revealer();
         }
+    }
+
+    public bool is_revealed() {
+        return revealer.get_reveal_child();
     }
 }

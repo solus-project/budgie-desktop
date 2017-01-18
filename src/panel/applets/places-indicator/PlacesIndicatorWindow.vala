@@ -14,13 +14,18 @@ public class PlacesIndicatorWindow : Gtk.Popover {
 
     private MessageRevealer message_bar;
     private PlacesSection places_section;
+
     private Gtk.ListBox mounts_listbox;
+    private Gtk.ListBox networks_listbox;
+    private Gtk.Box placeholder;
 
     private GLib.GenericSet<string> places_list;
 
-    private bool _show_places = true;
-    private bool _show_drives = true;
-    private bool _show_networks = true;
+    private bool _show_places = false;
+    private bool _show_drives = false;
+    private bool _show_networks = false;
+
+    private bool only_places = true;
 
     private GLib.FileMonitor bookmarks_monitor;
 
@@ -63,7 +68,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
 
         places_list = new GLib.GenericSet<string>(str_hash, str_equal);
 
-        Gtk.Box main_content = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+        Gtk.Box main_content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_content);
 
         message_bar = new MessageRevealer();
@@ -78,13 +83,41 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         mounts_listbox.set_header_func(list_header_func);
         main_content.pack_start(mounts_listbox, true, true, 0);
 
-        set_up_placeholder();
+        networks_listbox = new Gtk.ListBox();
+        networks_listbox.set_selection_mode(Gtk.SelectionMode.NONE);
+        networks_listbox.set_header_func(list_header_func);
+        main_content.pack_start(networks_listbox, true, true, 0);
+
+        placeholder = set_up_placeholder();
+        main_content.pack_start(placeholder, true, true, 0);
+        placeholder.hide();
 
         volume_monitor = GLib.VolumeMonitor.get();
 
         connect_signals();
 
+        refresh_special_dirs();
+        refresh_mounts();
+
+        this.closed.connect(on_popover_closed);
+
         main_content.show_all();
+    }
+
+    private void on_popover_closed()
+    {
+        foreach (Gtk.Widget item in mounts_listbox.get_children()) {
+            ListItem list_item = (ListItem) (item as Gtk.ListBoxRow).get_child();
+            list_item.cancel_operation();
+        }
+
+        foreach (Gtk.Widget item in networks_listbox.get_children()) {
+            ListItem list_item = (ListItem) (item as Gtk.ListBoxRow).get_child();
+            list_item.cancel_operation();
+        }
+
+        places_section.reveal(false);
+        message_bar.hide_it();
     }
 
     /**
@@ -110,8 +143,8 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         if (before == null || after == null || prev != next) {
             Gtk.Label label = new Gtk.Label(GLib.Markup.printf_escaped("<span font=\"11\">%s</span>", prev));
             label.get_style_context().add_class("dim-label");
-            label.halign = Gtk.Align.START;
-            label.use_markup = true;
+            label.set_halign(Gtk.Align.START);
+            label.set_use_markup(true);
             before.set_header(label);
             label.margin = 3;
         } else {
@@ -122,13 +155,12 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     /*
      * Construct the listbox placeholder
      */
-    private void set_up_placeholder()
+    private Gtk.Box set_up_placeholder()
     {
         Gtk.Box placeholder_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-        placeholder_box.margin = 10;
+        placeholder_box.margin = 20;
         placeholder_box.set_halign(Gtk.Align.CENTER);
         placeholder_box.set_valign(Gtk.Align.CENTER);
-        mounts_listbox.set_placeholder(placeholder_box);
 
         Gtk.Image placeholder_image = new Gtk.Image.from_icon_name(
             "drive-harddisk-symbolic", Gtk.IconSize.DIALOG);
@@ -140,13 +172,15 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         placeholder_label.use_markup = true;
         placeholder_box.pack_start(placeholder_label, false, false, 0);
         Gtk.Label placeholder_label1 = new Gtk.Label(
-            @"<span font=\"10\">%s\n%s</span>".printf(_("Mount some drives"), _("Enable more sections")));
+            "<span font=\"10\">%s\n%s</span>".printf(_("Mount some drives"), _("Enable more sections")));
         placeholder_label1.use_markup = true;
-        placeholder_label1.set_justify(Gtk.Justification.CENTER);
+        placeholder_label1.set_justify(Gtk.Justification.LEFT);
         placeholder_label1.get_style_context().add_class("dim-label");
         placeholder_box.pack_start(placeholder_label1, false, false, 0);
 
         placeholder_box.show_all();
+
+        return placeholder_box;
     }
 
     /*
@@ -173,13 +207,16 @@ public class PlacesIndicatorWindow : Gtk.Popover {
             bookmarks_monitor.set_rate_limit(1000);
 
             // Refresh special directories (including the bookmarks) when the file changes
-            bookmarks_monitor.changed.connect((src, dest, event)=> {
-                if (event == GLib.FileMonitorEvent.CHANGES_DONE_HINT) {
-                    refresh_special_dirs();
-                }
-            });
+            bookmarks_monitor.changed.connect(on_bookmarks_change);
         } catch (GLib.IOError e) {
             warning(e.message);
+        }
+    }
+
+    private void on_bookmarks_change(GLib.File src, GLib.File? dest, GLib.FileMonitorEvent event)
+    {
+        if (event == GLib.FileMonitorEvent.CHANGES_DONE_HINT) {
+            refresh_special_dirs();
         }
     }
 
@@ -199,24 +236,37 @@ public class PlacesIndicatorWindow : Gtk.Popover {
 
     /*
      * Figures out if we should expand the places section
-     * (Expand if it's the only enabled section)
+     * (Expand if it's the only enabled (populated) section)
      */
     private void check_expand()
     {
-        if (((!show_drives && !show_networks) || mounts_listbox.get_children().length() == 0) && show_places) {
-            mounts_listbox.set_no_show_all(true);
-            mounts_listbox.hide();
-            places_section.reveal(true);
-        } else if (show_drives || show_networks) {
-            mounts_listbox.set_no_show_all(false);
-            mounts_listbox.show();
-            // Only contract the places section if it wasn't previously expanded by the user
-            if (places_section.expanded_by == "code") {
+        if (mounts_listbox.get_visible()) {
+            mounts_listbox.set_visible(mounts_listbox.get_children().length() != 0);
+        }
+
+        if (networks_listbox.get_visible()) {
+            networks_listbox.set_visible(networks_listbox.get_children().length() != 0);
+        }
+
+        if (places_section.get_visible()) {
+            if (!mounts_listbox.get_visible() && !networks_listbox.get_visible()) {
+                places_section.reveal(true);
+                only_places = true;
+            } else if (only_places) {
                 places_section.reveal(false);
+                only_places = false;
             }
-        } else {
-            mounts_listbox.set_no_show_all(false);
-            mounts_listbox.show();
+        }
+
+        placeholder.hide();
+        placeholder.set_no_show_all(true);
+
+        if (!places_section.get_visible() &&
+            !mounts_listbox.get_visible() &&
+            !networks_listbox.get_visible())
+        {
+            placeholder.set_no_show_all(false);
+            placeholder.show();
         }
     }
 
@@ -228,26 +278,21 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     {
         switch (section) {
             case "places":
-                if (show_places) {
-                    places_section.show();
-                    // Stop it from re-appearing when opening the popover
-                    places_section.set_no_show_all(false);
-                    refresh_special_dirs();
-                } else {
-                    places_section.set_no_show_all(true);
-                    places_section.hide();
-                }
+                places_section.set_no_show_all(!show_places);
+                places_section.set_visible(show_places);
                 break;
             case "drives":
+                mounts_listbox.set_no_show_all(!show_drives);
+                mounts_listbox.set_visible(show_drives);
+                break;
             case "networks":
-                refresh_mounts();
+                networks_listbox.set_no_show_all(!show_networks);
+                networks_listbox.set_visible(show_networks);
                 break;
             default:
                 break;
         }
 
-        // Always retract the places section revealer when enabling/disabling sections
-        places_section.reveal(false);
         check_expand();
     }
 
@@ -292,22 +337,15 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     }
 
     /*
-     * Check if a mount is interesting to us
-     */
-    private bool is_interesting(GLib.Mount? mount)
-    {
-        if (mount.is_shadowed()) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
      * Finds all relevant mounts and adds them to the view
      */
     private void refresh_mounts()
     {
         foreach (Gtk.Widget item in mounts_listbox.get_children()) {
+            item.destroy();
+        }
+
+        foreach (Gtk.Widget item in networks_listbox.get_children()) {
             item.destroy();
         }
 
@@ -336,6 +374,21 @@ public class PlacesIndicatorWindow : Gtk.Popover {
             }
         }
 
+        // Add mounts without volumes
+        foreach (GLib.Mount mount in volume_monitor.get_mounts()) {
+            if (mount.is_shadowed() || mount.get_volume() != null) {
+                continue;
+            }
+
+            GLib.File root = mount.get_default_location();
+
+            if (!root.is_native()) {
+                add_mount(mount, "network");
+            } else {
+                add_mount(mount, "device");
+            }
+        }
+
         get_child().show_all();
         check_expand();
     }
@@ -345,45 +398,45 @@ public class PlacesIndicatorWindow : Gtk.Popover {
      */
     private void add_volume(GLib.Volume volume)
     {
-        if ((volume.get_identifier("class") == "network" && !show_networks) ||
-            (volume.get_identifier("class") == "device" && !show_drives))
-        {
-            return;
-        }
+        string? volume_class = volume.get_identifier("class");
 
         VolumeItem volume_item = new VolumeItem(volume);
-        mounts_listbox.add(volume_item);
+
+        if (volume_class == "network") {
+            networks_listbox.add(volume_item);
+        } else {
+            mounts_listbox.add(volume_item);
+        }
+
         volume_item.get_parent().set_can_focus(false);
 
-        volume_item.send_message.connect((message_content, message_type)=> {
-            message_bar.set_content(message_content, message_type);
-        });
+        volume_item.send_message.connect(set_message);
     }
 
     /*
      * Adds a mount to the view
      */
-    private void add_mount(GLib.Mount mount, string? class)
+    private void add_mount(GLib.Mount mount, string? mount_class)
     {
-        if ((class == "network" && !show_networks) || (class == "device" && !show_drives)) {
-            return;
-        }
-
         if (!mount.can_unmount() && !mount.can_eject()) {
             return;
         }
 
-        if (!is_interesting(mount)) {
+        if (mount.is_shadowed()) {
             return;
         }
 
-        MountItem mount_item = new MountItem(mount, class);
-        mounts_listbox.add(mount_item);
+        MountItem mount_item = new MountItem(mount, mount_class);
+
+        if (mount_class == "network") {
+            networks_listbox.add(mount_item);
+        } else {
+            mounts_listbox.add(mount_item);
+        }
+
         mount_item.get_parent().set_can_focus(false);
 
-        mount_item.send_message.connect((message_content, message_type)=> {
-            message_bar.set_content(message_content, message_type);
-        });
+        mount_item.send_message.connect(set_message);
     }
 
     /*
@@ -392,21 +445,22 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     private void add_place(string path, string class)
     {
         string unescaped_path = GLib.Uri.unescape_string(path);
+
         if (places_list.contains(unescaped_path)) {
             return;
         }
 
-        /*
-         * Check if $path is "file:/// /" because nautilus saves the
-         * root directory as that for some (stupid, I'm sure) reason.
-        */
-        if (path == "file:/// /") {
-            path = "file:///";
-        }
+        string new_path = path.split(" ")[0];
+        GLib.File file = GLib.File.new_for_uri(new_path);
 
-        GLib.File file = GLib.File.new_for_uri(path);
         PlaceItem place_item = new PlaceItem(file, "place");
         places_list.add(unescaped_path);
         places_section.add_item(place_item);
+
+        place_item.send_message.connect(set_message);
+    }
+
+    private void set_message(string message) {
+        message_bar.set_content(message);
     }
 }

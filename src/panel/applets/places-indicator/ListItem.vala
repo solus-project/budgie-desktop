@@ -17,9 +17,11 @@ public abstract class ListItem : Gtk.Box
     protected Gtk.Overlay overlay;
     protected Gtk.Spinner spin;
 
+    public signal void send_message(string message_content);
+
     public ListItem()
     {
-        orientation = Gtk.Orientation.HORIZONTAL;
+        orientation = Gtk.Orientation.VERTICAL;
         spacing = 0;
 
         name_button = new Gtk.ToolButton(null, null);
@@ -35,7 +37,7 @@ public abstract class ListItem : Gtk.Box
     /*
      * Add content to our name button
      */
-    protected void set_button(string label, Gtk.Image image, bool spinner = false)
+    protected void set_button(string label, Gtk.Image image, bool spinner = false, bool offset_spinner = false)
     {
         Gtk.Box box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
@@ -51,6 +53,9 @@ public abstract class ListItem : Gtk.Box
         if (spinner) {
             spin = new Gtk.Spinner();
             spin.set_halign(Gtk.Align.END);
+            if (offset_spinner) {
+                spin.margin_end = 25;
+            }
             box.pack_end(spin, false, false, 2);
         }
 
@@ -76,7 +81,6 @@ public abstract class ListItem : Gtk.Box
             case "network":
                 icon_name = "folder-remote-symbolic";
                 break;
-            case "place":
             default:
                 icon_name = "folder-symbolic";
                 break;
@@ -93,12 +97,25 @@ public abstract class ListItem : Gtk.Box
         return category_name;
     }
 
-    protected void open_directory(string location)
+    /*
+     * Opens the given directory
+     */
+    protected void open_directory(GLib.File? root)
     {
+        if (root == null) {
+            return;
+        }
+
+        GLib.AppLaunchContext launch_context = Gdk.Display.get_default().get_app_launch_context();
+        GLib.List<GLib.File> file_list = new GLib.List<GLib.File>();
+        file_list.append(root);
+
         try {
-            Gtk.show_uri(Gdk.Screen.get_default(), location, Gdk.CURRENT_TIME);
+            GLib.AppInfo.get_default_for_type("inode/directory", true).launch(file_list, launch_context);
         } catch (GLib.Error e) {
             warning(e.message);
         }
     }
+
+    public virtual void cancel_operation() {}
 }
