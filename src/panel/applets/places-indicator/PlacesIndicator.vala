@@ -106,7 +106,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
     public void toggle_popover()
     {
         if (popover.get_visible()) {
-            popover.hide();
+            popover.popdown();
         } else {
             popover.get_child().show_all();
             this.manager.show_popover(ebox);

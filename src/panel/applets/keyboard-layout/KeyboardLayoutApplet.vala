@@ -261,7 +261,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
-                popover.hide();
+                popover.popdown();
             } else {
                 this.manager.show_popover(widget);
             }
@@ -333,7 +333,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         uint idx = btn.idx;
 
         this.settings.set_uint("current", idx);
-        popover.hide();
+        popover.popdown();
     }
 
     /**
