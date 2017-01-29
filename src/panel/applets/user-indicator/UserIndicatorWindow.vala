@@ -100,7 +100,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
         IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "media-playback-pause-symbolic", false);
-        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "system-suspend-hibernate", false);
+        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "media-playback-pause-symbolic", false);
         IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "media-playlist-repeat-symbolic", false);
         IndicatorItem shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 
