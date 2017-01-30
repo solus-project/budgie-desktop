@@ -449,7 +449,7 @@ public class NotificationsView : Gtk.Box
     private HeaderWidget? header = null;
     private Gtk.ListBox? listbox;
 
-    private GLib.Queue<NotificationWindow?> queue = null;
+    private GLib.Queue<NotificationWindow?> stack = null;
 
     /* Obviously we'll change this.. */
     private HashTable<uint32,NotificationWindow?> notifications;
@@ -501,7 +501,7 @@ public class NotificationsView : Gtk.Box
         widget.stop_decay();
 
         notifications.remove(widget.id);
-        queue.remove(widget);
+        stack.remove(widget);
         widget.destroy();
         return true;
     }
@@ -581,7 +581,7 @@ public class NotificationsView : Gtk.Box
         int y = 0;
         Gdk.Rectangle rect;
 
-        unowned NotificationWindow? tail = queue.peek_tail();
+        unowned NotificationWindow? tail = stack.peek_tail();
         var screen = Gdk.Screen.get_default();
 
         int mon = screen.get_primary_monitor();
@@ -600,7 +600,7 @@ public class NotificationsView : Gtk.Box
             y = (rect.y) + INITIAL_BUFFER_ZONE;
         }
 
-        queue.push_tail(window);
+        stack.push_head(window);
         window.move(x, y);
         window.show_all();
         window.begin_decay();
@@ -651,7 +651,7 @@ public class NotificationsView : Gtk.Box
         pack_start(header, false, false, 0);
 
         notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
-        queue = new GLib.Queue<NotificationWindow?>();
+        stack = new GLib.Queue<NotificationWindow?>();
 
         var scrolledwindow = new Gtk.ScrolledWindow(null, null);
         scrolledwindow.get_style_context().add_class("raven-background");
