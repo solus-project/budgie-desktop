@@ -15,7 +15,7 @@
 
 gchar *budgie_form_theme_path(const gchar *suffix)
 {
-        gint minor_version = gtk_get_minor_version();
+        guint minor_version = gtk_get_minor_version();
 
         /* Prioritize 3.18 */
         switch (minor_version) {
