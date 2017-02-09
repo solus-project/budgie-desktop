@@ -11,26 +11,26 @@
 
 namespace Budgie {
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string MODULE_DIRECTORY;
+    public extern const string MODULE_DIRECTORY;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string MODULE_DATA_DIRECTORY;
+    public extern const string MODULE_DATA_DIRECTORY;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string DATADIR;
+    public extern const string DATADIR;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string CONFDIR;
+    public extern const string CONFDIR;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string VERSION;
+    public extern const string VERSION;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string WEBSITE;
+    public extern const string WEBSITE;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string GETTEXT_PACKAGE;
+    public extern const string GETTEXT_PACKAGE;
 
     [CCode (cheader_filename = "budgie-config.h")]
-    public static extern const string LOCALEDIR;
+    public extern const string LOCALEDIR;
 }

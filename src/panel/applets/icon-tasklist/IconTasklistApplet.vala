@@ -22,7 +22,7 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
  */
 public class DesktopHelper : Object
 {
-    public static const Gtk.TargetEntry[] targets = {
+    public const Gtk.TargetEntry[] targets = {
         { "application/x-icon-tasklist-launcher-id", 0, 0 }
     };
 

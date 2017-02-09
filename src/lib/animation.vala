@@ -191,7 +191,7 @@ public static double circ_ease_out(double p)
     return Math.sqrt((2 - p) * p);
 }
 
-public static const int64 MSECOND = 1000;
+public const int64 MSECOND = 1000;
 
 } /* End namespace */
 

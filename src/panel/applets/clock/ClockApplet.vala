@@ -22,7 +22,7 @@ enum ClockFormat {
     TWELVE = 1;
 }
 
-public static const string CALENDAR_MIME = "text/calendar";
+public const string CALENDAR_MIME = "text/calendar";
 
 public class ClockApplet : Budgie.Applet
 {

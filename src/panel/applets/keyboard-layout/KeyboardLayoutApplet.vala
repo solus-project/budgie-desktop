@@ -17,9 +17,9 @@ public class KeyboardLayoutPlugin : Budgie.Plugin, Peas.ExtensionBase
     }
 }
 
-public static const string DEFAULT_LOCALE = "en_US";
-public static const string DEFAULT_LAYOUT = "us";
-public static const string DEFAULT_VARIANT = "";
+public const string DEFAULT_LOCALE = "en_US";
+public const string DEFAULT_LAYOUT = "us";
+public const string DEFAULT_VARIANT = "";
 
 errordomain InputMethodError {
     UNKNOWN_IME

@@ -153,7 +153,7 @@ namespace Budgie {
     public static double circ_ease_out(double p);
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
-    public static const int64 MSECOND;
+    public const int64 MSECOND;
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
     public abstract class DesktopManager : GLib.Object

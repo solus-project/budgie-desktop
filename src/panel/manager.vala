@@ -14,10 +14,10 @@ using LibUUID;
 namespace Budgie
 {
 
-public static const string DBUS_NAME        = "com.solus_project.budgie.Panel";
-public static const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
+public const string DBUS_NAME        = "com.solus_project.budgie.Panel";
+public const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
-public static const string MIGRATION_1_APPLETS[] = {
+public const string MIGRATION_1_APPLETS[] = {
     "User Indicator",
     "Raven Trigger",
 };
@@ -34,64 +34,64 @@ class Screen : Object {
 /**
  * Maximum slots set to 2 because Raven has a side in this.
  */
-public static const uint MAX_SLOTS         = 2;
+public const uint MAX_SLOTS         = 2;
 
 /**
  * Root prefix for fixed schema
  */
-public static const string ROOT_SCHEMA     = "com.solus-project.budgie-panel";
+public const string ROOT_SCHEMA     = "com.solus-project.budgie-panel";
 
 /**
  * Relocatable schema ID for toplevel panels
  */
-public static const string TOPLEVEL_SCHEMA = "com.solus-project.budgie-panel.panel";
+public const string TOPLEVEL_SCHEMA = "com.solus-project.budgie-panel.panel";
 
 /**
  * Prefix for all relocatable panel settings
  */
-public static const string TOPLEVEL_PREFIX = "/com/solus-project/budgie-panel/panels";
+public const string TOPLEVEL_PREFIX = "/com/solus-project/budgie-panel/panels";
 
 
 /**
  * Relocatable schema ID for applets
  */
-public static const string APPLET_SCHEMA   = "com.solus-project.budgie-panel.applet";
+public const string APPLET_SCHEMA   = "com.solus-project.budgie-panel.applet";
 
 /**
  * Prefix for all relocatable applet settings
  */
-public static const string APPLET_PREFIX   = "/com/solus-project/budgie-panel/applets";
+public const string APPLET_PREFIX   = "/com/solus-project/budgie-panel/applets";
 
 /**
  * Known panels
  */
-public static const string ROOT_KEY_PANELS     = "panels";
+public const string ROOT_KEY_PANELS     = "panels";
 
 /** Panel position */
-public static const string PANEL_KEY_POSITION   = "location";
+public const string PANEL_KEY_POSITION   = "location";
 
 /** Panel applets */
-public static const string PANEL_KEY_APPLETS    = "applets";
+public const string PANEL_KEY_APPLETS    = "applets";
 
 /** Night mode/dark theme */
-public static const string PANEL_KEY_DARK_THEME = "dark-theme";
+public const string PANEL_KEY_DARK_THEME = "dark-theme";
 
 /** Panel size */
-public static const string PANEL_KEY_SIZE       = "size";
+public const string PANEL_KEY_SIZE       = "size";
 
 /** Shadow */
-public static const string PANEL_KEY_SHADOW     = "enable-shadow";
+public const string PANEL_KEY_SHADOW     = "enable-shadow";
 
 /** Theme regions permitted? */
-public static const string PANEL_KEY_REGIONS    = "theme-regions";
+public const string PANEL_KEY_REGIONS    = "theme-regions";
 
 /** Current migration level in settings */
-public static const string PANEL_KEY_MIGRATION  = "migration-level";
+public const string PANEL_KEY_MIGRATION  = "migration-level";
 
 /**
  * The current migration level of Budgie, or format change, if you will.
  */
-public static const int BUDGIE_MIGRATION_LEVEL = 1;
+public const int BUDGIE_MIGRATION_LEVEL = 1;
 
 
 [DBus (name = "com.solus_project.budgie.Panel")]

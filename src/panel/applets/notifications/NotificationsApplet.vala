@@ -17,8 +17,8 @@ public class NotificationsPlugin : Budgie.Plugin, Peas.ExtensionBase
     }
 }
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
+public const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
 [DBus (name="com.solus_project.budgie.Raven")]
 public interface RavenRemote : Object
