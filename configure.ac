@@ -23,7 +23,7 @@ m4_define([ibus_required_version], [1.5.10])
 
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
-AM_PROG_VALAC([0.28], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
+AM_PROG_VALAC([0.30], [], [AC_MSG_ERROR([valac is required to build Budgie Desktop])])
 AC_SUBST(VALAFLAGS)
 
 
