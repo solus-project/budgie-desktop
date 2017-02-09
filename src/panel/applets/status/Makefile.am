@@ -1,6 +1,6 @@
 if ENABLE_STATUS_PLUGIN
 
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -38,7 +38,8 @@ libstatusapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(STATUS_PLUGIN_CFLAGS) \
 	$(GVC_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libstatusapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

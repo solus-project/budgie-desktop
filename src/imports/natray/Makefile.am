@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 
 EXTRA_DIST = \
@@ -19,7 +19,8 @@ libnatray_la_SOURCES = \
 		fixedtip.h
 
 libnatray_la_CFLAGS = \
-		$(NATRAY_CFLAGS)
+		$(NATRAY_CFLAGS) \
+		$(AM_CFLAGS)
 
 libnatray_la_LIBADD = \
 		$(NATRAY_LIBS)

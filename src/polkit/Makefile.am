@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 polkit_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/polkit --generate-dependencies $(top_srcdir)/src/polkit/budgie-polkit.gresource.xml)
 
@@ -48,7 +48,8 @@ budgie_polkit_dialog_SOURCES = \
 budgie_polkit_dialog_CFLAGS = \
 	$(POLKIT_DIALOG_CFLAGS) \
 	-DPOLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 budgie_polkit_dialog_LDADD = \
 	$(POLKIT_DIALOG_LIBS) \

@@ -1,6 +1,6 @@
 if ENABLE_WORKSPACES_PLUGIN
 
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -36,7 +36,8 @@ libworkspacesapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(WORKSPACES_PLUGIN_CFLAGS) \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libworkspacesapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

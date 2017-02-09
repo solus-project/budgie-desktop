@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
 	toplevel.vapi
@@ -14,7 +14,8 @@ libtoplevel_la_SOURCES = \
 libtoplevel_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
 	$(BUDGIE_PLUGIN_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libtoplevel_la_LIBADD = \
 	$(BUDGIE_BASE_LIBS) \

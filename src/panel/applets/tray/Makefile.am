@@ -1,6 +1,6 @@
 if ENABLE_TRAY_PLUGIN
 
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -34,7 +34,8 @@ libtrayapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(NATRAY_CFLAGS) \
 	$(DECLARATIONS) \
-	-I${top_srcdir}/src/imports/natray
+	-I${top_srcdir}/src/imports/natray \
+	$(VALA_NOISY_FLAGS)
 
 libtrayapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

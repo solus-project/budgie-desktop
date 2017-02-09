@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
 	budgie-theme.gresource.xml \

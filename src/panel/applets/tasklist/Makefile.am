@@ -1,6 +1,6 @@
 if ENABLE_TASKLIST_PLUGIN
 
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -35,7 +35,8 @@ libtasklistapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(TASKLIST_PLUGIN_CFLAGS) \
 	-DWNCK_I_KNOW_THIS_IS_UNSTABLE \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libtasklistapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

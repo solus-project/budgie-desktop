@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 include $(INTROSPECTION_MAKEFILE)
 include $(VAPIGEN_MAKEFILE)

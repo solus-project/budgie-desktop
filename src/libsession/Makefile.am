@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
 	libsession.vapi
@@ -10,7 +10,8 @@ libsession_la_SOURCES = \
 	libsession.vala
 
 libsession_la_CFLAGS = \
-	$(LIBSESSION_CFLAGS)
+	$(LIBSESSION_CFLAGS) \
+	$(VALA_NOISY_FLAGS)
 
 libsession_la_LIBADD = \
 	$(LIBSESSION_LIBS)

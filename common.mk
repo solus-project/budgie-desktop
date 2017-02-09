@@ -12,7 +12,7 @@ AM_CFLAGS = \
 	-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_46
 
 
-AM_CPPFLAGS += \
+AM_CPPFLAGS = \
 	-I $(top_srcdir) \
 	-I $(top_srcdir)/src/gvc \
 	-I $(top_srcdir)/src/config \
@@ -31,3 +31,10 @@ MODULE_FLAGS = \
 	-module \
 	-avoid-version \
 	-shared
+
+VALA_NOISY_FLAGS = \
+	-Wno-incompatible-pointer-types \
+	-Wno-discarded-qualifiers \
+	-Wno-deprecated \
+	-Wno-deprecated-declarations \
+	-Wno-implicit-function-declaration

@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 daemon_resources = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/daemon --generate-dependencies $(top_srcdir)/src/daemon/budgie-daemon.gresource.xml)
 
@@ -51,7 +51,8 @@ budgie_daemon_SOURCES = \
 
 budgie_daemon_CFLAGS = \
 	$(BUDGIE_DAEMON_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 budgie_daemon_LDADD = \
 	$(BUDGIE_DAEMON_LIBS) \

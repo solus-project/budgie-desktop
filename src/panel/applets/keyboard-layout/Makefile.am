@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -32,7 +32,8 @@ libkeyboardlayoutapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(KEYBOARD_INDICATOR_CFLAGS) \
 	-DGNOME_DESKTOP_USE_UNSTABLE_API \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libkeyboardlayoutapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

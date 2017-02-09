@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST = \
 	raven.vapi \
@@ -53,7 +53,8 @@ libraven_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(GVC_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libraven_la_LIBADD = \
 	$(BUDGIE_BASE_LIBS) \

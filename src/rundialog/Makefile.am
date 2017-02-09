@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 bin_PROGRAMS = budgie-run-dialog
 
@@ -7,7 +7,8 @@ budgie_run_dialog_SOURCES = \
 
 budgie_run_dialog_CFLAGS = \
 	$(RUNDIALOG_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 budgie_run_dialog_LDADD = \
 	$(RUNDIALOG_LIBS)	  \

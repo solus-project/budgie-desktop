@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -31,7 +31,8 @@ liblockkeysapplet_la_SOURCES = \
 liblockkeysapplet_la_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
 	$(BUDGIE_PLUGIN_CFLAGS) \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 liblockkeysapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \

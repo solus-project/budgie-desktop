@@ -1,4 +1,4 @@
--include $(top_srcdir)/common.mk
+include $(top_srcdir)/common.mk
 
 EXTRA_DIST =
 pkglib_LTLIBRARIES =
@@ -54,7 +54,8 @@ libbudgiemenuapplet_la_CFLAGS = \
 	$(BUDGIE_PLUGIN_CFLAGS) \
 	$(GMENU_CFLAGS) \
 	-DGMENU_I_KNOW_THIS_IS_UNSTABLE \
-	$(DECLARATIONS)
+	$(DECLARATIONS) \
+	$(VALA_NOISY_FLAGS)
 
 libbudgiemenuapplet_la_LIBADD = \
 	${top_builddir}/src/plugin/libbudgie-plugin.la \
