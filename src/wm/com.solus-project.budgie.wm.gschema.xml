@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie-desktop">
+
+  <schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
+    <key type="b" name="edge-tiling">
+      <default>true</default>
+      <summary>Enable edge tiling when dropping windows on screen edges</summary>
+      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+    </key>
+
+    <key type="b" name="attach-modal-dialogs">
+      <default>true</default>
+      <summary>Attach modal dialog to the parent window</summary>
+      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+    </key>
+
+    <key type="b" name="force-unredirect">
+      <default>false</default>
+      <summary>Forcibly disable screen unredirection</summary>
+      <description>Disables the screen unredirection which may improve performance with certain drivers.</description>
+    </key>
+
+    <key type="as" name="toggle-raven">
+      <default><![CDATA[['<Super>A']]]></default>
+      <summary>The binding to use to toggle Raven applets view</summary>
+      <description>The binding to use to toggle Raven applets view</description>
+    </key>
+
+    <key type="as" name="toggle-notifications">
+      <default><![CDATA[['<Super>N']]]></default>
+      <summary>The binding to use to toggle Raven notifications</summary>
+      <description>The binding to use to toggle Raven notifications</description>
+    </key>
+
+    <key name="button-layout" type="s">
+      <default>'appmenu:minimize,maximize,close'</default>
+      <summary>Arrangement of buttons on the titlebar</summary>
+      <description>
+        Arrangement of buttons on the titlebar. The value should be a string,
+        such as  "menu:minimize,maximize,spacer,close"; the colon separates
+        the  left corner of the window from the right corner, and  the button
+        names are comma-separated. Duplicate buttons are not allowed. Unknown
+        button names are silently ignored so that buttons can be added in
+        future metacity versions  without breaking older versions. A special
+        spacer tag can be used to insert some space between
+        two adjacent buttons.
+      </description>
+    </key>
+  </schema>
+
+</schemalist>

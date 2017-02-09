@@ -172,6 +172,8 @@ AC_CONFIG_FILES([Makefile
                 src/session/Makefile
                 src/theme/budgie-theme-1.0.pc
                 src/theme/Makefile
+                src/wm/budgie-wm.desktop
+                src/wm/Makefile
                 po/Makefile.in
                 docs/Makefile])
 

@@ -11,4 +11,5 @@ SUBDIRS = \
 	polkit \
 	rundialog \
 	session \
-	daemon
+	daemon \
+	wm
