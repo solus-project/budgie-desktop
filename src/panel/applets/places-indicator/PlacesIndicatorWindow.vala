@@ -444,14 +444,14 @@ public class PlacesIndicatorWindow : Gtk.Popover {
      */
     private void add_place(string path, string class)
     {
-        string unescaped_path = GLib.Uri.unescape_string(path);
+        string place = path.split(" ")[0];
+        string unescaped_path = GLib.Uri.unescape_string(place);
 
         if (places_list.contains(unescaped_path)) {
             return;
         }
 
-        string new_path = path.split(" ")[0];
-        GLib.File file = GLib.File.new_for_uri(new_path);
+        GLib.File file = GLib.File.new_for_uri(unescaped_path);
 
         PlaceItem place_item = new PlaceItem(file, "place");
         places_list.add(unescaped_path);
