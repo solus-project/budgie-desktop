@@ -120,7 +120,7 @@ public class VolumeItem : ListItem
             } else if (first_try && unlock_revealer != null) {
                 send_message(_("Enter the encryption passphrase to unlock this volume"));
             } else {
-                send_message(_("An unknown error occured while attempting to mount this volume"));
+                send_message(_("An unknown error occurred while attempting to mount this volume"));
             }
             message(e.message);
         }
