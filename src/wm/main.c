@@ -9,11 +9,36 @@
  * (at your option) any later version.
  */
 
+#include <meta/main.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv)
 {
-        return EXIT_FAILURE;
+        int ret = META_EXIT_ERROR;
+        GOptionContext *context = NULL;
+        GError *error = NULL;
+
+        /* Initialise meta variables */
+        context = meta_get_option_context();
+        if (!g_option_context_parse(context, &argc, &argv, &error)) {
+                goto clean;
+        }
+
+        /* TODO: Initialise the actual plugin type */
+        meta_set_gnome_wm_keybindings("Mutter,GNOME Shell");
+        meta_set_wm_name("Mutter(Budgie)");
+
+        /* Fix environment */
+        g_setenv("NO_GAIL", "1", TRUE);
+        g_setenv("NO_AT_BRIDGE", "1", TRUE);
+
+clean:
+        if (error) {
+                g_printerr("Unknown option: %s\n", error->message);
+                g_error_free(error);
+        }
+        g_option_context_free(context);
+        return ret;
 }
 
 /*
