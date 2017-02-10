@@ -12,16 +12,18 @@
 #include <meta/main.h>
 #include <stdlib.h>
 
+#include "util.h"
+
 int main(int argc, char **argv)
 {
         int ret = META_EXIT_ERROR;
-        GOptionContext *context = NULL;
-        GError *error = NULL;
+        autofree(GOptionContext) *context = NULL;
+        autofree(GError) *error = NULL;
 
         /* Initialise meta variables */
         context = meta_get_option_context();
         if (!g_option_context_parse(context, &argc, &argv, &error)) {
-                goto clean;
+                goto end;
         }
 
         /* TODO: Initialise the actual plugin type */
@@ -32,12 +34,10 @@ int main(int argc, char **argv)
         g_setenv("NO_GAIL", "1", TRUE);
         g_setenv("NO_AT_BRIDGE", "1", TRUE);
 
-clean:
+end:
         if (error) {
                 g_printerr("Unknown option: %s\n", error->message);
-                g_error_free(error);
         }
-        g_option_context_free(context);
         return ret;
 }
 
