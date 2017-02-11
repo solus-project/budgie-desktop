@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "plugin.h"
+#include "util.h"
 
 struct _BudgieMetaPluginClass {
         MetaPluginClass parent_class;
@@ -78,7 +79,7 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
  *
  * Handle construction of the BudgieMetaPlugin
  */
-static void budgie_meta_plugin_init(BudgieMetaPlugin *self)
+static void budgie_meta_plugin_init(__budgie_unused__ BudgieMetaPlugin *self)
 {
         /* TODO: Any form of init */
 }
@@ -95,7 +96,7 @@ void budgie_meta_plugin_register_type(void)
 /**
  * Return the identifier for this budgie-wm plugin
  */
-static const MetaPluginInfo *budgie_meta_plugin_info(MetaPlugin *plugin)
+static const MetaPluginInfo *budgie_meta_plugin_info(__budgie_unused__ MetaPlugin *plugin)
 {
         return &budgie_plugin_info;
 }

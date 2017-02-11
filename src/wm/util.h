@@ -31,6 +31,11 @@
 #define autofree(N) __attribute__((cleanup(_autofree_func_##N))) N
 
 /**
+ * Silence compiler warnings for not using the variable/parameter
+ */
+#define __budgie_unused__ __attribute__((unused))
+
+/**
  * Common definitions for some autofree helpers
  */
 DEF_AUTOFREE(gchar, g_free)
