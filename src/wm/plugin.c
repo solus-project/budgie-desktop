@@ -14,6 +14,7 @@
 #include <meta/meta-plugin.h>
 
 #include "config.h"
+#include "plugin-private.h"
 #include "plugin.h"
 #include "util.h"
 
@@ -70,8 +71,24 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
         /* gobject vtable */
         obj_class->dispose = budgie_meta_plugin_dispose;
 
-        /* mutter vtable */
+        /* Hook up the vtable
+         * Note: We're still going to need to add some more yet and handle
+         * more than the old budgie-wm
+         */
         plug_class->plugin_info = budgie_meta_plugin_info;
+        plug_class->start = budgie_meta_plugin_start;
+        plug_class->minimize = budgie_meta_plugin_minimize;
+        plug_class->unminimize = budgie_meta_plugin_unminimize;
+        plug_class->map = budgie_meta_plugin_map;
+        plug_class->destroy = budgie_meta_plugin_destroy;
+        plug_class->switch_workspace = budgie_meta_plugin_switch_workspace;
+        plug_class->show_tile_preview = budgie_meta_plugin_show_tile_preview;
+        plug_class->hide_tile_preview = budgie_meta_plugin_hide_tile_preview;
+        plug_class->show_window_menu = budgie_meta_plugin_show_window_menu;
+        plug_class->show_window_menu_for_rect = budgie_meta_plugin_show_window_menu_for_rect;
+        plug_class->kill_window_effects = budgie_meta_plugin_kill_window_effects;
+        plug_class->kill_switch_workspace = budgie_meta_plugin_kill_switch_workspace;
+        plug_class->confirm_display_change = budgie_meta_plugin_confirm_display_change;
 }
 
 /**

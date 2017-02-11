@@ -17,6 +17,7 @@ budgie_wm_SOURCES = \
 	main.c \
 	plugin.h \
 	plugin.c \
+	plugin-private.h \
 	util.h
 
 budgie_wm_CFLAGS = \
