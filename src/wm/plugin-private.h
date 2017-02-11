@@ -12,6 +12,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <meta/meta-plugin.h>
 
 G_BEGIN_DECLS
 

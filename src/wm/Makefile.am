@@ -18,7 +18,11 @@ budgie_wm_SOURCES = \
 	plugin.h \
 	plugin.c \
 	plugin-private.h \
-	util.h
+	util.h \
+	impl/minimize.c \
+	impl/unminimize.c \
+	impl/map.c \
+	impl/destroy.c
 
 budgie_wm_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
