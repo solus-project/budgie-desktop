@@ -22,7 +22,9 @@ budgie_wm_SOURCES = \
 	impl/minimize.c \
 	impl/unminimize.c \
 	impl/map.c \
-	impl/destroy.c
+	impl/destroy.c \
+	impl/workspaces.c \
+	impl/tiling.c
 
 budgie_wm_CFLAGS = \
 	$(BUDGIE_BASE_CFLAGS) \
