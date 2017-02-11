@@ -14,6 +14,7 @@ applications_DATA = \
 bin_PROGRAMS = budgie-wm
 
 budgie_wm_SOURCES = \
+	core.c \
 	main.c \
 	plugin.h \
 	plugin.c \
