@@ -82,7 +82,6 @@ budgie-polkit-dialog
 
 /src/wm/budgie-wm
 /src/wm/budgie-wm.desktop
-/src/wm/*.c
 
 *.gschema.valid
 

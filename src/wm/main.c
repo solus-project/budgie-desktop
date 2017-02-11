@@ -12,6 +12,7 @@
 #include <meta/main.h>
 #include <stdlib.h>
 
+#include "plugin.h"
 #include "util.h"
 
 int main(int argc, char **argv)
@@ -26,13 +27,18 @@ int main(int argc, char **argv)
                 goto end;
         }
 
-        /* TODO: Initialise the actual plugin type */
+        budgie_meta_plugin_register_type();
         meta_set_gnome_wm_keybindings("Mutter,GNOME Shell");
         meta_set_wm_name("Mutter(Budgie)");
 
         /* Fix environment */
         g_setenv("NO_GAIL", "1", TRUE);
         g_setenv("NO_AT_BRIDGE", "1", TRUE);
+
+        meta_init();
+        /* TODO: Move register to post-start */
+        meta_register_with_session();
+        ret = meta_run();
 
 end:
         if (error) {
