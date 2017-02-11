@@ -13,17 +13,38 @@
 
 #include <meta/meta-plugin.h>
 
+#include "config.h"
 #include "plugin.h"
 
 struct _BudgieMetaPluginClass {
         MetaPluginClass parent_class;
 };
 
+/**
+ * Actual instance definition
+ */
 struct _BudgieMetaPlugin {
         MetaPlugin parent;
 };
 
+/**
+ * Make ourselves known to gobject
+ */
 G_DEFINE_TYPE(BudgieMetaPlugin, budgie_meta_plugin, META_TYPE_PLUGIN)
+
+/**
+ * Forward-declare
+ */
+static const MetaPluginInfo *budgie_meta_plugin_info(MetaPlugin *plugin);
+
+/**
+ * How we identify ourselves to Mutter
+ */
+static const MetaPluginInfo budgie_plugin_info = {.name = "Budgie WM",
+                                                  .version = PACKAGE_VERSION,
+                                                  .author = "Ikey Doherty",
+                                                  .license = "GPL-2.0",
+                                                  .description = "Budgie Window Manager" };
 
 /**
  * budgie_meta_plugin_dispose:
@@ -43,8 +64,13 @@ static void budgie_meta_plugin_dispose(GObject *obj)
 static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
 {
         GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+        MetaPluginClass *plug_class = META_PLUGIN_CLASS(klazz);
 
+        /* gobject vtable */
         obj_class->dispose = budgie_meta_plugin_dispose;
+
+        /* mutter vtable */
+        plug_class->plugin_info = budgie_meta_plugin_info;
 }
 
 /**
@@ -60,6 +86,18 @@ static void budgie_meta_plugin_init(BudgieMetaPlugin *self)
 void budgie_meta_plugin_register_type(void)
 {
         meta_plugin_manager_set_plugin_type(budgie_meta_plugin_get_type());
+}
+
+/**
+ * mutter API methods
+ */
+
+/**
+ * Return the identifier for this budgie-wm plugin
+ */
+static const MetaPluginInfo *budgie_meta_plugin_info(MetaPlugin *plugin)
+{
+        return &budgie_plugin_info;
 }
 
 /*
