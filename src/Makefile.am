@@ -1,5 +1,4 @@
 SUBDIRS = \
-	lib \
 	raven \
 	panel \
 	polkit \

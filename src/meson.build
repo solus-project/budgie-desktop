@@ -6,6 +6,7 @@ subdir('libsession')
 subdir('imports')
 subdir('plugin')
 subdir('theme')
+subdir('lib')
 
 # Executable components
 subdir('rundialog')
