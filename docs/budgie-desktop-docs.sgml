@@ -2,9 +2,9 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
 [
-  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY version SYSTEM "version.xml">
 ]>
-<book id="index">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>budgie-desktop Reference Manual</title>
     <releaseinfo>
@@ -14,7 +14,7 @@
     </releaseinfo>
   </bookinfo>
 
-  <chapter>
+  <chapter id="budgie-desktop">
     <title>Budgie Desktop</title>
         <xi:include href="xml/applet.xml"/>
     <xi:include href="xml/applet-info.xml"/>

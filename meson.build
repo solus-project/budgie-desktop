@@ -101,5 +101,8 @@ subdir('po')
 # Now build Budgie proper
 subdir('src')
 
+# Documentation...
+subdir('docs')
+
 # And lastly, data bits
 subdir('data')
