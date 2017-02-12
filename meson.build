@@ -46,6 +46,9 @@ dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
 dep_peas = dependency('libpeas-1.0', version: '>= 1.8.0')
 dep_libuuid = dependency('uuid', version: '>= 1.0')
 
+# wnck used all over the place..
+dep_wnck = dependency('libwnck-3.0', version: '>= 3.14.0')
+
 # Create config.h
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())

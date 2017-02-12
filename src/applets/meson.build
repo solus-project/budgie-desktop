@@ -5,3 +5,4 @@ applets_dir = join_paths(plugin_libdir, applet_namespace)
 
 subdir('clock')
 subdir('notifications')
+subdir('show-desktop')
