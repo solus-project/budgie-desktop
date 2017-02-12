@@ -1,0 +1,1 @@
+option('enable-stateless', type: 'boolean', value: false, description: 'Enable stateless XDG paths')
