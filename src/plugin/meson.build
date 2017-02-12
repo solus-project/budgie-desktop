@@ -12,7 +12,6 @@ plugin_enums = gnome.mkenums(
     install_dir: join_paths(get_option('includedir'), 'budgie-desktop'),
 )
 
-
 # install headers
 plugin_headers = [
 	'plugin.h',
