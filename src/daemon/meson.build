@@ -25,9 +25,9 @@ daemon_sources = [
 
 daemon_deps = [
     dep_gtk3,
+    dep_gdkx11,
     link_libtheme,
     link_libsession,
-    dependency('gdk-x11-3.0', version: gnome_minimum_version)
 ]
 
 
