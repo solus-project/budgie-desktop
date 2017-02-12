@@ -1,5 +1,4 @@
 SUBDIRS = \
 	raven \
 	panel \
-	session \
-	daemon
+	session

@@ -115,13 +115,3 @@ docs/budgie-desktop*.txt
 docs/html/
 docs/xml/
 test-driver
-
-# Daemon
-/src/daemon/budgie-daemon.desktop.in
-/src/daemon/budgie-daemon.desktop
-# Temporary, using Vala.
-/src/daemon/*.c
-/src/daemon/*.h
-
-# Main daemon binary
-/src/daemon/budgie-daemon

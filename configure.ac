@@ -107,7 +107,6 @@ m4_include([src/panel/applets/status/configure.ac])
 m4_include([src/panel/applets/tray/configure.ac])
 m4_include([src/panel/applets/user-indicator/configure.ac])
 m4_include([src/panel/applets/workspaces/configure.ac])
-m4_include([src/daemon/configure.ac])
 
 # Find the libraries containing animation functions we need.
 BACKLIBS="$LIBS"
