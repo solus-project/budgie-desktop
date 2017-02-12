@@ -53,11 +53,14 @@ cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
 
+# Globals that we need
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
+msgfmt = find_program('msgfmt')
+podir = join_paths(meson.source_root(), 'po')
 
 cdata.set_quoted('MODULEDIR', join_paths(libdir, meson.project_name(), 'plugins'))
 cdata.set_quoted('MODULE_DATA_DIR', join_paths(datadir, meson.project_name(), 'plugins'))

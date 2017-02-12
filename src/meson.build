@@ -9,5 +9,6 @@ subdir('theme')
 subdir('lib')
 
 # Executable components
+subdir('polkit')
 subdir('rundialog')
 subdir('wm')
