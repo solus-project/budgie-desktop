@@ -10,6 +10,7 @@ theme_resources = gnome.compile_resources('budgie-theme-resources',
 theme_sources = [
     'theme.c',
     'theme-manager.c',
+    theme_resources,
 ]
 
 lib_theme = shared_library('budgietheme',
