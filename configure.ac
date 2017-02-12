@@ -158,7 +158,6 @@ AC_CONFIG_FILES([Makefile
                 src/Makefile
                 src/gvc/Makefile
                 src/lib/Makefile
-                src/libsession/Makefile
                 src/plugin/Makefile
                 src/plugin/budgie-1.0.pc
                 src/raven/Makefile
