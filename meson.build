@@ -19,7 +19,7 @@ dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
 
 # Create config.h
 cdata = configuration_data()
-cdata.set('PACKAGE_VERSION', '"' + meson.project_version() + '"')
+cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 
 # Write config.h
 configure_file(
