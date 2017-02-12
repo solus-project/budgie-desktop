@@ -21,6 +21,23 @@ dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 
+# Make gettext work
+cdata.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
+
+prefix = get_option('prefix')
+libdir = join_paths(prefix, get_option('libdir'))
+confdir = join_paths(prefix, get_option('sysconfdir'))
+datadir = join_paths(prefix, get_option('datadir'))
+localedir = join_paths(prefix, get_option('localedir'))
+
+cdata.set_quoted('MODULEDIR', join_paths(libdir, meson.project_name(), 'plugins'))
+cdata.set_quoted('MODULE_DATA_DIR', join_paths(datadir, meson.project_name(), 'plugins'))
+cdata.set_quoted('DATADIR', datadir)
+cdata.set_quoted('SYSCONFDIR', confdir)
+cdata.set_quoted('LOCALEDIR', localedir)
+cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
+
 # Write config.h
 configure_file(
     output: 'config.h',
