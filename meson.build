@@ -47,6 +47,11 @@ dep_peas = dependency('libpeas-1.0', version: '>= 1.8.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: gnome_minimum_version)
 dep_libuuid = dependency('uuid')
 
+# Needed for keyboardy bits
+dep_ibus = dependency('ibus-1.0', verion: '>= 1.5.10')
+dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
+dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
+
 # wnck used all over the place..
 dep_wnck = dependency('libwnck-3.0', version: '>= 3.14.0')
 
