@@ -3,6 +3,7 @@
 # Library components
 subdir('config')
 subdir('libsession')
+subdir('imports')
 subdir('plugin')
 subdir('theme')
 

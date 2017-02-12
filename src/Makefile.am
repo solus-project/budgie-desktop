@@ -3,7 +3,6 @@ SUBDIRS = \
 	plugin \
 	lib \
 	raven \
-	imports \
 	panel \
 	polkit \
 	session \
