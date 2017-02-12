@@ -15,7 +15,9 @@ budgie_wm_deps = [
     dependency('libmutter', version: gnome_minimum_version),
 ]
 
-executable('budgie-wm', budgie_wm_sources,
+executable(
+    'budgie-wm', budgie_wm_sources,
     dependencies: budgie_wm_deps,
     include_directories: extra_includes,
-    install: true)
+    install: true
+)
