@@ -48,4 +48,4 @@ link_libtheme = declare_dependency(
 )
 
 # Expose the current directory so that we can use vapidir
-vapi_libtheme = meson.current_source_dir()
+dir_libtheme = meson.current_source_dir()
