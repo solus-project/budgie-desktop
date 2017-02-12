@@ -95,7 +95,7 @@ custom_target('desktop-file-xsession',
 )
 
 # Solus only allows stateless XDG (/usr/share/xdg/autostart) in packaging
-if get_option('enable-stateless') == true
+if get_option('with-stateless') == true
     xdg_appdir = join_paths(datadir, 'xdg', 'autostart')
 else
     xdg_appdir = join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
