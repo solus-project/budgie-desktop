@@ -3,6 +3,7 @@
 applet_namespace = 'org.budgie-desktop.applet'
 applets_dir = join_paths(plugin_libdir, applet_namespace)
 
+subdir('budgie-menu')
 subdir('clock')
 subdir('icon-tasklist')
 subdir('lock-keys')
