@@ -1,4 +1,3 @@
 SUBDIRS = \
-	raven \
 	panel \
 	session
