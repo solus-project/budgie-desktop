@@ -41,3 +41,11 @@ pkgconfig.generate(
     libraries: ['-L${libdir}', '-lbudgietheme'],
     requires: ['gtk+-3.0 >= 3.18.0'],
 )
+
+link_libtheme = declare_dependency(
+    link_with: lib_theme,
+    include_directories: include_directories('.'),
+)
+
+# Expose the current directory so that we can use vapidir
+vapi_libtheme = meson.current_source_dir()
