@@ -30,9 +30,9 @@ libraven_sources = [
 libraven_deps = [
     dep_gtk3,
     dep_peas,
-    link_libtheme,
     link_libplugin,
     link_libtoplevel,
+    link_libtheme,
     gvc.get_variable('link_libgvc'),
 ]
 
