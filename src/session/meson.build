@@ -4,9 +4,31 @@
 session_data = configuration_data()
 session_data.set('PACKAGE_VERSION', meson.project_version())
 
-# TODO: If GNOME version >= 3.24.0, use different components
 gnome_session_components = [
     'gnome-settings-daemon',
+]
+
+gnome_session_324_components = [
+    'org.gnome.SettingsDaemon.A11yKeyboard',
+    'org.gnome.SettingsDaemon.A11ySettings',
+    'org.gnome.SettingsDaemon.Clipboard',
+    'org.gnome.SettingsDaemon.Color',
+    'org.gnome.SettingsDaemon.Datetime',
+    'org.gnome.SettingsDaemon.Housekeeping',
+    'org.gnome.SettingsDaemon.Keyboard',
+    'org.gnome.SettingsDaemon.MediaKeys',
+    'org.gnome.SettingsDaemon.Mouse',
+    'org.gnome.SettingsDaemon.Orientation',
+    'org.gnome.SettingsDaemon.Power',
+    'org.gnome.SettingsDaemon.PrintNotifications',
+    'org.gnome.SettingsDaemon.Rfkill',
+    'org.gnome.SettingsDaemon.ScreensaverProxy',
+    'org.gnome.SettingsDaemon.Sharing',
+    'org.gnome.SettingsDaemon.Smartcard',
+    'org.gnome.SettingsDaemon.Sound',
+    'org.gnome.SettingsDaemon.Wacom',
+    'org.gnome.SettingsDaemon.XRANDR',
+    'org.gnome.SettingsDaemon.XSettings',
 ]
 
 # Always in Budgie
@@ -17,8 +39,12 @@ budgie_components = [
     'budgie-polkit',
 ]
 
-# Merge the list
-session_components = gnome_session_components + budgie_components
+# Merge the list depending on the GNOME version. We pick mutter arbitrarily.
+if dep_mutter.version().version_compare('>=3.23.3')
+    session_components = budgie_components + gnome_session_324_components
+else
+    session_components = gnome_session_components + budgie_components
+endif
 
 # Set the session list
 session_data.set('SESSION_COMPONENTS', ';'.join(session_components))

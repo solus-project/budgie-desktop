@@ -11,8 +11,10 @@ budgie_wm_sources = [
     'plugin.c',
 ]
 
+dep_mutter = dependency('libmutter', version: gnome_minimum_version)
+
 budgie_wm_deps = [
-    dependency('libmutter', version: gnome_minimum_version),
+    dep_mutter,
 ]
 
 executable(
