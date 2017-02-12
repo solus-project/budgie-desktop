@@ -7,6 +7,7 @@ subdir('imports')
 subdir('plugin')
 subdir('theme')
 subdir('lib')
+subdir('raven')
 
 # Executable components
 subdir('daemon')
