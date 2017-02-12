@@ -1,4 +1,4 @@
-# Clock Applet build
+# Raven Trigger Applet build
 
 applet_raventrigger_dir = applets_dir + '.raven-trigger'
 
