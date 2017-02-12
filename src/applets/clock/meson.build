@@ -1,4 +1,4 @@
-# Notifications Applet build
+# Clock Applet build
 
 applet_clock_dir = applets_dir + '.clock'
 
