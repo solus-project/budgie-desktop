@@ -15,7 +15,7 @@ public class CalendarWidget : Gtk.Box
     private Gtk.Calendar? cal = null;
     private Budgie.HeaderWidget? header = null;
 
-    private static const string date_format = "%e %b %Y";
+    private const string date_format = "%e %b %Y";
 
     public CalendarWidget()
     {

@@ -84,9 +84,9 @@ distribution, so the pkg-config names, and the names within Solus, are
 given:
 
 - accountsservice >= 0.6
-- gio-2.0 >= 2.44.0
-- gio-unix-2.0 >= 2.44.0
-- gnome-bluetooth-1.0 >= 3.16.0
+- gio-2.0 >= 2.46.0
+- gio-unix-2.0 >= 2.46.0
+- gnome-bluetooth-1.0 >= 3.18.0
 - gnome-desktop-3.0 >= 3.18.0
 - gobject-2.0 >= 2.44.0
 - gobject-introspection-1.0 >= 1.44.0

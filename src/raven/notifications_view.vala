@@ -15,10 +15,10 @@ namespace Budgie
 
 
 /** Spam apps */
-public static const string ROOT_KEY_SPAM_APPS = "spam-apps";
+public const string ROOT_KEY_SPAM_APPS = "spam-apps";
 
 /** Spam categories */
-public static const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
+public const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
 
 public enum NotificationCloseReason {
     EXPIRED = 1,    /** The notification expired. */
@@ -432,9 +432,9 @@ public class NotificationWindow : Gtk.Window
     }
 }
 
-public static const int BUFFER_ZONE = 10;
-public static const int INITIAL_BUFFER_ZONE = 45;
-public static const int NOTIFICATION_SIZE = 400;
+public const int BUFFER_ZONE = 10;
+public const int INITIAL_BUFFER_ZONE = 45;
+public const int NOTIFICATION_SIZE = 400;
 
 [DBus (name = "org.freedesktop.Notifications")]
 public class NotificationsView : Gtk.Box

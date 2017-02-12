@@ -166,7 +166,8 @@ remove_provider:
         self->css_provider = css_provider;
 }
 
-static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, GParamSpec *prop,
+static void budgie_theme_manager_theme_changed(BudgieThemeManager *self,
+                                               __attribute__((unused)) GParamSpec *prop,
                                                GtkSettings *settings)
 {
         gchar *theme_name = NULL;

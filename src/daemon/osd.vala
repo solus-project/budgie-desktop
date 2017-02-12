@@ -15,22 +15,22 @@ namespace Budgie
 /**
  * Default width for an OSD notification
  */
-public static const int OSD_SIZE = 350;
+public const int OSD_SIZE = 350;
 
 /**
  * How long before the visible OSD expires, default is 2.5 seconds
  */
-public static const int OSD_EXPIRE_TIME = 2500;
+public const int OSD_EXPIRE_TIME = 2500;
 
 /**
  * Our name on the session bus. Reserved for Budgie use
  */
-public static const string OSD_DBUS_NAME        = "com.solus_project.BudgieOSD";
+public const string OSD_DBUS_NAME        = "com.solus_project.BudgieOSD";
 
 /**
  * Unique object path on OSD_DBUS_NAME
  */
-public static const string OSD_DBUS_OBJECT_PATH = "/com/solus_project/BudgieOSD";
+public const string OSD_DBUS_OBJECT_PATH = "/com/solus_project/BudgieOSD";
 
 
 /**
