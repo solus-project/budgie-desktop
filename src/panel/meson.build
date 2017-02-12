@@ -13,7 +13,6 @@ gresource = join_paths(meson.current_source_dir(), 'budgie-panel.gresource.xml')
 panel_resources = gnome.compile_resources(
     'budgie-panel-resources',
     gresource,
-    'budgie-daemon.gresource.xml',
     source_dir: meson.current_source_dir(),
     c_name: 'budgie_panel',
 )
