@@ -1,13 +1,9 @@
 # Provides budgie-daemon component
 
-# Handle i18n on the .desktop file
-
-# Stole from TingPing:
-# https://github.com/vinszent/gnome-twitch/blob/master/data/meson.build
 custom_target('desktop-file-daemon',
     input : 'budgie-daemon.desktop.in',
     output : 'budgie-daemon.desktop',
-    command : [msgfmt, '--desktop', '--template', '@INPUT@', '-d', podir, '-o', '@OUTPUT@'],
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
 

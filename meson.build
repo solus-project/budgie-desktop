@@ -60,8 +60,13 @@ libdir = join_paths(prefix, get_option('libdir'))
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
-msgfmt = find_program('msgfmt')
 podir = join_paths(meson.source_root(), 'po')
+
+# Handle i18n on the .desktop file
+# Originally stolem from TingPing:
+# https://github.com/vinszent/gnome-twitch/blob/master/data/meson.build
+# Later changed to use intltool as we use _Key style files
+intltool = find_program('intltool-merge')
 
 cdata.set_quoted('MODULEDIR', join_paths(libdir, meson.project_name(), 'plugins'))
 cdata.set_quoted('MODULE_DATA_DIR', join_paths(datadir, meson.project_name(), 'plugins'))
