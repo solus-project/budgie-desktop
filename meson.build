@@ -16,6 +16,7 @@ gnome_minimum_version = '>= 3.18.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: gnome_minimum_version)
 dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
+dep_peas = dependency('libpeas-gtk-1.0', version: '>= 1.8.0')
 
 # Create config.h
 cdata = configuration_data()

@@ -3,6 +3,7 @@
 # Library components
 subdir('config')
 subdir('libsession')
+subdir('plugin')
 subdir('theme')
 
 # Executable components
