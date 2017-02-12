@@ -19,5 +19,5 @@ executable(
     'budgie-wm', budgie_wm_sources,
     dependencies: budgie_wm_deps,
     include_directories: extra_includes,
-    install: true
+    install: true,
 )

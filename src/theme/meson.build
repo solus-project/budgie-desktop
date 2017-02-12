@@ -6,7 +6,7 @@ theme_resources = gnome.compile_resources(
     'budgie-theme-resources',
     'budgie-theme.gresource.xml',
     source_dir: '.',
-    c_name: 'budgie_desktop_theme'
+    c_name: 'budgie_desktop_theme',
 )
 
 theme_sources = [
@@ -23,10 +23,11 @@ lib_theme = shared_library(
         dep_glib,
     ],
     version: '0.0.0',
-    install: true)
+    install: true,
+)
 
 theme_headers = [
-    'theme.h'
+    'theme.h',
 ]
 
 install_headers(theme_headers, subdir: 'budgie-desktop')
@@ -38,5 +39,5 @@ pkgconfig.generate(
     version: '2',
     filebase: 'budgie-theme-1.0',
     libraries: ['-L${libdir}', '-lbudgietheme'],
-    requires: ['gtk+-3.0 >= 3.18.0']
+    requires: ['gtk+-3.0 >= 3.18.0'],
 )

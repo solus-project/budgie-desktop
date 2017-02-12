@@ -8,7 +8,7 @@ project(
     ],
     default_options: [
         'c_std=c11',
-    ]
+    ],
 )
 
 # Budgie needs a minimum 3.18 GNOME stack
@@ -24,7 +24,7 @@ cdata.set('PACKAGE_VERSION', '"' + meson.project_version() + '"')
 # Write config.h
 configure_file(
     output: 'config.h',
-    configuration: cdata
+    configuration: cdata,
 )
 
 # Enable others to find this .h file
