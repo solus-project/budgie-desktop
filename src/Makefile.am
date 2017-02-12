@@ -1,7 +1,6 @@
 SUBDIRS = \
 	gvc \
 	config \
-	theme \
 	plugin \
 	lib \
 	raven \
