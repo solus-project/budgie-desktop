@@ -77,4 +77,8 @@ extra_includes = [
     include_directories('.'),
 ]
 
+# Get gvc built before we do anything
+subproject('gvc')
+
+# Now build Budgie proper
 subdir('src')
