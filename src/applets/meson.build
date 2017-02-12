@@ -5,6 +5,7 @@ applets_dir = join_paths(plugin_libdir, applet_namespace)
 
 subdir('clock')
 subdir('notifications')
+subdir('raven-trigger')
 subdir('separator')
 subdir('show-desktop')
 subdir('workspaces')
