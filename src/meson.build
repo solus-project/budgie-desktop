@@ -1,10 +1,10 @@
 # Control the order and relation between the subcomponents in Budgie
 
 # Library components
+subdir('plugin')
 subdir('config')
 subdir('libsession')
 subdir('imports')
-subdir('plugin')
 subdir('theme')
 subdir('lib')
 subdir('raven')
