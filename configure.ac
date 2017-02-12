@@ -98,12 +98,10 @@ m4_include([src/panel/applets/lock-keys/configure.ac])
 m4_include([src/panel/applets/tasklist/configure.ac])
 m4_include([src/panel/applets/places-indicator/configure.ac])
 m4_include([src/panel/applets/raven-trigger/configure.ac])
-m4_include([src/panel/applets/separator/configure.ac])
 m4_include([src/panel/applets/spacer/configure.ac])
 m4_include([src/panel/applets/status/configure.ac])
 m4_include([src/panel/applets/tray/configure.ac])
 m4_include([src/panel/applets/user-indicator/configure.ac])
-m4_include([src/panel/applets/workspaces/configure.ac])
 
 # Find the libraries containing animation functions we need.
 BACKLIBS="$LIBS"
