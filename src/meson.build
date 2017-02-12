@@ -15,3 +15,6 @@ subdir('polkit')
 subdir('rundialog')
 subdir('wm')
 subdir('panel')
+
+# Now build applets
+subdir('applets')
