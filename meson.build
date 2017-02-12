@@ -49,6 +49,9 @@ dep_libuuid = dependency('uuid')
 # wnck used all over the place..
 dep_wnck = dependency('libwnck-3.0', version: '>= 3.14.0')
 
+# accountsservice in multiple applets
+dep_accountsservice = dependency('accountsservice', version: '>= 0.6.40')
+
 # Create config.h
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
