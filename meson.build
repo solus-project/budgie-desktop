@@ -8,6 +8,9 @@ project('budgie-desktop', ['c', 'vala'],
 # Budgie needs a minimum 3.18 GNOME stack
 gnome_minimum_version = '>= 3.18.0'
 
+dep_gtk3 = dependency('gtk+-3.0', version: gnome_minimum_version)
+dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
+
 # Create config.h
 cdata = configuration_data()
 cdata.set('PACKAGE_VERSION', '"' + meson.project_version() + '"')
