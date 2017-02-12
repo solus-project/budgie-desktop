@@ -59,27 +59,30 @@ libplugin = shared_library(
 
 install_headers(plugin_headers, subdir: 'budgie-desktop')
 
+# Allow disabling gobject introspection bits
+if get_option('with-introspection') == true
 
-# Generate .gir
-libplugin_gir = gnome.generate_gir(
-    libplugin,
-    sources: plugin_sources + plugin_headers + plugin_enums,
-    namespace: 'Budgie',
-    nsversion: '1.0',
-    dependencies: plugin_deps,
-    includes: [
-        'GObject-2.0',
-        'Gio-2.0',
-        'Gtk-3.0',
-        'Peas-1.0',
-    ],
-    symbol_prefix: 'budgie',
-    install: true,
-    extra_args: [
-        '--warn-all',
-        '--c-include', 'plugin.h',
-    ],
-)
+    # Generate .gir
+    libplugin_gir = gnome.generate_gir(
+        libplugin,
+        sources: plugin_sources + plugin_headers + plugin_enums,
+        namespace: 'Budgie',
+        nsversion: '1.0',
+        dependencies: plugin_deps,
+        includes: [
+            'GObject-2.0',
+            'Gio-2.0',
+            'Gtk-3.0',
+            'Peas-1.0',
+        ],
+        symbol_prefix: 'budgie',
+        install: true,
+        extra_args: [
+            '--warn-all',
+            '--c-include', 'plugin.h',
+        ],
+    )
+endif
 
 # Install the (hand written..) vapi binding
 plugin_vapi = [
