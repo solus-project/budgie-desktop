@@ -63,3 +63,9 @@ executable(
     ],
     install: true,
 )
+
+# gschemas
+install_data(
+    'com.solus-project.budgie-panel.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
+)
