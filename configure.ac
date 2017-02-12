@@ -17,7 +17,6 @@ m4_define([peas_required_version], [1.8.0])
 m4_define([gdesktop_required_version], [3.18.0])
 m4_define([pulse_required_version], [2.0])
 m4_define([gsettings_required_version], [3.18.0])
-m4_define([polkit_required_version], [0.105])
 m4_define([accountsservice_version], [0.6.40])
 m4_define([ibus_required_version], [1.5.10])
 
@@ -108,7 +107,6 @@ m4_include([src/panel/applets/status/configure.ac])
 m4_include([src/panel/applets/tray/configure.ac])
 m4_include([src/panel/applets/user-indicator/configure.ac])
 m4_include([src/panel/applets/workspaces/configure.ac])
-m4_include([src/polkit/configure.ac])
 m4_include([src/daemon/configure.ac])
 
 # Find the libraries containing animation functions we need.
@@ -215,6 +213,4 @@ AC_MSG_RESULT([
         tray:                   ${have_natray}
         user-indicator:         ${have_user_indicator}
         workspaces:             ${have_wnck}
-
-        Polkit Agent:           always
 ])
