@@ -36,8 +36,11 @@ budgie_components = [
     'budgie-wm',
     'budgie-daemon',
     'budgie-panel',
-    'budgie-polkit',
 ]
+
+if with_polkit == true
+    budgie_components += 'budgie-polkit'
+endif
 
 # Merge the list depending on the GNOME version. We pick mutter arbitrarily.
 if dep_mutter.version().version_compare('>=3.23.3')

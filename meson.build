@@ -95,6 +95,9 @@ extra_includes = [
     include_directories('.'),
 ]
 
+# Determine if polkit is allowed.
+with_polkit = get_option('with-polkit')
+
 # Get gvc built before we do anything
 gvc = subproject('gvc')
 
