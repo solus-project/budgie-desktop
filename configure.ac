@@ -92,7 +92,6 @@ AM_CONDITIONAL(HAVE_CRANKY_MUTTER, test x$have_cranky_mutter = xyes)
 
 # Got this idea from gnome-builder :)
 m4_include([src/panel/applets/budgie-menu/configure.ac])
-m4_include([src/panel/applets/clock/configure.ac])
 m4_include([src/panel/applets/icon-tasklist/configure.ac])
 m4_include([src/panel/applets/keyboard-layout/configure.ac])
 m4_include([src/panel/applets/lock-keys/configure.ac])
