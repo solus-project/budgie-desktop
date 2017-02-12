@@ -89,7 +89,10 @@ pkgconfig.generate(
 
 link_libplugin = declare_dependency(
     link_with: libplugin,
-    include_directories: include_directories('.'),
+    include_directories: [
+        include_directories(meson.current_source_dir()),
+        include_directories(meson.current_build_dir()),
+    ],
 )
 
 # Expose the current directory so that we can use vapidir
