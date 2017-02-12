@@ -68,7 +68,10 @@ podir = join_paths(meson.source_root(), 'po')
 # Later changed to use intltool as we use _Key style files
 intltool = find_program('intltool-merge')
 
-cdata.set_quoted('MODULEDIR', join_paths(libdir, meson.project_name(), 'plugins'))
+# Make sure this is accessible to panel applet builds
+plugin_libdir = join_paths(libdir, meson.project_name(), 'plugins')
+
+cdata.set_quoted('MODULEDIR', plugin_libdir)
 cdata.set_quoted('MODULE_DATA_DIR', join_paths(datadir, meson.project_name(), 'plugins'))
 cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
