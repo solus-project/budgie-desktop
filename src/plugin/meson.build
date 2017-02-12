@@ -27,19 +27,23 @@ plugin_sources = [
     'popover-manager.c',
 ]
 
+
+plugin_deps = [
+    dep_gtk3,
+    dep_peas,
+]
+
 # build plugin
 libplugin = shared_library(
     'budgie-plugin',
     plugin_sources + plugin_enums,
-    dependencies: [
-        dep_gtk3,
-        dep_peas,
-    ],
+    dependencies: plugin_deps,
     version: '0.0.0',
     install: true,
 )
 
 install_headers(plugin_headers, subdir: 'budgie-desktop')
+
 
 # Generate .gir
 libplugin_gir = gnome.generate_gir(
@@ -47,10 +51,7 @@ libplugin_gir = gnome.generate_gir(
     sources: plugin_sources + plugin_headers + plugin_enums,
     namespace: 'Budgie',
     nsversion: '1.0',
-    dependencies: [
-        dep_gtk3,
-        dep_peas,
-    ],
+    dependencies: plugin_deps,
     includes: [
         'GObject-2.0',
         'Gio-2.0',
@@ -89,6 +90,7 @@ pkgconfig.generate(
 
 link_libplugin = declare_dependency(
     link_with: libplugin,
+    dependencies: plugin_deps,
     include_directories: [
         include_directories(meson.current_source_dir()),
         include_directories(meson.current_build_dir()),
