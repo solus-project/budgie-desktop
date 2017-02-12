@@ -28,7 +28,10 @@ libtoplevel = static_library(
 
 link_libtoplevel = declare_dependency(
     link_with: libtoplevel,
-    include_directories: include_directories('.'),
+    include_directories: [
+        include_directories('.'),
+        include_directories(meson.current_build_dir()),
+    ],
 )
 
 # Expose the current directory so that we can use vapidir
