@@ -91,8 +91,6 @@ fi
 
 AM_CONDITIONAL(HAVE_CRANKY_MUTTER, test x$have_cranky_mutter = xyes)
 
-m4_include([src/config/configure.ac])
-
 # Got this idea from gnome-builder :)
 m4_include([src/imports/configure.ac])
 m4_include([src/panel/applets/budgie-menu/configure.ac])
@@ -164,13 +162,11 @@ AC_CONFIG_FILES([Makefile
                 src/panel/budgie-panel.desktop.in
                 src/panel/Makefile
                 src/panel/applets/Makefile
-                src/rundialog/Makefile
                 src/session/budgie-desktop.desktop.in
                 src/session/budgie-desktop.session.in
                 src/session/budgie-desktop
                 src/session/Makefile
                 src/wm/budgie-wm.desktop
-                src/wm/Makefile
                 po/Makefile.in
                 docs/Makefile])
 
