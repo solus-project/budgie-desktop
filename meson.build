@@ -4,3 +4,18 @@ project('budgie-desktop', ['c', 'vala'],
         default_options: [
             'c_std=c11',
         ])
+
+# Budgie needs a minimum 3.18 GNOME stack
+gnome_minimum_version = '>= 3.18.0'
+
+# Create config.h
+cdata = configuration_data()
+cdata.set('PACKAGE_VERSION', '"' + meson.project_version() + '"')
+configure_file(output: 'config.h',
+               configuration: cdata)
+
+extra_includes = [
+    include_directories('.'),
+]
+
+subdir('src')
