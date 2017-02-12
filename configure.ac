@@ -152,7 +152,6 @@ AC_CONFIG_FILES([Makefile
                 data/budgie-panel.desktop
                 data/Makefile
                 src/Makefile
-                src/gvc/Makefile
                 src/lib/Makefile
                 src/raven/Makefile
                 src/panel/budgie-panel.desktop.in
