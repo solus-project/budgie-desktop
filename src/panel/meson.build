@@ -7,14 +7,14 @@ custom_target('desktop-file-panel',
     install : true,
     install_dir : join_paths(datadir, 'applications'))
 
-gresource = join_paths(meson.source_root(), 'data', 'budgie-panel.gresource.xml')
+gresource = join_paths(meson.current_source_dir(), 'budgie-panel.gresource.xml')
 
 # Compile the assets into the binary
 panel_resources = gnome.compile_resources(
     'budgie-panel-resources',
     gresource,
     'budgie-daemon.gresource.xml',
-    source_dir: join_paths(meson.source_root(), 'data'),
+    source_dir: meson.current_source_dir(),
     c_name: 'budgie_panel',
 )
 
