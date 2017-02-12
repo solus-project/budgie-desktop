@@ -47,6 +47,10 @@ libplugin_gir = gnome.generate_gir(
     sources: plugin_sources + plugin_headers + plugin_enums,
     namespace: 'Budgie',
     nsversion: '1.0',
+    dependencies: [
+        dep_gtk3,
+        dep_peas,
+    ],
     includes: [
         'GObject-2.0',
         'Gio-2.0',
@@ -78,7 +82,6 @@ pkgconfig.generate(
     requires: [
         'gtk+-3.0 >= 3.18.0',
         'libpeas-1.0 >= 1.8.0',
-        'libpeas-gtk-1.0 >= 1.8.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',
     ],
