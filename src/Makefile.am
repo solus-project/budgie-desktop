@@ -1,3 +1,2 @@
 SUBDIRS = \
-	panel \
 	session

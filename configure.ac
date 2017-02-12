@@ -148,17 +148,11 @@ AM_CONDITIONAL([STATELESS_CONFIG], [test x$enable_stateless = "xyes"])
 AC_CONFIG_FILES([Makefile
                 data/budgie-panel.desktop
                 data/Makefile
-                src/Makefile
-                src/raven/Makefile
-                src/panel/budgie-panel.desktop.in
-                src/panel/Makefile
                 src/panel/applets/Makefile
                 src/session/budgie-desktop.desktop.in
                 src/session/budgie-desktop.session.in
                 src/session/budgie-desktop
                 src/session/Makefile
-                src/wm/budgie-wm.desktop
-                po/Makefile.in
                 docs/Makefile])
 
 IT_PROG_INTLTOOL([0.50.0])
