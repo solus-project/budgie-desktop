@@ -150,14 +150,11 @@ AC_SUBST(XDGDIR)
 AM_CONDITIONAL([STATELESS_CONFIG], [test x$enable_stateless = "xyes"])
 
 AC_CONFIG_FILES([Makefile
-                src/config/Makefile
                 data/budgie-panel.desktop
                 data/Makefile
                 src/Makefile
                 src/gvc/Makefile
                 src/lib/Makefile
-                src/plugin/Makefile
-                src/plugin/budgie-1.0.pc
                 src/raven/Makefile
                 src/panel/budgie-panel.desktop.in
                 src/panel/Makefile
