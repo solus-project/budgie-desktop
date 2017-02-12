@@ -49,5 +49,8 @@ libgvc = static_library(
 
 link_libgvc = declare_dependency(
     link_with: libgvc,
-    include_directories: include_directories('.'),
+    include_directories: [
+        include_directories('.'),
+        include_directories(join_paths(top_dir, 'src', 'gvc')),
+    ],
 )
