@@ -80,5 +80,8 @@ extra_includes = [
 # Get gvc built before we do anything
 subproject('gvc')
 
+# Prep translations prior to build
+subdir('po')
+
 # Now build Budgie proper
 subdir('src')
