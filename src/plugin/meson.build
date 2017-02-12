@@ -12,6 +12,18 @@ plugin_enums = gnome.mkenums(
     install_dir: join_paths(get_option('includedir'), 'budgie-desktop'),
 )
 
+# Fight meson race conditions..
+libenum = static_library(
+    'enum',
+    plugin_enums,
+    dependencies: dep_gtk3,
+)
+
+link_libenum = declare_dependency(
+    sources: plugin_enums,
+    include_directories: include_directories(meson.current_build_dir()),
+)
+
 # install headers
 plugin_headers = [
 	'plugin.h',
@@ -27,17 +39,20 @@ plugin_sources = [
     'popover-manager.c',
 ]
 
-
 plugin_deps = [
     dep_gtk3,
     dep_peas,
+    link_libenum,
 ]
 
 # build plugin
 libplugin = shared_library(
     'budgie-plugin',
-    plugin_sources + plugin_enums,
-    dependencies: plugin_deps,
+    plugin_sources,
+    dependencies: [
+        plugin_deps,
+        link_libenum,
+    ],
     version: '0.0.0',
     install: true,
 )
