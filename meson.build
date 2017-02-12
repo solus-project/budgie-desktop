@@ -100,3 +100,6 @@ subdir('po')
 
 # Now build Budgie proper
 subdir('src')
+
+# And lastly, data bits
+subdir('data')
