@@ -16,6 +16,6 @@ budgie_wm_deps = [
 ]
 
 executable('budgie-wm', budgie_wm_sources,
-           dependencies: budgie_wm_deps,
-           include_directories: extra_includes,
-           install: true)
+    dependencies: budgie_wm_deps,
+    include_directories: extra_includes,
+    install: true)
