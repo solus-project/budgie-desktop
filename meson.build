@@ -33,7 +33,6 @@ am_cflags = [
     '-Wunreachable-code',
     '-Wall',
     '-W',
-    '-D_FORTIFY_SOURCE=2',
     version_flags,
 ]
 
