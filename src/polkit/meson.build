@@ -25,6 +25,7 @@ pkversion = '>= 0.105'
 
 polkit_deps = [
     dep_gtk3,
+    link_libconfig,
     link_libtheme,
     link_libsession,
     dependency('polkit-gobject-1', version: pkversion),
@@ -40,7 +41,6 @@ gresource = join_paths(meson.current_source_dir(), 'budgie-polkit.gresource.xml'
 executable(
     'budgie-polkit-dialog', polkit_sources,
     dependencies: polkit_deps,
-    include_directories: include_directories(dir_libconfig),
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

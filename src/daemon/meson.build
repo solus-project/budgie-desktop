@@ -26,6 +26,7 @@ daemon_sources = [
 daemon_deps = [
     dep_gtk3,
     dep_gdkx11,
+    link_libconfig,
     link_libtheme,
     link_libsession,
 ]
@@ -37,7 +38,6 @@ gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml'
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
-    include_directories: include_directories(dir_libconfig),
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

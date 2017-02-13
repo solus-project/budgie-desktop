@@ -13,23 +13,23 @@
 #define _BUDGIE_CONFIG_H_
 
 /* i.e. /usr/lib/budgie-desktop */
-const char *BUDGIE_MODULE_DIRECTORY;
+extern const char *BUDGIE_MODULE_DIRECTORY;
 
 /* i.e. /usr/share/budgie-desktop/plugins */
-const char *BUDGIE_MODULE_DATA_DIRECTORY;
+extern const char *BUDGIE_MODULE_DATA_DIRECTORY;
 
 /* i.e. /usr/share/ */
-const char *BUDGIE_DATADIR;
+extern const char *BUDGIE_DATADIR;
 
-const char *BUDGIE_VERSION;
+extern const char *BUDGIE_VERSION;
 
-const char *BUDGIE_WEBSITE;
+extern const char *BUDGIE_WEBSITE;
 
-const char *BUDGIE_LOCALEDIR;
+extern const char *BUDGIE_LOCALEDIR;
 
-const char *BUDGIE_GETTEXT_PACKAGE;
+extern const char *BUDGIE_GETTEXT_PACKAGE;
 
 /* sysconfdir */
-const char *BUDGIE_CONFDIR;
+extern const char *BUDGIE_CONFDIR;
 
 #endif

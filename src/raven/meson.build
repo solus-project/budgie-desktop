@@ -30,6 +30,7 @@ libraven_sources = [
 libraven_deps = [
     dep_gtk3,
     dep_peas,
+    link_libconfig,
     link_libplugin,
     link_libtoplevel,
     link_libtheme,
@@ -42,7 +43,6 @@ libraven = shared_library(
     'raven', libraven_sources,
     version: '0.0.0',
     dependencies: libraven_deps,
-    include_directories: include_directories(dir_libconfig),
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

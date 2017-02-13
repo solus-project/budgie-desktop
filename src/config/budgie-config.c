@@ -9,22 +9,20 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-#include "budgie-config.h"
-
 #ifndef CONFIG_H_INCLUDED
 #include "config.h"
 
-__attribute__((constructor)) void _budgie_config_init(void)
-{
-        BUDGIE_MODULE_DIRECTORY = MODULEDIR;
-        BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
-        BUDGIE_DATADIR = DATADIR;
-        BUDGIE_VERSION = PACKAGE_VERSION;
-        BUDGIE_WEBSITE = PACKAGE_URL;
-        BUDGIE_LOCALEDIR = LOCALEDIR;
-        BUDGIE_GETTEXT_PACKAGE = GETTEXT_PACKAGE;
-        BUDGIE_CONFDIR = SYSCONFDIR;
-}
+/**
+ * All this is to keep Vala happy & configured..
+ */
+const char *BUDGIE_MODULE_DIRECTORY = MODULEDIR;
+const char *BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+const char *BUDGIE_DATADIR = DATADIR;
+const char *BUDGIE_VERSION = PACKAGE_VERSION;
+const char *BUDGIE_WEBSITE = PACKAGE_URL;
+const char *BUDGIE_LOCALEDIR = LOCALEDIR;
+const char *BUDGIE_GETTEXT_PACKAGE = GETTEXT_PACKAGE;
+const char *BUDGIE_CONFDIR = SYSCONFDIR;
 
 #else
 #error config.h missing!

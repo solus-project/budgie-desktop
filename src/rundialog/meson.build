@@ -5,13 +5,13 @@ rundialog_sources = [
 
 rundialog_deps = [
     dep_gtk3,
+    link_libconfig,
     link_libtheme,
 ]
 
 executable(
     'budgie-run-dialog', rundialog_sources,
     dependencies: rundialog_deps,
-    include_directories: include_directories(dir_libconfig),
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
