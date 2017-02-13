@@ -1,3 +1,4 @@
 option('with-stateless', type: 'boolean', value: false, description: 'Enable stateless XDG paths')
 option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
 option('with-introspection', type: 'boolean', value: true, description: 'Enable GObject Introspection support')
+option('with-bluetooth', type: 'boolean', value: true, description: 'Enable gnome-bluetooth support')

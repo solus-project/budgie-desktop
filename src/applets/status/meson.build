@@ -10,7 +10,6 @@ custom_target('plugin-file-status',
     install_dir : applet_status_dir)
 
 applet_status_sources = [
-    'BluetoothIndicator.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
     'SoundIndicator.vala',
@@ -20,11 +19,20 @@ applet_status_deps = [
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
-    dependency('gnome-bluetooth-1.0', version: gnome_minimum_version),
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libplugin,
     gvc.get_variable('link_libgvc'),
 ]
+
+# Bluetooth is optional to allow smaller builds
+with_bluetooth = get_option('with-bluetooth')
+applet_status_vala_args = []
+
+if with_bluetooth == true
+    applet_status_deps += dependency('gnome-bluetooth-1.0', version: gnome_minimum_version)
+    applet_status_sources += 'BluetoothIndicator.vala'
+    applet_status_vala_args += ['-D', 'WITH_BLUETOOTH']
+endif
 
 shared_library(
     'statusapplet',
@@ -37,6 +45,7 @@ shared_library(
         '--pkg', 'accountsservice',
         '--pkg', 'gvc-1.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        applet_status_vala_args,
     ],
     install: true,
     install_dir: applet_status_dir,

@@ -20,7 +20,9 @@ public class StatusApplet : Budgie.Applet
 {
 
     protected Gtk.Box widget;
+#if WITH_BLUETOOTH
     protected BluetoothIndicator blue;
+#endif
     protected SoundIndicator sound;
     protected PowerIndicator power;
     protected Gtk.EventBox? wrap;
@@ -62,22 +64,26 @@ public class StatusApplet : Budgie.Applet
         widget.pack_start(sound, false, false, 2);
         sound.show_all();
 
+        /* Hook up the popovers */
+        this.setup_popover(power.ebox, power.popover);
+        this.setup_popover(sound.ebox, sound.popover);
+
+#if WITH_BLUETOOTH
         blue = new BluetoothIndicator();
         widget.pack_start(blue, false, false, 2);
         blue.show_all();
-
-        /* Hook up the popovers */
         this.setup_popover(blue.ebox, blue.popover);
-        this.setup_popover(power.ebox, power.popover);
-        this.setup_popover(sound.ebox, sound.popover);
+#endif
     }
 
     public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
-        manager.register_popover(blue.ebox, blue.popover);
         manager.register_popover(power.ebox, power.popover);
         manager.register_popover(sound.ebox, sound.popover);
+#if WITH_BLUETOOTH
+        manager.register_popover(blue.ebox, blue.popover);
+#endif
     }
 } // End class
 
