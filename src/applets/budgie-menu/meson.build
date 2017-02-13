@@ -33,7 +33,7 @@ applet_budgiemenu_deps = [
 ]
 
 shared_library(
-    'budgiemenuappletapplet',
+    'budgiemenuapplet',
     applet_budgiemenu_sources,
     dependencies: applet_budgiemenu_deps,
     vala_args: [
