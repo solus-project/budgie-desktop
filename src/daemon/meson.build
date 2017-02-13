@@ -20,7 +20,7 @@ daemon_sources = [
     'main.vala',
     'manager.vala',
     'osd.vala',
-    theme_resources,
+    daemon_resources,
 ]
 
 daemon_deps = [
