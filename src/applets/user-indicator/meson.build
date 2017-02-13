@@ -23,7 +23,7 @@ applet_userindicator_deps = [
 ]
 
 shared_library(
-    'userindicatorapplet',
+    'userindicator',
     applet_userindicator_sources,
     dependencies: applet_userindicator_deps,
     vala_args: [
