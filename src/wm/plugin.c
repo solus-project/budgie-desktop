@@ -18,17 +18,6 @@
 #include "plugin.h"
 #include "util.h"
 
-struct _BudgieMetaPluginClass {
-        MetaPluginClass parent_class;
-};
-
-/**
- * Actual instance definition
- */
-struct _BudgieMetaPlugin {
-        MetaPlugin parent;
-};
-
 /**
  * Make ourselves known to gobject
  */

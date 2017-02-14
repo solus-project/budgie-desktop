@@ -17,6 +17,20 @@
 G_BEGIN_DECLS
 
 /**
+ * Class inheritance
+ */
+struct _BudgieMetaPluginClass {
+        MetaPluginClass parent_class;
+};
+
+/**
+ * Actual instance definition
+ */
+struct _BudgieMetaPlugin {
+        MetaPlugin parent;
+};
+
+/**
  * Begin managing the display
  */
 void budgie_meta_plugin_start(MetaPlugin *plugin);
