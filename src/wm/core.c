@@ -19,9 +19,23 @@ void budgie_meta_plugin_confirm_display_change(MetaPlugin *plugin)
 
 void budgie_meta_plugin_start(MetaPlugin *plugin)
 {
-        /* Main startup sequence here.
-         * TODO: Show the stage
+        ClutterActor *stage = NULL;
+        MetaScreen *screen = NULL;
+        ClutterActor *screen_group = NULL;
+
+        screen = meta_plugin_get_screen(plugin);
+        screen_group = meta_get_window_group_for_screen(screen);
+        stage = meta_get_stage_for_screen(screen);
+
+        /* TODO:
+         *  - Hook up background group
+         *  - Hook up dbus
+         *  - Hook up signals + backgrounds
+         *  - Set up keybindings + ibus, etc
          */
+
+        clutter_actor_show(screen_group);
+        clutter_actor_show(stage);
 }
 
 void budgie_meta_plugin_kill_window_effects(MetaPlugin *plugin, MetaWindowActor *actor)
