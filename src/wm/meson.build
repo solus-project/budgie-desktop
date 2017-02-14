@@ -25,11 +25,19 @@ budgie_wm_deps = [
     dep_mutter,
 ]
 
+rpath = ''
+
+# Newer mutter uses rpath'd libraries..
+if dep_mutter.version().version_compare('>=3.21.0')
+    rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
+endif
+
 executable(
     'budgie-wm', budgie_wm_sources,
     dependencies: budgie_wm_deps,
     include_directories: extra_includes,
     install: true,
+    install_rpath: rpath,
 )
 
 # gschemas
