@@ -40,8 +40,81 @@ void budgie_meta_plugin_start(MetaPlugin *plugin)
 
 void budgie_meta_plugin_kill_window_effects(MetaPlugin *plugin, MetaWindowActor *actor)
 {
-        /* Can't do anything here until we have actor->transition mapping */
+        BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(plugin);
+
+        static AnimationType effects[] = {
+                ANIMATION_TYPE_MINIMIZE,
+                ANIMATION_TYPE_UNMINIMIZE,
+                ANIMATION_TYPE_MAP,
+                ANIMATION_TYPE_DESTROY,
+        };
+
+        /* Remove all possible effects from the window */
+        for (size_t i = 0; i < sizeof(effects) / sizeof(effects[0]); i++) {
+                budgie_meta_plugin_pop_animation(self, actor, effects[i]);
+        }
 }
+
+void budgie_meta_plugin_push_animation(BudgieMetaPlugin *self, MetaWindowActor *actor,
+                                       AnimationType flag)
+{
+        guint win_state;
+
+        /* At worst, this returns NULL, which is cast to 0, the initial state */
+        win_state = GPOINTER_TO_UINT(g_hash_table_lookup(self->win_effects, actor));
+        win_state &= flag;
+        g_hash_table_replace(self->win_effects, actor, GUINT_TO_POINTER(win_state));
+}
+
+void budgie_meta_plugin_pop_animation(BudgieMetaPlugin *self, MetaWindowActor *actor,
+                                      AnimationType flag)
+{
+        void (*pop_func)(MetaPlugin *, MetaWindowActor *);
+        gpointer v = NULL;
+        guint win_state;
+
+        /* No effect for this window, bail. */
+        v = g_hash_table_lookup(self->win_effects, actor);
+        if (!v) {
+                return;
+        }
+
+        win_state = GPOINTER_TO_UINT(v);
+
+        switch (flag) {
+        case ANIMATION_TYPE_MINIMIZE:
+                pop_func = meta_plugin_minimize_completed;
+                break;
+        case ANIMATION_TYPE_UNMINIMIZE:
+                pop_func = meta_plugin_unminimize_completed;
+                break;
+        case ANIMATION_TYPE_MAP:
+                pop_func = meta_plugin_map_completed;
+                break;
+        case ANIMATION_TYPE_DESTROY:
+                pop_func = meta_plugin_destroy_completed;
+                break;
+        default:
+                /* No flag, derp */
+                g_assert_not_reached();
+                return;
+        }
+
+        /* If this flag is set, remove it, and call the relevant pop function */
+        if ((win_state & flag) == flag) {
+                pop_func(META_PLUGIN(self), actor);
+                win_state ^= flag;
+        }
+
+        /* If flags persist, store the new state and return */
+        if (win_state != 0) {
+                g_hash_table_replace(self->win_effects, actor, GUINT_TO_POINTER(win_state));
+                return;
+        }
+        /* Remove it now, no effects persist */
+        g_hash_table_remove(self->win_effects, actor);
+}
+
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
  *

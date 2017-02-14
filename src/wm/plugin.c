@@ -44,6 +44,10 @@ static const MetaPluginInfo budgie_plugin_info = {.name = "Budgie WM",
  */
 static void budgie_meta_plugin_dispose(GObject *obj)
 {
+        BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(obj);
+
+        g_clear_pointer(&self->win_effects, g_hash_table_unref);
+
         G_OBJECT_CLASS(budgie_meta_plugin_parent_class)->dispose(obj);
 }
 
@@ -87,7 +91,11 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
  */
 static void budgie_meta_plugin_init(__budgie_unused__ BudgieMetaPlugin *self)
 {
-        /* TODO: Any form of init */
+        GHashTable *effects = NULL;
+
+        /* Map a MetaWindowActor to an enum state, always != 0 (NULL) */
+        effects = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
+        self->win_effects = effects;
 }
 
 void budgie_meta_plugin_register_type(void)

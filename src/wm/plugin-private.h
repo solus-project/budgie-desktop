@@ -14,6 +14,8 @@
 #include <glib-object.h>
 #include <meta/meta-plugin.h>
 
+#include "plugin.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -28,7 +30,19 @@ struct _BudgieMetaPluginClass {
  */
 struct _BudgieMetaPlugin {
         MetaPlugin parent;
+        GHashTable *win_effects; /**< Map Window to a set of animation states */
 };
+
+/**
+ * Type of animation currently active on an actor
+ */
+typedef enum {
+        ANIMATION_TYPE_NONE = 1 << 0,       /**< No animation is specified (bounds/unused)  */
+        ANIMATION_TYPE_MINIMIZE = 1 << 1,   /**< Minimize animation in progress */
+        ANIMATION_TYPE_UNMINIMIZE = 1 << 2, /**< Unminimize animation in progress */
+        ANIMATION_TYPE_MAP = 1 << 3,        /**< Map (show) animation in progress */
+        ANIMATION_TYPE_DESTROY = 1 << 4,    /**< Destroy (unmap/hide) animation in progress */
+} AnimationType;
 
 /**
  * Begin managing the display
@@ -101,6 +115,22 @@ void budgie_meta_plugin_kill_switch_workspace(MetaPlugin *plugin);
  * timeout in which to revert to the old display mode.
  */
 void budgie_meta_plugin_confirm_display_change(MetaPlugin *plugin);
+
+/**
+ * Private budgie-wm API
+ */
+
+/**
+ * Add the flag to the known animation state of a window actor
+ */
+void budgie_meta_plugin_push_animation(BudgieMetaPlugin *self, MetaWindowActor *actor,
+                                       AnimationType flag);
+
+/**
+ * Unset the flag from the window actor again
+ */
+void budgie_meta_plugin_pop_animation(BudgieMetaPlugin *self, MetaWindowActor *actor,
+                                      AnimationType flag);
 
 G_END_DECLS
 
