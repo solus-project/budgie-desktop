@@ -16,7 +16,12 @@ budgie_wm_sources = [
     'wm.vala',
 ]
 
-dep_mutter = dependency('libmutter', version: gnome_minimum_version)
+dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
+
+if not dep_mutter.found()
+    dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
+    message('Using new libmutter-0 ABI from GNOME 3.24')
+endif
 
 budgie_wm_deps = [
     link_libconfig,
