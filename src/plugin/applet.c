@@ -231,7 +231,7 @@ GSettings *budgie_applet_get_applet_settings(BudgieApplet *self, gchar *uuid)
         GSettings *settings = NULL;
         gchar *path = NULL;
 
-        if (!self->priv->schema || !self->priv->prefix) {
+        if (!self || !self->priv || !self->priv->schema || !self->priv->prefix) {
                 return NULL;
         }
 
