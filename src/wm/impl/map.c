@@ -29,10 +29,10 @@ static void map_done(ClutterActor *actor, gpointer v)
 {
         BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(v);
 
-        budgie_meta_plugin_pop_animation(self, META_WINDOW_ACTOR(actor), ANIMATION_TYPE_MAP);
         __extension__ g_signal_handlers_disconnect_by_func((gpointer)actor,
                                                            (gpointer)map_done,
                                                            (gpointer)self);
+        budgie_meta_plugin_pop_animation(self, META_WINDOW_ACTOR(actor), ANIMATION_TYPE_MAP);
 }
 
 void budgie_meta_plugin_map(MetaPlugin *plugin, MetaWindowActor *actor)
