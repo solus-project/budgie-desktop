@@ -122,7 +122,7 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
         plug_class->hide_tile_preview = budgie_meta_plugin_hide_tile_preview;
         plug_class->show_window_menu = budgie_meta_plugin_show_window_menu;
         plug_class->show_window_menu_for_rect = budgie_meta_plugin_show_window_menu_for_rect;
-        plug_class->kill_window_effects = budgie_meta_plugin_kill_window_effects;
+        // plug_class->kill_window_effects = budgie_meta_plugin_kill_window_effects;
         plug_class->kill_switch_workspace = budgie_meta_plugin_kill_switch_workspace;
         plug_class->confirm_display_change = budgie_meta_plugin_confirm_display_change;
 
