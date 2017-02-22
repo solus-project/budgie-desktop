@@ -283,7 +283,7 @@ public class KeyboardManager : GLib.Object
     {
         string engine_name;
         InputSource? current = sources.index(current_source);
-        if (current.ibus_engine != null) {
+        if (current != null && current.ibus_engine != null) {
             engine_name = current.ibus_engine;
         } else {
             engine_name = DEFAULT_ENGINE;
