@@ -18,6 +18,12 @@
 #include "plugin.h"
 #include "util.h"
 
+enum { PROP_USE_ANIMATIONS = 1, N_PROPS };
+
+static GParamSpec *obj_properties[N_PROPS] = {
+        NULL,
+};
+
 /**
  * Make ourselves known to gobject
  */
@@ -36,6 +42,41 @@ static const MetaPluginInfo budgie_plugin_info = {.name = "Budgie WM",
                                                   .author = "Ikey Doherty",
                                                   .license = "GPL-2.0",
                                                   .description = "Budgie Window Manager" };
+
+/**
+ * Set GObject properties
+ */
+static void budgie_meta_plugin_set_property(GObject *object, guint id, const GValue *value,
+                                            GParamSpec *spec)
+{
+        BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(object);
+
+        switch (id) {
+        case PROP_USE_ANIMATIONS:
+                self->use_animations = g_value_get_boolean(value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
+
+/**
+ * Get GObject properties
+ */
+static void budgie_meta_plugin_get_property(GObject *object, guint id, GValue *value,
+                                            GParamSpec *spec)
+{
+        BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(object);
+
+        switch (id) {
+        case PROP_USE_ANIMATIONS:
+                g_value_set_boolean(value, self->use_animations);
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
 
 /**
  * budgie_meta_plugin_dispose:
@@ -63,6 +104,8 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
 
         /* gobject vtable */
         obj_class->dispose = budgie_meta_plugin_dispose;
+        obj_class->set_property = budgie_meta_plugin_set_property;
+        obj_class->get_property = budgie_meta_plugin_get_property;
 
         /* Hook up the vtable
          * Note: We're still going to need to add some more yet and handle
@@ -82,6 +125,16 @@ static void budgie_meta_plugin_class_init(BudgieMetaPluginClass *klazz)
         plug_class->kill_window_effects = budgie_meta_plugin_kill_window_effects;
         plug_class->kill_switch_workspace = budgie_meta_plugin_kill_switch_workspace;
         plug_class->confirm_display_change = budgie_meta_plugin_confirm_display_change;
+
+        /* Hook up animations property */
+        obj_properties[PROP_USE_ANIMATIONS] =
+            g_param_spec_boolean("use-animations",
+                                 "Use Animations",
+                                 "Whether or not we can use animations for effects",
+                                 TRUE,
+                                 G_PARAM_READWRITE);
+
+        g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
 }
 
 /**

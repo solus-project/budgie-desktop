@@ -31,6 +31,7 @@ struct _BudgieMetaPluginClass {
 struct _BudgieMetaPlugin {
         MetaPlugin parent;
         GHashTable *win_effects; /**< Map Window to a set of animation states */
+        gboolean use_animations; /**< Whether we can animate or not */
 };
 
 /**
