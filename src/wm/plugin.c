@@ -149,6 +149,7 @@ static void budgie_meta_plugin_init(__budgie_unused__ BudgieMetaPlugin *self)
         /* Map a MetaWindowActor to an enum state, always != 0 (NULL) */
         effects = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
         self->win_effects = effects;
+        self->use_animations = TRUE;
 }
 
 void budgie_meta_plugin_register_type(void)
