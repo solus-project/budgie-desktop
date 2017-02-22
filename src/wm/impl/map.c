@@ -47,6 +47,9 @@ void budgie_meta_plugin_map(MetaPlugin *plugin, MetaWindowActor *actor)
                 return;
         }
 
+        /* Reset previous transitions in case we're in transit.. */
+        clutter_actor_remove_all_transitions(cactor);
+
         switch (meta_window_get_window_type(window)) {
         case META_WINDOW_POPUP_MENU:
         case META_WINDOW_DROPDOWN_MENU:
