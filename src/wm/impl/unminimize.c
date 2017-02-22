@@ -13,6 +13,13 @@
 
 void budgie_meta_plugin_unminimize(MetaPlugin *plugin, MetaWindowActor *actor)
 {
+        BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(plugin);
+
+        if (!self->use_animations) {
+                meta_plugin_unminimize_completed(plugin, actor);
+                return;
+        }
+
         meta_plugin_unminimize_completed(plugin, actor);
 }
 
