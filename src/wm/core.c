@@ -62,6 +62,10 @@ void budgie_meta_plugin_push_animation(BudgieMetaPlugin *self, MetaWindowActor *
 
         /* At worst, this returns NULL, which is cast to 0, the initial state */
         win_state = GPOINTER_TO_UINT(g_hash_table_lookup(self->win_effects, actor));
+        /* Don't allow double-setting the flag .. */
+        if ((win_state & flag) == flag) {
+                return;
+        }
         win_state |= flag;
         g_hash_table_replace(self->win_effects, actor, GUINT_TO_POINTER(win_state));
 }
