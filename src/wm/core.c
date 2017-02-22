@@ -79,6 +79,9 @@ void budgie_meta_plugin_pop_animation(BudgieMetaPlugin *self, MetaWindowActor *a
                 return;
         }
 
+        /* Find a better solution. */
+        clutter_actor_remove_all_transitions(CLUTTER_ACTOR(actor));
+
         win_state = GPOINTER_TO_UINT(v);
 
         switch (flag) {
