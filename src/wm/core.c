@@ -11,6 +11,13 @@
 
 #include "plugin-private.h"
 
+#include <meta/prefs.h>
+
+/**
+ * Current gsettings schema for budgie-wm
+ */
+#define WM_SCHEMA "com.solus-project.budgie-wm"
+
 void budgie_meta_plugin_confirm_display_change(MetaPlugin *plugin)
 {
         /* TODO: Ask via Zenity! */
@@ -26,6 +33,11 @@ void budgie_meta_plugin_start(MetaPlugin *plugin)
         screen = meta_plugin_get_screen(plugin);
         screen_group = meta_get_window_group_for_screen(screen);
         stage = meta_get_stage_for_screen(screen);
+
+        /* Set up our overrides */
+        meta_prefs_override_preference_schema("edge-tiling", WM_SCHEMA);
+        meta_prefs_override_preference_schema("attach-modal-dialogs", WM_SCHEMA);
+        meta_prefs_override_preference_schema("button-layout", WM_SCHEMA);
 
         /* TODO:
          *  - Hook up background group
