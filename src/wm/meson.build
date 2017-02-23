@@ -15,6 +15,7 @@ budgie_wm_sources = [
     'impl/tiling.c',
     'impl/tile-widget.c',
     'impl/unminimize.c',
+    'impl/window-switcher.c',
     'impl/workspaces.c',
     'main.c',
     'plugin.c',
