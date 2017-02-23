@@ -54,6 +54,11 @@ static void budgie_tile_preview_init(BudgieTilePreview *self)
         memset(&self->rect, 0, sizeof(MetaRectangle));
 }
 
+ClutterActor *budgie_tile_preview_new(void)
+{
+        return g_object_new(BUDGIE_TYPE_TILE_PREVIEW, NULL);
+}
+
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
  *

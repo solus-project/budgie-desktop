@@ -14,6 +14,7 @@
 #include <glib-object.h>
 #include <meta/meta-plugin.h>
 
+#include "impl/tile-widget.h"
 #include "plugin.h"
 
 G_BEGIN_DECLS
@@ -32,6 +33,7 @@ struct _BudgieMetaPlugin {
         MetaPlugin parent;
         GHashTable *win_effects; /**< Map Window to a set of animation states */
         gboolean use_animations; /**< Whether we can animate or not */
+        ClutterActor *tiler;     /**< Private tile widget */
 };
 
 /**
