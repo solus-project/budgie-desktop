@@ -52,6 +52,9 @@ static void budgie_tile_preview_class_init(BudgieTilePreviewClass *klazz)
 static void budgie_tile_preview_init(BudgieTilePreview *self)
 {
         memset(&self->rect, 0, sizeof(MetaRectangle));
+        clutter_actor_set_background_color(CLUTTER_ACTOR(self),
+                                           clutter_color_get_static(CLUTTER_COLOR_SKY_BLUE));
+        clutter_actor_set_opacity(CLUTTER_ACTOR(self), 100);
 }
 
 ClutterActor *budgie_tile_preview_new(void)

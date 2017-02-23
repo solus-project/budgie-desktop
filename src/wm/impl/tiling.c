@@ -71,6 +71,7 @@ void budgie_meta_plugin_show_tile_preview(MetaPlugin *plugin, MetaWindow *window
                      NULL);
         clutter_actor_set_position(tiler, x, y);
         clutter_actor_set_size(tiler, width, height);
+        clutter_actor_set_opacity(tiler, 100);
         g_object_set(tiler, "scale-x", 0.5f, "scale-y", 0.5f, "pivot-point", &pv_center, NULL);
 
         clutter_actor_set_child_below_sibling(screen_group, tiler, win_actor);
