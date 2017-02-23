@@ -96,16 +96,22 @@ void budgie_meta_plugin_hide_tile_preview(MetaPlugin *plugin)
 {
         BudgieMetaPlugin *self = BUDGIE_META_PLUGIN(plugin);
         ClutterActor *tiler = self->tiler;
+        MetaRectangle *rect = NULL;
 
         if (!self->tiler) {
                 return;
         }
+
         clutter_actor_remove_all_transitions(tiler);
         clutter_actor_save_easing_state(tiler);
         clutter_actor_set_easing_mode(tiler, CLUTTER_EASE_OUT_QUAD);
         clutter_actor_set_easing_duration(tiler, 165);
         clutter_actor_set_opacity(tiler, 0);
         clutter_actor_restore_easing_state(tiler);
+
+        /* Reset the tile preview */
+        rect = &(BUDGIE_TILE_PREVIEW(tiler)->rect);
+        *rect = (MetaRectangle){ 0 };
 }
 
 /*
