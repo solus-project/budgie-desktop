@@ -5,9 +5,7 @@ The Budgie Desktop a modern desktop designed to keep out the way of the user. It
 
 ![main_desktop](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainDesktop.png)
 
-Budgie is **not currently accepting** any contributions that **add** significant Vala code to the Budgie codebase. Please see [this bug](https://github.com/solus-project/budgie-desktop/issues/501) for further details. Our next steps involve cleaning up the code and porting to C for more control, flexibility, and ultimately a more stable and established desktop.
-
-We are currently moving to a modular architecture, which you see via our 
+We are slowly moving to a modular architecture, which you see via our 
 [organization page](https://github.com/budgie-desktop) as well as our 
 [Budgie 11 workboard](https://github.com/budgie-desktop/budgie-desktop/projects/1).
 
