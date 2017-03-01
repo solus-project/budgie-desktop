@@ -94,6 +94,7 @@ given:
 - libpeas-gtk-1.0 >= 1.8.0
 - libpulse >= 2
 - libwnck >= 3.14.0
+- meson
 - mutter >= 3.18.0
 - polkit-agent-1 >= 0.110
 - polkit-gobject-1 >= 0.110
@@ -108,7 +109,7 @@ And:
 To install these on Solus:
 
 ```bash
-sudo eopkg it glib2-devel libgtk-3-devel gtk-doc libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel gnome-bluetooth-devel mutter-devel polkit-devel libwnck-devel upower-devel accountsservice-devel ibus-devel vala
+sudo eopkg it glib2-devel libgtk-3-devel gtk-doc libpeas-devel gobject-introspection-devel util-linux-devel pulseaudio-devel libgnome-menus-devel libgnome-desktop-devel gnome-bluetooth-devel mutter-devel polkit-devel libwnck-devel upower-devel accountsservice-devel ibus-devel vala meson
 sudo eopkg it -c system.devel
 ```
 
@@ -121,9 +122,10 @@ git clone https://github.com/solus-project/budgie-desktop.git
 Now build it:
 ```bash
 cd budgie-desktop
-./autogen.sh --prefix=/usr
-make -j$(($(getconf _NPROCESSORS_ONLN)+1))
-sudo make install
+meson build
+cd build
+ninja
+sudo ninja install
 ```
 
 Theming
