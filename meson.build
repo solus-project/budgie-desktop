@@ -115,7 +115,9 @@ subdir('po')
 subdir('src')
 
 # Documentation...
-subdir('docs')
+if get_option('with-gtk-doc') == true
+    subdir('docs')
+endif
 
 # And lastly, data bits
 subdir('data')
