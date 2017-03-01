@@ -122,11 +122,19 @@ git clone https://github.com/solus-project/budgie-desktop.git
 Now build it:
 ```bash
 cd budgie-desktop
-meson build
+meson build --prefix=/usr --sysconfdir=/etc
 cd build
-ninja
+ninja -j$(($(getconf _NPROCESSORS_ONLN)+1))
 sudo ninja install
 ```
+
+**Note**: When building a distro package, please ensure you use:
+
+```
+meson build --prefix=/usr --sysconfdir=/etc --buildtype plain
+```
+
+This ensures your distro flags are respected.
 
 Theming
 ------
