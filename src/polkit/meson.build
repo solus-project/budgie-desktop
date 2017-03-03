@@ -17,7 +17,7 @@ polkit_resources = gnome.compile_resources(
 
 polkit_sources = [
     'polkitdialog.vala',
-    theme_resources,
+    polkit_resources,
 ]
 
 # Don't need APIs from anything older than this
