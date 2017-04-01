@@ -33,7 +33,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
                 return Gdk.EVENT_PROPAGATE;
             }
             if (visible_popover != null) {
-                visible_popover.popdown();
+                visible_popover.hide();
                 make_modal(visible_popover, false);
                 visible_popover = null;
             }
@@ -54,7 +54,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             if ((e.x < alloc.x || e.x > alloc.x+alloc.width) ||
                 (e.y < alloc.y || e.y > alloc.y+alloc.height)) {
-                    visible_popover.popdown();
+                    visible_popover.hide();
                     make_modal(visible_popover, false);
                     visible_popover = null;
             }
@@ -102,7 +102,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
         }
 
         owner.set_expanded(true);
-        pop.popup();
+        pop.show();
     }
 
     void on_widget_mapped(Gtk.Widget? p)
@@ -130,9 +130,9 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
                 if (visible_popover != widgets[w] && visible_popover != null) {
                     /* Hide current popover, re-open next */
                     mousing = true;
-                    visible_popover.popdown();
+                    visible_popover.hide();
                     visible_popover = widgets[w];
-                    visible_popover.popup();
+                    visible_popover.show_all();
                     owner.set_focus(null);
                     visible_popover.grab_focus();
                     mousing = false;

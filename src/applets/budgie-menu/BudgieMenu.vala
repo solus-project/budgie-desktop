@@ -110,7 +110,7 @@ public class BudgieMenuApplet : Budgie.Applet
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
-                popover.popdown();
+                popover.hide();
             } else {
                 popover.get_child().show_all();
                 this.manager.show_popover(widget);
@@ -137,7 +137,7 @@ public class BudgieMenuApplet : Budgie.Applet
 
         popover.key_release_event.connect((e)=> {
             if (e.keyval == Gdk.Key.Escape) {
-                popover.popdown();
+                popover.hide();
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -147,7 +147,7 @@ public class BudgieMenuApplet : Budgie.Applet
     {
         if ((action & Budgie.PanelAction.MENU) != 0) {
             if (popover.get_visible()) {
-                popover.popdown();
+                popover.hide();
             } else {
                 popover.get_child().show_all();
                 this.manager.show_popover(widget);

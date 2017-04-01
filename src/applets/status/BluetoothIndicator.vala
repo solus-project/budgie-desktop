@@ -208,7 +208,7 @@ public class BluetoothIndicator : Gtk.Bin
         } catch (Error e) {
             message("Error setting airplane mode: %s", e.message);
         }
-        this.popover.popdown();
+        this.popover.hide();
     }
 
     /* Notify */

@@ -38,7 +38,7 @@ public class StatusApplet : Budgie.Applet
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
-                popover.popdown();
+                popover.hide();
             } else {
                 this.manager.show_popover(parent_widget);
             }

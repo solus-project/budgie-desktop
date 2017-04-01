@@ -63,7 +63,7 @@ public class ClockApplet : Budgie.Applet
                 return Gdk.EVENT_PROPAGATE;
             }
             if (popover.get_visible()) {
-                popover.popdown();
+                popover.hide();
             } else {
                 this.manager.show_popover(widget);
             }
