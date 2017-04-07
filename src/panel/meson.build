@@ -30,6 +30,7 @@ panel_deps = [
     dep_gtk3,
     dep_peas,
     dep_libuuid,
+    link_libconfig,
     link_libsession,
     link_libtoplevel,
     link_libtheme,
@@ -43,7 +44,6 @@ top_vapidir = join_paths(meson.source_root(), 'vapi')
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
-    include_directories: include_directories(dir_libconfig),
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

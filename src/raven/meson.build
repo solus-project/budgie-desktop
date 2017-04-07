@@ -64,6 +64,5 @@ libraven = shared_library(
 
 link_libraven = declare_dependency(
     link_with: libraven,
-    include_directories: include_directories(meson.current_source_dir()),
-    include_directories: include_directories(meson.current_build_dir()),
+    include_directories: include_directories('.'),
 )

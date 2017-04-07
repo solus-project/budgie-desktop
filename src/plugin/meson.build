@@ -21,7 +21,7 @@ libenum = static_library(
 
 link_libenum = declare_dependency(
     sources: plugin_enums,
-    include_directories: include_directories(meson.current_build_dir()),
+    include_directories: include_directories('.'),
 )
 
 # install headers
@@ -110,8 +110,7 @@ link_libplugin = declare_dependency(
     link_with: libplugin,
     dependencies: plugin_deps,
     include_directories: [
-        include_directories(meson.current_source_dir()),
-        include_directories(meson.current_build_dir()),
+        include_directories('.'),
     ],
 )
 

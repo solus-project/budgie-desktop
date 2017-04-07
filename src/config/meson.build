@@ -14,7 +14,7 @@ libconfig = static_library(
 link_libconfig = declare_dependency(
     link_with: libconfig,
     include_directories: [
-        include_directories(meson.current_source_dir()),
+        include_directories('.'),
     ],
 )
 
