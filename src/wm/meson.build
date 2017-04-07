@@ -7,27 +7,34 @@ custom_target('desktop-file-wm',
 
 
 budgie_wm_sources = [
-    'background.vala',
-    'ibus.vala',
-    'keyboard.vala',
-    'main.vala',
-    'shim.vala',
-    'windowmenu.vala',
-    'wm.vala',
+    'core.c',
+    'impl/destroy.c',
+    'impl/map.c',
+    'impl/menus.c',
+    'impl/minimize.c',
+    'impl/tiling.c',
+    'impl/tile-widget.c',
+    'impl/unminimize.c',
+    'impl/window-switcher.c',
+    'impl/workspaces.c',
+    'main.c',
+    'plugin.c',
 ]
 
-dep_mutter = dependency('libmutter', version: gnome_minimum_version)
+dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
+
+if not dep_mutter.found()
+    dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
+    message('Using new libmutter-0 ABI from GNOME 3.24')
+endif
 
 budgie_wm_deps = [
-    link_libconfig,
     dep_mutter,
-    dep_gnomedesktop,
-    dep_gsettings,
-    dep_ibus,
 ]
 
 rpath = ''
 
+# Newer mutter uses rpath'd libraries..
 if dep_mutter.version().version_compare('>=3.21.0')
     rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
 endif
@@ -37,20 +44,6 @@ executable(
     dependencies: budgie_wm_deps,
     include_directories: extra_includes,
     install: true,
-    vala_args: [
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'ibus-1.0',
-        '--pkg', 'gnome-desktop-3.0',
-        '--pkg', 'libmutter',
-        '--pkg', 'budgie-config',
-        '--pkg', 'gsettings-desktop-schemas',
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
-        '--vapidir', dir_libconfig,
-    ],
-    c_args: [
-        '-DGNOME_DESKTOP_USE_UNSTABLE_API',
-    ],
     install_rpath: rpath,
 )
 
