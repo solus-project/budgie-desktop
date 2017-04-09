@@ -18,6 +18,7 @@ budgie_wm_sources = [
 
 vapi_mutter = 'libmutter'
 dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
+vapi_mutter_dir = ''
 
 if not dep_mutter.found()
     dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
@@ -37,6 +38,7 @@ rpath = ''
 
 if dep_mutter.version().version_compare('>=3.21.0')
     rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
+    vapi_mutter_dir = ['--girdir', rpath]
 endif
 
 executable(
@@ -54,6 +56,7 @@ executable(
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
+        vapi_mutter_dir,
     ],
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',
