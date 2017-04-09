@@ -92,6 +92,7 @@ public interface LoginDRemote : GLib.Object
 public interface MenuManager: GLib.Object
 {
     public abstract async void ShowDesktopMenu(uint button, uint32 timestamp) throws Error;
+    public abstract async void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws Error;
 }
 
 [CompactClass]
@@ -479,6 +480,18 @@ public class BudgieWM : Meta.Plugin
         if (type != Meta.WindowMenuType.WM) {
             return;
         }
+        if (menu_proxy == null) {
+            return;
+        }
+        Timeout.add(100, ()=> {
+            uint32 xid = (uint32)window.get_xwindow();
+            try {
+                menu_proxy.ShowWindowMenu.begin(xid, 3, 0);
+            } catch (Error e) {
+                message("Error invoking MenuManager: %s", e.message);
+            }
+            return false;
+        });
     }
 
     /* Dismiss raven from view. Consider in future tracking the visible

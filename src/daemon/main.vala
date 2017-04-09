@@ -17,6 +17,7 @@ public static int main(string[] args)
     Gtk.init(ref args);
     Budgie.ServiceManager? manager = null;
     Budgie.EndSessionDialog? end_dialog = null;
+    Wnck.Screen? screen = null;
 
     Intl.setlocale(LocaleCategory.ALL, "");
     Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
@@ -26,11 +27,19 @@ public static int main(string[] args)
     manager = new Budgie.ServiceManager();
     end_dialog = new Budgie.EndSessionDialog();
 
+    screen = Wnck.Screen.get_default();
+    if (screen != null) {
+        screen.force_update();
+    }
+
     /* Enter main loop */
     Gtk.main();
 
     /* Deref - clean */
     manager = null;
     end_dialog = null;
+
+    Wnck.shutdown();
+
     return 0;
 }

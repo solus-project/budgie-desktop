@@ -27,6 +27,7 @@ daemon_sources = [
 daemon_deps = [
     dep_gtk3,
     dep_gdkx11,
+    dep_wnck,
     link_libconfig,
     link_libtheme,
     link_libsession,
@@ -47,9 +48,13 @@ executable(
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
+        '--pkg', 'libwnck-3.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
+    ],
+    c_args: [
+        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
 )

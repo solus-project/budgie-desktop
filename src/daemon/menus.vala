@@ -32,6 +32,9 @@ public class MenuManager
 {
 
     private Gtk.Menu? desktop_menu = null;
+    private unowned Wnck.Window? active_window = null;
+    private Wnck.ActionMenu? action_menu = null;
+    private uint32 xid = 0;
 
     [DBus (visible = false)]
     public MenuManager()
@@ -133,6 +136,19 @@ public class MenuManager
         });
     }
 
+    /**
+     * Show a window menu for the given window ID
+     */
+    public void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp)
+    {
+        active_window = Wnck.Window.get(xid);
+        if (active_window == null) {
+            return;
+        }
+        action_menu = new Wnck.ActionMenu(active_window);
+        action_menu.popup(null, null, null, 3, Gdk.CURRENT_TIME);
+        this.xid = xid;
+    }
 } /* End class MenuManager (BudgieMenuManager) */
 
 } /* End namespace Budgie */
