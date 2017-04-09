@@ -31,9 +31,65 @@ public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 public class MenuManager
 {
 
+    private Gtk.Menu? desktop_menu = null;
+
     [DBus (visible = false)]
     public MenuManager()
     {
+        init_desktop_menu();
+    }
+
+    /**
+     * Construct the root level desktop menu (right click on wallpaper
+     */
+    private void init_desktop_menu()
+    {
+        desktop_menu = new Gtk.Menu();
+        desktop_menu.show();
+        var item = new Gtk.MenuItem.with_label(_("Change background"));
+        item.activate.connect(background_activate);
+        item.show();
+        desktop_menu.append(item);
+
+        var sep = new Gtk.SeparatorMenuItem();
+        sep.show();
+        desktop_menu.append(sep);
+
+        item = new Gtk.MenuItem.with_label(_("Settings"));
+        item.activate.connect(settings_activate);
+        item.show();
+        desktop_menu.append(item);
+    }
+
+    /**
+     * Launch a .desktop name in a fail safe fashion
+     */
+    private void launch_desktop_name(string desktop_name)
+    {
+        try {
+            var info = new DesktopAppInfo(desktop_name);
+            if (info != null) {
+                info.launch(null, null);
+            }
+        } catch (Error e) {
+            warning("Unable to launch %s: %s", desktop_name, e.message);
+        }
+    }
+
+    /**
+     * Launch the Background (wallpaper) settings
+     */
+    private void background_activate()
+    {
+        launch_desktop_name("gnome-background-panel.desktop");
+    }
+
+    /**
+     * Launch main settings (gnome control center)
+     */
+    private void settings_activate()
+    {
+        launch_desktop_name("gnome-control-center.desktop");
     }
 
     /**
@@ -56,6 +112,18 @@ public class MenuManager
         } catch (Error e) {
             stderr.printf("Error registering BudgieMenuManager: %s\n", e.message);
         }
+    }
+
+    /**
+     * We've been asked to display the root menu for the desktop itself,
+     * which contains actions for launching the settings, etc.
+     */
+    public void ShowDesktopMenu(uint button, uint32 timestamp)
+    {
+        Idle.add(()=> {
+            desktop_menu.popup(null, null, null, button, timestamp);
+            return false;
+        });
     }
 
 } /* End class MenuManager (BudgieMenuManager) */
