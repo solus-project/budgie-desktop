@@ -12,7 +12,6 @@ budgie_wm_sources = [
     'keyboard.vala',
     'main.vala',
     'shim.vala',
-    'windowmenu.vala',
     'wm.vala',
 ]
 
@@ -47,7 +46,6 @@ executable(
     include_directories: extra_includes,
     install: true,
     vala_args: [
-        '--pkg', 'gtk+-3.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',

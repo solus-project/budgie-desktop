@@ -99,14 +99,11 @@ public class BudgieWM : Meta.Plugin
     public static string[]? old_args;
     public static bool wayland = false;
 
-    public static bool gtk_available = true;
-
     static Clutter.Point PV_CENTER;
     static Clutter.Point PV_NORM;
 
     private Meta.BackgroundGroup? background_group;
 
-    private Gtk.Menu? menu = null;
     private KeyboardManager? keyboard = null;
 
     Settings? settings = null;
@@ -114,7 +111,6 @@ public class BudgieWM : Meta.Plugin
     ShellShim? shim = null;
     BudgieWMDBUS? focus_interface = null;
     PanelRemote? panel_proxy = null;
-    WindowMenu? winmenu = null;
     LoginDRemote? logind_proxy = null;
 
     private bool force_unredirect = false;
@@ -347,13 +343,6 @@ public class BudgieWM : Meta.Plugin
         Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_BUTTON_LAYOUT, WM_SCHEMA);
 
-        /* Follow GTK's policy on animations */
-        if (gtk_available) {
-            var settings = Gtk.Settings.get_default();
-            settings.bind_property("gtk-enable-animations", this, "use-animations");
-            winmenu = new WindowMenu();
-        }
-
         settings = new Settings(WM_SCHEMA);
         this.settings.changed.connect(this.on_wm_schema_changed);
         this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
@@ -397,20 +386,6 @@ public class BudgieWM : Meta.Plugin
         screen_group.show();
         stage.show();
 
-        if (wayland && !gtk_available) {
-            unowned string[] args = BudgieWM.old_args;
-            if (Gtk.init_check(ref args)) {
-                BudgieWM.gtk_available = true;
-                message("Got GTK+ now");
-            } else {
-                message("Still no GTK+");
-            }
-        }
-
-        if (BudgieWM.gtk_available) {
-            init_menu();
-        }
-
         keyboard = new KeyboardManager(this);
         keyboard.hook_extra();
     }
@@ -439,15 +414,6 @@ public class BudgieWM : Meta.Plugin
         if (type != Meta.WindowMenuType.WM) {
             return;
         }
-
-        if (winmenu == null) {
-            return;
-        }
-        Timeout.add(100, ()=> {
-            winmenu.meta_window = window;
-            winmenu.popup(null, null, null, 3, Gdk.CURRENT_TIME);
-            return false;
-        });
     }
 
     /* Dismiss raven from view. Consider in future tracking the visible
@@ -458,24 +424,6 @@ public class BudgieWM : Meta.Plugin
         if (raven_proxy != null) {
             raven_proxy.Dismiss.begin();
         }
-    }
-
-    bool on_button_release(Clutter.ButtonEvent? event)
-    {
-
-        if (event.button == 1) {
-            this.dismiss_raven();
-        } else if (event.button == 3 ) {
-            if (menu.get_visible()) {
-                menu.hide();
-            } else {
-                menu.popup(null, null, null, event.button, event.time);
-            }
-        } else {
-            return CLUTTER_EVENT_PROPAGATE;
-        }
-
-        return CLUTTER_EVENT_STOP;
     }
 
     void on_monitors_changed(Meta.Screen? screen)
@@ -512,26 +460,6 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    void init_menu()
-    {
-        menu = new Gtk.Menu();
-        menu.show();
-        var item = new Gtk.MenuItem.with_label(_("Change background"));
-        item.activate.connect(background_activate);
-        item.show();
-        menu.append(item);
-
-        var sep = new Gtk.SeparatorMenuItem();
-        sep.show();
-        menu.append(sep);
-
-        item = new Gtk.MenuItem.with_label(_("Settings"));
-        item.activate.connect(settings_activate);
-        item.show();
-        menu.append(item);
-
-        this.background_group.button_release_event.connect(on_button_release);
-    }
 
     static const int MAP_TIMEOUT  = 170;
     static const int MENU_MAP_TIMEOUT = 120;

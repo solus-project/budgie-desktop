@@ -17,15 +17,6 @@ public static int main(string[] args)
 
     ctx = Meta.get_option_context();
 
-    if ("--wayland" in args) {
-        warning("Running under Wayland, GTK+ functionality not available");
-        Budgie.BudgieWM.gtk_available = false;
-        Budgie.BudgieWM.wayland = true;
-    } else if (!Gtk.init_check(ref args)) {
-        warning("GTK+ functionality not available");
-        Budgie.BudgieWM.gtk_available = false;
-    }
-
     try {
         if (!ctx.parse(ref args)) {
             return Meta.ExitCode.ERROR;
