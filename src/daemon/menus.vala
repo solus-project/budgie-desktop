@@ -59,6 +59,9 @@ public class MenuManager
         item.activate.connect(settings_activate);
         item.show();
         desktop_menu.append(item);
+
+        /* Visibility test will now fail so we get first show working fine */
+        desktop_menu.hide();
     }
 
     /**
