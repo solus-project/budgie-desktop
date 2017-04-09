@@ -12,23 +12,27 @@
 namespace Budgie {
 
 
-public static const string MUTTER_EDGE_TILING  = "edge-tiling";
-public static const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
-public static const string MUTTER_BUTTON_LAYOUT = "button-layout";
-public static const string WM_FORCE_UNREDIRECT = "force-unredirect";
-public static const string WM_SCHEMA           = "com.solus-project.budgie-wm";
+public const string MUTTER_EDGE_TILING  = "edge-tiling";
+public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
+public const string MUTTER_BUTTON_LAYOUT = "button-layout";
+public const string WM_FORCE_UNREDIRECT = "force-unredirect";
+public const string WM_SCHEMA           = "com.solus-project.budgie-wm";
 
-public static const bool CLUTTER_EVENT_PROPAGATE = false;
-public static const bool CLUTTER_EVENT_STOP      = true;
+public const bool CLUTTER_EVENT_PROPAGATE = false;
+public const bool CLUTTER_EVENT_STOP      = true;
 
-public static const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
-public static const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
+public const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
 
-public static const string PANEL_DBUS_NAME        = "com.solus_project.budgie.Panel";
-public static const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
+public const string PANEL_DBUS_NAME        = "com.solus_project.budgie.Panel";
+public const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
 
-public static const string LOGIND_DBUS_NAME        = "org.freedesktop.login1";
-public static const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
+public const string LOGIND_DBUS_NAME        = "org.freedesktop.login1";
+public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
+
+/** Menu management */
+public const string MENU_DBUS_NAME        = "org.budgie_desktop.MenuManager";
+public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
 [Flags]
 public enum PanelAction {
@@ -81,6 +85,15 @@ public interface LoginDRemote : GLib.Object
     public signal void PrepareForSleep(bool suspending);
 }
 
+/**
+ * Allows us to invoke desktop menus without directly using GTK+ ourselves
+ */
+[DBus (name = "org.budgie_desktop.MenuManager")]
+public interface MenuManager: GLib.Object
+{
+    public abstract async void ShowDesktopMenu(uint button, uint32 timestamp) throws Error;
+}
+
 [CompactClass]
 class MinimizeData {
     public double scale_x;
@@ -112,6 +125,7 @@ public class BudgieWM : Meta.Plugin
     BudgieWMDBUS? focus_interface = null;
     PanelRemote? panel_proxy = null;
     LoginDRemote? logind_proxy = null;
+    MenuManager? menu_proxy = null;
 
     private bool force_unredirect = false;
 
@@ -169,6 +183,28 @@ public class BudgieWM : Meta.Plugin
     {
         if (panel_proxy == null) {
             Bus.get_proxy.begin<PanelRemote>(BusType.SESSION, PANEL_DBUS_NAME, PANEL_DBUS_OBJECT_PATH, 0, null, on_panel_get);
+        }
+    }
+
+    /* Obtain Menu manager */
+    void on_menu_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            menu_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to get Menu proxy: %s", e.message);
+        }
+    }
+
+    void lost_menu()
+    {
+        menu_proxy = null;
+    }
+
+    void has_menu()
+    {
+        if (menu_proxy == null) {
+            Bus.get_proxy.begin<MenuManager>(BusType.SESSION, MENU_DBUS_NAME, MENU_DBUS_OBJECT_PATH, 0, null, on_menu_get);
         }
     }
 
@@ -356,8 +392,13 @@ public class BudgieWM : Meta.Plugin
         Bus.watch_name(BusType.SESSION, RAVEN_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_raven, lost_raven);
 
+        /* Panel manager */
         Bus.watch_name(BusType.SESSION, PANEL_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_panel, lost_panel);
+
+        /* Menu manager */
+        Bus.watch_name(BusType.SESSION, MENU_DBUS_NAME, BusNameWatcherFlags.NONE,
+            has_menu, lost_menu);
 
         /* Keep an eye out for systemd stuffs */
         if (have_logind()) {
@@ -378,6 +419,7 @@ public class BudgieWM : Meta.Plugin
         background_group = new Meta.BackgroundGroup();
         background_group.set_reactive(true);
         screen_group.insert_child_below(background_group, null);
+        background_group.button_release_event.connect(on_background_click);
 
         screen.monitors_changed.connect(on_monitors_changed);
         on_monitors_changed(screen);
@@ -388,6 +430,29 @@ public class BudgieWM : Meta.Plugin
 
         keyboard = new KeyboardManager(this);
         keyboard.hook_extra();
+    }
+
+    /**
+     * Launch menu manager with our wallpaper
+     */
+    private bool on_background_click(Clutter.ButtonEvent? event)
+    {
+        if (event.button == 1) {
+            this.dismiss_raven();
+        } else if (event.button == 3) {
+            if (menu_proxy == null) {
+                return CLUTTER_EVENT_STOP;
+            }
+            try {
+                menu_proxy.ShowDesktopMenu.begin(3, 0);
+            } catch (Error e) {
+                message("Error invoking MenuManager: %s", e.message);
+            }
+        } else {
+            return CLUTTER_EVENT_PROPAGATE;
+        }
+
+        return CLUTTER_EVENT_STOP;
     }
 
     private void on_wm_schema_changed(string key)
@@ -435,31 +500,6 @@ public class BudgieWM : Meta.Plugin
             background_group.add_child(actor);
         }
     }
-
-    void background_activate()
-    {
-        try {
-            var info = new DesktopAppInfo("gnome-background-panel.desktop");
-            if (info != null) {
-                info.launch(null, null);
-            }
-        } catch (Error e) {
-            warning("Unable to launch gnome-background-panel.desktop: %s", e.message);
-        }
-    }
-
-    void settings_activate()
-    {
-        try {
-            var info = new DesktopAppInfo("gnome-control-center.desktop");
-            if (info != null) {
-                info.launch(null, null);
-            }
-        } catch (Error e) {
-            warning("Unable to launch gnome-control-center.desktop: %s", e.message);
-        }
-    }
-
 
     static const int MAP_TIMEOUT  = 170;
     static const int MENU_MAP_TIMEOUT = 120;

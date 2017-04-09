@@ -121,7 +121,11 @@ public class MenuManager
     public void ShowDesktopMenu(uint button, uint32 timestamp)
     {
         Idle.add(()=> {
-            desktop_menu.popup(null, null, null, button, timestamp);
+            if (desktop_menu.get_visible()) {
+                desktop_menu.hide();
+            } else {
+                desktop_menu.popup(null, null, null, button, timestamp == 0 ? Gdk.CURRENT_TIME : timestamp);
+            }
             return false;
         });
     }
