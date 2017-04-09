@@ -28,7 +28,7 @@ public enum DialogType {
 }
 
 [GtkTemplate (ui="/com/solus-project/budgie/endsession/endsession.ui")]
-[DBus (name = "com.solus_project.Session.EndSessionDialog")]
+[DBus (name = "org.budgie_desktop.Session.EndSessionDialog")]
 public class EndSessionDialog : Gtk.Window
 {
 
@@ -92,7 +92,7 @@ public class EndSessionDialog : Gtk.Window
     void on_bus_acquired(DBusConnection conn)
     {
         try {
-            conn.register_object("/com/solus_project/Session/EndSessionDialog", this);
+            conn.register_object("/org/budgie_desktop/Session/EndSessionDialog", this);
         } catch (Error e) {
             warning("Cannot register EndSessionDialog");
         }
@@ -129,7 +129,7 @@ public class EndSessionDialog : Gtk.Window
     [DBus (visible = false)]
     public EndSessionDialog()
     {
-        Bus.own_name(BusType.SESSION, "com.solus_project.Session.EndSessionDialog", BusNameOwnerFlags.NONE,
+        Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", BusNameOwnerFlags.NONE,
             on_bus_acquired, null, null);
         set_keep_above(true);
         set_has_resize_grip(false);

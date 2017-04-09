@@ -21,11 +21,11 @@ public const string WM_SCHEMA           = "com.solus-project.budgie-wm";
 public const bool CLUTTER_EVENT_PROPAGATE = false;
 public const bool CLUTTER_EVENT_STOP      = true;
 
-public const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
-public const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
+public const string RAVEN_DBUS_NAME        = "org.budgie_desktop.budgie.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/budgie/Raven";
 
-public const string PANEL_DBUS_NAME        = "com.solus_project.budgie.Panel";
-public const string PANEL_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
+public const string PANEL_DBUS_NAME        = "org.budgie_desktop.budgie.Panel";
+public const string PANEL_DBUS_OBJECT_PATH = "/org/budgie_desktop/budgie/Panel";
 
 public const string LOGIND_DBUS_NAME        = "org.freedesktop.login1";
 public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
@@ -62,7 +62,7 @@ public class ScreenTilePreview : Clutter.Actor
 }
 
 
-[DBus (name="com.solus_project.budgie.Raven")]
+[DBus (name="org.budgie_desktop.budgie.Raven")]
 public interface RavenRemote : Object
 {
     public abstract bool GetExpanded() throws Error;
@@ -72,7 +72,7 @@ public interface RavenRemote : Object
     public abstract async void Dismiss() throws Error;
 }
 
-[DBus (name = "com.solus_project.budgie.Panel")]
+[DBus (name = "org.budgie_desktop.budgie.Panel")]
 public interface PanelRemote : Object
 {
 
@@ -1090,7 +1090,7 @@ public class BudgieWM : Meta.Plugin
  * This part of the equation is inspired by wingpanel, which uses our
  * popover manager.
  */
-[DBus (name = "com.solus_project.budgie.BudgieWM")]
+[DBus (name = "org.budgie_desktop.budgie.BudgieWM")]
 public class BudgieWMDBUS : GLib.Object
 {
 
@@ -1104,7 +1104,7 @@ public class BudgieWMDBUS : GLib.Object
     void on_bus_acquired(DBusConnection conn)
     {
         try {
-            conn.register_object("/com/solus_project/budgie/BudgieWM", this);
+            conn.register_object("/org/budgie_desktop/budgie/BudgieWM", this);
         } catch (Error e) {
             message("Unable to register BudgieWMDBUS: %s", e.message);
         }
@@ -1113,7 +1113,7 @@ public class BudgieWMDBUS : GLib.Object
     [DBus (visible = false)]
     public void serve()
     {
-        Bus.own_name(BusType.SESSION, "com.solus_project.budgie.BudgieWM",
+        Bus.own_name(BusType.SESSION, "org.budgie_desktop.budgie.BudgieWM",
             BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
             on_bus_acquired, null, null);
     }

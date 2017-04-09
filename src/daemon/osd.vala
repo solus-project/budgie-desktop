@@ -25,12 +25,12 @@ public const int OSD_EXPIRE_TIME = 2500;
 /**
  * Our name on the session bus. Reserved for Budgie use
  */
-public const string OSD_DBUS_NAME        = "com.solus_project.BudgieOSD";
+public const string OSD_DBUS_NAME        = "org.budgie_desktop.BudgieOSD";
 
 /**
  * Unique object path on OSD_DBUS_NAME
  */
-public const string OSD_DBUS_OBJECT_PATH = "/com/solus_project/BudgieOSD";
+public const string OSD_DBUS_OBJECT_PATH = "/org/budgie_desktop/BudgieOSD";
 
 
 /**
@@ -217,7 +217,7 @@ public class OSD : Gtk.Window
  * BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, receiving
  * requests, for example, from budgie-wm
  */
-[DBus (name = "com.solus_project.BudgieOSD")]
+[DBus (name = "org.budgie_desktop.BudgieOSD")]
 public class OSDManager
 {
     private OSD? osd_window = null;

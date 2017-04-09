@@ -410,7 +410,7 @@ public class RunDialogApp : Gtk.Application
 
     public RunDialogApp()
     {
-        Object(application_id: "com.solus_project.BudgieRunDialog", flags: 0);
+        Object(application_id: "org.budgie_desktop.BudgieRunDialog", flags: 0);
     }
 
     public override void activate()

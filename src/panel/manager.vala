@@ -14,8 +14,8 @@ using LibUUID;
 namespace Budgie
 {
 
-public const string DBUS_NAME        = "com.solus_project.budgie.Panel";
-public const string DBUS_OBJECT_PATH = "/com/solus_project/budgie/Panel";
+public const string DBUS_NAME        = "org.budgie_desktop.Panel";
+public const string DBUS_OBJECT_PATH = "/org/budgie_desktop/Panel";
 
 public const string MIGRATION_1_APPLETS[] = {
     "User Indicator",
@@ -94,7 +94,7 @@ public const string PANEL_KEY_MIGRATION  = "migration-level";
 public const int BUDGIE_MIGRATION_LEVEL = 1;
 
 
-[DBus (name = "com.solus_project.budgie.Panel")]
+[DBus (name = "org.budgie_desktop.Panel")]
 public class PanelManagerIface
 {
 

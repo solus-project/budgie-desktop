@@ -9,10 +9,10 @@
  * (at your option) any later version.
  */
 
-public const string RAVEN_DBUS_NAME        = "com.solus_project.budgie.Raven";
-public const string RAVEN_DBUS_OBJECT_PATH = "/com/solus_project/budgie/Raven";
+public const string RAVEN_DBUS_NAME        = "org.budgie_desktop.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
-[DBus (name="com.solus_project.budgie.Raven")]
+[DBus (name="org.budgie_desktop.Raven")]
 public interface RavenTriggerProxy : Object
 {
     public abstract async void ToggleAppletView() throws Error;

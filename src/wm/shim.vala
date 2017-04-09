@@ -32,7 +32,7 @@ public class SessionHandler : GLib.Object
 
     public SessionHandler()
     {
-        Bus.watch_name(BusType.SESSION, "com.solus_project.Session.EndSessionDialog",
+        Bus.watch_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog",
             BusNameWatcherFlags.NONE, has_dialog, lost_dialog);
     }
 
@@ -65,7 +65,7 @@ public class SessionHandler : GLib.Object
         if (proxy != null) {
             return;
         }
-        Bus.get_proxy.begin<EndSessionDialog>(BusType.SESSION, "com.solus_project.Session.EndSessionDialog", "/com/solus_project/Session/EndSessionDialog", 0, null, on_dialog_get);
+        Bus.get_proxy.begin<EndSessionDialog>(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", "/org/budgie_desktop/Session/EndSessionDialog", 0, null, on_dialog_get);
     }
 
     void lost_dialog()
@@ -100,7 +100,7 @@ public class SessionHandler : GLib.Object
 /**
  * Wrap the EndSessionDialog type inside Budgie itself
  */
-[DBus (name = "com.solus_project.Session.EndSessionDialog")]
+[DBus (name = "org.budgie_desktop.Session.EndSessionDialog")]
 public interface EndSessionDialog : GLib.Object
 {
 
@@ -118,7 +118,7 @@ public interface EndSessionDialog : GLib.Object
 /**
  * Expose the BudgieOSD functionality for proxying of the Shell OSD Functionality
  */
-[DBus (name = "com.solus_project.BudgieOSD")]
+[DBus (name = "org.budgie_desktop.BudgieOSD")]
 public interface BudgieOSD : GLib.Object
 {
     /**
@@ -156,7 +156,7 @@ public class ShellShim : GLib.Object
 
         handler = new SessionHandler();
 
-        Bus.watch_name(BusType.SESSION, "com.solus_project.BudgieOSD",
+        Bus.watch_name(BusType.SESSION, "org.budgie_desktop.BudgieOSD",
             BusNameWatcherFlags.NONE, has_osd_proxy, lost_osd_proxy);
     }
 
@@ -180,7 +180,7 @@ public class ShellShim : GLib.Object
         if (osd_proxy  != null) {
             return;
         }
-        Bus.get_proxy.begin<BudgieOSD>(BusType.SESSION, "com.solus_project.BudgieOSD", "/com/solus_project/BudgieOSD", 0, null, on_osd_proxy_get);
+        Bus.get_proxy.begin<BudgieOSD>(BusType.SESSION, "org.budgie_desktop.BudgieOSD", "/org/budgie_desktop/BudgieOSD", 0, null, on_osd_proxy_get);
     }
 
     /**
