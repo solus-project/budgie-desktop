@@ -5,3 +5,7 @@ gdk-pixbuf-2.0
 gtk+-3.0
 x11
 xfixes-4.0
+Clutter-0
+ClutterX11-0
+Cogl-0
+CoglPango-0
