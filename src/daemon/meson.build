@@ -19,6 +19,7 @@ daemon_sources = [
     'endsession.vala',
     'main.vala',
     'manager.vala',
+    'menus.vala',
     'osd.vala',
     daemon_resources,
 ]

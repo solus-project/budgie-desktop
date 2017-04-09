@@ -25,6 +25,7 @@ public class ServiceManager : GLib.Object
 
     /* On Screen Display */
     Budgie.OSDManager? osd;
+    Budgie.MenuManager? menus;
 
     /**
      * Construct a new ServiceManager and initialiase appropriately
@@ -40,6 +41,8 @@ public class ServiceManager : GLib.Object
         });
         osd = new Budgie.OSDManager();
         osd.setup_dbus();
+        menus = new Budgie.MenuManager();
+        menus.setup_dbus();
     }
 
     /**
