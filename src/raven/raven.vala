@@ -12,10 +12,10 @@
 namespace Budgie
 {
 
-public const string RAVEN_DBUS_NAME        = "org.budgie_desktop.budgie.Raven";
-public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/budgie/Raven";
+public const string RAVEN_DBUS_NAME        = "org.budgie_desktop.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
-[DBus (name = "org.budgie_desktop.budgie.Raven")]
+[DBus (name = "org.budgie_desktop.Raven")]
 public class RavenIface
 {
 

@@ -15,10 +15,10 @@ namespace Budgie
 {
 
 
-public static const string WM_DBUS_NAME        = "org.budgie_desktop.budgie.BudgieWM";
-public static const string WM_DBUS_OBJECT_PATH = "/org/budgie_desktop/budgie/BudgieWM";
+public static const string WM_DBUS_NAME        = "org.budgie_desktop.BudgieWM";
+public static const string WM_DBUS_OBJECT_PATH = "/org/budgie_desktop/BudgieWM";
 
-[DBus (name="org.budgie_desktop.budgie.BudgieWM")]
+[DBus (name="org.budgie_desktop.BudgieWM")]
 public interface BudgieWMDBUS : Object
 {
     public abstract void store_focused() throws Error;
