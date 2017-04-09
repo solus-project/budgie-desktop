@@ -34,6 +34,7 @@ shared_library(
         '--pkg', 'gnome-desktop-3.0',
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', dir_libplugin,
     ],
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',

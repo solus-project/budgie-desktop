@@ -41,6 +41,7 @@ shared_library(
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libgnome-menu-3.0',
+        '--vapidir', dir_libplugin,
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

@@ -27,6 +27,7 @@ shared_library(
         '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
+        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_lockkeys_dir,

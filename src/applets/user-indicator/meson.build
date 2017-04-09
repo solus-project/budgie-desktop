@@ -32,6 +32,7 @@ shared_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'accountsservice',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_userindicator_dir,

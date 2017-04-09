@@ -45,6 +45,7 @@ shared_library(
         '--pkg', 'accountsservice',
         '--pkg', 'gvc-1.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', dir_libplugin,
         applet_status_vala_args,
     ],
     install: true,

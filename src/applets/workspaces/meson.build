@@ -29,6 +29,7 @@ shared_library(
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libwnck-3.0',
+        '--vapidir', dir_libplugin,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
