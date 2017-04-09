@@ -1,6 +1,4 @@
 cairo
-clutter-1.0
-cogl-1.0
 gsettings-desktop-schemas
 gdk-3.0
 gdk-pixbuf-2.0
