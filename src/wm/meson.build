@@ -16,11 +16,13 @@ budgie_wm_sources = [
     'wm.vala',
 ]
 
+vapi_mutter = 'libmutter'
 dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
 
 if not dep_mutter.found()
     dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
     message('Using new libmutter-0 ABI from GNOME 3.24')
+    vapi_mutter = 'libmutter-0'
 endif
 
 budgie_wm_deps = [
@@ -47,7 +49,7 @@ executable(
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
-        '--pkg', 'libmutter',
+        '--pkg', vapi_mutter,
         '--pkg', 'budgie-config',
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
