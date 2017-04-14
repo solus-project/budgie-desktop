@@ -892,12 +892,12 @@ public class BudgieWM : Meta.Plugin
       return 0;
     }
 
+    const uint ALT_TAB_TIMEOUT = 350;
+
     public void switch_windows(Meta.Display display, Meta.Screen screen,
                      Meta.Window? window, Clutter.KeyEvent? event,
                      Meta.KeyBinding binding)
     {
-        uint32 cur_time = display.get_current_time();
-
         var workspace = screen.get_active_workspace();
         var tablist = display.get_tab_list(Meta.TabList.NORMAL,workspace);
         var current = tablist.data;
@@ -905,7 +905,12 @@ public class BudgieWM : Meta.Plugin
         unowned CompareFunc<Meta.Window> cm = Budgie.BudgieWM.tab_sort;
         tablist.sort(cm);
         var next_window = current_index.next != null ? current_index.next.data : tablist.first().data;
+        var win_actor = next_window.get_compositor_private() as Clutter.Actor;
+        var effect = new Clutter.BrightnessContrastEffect();
+        effect.set_contrast ((float)0.5);
+        win_actor.add_effect(effect);
         next_window.activate(display.get_current_time());
+        Timeout.add(ALT_TAB_TIMEOUT,()=>{win_actor.remove_effect(effect); return false;});
     }
 
 
