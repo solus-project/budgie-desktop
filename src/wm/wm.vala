@@ -981,7 +981,8 @@ public class BudgieWM : Meta.Plugin
             return;
         }
         foreach (var tab in cur_tabs) {
-            switcher_proxy.PassItem(tab.get_user_time());
+            uint32 xid = (uint32)tab.get_xwindow();
+            switcher_proxy.PassItem(xid);
         }
         cur_index++;
         if (cur_index > cur_tabs.length()-1) {
@@ -992,7 +993,8 @@ public class BudgieWM : Meta.Plugin
             return;
         }
 
-        switcher_proxy.ShowSwitcher(win.get_user_time());
+        uint32 curr_xid = (uint32)win.get_xwindow();
+        switcher_proxy.ShowSwitcher(curr_xid);
         //win.activate(display.get_current_time());
 
     }
