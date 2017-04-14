@@ -907,7 +907,7 @@ public class BudgieWM : Meta.Plugin
         var next_window = current_index.next != null ? current_index.next.data : tablist.first().data;
         var win_actor = next_window.get_compositor_private() as Clutter.Actor;
         var effect = new Clutter.BrightnessContrastEffect();
-        effect.set_contrast ((float)0.5);
+        effect.set_brightness ((float)0.16);
         win_actor.add_effect(effect);
         next_window.activate(display.get_current_time());
         Timeout.add(ALT_TAB_TIMEOUT,()=>{win_actor.remove_effect(effect); return false;});
