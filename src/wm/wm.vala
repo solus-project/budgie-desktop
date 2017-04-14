@@ -34,6 +34,9 @@ public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 public const string MENU_DBUS_NAME        = "org.budgie_desktop.MenuManager";
 public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
+public const string SWITCHER_DBUS_NAME        = "org.budgie_desktop.TabSwitcher";
+public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
+
 [Flags]
 public enum PanelAction {
     NONE = 1 << 0,
@@ -95,6 +98,17 @@ public interface MenuManager: GLib.Object
     public abstract async void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws Error;
 }
 
+/**
+ * Allows us to display the tab switcher without Gtk
+ */
+[DBus (name = "org.budgie_desktop.TabSwitcher")]
+public interface Switcher: GLib.Object
+{
+    public abstract async void PassItem(uint32 xid) throws Error;
+    public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
+
+}
+
 [CompactClass]
 class MinimizeData {
     public double scale_x;
@@ -127,6 +141,7 @@ public class BudgieWM : Meta.Plugin
     PanelRemote? panel_proxy = null;
     LoginDRemote? logind_proxy = null;
     MenuManager? menu_proxy = null;
+    Switcher? switcher_proxy = null;
 
     private bool force_unredirect = false;
 
@@ -238,6 +253,26 @@ public class BudgieWM : Meta.Plugin
     {
         if (logind_proxy == null) {
             Bus.get_proxy.begin<LoginDRemote>(BusType.SYSTEM, LOGIND_DBUS_NAME, LOGIND_DBUS_OBJECT_PATH, 0, null, on_logind_get);
+        }
+    }
+
+    void lost_switcher()
+    {
+        switcher_proxy = null;
+    }
+
+    void on_swicher_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            switcher_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to get Switcher proxy: %s", e.message);
+        }
+    }
+    void has_switcher()
+    {
+        if(switcher_proxy == null) {
+            Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_swicher_get);
         }
     }
 
@@ -400,6 +435,10 @@ public class BudgieWM : Meta.Plugin
         /* Menu manager */
         Bus.watch_name(BusType.SESSION, MENU_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_menu, lost_menu);
+
+        /* TabSwitcher */
+        Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
+            has_switcher, lost_switcher);
 
         /* Keep an eye out for systemd stuffs */
         if (have_logind()) {
@@ -941,6 +980,9 @@ public class BudgieWM : Meta.Plugin
         if (cur_tabs == null) {
             return;
         }
+        foreach (var tab in cur_tabs) {
+            switcher_proxy.PassItem(tab.get_user_time());
+        }
         cur_index++;
         if (cur_index > cur_tabs.length()-1) {
             cur_index = 0;
@@ -949,7 +991,10 @@ public class BudgieWM : Meta.Plugin
         if (win == null) {
             return;
         }
-        win.activate(display.get_current_time());
+
+        switcher_proxy.ShowSwitcher(win.get_user_time());
+        //win.activate(display.get_current_time());
+
     }
 
 
