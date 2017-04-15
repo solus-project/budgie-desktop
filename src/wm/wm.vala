@@ -111,9 +111,7 @@ public class WindowSwitcher : Clutter.Actor
                     (def.get_height() - height) / 2);
     }
 
-    public void on_switch_windows(Meta.Display display, Meta.Screen screen,
-                     Meta.Window? window, Clutter.KeyEvent? event,
-                     Meta.KeyBinding binding)
+    void switch_windows(Meta.Display display, Meta.Screen screen, int dir)
     {
         var workspace = screen.get_active_workspace();
         saved_workspace = workspace;
@@ -121,9 +119,12 @@ public class WindowSwitcher : Clutter.Actor
 
         refresh(display, workspace);
 
-        ++cur_index;
-        if (cur_index >= cur_tabs.length())
+        cur_index += dir;
+        if (cur_index >= (int)cur_tabs.length()) {
             cur_index = 0;
+        } else if (cur_index < 0) {
+            cur_index = (int)cur_tabs.length() - 1;
+        }
 
         var win = cur_tabs.nth_data(cur_index);
         if (win == null) {
@@ -143,6 +144,20 @@ public class WindowSwitcher : Clutter.Actor
             grab_key_focus();
             show();
         }
+    }
+
+    public void on_switch_windows_backward(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        switch_windows(display, screen, -1);
+    }
+
+    public void on_switch_windows(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        switch_windows(display, screen, +1);
     }
 
     // Places previous window next in line to current window
@@ -544,7 +559,9 @@ public class BudgieWM : Meta.Plugin
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
         Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
         Meta.KeyBinding.set_custom_handler("switch-windows", window_switcher.on_switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-windows-backward", window_switcher.on_switch_windows_backward);
         Meta.KeyBinding.set_custom_handler("switch-applications", window_switcher.on_switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-applications-backward", window_switcher.on_switch_windows_backward);
 
         shim = new ShellShim(this);
         shim.serve();
