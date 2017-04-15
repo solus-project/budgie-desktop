@@ -200,7 +200,7 @@ public class Switcher : Gtk.Window
  * requests, for example, from budgie-wm
  */
 [DBus (name = "org.budgie_desktop.TabSwitcher")]
-public class TabSwitcher
+public class TabSwitcher : Object
 {
     private Switcher? switcher_window = null;
     private uint32 mod_timeout = 0;
@@ -256,6 +256,7 @@ public class TabSwitcher
         switcher_window.focus_item(curr_xid);
         this.add_mod_key_watcher();
 
+        switcher_window.move_switcher();
         switcher_window.show();
     }
 
