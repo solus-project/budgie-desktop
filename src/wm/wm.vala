@@ -34,6 +34,168 @@ public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 public const string MENU_DBUS_NAME        = "org.budgie_desktop.MenuManager";
 public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
+public class WindowSwitcher : Clutter.Actor
+{
+    const int PADDING = 15;
+    const int FONT_SIZE = 16;
+    const int SX = 600;
+    const int MAX_CHARS = 55;
+    const int OFFSET_Y = -8; // Weird glitch; otherwise too far down
+
+    List<Clutter.Text> window_names;
+    GLib.List<weak Meta.Window> cur_tabs;
+    unowned Meta.Workspace? cur_workspace = null;
+
+    bool is_open = false;
+    int cur_index = 0;
+    int prev_index = 0; // Last window index before opening switcher
+
+    public WindowSwitcher()
+    {
+        window_names = new List<Clutter.Text>();
+        background_color = { 47, 52, 63, 240 };
+    }
+
+    bool is_modifier_held()
+    {
+        Gdk.ModifierType modifiers;
+	    Gdk.Display.get_default ().get_device_manager ().get_client_pointer ().get_state (Gdk.get_default_root_window (),
+				null, out modifiers);
+        return (modifiers & Gdk.ModifierType.MOD1_MASK) != 0;
+    }
+
+    bool check_alt()
+    {
+        if (!is_modifier_held())
+        {
+            close_switcher();
+            return false;
+        }
+        return true;
+    }
+
+    void invalidate_tab(Meta.Workspace space, Meta.Window window)
+    {
+        if (space == cur_workspace) {
+            trigger_refresh();
+        }
+    }
+
+    void trigger_refresh()
+    {
+        cur_tabs = null;
+    }
+
+    bool must_refresh()
+    {
+        return cur_tabs == null;
+    }
+
+    // Grabs window list again (resets order as a side effect)
+    void refresh(Meta.Display display, Meta.Workspace workspace)
+    {
+        cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
+        cur_index = 0;
+        prev_index = 0;
+    }
+
+    void redraw_labels()
+    {
+        for (int i = 0; i < window_names.length(); ++i) {
+            remove_child(window_names.nth_data(i));
+        }
+        window_names = new List<Clutter.Text>();
+
+        for (int i = 0; i < cur_tabs.length(); ++i) {
+            string s = cur_tabs.nth_data(i).get_title();
+            if (s.size() > MAX_CHARS)
+                s = s.substring(0, MAX_CHARS - 3) + "...";
+            var font_str = "sans " + (i == cur_index ? "bold " : "") +
+                    FONT_SIZE.to_string();
+            var label = new Clutter.Text.full(font_str, s, Clutter.Color.from_string("#ECECEC"));
+            label.x = PADDING;
+            label.y = OFFSET_Y + PADDING + i * (FONT_SIZE + PADDING);
+
+            add_child(label);
+            window_names.append(label);
+        }
+
+        width = SX;
+        height = PADDING + window_names.length() * (FONT_SIZE + PADDING);
+
+        var def = Gdk.Screen.get_default();
+        set_position((def.get_width() - width) / 2,
+                    (def.get_height() - height) / 2);
+    }
+
+    public void on_switch_windows(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        var workspace = screen.get_active_workspace();
+
+        string? data = null;
+        if ((data = workspace.get_data("__flagged")) == null) {
+            workspace.window_added.connect(invalidate_tab);
+            workspace.window_removed.connect(invalidate_tab);
+            workspace.set_data("__flagged", "yes");
+        }
+
+        if (workspace != cur_workspace) {
+            cur_workspace = workspace;
+            trigger_refresh();
+        }
+
+        if (must_refresh()) {
+            refresh(display, workspace);
+        }
+
+        ++cur_index;
+        if (cur_index >= cur_tabs.length())
+            cur_index = 0;
+
+        var win = cur_tabs.nth_data(cur_index);
+        if (win == null) {
+            return;
+        }
+        win.activate(display.get_current_time());
+
+        redraw_labels();
+
+        if (!is_open)
+        {
+            is_open = true;
+            GLib.Timeout.add(100, check_alt);
+            grab_key_focus();
+            show();
+        }
+    }
+
+    // Places previous window next in line to current window
+    private void rearrange()
+    {
+        if (cur_index == prev_index)
+            return;
+        var cur_win = cur_tabs.nth_data(cur_index);
+        var prev_win = cur_tabs.nth_data(prev_index);
+        cur_tabs.remove(cur_win);
+        cur_tabs.remove(prev_win);
+        cur_tabs.prepend(prev_win);
+        cur_tabs.prepend(cur_win);
+        prev_index = cur_index = 0;
+    }
+
+    public void close_switcher()
+    {
+        if (!is_open)
+            return;
+        is_open = false;
+
+        rearrange();
+        hide();
+    }
+}
+
 [Flags]
 public enum PanelAction {
     NONE = 1 << 0,
@@ -127,6 +289,7 @@ public class BudgieWM : Meta.Plugin
     PanelRemote? panel_proxy = null;
     LoginDRemote? logind_proxy = null;
     MenuManager? menu_proxy = null;
+    WindowSwitcher? window_switcher = null;
 
     private bool force_unredirect = false;
 
@@ -401,6 +564,9 @@ public class BudgieWM : Meta.Plugin
         Bus.watch_name(BusType.SESSION, MENU_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_menu, lost_menu);
 
+        window_switcher = new WindowSwitcher();
+        stage.add_child(window_switcher);
+
         /* Keep an eye out for systemd stuffs */
         if (have_logind()) {
             get_logind();
@@ -408,8 +574,8 @@ public class BudgieWM : Meta.Plugin
 
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
         Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
-        Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
-        Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-windows", window_switcher.on_switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-applications", window_switcher.on_switch_windows);
 
         shim = new ShellShim(this);
         shim.serve();
@@ -875,83 +1041,6 @@ public class BudgieWM : Meta.Plugin
             this.tile_preview.hide();
         }
     }
-
-    /* SERIOUS LEVELS OF DERP FOLLOW: This is alt+Tab shite ported from old Budgie
-     * MUST fix. */
-    static int tab_sort(Meta.Window a, Meta.Window b)
-    {
-        uint32 at;
-        uint32 bt;
-
-        at = a.get_user_time();
-        bt = a.get_user_time();
-
-        if (at < bt) {
-            return -1;
-        }
-        if (at > bt) {
-            return 1;
-        }
-        return 0;
-    }
-
-    unowned Meta.Workspace? cur_workspace = null;
-    List<weak Meta.Window>? cur_tabs = null;
-    int cur_index = 0;
-    uint32 last_time = -1;
-
-    void invalidate_tab(Meta.Workspace space, Meta.Window window)
-    {
-        if (space == cur_workspace) {
-            cur_tabs = null;
-            cur_index = 0;
-            last_time = -1;
-        }
-    }
-
-    public static const uint32 MAX_TAB_ELAPSE = 2000;
-
-    public void switch_windows(Meta.Display display, Meta.Screen screen,
-                     Meta.Window? window, Clutter.KeyEvent? event,
-                     Meta.KeyBinding binding)
-    {
-        uint32 cur_time = display.get_current_time();
-
-        var workspace = screen.get_active_workspace();
-
-        string? data = null;
-        if ((data = workspace.get_data("__flagged")) == null) {
-            workspace.window_added.connect(invalidate_tab);
-            workspace.window_removed.connect(invalidate_tab);
-            workspace.set_data("__flagged", "yes");
-        }
-
-        if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
-            cur_workspace = workspace;
-            cur_tabs = null;
-            cur_index = 0;
-        }
-        last_time = cur_time;
-
-        if (cur_tabs == null) {
-            cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
-            CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort;
-            cur_tabs.sort(cm);
-        }
-        if (cur_tabs == null) {
-            return;
-        }
-        cur_index++;
-        if (cur_index > cur_tabs.length()-1) {
-            cur_index = 0;
-        }
-        var win = cur_tabs.nth_data(cur_index);
-        if (win == null) {
-            return;
-        }
-        win.activate(display.get_current_time());
-    }
-
 
     /* EVEN MORE LEVELS OF DERP. */
     Clutter.Actor? out_group = null;
