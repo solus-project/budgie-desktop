@@ -16,6 +16,9 @@
             <property name="can_focus">False</property>
             <property name="selection_mode">none</property>
             <property name="activate_on_single_click">False</property>
+            <style>
+              <class name="budgie-switcher"/>
+            </style>
           </object>
           <packing>
             <property name="expand">True</property>
