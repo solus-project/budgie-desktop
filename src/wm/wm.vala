@@ -980,19 +980,20 @@ public class BudgieWM : Meta.Plugin
         if (cur_tabs == null) {
             return;
         }
-        foreach (var tab in cur_tabs) {
-            uint32 xid = (uint32)tab.get_xwindow();
-            switcher_proxy.PassItem(xid, tab.get_title());
+        /* Pass each window over to tabswitcher */
+        foreach (var child in cur_tabs) {
+            uint32 xid = (uint32)child.get_xwindow();
+            switcher_proxy.PassItem(xid, child.get_title());
         }
         cur_index++;
         if (cur_index > cur_tabs.length()-1) {
             cur_index = 0;
         }
+        /* Get the new selected window over to TabSwitcher */
         var win = cur_tabs.nth_data(cur_index);
         if (win == null) {
             return;
         }
-
         uint32 curr_xid = (uint32)win.get_xwindow();
         switcher_proxy.ShowSwitcher(curr_xid);
     }

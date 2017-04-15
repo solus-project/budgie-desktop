@@ -68,10 +68,12 @@ public class Switcher : Gtk.Window
             }
             index++;
         }
+        /* Get the window, which should be activated and activate that */
         var active_window = Wnck.Window.get(xids.nth_data(index));
         uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
         active_window.activate(time);
 
+        /* Remove all items so if the widget gets shown again it starts from scratch */
         var children = box.get_children();
         foreach (var child in children) {
             child.destroy();
@@ -80,8 +82,10 @@ public class Switcher : Gtk.Window
         xids = null;
     }
 
+    /* Remove all items, so the hide method doesn't finds any active window and thus just exits */
     public void stop_switching()
     {
+        /* Remove all items so if the widget gets shown again it starts from scratch */
         var children = box.get_children();
         foreach (var child in children) {
             child.destroy();
@@ -156,6 +160,7 @@ public class Switcher : Gtk.Window
         move(x, y);
     }
 
+    /* Add a single item to the ListBox and the xid to the List */
     public void add(uint32 xid, string title)
     {
         if(this.visible == true) {
@@ -173,8 +178,10 @@ public class Switcher : Gtk.Window
         box.show_all();
     }
 
-    public void next_item(uint32 xid)
+    /* Switch focus to the item with the xid */
+    public void focus_item(uint32 xid)
     {
+        /* Get the index of the xid it will be the same as the one the widget has */
         int index = 0;
         while(index <= xids.length()) {
             if(xids.nth_data(index) == xid) {
@@ -241,7 +248,7 @@ public class TabSwitcher
      */
     public void ShowSwitcher(uint32 curr_xid)
     {
-        switcher_window.next_item(curr_xid);
+        switcher_window.focus_item(curr_xid);
         this.add_mod_key_watcher();
 
         switcher_window.show();
@@ -269,9 +276,11 @@ public class TabSwitcher
         // Check if alt or windows key is pressed 80 and 24 are the codes, getting these programmatically didn't worked out so this works
         if((int)modifiers != 80 && (int)modifiers != 24)
         {
+            /* All done now hide and stop the timer */
             switcher_window.hide();
             return false;
         }
+        /* restart the timeout */
         return true;
     }
 
