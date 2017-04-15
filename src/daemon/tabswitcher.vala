@@ -18,9 +18,9 @@ namespace Budgie
 public const int SWITCHER_SIZE= 350;
 
 /**
- * How long before the visible SWITCHER expires, default is 0.5 seconds
+ * How often it is checked if the meta key is still pressed
  */
-public const int SWITCHER_EXPIRE_TIME = 500;
+public const int SWITCHER_MOD_EXPIRE_TIME = 50;
 
 /**
  * Our name on the session bus. Reserved for Budgie use
@@ -196,7 +196,7 @@ public class Switcher : Gtk.Window
 public class TabSwitcher
 {
     private Switcher? switcher_window = null;
-    private uint32 expire_timeout = 0;
+    private uint32 mod_timeout = 0;
 
     [DBus (visible = false)]
     public TabSwitcher()
@@ -242,44 +242,39 @@ public class TabSwitcher
     public void ShowSwitcher(uint32 curr_xid)
     {
         switcher_window.next_item(curr_xid);
-        this.reset_switcher_expire(SWITCHER_EXPIRE_TIME);
+        this.add_mod_key_watcher();
+
+        switcher_window.show();
     }
 
     public void StopSwitcher()
     {
-        if(expire_timeout  != 0) {
-            switcher_window.stop_switching();
-            this.switcher_expire();
-        }
-    }
-    /**
-     * Reset and update the expiration for the Switcher timeout
-     */
-    private void reset_switcher_expire(int timeout_length)
-    {
-        if (expire_timeout > 0) {
-            Source.remove(expire_timeout);
-            expire_timeout = 0;
-        }
-        if (!switcher_window.get_visible()) {
-            switcher_window.move_switcher();
-        }
-        switcher_window.show();
-        expire_timeout = Timeout.add(timeout_length, this.switcher_expire);
+        switcher_window.stop_switching();
     }
 
-    /**
-     * Expiration timeout was met, so hide the Switcher Window
-     */
-    private bool switcher_expire()
+    private void add_mod_key_watcher()
     {
-        if (expire_timeout == 0) {
+        if(mod_timeout != 0){
+            Source.remove(mod_timeout);
+            mod_timeout = 0;
+        }
+        mod_timeout = Timeout.add(SWITCHER_MOD_EXPIRE_TIME, (GLib.SourceFunc)this.check_mod_key);
+    }
+
+    private bool check_mod_key()
+    {
+        mod_timeout = 0;
+        Gdk.ModifierType modifiers;
+        Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifiers);
+        // Check if alt or windows key is pressed 80 and 24 are the codes, getting these programmatically didn't worked out so this works
+        if((int)modifiers != 80 && (int)modifiers != 24)
+        {
+            switcher_window.hide();
             return false;
         }
-        switcher_window.hide();
-        expire_timeout = 0;
-        return false;
+        return true;
     }
+
 } /* End class TabSwitcher (BudgieSwitcher) */
 
 } /* End namespace Budgie */
