@@ -67,10 +67,14 @@ public static int main(string[] args)
         return 0;
     }
 
-    screen = Wnck.Screen.get_default();
-    if (screen != null) {
-        screen.force_update();
-    }
+    /* Initialise wnck properly post gtk-start */
+    Idle.add(()=> {
+        screen = Wnck.Screen.get_default();
+        if (screen != null) {
+            screen.force_update();
+        }
+        return false;
+    });
 
     manager = new Budgie.ServiceManager(replace);
     end_dialog = new Budgie.EndSessionDialog(replace);
