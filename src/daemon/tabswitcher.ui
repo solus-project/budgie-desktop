@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <template class="BudgieTabSwitcher" parent="GtkWindow">
+  <template class="BudgieTabSwitcherWindow" parent="GtkWindow">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox" id="box">
