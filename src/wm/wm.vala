@@ -36,6 +36,7 @@ public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
 public class WindowSwitcher : Clutter.Actor
 {
+    const bool RAISE_APPS_WHILE_SWITCHER = false;
     const int PADDING = 15;
     const int FONT_SIZE = 16;
     const int SX = 600;
@@ -45,6 +46,8 @@ public class WindowSwitcher : Clutter.Actor
     List<Clutter.Text> window_names;
     GLib.List<weak Meta.Window> cur_tabs;
     unowned Meta.Workspace? cur_workspace = null;
+    Meta.Display? saved_display; // Used to get timestamp
+    Meta.Workspace? saved_workspace;
 
     bool is_open = false;
     int cur_index = 0;
@@ -91,7 +94,7 @@ public class WindowSwitcher : Clutter.Actor
         return cur_tabs == null;
     }
 
-    // Grabs window list again (resets order as a side effect)
+    // Grabs window list again
     void refresh(Meta.Display display, Meta.Workspace workspace)
     {
         cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
@@ -133,6 +136,8 @@ public class WindowSwitcher : Clutter.Actor
                      Meta.KeyBinding binding)
     {
         var workspace = screen.get_active_workspace();
+        saved_workspace = workspace;
+        saved_display = display;
 
         string? data = null;
         if ((data = workspace.get_data("__flagged")) == null) {
@@ -158,7 +163,10 @@ public class WindowSwitcher : Clutter.Actor
         if (win == null) {
             return;
         }
-        win.activate(display.get_current_time());
+
+        if (RAISE_APPS_WHILE_SWITCHER) {
+            win.raise();
+        }
 
         redraw_labels();
 
@@ -174,15 +182,9 @@ public class WindowSwitcher : Clutter.Actor
     // Places previous window next in line to current window
     private void rearrange()
     {
-        if (cur_index == prev_index)
-            return;
-        var cur_win = cur_tabs.nth_data(cur_index);
-        var prev_win = cur_tabs.nth_data(prev_index);
-        cur_tabs.remove(cur_win);
-        cur_tabs.remove(prev_win);
-        cur_tabs.prepend(prev_win);
-        cur_tabs.prepend(cur_win);
-        prev_index = cur_index = 0;
+        var win = cur_tabs.nth_data(cur_index);
+        win.activate(saved_display.get_current_time());
+        refresh(saved_display, saved_workspace);
     }
 
     public void close_switcher()
