@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2016 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -26,6 +26,7 @@ public class ServiceManager : GLib.Object
     /* On Screen Display */
     Budgie.OSDManager? osd;
     Budgie.MenuManager? menus;
+    Budgie.TabSwitcher? switcher;
 
     /**
      * Construct a new ServiceManager and initialiase appropriately
@@ -43,6 +44,8 @@ public class ServiceManager : GLib.Object
         osd.setup_dbus();
         menus = new Budgie.MenuManager();
         menus.setup_dbus();
+        switcher = new Budgie.TabSwitcher();
+        switcher.setup_dbus();
     }
 
     /**

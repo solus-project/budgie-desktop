@@ -34,6 +34,9 @@ public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 public const string MENU_DBUS_NAME        = "org.budgie_desktop.MenuManager";
 public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
+public const string SWITCHER_DBUS_NAME        = "org.budgie_desktop.TabSwitcher";
+public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
+
 [Flags]
 public enum PanelAction {
     NONE = 1 << 0,
@@ -95,6 +98,17 @@ public interface MenuManager: GLib.Object
     public abstract async void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws Error;
 }
 
+/**
+ * Allows us to display the tab switcher without Gtk
+ */
+[DBus (name = "org.budgie_desktop.TabSwitcher")]
+public interface Switcher: GLib.Object
+{
+    public abstract async void PassItem(uint32 xid, string title) throws Error;
+    public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
+    public abstract async void StopSwitcher() throws Error;
+}
+
 [CompactClass]
 class MinimizeData {
     public double scale_x;
@@ -127,6 +141,7 @@ public class BudgieWM : Meta.Plugin
     PanelRemote? panel_proxy = null;
     LoginDRemote? logind_proxy = null;
     MenuManager? menu_proxy = null;
+    Switcher? switcher_proxy = null;
 
     private bool force_unredirect = false;
 
@@ -238,6 +253,26 @@ public class BudgieWM : Meta.Plugin
     {
         if (logind_proxy == null) {
             Bus.get_proxy.begin<LoginDRemote>(BusType.SYSTEM, LOGIND_DBUS_NAME, LOGIND_DBUS_OBJECT_PATH, 0, null, on_logind_get);
+        }
+    }
+
+    void lost_switcher()
+    {
+        switcher_proxy = null;
+    }
+
+    void on_swicher_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            switcher_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to get Switcher proxy: %s", e.message);
+        }
+    }
+    void has_switcher()
+    {
+        if(switcher_proxy == null) {
+            Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_swicher_get);
         }
     }
 
@@ -401,6 +436,10 @@ public class BudgieWM : Meta.Plugin
         Bus.watch_name(BusType.SESSION, MENU_DBUS_NAME, BusNameWatcherFlags.NONE,
             has_menu, lost_menu);
 
+        /* TabSwitcher */
+        Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
+            has_switcher, lost_switcher);
+
         /* Keep an eye out for systemd stuffs */
         if (have_logind()) {
             get_logind();
@@ -409,7 +448,9 @@ public class BudgieWM : Meta.Plugin
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
         Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
         Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-windows-backward", switch_windows_backward);
         Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-applications-backward", switch_windows_backward);
 
         shim = new ShellShim(this);
         shim.serve();
@@ -876,8 +917,6 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    /* SERIOUS LEVELS OF DERP FOLLOW: This is alt+Tab shite ported from old Budgie
-     * MUST fix. */
     static int tab_sort(Meta.Window a, Meta.Window b)
     {
         uint32 at;
@@ -891,6 +930,22 @@ public class BudgieWM : Meta.Plugin
         }
         if (at > bt) {
             return 1;
+        }
+        return 0;
+    }
+    static int tab_sort_reverse(Meta.Window a, Meta.Window b)
+    {
+        uint32 at;
+        uint32 bt;
+
+        at = a.get_user_time();
+        bt = a.get_user_time();
+
+        if (at < bt) {
+            return 1;
+        }
+        if (at > bt) {
+            return -1;
         }
         return 0;
     }
@@ -910,6 +965,39 @@ public class BudgieWM : Meta.Plugin
     }
 
     public static const uint32 MAX_TAB_ELAPSE = 2000;
+
+    public void switch_windows_backward(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        uint32 cur_time = display.get_current_time();
+
+        var workspace = screen.get_active_workspace();
+
+        string? data = null;
+        if ((data = workspace.get_data("__flagged")) == null) {
+            workspace.window_added.connect(invalidate_tab);
+            workspace.window_removed.connect(invalidate_tab);
+            workspace.set_data("__flagged", "yes");
+        }
+
+        if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
+            cur_workspace = workspace;
+            cur_tabs = null;
+            cur_index = 0;
+        }
+        last_time = cur_time;
+
+        if (cur_tabs == null) {
+            cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
+            CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort_reverse;
+            cur_tabs.sort(cm);
+        }
+        if (cur_tabs == null) {
+            return;
+        }
+        switch_switcher();
+    }
 
     public void switch_windows(Meta.Display display, Meta.Screen screen,
                      Meta.Window? window, Clutter.KeyEvent? event,
@@ -941,15 +1029,32 @@ public class BudgieWM : Meta.Plugin
         if (cur_tabs == null) {
             return;
         }
+        switch_switcher();
+    }
+
+    public void switch_switcher()
+    {
+        /* Pass each window over to tabswitcher */
+        foreach (var child in cur_tabs) {
+            uint32 xid = (uint32)child.get_xwindow();
+            switcher_proxy.PassItem(xid, child.get_title());
+        }
         cur_index++;
         if (cur_index > cur_tabs.length()-1) {
             cur_index = 0;
         }
+        /* Get the new selected window over to TabSwitcher */
         var win = cur_tabs.nth_data(cur_index);
         if (win == null) {
             return;
         }
-        win.activate(display.get_current_time());
+        uint32 curr_xid = (uint32)win.get_xwindow();
+        switcher_proxy.ShowSwitcher(curr_xid);
+    }
+
+    public void stop_switch_windows()
+    {
+        switcher_proxy.StopSwitcher();
     }
 
 
@@ -998,6 +1103,9 @@ public class BudgieWM : Meta.Plugin
     public static const int SWITCH_TIMEOUT = 250;
     public override void switch_workspace(int from, int to, Meta.MotionDirection direction)
     {
+        // Stop the Switcher if it was showing
+        this.stop_switch_windows();
+
         int screen_width;
         int screen_height;
 

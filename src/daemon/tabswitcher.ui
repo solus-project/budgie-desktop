@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <template class="BudgieSwitcher" parent="GtkWindow">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkListBox" id="box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">5</property>
+      </object>
+    </child>
+    <style>
+      <class name="budgie-switcher-window"/>
+    </style>
+  </template>
+</interface>
