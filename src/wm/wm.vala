@@ -448,7 +448,9 @@ public class BudgieWM : Meta.Plugin
         Meta.KeyBinding.set_custom_handler("panel-main-menu", launch_menu);
         Meta.KeyBinding.set_custom_handler("panel-run-dialog", launch_rundialog);
         Meta.KeyBinding.set_custom_handler("switch-windows", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-windows-backward", switch_windows_backward);
         Meta.KeyBinding.set_custom_handler("switch-applications", switch_windows);
+        Meta.KeyBinding.set_custom_handler("switch-applications-backward", switch_windows_backward);
 
         shim = new ShellShim(this);
         shim.serve();
@@ -915,8 +917,6 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    /* SERIOUS LEVELS OF DERP FOLLOW: This is alt+Tab shite ported from old Budgie
-     * MUST fix. */
     static int tab_sort(Meta.Window a, Meta.Window b)
     {
         uint32 at;
@@ -930,6 +930,22 @@ public class BudgieWM : Meta.Plugin
         }
         if (at > bt) {
             return 1;
+        }
+        return 0;
+    }
+    static int tab_sort_reverse(Meta.Window a, Meta.Window b)
+    {
+        uint32 at;
+        uint32 bt;
+
+        at = a.get_user_time();
+        bt = a.get_user_time();
+
+        if (at < bt) {
+            return 1;
+        }
+        if (at > bt) {
+            return -1;
         }
         return 0;
     }
@@ -949,6 +965,39 @@ public class BudgieWM : Meta.Plugin
     }
 
     public static const uint32 MAX_TAB_ELAPSE = 2000;
+
+    public void switch_windows_backward(Meta.Display display, Meta.Screen screen,
+                     Meta.Window? window, Clutter.KeyEvent? event,
+                     Meta.KeyBinding binding)
+    {
+        uint32 cur_time = display.get_current_time();
+
+        var workspace = screen.get_active_workspace();
+
+        string? data = null;
+        if ((data = workspace.get_data("__flagged")) == null) {
+            workspace.window_added.connect(invalidate_tab);
+            workspace.window_removed.connect(invalidate_tab);
+            workspace.set_data("__flagged", "yes");
+        }
+
+        if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
+            cur_workspace = workspace;
+            cur_tabs = null;
+            cur_index = 0;
+        }
+        last_time = cur_time;
+
+        if (cur_tabs == null) {
+            cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
+            CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort_reverse;
+            cur_tabs.sort(cm);
+        }
+        if (cur_tabs == null) {
+            return;
+        }
+        switch_switcher();
+    }
 
     public void switch_windows(Meta.Display display, Meta.Screen screen,
                      Meta.Window? window, Clutter.KeyEvent? event,
@@ -980,6 +1029,11 @@ public class BudgieWM : Meta.Plugin
         if (cur_tabs == null) {
             return;
         }
+        switch_switcher();
+    }
+
+    public void switch_switcher()
+    {
         /* Pass each window over to tabswitcher */
         foreach (var child in cur_tabs) {
             uint32 xid = (uint32)child.get_xwindow();

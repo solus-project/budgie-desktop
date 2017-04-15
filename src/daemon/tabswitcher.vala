@@ -271,10 +271,10 @@ public class TabSwitcher
     private bool check_mod_key()
     {
         mod_timeout = 0;
-        Gdk.ModifierType modifiers;
-        Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifiers);
+        Gdk.ModifierType modifier;
+        Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
         // Check if alt or windows key is pressed 80 and 24 are the codes, getting these programmatically didn't worked out so this works
-        if((int)modifiers != 80 && (int)modifiers != 24)
+        if((int)modifier != 80 && (int)modifier != 24 && (int)modifier != 81 && (int)modifier != 25)
         {
             /* All done now hide and stop the timer */
             switcher_window.hide();
