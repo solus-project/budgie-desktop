@@ -36,7 +36,7 @@ public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
 public class WindowSwitcher : Clutter.Actor
 {
-    const bool RAISE_APPS_WHILE_SWITCHER = false;
+    const bool RAISE_APPS_WHILE_SWITCHING = false;
     const int PADDING = 15;
     const int FONT_SIZE = 16;
     const int SX = 600;
@@ -51,7 +51,6 @@ public class WindowSwitcher : Clutter.Actor
 
     bool is_open = false;
     int cur_index = 0;
-    int prev_index = 0; // Last window index before opening switcher
 
     public WindowSwitcher()
     {
@@ -77,29 +76,10 @@ public class WindowSwitcher : Clutter.Actor
         return true;
     }
 
-    void invalidate_tab(Meta.Workspace space, Meta.Window window)
-    {
-        if (space == cur_workspace) {
-            trigger_refresh();
-        }
-    }
-
-    void trigger_refresh()
-    {
-        cur_tabs = null;
-    }
-
-    bool must_refresh()
-    {
-        return cur_tabs == null;
-    }
-
     // Grabs window list again
     void refresh(Meta.Display display, Meta.Workspace workspace)
     {
         cur_tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
-        cur_index = 0;
-        prev_index = 0;
     }
 
     void redraw_labels()
@@ -139,21 +119,7 @@ public class WindowSwitcher : Clutter.Actor
         saved_workspace = workspace;
         saved_display = display;
 
-        string? data = null;
-        if ((data = workspace.get_data("__flagged")) == null) {
-            workspace.window_added.connect(invalidate_tab);
-            workspace.window_removed.connect(invalidate_tab);
-            workspace.set_data("__flagged", "yes");
-        }
-
-        if (workspace != cur_workspace) {
-            cur_workspace = workspace;
-            trigger_refresh();
-        }
-
-        if (must_refresh()) {
-            refresh(display, workspace);
-        }
+        refresh(display, workspace);
 
         ++cur_index;
         if (cur_index >= cur_tabs.length())
@@ -164,7 +130,7 @@ public class WindowSwitcher : Clutter.Actor
             return;
         }
 
-        if (RAISE_APPS_WHILE_SWITCHER) {
+        if (RAISE_APPS_WHILE_SWITCHING) {
             win.raise();
         }
 
@@ -185,6 +151,7 @@ public class WindowSwitcher : Clutter.Actor
         var win = cur_tabs.nth_data(cur_index);
         win.activate(saved_display.get_current_time());
         refresh(saved_display, saved_workspace);
+        cur_index = 0;
     }
 
     public void close_switcher()
