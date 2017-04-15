@@ -789,6 +789,16 @@ button.raven-trigger {
     @extend .budgie-notification;
 }
 
+// Alt+tab switcher in Budgie
+.budgie-switcher-window {
+    @extend .budgie-notification-window;
+}
+
+// Internal part of the Switcher
+.budgie-switcher {
+    @extend .budgie-notification;
+}
+
 // Session Dialog
 .budgie-session-dialog {
     color: $fg_color;
