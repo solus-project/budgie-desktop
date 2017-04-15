@@ -245,8 +245,10 @@ public class TabSwitcher
 
     public void StopSwitcher()
     {
-        switcher_window.stop_switching();
-        this.switcher_expire();
+        if(expire_timeout  != 0) {
+            switcher_window.stop_switching();
+            this.switcher_expire();
+        }
     }
     /**
      * Reset and update the expiration for the Switcher timeout

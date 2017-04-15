@@ -1041,7 +1041,6 @@ public class BudgieWM : Meta.Plugin
         in_group.destroy();
         in_group = null;
 
-        this.stop_switch_windows();
         this.switch_workspace_completed();
     }
 
@@ -1049,6 +1048,9 @@ public class BudgieWM : Meta.Plugin
     public static const int SWITCH_TIMEOUT = 250;
     public override void switch_workspace(int from, int to, Meta.MotionDirection direction)
     {
+        // Stop the Switcher if it was showing
+        this.stop_switch_windows();
+
         int screen_width;
         int screen_height;
 
