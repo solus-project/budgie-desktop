@@ -13,14 +13,14 @@ namespace Budgie
 {
 
 /**
- * Default width for an OSD notification
+ * Default width for an Switcher notification
  */
 public const int SWITCHER_SIZE= 350;
 
 /**
- * How long before the visible OSD expires, default is 2.5 seconds
+ * How long before the visible SWITCHER expires, default is 1.5 seconds
  */
-public const int SWITCHER_EXPIRE_TIME = 2500;
+public const int SWITCHER_EXPIRE_TIME = 1500;
 
 /**
  * Our name on the session bus. Reserved for Budgie use
@@ -28,31 +28,19 @@ public const int SWITCHER_EXPIRE_TIME = 2500;
 public const string SWITCHER_DBUS_NAME        = "org.budgie_desktop.TabSwitcher";
 
 /**
- * Unique object path on OSD_DBUS_NAME
+ * Unique object path on SWITCHER_DBUS_NAME
  */
 public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
 
 /**
- * The BudgieOSD provides a very simplistic On Screen Display service, complying with the
- * private GNOME Settings Daemon -> GNOME Shell protocol.
  *
- * In short, all elements of the permanently present window should be able to hide or show
- * depending on the updated ShowOSD message, including support for a progress bar (level),
- * icon, optional label.
- *
- * This OSD is used by gnome-settings-daemon to portray special events, such as brightness/volume
- * changes, physical volume changes (disk eject/mount), etc. This special window should remain
- * above all other windows and be non-interactive, allowing unobtrosive overlay of information
- * even in full screen movies and games.
- *
- * Each request to ShowOSD will reset the expiration timeout for the OSD's current visibility,
- * meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
- * users to "hold down" the volume change buttons, for example.
  */
 [GtkTemplate (ui = "/com/solus-project/budgie/daemon/tabswitcher.ui")]
 public class Switcher : Gtk.Window
 {
+    [GtkChild]
+    private Gtk.ListBox box;
 
     /**
      * Track the primary monitor to show on
@@ -60,11 +48,43 @@ public class Switcher : Gtk.Window
     private int primary_monitor;
 
     /**
+     * Keep a list of the available windows
+     */
+    private List<uint32> xids;
+
+    /**
+     * Make the current selection the active window
+     */
+    private void on_hide()
+    {
+    	var current = box.get_selected_row();
+    	int index = 0;
+    	while(index <= xids.length()) {
+    		if(current == box.get_row_at_index(index)) {
+    			break;
+    		}
+    		index++;
+    	}
+        var active_window = Wnck.Window.get(xids.nth_data(index));
+	uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
+        active_window.activate(time);
+
+	var children = box.get_children();
+    	foreach (var child in children) {
+    		child.destroy();
+    	}
+
+    	xids = null;
+    }
+
+    /**
      * Construct a new Switcher widget
      */
     public Switcher()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+
+        this.hide.connect(this.on_hide);
         /* Skip everything, appear above all else, everywhere. */
         resizable = false;
         skip_pager_hint = true;
@@ -81,6 +101,9 @@ public class Switcher : Gtk.Window
 
         /* Update the primary monitor notion */
         screen.monitors_changed.connect(on_monitors_changed);
+
+	xids = new List<uint32> ();
+	titles = new List<string> ();
 
         /* Set up size */
         set_default_size(SWITCHER_SIZE, -1);
@@ -102,7 +125,7 @@ public class Switcher : Gtk.Window
     }
 
     /**
-     * Move the OSD into the correct position
+     * Move the SWITCHER into the correct position
      */
     public void move_switcher()
     {
@@ -120,10 +143,39 @@ public class Switcher : Gtk.Window
         int y = bounds.y + ((int)(bounds.height * 0.85));
         move(x, y);
     }
-} /* End class OSD (BudgieOSD) */
+
+    public void add(uint32 xid, string title)
+    {
+    	if(this.visible == true) {
+    		return;
+    	}
+    	if(xids == null) {
+		xids = new List<uint32> ();
+    	}
+    	xids.append(xid);
+    	Gtk.Label child = new Gtk.Label(null);
+	child.set_markup(title);
+    	box.insert(child, -1);
+    	box.show_all();
+    }
+
+    public void next_item(uint32 xid)
+    {
+    	int index = 0;
+    	while(index <= xids.length()) {
+    		if(xids.nth_data(index) == xid) {
+    			break;
+    		}
+    		index++;
+    	}
+
+	var new_row = box.get_row_at_index(index);
+	box.select_row(new_row);
+    }
+} /* End class Switcher (BudgieSwitcher) */
 
 /**
- * BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, receiving
+ * TabSwitcher is responsible for managing the BudgieSwitcher over d-bus, receiving
  * requests, for example, from budgie-wm
  */
 [DBus (name = "org.budgie_desktop.TabSwitcher")]
@@ -139,7 +191,7 @@ public class TabSwitcher
     }
 
     /**
-     * Own the OSD_DBUS_NAME
+     * Own the SWITCHER_DBUS_NAME
      */
     [DBus (visible = false)]
     public void setup_dbus()
@@ -149,7 +201,7 @@ public class TabSwitcher
     }
 
     /**
-     * Acquired OSD_DBUS_NAME, register ourselves on the bus
+     * Acquired SWITCHER_DBUS_NAME, register ourselves on the bus
      */
     private void on_bus_acquired(DBusConnection conn)
     {
@@ -161,25 +213,26 @@ public class TabSwitcher
     }
 
     /**
-     * Show the OSD on screen with the given parameters:
-     * icon: string Icon-name to use
-     * label: string Text to display, if any
-     * level: int32 Progress-level to display in the OSD
-     * monitor: int32 The monitor to display the OSD on (currently ignored)
+     * Add items to the SWITCHER with parameters:
+     * id: uint32 xid of the item
+     * title: string title of the window
      */
-    public void PassItem(uint32 id)
+    public void PassItem(uint32 id, string title)
     {
-	message("Got id: %" + uint32.FORMAT + "", id);
+    	switcher_window.add(id, title);
     }
-
+    /**
+     * Show the SWITCHER on screen with the given parameters:
+     * curr_xid: uint32 xid of the item to select
+     */
     public void ShowSwitcher(uint32 curr_xid)
     {
-    	message("Next window: %" + uint32.FORMAT + "", curr_xid);
+	switcher_window.next_item(curr_xid);
         this.reset_switcher_expire(SWITCHER_EXPIRE_TIME);
     }
 
     /**
-     * Reset and update the expiration for the OSD timeout
+     * Reset and update the expiration for the Switcher timeout
      */
     private void reset_switcher_expire(int timeout_length)
     {
@@ -206,6 +259,6 @@ public class TabSwitcher
         expire_timeout = 0;
         return false;
     }
-} /* End class OSDManager (BudgieOSDManager) */
+} /* End class TabSwitcher (BudgieSwitcher) */
 
 } /* End namespace Budgie */
