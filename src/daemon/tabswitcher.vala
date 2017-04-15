@@ -152,7 +152,7 @@ public class Switcher : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((int)(bounds.height * 0.85));
+        int y = bounds.y + ((int)(bounds.height * 0.5));
         move(x, y);
     }
 
@@ -167,6 +167,8 @@ public class Switcher : Gtk.Window
         xids.append(xid);
         Gtk.Label child = new Gtk.Label(null);
         child.set_markup(title);
+        child.set_margin_bottom(10);
+        child.set_margin_top(10);
         box.insert(child, -1);
         box.show_all();
     }
