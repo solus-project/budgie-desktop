@@ -31,7 +31,7 @@ public class ServiceManager : GLib.Object
     /**
      * Construct a new ServiceManager and initialiase appropriately
      */
-    public ServiceManager()
+    public ServiceManager(bool replace)
     {
         theme_manager = new Budgie.ThemeManager();
         register_with_session.begin((o,res)=> {
@@ -41,11 +41,11 @@ public class ServiceManager : GLib.Object
             }
         });
         osd = new Budgie.OSDManager();
-        osd.setup_dbus();
+        osd.setup_dbus(replace);
         menus = new Budgie.MenuManager();
-        menus.setup_dbus();
+        menus.setup_dbus(replace);
         switcher = new Budgie.TabSwitcher();
-        switcher.setup_dbus();
+        switcher.setup_dbus(replace);
     }
 
     /**

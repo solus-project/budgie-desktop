@@ -233,10 +233,14 @@ public class OSDManager
      * Own the OSD_DBUS_NAME
      */
     [DBus (visible = false)]
-    public void setup_dbus()
+    public void setup_dbus(bool replace)
     {
-        Bus.own_name(BusType.SESSION, Budgie.OSD_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-            on_bus_acquired, ()=> {}, ()=> { warning("BudgieOSD could not take dbus!"); });
+        var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+        if (replace) {
+            flags |= BusNameOwnerFlags.REPLACE;
+        }
+        Bus.own_name(BusType.SESSION, Budgie.OSD_DBUS_NAME, flags,
+            on_bus_acquired, ()=> {}, Budgie.DaemonNameLost);
     }
 
     /**
@@ -249,6 +253,7 @@ public class OSDManager
         } catch (Error e) {
             stderr.printf("Error registering BudgieOSD: %s\n", e.message);
         }
+        Budgie.setup = true;
     }
 
     /**

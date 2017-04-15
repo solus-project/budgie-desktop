@@ -96,6 +96,7 @@ public class EndSessionDialog : Gtk.Window
         } catch (Error e) {
             warning("Cannot register EndSessionDialog");
         }
+        Budgie.setup = true;
     }
 
     /**
@@ -127,10 +128,14 @@ public class EndSessionDialog : Gtk.Window
     }
 
     [DBus (visible = false)]
-    public EndSessionDialog()
+    public EndSessionDialog(bool replace)
     {
-        Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", BusNameOwnerFlags.NONE,
-            on_bus_acquired, null, null);
+        var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+        if (replace) {
+            flags |= BusNameOwnerFlags.REPLACE;
+        }
+        Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", flags,
+            on_bus_acquired, ()=> {} , Budgie.DaemonNameLost);
         set_keep_above(true);
         set_has_resize_grip(false);
         set_resizable(false);
