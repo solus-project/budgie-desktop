@@ -37,10 +37,10 @@ public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher
  *
  */
 [GtkTemplate (ui = "/com/solus-project/budgie/daemon/tabswitcher.ui")]
-public class Switcher : Gtk.Window
+public class TabSwitcherWindow : Gtk.Window
 {
     [GtkChild]
-    private Gtk.ListBox box;
+    private Gtk.ListBox window_box;
 
     /**
      * Track the primary monitor to show on
@@ -57,13 +57,13 @@ public class Switcher : Gtk.Window
      */
     private void on_hide()
     {
-        var current = box.get_selected_row();
+        var current = window_box.get_selected_row();
         if(current == null){
             return;
         }
         int index = 0;
         while(index <= xids.length()) {
-            if(current == box.get_row_at_index(index)) {
+            if(current == window_box.get_row_at_index(index)) {
                 break;
             }
             index++;
@@ -74,7 +74,7 @@ public class Switcher : Gtk.Window
         active_window.activate(time);
 
         /* Remove all items so if the widget gets shown again it starts from scratch */
-        var children = box.get_children();
+        var children = window_box.get_children();
         foreach (var child in children) {
             child.destroy();
         }
@@ -86,7 +86,7 @@ public class Switcher : Gtk.Window
     public void stop_switching()
     {
         /* Remove all items so if the widget gets shown again it starts from scratch */
-        var children = box.get_children();
+        var children = window_box.get_children();
         foreach (var child in children) {
             child.destroy();
         }
@@ -95,9 +95,9 @@ public class Switcher : Gtk.Window
     }
 
     /**
-     * Construct a new Switcher widget
+     * Construct a new TabSwitcherWindow
      */
-    public Switcher()
+    public TabSwitcherWindow()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
 
@@ -174,8 +174,8 @@ public class Switcher : Gtk.Window
         child.set_markup(title);
         child.set_margin_bottom(10);
         child.set_margin_top(10);
-        box.insert(child, -1);
-        box.show_all();
+        window_box.insert(child, -1);
+        window_box.show_all();
     }
 
     /* Switch focus to the item with the xid */
@@ -190,8 +190,8 @@ public class Switcher : Gtk.Window
             index++;
         }
 
-        var new_row = box.get_row_at_index(index);
-        box.select_row(new_row);
+        var new_row = window_box.get_row_at_index(index);
+        window_box.select_row(new_row);
     }
 } /* End class Switcher (BudgieSwitcher) */
 
@@ -202,13 +202,13 @@ public class Switcher : Gtk.Window
 [DBus (name = "org.budgie_desktop.TabSwitcher")]
 public class TabSwitcher : Object
 {
-    private Switcher? switcher_window = null;
+    private TabSwitcherWindow? switcher_window = null;
     private uint32 mod_timeout = 0;
 
     [DBus (visible = false)]
     public TabSwitcher()
     {
-        switcher_window = new Switcher();
+        switcher_window = new TabSwitcherWindow();
     }
 
     /**
