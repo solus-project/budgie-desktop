@@ -57,24 +57,37 @@ public class Switcher : Gtk.Window
      */
     private void on_hide()
     {
-    	var current = box.get_selected_row();
-    	int index = 0;
-    	while(index <= xids.length()) {
-    		if(current == box.get_row_at_index(index)) {
-    			break;
-    		}
-    		index++;
-    	}
+        var current = box.get_selected_row();
+        if(current == null){
+            return;
+        }
+        int index = 0;
+        while(index <= xids.length()) {
+            if(current == box.get_row_at_index(index)) {
+                break;
+            }
+            index++;
+        }
         var active_window = Wnck.Window.get(xids.nth_data(index));
-	uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
+        uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
         active_window.activate(time);
 
-	var children = box.get_children();
-    	foreach (var child in children) {
-    		child.destroy();
-    	}
+        var children = box.get_children();
+        foreach (var child in children) {
+            child.destroy();
+        }
 
-    	xids = null;
+        xids = null;
+    }
+
+    public void stop_switching()
+    {
+        var children = box.get_children();
+        foreach (var child in children) {
+            child.destroy();
+        }
+
+        xids = null;
     }
 
     /**
@@ -102,8 +115,7 @@ public class Switcher : Gtk.Window
         /* Update the primary monitor notion */
         screen.monitors_changed.connect(on_monitors_changed);
 
-	xids = new List<uint32> ();
-	titles = new List<string> ();
+        xids = new List<uint32> ();
 
         /* Set up size */
         set_default_size(SWITCHER_SIZE, -1);
@@ -146,31 +158,31 @@ public class Switcher : Gtk.Window
 
     public void add(uint32 xid, string title)
     {
-    	if(this.visible == true) {
-    		return;
-    	}
-    	if(xids == null) {
-		xids = new List<uint32> ();
-    	}
-    	xids.append(xid);
-    	Gtk.Label child = new Gtk.Label(null);
-	child.set_markup(title);
-    	box.insert(child, -1);
-    	box.show_all();
+        if(this.visible == true) {
+            return;
+        }
+        if(xids == null) {
+            xids = new List<uint32> ();
+        }
+        xids.append(xid);
+        Gtk.Label child = new Gtk.Label(null);
+        child.set_markup(title);
+        box.insert(child, -1);
+        box.show_all();
     }
 
     public void next_item(uint32 xid)
     {
-    	int index = 0;
-    	while(index <= xids.length()) {
-    		if(xids.nth_data(index) == xid) {
-    			break;
-    		}
-    		index++;
-    	}
+        int index = 0;
+        while(index <= xids.length()) {
+            if(xids.nth_data(index) == xid) {
+                break;
+            }
+            index++;
+        }
 
-	var new_row = box.get_row_at_index(index);
-	box.select_row(new_row);
+        var new_row = box.get_row_at_index(index);
+        box.select_row(new_row);
     }
 } /* End class Switcher (BudgieSwitcher) */
 
@@ -219,7 +231,7 @@ public class TabSwitcher
      */
     public void PassItem(uint32 id, string title)
     {
-    	switcher_window.add(id, title);
+        switcher_window.add(id, title);
     }
     /**
      * Show the SWITCHER on screen with the given parameters:
@@ -227,10 +239,15 @@ public class TabSwitcher
      */
     public void ShowSwitcher(uint32 curr_xid)
     {
-	switcher_window.next_item(curr_xid);
+        switcher_window.next_item(curr_xid);
         this.reset_switcher_expire(SWITCHER_EXPIRE_TIME);
     }
 
+    public void StopSwitcher()
+    {
+        switcher_window.stop_switching();
+        this.switcher_expire();
+    }
     /**
      * Reset and update the expiration for the Switcher timeout
      */
@@ -248,7 +265,7 @@ public class TabSwitcher
     }
 
     /**
-     * Expiration timeout was met, so hide the OSD Window
+     * Expiration timeout was met, so hide the Switcher Window
      */
     private bool switcher_expire()
     {

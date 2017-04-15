@@ -106,7 +106,7 @@ public interface Switcher: GLib.Object
 {
     public abstract async void PassItem(uint32 xid, string title) throws Error;
     public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
-
+    public abstract async void StopSwitcher() throws Error;
 }
 
 [CompactClass]
@@ -997,6 +997,11 @@ public class BudgieWM : Meta.Plugin
         switcher_proxy.ShowSwitcher(curr_xid);
     }
 
+    public void stop_switch_windows()
+    {
+        switcher_proxy.StopSwitcher();
+    }
+
 
     /* EVEN MORE LEVELS OF DERP. */
     Clutter.Actor? out_group = null;
@@ -1036,6 +1041,7 @@ public class BudgieWM : Meta.Plugin
         in_group.destroy();
         in_group = null;
 
+        this.stop_switch_windows();
         this.switch_workspace_completed();
     }
 
