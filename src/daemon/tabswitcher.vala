@@ -32,6 +32,57 @@ public const string SWITCHER_DBUS_NAME        = "org.budgie_desktop.TabSwitcher"
  */
 public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
+/**
+ * A TabSwitcherWidget is used for each icon in the display
+ */
+public class TabSwitcherWidget : Gtk.Box {
+
+    /**
+     * Display title for the window
+     */
+    public string title;
+
+    /**
+     * X11 window ID
+     */
+    public uint32 xid;
+
+    private Gtk.Image? image = null;
+    private Gtk.Label? label = null;
+
+    /**
+     * Construct a new TabSwitcherWidget with the given xid + title
+     */
+    public TabSwitcherWidget(uint32 xid, string? title)
+    {
+        Object(orientation: Gtk.Orientation.HORIZONTAL);
+        this.xid = xid;
+        this.title = title == null ? " - " : title;
+        this.title = this.title.strip();
+
+        set_margin_bottom(10);
+        set_margin_top(10);
+        set_margin_start(10);
+        set_margin_end(10);
+
+        image = new Gtk.Image();
+        pack_start(image, false, false, 0);
+
+        unowned Wnck.Window? window = Wnck.Window.get(xid);
+        if (window == null) {
+            image.set_from_icon_name("window-new", Gtk.IconSize.DIALOG);
+        } else {
+            /* TODO: Get the proper THEME icon for this ! */
+            image.set_from_pixbuf(window.get_icon());
+        }
+        image.set_pixel_size(48);
+        image.set_margin_right(10);
+
+        label = new Gtk.Label(this.title);
+        label.halign = Gtk.Align.START;
+        pack_start(label, true, true, 0);
+    }
+}
 
 /**
  *
@@ -58,11 +109,11 @@ public class TabSwitcherWindow : Gtk.Window
     private void on_hide()
     {
         var current = window_box.get_selected_row();
-        if(current == null){
+        if (current == null){
             return;
         }
         int index = 0;
-        while(index <= xids.length()) {
+        while (index <= xids.length()) {
             if(current == window_box.get_row_at_index(index)) {
                 break;
             }
@@ -100,6 +151,7 @@ public class TabSwitcherWindow : Gtk.Window
     public TabSwitcherWindow()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+        set_position(Gtk.WindowPosition.CENTER_ALWAYS);
 
         this.hide.connect(this.on_hide);
         /* Skip everything, appear above all else, everywhere. */
@@ -163,17 +215,14 @@ public class TabSwitcherWindow : Gtk.Window
     /* Add a single item to the ListBox and the xid to the List */
     public void add(uint32 xid, string title)
     {
-        if(this.visible == true) {
+        if (this.visible == true) {
             return;
         }
-        if(xids == null) {
+        if (xids == null) {
             xids = new List<uint32> ();
         }
         xids.append(xid);
-        Gtk.Label child = new Gtk.Label(null);
-        child.set_markup(title);
-        child.set_margin_bottom(10);
-        child.set_margin_top(10);
+        var child = new TabSwitcherWidget(xid, title);
         window_box.insert(child, -1);
         window_box.show_all();
     }
@@ -183,7 +232,7 @@ public class TabSwitcherWindow : Gtk.Window
     {
         /* Get the index of the xid it will be the same as the one the widget has */
         int index = 0;
-        while(index <= xids.length()) {
+        while (index <= xids.length()) {
             if(xids.nth_data(index) == xid) {
                 break;
             }
