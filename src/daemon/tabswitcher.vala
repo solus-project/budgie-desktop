@@ -18,9 +18,9 @@ namespace Budgie
 public const int SWITCHER_SIZE= 350;
 
 /**
- * How long before the visible SWITCHER expires, default is 1.5 seconds
+ * How long before the visible SWITCHER expires, default is 0.5 seconds
  */
-public const int SWITCHER_EXPIRE_TIME = 1500;
+public const int SWITCHER_EXPIRE_TIME = 500;
 
 /**
  * Our name on the session bus. Reserved for Budgie use
