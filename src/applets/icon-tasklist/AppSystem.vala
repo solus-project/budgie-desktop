@@ -32,6 +32,7 @@ public class AppSystem : GLib.Object
         simpletons["code - oss"] = "vscode-oss";
         simpletons["code"] = "vscode";
         simpletons["psppire"] = "pspp";
+        simpletons["gnome-twitch"] = "com.vinszent.gnometwitch";
 
         derpers = new string[] {
             "atom",
