@@ -78,7 +78,7 @@ public class IBusManager : GLib.Object
      */
     private void startup_ibus()
     {
-        string[] cmdline = {"ibus-daemon", "--xim", "--panel", "disable"};
+        string[] cmdline = {"ibus-daemon", "--xim"};
         try {
             new Subprocess.newv(cmdline, SubprocessFlags.NONE);
         } catch (Error e) {
