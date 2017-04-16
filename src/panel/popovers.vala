@@ -33,7 +33,11 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
                 return Gdk.EVENT_PROPAGATE;
             }
             if (visible_popover != null) {
+                #if HAVE_GTK_322
                 visible_popover.popdown();
+                #else
+                visible_popover.hide();
+                #endif
                 make_modal(visible_popover, false);
                 visible_popover = null;
             }
@@ -54,7 +58,11 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             if ((e.x < alloc.x || e.x > alloc.x+alloc.width) ||
                 (e.y < alloc.y || e.y > alloc.y+alloc.height)) {
+                    #if HAVE_GTK_322
                     visible_popover.popdown();
+                    #else
+                    visible_popover.hide();
+                    #endif
                     make_modal(visible_popover, false);
                     visible_popover = null;
             }
@@ -117,7 +125,11 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             Idle.add(()=>{
                 if (!pop.get_visible()) {
+                    #if HAVE_GTK_322
                     pop.popup();
+                    #else
+                    pop.show();
+                    #endif
                 }
                 return false;
             });

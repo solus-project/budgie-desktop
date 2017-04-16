@@ -41,6 +41,12 @@ panel_deps = [
 
 top_vapidir = join_paths(meson.source_root(), 'vapi')
 
+# For popdown/popup methods
+extra_panel_flags = []
+if dep_gtk322.found()
+    extra_panel_flags = ['-D', 'HAVE_GTK_322']
+endif
+
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
@@ -59,6 +65,7 @@ executable(
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
+        extra_panel_flags,
     ],
     install: true,
 )
