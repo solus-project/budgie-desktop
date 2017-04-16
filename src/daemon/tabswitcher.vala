@@ -137,6 +137,7 @@ public class TabSwitcherWindow : Gtk.Window
     public TabSwitcherWindow()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+        set_position(Gtk.WindowPosition.CENTER_ALWAYS);
         this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
 
         this.hide.connect(this.on_hide);
@@ -192,7 +193,7 @@ public class TabSwitcherWindow : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((int)(bounds.height * 0.5));
+        int y = bounds.y + ((bounds.height / 2) - (alloc.height / 2));
         move(x, y);
     }
 
