@@ -61,7 +61,7 @@ public class TabSwitcherWidget : Gtk.Image {
     {
         Object();
         string? title = window.get_name();
-        this.title = window.has_name() ? title : " - ";
+        this.title = window.has_name() ? title : "";
         this.title = this.title.strip();
         this.wnck_window = window;
         this.xid = (uint32)window.get_xid();
