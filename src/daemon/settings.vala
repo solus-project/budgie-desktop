@@ -82,8 +82,8 @@ public class SettingsManager
 
         switch (style) {
         case ButtonPosition.LEFT:
-            xset = this.new_filtered_xsetting("close,minimize,maximize,menu:");
-            wm_set = "close,maximize,minimize,appmenu";
+            xset = this.new_filtered_xsetting("close,minimize,maximize:menu");
+            wm_set = "close,maximize,minimize:appmenu";
             break;
         case ButtonPosition.TRADITIONAL:
         default:
