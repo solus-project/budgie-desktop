@@ -792,6 +792,28 @@ button.raven-trigger {
 // Alt+tab switcher in Budgie
 .budgie-switcher-window {
     @extend .budgie-notification-window;
+
+    // Flowbox
+    flowbox { color: $fg_color; }
+    flowboxchild {
+        padding: 3px;
+        color: $fg_color;
+
+        &:hover { background-color: $button_bg; }
+        &:active { color: $fg_color; }
+        &:selected {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+
+            &:active { color: $selected_fg_color; }
+            &:hover { background-color: mix(black, $selected_bg_color, 10%); }
+            &:disabled {
+                color: transparentize($selected_fg_color, 0.3);
+                background-color: transparentize($selected_bg_color, 0.3);
+                label { color: inherit; }
+            }
+        }
+    }
 }
 
 // Internal part of the Switcher
