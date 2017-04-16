@@ -311,10 +311,11 @@ public class TabSwitcher : Object
         mod_timeout = 0;
         Gdk.ModifierType modifier;
         Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
-        if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0) {
+        if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0 && (modifier & Gdk.ModifierType.MOD4_MASK) == 0) {
             switcher_window.hide();
             return false;
         }
+
         /* restart the timeout */
         return true;
     }
