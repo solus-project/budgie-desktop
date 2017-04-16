@@ -48,8 +48,10 @@ public class ClockApplet : Budgie.Applet
     {
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
+        clock.valign = Gtk.Align.CENTER;
         time = new DateTime.now_local();
         widget.add(clock);
+        margin_bottom = 2;
 
         var menu = new GLib.Menu();
         menu.append(_("Time and date settings"), "clock.time_and_date");
