@@ -26,7 +26,7 @@
 #include "na-tray-manager.h"
 #include "fixedtip.h"
 
-#define ICON_SPACING 1
+#define ICON_SPACING 3
 #define MIN_BOX_SIZE 3
 
 struct _NaTray
