@@ -199,6 +199,9 @@ public class ClockApplet : Budgie.Applet
                 clock_date.set_state(new Variant.boolean(show_date));
                 break;
         }
+        if (get_toplevel() != null) {
+            get_toplevel().queue_draw();
+        }
         /* Lazy update on next clock sync */
     }
 
