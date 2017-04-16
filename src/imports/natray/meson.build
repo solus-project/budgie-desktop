@@ -17,6 +17,10 @@ libnatray = static_library(
     'natray',
     libnatray_sources,
     dependencies: libnatray_deps,
+    include_directories: [
+        include_directories('.'),
+        include_directories(join_paths('..', '..', '..')),
+    ],
 )
 
 link_libnatray = declare_dependency(
