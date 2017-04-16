@@ -3,6 +3,6 @@ Module=clockapplet.so
 Name=Clock
 _Description=Clock
 Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
+Copyright=Copyright © 2014-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=clock-applet-symbolic

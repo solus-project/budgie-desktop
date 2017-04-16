@@ -3,6 +3,6 @@ Module=trayapplet.so
 Name=System Tray
 _Description=System Tray
 Authors=Ikey Doherty
-Copyright=Copyright © 2015 Ikey Doherty
+Copyright=Copyright © 2015-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=system-tray-symbolic

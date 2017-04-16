@@ -3,6 +3,6 @@ Module=libuserindicator.so
 Name=User Indicator
 _Description=User Indicator
 Authors=Solus Project
-Copyright=Copyright © 2016 Solus Project
+Copyright=Copyright © 2016-2017 Solus Project
 Website=https://solus-project.com
 Icon=system-users-symbolic

@@ -4,7 +4,7 @@ BUDGIE_VERSION="@PACKAGE_VERSION@"
 
 if [ "$1" = "--version" ]; then
     echo "budgie-desktop $BUDGIE_VERSION"
-    echo "Copyright © 2014-2016 Ikey Doherty, Solus Project"
+    echo "Copyright © 2014-2017 Ikey Doherty, Solus Project"
     exit 0
 fi
 
