@@ -146,7 +146,8 @@ public class ShellShim : GLib.Object
     /* Proxy off the OSD Calls */
     private BudgieOSD? osd_proxy = null;
 
-    protected ShellShim(Budgie.BudgieWM? wm)
+    [DBus (visible = false)]
+    public ShellShim(Budgie.BudgieWM? wm)
     {
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
         watches = new HashTable<string,uint>(str_hash, str_equal);
