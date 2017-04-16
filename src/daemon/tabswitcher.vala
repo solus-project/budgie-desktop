@@ -35,7 +35,7 @@ public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher
 /**
  * A TabSwitcherWidget is used for each icon in the display
  */
-public class TabSwitcherWidget : Gtk.Box {
+public class TabSwitcherWidget : Gtk.Image {
 
     /**
      * Display title for the window
@@ -54,14 +54,12 @@ public class TabSwitcherWidget : Gtk.Box {
 
     public unowned Wnck.Window? wnck_window = null;
 
-    private Gtk.Image? image = null;
-
     /**
      * Construct a new TabSwitcherWidget with the given xid + title
      */
     public TabSwitcherWidget(Wnck.Window? window, uint32 usertime)
     {
-        Object(orientation: Gtk.Orientation.HORIZONTAL);
+        Object();
         string? title = window.get_name();
         this.title = window.has_name() ? title : " - ";
         this.title = this.title.strip();
@@ -72,12 +70,10 @@ public class TabSwitcherWidget : Gtk.Box {
         set_property("margin", 10);
 
         /* TODO: Get the proper THEME icon for this ! */
-        image = new Gtk.Image();
-        image.set_from_pixbuf(wnck_window.get_icon());
-        image.set_pixel_size(48);
-        image.halign = Gtk.Align.CENTER;
-        image.valign = Gtk.Align.CENTER;
-        pack_start(image, false, false, 0);
+        set_from_pixbuf(wnck_window.get_icon());
+        set_pixel_size(48);
+        halign = Gtk.Align.CENTER;
+        valign = Gtk.Align.CENTER;
     }
 }
 
