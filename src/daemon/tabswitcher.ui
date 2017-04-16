@@ -21,6 +21,7 @@
             <property name="homogeneous">True</property>
             <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
+            <property name="max_children_per_line">8</property>
           </object>
           <packing>
             <property name="expand">True</property>
