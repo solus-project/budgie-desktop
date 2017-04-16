@@ -141,7 +141,6 @@ public class TabSwitcherWindow : Gtk.Window
     public TabSwitcherWindow()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
-        set_position(Gtk.WindowPosition.CENTER_ALWAYS);
         this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
 
         this.hide.connect(this.on_hide);
