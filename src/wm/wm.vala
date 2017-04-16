@@ -104,7 +104,7 @@ public interface MenuManager: GLib.Object
 [DBus (name = "org.budgie_desktop.TabSwitcher")]
 public interface Switcher: GLib.Object
 {
-    public abstract async void PassItem(uint32 xid, string title) throws Error;
+    public abstract async void PassItem(uint32 xid, uint32 timestamp) throws Error;
     public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
     public abstract async void StopSwitcher() throws Error;
 }
@@ -1037,7 +1037,7 @@ public class BudgieWM : Meta.Plugin
         /* Pass each window over to tabswitcher */
         foreach (var child in cur_tabs) {
             uint32 xid = (uint32)child.get_xwindow();
-            switcher_proxy.PassItem(xid, child.get_title());
+            switcher_proxy.PassItem(xid, child.get_user_time());
         }
         cur_index++;
         if (cur_index > cur_tabs.length()-1) {

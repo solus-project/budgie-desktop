@@ -11,22 +11,40 @@
         <property name="border_width">5</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkListBox" id="window_box">
+          <object class="GtkFlowBox" id="window_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="activate_on_single_click">False</property>
-            <style>
-              <class name="budgie-switcher"/>
-            </style>
+            <property name="orientation">vertical</property>
+            <property name="column_spacing">6</property>
+            <property name="row_spacing">6</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkLabel" id="window_title">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">6</property>
+            <property name="margin_bottom">6</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes"> - </property>
+            <property name="wrap">True</property>
+            <style>
+              <class name="budgie-switcher-title"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
         <style>
           <class name="drop-shadow"/>

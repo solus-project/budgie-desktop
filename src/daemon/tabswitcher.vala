@@ -47,40 +47,37 @@ public class TabSwitcherWidget : Gtk.Box {
      */
     public uint32 xid;
 
+    /**
+     * Last "touched" by the user
+     */
+    public uint32 usertime;
+
+    public unowned Wnck.Window? wnck_window = null;
+
     private Gtk.Image? image = null;
-    private Gtk.Label? label = null;
 
     /**
      * Construct a new TabSwitcherWidget with the given xid + title
      */
-    public TabSwitcherWidget(uint32 xid, string? title)
+    public TabSwitcherWidget(Wnck.Window? window, uint32 usertime)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL);
-        this.xid = xid;
-        this.title = title == null ? " - " : title;
+        string? title = window.get_name();
+        this.title = window.has_name() ? title : " - ";
         this.title = this.title.strip();
+        this.wnck_window = window;
+        this.xid = (uint32)window.get_xid();
+        this.usertime = usertime;
 
-        set_margin_bottom(10);
-        set_margin_top(10);
-        set_margin_start(10);
-        set_margin_end(10);
+        set_property("margin", 10);
 
+        /* TODO: Get the proper THEME icon for this ! */
         image = new Gtk.Image();
-        pack_start(image, false, false, 0);
-
-        unowned Wnck.Window? window = Wnck.Window.get(xid);
-        if (window == null) {
-            image.set_from_icon_name("window-new", Gtk.IconSize.DIALOG);
-        } else {
-            /* TODO: Get the proper THEME icon for this ! */
-            image.set_from_pixbuf(window.get_icon());
-        }
+        image.set_from_pixbuf(wnck_window.get_icon());
         image.set_pixel_size(48);
-        image.set_margin_right(10);
-
-        label = new Gtk.Label(this.title);
-        label.halign = Gtk.Align.START;
-        pack_start(label, true, true, 0);
+        image.halign = Gtk.Align.CENTER;
+        image.valign = Gtk.Align.CENTER;
+        pack_start(image, false, false, 0);
     }
 }
 
@@ -91,46 +88,40 @@ public class TabSwitcherWidget : Gtk.Box {
 public class TabSwitcherWindow : Gtk.Window
 {
     [GtkChild]
-    private Gtk.ListBox window_box;
+    private Gtk.FlowBox window_box;
+
+    [GtkChild]
+    private Gtk.Label window_title;
 
     /**
      * Track the primary monitor to show on
      */
     private int primary_monitor;
 
-    /**
-     * Keep a list of the available windows
-     */
-    private List<uint32> xids;
+    private HashTable<uint32, TabSwitcherWidget?> xids = null;
 
     /**
      * Make the current selection the active window
      */
     private void on_hide()
     {
-        var current = window_box.get_selected_row();
-        if (current == null){
+        var selection = window_box.get_selected_children();
+        Gtk.FlowBoxChild? current = null;
+        if (selection != null && selection.length() > 0) {
+            current = selection.nth_data(0) as Gtk.FlowBoxChild;
+        }
+
+        if (current == null) {
             return;
         }
-        int index = 0;
-        while (index <= xids.length()) {
-            if(current == window_box.get_row_at_index(index)) {
-                break;
-            }
-            index++;
-        }
+
         /* Get the window, which should be activated and activate that */
-        var active_window = Wnck.Window.get(xids.nth_data(index));
+        TabSwitcherWidget? tab = current.get_child() as TabSwitcherWidget;
         uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
-        active_window.activate(time);
+        tab.wnck_window.activate(time);
 
         /* Remove all items so if the widget gets shown again it starts from scratch */
-        var children = window_box.get_children();
-        foreach (var child in children) {
-            child.destroy();
-        }
-
-        xids = null;
+        this.stop_switching();
     }
 
     /* Remove all items, so the hide method doesn't finds any active window and thus just exits */
@@ -141,8 +132,7 @@ public class TabSwitcherWindow : Gtk.Window
         foreach (var child in children) {
             child.destroy();
         }
-
-        xids = null;
+        xids.remove_all();
     }
 
     /**
@@ -152,6 +142,7 @@ public class TabSwitcherWindow : Gtk.Window
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
         set_position(Gtk.WindowPosition.CENTER_ALWAYS);
+        this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
 
         this.hide.connect(this.on_hide);
         /* Skip everything, appear above all else, everywhere. */
@@ -170,8 +161,6 @@ public class TabSwitcherWindow : Gtk.Window
 
         /* Update the primary monitor notion */
         screen.monitors_changed.connect(on_monitors_changed);
-
-        xids = new List<uint32> ();
 
         /* Set up size */
         set_default_size(SWITCHER_SIZE, -1);
@@ -213,16 +202,19 @@ public class TabSwitcherWindow : Gtk.Window
     }
 
     /* Add a single item to the ListBox and the xid to the List */
-    public void add(uint32 xid, string title)
+    public new void add_window(uint32 xid, uint32 usertime)
     {
         if (this.visible == true) {
             return;
         }
-        if (xids == null) {
-            xids = new List<uint32> ();
+        unowned Wnck.Window? window = null;
+        window = Wnck.Window.get(xid);
+        if (window == null) {
+            return;
         }
-        xids.append(xid);
-        var child = new TabSwitcherWidget(xid, title);
+
+        var child = new TabSwitcherWidget(window, usertime);
+        xids.insert(xid, child);
         window_box.insert(child, -1);
         window_box.show_all();
     }
@@ -231,16 +223,12 @@ public class TabSwitcherWindow : Gtk.Window
     public void focus_item(uint32 xid)
     {
         /* Get the index of the xid it will be the same as the one the widget has */
-        int index = 0;
-        while (index <= xids.length()) {
-            if(xids.nth_data(index) == xid) {
-                break;
-            }
-            index++;
+        TabSwitcherWidget? widget = xids.lookup(xid);
+        if (widget == null) {
+            return;
         }
-
-        var new_row = window_box.get_row_at_index(index);
-        window_box.select_row(new_row);
+        window_title.set_markup("<b>%s</b>".printf(Markup.escape_text(widget.title)));
+        window_box.select_child(widget.get_parent() as Gtk.FlowBoxChild);
     }
 } /* End class Switcher (BudgieSwitcher) */
 
@@ -292,9 +280,9 @@ public class TabSwitcher : Object
      * id: uint32 xid of the item
      * title: string title of the window
      */
-    public void PassItem(uint32 id, string title)
+    public void PassItem(uint32 id, uint32 usertime)
     {
-        switcher_window.add(id, title);
+        switcher_window.add_window(id, usertime);
     }
     /**
      * Show the SWITCHER on screen with the given parameters:
@@ -302,11 +290,11 @@ public class TabSwitcher : Object
      */
     public void ShowSwitcher(uint32 curr_xid)
     {
-        switcher_window.focus_item(curr_xid);
         this.add_mod_key_watcher();
 
         switcher_window.move_switcher();
         switcher_window.show();
+        switcher_window.focus_item(curr_xid);
     }
 
     public void StopSwitcher()
