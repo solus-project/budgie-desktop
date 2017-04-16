@@ -17,6 +17,7 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <config.h>
 #include <string.h>
 
 #include "na-tray-child.h"
@@ -124,7 +125,7 @@ na_tray_child_get_preferred_height (GtkWidget *widget,
 
   if (*natural_height < 16)
     *natural_height = 16;
- }
+}
 
 static void
 na_tray_child_size_allocate (GtkWidget      *widget,
@@ -287,8 +288,7 @@ na_tray_child_new (GdkScreen *screen,
   depth = gdk_visual_get_depth (visual);
 
   visual_has_alpha = red_prec + blue_prec + green_prec < depth;
-  child->has_alpha = (visual_has_alpha &&
-                      gdk_display_supports_composite (gdk_screen_get_display (screen)));
+  child->has_alpha = (visual_has_alpha && gdk_screen_is_composited (screen));
 
   child->composited = child->has_alpha;
 
@@ -323,7 +323,7 @@ na_tray_child_get_title (NaTrayChild *child)
                                False, utf8_string,
                                &type, &format, &nitems,
                                &bytes_after, (guchar **)&val);
-  
+
   if (gdk_error_trap_pop () || result != Success)
     return NULL;
 
