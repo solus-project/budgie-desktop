@@ -226,7 +226,7 @@ public class TabSwitcherWindow : Gtk.Window
         if (widget == null) {
             return;
         }
-        window_title.set_markup("<b>%s</b>".printf(Markup.escape_text(widget.title)));
+        window_title.set_text(widget.title);
         window_box.select_child(widget.get_parent() as Gtk.FlowBoxChild);
     }
 } /* End class Switcher (BudgieSwitcher) */
