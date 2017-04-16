@@ -998,16 +998,6 @@ public class Panel : Budgie.Toplevel
         while (Gtk.events_pending()) {
             Gtk.main_iteration();
         }
-
-        if (expanded) {
-            Idle.add(()=> {
-                if (get_window() != null) {
-                    get_window().focus(Gdk.CURRENT_TIME);
-                }
-                present();
-                return false;
-            });
-        }
     }
 
     void placement()

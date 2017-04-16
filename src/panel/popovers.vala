@@ -33,7 +33,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
                 return Gdk.EVENT_PROPAGATE;
             }
             if (visible_popover != null) {
-                visible_popover.hide();
+                visible_popover.popdown();
                 make_modal(visible_popover, false);
                 visible_popover = null;
             }
@@ -54,7 +54,7 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             if ((e.x < alloc.x || e.x > alloc.x+alloc.width) ||
                 (e.y < alloc.y || e.y > alloc.y+alloc.height)) {
-                    visible_popover.hide();
+                    visible_popover.popdown();
                     make_modal(visible_popover, false);
                     visible_popover = null;
             }
@@ -101,8 +101,28 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             return;
         }
 
+        pop.set_modal(false);
         owner.set_expanded(true);
-        pop.show();
+        Idle.add(()=> {
+            Gtk.Widget? relative_to = pop.get_relative_to();
+            if (owner.get_window() != null) {
+                owner.get_window().focus(Gdk.CURRENT_TIME);
+            }
+            owner.present();
+            pop.set_relative_to(null);
+            pop.set_relative_to(relative_to);
+            pop.queue_resize();
+            while (Gtk.events_pending()) {
+                Gtk.main_iteration();
+            }
+            Idle.add(()=>{
+                if (!pop.get_visible()) {
+                    pop.popup();
+                }
+                return false;
+            });
+            return false;
+        });
     }
 
     void on_widget_mapped(Gtk.Widget? p)
