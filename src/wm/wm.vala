@@ -1204,11 +1204,13 @@ public class BudgieWMDBUS : GLib.Object
 
     unowned Budgie.BudgieWM? wm;
 
-    protected BudgieWMDBUS(Budgie.BudgieWM? wm)
+    [DBus (visible = false)]
+    public BudgieWMDBUS(Budgie.BudgieWM? wm)
     {
         this.wm = wm;
     }
 
+    [DBus (visible = false)]
     void on_bus_acquired(DBusConnection conn)
     {
         try {
