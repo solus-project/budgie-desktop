@@ -30,7 +30,6 @@ panel_deps = [
     dep_gtk3,
     dep_peas,
     dep_libuuid,
-    dep_mutter,
     link_libconfig,
     link_libsession,
     link_libtoplevel,

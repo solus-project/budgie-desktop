@@ -14,7 +14,7 @@ namespace Budgie
 
 [DBus (name="org.budgie_desktop.BudgieWM")]
 public interface BudgieWM : Object {
-    public abstract Meta.WindowType GetLastWindowType() throws Error;
+    public abstract bool IsLastWindowDismissable() throws Error;
 }
 
 public class PopoverManagerImpl : PopoverManager, GLib.Object
@@ -44,13 +44,8 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             if (visible_popover != null) {
                 if (wm_proxy != null && e.window != null) {
-                    switch (wm_proxy.GetLastWindowType()) {
-                        case Meta.WindowType.POPUP_MENU:
-                        case Meta.WindowType.COMBO:
-                            break;
-                        default:
-                            hide_popover();
-                            break;
+                    if (wm_proxy.IsLastWindowDismissable()) {
+                        hide_popover();
                     }
                 } else {
                     hide_popover();
