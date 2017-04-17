@@ -314,7 +314,7 @@ public class PanelManager : DesktopManager
      */
     void do_reset()
     {
-        GLib.message("Reseting budgie-panel configuration to defaults");
+        GLib.message("Resetting budgie-panel configuration to defaults");
         Settings s = new Settings(Budgie.ROOT_SCHEMA);
         this.reset_dconf_path(s);
     }
