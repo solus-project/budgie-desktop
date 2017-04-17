@@ -17,7 +17,6 @@ budgie_wm_sources = [
 
 vapi_mutter = 'libmutter'
 dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
-vapi_mutter_dir = ''
 
 if not dep_mutter.found()
     dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
@@ -33,19 +32,7 @@ budgie_wm_deps = [
     dep_ibus,
 ]
 
-rpath = ''
-
-if dep_mutter.version().version_compare('>=3.21.0')
-    rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
-    vapi_mutter_dir = ['--girdir', rpath]
-endif
-
-executable(
-    'budgie-wm', budgie_wm_sources,
-    dependencies: budgie_wm_deps,
-    include_directories: extra_includes,
-    install: true,
-    vala_args: [
+budgie_wm_vala_args =  [
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
@@ -54,8 +41,19 @@ executable(
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
-        vapi_mutter_dir,
-    ],
+]
+
+if dep_mutter.version().version_compare('>=3.21.0')
+    rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
+    budgie_wm_vala_args += ['--girdir', rpath]
+endif
+
+executable(
+    'budgie-wm', budgie_wm_sources,
+    dependencies: budgie_wm_deps,
+    include_directories: extra_includes,
+    install: true,
+    vala_args: budgie_wm_vala_args,
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',
     ],
