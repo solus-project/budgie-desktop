@@ -12,6 +12,11 @@
 namespace Budgie
 {
 
+[DBus (name="org.budgie_desktop.BudgieWM")]
+public interface BudgieWM : Object {
+    public abstract Meta.WindowType GetLastWindowType() throws Error;
+}
+
 public class PopoverManagerImpl : PopoverManager, GLib.Object
 {
     HashTable<Gtk.Widget?,Gtk.Popover?> widgets;
@@ -22,24 +27,34 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
     bool grabbed = false;
     bool mousing = false;
 
+    BudgieWM? wm_proxy = null;
+
 
     public PopoverManagerImpl(Budgie.Panel? owner)
     {
         this.owner = owner;
         widgets = new HashTable<Gtk.Widget?,Gtk.Popover?>(direct_hash, direct_equal);
 
-        owner.focus_out_event.connect(()=>{
+        Bus.watch_name(BusType.SESSION, "org.budgie_desktop.BudgieWM", BusNameWatcherFlags.NONE,
+            has_wm, lost_wm);
+
+        owner.focus_out_event.connect((e)=>{
             if (mousing) {
                 return Gdk.EVENT_PROPAGATE;
             }
             if (visible_popover != null) {
-                #if HAVE_GTK_322
-                visible_popover.popdown();
-                #else
-                visible_popover.hide();
-                #endif
-                make_modal(visible_popover, false);
-                visible_popover = null;
+                if (wm_proxy != null && e.window != null) {
+                    switch (wm_proxy.GetLastWindowType()) {
+                        case Meta.WindowType.POPUP_MENU:
+                        case Meta.WindowType.COMBO:
+                            break;
+                        default:
+                            hide_popover();
+                            break;
+                    }
+                } else {
+                    hide_popover();
+                }
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -58,18 +73,45 @@ public class PopoverManagerImpl : PopoverManager, GLib.Object
             }
             if ((e.x < alloc.x || e.x > alloc.x+alloc.width) ||
                 (e.y < alloc.y || e.y > alloc.y+alloc.height)) {
-                    #if HAVE_GTK_322
-                    visible_popover.popdown();
-                    #else
-                    visible_popover.hide();
-                    #endif
-                    make_modal(visible_popover, false);
-                    visible_popover = null;
+                hide_popover();
             }
             return Gdk.EVENT_STOP;
 
         });
         owner.add_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
+    }
+
+    void lost_wm() {
+        wm_proxy = null;
+    }
+
+    void on_wm_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            wm_proxy = Bus.get_proxy.end(res);
+        } catch (Error e) {
+            warning("Failed to get BudgieWM proxy: %s", e.message);
+        }
+    }
+
+    void has_wm()
+    {
+        if (wm_proxy == null) {
+            Bus.get_proxy.begin<BudgieWM>(BusType.SESSION,
+                "org.budgie_desktop.BudgieWM",
+                "/org/budgie_desktop/BudgieWM", 0, null, on_wm_get);
+        }
+    }
+
+    void hide_popover()
+    {
+        #if HAVE_GTK_322
+        visible_popover.popdown();
+        #else
+        visible_popover.hide();
+        #endif
+        make_modal(visible_popover, false);
+        visible_popover = null;
     }
 
     void make_modal(Gtk.Popover? pop, bool modal = true)

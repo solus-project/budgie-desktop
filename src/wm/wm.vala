@@ -1238,6 +1238,13 @@ public class BudgieWMDBUS : GLib.Object
         this.wm.restore_focused();
     }
 
+    public Meta.WindowType GetLastWindowType()
+    {
+        unowned GLib.List<weak Meta.WindowActor>? last = Meta.Compositor.get_window_actors(
+            this.wm.get_screen()).last();
+        return last.data.get_meta_window().get_window_type();
+    }
+
 } /* End BudgieWMDBUS */
 
 } /* End namespace */
