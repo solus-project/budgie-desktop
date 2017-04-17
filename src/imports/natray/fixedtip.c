@@ -130,13 +130,23 @@ static void
 get_monitor_geometry (GdkWindow    *window,
                       GdkRectangle *geometry)
 {
-  GdkDisplay *display;
+  GdkDisplay *display = NULL;
+#if GTK_MAJOR_VERSION == 3 && GTK_MINOR_VERSION < 22
+  GdkScreen *screen = NULL;
+  gint monitor;
+
+  screen = gdk_screen_get_default ();
+  monitor = gdk_screen_get_monitor_at_window (screen, window);
+
+  gdk_screen_get_monitor_geometry (screen, monitor, geometry);
+#else
   GdkMonitor *monitor;
 
   display = gdk_display_get_default ();
   monitor = gdk_display_get_monitor_at_window (display, window);
 
   gdk_monitor_get_geometry (monitor, geometry);
+#endif
 }
 
 static void
