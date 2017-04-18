@@ -43,6 +43,8 @@ budgie_wm_vala_args =  [
         '--vapidir', dir_libconfig,
 ]
 
+rpath = ''
+
 if dep_mutter.version().version_compare('>=3.21.0')
     rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
     budgie_wm_vala_args += ['--girdir', rpath]
