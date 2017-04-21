@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,6 +202,29 @@ public class PanelManager : DesktopManager
         plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
     }
 
+    /**
+     * Attempt to reset the given path
+     */
+    public void reset_dconf_path(Settings? settings)
+    {
+        if (settings == null) {
+            return;
+        }
+        string path = settings.path;
+        settings.sync();
+        if (settings.path == null) {
+            return;
+        }
+        string argv[] = { "dconf", "reset", "-f", path};
+        message("Resetting dconf path: %s", path);
+        try {
+            Process.spawn_command_line_sync(string.joinv(" ", argv), null, null, null);
+        } catch (Error e) {
+            warning("Failed to reset dconf path %s: %s", path, e.message);
+        }
+        settings.sync();
+    }
+
     public Budgie.AppletInfo? get_applet(string key)
     {
         return null;
@@ -291,10 +314,9 @@ public class PanelManager : DesktopManager
      */
     void do_reset()
     {
-        GLib.message("Reseting budgie-panel configuration to defaults");
+        GLib.message("Resetting budgie-panel configuration to defaults");
         Settings s = new Settings(Budgie.ROOT_SCHEMA);
-        s.reset(null);
-        s.sync();
+        this.reset_dconf_path(s);
     }
 
     /**
@@ -797,7 +819,7 @@ public class PanelManager : DesktopManager
 
 
         var psettings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, spath);
-        psettings.reset(null);
+        this.reset_dconf_path(psettings);
     }
 
     void create_panel(string? name = null, KeyFile? new_defaults = null)

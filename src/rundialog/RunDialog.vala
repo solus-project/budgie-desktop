@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,7 +149,8 @@ public class RunDialog : Gtk.ApplicationWindow
 
         this.build_app_box();
 
-        set_size_request(240, -1);
+        set_size_request(420, -1);
+        set_default_size(420, -1);
         main_layout.show_all();
         set_border_width(0);
         set_resizable(false);

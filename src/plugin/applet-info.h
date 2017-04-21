@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop.
  *
- * Copyright (C) 2015 Ikey Doherty
+ * Copyright © 2015-2017 Ikey Doherty
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

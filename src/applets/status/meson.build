@@ -38,6 +38,9 @@ shared_library(
     'statusapplet',
     applet_status_sources,
     dependencies: applet_status_deps,
+    c_args: [
+        '-lm'
+    ],
     vala_args: [
         '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',

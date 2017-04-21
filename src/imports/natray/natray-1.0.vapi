@@ -4,7 +4,7 @@ namespace Na {
 		[CCode (has_construct_function = false, type = "GtkWidget*")]
 		public Tray();
 		[CCode (has_construct_function = false, type = "GtkWidget*")]
-        public Tray.for_screen(Gdk.Screen screen, Gtk.Orientation orientation);
+        public Tray.for_screen(Gtk.Orientation orientation);
 
         public void set_orientation(Gtk.Orientation orientation);
         public Gtk.Orientation get_orientation(Gtk.Orientation orientation);
@@ -12,8 +12,6 @@ namespace Na {
         public void set_padding(int padding);
         public void set_icon_size(int icon_size);
 
-        public void set_colors(Gdk.Color fg, Gdk.Color error, Gdk.Color warning, Gdk.Color success);
-
-        public void force_redraw();
+        public void set_colors(Gdk.RGBA fg, Gdk.RGBA error, Gdk.RGBA warning, Gdk.RGBA success);
 	}
 }

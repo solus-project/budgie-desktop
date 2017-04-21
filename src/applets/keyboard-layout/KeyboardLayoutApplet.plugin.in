@@ -3,6 +3,6 @@ Module=keyboardlayoutapplet.so
 Name=Keyboard Layout
 _Description=Keyboard Layout Indicator
 Authors=Ikey Doherty
-Copyright=Copyright © 2016 Ikey Doherty
+Copyright=Copyright © 2016-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=input-keyboard-symbolic

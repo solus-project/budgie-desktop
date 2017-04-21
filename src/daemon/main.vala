@@ -48,6 +48,7 @@ public static int main(string[] args)
     OptionContext ctx;
     Budgie.ServiceManager? manager = null;
     Budgie.EndSessionDialog? end_dialog = null;
+    Budgie.SettingsManager? settings = null;
     Wnck.Screen? screen = null;
 
     Intl.setlocale(LocaleCategory.ALL, "");
@@ -78,6 +79,7 @@ public static int main(string[] args)
 
     manager = new Budgie.ServiceManager(replace);
     end_dialog = new Budgie.EndSessionDialog(replace);
+    settings = new Budgie.SettingsManager();
 
     /* Enter main loop */
     Gtk.main();

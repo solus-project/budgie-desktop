@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -829,9 +829,9 @@ public class WmSettings : Gtk.Box
     [GtkChild]
     private Gtk.Switch? switch_unredirect;
 
-    /** Button layout
+    /** Button layout */
     [GtkChild]
-    private Gtk.ComboBox? combo_layouts; */
+    private Gtk.ComboBox? combo_layouts;
 
     private GLib.Settings wm_settings;
 
@@ -840,21 +840,20 @@ public class WmSettings : Gtk.Box
         /* Force unredirect of the display, i.e. nvidia folks */
         wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
 
-        /* Button layout 
+        /* Button layout  */
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));
         Gtk.TreeIter iter;
         model.append(out iter);
-        model.set(iter, 0, "appmenu:minimize,maximize,close", 1, _("Right (standard)"), -1);
+        model.set(iter, 0, "traditional", 1, _("Right (standard)"), -1);
         model.append(out iter);
-        model.set(iter, 0, "close,minimize,maximize:appmenu", 1, _("Left"), -1);
+        model.set(iter, 0, "left", 1, _("Left"), -1);
         combo_layouts.set_model(model);
         combo_layouts.set_id_column(0);
         var render = new Gtk.CellRendererText();
         combo_layouts.pack_start(render, true);
         combo_layouts.add_attribute(render, "text", 1);
         combo_layouts.set_id_column(0);
-        wm_settings.bind("button-layout", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
-        */
+        wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
     }
 }
 

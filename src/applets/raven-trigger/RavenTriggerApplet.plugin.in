@@ -3,6 +3,6 @@ Module=raventriggerapplet.so
 Name=Raven Trigger
 _Description=Raven Sidebar Control
 Authors=Ikey Doherty
-Copyright=Copyright © 2016 Ikey Doherty
+Copyright=Copyright © 2016-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=pane-show-symbolic

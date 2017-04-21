@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2015-2016 Solus Project
+ * Copyright © 2015-2017 Solus Project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public class UserIndicatorWindow : Gtk.Popover {
 
         IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
         IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "media-playback-pause-symbolic", false);
-        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "media-playback-pause-symbolic", false);
+        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "document-save-symbolic", false);
         IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "media-playlist-repeat-symbolic", false);
         IndicatorItem shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 

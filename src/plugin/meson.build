@@ -97,6 +97,7 @@ pkgconfig.generate(
     description: 'Budgie Plugin Library',
     version: '2',
     filebase: 'budgie-1.0',
+    subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
         'gtk+-3.0 >= 3.18.0',
