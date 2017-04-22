@@ -104,11 +104,11 @@ na_tray_child_get_preferred_width (GtkWidget *widget,
                                                                       minimal_width,
                                                                       natural_width);
 
-  if (*minimal_width < 16)
-    *minimal_width = 16;
+  if (*minimal_width < 22)
+    *minimal_width = 22;
 
-  if (*natural_width < 16)
-    *natural_width = 16;
+  if (*natural_width < 22)
+    *natural_width = 22;
 }
 
 static void
@@ -120,11 +120,11 @@ na_tray_child_get_preferred_height (GtkWidget *widget,
                                                                        minimal_height,
                                                                        natural_height);
 
-  if (*minimal_height < 16)
-    *minimal_height = 16;
+  if (*minimal_height < 22)
+    *minimal_height = 22;
 
-  if (*natural_height < 16)
-    *natural_height = 16;
+  if (*natural_height < 22)
+    *natural_height = 22;
 }
 
 static void
