@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.2.9',
+    version: '10.3.1',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -47,6 +47,9 @@ dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
 dep_peas = dependency('libpeas-1.0', version: '>= 1.8.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: gnome_minimum_version)
 dep_libuuid = dependency('uuid')
+
+# gtk 3.22 needed for popup/popdown methods
+dep_gtk322 = dependency('gtk+-3.0', version: '>= 3.22.0', required: false)
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', verion: '>= 1.5.10')

@@ -3,6 +3,6 @@ Module=separatorapplet.so
 Name=Separator
 _Description=Separator
 Authors=Ikey Doherty
-Copyright=Copyright © 2015 Ikey Doherty
+Copyright=Copyright © 2015-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=separator-symbolic

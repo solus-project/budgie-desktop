@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,6 @@ public class TrayApplet : Budgie.Applet
                 tray.set_icon_size(icon_size);
                 queue_resize();
                 tray.queue_resize();
-                tray.force_redraw();
             }
         });
 
@@ -86,7 +85,7 @@ public class TrayApplet : Budgie.Applet
             return;
         }
 
-        tray = new Na.Tray.for_screen(get_screen(), Gtk.Orientation.HORIZONTAL);
+        tray = new Na.Tray.for_screen(Gtk.Orientation.HORIZONTAL);
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
             add(label);
@@ -95,15 +94,15 @@ public class TrayApplet : Budgie.Applet
         }
         tray.set_icon_size(icon_size);
 
-        Gdk.Color fg;
-        Gdk.Color warning;
-        Gdk.Color error;
-        Gdk.Color success;
+        Gdk.RGBA fg = {};
+        Gdk.RGBA warning = {};
+        Gdk.RGBA error = {};
+        Gdk.RGBA success = {};
 
-        Gdk.Color.parse("white", out fg);
-        Gdk.Color.parse("red", out error);
-        Gdk.Color.parse("orange", out warning);
-        Gdk.Color.parse("white", out success);
+        fg.parse("white");
+        warning.parse("red");
+        error.parse("orange");
+        success.parse("white");
 
         tray.set_colors(fg, error, warning, success);
         box.add(tray);
@@ -114,7 +113,6 @@ public class TrayApplet : Budgie.Applet
             return;
         }
         win.queue_draw();
-        tray.force_redraw();
         this.queue_resize();
     }
 }

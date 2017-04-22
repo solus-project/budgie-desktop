@@ -206,6 +206,6 @@ of each source file.
 Authors
 =======
 
-Copyright © 2014-2016 Ikey Doherty, Solus Project & Others
+Copyright © 2014-2017 Ikey Doherty, Solus Project & Others
 
 Also see our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!

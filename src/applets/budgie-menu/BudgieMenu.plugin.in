@@ -3,6 +3,6 @@ Module=budgiemenuapplet.so
 Name=Budgie Menu
 _Description=Budgie Menu
 Authors=Ikey Doherty
-Copyright=Copyright © 2014 Ikey Doherty
+Copyright=Copyright © 2014-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=view-grid-symbolic

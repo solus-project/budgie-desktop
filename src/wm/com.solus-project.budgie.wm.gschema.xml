@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="budgie-desktop">
 
+  <enum id="com.solus-project.budgie-wm.ButtonPosition">
+      <value nick="left" value="1" />
+      <value nick="traditional" value="2" />
+  </enum>
+
   <schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
     <key type="b" name="edge-tiling">
       <default>true</default>
@@ -45,6 +50,12 @@
         spacer tag can be used to insert some space between
         two adjacent buttons.
       </description>
+    </key>
+
+    <key enum="com.solus-project.budgie-wm.ButtonPosition" name="button-style">
+      <default>'traditional'</default>
+      <summary>Button layout style</summary>
+      <description>Which layout to use for window buttons</description>
     </key>
   </schema>
 

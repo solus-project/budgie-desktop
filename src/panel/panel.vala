@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -461,6 +461,9 @@ public class Panel : Budgie.Toplevel
         var iter = HashTableIter<string?,AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
             Settings? app_settings = info.applet.get_applet_settings(info.uuid);
+            if (app_settings != null) {
+                app_settings.ref();
+            }
 
             // Stop it screaming when it dies
             ulong notify_id = info.get_data("notify_id");
@@ -468,12 +471,12 @@ public class Panel : Budgie.Toplevel
             SignalHandler.disconnect(info, notify_id);
             info.applet.get_parent().remove(info.applet);
 
-            // Nuke our settings for it 8
-            info.settings.reset(null);
+            // Clean up the settings
+            this.manager.reset_dconf_path(info.settings);
 
             // Nuke it's own settings
             if (app_settings != null) {
-                app_settings.reset(null);
+                this.manager.reset_dconf_path(app_settings);
             }
         }
     }
@@ -729,15 +732,18 @@ public class Panel : Budgie.Toplevel
         info.applet.get_parent().remove(info.applet);
 
         Settings? app_settings = info.applet.get_applet_settings(uuid);
+        if (app_settings != null) {
+            app_settings.ref();
+        }
 
-        info.settings.reset(null);
+        this.manager.reset_dconf_path(info.settings);
 
         /* TODO: Add refcounting and unload unused plugins. */
         applets.remove(uuid);
         applet_removed(uuid);
 
         if (app_settings != null) {
-            app_settings.reset(null);
+            this.manager.reset_dconf_path(app_settings);
         }
 
         set_applets();
@@ -997,16 +1003,6 @@ public class Panel : Budgie.Toplevel
 
         while (Gtk.events_pending()) {
             Gtk.main_iteration();
-        }
-
-        if (expanded) {
-            Idle.add(()=> {
-                if (get_window() != null) {
-                    get_window().focus(Gdk.CURRENT_TIME);
-                }
-                present();
-                return false;
-            });
         }
     }
 

@@ -35,7 +35,7 @@ public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher
 /**
  * A TabSwitcherWidget is used for each icon in the display
  */
-public class TabSwitcherWidget : Gtk.Box {
+public class TabSwitcherWidget : Gtk.Image {
 
     /**
      * Display title for the window
@@ -54,16 +54,14 @@ public class TabSwitcherWidget : Gtk.Box {
 
     public unowned Wnck.Window? wnck_window = null;
 
-    private Gtk.Image? image = null;
-
     /**
      * Construct a new TabSwitcherWidget with the given xid + title
      */
     public TabSwitcherWidget(Wnck.Window? window, uint32 usertime)
     {
-        Object(orientation: Gtk.Orientation.HORIZONTAL);
+        Object();
         string? title = window.get_name();
-        this.title = window.has_name() ? title : " - ";
+        this.title = window.has_name() ? title : "";
         this.title = this.title.strip();
         this.wnck_window = window;
         this.xid = (uint32)window.get_xid();
@@ -72,12 +70,10 @@ public class TabSwitcherWidget : Gtk.Box {
         set_property("margin", 10);
 
         /* TODO: Get the proper THEME icon for this ! */
-        image = new Gtk.Image();
-        image.set_from_pixbuf(wnck_window.get_icon());
-        image.set_pixel_size(48);
-        image.halign = Gtk.Align.CENTER;
-        image.valign = Gtk.Align.CENTER;
-        pack_start(image, false, false, 0);
+        set_from_pixbuf(wnck_window.get_icon());
+        set_pixel_size(48);
+        halign = Gtk.Align.CENTER;
+        valign = Gtk.Align.CENTER;
     }
 }
 
@@ -141,6 +137,7 @@ public class TabSwitcherWindow : Gtk.Window
     public TabSwitcherWindow()
     {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+        set_position(Gtk.WindowPosition.CENTER_ALWAYS);
         this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
 
         this.hide.connect(this.on_hide);
@@ -196,7 +193,7 @@ public class TabSwitcherWindow : Gtk.Window
 
         /* For now just center it */
         int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-        int y = bounds.y + ((int)(bounds.height * 0.5));
+        int y = bounds.y + ((bounds.height / 2) - (alloc.height / 2));
         move(x, y);
     }
 
@@ -226,7 +223,7 @@ public class TabSwitcherWindow : Gtk.Window
         if (widget == null) {
             return;
         }
-        window_title.set_markup("<b>%s</b>".printf(Markup.escape_text(widget.title)));
+        window_title.set_text(widget.title);
         window_box.select_child(widget.get_parent() as Gtk.FlowBoxChild);
     }
 } /* End class Switcher (BudgieSwitcher) */
@@ -315,10 +312,11 @@ public class TabSwitcher : Object
         mod_timeout = 0;
         Gdk.ModifierType modifier;
         Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
-        if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0) {
+        if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0 && (modifier & Gdk.ModifierType.MOD4_MASK) == 0) {
             switcher_window.hide();
             return false;
         }
+
         /* restart the timeout */
         return true;
     }

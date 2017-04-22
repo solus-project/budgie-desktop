@@ -3,6 +3,6 @@ Module=statusapplet.so
 Name=Status Indicator
 _Description=Status Indicator
 Authors=Ikey Doherty
-Copyright=Copyright © 2015 Ikey Doherty
+Copyright=Copyright © 2015-2017 Ikey Doherty
 Website=https://solus-project.com
 Icon=avatar-default-symbolic

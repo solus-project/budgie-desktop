@@ -21,6 +21,7 @@ daemon_sources = [
     'manager.vala',
     'menus.vala',
     'osd.vala',
+    'settings.vala',
     'tabswitcher.vala',
     daemon_resources,
 ]

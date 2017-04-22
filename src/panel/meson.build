@@ -41,10 +41,7 @@ panel_deps = [
 
 top_vapidir = join_paths(meson.source_root(), 'vapi')
 
-executable(
-    'budgie-panel', panel_sources,
-    dependencies: panel_deps,
-    vala_args: [
+budgie_panel_vala_args = [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
         '--vapidir', dir_libplugin,
@@ -59,7 +56,17 @@ executable(
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-    ],
+]
+
+# For popdown/popup methods
+if dep_gtk322.found()
+    budgie_panel_vala_args += ['-D', 'HAVE_GTK_322']
+endif
+
+executable(
+    'budgie-panel', panel_sources,
+    dependencies: panel_deps,
+    vala_args: budgie_panel_vala_args,
     install: true,
 )
 

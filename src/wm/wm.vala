@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1204,11 +1204,13 @@ public class BudgieWMDBUS : GLib.Object
 
     unowned Budgie.BudgieWM? wm;
 
-    protected BudgieWMDBUS(Budgie.BudgieWM? wm)
+    [DBus (visible = false)]
+    public BudgieWMDBUS(Budgie.BudgieWM? wm)
     {
         this.wm = wm;
     }
 
+    [DBus (visible = false)]
     void on_bus_acquired(DBusConnection conn)
     {
         try {
@@ -1234,6 +1236,22 @@ public class BudgieWMDBUS : GLib.Object
     public void restore_focused()
     {
         this.wm.restore_focused();
+    }
+
+    public bool IsLastWindowDismissable()
+    {
+        unowned GLib.List<weak Meta.WindowActor>? last = Meta.Compositor.get_window_actors(
+            this.wm.get_screen()).last();
+
+        switch (last.data.get_meta_window().get_window_type()) {
+            case Meta.WindowType.POPUP_MENU:
+            case Meta.WindowType.COMBO:
+                return false;
+            default:
+                return true;
+        }
+
+        return true;
     }
 
 } /* End BudgieWMDBUS */

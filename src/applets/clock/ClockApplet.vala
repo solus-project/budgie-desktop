@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2014-2016 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2014-2016 Ikey Doherty <ikey@solus-project.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,16 +44,28 @@ public class ClockApplet : Budgie.Applet
 
     private unowned Budgie.PopoverManager? manager = null;
 
+    SimpleAction? clock_seconds = null;
+    SimpleAction? clock_date = null;
+    SimpleAction? clock_format = null;
+
     public ClockApplet()
     {
         widget = new Gtk.EventBox();
         clock = new Gtk.Label("");
+        clock.valign = Gtk.Align.CENTER;
         time = new DateTime.now_local();
         widget.add(clock);
+        margin_bottom = 2;
 
         var menu = new GLib.Menu();
         menu.append(_("Time and date settings"), "clock.time_and_date");
         menu.append(_("Calendar"), "clock.calendar");
+
+        var menu_settings = new GLib.Menu();
+        menu_settings.append(_("Show date"), "clock.show_date");
+        menu_settings.append(_("Show seconds"), "clock.show_seconds");
+        menu_settings.append(_("Use 24 hour time"), "clock.format");
+        menu.append_submenu(_("Preferences"), menu_settings);
         popover = new Gtk.Popover.from_model(widget, menu);
 
         popover.get_child().show_all();
@@ -74,9 +86,6 @@ public class ClockApplet : Budgie.Applet
 
         settings = new Settings("org.gnome.desktop.interface");
         settings.changed.connect(on_settings_change);
-        on_settings_change("clock-format");
-        on_settings_change("clock-show-seconds");
-        on_settings_change("clock-show-date");
 
         var group = new GLib.SimpleActionGroup();
         var date = new GLib.SimpleAction("time_and_date", null);
@@ -88,6 +97,37 @@ public class ClockApplet : Budgie.Applet
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(update_cal);
 
+        /* Sort out the toggles */
+        clock_seconds = new GLib.SimpleAction.stateful("show_seconds", null, new Variant.boolean(true));
+        clock_seconds.activate.connect(()=> {
+            this.settings.set_boolean("clock-show-seconds", !this.settings.get_boolean("clock-show-seconds"));
+            Idle.add(()=> {
+                this.update_clock();
+                return false;
+            });
+        });
+        clock_date = new GLib.SimpleAction.stateful("show_date", null, new Variant.boolean(true));
+        clock_date.activate.connect(()=> {
+            this.settings.set_boolean("clock-show-date", !this.settings.get_boolean("clock-show-date"));
+            Idle.add(()=> {
+                this.update_clock();
+                return false;
+            });
+        });
+        clock_format = new GLib.SimpleAction.stateful("format", null, new Variant.boolean(true));
+        clock_format.activate.connect(()=> {
+            ClockFormat f = (ClockFormat)settings.get_enum("clock-format");
+            ClockFormat newf = f == ClockFormat.TWELVE ? ClockFormat.TWENTYFOUR : ClockFormat.TWELVE;
+            this.settings.set_enum("clock-format", newf);
+            Idle.add(()=> {
+                this.update_clock();
+                return false;
+            });
+        });
+        group.add_action(clock_seconds);
+        group.add_action(clock_date);
+        group.add_action(clock_format);
+
         this.insert_action_group("clock", group);
         cal = new GLib.SimpleAction("calendar", null);
         cal.set_enabled(calprov != null);
@@ -98,6 +138,9 @@ public class ClockApplet : Budgie.Applet
 
         update_clock();
         add(widget);
+        on_settings_change("clock-format");
+        on_settings_change("clock-show-seconds");
+        on_settings_change("clock-show-date");
         show_all();
     }
 
@@ -145,13 +188,19 @@ public class ClockApplet : Budgie.Applet
             case "clock-format":
                 ClockFormat f = (ClockFormat)settings.get_enum(key);
                 ampm = f == ClockFormat.TWELVE;
+                clock_format.set_state(new Variant.boolean(f == ClockFormat.TWENTYFOUR));
                 break;
             case "clock-show-seconds":
                 show_seconds = settings.get_boolean(key);
+                clock_seconds.set_state(new Variant.boolean(show_seconds));
                 break;
             case "clock-show-date":
                 show_date = settings.get_boolean(key);
+                clock_date.set_state(new Variant.boolean(show_date));
                 break;
+        }
+        if (get_toplevel() != null) {
+            get_toplevel().queue_draw();
         }
         /* Lazy update on next clock sync */
     }

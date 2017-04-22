@@ -72,7 +72,7 @@
       <description>Toplevel panels</description>
     </key>
     <key type="as" name="spam-apps">
-      <default>['Spotify', 'Lollypop', 'lollypop.desktop']</default>
+      <default>['Spotify', 'Lollypop', 'lollypop.desktop', 'nm-applet', 'budgie-desktop-nm-applet.desktop']</default>
       <summary>Spam Apps</summary>
       <description>Notifications send by these apps will not be displayed in Raven.</description>
     </key>

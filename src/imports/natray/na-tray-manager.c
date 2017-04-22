@@ -18,17 +18,14 @@
  * Used to be: eggtraymanager.c
  */
 
+#include <config.h>
 #include <string.h>
 #include <libintl.h>
 
 #include "na-tray-manager.h"
 
-#if defined (GDK_WINDOWING_X11)
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
-#elif defined (GDK_WINDOWING_WIN32)
-#include <gdk/gdkwin32.h>
-#endif
 #include <gtk/gtk.h>
 
 /* Signals */
@@ -51,7 +48,7 @@ typedef struct
 {
   long id, len;
   long remaining_len;
-  
+
   long timeout;
   char *str;
 #ifdef GDK_WINDOWING_X11
@@ -95,28 +92,32 @@ na_tray_manager_init (NaTrayManager *manager)
   manager->padding = 0;
   manager->icon_size = 0;
 
-  manager->fg.red = 0;
-  manager->fg.green = 0;
-  manager->fg.blue = 0;
+  manager->fg.red = 0.0;
+  manager->fg.green = 0.0;
+  manager->fg.blue = 0.0;
+  manager->fg.alpha = 1.0;
 
-  manager->error.red = 0xffff;
-  manager->error.green = 0;
-  manager->error.blue = 0;
+  manager->error.red = 1.0;
+  manager->error.green = 0.0;
+  manager->error.blue = 0.0;
+  manager->error.alpha = 1.0;
 
-  manager->warning.red = 0xffff;
-  manager->warning.green = 0xffff;
-  manager->warning.blue = 0;
+  manager->warning.red = 1.0;
+  manager->warning.green = 1.0;
+  manager->warning.blue = 0.0;
+  manager->warning.alpha = 1.0;
 
-  manager->success.red = 0;
-  manager->success.green = 0xffff;
-  manager->success.blue = 0;
+  manager->success.red = 0.0;
+  manager->success.green = 1.0;
+  manager->success.blue = 0.0;
+  manager->success.alpha = 1.0;
 }
 
 static void
 na_tray_manager_class_init (NaTrayManagerClass *klass)
 {
   GObjectClass *gobject_class;
-  
+
   gobject_class = (GObjectClass *)klass;
 
   gobject_class->finalize = na_tray_manager_finalize;
@@ -135,7 +136,7 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 						      G_PARAM_STATIC_NAME |
 						      G_PARAM_STATIC_NICK |
 						      G_PARAM_STATIC_BLURB));
-  
+
   manager_signals[TRAY_ICON_ADDED] =
     g_signal_new ("tray_icon_added",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -194,14 +195,14 @@ static void
 na_tray_manager_finalize (GObject *object)
 {
   NaTrayManager *manager;
-  
+
   manager = NA_TRAY_MANAGER (object);
 
   na_tray_manager_unmanage (manager);
 
   g_list_free (manager->messages);
   g_hash_table_destroy (manager->socket_table);
-  
+
   G_OBJECT_CLASS (na_tray_manager_parent_class)->finalize (object);
 }
 
@@ -329,7 +330,7 @@ na_tray_manager_handle_message_data (NaTrayManager       *manager,
 {
   GList *p;
   int    len;
-  
+
   /* Try to see if we can find the pending message in the list */
   for (p = manager->messages; p; p = p->next)
     {
@@ -431,7 +432,7 @@ na_tray_manager_handle_cancel_message (NaTrayManager       *manager,
   long       id;
 
   id = xevent->data.l[2];
-  
+
   /* Check if the message is in the queue and remove it if so */
   for (p = manager->messages; p; p = p->next)
     {
@@ -449,7 +450,7 @@ na_tray_manager_handle_cancel_message (NaTrayManager       *manager,
 
   socket = g_hash_table_lookup (manager->socket_table,
                                 GINT_TO_POINTER (xevent->window));
-  
+
   if (socket)
     {
       g_signal_emit (manager, manager_signals[MESSAGE_CANCELLED], 0,
@@ -521,7 +522,7 @@ na_tray_manager_selection_clear_event (GtkWidget         *widget,
   return FALSE;
 }
 #endif
-#endif  
+#endif
 
 static void
 na_tray_manager_unmanage (NaTrayManager *manager)
@@ -541,9 +542,9 @@ na_tray_manager_unmanage (NaTrayManager *manager)
   g_assert (GTK_IS_INVISIBLE (invisible));
   g_assert (gtk_widget_get_realized (invisible));
   g_assert (GDK_IS_WINDOW (window));
-  
+
   display = gtk_widget_get_display (invisible);
-  
+
   if (gdk_selection_owner_get_for_display (display, manager->selection_atom) ==
       window)
     {
@@ -556,7 +557,7 @@ na_tray_manager_unmanage (NaTrayManager *manager)
     }
 
   gdk_window_remove_filter (window,
-                            na_tray_manager_window_filter, manager);  
+                            na_tray_manager_window_filter, manager);
 
   manager->invisible = NULL; /* prior to destroy for reentrancy paranoia */
   gtk_widget_destroy (invisible);
@@ -621,7 +622,7 @@ na_tray_manager_set_visual_property (NaTrayManager *manager)
 						       "_NET_SYSTEM_TRAY_VISUAL");
 
   if (gdk_screen_get_rgba_visual (manager->screen) != NULL &&
-      gdk_display_supports_composite (display))
+      gdk_screen_is_composited (manager->screen))
     xvisual = GDK_VISUAL_XVISUAL (gdk_screen_get_rgba_visual (manager->screen));
   else
     {
@@ -716,18 +717,18 @@ na_tray_manager_set_colors_property (NaTrayManager *manager)
   atom = gdk_x11_get_xatom_by_name_for_display (display,
                                                 "_NET_SYSTEM_TRAY_COLORS");
 
-  data[0] = manager->fg.red;
-  data[1] = manager->fg.green;
-  data[2] = manager->fg.blue;
-  data[3] = manager->error.red;
-  data[4] = manager->error.green;
-  data[5] = manager->error.blue;
-  data[6] = manager->warning.red;
-  data[7] = manager->warning.green;
-  data[8] = manager->warning.blue;
-  data[9] = manager->success.red;
-  data[10] = manager->success.green;
-  data[11] = manager->success.blue;
+  data[0] = manager->fg.red * 65535;
+  data[1] = manager->fg.green * 65535;
+  data[2] = manager->fg.blue * 65535;
+  data[3] = manager->error.red * 65535;
+  data[4] = manager->error.green * 65535;
+  data[5] = manager->error.blue * 65535;
+  data[6] = manager->warning.red * 65535;
+  data[7] = manager->warning.green * 65535;
+  data[8] = manager->warning.blue * 65535;
+  data[9] = manager->success.red * 65535;
+  data[10] = manager->success.green * 65535;
+  data[11] = manager->success.blue * 65535;
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
                    GDK_WINDOW_XID (window),
@@ -750,7 +751,7 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
   GdkWindow  *window;
   char       *selection_atom_name;
   guint32     timestamp;
-  
+
   g_return_val_if_fail (NA_IS_TRAY_MANAGER (manager), FALSE);
   g_return_val_if_fail (manager->screen == NULL, FALSE);
 
@@ -761,20 +762,20 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
   if (na_tray_manager_check_running_screen_x11 (screen))
     return FALSE;
 #endif
-  
+
   manager->screen = screen;
 
   display = gdk_screen_get_display (screen);
   xscreen = GDK_SCREEN_XSCREEN (screen);
-  
+
   invisible = gtk_invisible_new_for_screen (screen);
   gtk_widget_realize (invisible);
-  
+
   gtk_widget_add_events (invisible,
                          GDK_PROPERTY_CHANGE_MASK | GDK_STRUCTURE_MASK);
 
   selection_atom_name = g_strdup_printf ("_NET_SYSTEM_TRAY_S%d",
-					 gdk_screen_get_number (screen));
+					 gdk_x11_screen_get_screen_number (screen));
   manager->selection_atom = gdk_atom_intern (selection_atom_name, FALSE);
   g_free (selection_atom_name);
 
@@ -786,7 +787,7 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
   na_tray_manager_set_padding_property (manager);
   na_tray_manager_set_icon_size_property (manager);
   na_tray_manager_set_colors_property (manager);
-  
+
   window = gtk_widget_get_window (invisible);
 
   timestamp = gdk_x11_get_server_time (window);
@@ -846,7 +847,7 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
       manager->invisible = NULL;
 
       manager->screen = NULL;
- 
+
       return FALSE;
     }
 }
@@ -878,7 +879,7 @@ na_tray_manager_check_running_screen_x11 (GdkScreen *screen)
 
   display = gdk_screen_get_display (screen);
   selection_atom_name = g_strdup_printf ("_NET_SYSTEM_TRAY_S%d",
-                                         gdk_screen_get_number (screen));
+                                         gdk_x11_screen_get_screen_number (screen));
   selection_atom = gdk_x11_get_xatom_by_name_for_display (display,
                                                           selection_atom_name);
   g_free (selection_atom_name);
@@ -950,17 +951,17 @@ na_tray_manager_set_icon_size (NaTrayManager *manager,
 
 void
 na_tray_manager_set_colors (NaTrayManager *manager,
-                            GdkColor      *fg,
-                            GdkColor      *error,
-                            GdkColor      *warning,
-                            GdkColor      *success)
+                            GdkRGBA       *fg,
+                            GdkRGBA       *error,
+                            GdkRGBA       *warning,
+                            GdkRGBA       *success)
 {
   g_return_if_fail (NA_IS_TRAY_MANAGER (manager));
 
-  if (!gdk_color_equal (&manager->fg, fg) ||
-      !gdk_color_equal (&manager->error, error) ||
-      !gdk_color_equal (&manager->warning, warning) ||
-      !gdk_color_equal (&manager->success, success))
+  if (!gdk_rgba_equal (&manager->fg, fg) ||
+      !gdk_rgba_equal (&manager->error, error) ||
+      !gdk_rgba_equal (&manager->warning, warning) ||
+      !gdk_rgba_equal (&manager->success, success))
     {
       manager->fg = *fg;
       manager->error = *error;
