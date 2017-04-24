@@ -9,6 +9,6 @@ gnome.gtkdoc(
     scan_args: [
         '--ignore-headers=budgie-enums.h',
     ],
-    gobject_typesfile : 'bdugie-desktop.types',
+    gobject_typesfile : 'budgie-desktop.types',
     dependencies: link_libplugin,
 )
