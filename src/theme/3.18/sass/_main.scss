@@ -523,6 +523,16 @@ GtkPopover GtkListBoxRow {
         border: 0;
         border-left: 1px solid transparentize($raven_expander_border, 0.1);
     }
+
+    .alternative-label {
+        font-size: 15px;
+        padding: 3px;
+    }
+
+    .always-expand {
+        background: transparent;
+        border-bottom: none;
+    }
 }
 
 // Raven Trigger

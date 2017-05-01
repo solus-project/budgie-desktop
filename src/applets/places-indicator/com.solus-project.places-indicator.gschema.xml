@@ -4,27 +4,24 @@
 
     <key type="b" name="show-label">
       <default>false</default>
-      <summary>Whether to show the label</summary>
-      <description>Show label</description>
+    </key>
+
+    <key type="b" name="expand-places">
+      <default>false</default>
     </key>
 
     <key type="b" name="show-places">
       <default>true</default>
-      <summary>Whether to show places</summary>
-      <description>Show disk mounts</description>
     </key>
 
     <key type="b" name="show-drives">
       <default>true</default>
-      <summary>Whether to show removable drives</summary>
-      <description>Show removable drives</description>
     </key>
 
     <key type="b" name="show-networks">
       <default>true</default>
-      <summary>Whether to show network folders</summary>
-      <description>Show network folders</description>
     </key>
+
   </schema>
 
 </schemalist>
