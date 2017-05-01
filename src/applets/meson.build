@@ -8,7 +8,11 @@ subdir('clock')
 subdir('icon-tasklist')
 subdir('keyboard-layout')
 subdir('lock-keys')
-subdir('night-light')
+
+if dep_mutter.version().version_compare('>=3.24')
+    subdir('night-light')
+endif
+
 subdir('notifications')
 subdir('raven-trigger')
 subdir('places-indicator')
