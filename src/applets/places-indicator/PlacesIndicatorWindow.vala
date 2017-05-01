@@ -21,6 +21,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
 
     private GLib.GenericSet<string> places_list;
 
+    private bool _expand_places = false;
     private bool _show_places = false;
     private bool _show_drives = false;
     private bool _show_networks = false;
@@ -28,6 +29,15 @@ public class PlacesIndicatorWindow : Gtk.Popover {
     private bool only_places = true;
 
     private GLib.FileMonitor bookmarks_monitor;
+
+    public bool expand_places {
+        get { return _expand_places; }
+        set {
+            _expand_places = value;
+            places_section.reveal(value);
+            places_section.show_alternative_header(value);
+        }
+    }
 
     public bool show_places {
         get { return _show_places; }
@@ -116,8 +126,10 @@ public class PlacesIndicatorWindow : Gtk.Popover {
             list_item.cancel_operation();
         }
 
-        places_section.reveal(false);
+        places_section.reveal(expand_places);
         message_bar.hide_it();
+
+        check_expand();
     }
 
     /**

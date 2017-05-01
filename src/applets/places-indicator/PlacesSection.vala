@@ -11,6 +11,8 @@
 
 public class PlacesSection : Gtk.Box
 {
+    private Gtk.Label alternative_header;
+    private Gtk.Box header_box;
     private Gtk.ListBox listbox;
     private Gtk.Revealer revealer;
     private Gtk.Button toggler_button;
@@ -21,7 +23,14 @@ public class PlacesSection : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
-        Gtk.Box header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
+        alternative_header = new Gtk.Label(_("Places"));
+        alternative_header.set_no_show_all(true);
+        alternative_header.set_visible(false);
+        alternative_header.set_halign(Gtk.Align.START);
+        alternative_header.get_style_context().add_class("dim-label");
+        alternative_header.get_style_context().add_class("alternative-label");
+
+        header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
         header_box.get_style_context().add_class("places-section-header");
 
         Gtk.Image header_icon = new Gtk.Image.from_icon_name("folder-symbolic", Gtk.IconSize.MENU);
@@ -49,6 +58,7 @@ public class PlacesSection : Gtk.Box
 
         toggler_button.clicked.connect(toggle_revealer);
 
+        pack_start(alternative_header, false, false, 0);
         pack_start(header_box, false, false, 0);
         pack_start(revealer, false, false, 0);
 
@@ -57,6 +67,7 @@ public class PlacesSection : Gtk.Box
 
     private void toggle_revealer()
     {
+        revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
         if (!revealer.child_revealed) {
             expand_revealer();
         } else {
@@ -64,18 +75,23 @@ public class PlacesSection : Gtk.Box
         }
     }
 
-    private void expand_revealer()
+    private void expand_revealer(bool animate=true)
     {
         if (!revealer.get_child_revealed()) {
-            revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            if (animate) {
+                revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            }
             revealer.set_reveal_child(true);
             toggler_button.image = arrow_down;
         }
     }
 
-    public void contract_revealer()
+    public void contract_revealer(bool animate=true)
     {
         if (revealer.get_child_revealed()) {
+            if (animate) {
+                revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            }
             revealer.set_reveal_child(false);
             toggler_button.image = arrow_right;
         }
@@ -105,11 +121,24 @@ public class PlacesSection : Gtk.Box
      * Only used for automatic showing/hiding
      */
     public void reveal(bool state) {
+        revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
         if (state) {
-            expand_revealer();
+            expand_revealer(false);
         } else {
-            revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
-            contract_revealer();
+            contract_revealer(false);
+        }
+    }
+
+    public void show_alternative_header(bool state) {
+        header_box.set_no_show_all(state);
+        header_box.set_visible(!state);
+        alternative_header.set_no_show_all(!state);
+        alternative_header.set_visible(state);
+
+        if (state) {
+            listbox.get_style_context().add_class("always-expand");
+        } else {
+            listbox.get_style_context().remove_class("always-expand");
         }
     }
 
