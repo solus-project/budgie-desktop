@@ -57,6 +57,7 @@ public class PlacesSection : Gtk.Box
 
     private void toggle_revealer()
     {
+        revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
         if (!revealer.child_revealed) {
             expand_revealer();
         } else {
@@ -64,18 +65,23 @@ public class PlacesSection : Gtk.Box
         }
     }
 
-    private void expand_revealer()
+    private void expand_revealer(bool animate=true)
     {
         if (!revealer.get_child_revealed()) {
-            revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            if (animate) {
+                revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            }
             revealer.set_reveal_child(true);
             toggler_button.image = arrow_down;
         }
     }
 
-    public void contract_revealer()
+    public void contract_revealer(bool animate=true)
     {
         if (revealer.get_child_revealed()) {
+            if (animate) {
+                revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+            }
             revealer.set_reveal_child(false);
             toggler_button.image = arrow_right;
         }
@@ -105,11 +111,11 @@ public class PlacesSection : Gtk.Box
      * Only used for automatic showing/hiding
      */
     public void reveal(bool state) {
+        revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
         if (state) {
-            expand_revealer();
+            expand_revealer(false);
         } else {
-            revealer.set_transition_type(Gtk.RevealerTransitionType.NONE);
-            contract_revealer();
+            contract_revealer(false);
         }
     }
 

@@ -26,6 +26,9 @@ public class PlacesIndicatorSettings : Gtk.Grid
     private Gtk.Switch? switch_places;
 
     [GtkChild]
+    private Gtk.Switch? switch_expand_places;
+
+    [GtkChild]
     private Gtk.Switch? switch_drives;
 
     [GtkChild]
@@ -37,6 +40,7 @@ public class PlacesIndicatorSettings : Gtk.Grid
     {
         this.settings = settings;
         settings.bind("show-label", switch_label, "active", GLib.SettingsBindFlags.DEFAULT);
+        settings.bind("expand-places", switch_expand_places, "active", GLib.SettingsBindFlags.DEFAULT);
         settings.bind("show-places", switch_places, "active", GLib.SettingsBindFlags.DEFAULT);
         settings.bind("show-drives", switch_drives, "active", GLib.SettingsBindFlags.DEFAULT);
         settings.bind("show-networks", switch_networks, "active", GLib.SettingsBindFlags.DEFAULT);
@@ -98,6 +102,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
         show_all();
 
         on_settings_changed("show-label");
+        on_settings_changed("expand-places");
         on_settings_changed("show-places");
         on_settings_changed("show-drives");
         on_settings_changed("show-networks");
@@ -129,6 +134,9 @@ public class PlacesIndicatorApplet : Budgie.Applet
         {
             case "show-label":
                 label.set_visible(settings.get_boolean(key));
+                break;
+            case "expand-places":
+                popover.expand_places = settings.get_boolean(key);
                 break;
             case "show-places":
                 popover.show_places = settings.get_boolean(key);
