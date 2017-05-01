@@ -1,0 +1,8 @@
+[Plugin]
+Module=nightlightapplet.so
+Name=Night Light
+_Description=Night Light
+Authors=Stefan Ric
+Copyright=Copyright © 2017 Stefan Ric
+Website=https://budgie-desktop.org
+Icon=weather-clear-night-symbolic
