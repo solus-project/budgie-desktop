@@ -21,6 +21,30 @@ popover row {
     min-height: 0;
 }
 
+%reset_style,
+ menubar {
+    menuitem {
+        padding: 4px 8px;
+        border: solid transparent;
+        border-width: 0;
+        }
+
+    menuitem:hover {
+        background-color: $selected_bg_color;
+        color: $fg_color;
+        }
+
+    menuitem:disabled {
+        color: rgba(207, 218, 231, 0.2);
+        border-color: transparent;
+        }
+
+    menuitem label {
+        background: none;
+        color: $fg_color;
+        }
+    }
+
 // Container for both the "panel" area and the shadow. Wise to keep
 // this transparent..
 .budgie-container { background-color: transparent; }
@@ -893,4 +917,45 @@ button.raven-trigger {
     list row:selected .dim-label { opacity: 1; }
 
     scrolledwindow { border-top: 1px solid darken($entry_border, 5%); }
+}
+
+// Budgie styled Gtk Menus
+.budgie-menubar {
+    menu {
+        margin: 4px;
+        padding: 5px;
+        border-radius: 0;
+        background-color: $panel_bg;
+        menuitem:hover {
+            background-color: $selected_bg_color;
+            color: $fg_color;
+            }
+        }
+
+    arrow {
+        border:none;
+        min-width:16px;
+        min-height:16px;
+
+        &.top {
+            -gtk-icon-source:-gtk-icontheme("pan-up-symbolic");
+            border-bottom: 1px solid mix($fg_color, $raven_bg, 10%);
+        }
+
+        &.bottom {
+            -gtk-icon-source:-gtk-icontheme("pan-down-symbolic");
+            border-top: 1px solid mix($fg_color, $raven_bg, 10%);
+        }
+    }
+
+    menuitem {
+        accelerator {
+            color: transparentize($fg_color, 0.65);
+        }
+
+        check, radio {
+            min-height: 16px;
+            min-width: 16px;
+        }
+    }
 }
