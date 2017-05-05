@@ -869,6 +869,7 @@ GtkPopover GtkListBoxRow {
 
 // Budgie styled Gtk Menus
 .budgie-menubar {
+    @extend %menu;
     GtkMenu {
         margin: 4px;
         padding: 5px;
