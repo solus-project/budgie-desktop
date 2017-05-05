@@ -921,6 +921,7 @@ button.raven-trigger {
 
 // Budgie styled Gtk Menus
 .budgie-menubar {
+    @extend %menu;
     menu {
         margin: 4px;
         padding: 5px;
