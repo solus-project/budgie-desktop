@@ -687,9 +687,7 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void clear_all()
     {
-        foreach (var child in listbox.get_children()) {
-            child.destroy();
-        }
+        listbox.foreach((c)=> listbox.remove(c));
 
         update_child_count();
         Raven.get_instance().ReadNotifications();

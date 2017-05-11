@@ -200,7 +200,7 @@ public class Raven : Gtk.Window
 
     public void set_notification_count(uint count)
     {
-        if (this.n_count != count) {
+        if (this.n_count != count && this.iface != null) {
             this.n_count = count;
             this.iface.notifications = count;
             this.iface.NotificationsChanged();

@@ -255,13 +255,20 @@ public class BudgieMenuWindow : Gtk.Popover
             m.insert(dname, score);
         }
 
-        foreach (var sprog in content.get_children()) {
-            MenuButton child = (sprog as Gtk.Bin).get_child() as MenuButton;
+        content.foreach((sprog)=> {
+            if (!(sprog is Gtk.Bin)) {
+                return;
+            }
+            Gtk.Widget? gtk_child = (sprog as Gtk.Bin).get_child();
+            if (!(gtk_child is MenuButton)) {
+                return;
+            }
+            MenuButton child = gtk_child as MenuButton;
             var key = child.info.get_filename();
             if (m.contains(key)) {
                 child.score = m.get(key);
             }
-        }
+        });
 
         content.invalidate_sort();
     }
