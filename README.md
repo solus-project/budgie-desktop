@@ -117,6 +117,9 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/solus-project/budgie-desktop.git
+cd budgie-desktop
+git submodule init
+git submodule update
 ```
 
 Now build it:
