@@ -116,7 +116,7 @@ sudo eopkg it -c system.devel
 Clone the repository:
 
 ```bash
-git clone https://github.com/solus-project/budgie-desktop.git
+git clone https://github.com/budgie-desktop/budgie-desktop.git
 cd budgie-desktop
 git submodule init
 git submodule update
