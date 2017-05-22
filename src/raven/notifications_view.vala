@@ -41,6 +41,11 @@ public static string safe_markup_string(string inp)
         return Markup.escape_text(inp2);
     }
 
+    /* is it already escaped? */
+    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2)) {
+        return inp2;
+    }
+
     /* Ensure it's now sane */
     if (!("&amp;" in inp2)) {
         inp2 = inp2.replace("&", "&amp;");
