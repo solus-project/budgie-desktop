@@ -318,6 +318,10 @@ public class SoundWidget : Gtk.Box
         }
         var device = this.mixer.lookup_output_id(id);
 
+        if (device.card == null) {
+            return;
+        }
+
         var card = device.card as Gvc.MixerCard;
         var check = new Gtk.RadioButton.with_label_from_widget(this.output_leader, "%s - %s".printf(device.description, card.name));
         (check.get_child() as Gtk.Label).set_ellipsize(Pango.EllipsizeMode.END);
