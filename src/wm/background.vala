@@ -83,6 +83,13 @@ public class BudgieBackground : Meta.BackgroundGroup
 
     void remove_old(Clutter.Actor? actor)
     {
+        File? bwm_file = actor.get_data("_bwm_uri");
+        if (bwm_file != null) {
+            cache.purge(bwm_file);
+            images.remove(bwm_file.get_uri());
+            bwm_file = null;
+        }
+
         actor.destroy();
         this.old_bg = null;
     }
@@ -102,6 +109,8 @@ public class BudgieBackground : Meta.BackgroundGroup
         }
 
         File f = File.new_for_uri(uri);
+        bg.set_data("_bwm_uri", f);
+
         Meta.BackgroundImage? image = cache.load(f);
         if (image.is_loaded()) {
             return;
@@ -192,6 +201,7 @@ public class BudgieBackground : Meta.BackgroundGroup
         } else {
             var bg_file = File.new_for_uri("file://" + bg_filename);
             /* Once we know the image is in the image cache, set the background */
+
             load_uri.begin("file://" + bg_filename, ()=> {
                 background.set_file(bg_file, gnome_bg.get_placement());
                 on_update();
