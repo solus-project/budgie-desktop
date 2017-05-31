@@ -5,6 +5,7 @@
 # Translators:
 # Bogdan Cuza <boghison22@gmail.com>, 2015
 # Catirau Mihail <ustmaestro@gmail.com>, 2016
+# Danileţ Romeo Cristian <yupy17y@live.com>, 2017
 # Richard <richardbp85@gmail.com>, 2015
 # Richard <richardbp85@gmail.com>, 2015
 msgid ""
@@ -23,15 +24,15 @@ msgstr ""
 
 #: ../daemon/endsession.vala:167
 msgid "Log out"
-msgstr ""
+msgstr "Deconectare"
 
 #: ../daemon/endsession.vala:171
 msgid "Restart device"
-msgstr ""
+msgstr "Repornire dispozitiv"
 
 #: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Deconectare"
+msgstr "Oprire"
 
 #: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
 msgid "Applets"
@@ -93,7 +94,7 @@ msgstr "Fonturi"
 
 #: ../raven/settings_view.vala:980
 msgid "Windows"
-msgstr ""
+msgstr "Ferestre"
 
 #: ../raven/settings_view.vala:984
 msgid "General"
@@ -252,19 +253,19 @@ msgstr "Monospațiat"
 
 #: ../raven/ui/wm.ui.h:1
 msgid "Disable unredirect of fullscreen windows"
-msgstr ""
+msgstr "Dezactivați unredirect de ferestre pe tot ecranul"
 
 #: ../raven/ui/wm.ui.h:2
 msgid "Disable unredirect"
-msgstr ""
+msgstr "Dezactivați unredirect"
 
 #: ../raven/ui/wm.ui.h:3
 msgid "Change the layout of the window buttons"
-msgstr ""
+msgstr "Modifica aspectul butoanelor de ferestre"
 
 #: ../raven/ui/wm.ui.h:4
 msgid "Button layout"
-msgstr ""
+msgstr "Aspect Buton"
 
 #: ../session/budgie-desktop.desktop.in.in.h:1
 #: ../session/budgie-desktop.session.in.in.h:1
@@ -388,26 +389,26 @@ msgstr "Restul bateriei"
 
 #: ../panel/applets/status/PowerIndicator.vala:107
 msgid "Power settings"
-msgstr ""
+msgstr "Setări Energie"
 
 #. User Menu Creation
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr ""
+msgstr "Utilizator"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr ""
+msgstr "Blocare"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr ""
+msgstr "Suspendă"
 
 #: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr ""
+msgstr "Hibernare"
 
 #: ../wm/windowmenu.vala:124
 msgid "Minimize"
@@ -503,72 +504,72 @@ msgstr "Separator"
 #: ../panel/applets/places-indicator/MountItem.vala:23
 #: ../panel/applets/places-indicator/VolumeItem.vala:23
 msgid "Removable devices"
-msgstr ""
+msgstr "Dispozitive detașabile"
 
 #: ../panel/applets/places-indicator/MountItem.vala:25
 #: ../panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Local volumes"
-msgstr ""
+msgstr "Volume locale"
 
 #: ../panel/applets/places-indicator/MountItem.vala:29
 #: ../panel/applets/places-indicator/VolumeItem.vala:29
 msgid "Network folders"
-msgstr ""
+msgstr "Dosare rețea"
 
 #: ../panel/applets/places-indicator/MountItem.vala:49
 #: ../panel/applets/places-indicator/VolumeItem.vala:46
 msgid "Eject"
-msgstr ""
+msgstr "Evacuare"
 
 #: ../panel/applets/places-indicator/MountItem.vala:51
 msgid "Unmount"
-msgstr ""
+msgstr "Demontează"
 
 #: ../panel/applets/places-indicator/MountItem.vala:54
 #: ../panel/applets/places-indicator/PlaceItem.vala:27
 #, c-format
 msgid "Open \"%s\""
-msgstr ""
+msgstr "Deschide \"%s\""
 
 #: ../panel/applets/places-indicator/MountItem.vala:78
 #: ../panel/applets/places-indicator/VolumeItem.vala:53
 msgid "You can now safely remove"
-msgstr ""
+msgstr "Acum puteți elimina în siguranță"
 
 #: ../panel/applets/places-indicator/PlacesIndicator.vala:80
 #: ../panel/applets/places-indicator/PlacesSection.vala:32
 msgid "Places"
-msgstr ""
+msgstr "Locuri"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
 msgid "Nothing to display right now"
-msgstr ""
+msgstr "Nimic pentru a afișa chiar acum"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Mount some drives"
-msgstr ""
+msgstr "Montează unele unități"
 
 #: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
 msgid "Enable more sections"
-msgstr ""
+msgstr "Activați mai multe secțiuni"
 
 #: ../panel/applets/places-indicator/VolumeItem.vala:64
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr ""
+msgstr "Montează si Deschide \"%s\""
 
 #: ../panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr ""
+msgstr "Afișați eticheta"
 
 #: ../panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr ""
+msgstr "Afișați locuri"
 
 #: ../panel/applets/places-indicator/settings.ui.h:3
 msgid "Show removable drives"
-msgstr ""
+msgstr "Afișați unitățile detașabile"
 
 #: ../panel/applets/places-indicator/settings.ui.h:4
 msgid "Show network folders"
-msgstr ""
+msgstr "Afișează dosare rețea"
