@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -33,6 +33,9 @@ public class CalendarWidget : Gtk.Box
         expander.add(ebox);
 
         Timeout.add_seconds_full(GLib.Priority.LOW, 30, this.update_date);
+        cal.month_changed.connect(()=> {
+            update_date();
+        });
     }
 
     private bool update_date()
@@ -40,7 +43,7 @@ public class CalendarWidget : Gtk.Box
         var time = new DateTime.now_local();
         var strf = time.format(date_format);
         header.text = strf;
-        cal.day = time.get_day_of_month();
+        cal.day = (cal.month + 1) == time.get_month() && cal.year == time.get_year() ? time.get_day_of_month() : 0;
         return true;
     }
 
