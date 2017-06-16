@@ -11,6 +11,11 @@
       <value nick="center" value="2" />
       <value nick="end" value="4" />
   </enum>
+  <enum id="com.solus-project.budgie-panel.Transparency">
+      <value nick="none" value="1" />
+      <value nick="dynamic" value="2" />
+      <value nick="always" value="4" />
+  </enum>
 
   <schema id="com.solus-project.budgie-panel.panel">
     <key enum="com.solus-project.budgie-panel.Position" name="location">
@@ -23,6 +28,12 @@
       <default>39</default>
       <summary>Panel size</summary>
       <description>Height of panel if horizontal, or the width if it is vertical</description>
+    </key>
+
+    <key enum="com.solus-project.budgie-panel.Transparency" name="transparency">
+      <default>'none'</default>
+      <summary>Panel transparency</summary>
+      <description>The transparency mode of the panel</description>
     </key>
 
     <key type="b" name="enable-shadow">

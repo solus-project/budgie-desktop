@@ -65,28 +65,31 @@ public const string APPLET_PREFIX   = "/com/solus-project/budgie-panel/applets";
 /**
  * Known panels
  */
-public const string ROOT_KEY_PANELS     = "panels";
+public const string ROOT_KEY_PANELS        = "panels";
 
 /** Panel position */
-public const string PANEL_KEY_POSITION   = "location";
+public const string PANEL_KEY_POSITION     = "location";
+
+/** Panel transparency */
+public const string PANEL_KEY_TRANSPARENCY = "transparency";
 
 /** Panel applets */
-public const string PANEL_KEY_APPLETS    = "applets";
+public const string PANEL_KEY_APPLETS      = "applets";
 
 /** Night mode/dark theme */
-public const string PANEL_KEY_DARK_THEME = "dark-theme";
+public const string PANEL_KEY_DARK_THEME   = "dark-theme";
 
 /** Panel size */
-public const string PANEL_KEY_SIZE       = "size";
+public const string PANEL_KEY_SIZE         = "size";
 
 /** Shadow */
-public const string PANEL_KEY_SHADOW     = "enable-shadow";
+public const string PANEL_KEY_SHADOW       = "enable-shadow";
 
 /** Theme regions permitted? */
-public const string PANEL_KEY_REGIONS    = "theme-regions";
+public const string PANEL_KEY_REGIONS      = "theme-regions";
 
 /** Current migration level in settings */
-public const string PANEL_KEY_MIGRATION  = "migration-level";
+public const string PANEL_KEY_MIGRATION    = "migration-level";
 
 /**
  * The current migration level of Budgie, or format change, if you will.
@@ -140,6 +143,9 @@ public class PanelManager : DesktopManager
     private Budgie.Raven? raven = null;
 
     private Budgie.ThemeManager theme_manager;
+
+    Wnck.Screen wnck_screen;
+    List<unowned Wnck.Window> window_list;
 
     /**
      * Updated when specific names are queried
@@ -200,6 +206,105 @@ public class PanelManager : DesktopManager
         screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
         panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
         plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
+    }
+
+    /**
+     * Initial setup of the dynamic transparency routine
+     * Executed after the initial setup of the panel manager
+     */
+    private void do_dynamic_transparency_setup()
+    {
+        wnck_screen = Wnck.Screen.get_default();
+        window_list = new List<unowned Wnck.Window>();
+
+        wnck_screen.get_windows().foreach((window) => {
+            window_list.append(window);
+            window.state_changed.connect(() => {
+                check_windows();
+            });
+        });
+
+        wnck_screen.window_opened.connect(window_opened);
+        wnck_screen.window_closed.connect(window_closed);
+        wnck_screen.active_window_changed.connect(check_windows);
+        wnck_screen.active_workspace_changed.connect(check_windows);
+    }
+
+    /*
+     * Callback for newly opened, not yet tracked windows
+     */
+    private void window_opened(Wnck.Window window)
+    {
+        unowned List<Wnck.Window>? element = window_list.find(window);
+        if (element != null) {
+            return;
+        }
+
+        window_list.append(window);
+
+        window.state_changed.connect(() => {
+            check_windows();
+        });
+
+        check_windows();
+    }
+
+    /*
+     * Callback for closed windows
+     */
+    private void window_closed(Wnck.Window window)
+    {
+        unowned List<Wnck.Window>? element = window_list.find(window);
+        if (element == null) {
+            return;
+        }
+
+        window_list.remove_all(window);
+        check_windows();
+    }
+
+    /*
+     * Decide wether or not the panel should be opaque
+     * The panel should be opaque when:
+     *   - Raven is open
+     *   - a window fills these requirements:
+     *     - Maximized horizontally or verically
+     *     - Not minimized/iconified
+     *     - On the current active workspace
+     */
+    public void check_windows()
+    {
+        if (raven.get_expanded()) {
+            set_panel_transparent(false);
+            return;
+        }
+
+        bool found = false;
+
+        window_list.foreach((window) => {
+            bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
+            if ((is_maximized && !window.is_minimized()) &&
+                window.get_workspace() == wnck_screen.get_active_workspace()) {
+                found = true;
+                return;
+            }
+        });
+
+        set_panel_transparent(!found);
+    }
+
+    /*
+     * Control the transparency for panels with dynamic transparency on
+     */
+    void set_panel_transparent(bool transparent)
+    {
+        Budgie.Panel? panel = null;
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
+        while (iter.next(null, out panel)) {
+            if (panel.transparency == PanelTransparency.DYNAMIC) {
+                panel.set_transparent(transparent);
+            }
+        }
     }
 
     /**
@@ -307,6 +412,7 @@ public class PanelManager : DesktopManager
         this.setup = true;
         /* Well, off we go to be a panel manager. */
         do_setup();
+        do_dynamic_transparency_setup();
     }
 
     /**
@@ -631,6 +737,7 @@ public class PanelManager : DesktopManager
 
         string path = this.create_panel_path(uuid);
         PanelPosition position;
+        PanelTransparency transparency;
         int size;
 
         var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
@@ -642,9 +749,11 @@ public class PanelManager : DesktopManager
         }
 
         position = (PanelPosition)settings.get_enum(Budgie.PANEL_KEY_POSITION);
+        transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
+        panel.transparency = transparency;
         size = settings.get_int(Budgie.PANEL_KEY_SIZE);
         panel.intended_size = (int)size;
-        this.show_panel(uuid, position);
+        this.show_panel(uuid, position, transparency);
     }
 
     static string? pos_text(PanelPosition pos) {
@@ -662,7 +771,7 @@ public class PanelManager : DesktopManager
         }
     }
 
-    void show_panel(string uuid, PanelPosition position)
+    void show_panel(string uuid, PanelPosition position, PanelTransparency transparency)
     {
         Budgie.Panel? panel = panels.lookup(uuid);
         unowned Screen? scr;
@@ -675,6 +784,7 @@ public class PanelManager : DesktopManager
         scr = screens.lookup(this.primary_monitor);
         scr.slots |= position;
         this.set_placement(uuid, position);
+        this.set_transparency(uuid, transparency);
     }
 
     /**
@@ -744,6 +854,21 @@ public class PanelManager : DesktopManager
          */
         this.update_screen();
         panel.show();
+    }
+
+    /**
+     * Set panel transparency
+     */
+    public override void set_transparency(string uuid, PanelTransparency transparency)
+    {
+        Budgie.Panel? panel = panels.lookup(uuid);
+
+        if (panel == null) {
+            warning("Trying to set transparency on non-existent panel: %s", uuid);
+            return;
+        }
+
+        panel.update_transparency(transparency);
     }
 
     /**
@@ -825,6 +950,7 @@ public class PanelManager : DesktopManager
     void create_panel(string? name = null, KeyFile? new_defaults = null)
     {
         PanelPosition position = PanelPosition.NONE;
+        PanelTransparency transparency = PanelTransparency.NONE;
         int size = -1;
 
         if (this.slots_available() < 1) {
@@ -863,7 +989,7 @@ public class PanelManager : DesktopManager
         load_panel(uuid, false);
 
         set_panels();
-        show_panel(uuid, position);
+        show_panel(uuid, position, transparency);
 
         if (new_defaults == null || name == null) {
             return;

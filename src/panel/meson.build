@@ -30,6 +30,7 @@ panel_deps = [
     dep_gtk3,
     dep_peas,
     dep_libuuid,
+    dep_wnck,
     link_libconfig,
     link_libsession,
     link_libtoplevel,
@@ -63,10 +64,15 @@ if dep_gtk322.found()
     budgie_panel_vala_args += ['-D', 'HAVE_GTK_322']
 endif
 
+budgie_panel_c_args = [
+    '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
+]
+
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
     vala_args: budgie_panel_vala_args,
+    c_args: budgie_panel_c_args,
     install: true,
 )
 
