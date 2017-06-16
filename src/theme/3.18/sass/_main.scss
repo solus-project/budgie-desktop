@@ -594,6 +594,7 @@ GtkPopover GtkListBoxRow {
     background-image: none;
     box-shadow: none;
     border: none;
+    transition: all 150ms ease-in;
 
     .button {
       border-top-width: 0;
@@ -609,6 +610,18 @@ GtkPopover GtkListBoxRow {
       .bottom & {
           padding-bottom: 1px;
           border-top: 1px solid transparentize($panel_bg, 1);
+      }
+    }
+
+    &.transparent {
+      background-color: transparent;
+
+      .top & {
+        border-bottom-color: transparent;
+      }
+
+      .bottom & {
+        border-top-color: transparent;
       }
     }
 

@@ -50,6 +50,14 @@ public class MainPanel : Gtk.Box
         m = intended_size - 5;
         n = intended_size - 5;
     }
+
+    public void set_transparent(bool transparent) {
+        if (transparent) {
+            get_style_context().add_class("transparent");
+        } else {
+            get_style_context().remove_class("transparent");
+        }
+    }
 }
 
 /**
@@ -226,6 +234,29 @@ public class Panel : Budgie.Toplevel
         update_sizes();
     }
 
+    public void update_transparency(PanelTransparency transparency)
+    {
+        this.transparency = transparency;
+
+        switch (transparency) {
+            case PanelTransparency.ALWAYS:
+                set_transparent(true);
+                break;
+            case PanelTransparency.DYNAMIC:
+                manager.check_windows();
+                break;
+            default:
+                set_transparent(false);
+                break;
+        }
+
+        this.settings.set_enum(Budgie.PANEL_KEY_TRANSPARENCY, transparency);
+    }
+
+    public void set_transparent(bool transparent) {
+        (layout as MainPanel).set_transparent(transparent);
+    }
+
     public override void reset_shadow()
     {
         this.shadow.required_size = this.orig_scr.width;
@@ -334,7 +365,7 @@ public class Panel : Budgie.Toplevel
         skip_taskbar_hint = true;
         skip_pager_hint = true;
         set_decorated(false);
-    
+
         scale = get_scale_factor();
         nscale = 1.0;
 

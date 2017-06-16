@@ -39,6 +39,7 @@ public abstract class Toplevel : Gtk.Window
     public string uuid { public set ; public get; }
 
     public Budgie.PanelPosition position { public set; public get; default = Budgie.PanelPosition.BOTTOM; }
+    public Budgie.PanelTransparency transparency { public set; public get; default = Budgie.PanelTransparency.NONE; }
 
     public virtual void reset_shadow() { }
 
@@ -123,6 +124,13 @@ public enum PanelPosition {
     TOP         = 1 << 2,
     LEFT        = 1 << 3,
     RIGHT       = 1 << 4
+}
+
+[Flags]
+public enum PanelTransparency {
+    NONE        = 1 << 0,
+    DYNAMIC     = 1 << 1,
+    ALWAYS      = 1 << 2
 }
 
 [Flags]

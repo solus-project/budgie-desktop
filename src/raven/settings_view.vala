@@ -187,6 +187,10 @@ public class PanelEditor : Gtk.Box
     private ulong position_id;
 
     [GtkChild]
+    private Gtk.ComboBox? combobox_transparency;
+    private ulong transparency_id;
+
+    [GtkChild]
     private Gtk.SpinButton? spinbutton_size;
     private ulong spin_id;
 
@@ -329,6 +333,7 @@ public class PanelEditor : Gtk.Box
         combobox_panels.set_id_column(PanelColumn.UUID);
 
         position_id = combobox_position.changed.connect(on_position_changed);
+        transparency_id = combobox_transparency.changed.connect(on_transparency_changed);
         spin_id = spinbutton_size.value_changed.connect(on_size_changed);
 
         spinbutton_size.set_range(16, 200);
@@ -444,6 +449,18 @@ public class PanelEditor : Gtk.Box
         }
     }
 
+    string transparency_to_id(PanelTransparency transparency)
+    {
+        switch (transparency) {
+            case PanelTransparency.DYNAMIC:
+                return "dynamic";
+            case PanelTransparency.ALWAYS:
+                return "always";
+            default:
+                return "none";
+        }
+    }
+
     public void on_panels_changed()
     {
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
@@ -518,6 +535,10 @@ public class PanelEditor : Gtk.Box
         SignalHandler.block(combobox_position, position_id);
         combobox_position.set_active_id(positition_to_id(panel.position));
         SignalHandler.unblock(combobox_position, position_id);
+
+        SignalHandler.block(combobox_transparency, transparency_id);
+        combobox_transparency.set_active_id(transparency_to_id(panel.transparency));
+        SignalHandler.unblock(combobox_transparency, transparency_id);
 
         SignalHandler.block(spinbutton_size, spin_id);
         spinbutton_size.set_value(panel.intended_size);
@@ -721,6 +742,11 @@ public class PanelEditor : Gtk.Box
             SignalHandler.block(combobox_position, position_id);
             combobox_position.set_active_id(pos);
             SignalHandler.unblock(combobox_position, position_id);
+        } else if (p.name == "transparency") {
+            var transparency = this.transparency_to_id(panel.transparency);
+            SignalHandler.block(combobox_transparency, transparency_id);
+            combobox_transparency.set_active_id(transparency);
+            SignalHandler.unblock(combobox_transparency, transparency_id);
         } else if (p.name == "intended-size") {
             SignalHandler.block(spinbutton_size, spin_id);
             spinbutton_size.set_value(panel.intended_size);
@@ -756,6 +782,25 @@ public class PanelEditor : Gtk.Box
         }
 
         manager.set_placement(current_panel.uuid, pos);
+    }
+
+    void on_transparency_changed()
+    {
+        var id = combobox_transparency.active_id;
+        PanelTransparency transparency;
+        switch (id) {
+            case "dynamic":
+                transparency = PanelTransparency.DYNAMIC;
+                break;
+            case "always":
+                transparency = PanelTransparency.ALWAYS;
+                break;
+            default:
+                transparency = PanelTransparency.NONE;
+                break;
+        }
+
+        manager.set_transparency(current_panel.uuid, transparency);
     }
 }
 

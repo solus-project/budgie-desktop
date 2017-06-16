@@ -647,11 +647,24 @@ button.raven-trigger {
     background-image: none;
     box-shadow: none;
     border: none;
+    transition: all 150ms ease-in;
 
     button {
       border-top-width: 0;
       border-bottom-width: 0;
       border-radius: 0;
+    }
+
+    &.transparent {
+        background-color: transparent;
+
+        .top & {
+            border-bottom-color: transparent;
+        }
+
+        .bottom & {
+            border-top-color: transparent;
+        }
     }
 
     separator { background-color: transparentize($fg_color, 0.85) }
