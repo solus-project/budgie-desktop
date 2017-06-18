@@ -137,6 +137,7 @@ public class BudgieMenuWindow : Gtk.Popover
     // The current group 
     protected GMenu.TreeDirectory? group = null;
     protected bool compact_mode;
+    protected bool headers_visible;
 
     /* Whether we allow rollover category switch */
     protected bool rollover_menus = true;
@@ -173,6 +174,9 @@ public class BudgieMenuWindow : Gtk.Popover
         this.tree = null;
         Idle.add(()=> { 
             load_menus(null);
+            content.invalidate_headers();
+            content.invalidate_filter();
+            content.invalidate_sort();
             return false;
         });
         lock (reloading) {
@@ -357,6 +361,9 @@ public class BudgieMenuWindow : Gtk.Popover
         // load them in the background
         Idle.add(()=> {
             load_menus(null);
+            content.invalidate_headers();
+            content.invalidate_filter();
+            content.invalidate_sort();
             queue_resize();
             if (!get_realized()) {
                 realize();
@@ -373,14 +380,19 @@ public class BudgieMenuWindow : Gtk.Popover
                 categories_scroll.no_show_all = vis;
                 categories_scroll.set_visible(vis);
                 compact_mode = vis;
+                content.invalidate_headers();
+                content.invalidate_sort();
                 break;
             case "menu-headers":
-                if (settings.get_boolean(key)) {
+                var hed = settings.get_boolean(key);
+                headers_visible = hed;
+                if (hed) {
                     content.set_header_func(do_list_header);
                 } else {
                     content.set_header_func(null);
                 }
                 content.invalidate_headers();
+                content.invalidate_sort();
                 break;
             case "menu-categories-hover":
                 /* Category hover */
@@ -510,6 +522,15 @@ public class BudgieMenuWindow : Gtk.Popover
         return array_contains(keywords, term);
     }
 
+    private bool is_item_dupe(MenuButton? button)
+    {
+        MenuButton? compare_item = menu_buttons.lookup(button.info.get_id());
+        if (compare_item != null && compare_item != button) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Filter out results in the list according to whatever the current filter is,
      * i.e. group based or search based
@@ -517,16 +538,17 @@ public class BudgieMenuWindow : Gtk.Popover
     protected bool do_filter_list(Gtk.ListBoxRow row)
     {
         MenuButton child = row.get_child() as MenuButton;
+        bool super_compact = this.compact_mode && (!this.headers_visible);
 
         string term = search_term.strip();
         if (term.length > 0) {
             // "disable" categories while searching
             categories.sensitive = false;
             // Items must be unique across the search
-            MenuButton? compare_item = menu_buttons.lookup(child.info.get_id());
-            if (compare_item != null && compare_item != child) {
+            if (this.is_item_dupe(child)) {
                 return false;
             }
+
             return info_matches_term(child.info, term);
         }
 
@@ -535,6 +557,10 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // No more filtering, show all
         if (group == null) {
+            // Don't dupe when in "super compact" mode
+            if (super_compact && this.is_item_dupe(child)) {
+                return false;
+            }
             return true;
         }
 
@@ -564,9 +590,10 @@ public class BudgieMenuWindow : Gtk.Popover
             return 0;
         }
 
+        // Only perform category grouping if headers are visible
         string parentA = searchable_string(child1.parent_menu.get_name());
         string parentB = searchable_string(child2.parent_menu.get_name());
-        if (child1.parent_menu != child2.parent_menu) {
+        if (child1.parent_menu != child2.parent_menu && this.headers_visible) {
             return GLib.strcmp(parentA, parentB);
         }
 
