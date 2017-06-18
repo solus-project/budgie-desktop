@@ -253,9 +253,9 @@ public class IconButton : Gtk.ToggleButton
 
     private string wclass_name = null;
     private ulong wclass_id = 0;
-    private unowned AppSystem? helper = null;
+    private unowned Budgie.AppSystem? helper = null;
 
-    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo, AppSystem? helper, int panel_size)
+    public IconButton(Settings? settings, Wnck.Window? window, int size, DesktopAppInfo? ainfo, Budgie.AppSystem? helper, int panel_size)
     {
         this.settings = settings;
         this.helper = helper;
@@ -442,7 +442,7 @@ public class PinnedIconButton : IconButton
 
     unowned Settings? settings;
 
-    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, AppSystem? helper, int panel_size)
+    public PinnedIconButton(Settings settings, DesktopAppInfo info, int size, Budgie.AppSystem? helper, int panel_size)
     {
         base(settings, null, size, info, helper, panel_size);
         this.app_info = info;

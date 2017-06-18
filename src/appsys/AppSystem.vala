@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+namespace Budgie {
+
 public class AppSystem : GLib.Object
 {
 
@@ -254,6 +256,8 @@ public class AppSystem : GLib.Object
         return this.query_atom_string_utf8(window, Gdk.Atom.intern("_GTK_APPLICATION_ID", false));
     }
 }
+
+} // End namespace Budgie
 
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html

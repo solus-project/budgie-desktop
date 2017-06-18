@@ -10,7 +10,6 @@ custom_target('plugin-file-icontasklist',
     install_dir : applet_icontasklist_dir)
 
 applet_icontasklist_sources = [
-    'AppSystem.vala',
     'IconTasklistApplet.vala',
     'Buttons.vala',
 ]
@@ -21,6 +20,7 @@ applet_icontasklist_deps = [
     dep_wnck,
     dep_gdkx11,
     link_libplugin,
+    link_libappsys,
 ]
 
 shared_library(
@@ -34,6 +34,7 @@ shared_library(
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'libwnck-3.0',
         '--vapidir', dir_libplugin,
+        '--vapidir', dir_libappsys,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',

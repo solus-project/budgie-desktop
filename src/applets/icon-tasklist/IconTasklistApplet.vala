@@ -67,7 +67,7 @@ public class IconTasklistApplet : Budgie.Applet
     protected int icon_size = 32;
     private Settings settings;
 
-    protected AppSystem? helper;
+    protected Budgie.AppSystem? helper;
 
     private unowned IconButton? active_button;
 
@@ -187,7 +187,7 @@ public class IconTasklistApplet : Budgie.Applet
         settings_schema = "com.solus-project.icon-tasklist";
         settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
 
-        helper = new AppSystem();
+        helper = new Budgie.AppSystem();
 
         // Easy mapping :)
         buttons = new HashTable<Wnck.Window,IconButton>(direct_hash, direct_equal);
