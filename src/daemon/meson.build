@@ -30,6 +30,7 @@ daemon_deps = [
     dep_gtk3,
     dep_gdkx11,
     dep_wnck,
+    link_libappsys,
     link_libconfig,
     link_libtheme,
     link_libsession,
@@ -45,6 +46,7 @@ executable(
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
+        '--vapidir', dir_libappsys,
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gio-unix-2.0',

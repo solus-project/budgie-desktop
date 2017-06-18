@@ -57,7 +57,7 @@ public class TabSwitcherWidget : Gtk.Image {
     /**
      * Construct a new TabSwitcherWidget with the given xid + title
      */
-    public TabSwitcherWidget(Wnck.Window? window, uint32 usertime)
+    public TabSwitcherWidget(Wnck.Window? window, DesktopAppInfo? info, uint32 usertime)
     {
         Object();
         string? title = window.get_name();
@@ -69,8 +69,11 @@ public class TabSwitcherWidget : Gtk.Image {
 
         set_property("margin", 10);
 
-        /* TODO: Get the proper THEME icon for this ! */
-        set_from_pixbuf(wnck_window.get_icon());
+        if (info != null) {
+            set_from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
+        } else {
+            set_from_pixbuf(wnck_window.get_icon());
+        }
         set_pixel_size(48);
         halign = Gtk.Align.CENTER;
         valign = Gtk.Align.CENTER;
@@ -95,6 +98,8 @@ public class TabSwitcherWindow : Gtk.Window
     private int primary_monitor;
 
     private HashTable<uint32, TabSwitcherWidget?> xids = null;
+
+    private Budgie.AppSystem? app_system = null;
 
     /**
      * Make the current selection the active window
@@ -139,6 +144,7 @@ public class TabSwitcherWindow : Gtk.Window
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
         set_position(Gtk.WindowPosition.CENTER_ALWAYS);
         this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
+        this.app_system = new Budgie.AppSystem();
 
         this.hide.connect(this.on_hide);
         /* Skip everything, appear above all else, everywhere. */
@@ -208,8 +214,9 @@ public class TabSwitcherWindow : Gtk.Window
         if (window == null) {
             return;
         }
+        var desktop = this.app_system.query_window(window);
 
-        var child = new TabSwitcherWidget(window, usertime);
+        var child = new TabSwitcherWidget(window, desktop, usertime);
         xids.insert(xid, child);
         window_box.insert(child, -1);
         window_box.show_all();
