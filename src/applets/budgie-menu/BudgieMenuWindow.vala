@@ -381,7 +381,7 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // searching functionality :)
         search_entry.changed.connect(()=> {
-            search_term = search_entry.text.down();
+            search_term = this.searchable_string(search_entry.text);
             content.invalidate_headers();
             content.invalidate_filter();
         });
@@ -522,6 +522,58 @@ public class BudgieMenuWindow : Gtk.Popover
     }
 
     /**
+     * Return a string suitable for working on.
+     * This works around the issue of GNOME Control Center and others deciding to
+     * use soft hyphens in their .desktop files.
+     */
+    private string? searchable_string(string input)
+    {
+        /* Force dup in vala */
+        string mod = "" + input;
+        return mod.replace("\u00AD", "").ascii_down().strip();
+    }
+
+    /* Helper ported from Brisk */
+    private bool array_contains(string?[] array, string term)
+    {
+        foreach (string? field in array) {
+            if (field == null) {
+                continue;
+            }
+            string ct = searchable_string(field);
+            if (term.match_string(ct, true)) {
+                return true;
+            }
+            if (term in ct) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* Helper ported from brisk */
+    private bool info_matches_term(AppInfo? info, string term)
+    {
+        string?[] fields = {
+            info.get_display_name(),
+            info.get_description(),
+            info.get_name(),
+            info.get_executable()
+        };
+
+        if (array_contains(fields, term)) {
+            return true;
+        }
+
+        var keywords = (info as DesktopAppInfo).get_keywords();
+        if (keywords == null || keywords.length < 1) {
+            return false;
+        }
+
+        return array_contains(keywords, term);
+    }
+
+    /**
      * Filter out results in the list according to whatever the current filter is,
      * i.e. group based or search based
      */
@@ -529,39 +581,11 @@ public class BudgieMenuWindow : Gtk.Popover
     {
         MenuButton child = row.get_child() as MenuButton;
 
-        if (search_term.length > 0) {
-            string? app_name, desc, name, exec;
-
+        string term = search_term.strip();
+        if (term.length > 0) {
             // "disable" categories while searching
             categories.sensitive = false;
-
-            // Ugly and messy but we need to ensure we're not dealing with NULL strings
-            app_name = child.info.get_display_name();
-            if (app_name != null) {
-                app_name = app_name.down();
-            } else {
-                app_name = "";
-            }
-            desc = child.info.get_description();
-            if (desc != null) {
-                desc = desc.down();
-            } else {
-                desc = "";
-            }
-            name = child.info.get_name();
-            if (name != null) {
-                name = name.down();
-            } else {
-                name = "";
-            };
-            exec = child.info.get_executable();
-            if (exec != null) {
-                exec = exec.down();
-            } else {
-                exec = "";
-            }
-            return (search_term in app_name || search_term in desc ||
-                    search_term in name || search_term in exec);
+            return info_matches_term(child.info, term);
         }
 
         // "enable" categories if not searching
@@ -571,6 +595,7 @@ public class BudgieMenuWindow : Gtk.Popover
         if (group == null) {
             return true;
         }
+
         // If the GMenu.TreeDirectory isn't the same as the current filter, hide it
         if (child.parent_menu != group) {
             return false;
