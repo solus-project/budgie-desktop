@@ -131,6 +131,9 @@ public class BudgieMenuWindow : Gtk.Popover
     protected Gtk.ScrolledWindow content_scroll;
     protected CategoryButton all_categories;
 
+    /* Mapped id -> button */
+    protected HashTable<string,MenuButton?> menu_buttons = null;
+
     // The current group 
     protected GMenu.TreeDirectory? group = null;
     protected bool compact_mode;
@@ -159,6 +162,7 @@ public class BudgieMenuWindow : Gtk.Popover
         foreach (var child in content.get_children()) {
             child.destroy();
         }
+        menu_buttons.remove_all();
         foreach (var child in categories.get_children()) {
             if (child != all_categories) {
                 SignalHandler.disconnect_by_func(child, (void*)on_mouse_enter, this);
@@ -258,6 +262,7 @@ public class BudgieMenuWindow : Gtk.Popover
                         hide();
                         launch_app(btn.info);
                     });
+                    menu_buttons.insert(appinfo.get_id(), btn);
                     content.add(btn);
                 }
             }
@@ -270,6 +275,8 @@ public class BudgieMenuWindow : Gtk.Popover
         get_style_context().add_class("budgie-menu");
         var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(master_layout);
+
+        menu_buttons = new HashTable<string,MenuButton?>(GLib.str_hash, GLib.str_equal);
 
         icon_size = settings.get_int("menu-icons-size");
 
@@ -515,6 +522,11 @@ public class BudgieMenuWindow : Gtk.Popover
         if (term.length > 0) {
             // "disable" categories while searching
             categories.sensitive = false;
+            // Items must be unique across the search
+            MenuButton? compare_item = menu_buttons.lookup(child.info.get_id());
+            if (compare_item != null && compare_item != child) {
+                return false;
+            }
             return info_matches_term(child.info, term);
         }
 
