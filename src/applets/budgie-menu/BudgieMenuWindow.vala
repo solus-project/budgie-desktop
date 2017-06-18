@@ -13,6 +13,18 @@ const string APPS_ID = "gnome-applications.menu";
 const string LOGOUT_BINARY = "budgie-session-dialog";
 
 /**
+ * Return a string suitable for working on.
+ * This works around the issue of GNOME Control Center and others deciding to
+ * use soft hyphens in their .desktop files.
+ */
+static string? searchable_string(string input)
+{
+    /* Force dup in vala */
+    string mod = "" + input;
+    return mod.replace("\u00AD", "").ascii_down().strip();
+}
+
+/**
  * Factory widget to represent a category
  */
 public class CategoryButton : Gtk.RadioButton
@@ -57,8 +69,6 @@ public class MenuButton : Gtk.Button
     public DesktopAppInfo info { public get ; protected set ; }
     public GMenu.TreeDirectory parent_menu { public get ; protected set ; }
 
-    public int score { public set ; public get; }
-
     public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory, int icon_size)
     {
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
@@ -77,9 +87,37 @@ public class MenuButton : Gtk.Button
         this.parent_menu = directory;
         set_tooltip_text(parent.get_description());
 
-        score = 0;
-
         get_style_context().add_class("flat");
+    }
+
+    private string? vala_has_no_strstr(string a, string b)
+    {
+        int index = a.index_of(b);
+        if (index < 0) {
+            return null;
+        }
+        return a.substring(index);
+    }
+
+    /* Determine our score in relation to a given search term
+     * Totally stole this from Brisk (Which I wrote anyway so woo.)
+     */
+    public int get_score(string term)
+    {
+        int score = 0;
+        string name = searchable_string(info.get_name());
+        if (name == term) {
+            score += 100;
+        } else if (name.has_prefix(term)) {
+            score += 50;
+        }
+
+        var found = vala_has_no_strstr(name, term);
+        if (found != null) {
+            score += 20 + found.length;
+        }
+        score += GLib.strcmp(name, term);
+        return score;
     }
 }
 
@@ -131,7 +169,6 @@ public class BudgieMenuWindow : Gtk.Popover
         this.tree = null;
         Idle.add(()=> { 
             load_menus(null);
-            apply_scores();
             return false;
         });
         lock (reloading) {
@@ -219,95 +256,12 @@ public class BudgieMenuWindow : Gtk.Popover
                     var btn = new MenuButton(appinfo, tree_root, icon_size);
                     btn.clicked.connect(()=> {
                         hide();
-                        btn.score++;
                         launch_app(btn.info);
-                        content.invalidate_sort();
-                        content.invalidate_headers();
-                        save_scores();
                     });
                     content.add(btn);
                 }
             }
         }
-    }
-
-    protected void unwrap_score(Variant v, out string s, out int i)
-    {
-        Variant t = v.get_child_value(0);
-        s = t.get_string();
-        t = v.get_child_value(1);
-        i = t.get_int32();
-    }
-
-    /* Apply "scores" to enable usage-sorting */
-    protected void apply_scores()
-    {
-        var scores = settings.get_value("app-scores");
-
-        HashTable<string,int> m = new HashTable<string,int>(str_hash, str_equal);
-
-        /* Prevent large loops by caching score items */
-        for (int i = 0; i < scores.n_children(); i++) {
-            var tupe = scores.get_child_value(i);
-            string dname; int score;
-            unwrap_score(tupe, out dname, out score);
-
-            m.insert(dname, score);
-        }
-
-        content.foreach((sprog)=> {
-            if (!(sprog is Gtk.Bin)) {
-                return;
-            }
-            Gtk.Widget? gtk_child = (sprog as Gtk.Bin).get_child();
-            if (!(gtk_child is MenuButton)) {
-                return;
-            }
-            MenuButton child = gtk_child as MenuButton;
-            var key = child.info.get_filename();
-            if (m.contains(key)) {
-                child.score = m.get(key);
-            }
-        });
-
-        content.invalidate_sort();
-    }
-
-    protected Variant mktuple(string text, int val)
-    {
-        Variant l = new Variant.string(text);
-        Variant r = new Variant.int32(val);
-        Variant t = new Variant.tuple(new Variant[] { l, r});
-
-        return t;
-    }
-
-    /* Save "scores" (usage-sorting */
-    protected void save_scores()
-    {
-
-        Variant[] children = null;
-
-        foreach (var sprog in content.get_children()) {
-            MenuButton child = (sprog as Gtk.Bin).get_child() as MenuButton;
-            if (child.score == 0) {
-                continue;
-            }
-            var key = child.info.get_filename();
-            var tuple = mktuple(key, child.score);
-            if (children == null) {
-                children = new Variant[] { tuple };
-            } else {
-                children += tuple;
-            }
-        }
-
-        if (children == null) {
-            return;
-        }
-        var arr = new Variant.array(null, children);
-        settings.set_value("app-scores", arr);
-
     }
 
     public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent)
@@ -381,16 +335,13 @@ public class BudgieMenuWindow : Gtk.Popover
 
         // searching functionality :)
         search_entry.changed.connect(()=> {
-            search_term = this.searchable_string(search_entry.text);
+            search_term = searchable_string(search_entry.text);
             content.invalidate_headers();
             content.invalidate_filter();
+            content.invalidate_sort();
         });
 
-        //search_entry.set_can_default(true);
-        //search_entry.grab_default();
-        //this.set_default(search_entry);
         search_entry.grab_focus();
-        //this.set_focus_on_map(true);
 
         // Enabling activation by search entry
         search_entry.activate.connect(on_entry_activate);
@@ -399,7 +350,6 @@ public class BudgieMenuWindow : Gtk.Popover
         // load them in the background
         Idle.add(()=> {
             load_menus(null);
-            apply_scores();
             queue_resize();
             if (!get_realized()) {
                 realize();
@@ -456,11 +406,7 @@ public class BudgieMenuWindow : Gtk.Popover
         }
 
         MenuButton btn = selected.get_child() as MenuButton;
-        btn.score++;
         launch_app(btn.info);
-        content.invalidate_sort();
-        content.invalidate_headers();
-        save_scores();
     }
 
     protected void on_row_activate(Gtk.ListBoxRow? row)
@@ -470,11 +416,7 @@ public class BudgieMenuWindow : Gtk.Popover
         }
         /* Launch this item, i.e. keyboard access. */
         MenuButton btn = row.get_child() as MenuButton;
-        btn.score++;
         launch_app(btn.info);
-        content.invalidate_sort();
-        content.invalidate_headers();
-        save_scores();
     }
 
     /**
@@ -519,18 +461,6 @@ public class BudgieMenuWindow : Gtk.Popover
         } else {
             before.set_header(null);
         }
-    }
-
-    /**
-     * Return a string suitable for working on.
-     * This works around the issue of GNOME Control Center and others deciding to
-     * use soft hyphens in their .desktop files.
-     */
-    private string? searchable_string(string input)
-    {
-        /* Force dup in vala */
-        string mod = "" + input;
-        return mod.replace("\u00AD", "").ascii_down().strip();
     }
 
     /* Helper ported from Brisk */
@@ -608,14 +538,29 @@ public class BudgieMenuWindow : Gtk.Popover
         MenuButton child1 = row1.get_child() as MenuButton;
         MenuButton child2 = row2.get_child() as MenuButton;
 
-        int run = 0;
-        if (child1.score > child2.score) {
-            run = -1;
-        } else if (child2.score > child1.score) {
-            run = 1;
+        string term = search_term.strip();
+
+        if (term.length > 0) {
+            int sc1 = child1.get_score(term);
+            int sc2 = child2.get_score(term);
+            /* Vala can't do this: return (sc1 > sc2) - (sc1 - sc2); */
+            if (sc1 < sc2) {
+                return 1;
+            } else if (sc1 > sc2) {
+                return -1;
+            }
+            return 0;
         }
 
-        return run;
+        string parentA = searchable_string(child1.parent_menu.get_name());
+        string parentB = searchable_string(child2.parent_menu.get_name());
+        if (child1.parent_menu != child2.parent_menu) {
+            return GLib.strcmp(parentA, parentB);
+        }
+
+        string nameA = searchable_string(child1.info.get_display_name());
+        string nameB = searchable_string(child2.info.get_display_name());
+        return GLib.strcmp(nameA, nameB);
     }
 
 
@@ -628,6 +573,7 @@ public class BudgieMenuWindow : Gtk.Popover
             group = btn.group;
             content.invalidate_filter();
             content.invalidate_headers();
+            content.invalidate_sort();
         }
     }
 
