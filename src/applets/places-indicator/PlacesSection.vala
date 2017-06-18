@@ -15,9 +15,7 @@ public class PlacesSection : Gtk.Box
     private Gtk.Box header_box;
     private Gtk.ListBox listbox;
     private Gtk.Revealer revealer;
-    private Gtk.Button toggler_button;
-    private Gtk.Image arrow_right;
-    private Gtk.Image arrow_down;
+    private Gtk.Image toggle_image;
 
     public PlacesSection()
     {
@@ -30,21 +28,27 @@ public class PlacesSection : Gtk.Box
         alternative_header.get_style_context().add_class("dim-label");
         alternative_header.get_style_context().add_class("alternative-label");
 
-        header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
+        header_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         header_box.get_style_context().add_class("places-section-header");
+
+        Gtk.Button header_button = new Gtk.Button();
+        header_button.set_relief(Gtk.ReliefStyle.NONE);
+        header_button.set_can_focus(false);
+        header_box.pack_start(header_button, true, true, 0);
+
+        Gtk.Box header_content_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
+        header_button.add(header_content_box);
 
         Gtk.Image header_icon = new Gtk.Image.from_icon_name("folder-symbolic", Gtk.IconSize.MENU);
         header_icon.margin_start = 3;
-        header_box.pack_start(header_icon, false, false, 0);
+        header_content_box.pack_start(header_icon, false, false, 0);
 
         Gtk.Label header_label = new Gtk.Label(_("Places"));
         header_label.set_halign(Gtk.Align.START);
-        header_box.pack_start(header_label, true, true, 0);
+        header_content_box.pack_start(header_label, true, true, 0);
 
-        toggler_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-        toggler_button.set_relief(Gtk.ReliefStyle.NONE);
-        toggler_button.set_can_focus(false);
-        header_box.pack_start(toggler_button, false, false, 0);
+        toggle_image = new Gtk.Image.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+        header_content_box.pack_start(toggle_image, false, false, 0);
 
         revealer = new Gtk.Revealer();
 
@@ -53,10 +57,7 @@ public class PlacesSection : Gtk.Box
         listbox.set_selection_mode(Gtk.SelectionMode.NONE);
         revealer.add(listbox);
 
-        arrow_right = toggler_button.image as Gtk.Image;
-        arrow_down = new Gtk.Image.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-
-        toggler_button.clicked.connect(toggle_revealer);
+        header_button.clicked.connect(toggle_revealer);
 
         pack_start(alternative_header, false, false, 0);
         pack_start(header_box, false, false, 0);
@@ -82,7 +83,7 @@ public class PlacesSection : Gtk.Box
                 revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
             }
             revealer.set_reveal_child(true);
-            toggler_button.image = arrow_down;
+            toggle_image.set_from_icon_name("pan-up-symbolic", Gtk.IconSize.MENU);
         }
     }
 
@@ -93,7 +94,7 @@ public class PlacesSection : Gtk.Box
                 revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
             }
             revealer.set_reveal_child(false);
-            toggler_button.image = arrow_right;
+            toggle_image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
         }
     }
 
