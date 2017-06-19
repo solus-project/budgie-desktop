@@ -34,7 +34,7 @@ public class MainPanel : Gtk.Box
 
     public MainPanel(int size)
     {
-        Object(orientation: Gtk.Orientation.HORIZONTAL);
+        Object(orientation: Gtk.Orientation.HORIZONTAL, baseline_position: Gtk.BaselinePosition.CENTER);
         this.intended_size = size;
         get_style_context().add_class("budgie-panel");
         get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
