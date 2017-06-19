@@ -58,20 +58,6 @@ namespace Budgie {
     }
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
-    [Flags]
-    public enum AppletPackType {
-        START,
-        END
-    }
-
-    [CCode (cheader_filename = "BudgieToplevel.h")]
-    [Flags]
-    public enum AppletAlignment {
-        START,
-        CENTER,
-        END
-    }
-    [CCode (cheader_filename = "BudgieToplevel.h")]
     public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size);
 
     [CCode (cheader_filename = "BudgieToplevel.h")]

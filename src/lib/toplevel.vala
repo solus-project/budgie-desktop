@@ -133,19 +133,6 @@ public enum PanelTransparency {
     ALWAYS      = 1 << 2
 }
 
-[Flags]
-public enum AppletPackType {
-    START       = 1 << 0,
-    END         = 1 << 2
-}
-
-[Flags]
-public enum AppletAlignment {
-    START       = 1 << 0,
-    CENTER      = 1 << 1,
-    END         = 1 << 2
-}
-
 public static string position_class_name(PanelPosition position)
 {
     switch (position) {
