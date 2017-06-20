@@ -51,14 +51,6 @@ static GParamSpec *obj_properties[N_PROPS] = {
 };
 static guint applet_signals[N_SIGNALS] = { 0 };
 
-#define FREE_IF_SET(x)                                                                             \
-        {                                                                                          \
-                if (self->priv->x) {                                                               \
-                        g_free(self->priv->x);                                                     \
-                        self->priv->x = NULL;                                                      \
-                }                                                                                  \
-        }
-
 static void budgie_applet_set_property(GObject *object, guint id, const GValue *value,
                                        GParamSpec *spec)
 {
@@ -249,8 +241,8 @@ static void budgie_applet_dispose(GObject *g_object)
 {
         BudgieApplet *self = BUDGIE_APPLET(g_object);
 
-        FREE_IF_SET(prefix);
-        FREE_IF_SET(schema);
+        g_clear_pointer(&self->priv->prefix, g_free);
+        g_clear_pointer(&self->priv->schema, g_free);
 
         G_OBJECT_CLASS(budgie_applet_parent_class)->dispose(g_object);
 }

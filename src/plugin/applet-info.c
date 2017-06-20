@@ -36,23 +36,6 @@ struct _BudgieAppletInfoPrivate {
 static void budgie_applet_info_bind_settings(BudgieAppletInfo *info);
 static void budgie_applet_info_unbind_settings(BudgieAppletInfo *info);
 
-#define UPDATE_STRING_PROPERTY(x, y)                                                               \
-        {                                                                                          \
-                if (self->priv->x) {                                                               \
-                        g_free(self->priv->x);                                                     \
-                        self->priv->x = NULL;                                                      \
-                }                                                                                  \
-                self->priv->x = g_value_dup_string(y);                                             \
-        }
-
-#define FREE_IF_SET(x)                                                                             \
-        {                                                                                          \
-                if (self->priv->x) {                                                               \
-                        g_free(self->priv->x);                                                     \
-                        self->priv->x = NULL;                                                      \
-                }                                                                                  \
-        }
-
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieAppletInfo, budgie_applet_info, G_TYPE_OBJECT)
 
 static GParamSpec *obj_properties[N_PROPS] = {
@@ -107,19 +90,24 @@ static void budgie_applet_info_set_property(GObject *object, guint id, const GVa
 
         switch (id) {
         case PROP_ICON:
-                UPDATE_STRING_PROPERTY(icon, value);
+                g_clear_pointer(&self->priv->icon, g_free);
+                self->priv->icon = g_value_dup_string(value);
                 break;
         case PROP_NAME:
-                UPDATE_STRING_PROPERTY(name, value);
+                g_clear_pointer(&self->priv->name, g_free);
+                self->priv->name = g_value_dup_string(value);
                 break;
         case PROP_DESCRIPTION:
-                UPDATE_STRING_PROPERTY(description, value);
+                g_clear_pointer(&self->priv->description, g_free);
+                self->priv->description = g_value_dup_string(value);
                 break;
         case PROP_UUID:
-                UPDATE_STRING_PROPERTY(uuid, value);
+                g_clear_pointer(&self->priv->uuid, g_free);
+                self->priv->uuid = g_value_dup_string(value);
                 break;
         case PROP_ALIGNMENT:
-                UPDATE_STRING_PROPERTY(alignment, value);
+                g_clear_pointer(&self->priv->alignment, g_free);
+                self->priv->alignment = g_value_dup_string(value);
                 break;
         case PROP_POSITION:
                 self->priv->position = g_value_get_int((GValue *)value);
@@ -140,9 +128,7 @@ static void budgie_applet_info_set_property(GObject *object, guint id, const GVa
                 if (!applet) {
                         break;
                 }
-                if (self->priv->applet) {
-                        g_object_unref(self->priv->applet);
-                }
+                g_clear_object(&self->priv->applet);
                 self->priv->applet = g_object_ref(applet);
                 break;
         default:
@@ -155,16 +141,12 @@ static void budgie_applet_info_dispose(GObject *g_object)
 {
         BudgieAppletInfo *self = BUDGIE_APPLET_INFO(g_object);
 
-        FREE_IF_SET(icon);
-        FREE_IF_SET(name);
-        FREE_IF_SET(description);
-        FREE_IF_SET(uuid);
-        FREE_IF_SET(alignment);
-
-        if (self->priv->applet) {
-                g_object_unref(self->priv->applet);
-                self->priv->applet = NULL;
-        }
+        g_clear_pointer(&self->priv->icon, g_free);
+        g_clear_pointer(&self->priv->name, g_free);
+        g_clear_pointer(&self->priv->description, g_free);
+        g_clear_pointer(&self->priv->uuid, g_free);
+        g_clear_pointer(&self->priv->alignment, g_free);
+        g_clear_object(&self->priv->applet);
 
         budgie_applet_info_unbind_settings(self);
 
@@ -268,8 +250,7 @@ static void budgie_applet_info_unbind_settings(BudgieAppletInfo *self)
         g_settings_unbind(self, "name");
         g_settings_unbind(self, "position");
         g_settings_unbind(self, "alignment");
-        g_object_unref(self->priv->settings);
-        self->priv->settings = NULL;
+        g_clear_object(&self->priv->settings);
 }
 
 static void budgie_applet_info_init(BudgieAppletInfo *self)
