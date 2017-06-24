@@ -22,6 +22,11 @@ typedef struct _BudgiePopoverPrivate BudgiePopoverPrivate;
 
 struct _BudgiePopoverClass {
         GtkWindowClass parent_class;
+
+        /* Marked for gtk-doc syntax */
+        void (*closed)(BudgiePopover *popover);
+
+        gpointer padding[12];
 };
 
 struct _BudgiePopover {

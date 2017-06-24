@@ -57,6 +57,13 @@ static GParamSpec *obj_properties[N_PROPS] = {
         NULL,
 };
 
+/*
+ * IDs for our signals
+ */
+enum { POPOVER_SIGNAL_CLOSED = 0, N_SIGNALS };
+
+static guint popover_signals[N_SIGNALS] = { 0 };
+
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopover, budgie_popover, GTK_TYPE_WINDOW)
 
 static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr);
@@ -169,6 +176,26 @@ static void budgie_popover_class_init(BudgiePopoverClass *klazz)
         /* container vtable */
         cont_class->add = budgie_popover_add;
 
+        /**
+         * BudgiePopover::closed
+         * @popover: The popover that has been closed
+         *
+         * This signal is emitted when the popover has been dismissed, whether
+         * it was deliberately from the user's perspective, or implicitly
+         * through a toggling action, such as being rolled past in a
+         * #BudgiePopoverManager set of popovers.
+         */
+        popover_signals[POPOVER_SIGNAL_CLOSED] =
+            g_signal_new("closed",
+                         BUDGIE_TYPE_POPOVER,
+                         G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                         G_STRUCT_OFFSET(BudgiePopoverClass, closed),
+                         NULL,
+                         NULL,
+                         NULL,
+                         G_TYPE_NONE,
+                         0);
+
         /*
          * BudgiePopover:relative-to
          *
@@ -271,9 +298,22 @@ static void budgie_popover_map(GtkWidget *widget)
         GTK_WIDGET_CLASS(budgie_popover_parent_class)->map(widget);
 }
 
+/**
+ * budgie_popover_trigger_closed:
+ *
+ * Used to emit the `closed` signal on the idle loop, after we've dealt
+ * with the unmap event cleanly.
+ */
+static inline gboolean budgie_popover_trigger_closed(gpointer v)
+{
+        g_signal_emit(v, popover_signals[POPOVER_SIGNAL_CLOSED], 0);
+        return G_SOURCE_REMOVE;
+}
+
 static void budgie_popover_unmap(GtkWidget *widget)
 {
         GTK_WIDGET_CLASS(budgie_popover_parent_class)->unmap(widget);
+        g_idle_add(budgie_popover_trigger_closed, widget);
 }
 
 /**
