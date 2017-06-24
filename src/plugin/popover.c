@@ -830,6 +830,13 @@ static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr)
 
         self = BUDGIE_POPOVER(widget);
 
+        /* Clear out the background before we draw anything */
+        cairo_save(cr);
+        cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_paint(cr);
+        cairo_restore(cr);
+
         style = gtk_widget_get_style_context(widget);
         gtk_widget_get_allocation(widget, &alloc);
         body_alloc = alloc;
