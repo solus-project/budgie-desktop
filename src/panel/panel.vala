@@ -967,11 +967,7 @@ public class Panel : Budgie.Toplevel
             layout.set_orientation(Gtk.Orientation.HORIZONTAL);
 
             main_layout.set_orientation(Gtk.Orientation.VERTICAL);
-            if (position == Budgie.PanelPosition.BOTTOM) {
-                main_layout.valign = Gtk.Align.FILL;
-            } else {
-                main_layout.valign = Gtk.Align.START;
-            }
+            main_layout.valign = Gtk.Align.FILL;
             main_layout.halign = Gtk.Align.FILL;
             main_layout.hexpand = false;
         } else {

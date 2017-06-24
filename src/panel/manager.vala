@@ -896,13 +896,38 @@ public class PanelManager : DesktopManager
         Budgie.Panel? val = null;
         Screen? area = screens.lookup(primary_monitor);
         var iter = HashTableIter<string,Budgie.Panel?>(panels);
+
+        // First loop, find top and bottom
         while (iter.next(out key, out val)) {
             if (val.position == Budgie.PanelPosition.TOP) {
                 top = val;
             } else if (val.position == Budgie.PanelPosition.BOTTOM) {
                 bottom = val;
+            } else {
+                continue;
             }
-            val.update_geometry(area.area, val.position, val.intended_size);
+        }
+
+        var iter2 = HashTableIter<string,Budgie.Panel?>(panels);
+
+        while (iter2.next(out key, out val)) {
+            switch (val.position) {
+            case Budgie.PanelPosition.LEFT:
+            case Budgie.PanelPosition.RIGHT:
+                Gdk.Rectangle geom = area.area;
+                if (top != null) {
+                    geom.y += (top.intended_size - 5);
+                    geom.height -= (top.intended_size - 5);
+                }
+                if (bottom != null) {
+                    geom.height -= (bottom.intended_size - 5);
+                }
+                val.update_geometry(geom, val.position, val.intended_size);
+                break;
+            default:
+                val.update_geometry(area.area, val.position, val.intended_size);
+                break;
+            }
         }
 
         raven_screen = area.area;
