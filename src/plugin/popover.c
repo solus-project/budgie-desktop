@@ -19,6 +19,28 @@ BUDGIE_BEGIN_PEDANTIC
 #include <gtk/gtk.h>
 BUDGIE_END_PEDANTIC
 
+/**
+ * SECTION:popover
+ * @Short_description: Budgie Panel GTK+ Popover Widget
+ * @Title: BudgiePopover
+ *
+ * The BudgiePopover is a specialised top level window with a tail pointer,
+ * providing a decorative approach to panel windows. These windows point
+ * at the source of an event, such as a button, and allow rich user interfaces
+ * to be built with a focus on Budgie Panel usage.
+ *
+ * The BudgiePopover should be used in conjunction with the #BudgiePopoverManager.
+ * Simply add your content to the popover, and ensure that you call
+ * #GtkWidget:show_all to display the contents.
+ *
+ * Your popover may be dismissed from screen in response to an event, such
+ * as the user pressing the button again, or automatically, as the user
+ * clicked outside of the window, or even because the #BudgiePopoverManager
+ * switched to a new active popover. You may connect to the #BudgiePopover::closed
+ * signal to check for this event.
+ *
+ */
+
 /*
  * We'll likely take this from a style property in future, but for now it
  * is both the width and height of a tail
