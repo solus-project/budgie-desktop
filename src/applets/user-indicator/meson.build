@@ -16,6 +16,7 @@ applet_userindicator_sources = [
 ]
 
 applet_userindicator_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
@@ -27,12 +28,10 @@ shared_library(
     applet_userindicator_sources,
     dependencies: applet_userindicator_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'accountsservice',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
-        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_userindicator_dir,

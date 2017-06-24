@@ -33,6 +33,7 @@ applet_placesindicator_sources = [
 ]
 
 applet_placesindicator_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -43,10 +44,8 @@ shared_library(
     applet_placesindicator_sources,
     dependencies: applet_placesindicator_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--vapidir', dir_libplugin,
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

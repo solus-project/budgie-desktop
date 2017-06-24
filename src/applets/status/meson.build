@@ -16,6 +16,7 @@ applet_status_sources = [
 ]
 
 applet_status_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
@@ -42,13 +43,11 @@ shared_library(
         '-lm'
     ],
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'accountsservice',
         '--pkg', 'gvc-1.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
-        '--vapidir', dir_libplugin,
         applet_status_vala_args,
     ],
     install: true,

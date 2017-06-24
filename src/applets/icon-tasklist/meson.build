@@ -15,6 +15,7 @@ applet_icontasklist_sources = [
 ]
 
 applet_icontasklist_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_wnck,
@@ -28,12 +29,10 @@ shared_library(
     applet_icontasklist_sources,
     dependencies: applet_icontasklist_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'libwnck-3.0',
-        '--vapidir', dir_libplugin,
         '--vapidir', dir_libappsys,
     ],
     c_args: [

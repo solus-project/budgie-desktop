@@ -14,6 +14,7 @@ applet_separator_sources = [
 ]
 
 applet_separator_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -24,10 +25,8 @@ shared_library(
     applet_separator_sources,
     dependencies: applet_separator_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_separator_dir,

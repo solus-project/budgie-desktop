@@ -14,6 +14,7 @@ applet_raventrigger_sources = [
 ]
 
 applet_raventrigger_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -24,10 +25,8 @@ shared_library(
     applet_raventrigger_sources,
     dependencies: applet_raventrigger_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_raventrigger_dir,

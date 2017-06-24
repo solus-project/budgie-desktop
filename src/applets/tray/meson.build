@@ -14,6 +14,7 @@ applet_tray_sources = [
 ]
 
 applet_tray_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libnatray,
@@ -25,12 +26,10 @@ shared_library(
     applet_tray_sources,
     dependencies: applet_tray_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'natray-1.0',
         '--vapidir', join_paths(meson.source_root(), 'src', 'imports', 'natray'),
-        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_tray_dir,

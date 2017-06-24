@@ -14,6 +14,7 @@ applet_lockkeys_sources = [
 ]
 
 applet_lockkeys_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -24,7 +25,6 @@ shared_library(
     applet_lockkeys_sources,
     dependencies: applet_lockkeys_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--vapidir', dir_libplugin,

@@ -11,17 +11,16 @@ libtoplevel = static_library(
     'toplevel',
     libtoplevel_sources,
     dependencies: [
+        libplugin_vapi,
         link_libplugin,
         dep_peas,
         dep_gtk3,
         meson.get_compiler('c').find_library('m', required: false),
     ],
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libpeas-1.0',
-        '--vapidir', dir_libplugin,
         '-H', 'BudgieToplevel.h',
     ],
 )

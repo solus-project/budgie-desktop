@@ -14,6 +14,7 @@ applet_keyboardlayout_sources = [
 ]
 
 applet_keyboardlayout_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_gnomedesktop,
@@ -27,14 +28,12 @@ shared_library(
     applet_keyboardlayout_sources,
     dependencies: applet_keyboardlayout_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
-        '--vapidir', dir_libplugin,
     ],
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',

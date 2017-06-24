@@ -26,6 +26,7 @@ applet_budgiemenu_sources = [
 ]
 
 applet_budgiemenu_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -37,11 +38,9 @@ shared_library(
     applet_budgiemenu_sources,
     dependencies: applet_budgiemenu_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libgnome-menu-3.0',
-        '--vapidir', dir_libplugin,
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

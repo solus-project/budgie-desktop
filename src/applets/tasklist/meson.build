@@ -14,6 +14,7 @@ applet_tasklist_sources = [
 ]
 
 applet_tasklist_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_wnck,
@@ -25,11 +26,9 @@ shared_library(
     applet_tasklist_sources,
     dependencies: applet_tasklist_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libwnck-3.0',
-        '--vapidir', dir_libplugin,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',

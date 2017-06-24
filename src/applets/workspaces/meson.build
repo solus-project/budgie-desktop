@@ -14,6 +14,7 @@ applet_workspaces_sources = [
 ]
 
 applet_workspaces_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_wnck,
     dep_peas,
@@ -25,11 +26,9 @@ shared_library(
     applet_workspaces_sources,
     dependencies: applet_workspaces_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libwnck-3.0',
-        '--vapidir', dir_libplugin,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',

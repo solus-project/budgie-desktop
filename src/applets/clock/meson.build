@@ -14,6 +14,7 @@ applet_clock_sources = [
 ]
 
 applet_clock_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libplugin,
@@ -24,10 +25,8 @@ shared_library(
     applet_clock_sources,
     dependencies: applet_clock_deps,
     vala_args: [
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--vapidir', dir_libplugin,
     ],
     install: true,
     install_dir: applet_clock_dir,
