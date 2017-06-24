@@ -485,6 +485,9 @@ popover row,
 
 .budgie-popover,
 .budgie-popover.background {
+    @extend %reset_style;
+    margin: 5px;
+
     border-radius: 3px;
     background-clip: border-box;
     background-color: #353945;
