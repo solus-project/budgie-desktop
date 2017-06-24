@@ -5,6 +5,7 @@
 #include <glib-object.h>
 
 #include "applet.h"
+#include "popover.h"
 
 G_BEGIN_DECLS
 /*** END file-header ***/

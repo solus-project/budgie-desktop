@@ -1,4 +1,5 @@
 budgie_applet_info_get_type
 budgie_applet_get_type
 budgie_plugin_get_type
+budgie_popover_get_type
 budgie_popover_manager_get_type

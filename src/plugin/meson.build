@@ -5,7 +5,10 @@ pkgconfig = import('pkgconfig')
 # Generate enums for gobject typing
 plugin_enums = gnome.mkenums(
     'budgie-enums',
-    sources: 'applet.h',
+    sources: [
+        'applet.h',
+        'popover.h',
+    ],
     c_template: 'budgie-enums.c.template',
     h_template: 'budgie-enums.h.template',
     install_header: true,
@@ -29,6 +32,7 @@ plugin_headers = [
 	'plugin.h',
 	'applet.h',
 	'applet-info.h',
+        'popover.h',
 	'popover-manager.h',
 ]
 
@@ -36,6 +40,7 @@ plugin_sources = [
     'applet.c',
     'applet-info.c',
     'plugin.c',
+    'popover.c',
     'popover-manager.c',
 ]
 
