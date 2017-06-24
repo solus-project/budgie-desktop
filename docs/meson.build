@@ -7,7 +7,7 @@ gnome.gtkdoc(
     src_dir: join_paths(meson.source_root(), 'src', 'plugin'),
     install: true,
     scan_args: [
-        '--ignore-headers=budgie-enums.h',
+        '--ignore-headers=util.h',
     ],
     gobject_typesfile : 'budgie-desktop.types',
     dependencies: link_libplugin,

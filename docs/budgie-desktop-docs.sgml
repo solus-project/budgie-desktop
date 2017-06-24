@@ -19,6 +19,7 @@
         <xi:include href="xml/applet.xml"/>
     <xi:include href="xml/applet-info.xml"/>
     <xi:include href="xml/plugin.xml"/>
+    <xi:include href="xml/popover.xml"/>
     <xi:include href="xml/popover-manager.xml"/>
 
   </chapter>

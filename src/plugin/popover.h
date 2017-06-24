@@ -20,6 +20,10 @@ typedef struct _BudgiePopover BudgiePopover;
 typedef struct _BudgiePopoverClass BudgiePopoverClass;
 typedef struct _BudgiePopoverPrivate BudgiePopoverPrivate;
 
+/**
+ * BudgiePopoverClass:
+ * @closed: Virtual closed signal
+ */
 struct _BudgiePopoverClass {
         GtkWindowClass parent_class;
 
