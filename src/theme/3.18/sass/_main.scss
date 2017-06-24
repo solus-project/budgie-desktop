@@ -10,13 +10,17 @@ $asset_suffix: if($variant == 'default', '', '-hc');
 // Used to reset all style properties set by the gtk theme
 %reset_style,
 GtkPopover GtkListBox,
-GtkPopover GtkListBoxRow {
+GtkPopover GtkListBoxRow,
+.budgie-popover GtkListBox,
+.budgie-popover GtkListBoxRow {
     background: none;
     border: none;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     opacity: 1;
+    min-width: 0;
+    min-height: 0;
 }
 
 %reset_style,
@@ -430,16 +434,29 @@ GtkPopover GtkListBoxRow {
     }
 }
 
+.budgie-popover,
+.budgie-popover.background {
+    border-radius: 3px;
+    background-clip: border-box;
+    box-shadow: 0 2px 3px 1px transparentize(black, 0.65);
+    border: 1px solid #{"@borders"};
+}
+
+.budgie-popover .container {
+    @extend %reset_style;
+    padding: 2px;
+}
+
 // Budgie Menu
 .budgie-menu {
-    padding: 0;
+    .container { padding: 0; }
 
     .button:hover { -gtk-image-effect: none; }
 
     GtkSearchEntry.entry:not(:selected) {
         @extend %reset_style;
 
-        padding: 8px 5px;
+        padding: 12px 5px;
         border-bottom: 1px solid #{"@borders"};
         border-radius: 0;
         font-size: 120%;
@@ -487,7 +504,7 @@ GtkPopover GtkListBoxRow {
 
 // User Menu
 .user-menu {
-    padding: 10px;
+    .container { padding: 10px; }
 
     .content-box GtkSeparator {
         color: #{"alpha(@theme_fg_color, 0.15)"};
@@ -496,7 +513,7 @@ GtkPopover GtkListBoxRow {
 
 // Places Menu
 .places-menu {
-    padding: 0;
+    .container { padding: 0; }
 
     .message-bar {
         border-top-left-radius: 3px;
@@ -516,7 +533,7 @@ GtkPopover GtkListBoxRow {
     }
 
     .places-section-header {
-        padding: 0px;
+        padding: 0;
         border-bottom: 1px solid $raven_expander_border;
         box-shadow: 0px 1px 1px #{"alpha(@theme_fg_color, 0.03)"};
     }
@@ -574,7 +591,7 @@ GtkPopover GtkListBoxRow {
 
 // Night Light indicator
 .night-light-indicator {
-    padding: 0px;
+    .container { padding: 0; }
 
     .view-header {
         font-size: 14px;

@@ -1238,22 +1238,6 @@ public class BudgieWMDBUS : GLib.Object
         this.wm.restore_focused();
     }
 
-    public bool IsLastWindowDismissable()
-    {
-        unowned GLib.List<weak Meta.WindowActor>? last = Meta.Compositor.get_window_actors(
-            this.wm.get_screen()).last();
-
-        switch (last.data.get_meta_window().get_window_type()) {
-            case Meta.WindowType.POPUP_MENU:
-            case Meta.WindowType.COMBO:
-                return false;
-            default:
-                return true;
-        }
-
-        return true;
-    }
-
 } /* End BudgieWMDBUS */
 
 } /* End namespace */
