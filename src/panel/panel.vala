@@ -31,9 +31,12 @@ public interface BudgieWMDBUS : Object
 public class MainPanel : Gtk.Box
 {
 
-    public MainPanel()
+    public int intended_size { public get ; public set ; }
+ 
+    public MainPanel(int size)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, baseline_position: Gtk.BaselinePosition.CENTER);
+        this.intended_size = size;
         get_style_context().add_class("budgie-panel");
         get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
     }
@@ -45,6 +48,19 @@ public class MainPanel : Gtk.Box
             get_style_context().remove_class("transparent");
         }
     }
+
+    public override void get_preferred_height(out int m, out int n)
+    {
+        m = intended_size - 5;
+        n = intended_size - 5;
+    }
+
+    public override void get_preferred_height_for_width(int w, out int m, out int n)
+    {
+        m = intended_size - 5;
+        n = intended_size - 5;
+    }
+
 }
 
 /**
@@ -361,7 +377,7 @@ public class Panel : Budgie.Toplevel
         main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_layout);
 
-        layout = new MainPanel();
+        layout = new MainPanel(this.intended_size);
         layout.vexpand = false;
         vexpand = false;
         main_layout.pack_start(layout, false, false, 0);
@@ -381,6 +397,7 @@ public class Panel : Budgie.Toplevel
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
         this.bind_property("shadow-width", shadow, "removal");
+        this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
