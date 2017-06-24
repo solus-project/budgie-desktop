@@ -88,6 +88,61 @@ static void budgie_popover_dispose(GObject *obj)
 }
 
 /**
+ * budgie_popover_constructor:
+ *
+ * Override initial properties to be sane
+ *
+ * Influence:
+ * https://stackoverflow.com/questions/16557905/change-g-param-construct-only-property-via-inheritance
+ */
+static GObject *budgie_popover_constructor(GType type, guint n_properties,
+                                           GObjectConstructParam *properties)
+{
+        GObject *o = NULL;
+        const gchar *prop_name = NULL;
+        GObjectConstructParam *param = NULL;
+
+        /* Override the construct-only type property */
+        for (guint i = 0; i < n_properties; i++) {
+                param = &properties[i];
+
+                prop_name = g_param_spec_get_name(param->pspec);
+                if (g_str_equal(prop_name, "type")) {
+                        g_value_set_enum(param->value, GTK_WINDOW_POPUP);
+                }
+        }
+
+        o = G_OBJECT_CLASS(budgie_popover_parent_class)
+                ->constructor(type, n_properties, properties);
+
+        /* Blame clang-format for weird wrapping */
+        g_object_set(o,
+                     "decorated",
+                     FALSE,
+                     "deletable",
+                     FALSE,
+                     "focus-on-map",
+                     TRUE,
+                     "gravity",
+                     GDK_GRAVITY_NORTH_WEST,
+                     "modal",
+                     FALSE,
+                     "resizable",
+                     FALSE,
+                     "skip-pager-hint",
+                     TRUE,
+                     "skip-taskbar-hint",
+                     TRUE,
+                     "type-hint",
+                     GDK_WINDOW_TYPE_HINT_POPUP_MENU,
+                     "window-position",
+                     GTK_WIN_POS_NONE,
+                     NULL);
+
+        return o;
+}
+
+/**
  * budgie_popover_class_init:
  *
  * Handle class initialisation
@@ -99,6 +154,7 @@ static void budgie_popover_class_init(BudgiePopoverClass *klazz)
         GtkContainerClass *cont_class = GTK_CONTAINER_CLASS(klazz);
 
         /* gobject vtable hookup */
+        obj_class->constructor = budgie_popover_constructor;
         obj_class->dispose = budgie_popover_dispose;
         obj_class->set_property = budgie_popover_set_property;
         obj_class->get_property = budgie_popover_get_property;
@@ -952,32 +1008,11 @@ static void budgie_popover_get_property(GObject *object, guint id, GValue *value
  */
 GtkWidget *budgie_popover_new(GtkWidget *relative_to)
 {
-        /* Blame clang-format for weird wrapping */
         return g_object_new(BUDGIE_TYPE_POPOVER,
                             "relative-to",
                             relative_to,
-                            "decorated",
-                            FALSE,
-                            "deletable",
-                            FALSE,
-                            "focus-on-map",
-                            TRUE,
-                            "gravity",
-                            GDK_GRAVITY_NORTH_WEST,
-                            "modal",
-                            FALSE,
-                            "resizable",
-                            FALSE,
-                            "skip-pager-hint",
-                            TRUE,
-                            "skip-taskbar-hint",
-                            TRUE,
                             "type",
                             GTK_WINDOW_POPUP,
-                            "type-hint",
-                            GDK_WINDOW_TYPE_HINT_POPUP_MENU,
-                            "window-position",
-                            GTK_WIN_POS_NONE,
                             NULL);
 }
 
