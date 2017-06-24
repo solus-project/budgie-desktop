@@ -513,52 +513,52 @@ static void budgie_popover_update_position_hints(BudgiePopover *self)
         case GTK_POS_BOTTOM:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             5,
+                             4,
                              "margin-bottom",
-                             15,
+                             12,
                              "margin-start",
-                             5,
+                             4,
                              "margin-end",
-                             5,
+                             4,
                              NULL);
                 style_class = "bottom";
                 break;
         case GTK_POS_TOP:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             10,
+                             8,
                              "margin-bottom",
-                             10,
+                             8,
                              "margin-start",
-                             5,
+                             4,
                              "margin-end",
-                             5,
+                             4,
                              NULL);
                 style_class = "top";
                 break;
         case GTK_POS_LEFT:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             5,
+                             4,
                              "margin-bottom",
-                             10,
+                             8,
                              "margin-start",
-                             15,
+                             12,
                              "margin-end",
-                             5,
+                             4,
                              NULL);
                 style_class = "left";
                 break;
         case GTK_POS_RIGHT:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             5,
+                             4,
                              "margin-bottom",
-                             10,
+                             8,
                              "margin-start",
-                             5,
+                             4,
                              "margin-end",
-                             15,
+                             12,
                              NULL);
                 style_class = "right";
                 break;
