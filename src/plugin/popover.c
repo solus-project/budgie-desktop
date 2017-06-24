@@ -77,6 +77,7 @@ static void budgie_popover_get_property(GObject *object, guint id, GValue *value
 static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle *target);
 static void budgie_popover_compute_widget_geometry(GtkWidget *parent_widget, GdkRectangle *target);
 static void budgie_popover_compute_tail(BudgiePopover *self);
+static void budgie_popover_update_position_hints(BudgiePopover *self);
 
 /**
  * budgie_popover_dispose:
@@ -244,16 +245,7 @@ static void budgie_popover_init(BudgiePopover *self)
         /* Set initial placement up for default bottom position */
         self->priv->tail.position = GTK_POS_BOTTOM;
 
-        g_object_set(self->priv->add_area,
-                     "margin-top",
-                     5,
-                     "margin-bottom",
-                     15,
-                     "margin-start",
-                     5,
-                     "margin-end",
-                     5,
-                     NULL);
+        budgie_popover_update_position_hints(self);
 }
 
 static void budgie_popover_map(GtkWidget *widget)
@@ -535,6 +527,86 @@ static GtkPositionType budgie_popover_select_position_automatic(gint our_height,
 }
 
 /**
+ * budgie_popover_update_position_hints:
+ *
+ * Update our style classes and padding in response to a tail change
+ */
+static void budgie_popover_update_position_hints(BudgiePopover *self)
+{
+        GtkStyleContext *style = NULL;
+        const gchar *style_class = NULL;
+        static const gchar *position_classes[] = { "top", "left", "right", "bottom" };
+
+        /* Allow themers to know what kind of popover this is, and set the
+         * CSS class in accordance with the direction that the popover is
+         * pointing in.
+         */
+        style = gtk_widget_get_style_context(GTK_WIDGET(self));
+        for (guint i = 0; i < G_N_ELEMENTS(position_classes); i++) {
+                gtk_style_context_remove_class(style, position_classes[i]);
+        }
+
+        switch (self->priv->tail.position) {
+        case GTK_POS_BOTTOM:
+                g_object_set(self->priv->add_area,
+                             "margin-top",
+                             5,
+                             "margin-bottom",
+                             15,
+                             "margin-start",
+                             5,
+                             "margin-end",
+                             5,
+                             NULL);
+                style_class = "bottom";
+                break;
+        case GTK_POS_TOP:
+                g_object_set(self->priv->add_area,
+                             "margin-top",
+                             10,
+                             "margin-bottom",
+                             10,
+                             "margin-start",
+                             5,
+                             "margin-end",
+                             5,
+                             NULL);
+                style_class = "top";
+                break;
+        case GTK_POS_LEFT:
+                g_object_set(self->priv->add_area,
+                             "margin-top",
+                             5,
+                             "margin-bottom",
+                             10,
+                             "margin-start",
+                             15,
+                             "margin-end",
+                             5,
+                             NULL);
+                style_class = "left";
+                break;
+        case GTK_POS_RIGHT:
+                g_object_set(self->priv->add_area,
+                             "margin-top",
+                             5,
+                             "margin-bottom",
+                             10,
+                             "margin-start",
+                             5,
+                             "margin-end",
+                             15,
+                             NULL);
+                style_class = "right";
+                break;
+        default:
+                break;
+        }
+
+        gtk_style_context_add_class(style, style_class);
+}
+
+/**
  * budgie_popover_compute_position:
  *
  * Work out exactly where the popover needs to appear on screen
@@ -550,10 +622,7 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
         GdkRectangle widget_rect = { 0 };
         GtkPositionType tail_position = GTK_POS_BOTTOM;
         gint our_width = 0, our_height = 0;
-        GtkStyleContext *style = NULL;
         int x = 0, y = 0, width = 0, height = 0;
-        static const gchar *position_classes[] = { "top", "left", "right", "bottom" };
-        const gchar *style_class = NULL;
         GdkRectangle display_geom = { 0 };
 
         /* Find out where the widget is on screen */
@@ -578,85 +647,35 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
                 /* We need to appear above the widget */
                 y = widget_rect.y - our_height;
                 x = (widget_rect.x + (widget_rect.width / 2)) - (our_width / 2);
-                g_object_set(self->priv->add_area,
-                             "margin-top",
-                             5,
-                             "margin-bottom",
-                             15,
-                             "margin-start",
-                             5,
-                             "margin-end",
-                             5,
-                             NULL);
-                style_class = "bottom";
                 break;
         case GTK_POS_TOP:
                 /* We need to appear below the widget */
                 y = widget_rect.y + widget_rect.height + (TAIL_DIMENSION / 2);
                 x = (widget_rect.x + (widget_rect.width / 2)) - (our_width / 2);
-                g_object_set(self->priv->add_area,
-                             "margin-top",
-                             10,
-                             "margin-bottom",
-                             10,
-                             "margin-start",
-                             5,
-                             "margin-end",
-                             5,
-                             NULL);
-                style_class = "top";
                 break;
         case GTK_POS_LEFT:
                 /* We need to appear to the right of the widget */
                 y = (widget_rect.y + (widget_rect.height / 2)) - (our_height / 2);
                 y += TAIL_DIMENSION / 4;
                 x = widget_rect.x + widget_rect.width;
-                g_object_set(self->priv->add_area,
-                             "margin-top",
-                             5,
-                             "margin-bottom",
-                             10,
-                             "margin-start",
-                             15,
-                             "margin-end",
-                             5,
-                             NULL);
-                style_class = "left";
                 break;
         case GTK_POS_RIGHT:
                 y = (widget_rect.y + (widget_rect.height / 2)) - (our_height / 2);
                 y += TAIL_DIMENSION / 4;
                 x = widget_rect.x - our_width;
-                g_object_set(self->priv->add_area,
-                             "margin-top",
-                             5,
-                             "margin-bottom",
-                             10,
-                             "margin-start",
-                             5,
-                             "margin-end",
-                             15,
-                             NULL);
-                style_class = "right";
                 break;
         default:
                 break;
         }
 
+        /* Don't do this unless somethign changed */
+        if (self->priv->tail.position != tail_position) {
+                budgie_popover_update_position_hints(self);
+        }
+
         /* Update tail knowledge */
         self->priv->tail.position = tail_position;
         budgie_popover_compute_tail(self);
-
-        /* Allow themers to know what kind of popover this is, and set the
-         * CSS class in accordance with the direction that the popover is
-         * pointing in.
-         */
-        style = gtk_widget_get_style_context(GTK_WIDGET(self));
-        for (guint i = 0; i < G_N_ELEMENTS(position_classes); i++) {
-                gtk_style_context_remove_class(style, position_classes[i]);
-        }
-
-        gtk_style_context_add_class(style, style_class);
 
         static int pad_num = 1;
 
