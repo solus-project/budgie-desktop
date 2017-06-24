@@ -203,10 +203,6 @@ public class ClockApplet : Budgie.Applet
                 clock_date.set_state(new Variant.boolean(show_date));
                 break;
         }
-        if (get_toplevel() != null) {
-            get_toplevel().queue_draw();
-        }
-        /* Lazy update on next clock sync */
     }
 
     /**
@@ -234,8 +230,15 @@ public class ClockApplet : Budgie.Applet
             ftime += " <big>%x</big>";
         }
 
+        // Prevent unnecessary redraws
+        var old = clock.get_label();
         var ctime = time.format(ftime);
+        if (old == ctime) {
+            return true;
+        }
+
         clock.set_markup(ctime);
+        this.queue_draw();
 
         return true;
     }
