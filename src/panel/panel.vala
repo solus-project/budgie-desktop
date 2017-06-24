@@ -18,13 +18,6 @@ namespace Budgie
 public static const string WM_DBUS_NAME        = "org.budgie_desktop.BudgieWM";
 public static const string WM_DBUS_OBJECT_PATH = "/org/budgie_desktop/BudgieWM";
 
-[DBus (name="org.budgie_desktop.BudgieWM")]
-public interface BudgieWMDBUS : Object
-{
-    public abstract void store_focused() throws Error;
-    public abstract void restore_focused() throws Error;
-}
-
 /**
  * The main panel area - i.e. the bit that's rendered
  */
@@ -76,7 +69,6 @@ public class Panel : Budgie.Toplevel
     private unowned Budgie.PanelManager? manager;
 
     PopoverManager? popover_manager;
-    BudgieWMDBUS? wm_proxy = null;
 
     Budgie.ShadowBlock shadow;
 
@@ -125,38 +117,6 @@ public class Panel : Budgie.Toplevel
         }
         public get {
             return render_scale;
-        }
-    }
-
-    /* Hold onto our WM proxy ref */
-    void on_wm_get(GLib.Object? o, GLib.AsyncResult? res)
-    {
-        try {
-            wm_proxy = Bus.get_proxy.end(res);
-        } catch (Error e) {
-            warning("Failed to gain WM proxy: %s", e.message);
-        }
-    }
-
-    /**
-     * Asynchronously fetch a BudgieWMDBUS proxy
-     */
-    void get_wm()
-    {
-        /* Hook up proxy handler.. */
-        Bus.watch_name(BusType.SESSION, WM_DBUS_NAME, BusNameWatcherFlags.NONE,
-            has_wm_proxy, lost_wm_proxy);
-    }
-
-    void lost_wm_proxy()
-    {
-        wm_proxy = null;
-    }
-
-    void has_wm_proxy()
-    {
-        if (wm_proxy == null) {
-            Bus.get_proxy.begin<BudgieWMDBUS>(BusType.SESSION, WM_DBUS_NAME, WM_DBUS_OBJECT_PATH, 0, null, on_wm_get);
         }
     }
 
@@ -417,8 +377,6 @@ public class Panel : Budgie.Toplevel
         get_child().show_all();
 
         this.manager.extension_loaded.connect_after(this.on_extension_loaded);
-
-        this.get_wm();
 
         /* bit of a no-op. */
         update_sizes();
