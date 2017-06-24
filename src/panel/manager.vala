@@ -379,6 +379,8 @@ public class PanelManager : DesktopManager
         primary = screens.lookup(mon);
 
         /* Fix all existing panels here */
+        Gdk.Rectangle raven_screen;
+
         iter = HashTableIter<string,Budgie.Panel?>(panels);
         while (iter.next(out uuid, out panel)) {
             /* Force existing panels to update to new primary display */
@@ -393,7 +395,17 @@ public class PanelManager : DesktopManager
         }
         this.primary_monitor = mon;
 
-        this.raven.update_geometry(primary.area, top, bottom);
+        raven_screen = primary.area;
+        if (top != null) {
+            raven_screen.y += (top.intended_size - 5);
+            raven_screen.height -= (top.intended_size - 5);
+        }
+        if (bottom != null) {
+            raven_screen.height -= bottom.intended_size - 5;
+        }
+
+
+        this.raven.update_geometry(raven_screen);
     }
 
     private void on_bus_acquired(DBusConnection conn)
@@ -878,6 +890,7 @@ public class PanelManager : DesktopManager
     {
         Budgie.Toplevel? top = null;
         Budgie.Toplevel? bottom = null;
+        Gdk.Rectangle raven_screen;
 
         string? key = null;
         Budgie.Panel? val = null;
@@ -892,8 +905,16 @@ public class PanelManager : DesktopManager
             val.update_geometry(area.area, val.position, val.intended_size);
         }
 
+        raven_screen = area.area;
+        if (top != null) {
+            raven_screen.y += (top.intended_size - 5);
+            raven_screen.height -= (top.intended_size - 5);
+        }
+        if (bottom != null) {
+            raven_screen.height -= bottom.intended_size - 5;
+        }
         /* Let Raven update itself accordingly */
-        raven.update_geometry(area.area, top, bottom);
+        raven.update_geometry(raven_screen);
         this.panels_changed();
     }
 

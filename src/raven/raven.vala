@@ -131,9 +131,6 @@ public class Raven : Gtk.Window
 
     private PowerStrip? strip = null;
 
-    unowned Budgie.Toplevel? toplevel_top = null;
-    unowned Budgie.Toplevel? toplevel_bottom = null;
-
     private Budgie.MainView? main_view = null;
     private Budgie.SettingsView? settings_view = null;
     private Gtk.Stack? main_stack;
@@ -268,7 +265,7 @@ public class Raven : Gtk.Window
 
         // Response to a scale factor change
         notify["scale-factor"].connect(()=> {
-            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
+            this.update_geometry(this.old_rect);
             queue_resize();
         });
 
@@ -328,17 +325,6 @@ public class Raven : Gtk.Window
             this.realize();
         }
 
-        notify["visible"].connect(()=> {
-            if (!get_visible()) {
-                if (this.toplevel_top != null) {
-                    toplevel_top.reset_shadow();
-                }
-                if (this.toplevel_bottom != null) {
-                    toplevel_bottom.reset_shadow();
-                }
-            }
-        });
-
         this.get_child().show_all();
     }
 
@@ -363,7 +349,7 @@ public class Raven : Gtk.Window
         base.size_allocate(rect);
         if ((w = get_allocated_width()) != this.required_size) {
             this.required_size = w;
-            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
+            this.update_geometry(this.old_rect);
         }
     }
 
@@ -373,37 +359,10 @@ public class Raven : Gtk.Window
             on_bus_acquired, ()=> {}, ()=> { warning("Raven could not take dbus!"); });
     }
 
-    void bind_panel_shadow(Budgie.Toplevel? toplevel)
-    {
-        weak Binding? b = bind_property("required-size", toplevel, "shadow-width", BindingFlags.DEFAULT, (b,v, ref v2)=> {
-            var d = v.get_int()-5;
-            v2 = Value(typeof(int));
-            v2.set_int(d);
-            return true;
-        });
-        toplevel.set_data("_binding_shadow", b);
-    }
-
-    void unbind_panel_shadow(Budgie.Toplevel? top)
-    {
-        if (top == null) {
-            return;
-        }
-        weak Binding? b = top.get_data("_binding_shadow");
-        if (b != null) {
-            b.unbind();
-        }
-        if (this.toplevel_top == top) {
-            this.toplevel_top = null;
-        } else if (this.toplevel_bottom == top) {
-            this.toplevel_bottom = null;
-        }
-    }
-
     /**
      * Update our geometry based on other panels in the neighbourhood, and the screen we
      * need to be on */
-    public void update_geometry(Gdk.Rectangle rect, Budgie.Toplevel? top, Budgie.Toplevel? bottom)
+    public void update_geometry(Gdk.Rectangle rect)
     {
         int width = required_size;
 
@@ -412,34 +371,6 @@ public class Raven : Gtk.Window
         int height = rect.height;
 
         this.old_rect = rect;
-
-        if (top != this.toplevel_top) {
-            unbind_panel_shadow(this.toplevel_top);
-        }
-        if (bottom != this.toplevel_bottom) {
-            unbind_panel_shadow(this.toplevel_bottom);
-        }
-
-        if (top != null) {
-            int size = top.intended_size - top.shadow_depth;
-            height -= size;
-            y += size;
-
-            if (this.toplevel_top != top) {
-                this.toplevel_top = top;
-                this.bind_panel_shadow(top);
-            }
-        }
-
-        if (bottom != null) {
-            height -= bottom.intended_size;
-            height += bottom.shadow_depth;
-
-            if (this.toplevel_bottom != bottom) {
-                this.toplevel_bottom = bottom;
-                this.bind_panel_shadow(bottom);
-            }
-        }
 
         move(x,y);
 
@@ -495,7 +426,7 @@ public class Raven : Gtk.Window
         }
         double old_op, new_op;
         if (exp) {
-            this.update_geometry(this.old_rect, this.toplevel_top, this.toplevel_bottom);
+            this.update_geometry(this.old_rect);
             old_op = 0.0;
             new_op = 1.0;
         } else {
