@@ -373,6 +373,18 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover,
                                                       __budgie_unused__ GdkEvent *event,
                                                       BudgiePopoverManager *self)
 {
+        /* Someone might have forcibly opened a new popover with one active, so
+         * if we're already managing a popover, the only sane thing to do is
+         * to tell it to sod off and start managing the new one.
+         */
+        if (self->priv->active_popover && self->priv->active_popover != popover) {
+                budgie_popover_manager_ungrab(self, self->priv->active_popover);
+                self->priv->active_popover = NULL;
+                if (gtk_widget_get_visible(GTK_WIDGET(popover))) {
+                        gtk_widget_hide(GTK_WIDGET(popover));
+                }
+        }
+
         self->priv->active_popover = popover;
 
         /* If we don't do this wierd cycle then the rollover enter-notify
