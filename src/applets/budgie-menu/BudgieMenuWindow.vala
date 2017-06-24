@@ -267,6 +267,7 @@ public class BudgieMenuWindow : Budgie.Popover
                         launch_app(btn.info);
                     });
                     menu_buttons.insert(appinfo.get_id(), btn);
+                    btn.show_all();
                     content.add(btn);
                 }
             }
