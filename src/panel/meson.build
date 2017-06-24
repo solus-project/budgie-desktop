@@ -21,7 +21,6 @@ panel_sources = [
     'main.vala',
     'manager.vala',
     'panel.vala',
-    'popovers.vala',
     'uuid.vala',
     panel_resources,
 ]
