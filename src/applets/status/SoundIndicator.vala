@@ -27,7 +27,7 @@ public class SoundIndicator : Gtk.Bin
     public Gtk.EventBox? ebox;
 
     /** GtkPopover in which to show a volume control */
-    public Gtk.Popover popover;
+    public Budgie.Popover popover;
 
     /** Display scale for le volume controls */
     private Gtk.Scale volume_scale;
@@ -68,7 +68,7 @@ public class SoundIndicator : Gtk.Bin
      */
     private void create_sound_popover()
     {
-        popover = new Gtk.Popover(ebox);
+        popover = new Budgie.Popover(ebox);
         Gtk.Box? popover_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         popover.add(popover_box);
         Gtk.Button? sub_button = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);

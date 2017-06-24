@@ -31,7 +31,7 @@ public class StatusApplet : Budgie.Applet
     /**
      * Set up an EventBox for popovers
      */
-    private void setup_popover(Gtk.Widget? parent_widget, Gtk.Popover? popover)
+    private void setup_popover(Gtk.Widget? parent_widget, Budgie.Popover? popover)
     {
         parent_widget.button_press_event.connect((e)=> {
             if (e.button != 1) {

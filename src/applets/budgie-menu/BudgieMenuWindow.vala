@@ -121,7 +121,7 @@ public class MenuButton : Gtk.Button
     }
 }
 
-public class BudgieMenuWindow : Gtk.Popover
+public class BudgieMenuWindow : Budgie.Popover
 {
     protected Gtk.SearchEntry search_entry;
     protected Gtk.Box categories;

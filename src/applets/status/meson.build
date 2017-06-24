@@ -47,6 +47,7 @@ shared_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'accountsservice',
         '--pkg', 'gvc-1.0',
+        '--pkg', 'gio-unix-2.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         applet_status_vala_args,
     ],

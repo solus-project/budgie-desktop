@@ -25,7 +25,7 @@ public class BluetoothIndicator : Gtk.Bin
     public Gtk.EventBox? ebox = null;
     private Bluetooth.Client? client = null;
     private Gtk.TreeModel? model = null;
-    public Gtk.Popover? popover = null;
+    public Budgie.Popover? popover = null;
 
     SimpleAction? send_to = null;
     SimpleAction? airplane = null;
@@ -171,7 +171,9 @@ public class BluetoothIndicator : Gtk.Bin
         menu.append(_("Bluetooth Settings"), "bluetooth.settings");
         menu.append(_("Send Files"), "bluetooth.send-file");
         menu.append(_("Bluetooth Airplane Mode"), "bluetooth.airplane-mode");
-        popover = new Gtk.Popover.from_model(ebox, menu);
+
+        // TODO: Port, drop menu model shite
+        popover = new Budgie.Popover(ebox);
 
         var group = new GLib.SimpleActionGroup();
         var settings = new GLib.SimpleAction("settings", null);

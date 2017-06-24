@@ -7,7 +7,7 @@
     <property name="step_increment">100</property>
     <property name="page_increment">1000</property>
   </object>
-  <template class="NightLightIndicatorWindow" parent="GtkPopover">
+  <template class="NightLightIndicatorWindow" parent="BudgiePopover">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">

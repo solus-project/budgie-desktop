@@ -26,6 +26,7 @@ shared_library(
     dependencies: applet_clock_deps,
     vala_args: [
         '--pkg', 'libpeas-1.0',
+        '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
     ],
     install: true,

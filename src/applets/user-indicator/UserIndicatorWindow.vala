@@ -16,7 +16,7 @@ public const string G_SESSION = "org.gnome.SessionManager";
 
 public const string UNABLE_CONTACT = "Unable to contact ";
 
-public class UserIndicatorWindow : Gtk.Popover {
+public class UserIndicatorWindow : Budgie.Popover {
     public Gtk.Box? menu = null;
     public Gtk.Revealer? user_section = null;
 
@@ -169,7 +169,7 @@ public class UserIndicatorWindow : Gtk.Popover {
             return Gdk.EVENT_STOP;
         });
 
-        this.closed.connect(hide_usersection); // Ensure User Section is hidden.
+        this.unmap.connect(hide_usersection); // Ensure User Section is hidden.
     }
 
     private Gtk.Revealer create_usersection() {

@@ -38,7 +38,7 @@ public class ClockApplet : Budgie.Applet
 
     protected Settings settings;
 
-    Gtk.Popover? popover = null;
+    Budgie.Popover? popover = null;
     AppInfo? calprov = null;
     SimpleAction? cal = null;
 
@@ -66,7 +66,9 @@ public class ClockApplet : Budgie.Applet
         menu_settings.append(_("Show seconds"), "clock.show_seconds");
         menu_settings.append(_("Use 24 hour time"), "clock.format");
         menu.append_submenu(_("Preferences"), menu_settings);
-        popover = new Gtk.Popover.from_model(widget, menu);
+
+        // TODO: Something useful.
+        popover = new Budgie.Popover(widget);
 
         popover.get_child().show_all();
 
@@ -96,6 +98,8 @@ public class ClockApplet : Budgie.Applet
 
         var monitor = AppInfoMonitor.get();
         monitor.changed.connect(update_cal);
+
+        // TODO: Remove all this shite
 
         /* Sort out the toggles */
         clock_seconds = new GLib.SimpleAction.stateful("show_seconds", null, new Variant.boolean(true));

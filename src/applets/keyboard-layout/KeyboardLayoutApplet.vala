@@ -243,7 +243,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
     private Gtk.Stack label_stack;
 
     /* For left click interaction... */
-    private Gtk.Popover popover;
+    private Budgie.Popover popover;
     private Gtk.ListBox listbox;
     private Budgie.PopoverManager? manager = null;
 
@@ -288,7 +288,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         layout.pack_start(label_stack, false, false, 0);
 
         /* Popover menu magicks */
-        popover = new Gtk.Popover(img_wrap);
+        popover = new Budgie.Popover(img_wrap);
         popover.get_style_context().add_class("user-menu");
         listbox = new Gtk.ListBox();
         listbox.set_can_focus(false);

@@ -32,6 +32,7 @@ shared_library(
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
+        '--pkg', 'gio-unix-2.0',
         '--pkg', 'libwnck-3.0',
         '--vapidir', dir_libappsys,
     ],

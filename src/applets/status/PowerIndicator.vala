@@ -86,7 +86,7 @@ public class PowerIndicator : Gtk.Bin
 
     /** Widget containing battery icons to display */
     public Gtk.EventBox? ebox = null;
-    public Gtk.Popover? popover = null;
+    public Budgie.Popover? popover = null;
     private Gtk.Box widget = null;
 
     /** Our upower client */
@@ -106,7 +106,9 @@ public class PowerIndicator : Gtk.Bin
         var menu = new GLib.Menu();
         menu.append(_("Power settings"), "power.settings");
 
-        popover = new Gtk.Popover.from_model(ebox, menu);
+        // TODO: Port to non model cruft
+        //popover = new Gtk.Popover.from_model(ebox, menu);
+        popover = new Budgie.Popover(ebox);
 
         var group = new GLib.SimpleActionGroup();
         var power = new GLib.SimpleAction("settings", null);

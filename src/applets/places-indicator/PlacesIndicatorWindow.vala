@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class PlacesIndicatorWindow : Gtk.Popover {
+public class PlacesIndicatorWindow : Budgie.Popover {
     private GLib.VolumeMonitor volume_monitor;
 
     private MessageRevealer message_bar;
@@ -109,7 +109,7 @@ public class PlacesIndicatorWindow : Gtk.Popover {
         refresh_special_dirs();
         refresh_mounts();
 
-        this.closed.connect(on_popover_closed);
+        this.unmap.connect(on_popover_closed);
 
         main_content.show_all();
     }
