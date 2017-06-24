@@ -4,7 +4,8 @@
       <value nick="none" value="1" />
       <value nick="bottom" value="2" />
       <value nick="top" value="4" />
-      <value nick="left" value="16" />
+      <value nick="left" value="8" />
+      <value nick="right" value="16" />
   </enum>
   <enum id="com.solus-project.budgie-applet.Alignment">
       <value nick="start" value="1" />

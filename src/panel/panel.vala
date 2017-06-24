@@ -28,7 +28,7 @@ public class MainPanel : Gtk.Box
  
     public MainPanel(int size)
     {
-        Object(orientation: Gtk.Orientation.HORIZONTAL, baseline_position: Gtk.BaselinePosition.CENTER);
+        Object(orientation: Gtk.Orientation.HORIZONTAL);
         this.intended_size = size;
         get_style_context().add_class("budgie-panel");
         get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
@@ -44,11 +44,37 @@ public class MainPanel : Gtk.Box
 
     public override void get_preferred_height(out int m, out int n)
     {
+        if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
+            m = intended_size - 5;
+            n = intended_size - 5;
+            return;
+        }
+        int om, on;
+        base.get_preferred_height(out om, out on);
+        m = om;
+        n = on;
+    }
+
+    public override void get_preferred_height_for_width(int w, out int m, out int n)
+    {
+        if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
+            m = intended_size - 5;
+            n = intended_size - 5;
+            return;
+        }
+        int om, on;
+        base.get_preferred_height_for_width(w, out om, out on);
+        m = om;
+        n = on;
+    }
+
+    public override void get_preferred_width(out int m, out int n)
+    {
         m = intended_size - 5;
         n = intended_size - 5;
     }
 
-    public override void get_preferred_height_for_width(int w, out int m, out int n)
+    public override void get_preferred_width_for_height(int h, out int m, out int n)
     {
         m = intended_size - 5;
         n = intended_size - 5;
@@ -168,7 +194,6 @@ public class Panel : Budgie.Toplevel
 
         this.position = position;
 
-        shadow.required_size = orig_scr.width;
         this.shadow.position = position;
         this.layout.queue_resize();
         queue_resize();
@@ -197,12 +222,6 @@ public class Panel : Budgie.Toplevel
 
     public void set_transparent(bool transparent) {
         (layout as MainPanel).set_transparent(transparent);
-    }
-
-    public override void reset_shadow()
-    {
-        this.shadow.required_size = this.orig_scr.width;
-        this.shadow.removal = 0;
     }
 
     public override GLib.List<AppletInfo?> get_applets()
@@ -338,16 +357,14 @@ public class Panel : Budgie.Toplevel
         add(main_layout);
 
         layout = new MainPanel(this.intended_size);
-        layout.vexpand = false;
-        vexpand = false;
-        main_layout.pack_start(layout, false, false, 0);
+        main_layout.pack_start(layout, true, true, 0);
         main_layout.valign = Gtk.Align.START;
 
         /* Shadow.. */
         shadow = new Budgie.ShadowBlock(this.position);
         shadow.no_show_all = true;
         shadow.hexpand = false;
-        shadow.halign = Gtk.Align.START;
+        shadow.halign = Gtk.Align.FILL;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
 
@@ -356,17 +373,16 @@ public class Panel : Budgie.Toplevel
         shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
-        this.bind_property("shadow-width", shadow, "removal");
         this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         start_box.halign = Gtk.Align.START;
-        layout.pack_start(start_box, true, true, 0);
+        layout.pack_start(start_box, false, false, 0);
         center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         layout.set_center_widget(center_box);
         end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
-        layout.pack_end(end_box, true, true, 0);
+        layout.pack_end(end_box, false, false, 0);
         end_box.halign = Gtk.Align.END;
 
         this.theme_regions = this.settings.get_boolean(Budgie.PANEL_KEY_REGIONS);
@@ -908,18 +924,74 @@ public class Panel : Budgie.Toplevel
     void placement()
     {
         Budgie.set_struts(this, position, (intended_size - 5)*this.scale);
+        bool horizontal = false;
+
         switch (position) {
             case Budgie.PanelPosition.TOP:
+                set_size_request(orig_scr.width, intended_size);
                 move(orig_scr.x, orig_scr.y);
-                resize(orig_scr.width, intended_size);
                 main_layout.child_set(shadow, "position", 1);
+                horizontal = true;
+                break;
+            case Budgie.PanelPosition.LEFT:
+                set_size_request(intended_size, orig_scr.height);
+                move(orig_scr.x, orig_scr.y);
+                main_layout.child_set(shadow, "position", 1);
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                set_size_request(intended_size, orig_scr.height);
+                get_window().move((orig_scr.x+orig_scr.width) - intended_size, orig_scr.y);
+                main_layout.child_set(shadow, "position", 0);
                 break;
             case Budgie.PanelPosition.BOTTOM:
             default:
                 move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
-                resize(orig_scr.width, intended_size);
+                set_size_request(orig_scr.width, intended_size);
                 main_layout.child_set(shadow, "position", 0);
+                horizontal = true;
                 break;
+        }
+
+        if (horizontal) {
+            start_box.halign = Gtk.Align.START;
+            center_box.halign = Gtk.Align.CENTER;
+            end_box.halign = Gtk.Align.END;
+
+            start_box.valign = Gtk.Align.FILL;
+            center_box.valign = Gtk.Align.FILL;
+            end_box.valign = Gtk.Align.FILL;
+
+            start_box.set_orientation(Gtk.Orientation.HORIZONTAL);
+            center_box.set_orientation(Gtk.Orientation.HORIZONTAL);
+            end_box.set_orientation(Gtk.Orientation.HORIZONTAL);
+            layout.set_orientation(Gtk.Orientation.HORIZONTAL);
+
+            main_layout.set_orientation(Gtk.Orientation.VERTICAL);
+            if (position == Budgie.PanelPosition.BOTTOM) {
+                main_layout.valign = Gtk.Align.FILL;
+            } else {
+                main_layout.valign = Gtk.Align.START;
+            }
+            main_layout.halign = Gtk.Align.FILL;
+            main_layout.hexpand = false;
+        } else {
+            start_box.halign = Gtk.Align.FILL;
+            center_box.halign = Gtk.Align.FILL;
+            end_box.halign = Gtk.Align.FILL;
+
+            start_box.valign = Gtk.Align.START;
+            center_box.valign = Gtk.Align.CENTER;
+            end_box.valign = Gtk.Align.END;
+
+            start_box.set_orientation(Gtk.Orientation.VERTICAL);
+            center_box.set_orientation(Gtk.Orientation.VERTICAL);
+            end_box.set_orientation(Gtk.Orientation.VERTICAL);
+            layout.set_orientation(Gtk.Orientation.VERTICAL);
+
+            main_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
+            main_layout.valign = Gtk.Align.FILL;
+            main_layout.halign = Gtk.Align.START;
+            main_layout.hexpand = true;
         }
     }
 

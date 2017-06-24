@@ -32,9 +32,9 @@ class Screen : Object {
 }
 
 /**
- * Maximum slots set to 2 because Raven has a side in this.
+ * Permit a slot for each edge of the screen
  */
-public const uint MAX_SLOTS         = 2;
+public const uint MAX_SLOTS         = 4;
 
 /**
  * Root prefix for fixed schema
@@ -834,7 +834,7 @@ public class PanelManager : DesktopManager
         PanelPosition old = panel.position;
 
         if (old == position) {
-            warning("Attempting to move panel to the same position it's already in: %s", uuid);
+            warning("Attempting to move panel to the same position it's already in: %s %s %s", uuid, old.to_string(), position.to_string());
             return;
         }
 

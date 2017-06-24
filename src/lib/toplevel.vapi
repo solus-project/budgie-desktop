@@ -12,7 +12,6 @@
 namespace Budgie {
     [CCode (cheader_filename = "BudgieToplevel.h")]
     public abstract class Toplevel : Gtk.Window {
-        public int shadow_width {  set ; get; }
         public int intended_size { set ; get; }
         public int shadow_depth { set ;  get; }
         public bool shadow_visible { set ; get; }
@@ -32,8 +31,6 @@ namespace Budgie {
 
         public abstract void move_applet_left(Budgie.AppletInfo? info);
         public abstract void move_applet_right(Budgie.AppletInfo? info);
-
-        public virtual void reset_shadow();
 
         public abstract void add_new_applet(string id);
         public abstract void remove_applet(Budgie.AppletInfo? info);

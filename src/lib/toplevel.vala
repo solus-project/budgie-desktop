@@ -16,11 +16,6 @@ public abstract class Toplevel : Gtk.Window
 {
 
     /**
-     * Length of our shadow component, to enable Raven blending
-     */
-    public int shadow_width { public set ; public get; }
-
-    /**
      * Depth of our shadow component, to enable Raven blending
      */
     public int shadow_depth { public set ; public get; default = 5; }
@@ -41,7 +36,6 @@ public abstract class Toplevel : Gtk.Window
     public Budgie.PanelPosition position { public set; public get; default = Budgie.PanelPosition.BOTTOM; }
     public Budgie.PanelTransparency transparency { public set; public get; default = Budgie.PanelTransparency.NONE; }
 
-    public virtual void reset_shadow() { }
 
     public abstract GLib.List<Budgie.AppletInfo?> get_applets();
     public signal void applet_added(Budgie.AppletInfo? info);

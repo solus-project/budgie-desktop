@@ -317,6 +317,10 @@ public class PanelEditor : Gtk.Box
         model.set(iter, 0, "top", 1, _("Top"), -1);
         model.append(out iter);
         model.set(iter, 0, "bottom", 1, _("Bottom"), -1);
+        model.append(out iter);
+        model.set(iter, 0, "left", 1, _("Left"), -1);
+        model.append(out iter);
+        model.set(iter, 0, "right", 1, _("Right"), -1);
         combobox_position.set_model(model);
         combobox_position.set_id_column(0);
         var render = new Gtk.CellRendererText();
