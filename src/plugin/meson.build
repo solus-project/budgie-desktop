@@ -87,14 +87,18 @@ if get_option('with-introspection') == true
             '--c-include', 'plugin.h',
         ],
     )
-endif
 
-# Install the (hand written..) vapi binding
-plugin_vapi = [
-    'budgie-1.0.vapi',
-    'budgie-1.0.deps',
-]
-install_data(plugin_vapi, install_dir: join_paths(get_option('datadir'), 'vala', 'vapi'))
+    libplugin_vapi = gnome.generate_vapi(
+        'budgie-1.0',
+        sources: [libplugin_gir[0]],
+        packages: [
+            'gtk+-3.0',
+            'gio-unix-2.0',
+            'libpeas-1.0',
+        ],
+        install: true,
+    )
+endif
 
 # Install pkgconfig file to enable building against budgie-plugin
 pkgconfig.generate(
@@ -111,6 +115,7 @@ pkgconfig.generate(
         'gio-unix-2.0 >= 2.46.0',
     ],
 )
+
 
 link_libplugin = declare_dependency(
     link_with: libplugin,
