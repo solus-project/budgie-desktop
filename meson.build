@@ -11,14 +11,6 @@ project(
     ],
 )
 
-
-version_flags = [
-    '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_18',
-    '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_18',
-    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_46',
-    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_46',
-]
-
 am_cflags = [
     '-fstack-protector',
     '-pedantic',
@@ -33,7 +25,6 @@ am_cflags = [
     '-Wunreachable-code',
     '-Wall',
     '-W',
-    version_flags,
 ]
 
 add_global_arguments(am_cflags, language: 'c')
