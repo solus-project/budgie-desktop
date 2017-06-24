@@ -121,6 +121,8 @@ static GObject *budgie_popover_constructor(GType type, guint n_properties,
 
         /* Blame clang-format for weird wrapping */
         g_object_set(o,
+                     "app-paintable",
+                     TRUE,
                      "decorated",
                      FALSE,
                      "deletable",
@@ -803,10 +805,6 @@ static void budgie_popover_draw_tail(BudgiePopover *self, cairo_t *cr)
 {
         BudgieTail *tail = &(self->priv->tail);
 
-        /* Draw "through" the previous box-shadow */
-        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-        cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
-        cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
         cairo_move_to(cr, tail->start_x + tail->x_offset, tail->start_y + tail->y_offset);
         cairo_line_to(cr, tail->x + tail->x_offset, tail->y + tail->y_offset);
         cairo_line_to(cr, tail->end_x + tail->x_offset, tail->end_y + tail->y_offset);
@@ -833,8 +831,6 @@ static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr)
         self = BUDGIE_POPOVER(widget);
         tail = &(self->priv->tail);
         fl = GTK_STATE_FLAG_VISITED;
-
-        cairo_set_antialias(cr, CAIRO_ANTIALIAS_SUBPIXEL);
 
         style = gtk_widget_get_style_context(widget);
         gtk_widget_get_allocation(widget, &alloc);
@@ -908,8 +904,6 @@ static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr)
         }
 
         cairo_set_line_width(cr, 1.3);
-        cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL);
         cairo_set_source_rgba(cr,
                               border_color.red,
                               border_color.green,
