@@ -485,26 +485,31 @@ popover row,
 
 .budgie-popover,
 .budgie-popover.background {
-    @extend %reset_style;
-    margin: 5px;
-
     border-radius: 3px;
     background-clip: border-box;
-    background-color: #353945;
     box-shadow: 0 2px 3px 1px transparentize(black, 0.65);
-    border-color: #353945;
+    border: 1px solid #{"@borders"};
+}
+
+.budgie-popover .container,
+.budgie-popover .container > border {
+    @extend %reset_style;
+}
+
+.budgie-popover > .container {
+    padding: 2px;
 }
 
 // Budgie Menu
 .budgie-menu {
-    padding : 0;
+    .container { padding: 0; }
 
     button:hover { -gtk-icon-effect: none; }
 
     entry.search {
         @extend %reset_style;
 
-        padding: 8px 5px;
+        padding: 12px 5px;
         border-bottom: 1px solid #{"@borders"};
         border-radius: 0;
         font-size: 120%;
@@ -554,10 +559,12 @@ button.budgie-menu-launcher {
 
 // User Menu
 .user-menu {
-    padding: 10px;
-
     .content-box separator {
         background-color: #{"alpha(@theme_fg_color, 0.15)"};
+    }
+
+    .container {
+        padding: 10px;
     }
 }
 
@@ -569,7 +576,7 @@ button.raven-trigger {
 
 // Places Menu
 .places-menu {
-    padding: 0;
+    .container { padding: 0; }
 
     .message-bar {
         border-top-left-radius: 3px;
@@ -641,7 +648,7 @@ button.raven-trigger {
 
 // Night Light indicator
 .night-light-indicator {
-    padding: 0px;
+    .container { padding: 0; }
 
     .view-header {
         font-size: 14px;

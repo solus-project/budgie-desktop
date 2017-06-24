@@ -26,6 +26,7 @@ BUDGIE_END_PEDANTIC
 #define TAIL_DIMENSION 16
 #define TAIL_HEIGHT TAIL_DIMENSION / 2
 #define SHADOW_DIMENSION 4
+#define BORDER_WIDTH 1
 
 /*
  * Used for storing BudgieTail calculations
@@ -216,7 +217,9 @@ static void budgie_popover_init(BudgiePopover *self)
         gtk_window_set_wmclass(GTK_WINDOW(self), "budgie-popover", "budgie-popover");
         G_GNUC_END_IGNORE_DEPRECATIONS
 
-        self->priv->add_area = gtk_event_box_new();
+        self->priv->add_area = gtk_frame_new(NULL);
+        style = gtk_widget_get_style_context(GTK_WIDGET(self->priv->add_area));
+        gtk_style_context_add_class(style, "container");
         gtk_container_add(GTK_CONTAINER(self), self->priv->add_area);
         gtk_widget_show_all(self->priv->add_area);
 
@@ -396,26 +399,26 @@ static void budgie_popover_update_position_hints(BudgiePopover *self)
         case GTK_POS_BOTTOM:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             4,
+                             5,
                              "margin-bottom",
-                             12,
+                             13,
                              "margin-start",
-                             4,
+                             5,
                              "margin-end",
-                             4,
+                             5,
                              NULL);
                 style_class = "bottom";
                 break;
         case GTK_POS_TOP:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             8,
+                             9,
                              "margin-bottom",
-                             8,
+                             9,
                              "margin-start",
-                             4,
+                             5,
                              "margin-end",
-                             4,
+                             5,
                              NULL);
                 style_class = "top";
                 break;
@@ -660,7 +663,7 @@ static void budgie_popover_compute_tail(BudgiePopover *self)
                 break;
         case GTK_POS_TOP:
                 t.x = (alloc.x + alloc.width / 2);
-                t.y = alloc.y;
+                t.y = alloc.y + BORDER_WIDTH;
                 t.start_x = t.x - TAIL_HEIGHT;
                 t.end_x = t.start_x + TAIL_DIMENSION;
                 t.start_y = t.y + TAIL_HEIGHT;
