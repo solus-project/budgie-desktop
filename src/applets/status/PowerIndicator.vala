@@ -103,19 +103,17 @@ public class PowerIndicator : Gtk.Bin
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         ebox.add(widget);
 
-        var menu = new GLib.Menu();
-        menu.append(_("Power settings"), "power.settings");
-
-        // TODO: Port to non model cruft
-        //popover = new Gtk.Popover.from_model(ebox, menu);
         popover = new Budgie.Popover(ebox);
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
+        box.border_width = 6;
+        popover.add(box);
 
-        var group = new GLib.SimpleActionGroup();
-        var power = new GLib.SimpleAction("settings", null);
-        power.activate.connect(open_power_settings);
-        group.add_action(power);
+        var button = new Gtk.Button.with_label(_("Power settings"));
+        button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        button.clicked.connect(open_power_settings);
+        box.pack_start(button, false, false, 0);
+        box.show_all();
 
-        this.insert_action_group("power", group);
         client = new Up.Client();
 
         this.sync_devices();
@@ -134,7 +132,10 @@ public class PowerIndicator : Gtk.Bin
     }
 
     void open_power_settings() {
+        popover.hide();
+
         var app_info = new DesktopAppInfo("gnome-power-panel.desktop");
+
         if (app_info == null) {
             return;
         }
