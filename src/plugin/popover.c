@@ -263,13 +263,12 @@ static void budgie_popover_map(GtkWidget *widget)
 
         /* Work out where we go on screen now */
         budgie_popover_compute_positition(self, &coords);
-        gtk_widget_queue_draw(widget);
 
         /* Forcibly request focus */
         window = gtk_widget_get_window(widget);
         gdk_window_set_accept_focus(window, TRUE);
         gdk_window_focus(window, GDK_CURRENT_TIME);
-        gtk_window_move(GTK_WINDOW(widget), coords.x, coords.y);
+        gdk_window_move(window, coords.x, coords.y);
         gtk_window_present(GTK_WINDOW(widget));
 
         budgie_popover_grab(BUDGIE_POPOVER(widget));
@@ -291,24 +290,29 @@ static void budgie_popover_unmap(GtkWidget *widget)
  * Upon having our contents resize us, i.e. a #GtkStack or #GtkRevealer, we
  * re-calculate our position to ensure we resize in the right direction.
  */
-static void budgie_popover_size_allocate(GtkWidget *widget, GdkRectangle *rectangle, gpointer udata)
+static void budgie_popover_size_allocate(GtkWidget *widget,
+                                         __budgie_unused__ GdkRectangle *rectangle,
+                                         __budgie_unused__ gpointer udata)
 {
         GdkRectangle coords = { 0 };
         BudgiePopover *self = NULL;
+        GdkWindow *window = NULL;
 
         if (!gtk_widget_get_realized(widget)) {
                 return;
         }
 
-        /* TODO: Add a cheap hack where we don't need to move our position
-         * if we extend downwards (TOP/LEFT)
-         */
-
         self = BUDGIE_POPOVER(widget);
+        /* We never have to move the window in these cases */
+        if (self->priv->tail.position == GTK_POS_TOP || self->priv->tail.position == GTK_POS_LEFT) {
+                return;
+        }
+
+        window = gtk_widget_get_window(widget);
 
         /* Work out where we go on screen now */
         budgie_popover_compute_positition(self, &coords);
-        gtk_window_move(GTK_WINDOW(widget), coords.x, coords.y);
+        gdk_window_move(window, coords.x, coords.y);
 }
 
 /**
