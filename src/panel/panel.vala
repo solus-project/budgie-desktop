@@ -30,25 +30,12 @@ public interface BudgieWMDBUS : Object
  */
 public class MainPanel : Gtk.Box
 {
-    public int intended_size { public get ; public set ; }
 
-    public MainPanel(int size)
+    public MainPanel()
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, baseline_position: Gtk.BaselinePosition.CENTER);
-        this.intended_size = size;
         get_style_context().add_class("budgie-panel");
         get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
-    }
-
-    public override void get_preferred_height(out int m, out int n)
-    {
-        m = intended_size - 5;
-        n = intended_size - 5;
-    }
-    public override void get_preferred_height_for_width(int w, out int m, out int n)
-    {
-        m = intended_size - 5;
-        n = intended_size - 5;
     }
 
     public void set_transparent(bool transparent) {
@@ -65,19 +52,14 @@ public class MainPanel : Gtk.Box
  */
 public class Panel : Budgie.Toplevel
 {
-
-    Gdk.Rectangle scr;
-    Gdk.Rectangle small_scr;
-    Gdk.Rectangle orig_scr;
-
     Gtk.Box layout;
     Gtk.Box main_layout;
+    Gdk.Rectangle orig_scr;
 
     public Settings settings { construct set ; public get; }
     private unowned Budgie.PanelManager? manager;
 
     PopoverManager? popover_manager;
-    bool expanded = true;
     BudgieWMDBUS? wm_proxy = null;
 
     Budgie.ShadowBlock shadow;
@@ -189,8 +171,9 @@ public class Panel : Budgie.Toplevel
      */
     public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int size = 0)
     {
-        Gdk.Rectangle small = screen;
+        this.orig_scr = screen;
         string old_class = Budgie.position_class_name(this.position);
+
         if (old_class != "") {
             this.get_style_context().remove_class(old_class);
         }
@@ -200,32 +183,15 @@ public class Panel : Budgie.Toplevel
         }
 
         this.settings.set_int(Budgie.PANEL_KEY_SIZE, size);
-
         this.intended_size = size;
-
         this.get_style_context().add_class(Budgie.position_class_name(position));
 
-        switch (position) {
-            case PanelPosition.TOP:
-            case PanelPosition.BOTTOM:
-                small.height = intended_size;
-                break;
-            default:
-                small.width = intended_size;
-                break;
-        }
         if (position != this.position) {
             this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
         }
-        this.position = position;
-        this.small_scr = small;
-        this.orig_scr = screen;
 
-        if (this.expanded) {
-            this.scr = this.orig_scr;
-        } else {
-            this.scr = this.small_scr;
-        }
+        this.position = position;
+
         shadow.required_size = orig_scr.width;
         this.shadow.position = position;
         this.layout.queue_resize();
@@ -375,7 +341,7 @@ public class Panel : Budgie.Toplevel
             this.placement();
         });
 
-        popover_manager = new PopoverManagerImpl(this);
+        popover_manager = new PopoverManager();
         pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
         applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
@@ -395,8 +361,7 @@ public class Panel : Budgie.Toplevel
         main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_layout);
 
-
-        layout = new MainPanel(intended_size);
+        layout = new MainPanel();
         layout.vexpand = false;
         vexpand = false;
         main_layout.pack_start(layout, false, false, 0);
@@ -416,7 +381,6 @@ public class Panel : Budgie.Toplevel
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
         this.bind_property("shadow-width", shadow, "removal");
-        this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
@@ -434,7 +398,6 @@ public class Panel : Budgie.Toplevel
         this.update_theme_regions();
 
         get_child().show_all();
-        set_expanded(false);
 
         this.manager.extension_loaded.connect_after(this.on_extension_loaded);
 
@@ -967,94 +930,19 @@ public class Panel : Budgie.Toplevel
         placement();
     }
 
-    public override void get_preferred_width(out int m, out int n)
-    {
-        int x, j;
-        base.get_preferred_width(out x, out j);
-        m = scr.width;
-        n = scr.width;
-    }
-    public override void get_preferred_width_for_height(int h, out int m, out int n)
-    {
-        int x, j;
-        base.get_preferred_width_for_height(h, out x, out j);
-        m = scr.width;
-        n = scr.width;
-    }
-
-    public override void get_preferred_height(out int m, out int n)
-    {
-        int x, j;
-        base.get_preferred_height(out x, out j);
-        m = scr.height;
-        n = scr.height;
-    }
-    public override void get_preferred_height_for_width(int w, out int m, out int n)
-    {
-        int x, j;
-        base.get_preferred_height_for_width(w, out x, out j);
-        m = scr.height;
-        n = scr.height;
-    }
-
-    public void set_expanded(bool expanded)
-    {
-        if (this.expanded == expanded) {
-            return;
-        }
-        this.expanded = expanded;
-        if (!expanded) {
-            if (wm_proxy != null) {
-                try {
-                    this.wm_proxy.restore_focused();
-                } catch (Error e) {
-                    message("Error with wm_proxy: %s", e.message);
-                }
-            }
-            scr = small_scr;
-        } else {
-            if (wm_proxy != null) {
-                try {
-                    this.wm_proxy.store_focused();
-                } catch (Error e) {
-                    message("Error with wm_proxy: %s", e.message);
-                }
-            }
-            scr = orig_scr;
-        }
-
-        Gtk.Allocation alloc = Gtk.Allocation() {
-            x = 0,
-            y = 0,
-            width = scr.width,
-            height = scr.height
-        };
-        set_allocation(alloc);
-        queue_resize();
-
-        while (Gtk.events_pending()) {
-            Gtk.main_iteration();
-        }
-    }
-
     void placement()
     {
         Budgie.set_struts(this, position, (intended_size - 5)*this.scale);
         switch (position) {
             case Budgie.PanelPosition.TOP:
-                if (main_layout.valign != Gtk.Align.START) {
-                    main_layout.valign = Gtk.Align.START;
-                }
-                set_gravity(Gdk.Gravity.NORTH_WEST);
                 move(orig_scr.x, orig_scr.y);
+                resize(orig_scr.width, intended_size);
                 main_layout.child_set(shadow, "position", 1);
                 break;
+            case Budgie.PanelPosition.BOTTOM:
             default:
-                if (main_layout.valign != Gtk.Align.END) {
-                    main_layout.valign = Gtk.Align.END;
-                }
-                set_gravity(Gdk.Gravity.SOUTH_WEST);
                 move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
+                resize(orig_scr.width, intended_size);
                 main_layout.child_set(shadow, "position", 0);
                 break;
         }

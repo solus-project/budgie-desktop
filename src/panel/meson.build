@@ -26,6 +26,7 @@ panel_sources = [
 ]
 
 panel_deps = [
+    libplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_libuuid,
@@ -44,12 +45,10 @@ top_vapidir = join_paths(meson.source_root(), 'vapi')
 budgie_panel_vala_args = [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
-        '--vapidir', dir_libplugin,
         '--vapidir', top_vapidir,
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
-        '--pkg', 'budgie-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
