@@ -10,7 +10,9 @@ $asset_suffix: if($variant == 'default', '', '-hc');
 // Used to reset all style properties set by the gtk theme
 %reset_style,
 popover list,
-popover row {
+popover row,
+.budgie-popover list,
+.budgie-popover row {
     background: none;
     border: none;
     box-shadow: none;
@@ -479,6 +481,15 @@ popover row {
             }
         }
     }
+}
+
+.budgie-popover,
+.budgie-popover.background {
+    border-radius: 3px;
+    background-clip: border-box;
+    background-color: #353945;
+    box-shadow: 0 2px 3px 1px transparentize(black, 0.65);
+    border-color: #353945;
 }
 
 // Budgie Menu
