@@ -19,7 +19,7 @@ BUDGIE_BEGIN_PEDANTIC
 #include <gtk/gtk.h>
 BUDGIE_END_PEDANTIC
 
-/**
+/*
  * We'll likely take this from a style property in future, but for now it
  * is both the width and height of a tail
  */
@@ -27,7 +27,7 @@ BUDGIE_END_PEDANTIC
 #define TAIL_HEIGHT TAIL_DIMENSION / 2
 #define SHADOW_DIMENSION 4
 
-/**
+/*
  * Used for storing BudgieTail calculations
  */
 typedef struct BudgieTail {
@@ -229,7 +229,10 @@ static void budgie_popover_unmap(GtkWidget *widget)
 }
 
 /**
- * We did a thing, so update our position to match our size
+ * budgie_popover_size_allocate:
+ *
+ * Upon having our contents resize us, i.e. a #GtkStack or #GtkRevealer, we
+ * re-calculate our position to ensure we resize in the right direction.
  */
 static void budgie_popover_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
@@ -252,6 +255,8 @@ static void budgie_popover_size_allocate(GtkWidget *widget, GtkAllocation *alloc
 }
 
 /**
+ * budgie_popover_grab:
+ *
  * Grab the input events using the GdkSeat
  */
 static void budgie_popover_grab(BudgiePopover *self)
@@ -286,6 +291,8 @@ static void budgie_popover_grab(BudgiePopover *self)
 }
 
 /**
+ * budgie_popover_ungrab:
+ *
  * Ungrab a previous grab by this widget
  */
 static void budgie_popover_ungrab(BudgiePopover *self)
@@ -306,6 +313,8 @@ static void budgie_popover_ungrab(BudgiePopover *self)
 }
 
 /**
+ * budgie_popover_grab_broken:
+ *
  * Grab was broken, most likely due to a window within our application
  */
 static gboolean budgie_popover_grab_broken(GtkWidget *widget, __budgie_unused__ GdkEvent *event,
@@ -319,6 +328,8 @@ static gboolean budgie_popover_grab_broken(GtkWidget *widget, __budgie_unused__ 
 }
 
 /**
+ * budgie_popover_grab_notify:
+ *
  * Grab changed _within_ the application
  *
  * If our grab was broken, i.e. due to some popup menu, and we're still visible,
@@ -348,6 +359,8 @@ static void budgie_popover_grab_notify(GtkWidget *widget, gboolean was_grabbed,
 }
 
 /**
+ * budgie_popover_compute_geometry:
+ *
  * Work out the geometry for the relative_to widget in absolute coordinates
  * on the screen.
  */
@@ -374,6 +387,8 @@ static void budgie_popover_compute_widget_geometry(GtkWidget *parent_widget, Gdk
 }
 
 /**
+ * budgie_popover_get_screen_for_widget:
+ *
  * Use the appropriate function to find out the monitor's resolution for the
  * given @widget.
  */
@@ -397,6 +412,8 @@ static void budgie_popover_get_screen_for_widget(GtkWidget *widget, GdkRectangle
 }
 
 /**
+ * budgie_popover_select_position_toplevel:
+ *
  * Select the position of the popover tail (and extend outwards from it)
  * based on the hints provided by the toplevel
  */
@@ -423,6 +440,8 @@ static GtkPositionType budgie_popover_select_position_toplevel(BudgiePopover *se
 }
 
 /**
+ * budgie_popover_select_position_automatic:
+ *
  * Select the position based on the amount of space available in the given
  * regions.
  *
@@ -460,6 +479,8 @@ static GtkPositionType budgie_popover_select_position_automatic(gint our_height,
 }
 
 /**
+ * budgie_popover_compute_position:
+ *
  * Work out exactly where the popover needs to appear on screen
  *
  * This will try to account for all potential positions, using a fairly
@@ -675,7 +696,9 @@ static void budgie_popover_compute_tail(BudgiePopover *self)
 }
 
 /**
- * Draw the actual tail itself.
+ * budgie_popover_draw_tail:
+ *
+ * Draw the popover's tail section.
  */
 static void budgie_popover_draw_tail(BudgiePopover *self, cairo_t *cr)
 {
@@ -692,7 +715,9 @@ static void budgie_popover_draw_tail(BudgiePopover *self, cairo_t *cr)
 }
 
 /**
- * Override the drawing to provide a tail region
+ * budgie_popover_draw:
+ *
+ * Handle the main rendering + clipping of the BudgiePopover
  */
 static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr)
 {
@@ -821,6 +846,8 @@ static gboolean budgie_popover_hide_self(gpointer v)
 }
 
 /**
+ * budgie_popover_button_press:
+ *
  * If the mouse button is pressed outside of our window, that's our cue to close.
  */
 static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *button,
@@ -845,6 +872,8 @@ static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *b
 }
 
 /**
+ * budgie_popover_key_press:
+ *
  * If the Escape key is pressed, then we also need to close.
  */
 static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key,
@@ -858,6 +887,8 @@ static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key,
 }
 
 /**
+ * budgie_popover_disconnect:
+ *
  * Our associated widget has died, so we must unref ourselves now.
  */
 static void budgie_popover_disconnect(__budgie_unused__ GtkWidget *relative_to, BudgiePopover *self)
@@ -952,10 +983,9 @@ GtkWidget *budgie_popover_new(GtkWidget *relative_to)
 
 /**
  * budgie_popover_set_position_policy:
+ * @policy:(type BudgiePopoverPositionPolicy): New policy to set
  *
  * Set the positioning policy employed by the popover
- *
- * @policy: New policy to use for positioning the popover
  */
 void budgie_popover_set_position_policy(BudgiePopover *self, BudgiePopoverPositionPolicy policy)
 {

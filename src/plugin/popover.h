@@ -57,7 +57,7 @@ typedef enum {
 #define BUDGIE_POPOVER_GET_CLASS(o)                                                                \
         (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER, BudgiePopoverClass))
 
-/**
+/*
  * API Methods
  */
 
