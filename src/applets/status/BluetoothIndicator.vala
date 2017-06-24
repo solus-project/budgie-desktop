@@ -27,9 +27,10 @@ public class BluetoothIndicator : Gtk.Bin
     private Gtk.TreeModel? model = null;
     public Budgie.Popover? popover = null;
 
-    SimpleAction? send_to = null;
-    SimpleAction? airplane = null;
     Rfkill? killer = null;
+
+    Gtk.CheckButton radio_airplane;
+    Gtk.Button send_to;
 
     async void setup_dbus()
     {
@@ -108,12 +109,12 @@ public class BluetoothIndicator : Gtk.Bin
 
         if (n_devices > 0) {
             lbl = ngettext("Connected to %d device", "Connected to %d devices", n_devices).printf(n_devices);
-            send_to.set_enabled(true);
+            send_to.set_sensitive(true);
         } else if (n_devices < 0) {
             hide();
             return;
         } else {
-            send_to.set_enabled(false);
+            send_to.set_sensitive(false);
         }
 
         /* TODO: Determine if bluetooth is actually active (rfkill) */
@@ -161,33 +162,43 @@ public class BluetoothIndicator : Gtk.Bin
 
         ebox.add(image);
 
+        // Create our popover
+        popover = new Budgie.Popover(ebox);
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
+        box.border_width = 6;
+        popover.add(box);
+
+        // Settings button
+        var button = new Gtk.Button.with_label(_("Bluetooth Settings"));
+        button.get_child().set_halign(Gtk.Align.START);
+        button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        button.clicked.connect(on_settings_activate);
+        box.pack_start(button, false, false, 0);
+
+        // Send files button
+        send_to = new Gtk.Button.with_label(_("Send Files"));
+        send_to.get_child().set_halign(Gtk.Align.START);
+        send_to.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        send_to.clicked.connect(on_send_file);
+        box.pack_start(send_to, false, false, 0);
+
+        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        box.pack_start(sep, false, false, 1);
+
+        // Airplane mode
+        radio_airplane = new Gtk.CheckButton.with_label(_("Bluetooth Airplane Mode"));
+        radio_airplane.get_child().set_property("margin", 4);
+        radio_airplane.clicked.connect(on_set_airplane);
+        box.pack_start(radio_airplane, false, false, 0);
+
+        // Ensure all content is shown
+        box.show_all();
+
         client = new Bluetooth.Client();
         model = client.get_model();
         model.row_changed.connect(() => { resync(); });
         model.row_deleted.connect(() => { resync(); });
         model.row_inserted.connect(() => { resync(); });
-
-        var menu = new GLib.Menu();
-        menu.append(_("Bluetooth Settings"), "bluetooth.settings");
-        menu.append(_("Send Files"), "bluetooth.send-file");
-        menu.append(_("Bluetooth Airplane Mode"), "bluetooth.airplane-mode");
-
-        // TODO: Port, drop menu model shite
-        popover = new Budgie.Popover(ebox);
-
-        var group = new GLib.SimpleActionGroup();
-        var settings = new GLib.SimpleAction("settings", null);
-        settings.activate.connect(on_settings_activate);
-        group.add_action(settings);
-
-        send_to = new GLib.SimpleAction("send-file", null);
-        send_to.activate.connect(on_send_file);
-        group.add_action(send_to);
-
-        airplane = new GLib.SimpleAction.stateful("airplane-mode", null, new Variant.boolean(true));
-        airplane.activate.connect(on_set_airplane);
-        group.add_action(airplane);
-        this.insert_action_group("bluetooth", group);
 
         this.resync();
 
@@ -204,7 +215,7 @@ public class BluetoothIndicator : Gtk.Bin
     /* We set */
     void on_set_airplane()
     {
-        bool s = !(airplane.get_state().get_boolean());
+        bool s = !(radio_airplane.get_active());
         try {
             killer.BluetoothAirplaneMode = s;
         } catch (Error e) {
@@ -216,18 +227,16 @@ public class BluetoothIndicator : Gtk.Bin
     /* Notify */
     void on_airplane_change()
     {
-        bool b = killer.BluetoothAirplaneMode;
-        airplane.set_state(new Variant.boolean(b));
+        radio_airplane.set_active(killer.BluetoothAirplaneMode);
         this.resync();
     }
 
     void sync_rfkill()
     {
         bool b = killer.BluetoothAirplaneMode;
-
         var db = killer as DBusProxy;
         db.g_properties_changed.connect(on_airplane_change);
-        airplane.set_state(new Variant.boolean(b));
         this.resync();
+        radio_airplane.set_active(killer.BluetoothAirplaneMode);
     }
 } // End class
