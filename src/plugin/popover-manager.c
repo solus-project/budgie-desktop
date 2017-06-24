@@ -18,17 +18,12 @@ BUDGIE_BEGIN_PEDANTIC
 #include <gtk/gtk.h>
 BUDGIE_END_PEDANTIC
 
-struct _BudgiePopoverManagerClass {
-        GObjectClass parent_class;
-};
-
-struct _BudgiePopoverManager {
-        GObject parent;
+struct _BudgiePopoverManagerPrivate {
         GHashTable *popovers;
         BudgiePopover *active_popover;
 };
 
-G_DEFINE_TYPE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
 
 static gboolean budgie_popover_manager_enter_notify(BudgiePopoverManager *manager,
                                                     GdkEventCrossing *crossing, GtkWidget *widget);
@@ -47,8 +42,10 @@ static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover, 
 
 /**
  * budgie_popover_manager_new:
- *
+
  * Construct a new BudgiePopoverManager object
+ *
+ * Return value: A pointer to a new #BudgiePopoverManager object.
  */
 BudgiePopoverManager *budgie_popover_manager_new()
 {
@@ -65,7 +62,7 @@ static void budgie_popover_manager_dispose(GObject *obj)
         BudgiePopoverManager *self = NULL;
 
         self = BUDGIE_POPOVER_MANAGER(obj);
-        g_clear_pointer(&self->popovers, g_hash_table_unref);
+        g_clear_pointer(&self->priv->popovers, g_hash_table_unref);
 
         G_OBJECT_CLASS(budgie_popover_manager_parent_class)->dispose(obj);
 }
@@ -90,10 +87,12 @@ static void budgie_popover_manager_class_init(BudgiePopoverManagerClass *klazz)
  */
 static void budgie_popover_manager_init(BudgiePopoverManager *self)
 {
+        self->priv = budgie_popover_manager_get_instance_private(self);
+
         /* We don't re-ref anything as we just effectively hold floating references
          * to the WhateverTheyAres
          */
-        self->popovers = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
+        self->priv->popovers = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
 }
 
 /**
@@ -114,7 +113,7 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidg
         g_assert(self != NULL);
         g_return_if_fail(parent_widget != NULL && popover != NULL);
 
-        if (g_hash_table_contains(self->popovers, parent_widget)) {
+        if (g_hash_table_contains(self->priv->popovers, parent_widget)) {
                 g_warning("register_popover(): Widget %p is already registered",
                           (gpointer)parent_widget);
                 return;
@@ -126,7 +125,7 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidg
 
         /* Stick it into the map and hook it up */
         budgie_popover_manager_link_signals(self, parent_widget, popover);
-        g_hash_table_insert(self->popovers, parent_widget, popover);
+        g_hash_table_insert(self->priv->popovers, parent_widget, popover);
 }
 
 /**
@@ -142,14 +141,14 @@ void budgie_popover_manager_unregister_popover(BudgiePopoverManager *self, GtkWi
         g_return_if_fail(parent_widget != NULL);
         BudgiePopover *popover = NULL;
 
-        popover = g_hash_table_lookup(self->popovers, parent_widget);
+        popover = g_hash_table_lookup(self->priv->popovers, parent_widget);
         if (!popover) {
                 g_warning("unregister_popover(): Widget %p is unknown", (gpointer)parent_widget);
                 return;
         }
 
         budgie_popover_manager_unlink_signals(self, parent_widget, popover);
-        g_hash_table_remove(self->popovers, parent_widget);
+        g_hash_table_remove(self->priv->popovers, parent_widget);
 }
 
 /**
@@ -176,7 +175,7 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager *self, GtkWidget *
         g_assert(self != NULL);
         g_return_if_fail(parent_widget != NULL);
 
-        popover = g_hash_table_lookup(self->popovers, parent_widget);
+        popover = g_hash_table_lookup(self->priv->popovers, parent_widget);
         if (!popover) {
                 g_warning("show_popover(): Widget %p is unknown", (gpointer)parent_widget);
                 return;
@@ -192,10 +191,10 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager *self, GtkWidget *
  */
 static void budgie_popover_manager_widget_died(BudgiePopoverManager *self, GtkWidget *child)
 {
-        if (!g_hash_table_contains(self->popovers, child)) {
+        if (!g_hash_table_contains(self->priv->popovers, child)) {
                 return;
         }
-        g_hash_table_remove(self->popovers, child);
+        g_hash_table_remove(self->priv->popovers, child);
 }
 
 /**
@@ -267,13 +266,13 @@ static gboolean budgie_popover_manager_enter_notify(BudgiePopoverManager *self,
         }
 
         /* Don't show the same popover again. :P */
-        if (target_popover == self->active_popover) {
+        if (target_popover == self->priv->active_popover) {
                 return GDK_EVENT_PROPAGATE;
         }
 
-        if (self->active_popover) {
-                gtk_widget_hide(GTK_WIDGET(self->active_popover));
-                self->active_popover = NULL;
+        if (self->priv->active_popover) {
+                gtk_widget_hide(GTK_WIDGET(self->priv->active_popover));
+                self->priv->active_popover = NULL;
         }
 
         g_idle_add(show_one_popover, target_popover);
@@ -318,7 +317,7 @@ static BudgiePopover *budgie_popover_manager_get_popover_for_coords(BudgiePopove
         GtkWidget *parent_widget = NULL;
         BudgiePopover *assoc_popover = NULL;
 
-        g_hash_table_iter_init(&iter, self->popovers);
+        g_hash_table_iter_init(&iter, self->priv->popovers);
         while (g_hash_table_iter_next(&iter, (void **)&parent_widget, (void **)&assoc_popover)) {
                 GtkAllocation alloc = { 0 };
                 GtkWidget *toplevel = NULL;
@@ -352,7 +351,7 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover,
                                                       __budgie_unused__ GdkEvent *event,
                                                       BudgiePopoverManager *self)
 {
-        self->active_popover = popover;
+        self->priv->active_popover = popover;
         return GDK_EVENT_PROPAGATE;
 }
 
@@ -366,8 +365,8 @@ static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover,
                                                         __budgie_unused__ GdkEvent *event,
                                                         BudgiePopoverManager *self)
 {
-        if (popover == self->active_popover) {
-                self->active_popover = NULL;
+        if (popover == self->priv->active_popover) {
+                self->priv->active_popover = NULL;
         }
         return GDK_EVENT_PROPAGATE;
 }

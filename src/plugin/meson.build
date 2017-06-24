@@ -66,34 +66,35 @@ install_headers(plugin_headers, subdir: 'budgie-desktop')
 
 # Generate .gir
 libplugin_gir = gnome.generate_gir(
-libplugin,
-sources: plugin_sources + plugin_headers + plugin_enums,
-namespace: 'Budgie',
-nsversion: '1.0',
-dependencies: plugin_deps,
-includes: [
-    'GObject-2.0',
-    'Gio-2.0',
-    'Gtk-3.0',
-    'Peas-1.0',
-],
-symbol_prefix: 'budgie',
-install: true,
-extra_args: [
-    '--warn-all',
-    '--c-include', 'plugin.h',
-],
+    libplugin,
+    sources: plugin_sources + plugin_headers + plugin_enums,
+    namespace: 'Budgie',
+    nsversion: '1.0',
+    dependencies: plugin_deps,
+    includes: [
+        'GObject-2.0',
+        'Gio-2.0',
+        'Gtk-3.0',
+        'Peas-1.0',
+    ],
+    symbol_prefix: 'budgie',
+    identifier_prefix: 'Budgie',
+    install: true,
+    extra_args: [
+        '--warn-all',
+        '--c-include', 'plugin.h',
+    ],
 )
 
 libplugin_vapi = gnome.generate_vapi(
-'budgie-1.0',
-sources: [libplugin_gir[0]],
-packages: [
-    'gtk+-3.0',
-    'gio-unix-2.0',
-    'libpeas-1.0',
-],
-install: true,
+    'budgie-1.0',
+    sources: [libplugin_gir[0]],
+    packages: [
+        'gtk+-3.0',
+        'gio-unix-2.0',
+        'libpeas-1.0',
+    ],
+    install: true,
 )
 
 # Install pkgconfig file to enable building against budgie-plugin

@@ -20,6 +20,16 @@ G_BEGIN_DECLS
 
 typedef struct _BudgiePopoverManager BudgiePopoverManager;
 typedef struct _BudgiePopoverManagerClass BudgiePopoverManagerClass;
+typedef struct _BudgiePopoverManagerPrivate BudgiePopoverManagerPrivate;
+
+struct _BudgiePopoverManagerClass {
+        GObjectClass parent_class;
+};
+
+struct _BudgiePopoverManager {
+        GObject parent;
+        BudgiePopoverManagerPrivate *priv;
+};
 
 #define BUDGIE_TYPE_POPOVER_MANAGER budgie_popover_manager_get_type()
 #define BUDGIE_POPOVER_MANAGER(o)                                                                  \
