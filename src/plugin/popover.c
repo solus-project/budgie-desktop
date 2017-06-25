@@ -357,10 +357,6 @@ static void budgie_popover_size_allocate(GtkWidget *widget,
         }
 
         self = BUDGIE_POPOVER(widget);
-        /* We never have to move the window in these cases */
-        if (self->priv->tail.position == GTK_POS_TOP) {
-                return;
-        }
 
         window = gtk_widget_get_window(widget);
 
