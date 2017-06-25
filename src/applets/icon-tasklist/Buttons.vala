@@ -399,14 +399,10 @@ public class IconButton : Gtk.ToggleButton
             aicon = ainfo.get_icon();
         }
 
-        if (this.helper.has_derpy_icon(window) && aicon != null) {
+        if (aicon != null) {
             image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
         } else {
-            if (aicon != null) {
-                image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
-            } else {
-                image.set_from_pixbuf(window.get_icon());
-            }
+            image.set_from_pixbuf(window.get_icon());
         }
 
         image.pixel_size = icon_size;

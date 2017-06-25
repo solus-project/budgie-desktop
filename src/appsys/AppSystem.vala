@@ -21,8 +21,6 @@ public class AppSystem : GLib.Object
     HashTable<string?,string?> exec_cache = null;
     AppInfoMonitor? monitor = null;
 
-    string[]? derpers;
-
     bool invalidated = false;
 
     public AppSystem()
@@ -36,20 +34,6 @@ public class AppSystem : GLib.Object
         simpletons["psppire"] = "pspp";
         simpletons["gnome-twitch"] = "com.vinszent.gnometwitch";
 
-        derpers = new string[] {
-            "atom",
-            "calibre-gui",
-            "dia",
-            "freeorion",
-            "fbreader",
-            "google-chrome",
-            "hexchat",
-            "pale moon",
-            "spotify",
-            "steam",
-            "telegram",
-            "zim",
-        };
 
         monitor = AppInfoMonitor.get();
         monitor.changed.connect(()=> {
@@ -61,23 +45,6 @@ public class AppSystem : GLib.Object
             });
         });
         reload_ids();
-    }
-
-    /**
-     * Determine if the app is forbidden from changing its icon through
-     * the icon-changed signal
-     */
-    public bool has_derpy_icon(Wnck.Window? window)
-    {
-        string? iname = window.get_class_instance_name();
-        if (iname == null) {
-            return false;
-        }
-        iname = iname.down();
-        if (iname in this.derpers) {
-            return true;
-        }
-        return false;
     }
 
     /**

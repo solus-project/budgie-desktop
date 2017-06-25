@@ -14,6 +14,5 @@ namespace Budgie {
     public class AppSystem : GLib.Object {
         public AppSystem();
         public DesktopAppInfo? query_window(Wnck.Window? window);
-        public bool has_derpy_icon(Wnck.Window? window);
     }
 }
