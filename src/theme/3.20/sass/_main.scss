@@ -693,6 +693,14 @@ button.raven-trigger {
         .bottom & {
             border-top-color: transparent;
         }
+
+        .left & {
+            border-right-color: transparent;
+        }
+
+        .right & {
+            border-left-color: transparent;
+        }
     }
 
     separator { background-color: transparentize($fg_color, 0.85) }

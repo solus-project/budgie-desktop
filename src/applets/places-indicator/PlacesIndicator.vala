@@ -53,6 +53,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
     private PlacesIndicatorWindow? popover;
     private Gtk.Label label;
     private Gtk.Image image;
+    private Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
     private unowned Budgie.PopoverManager? manager = null;
     private GLib.Settings settings;
@@ -80,10 +81,9 @@ public class PlacesIndicatorApplet : Budgie.Applet
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         ebox.add(layout);
         image = new Gtk.Image.from_icon_name("drive-harddisk-symbolic", Gtk.IconSize.MENU);
-        layout.pack_start(image, false, false, 3);
+        layout.pack_start(image, true, true, 3);
         label = new Gtk.Label(_("Places"));
         label.halign = Gtk.Align.START;
-        label.hide();
         layout.pack_start(label, true, true, 3);
 
         popover = new PlacesIndicatorWindow(image);
@@ -106,6 +106,12 @@ public class PlacesIndicatorApplet : Budgie.Applet
         on_settings_changed("show-places");
         on_settings_changed("show-drives");
         on_settings_changed("show-networks");
+    }
+
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        this.panel_position = position;
+        on_settings_changed("show-label");
     }
 
     public void toggle_popover()
@@ -133,7 +139,10 @@ public class PlacesIndicatorApplet : Budgie.Applet
         switch (key)
         {
             case "show-label":
-                label.set_visible(settings.get_boolean(key));
+                bool visible = (panel_position == Budgie.PanelPosition.TOP ||
+                                panel_position == Budgie.PanelPosition.BOTTOM) &&
+                                settings.get_boolean(key);
+                label.set_visible(visible);
                 break;
             case "expand-places":
                 popover.expand_places = settings.get_boolean(key);

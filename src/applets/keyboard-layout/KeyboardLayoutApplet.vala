@@ -229,6 +229,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
 {
     private Gtk.EventBox widget;
     private Gtk.EventBox img_wrap;
+    private Gtk.Box layout;
     private Gtk.Image img;
 
     /* Tracking input-source settings */
@@ -271,7 +272,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
         get_style_context().add_class("keyboard-indicator");
 
         /* Layout */
-        Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         widget.add(layout);
 
         /* Image */
@@ -279,7 +280,6 @@ public class KeyboardLayoutApplet : Budgie.Applet
         img_wrap = new Gtk.EventBox();
         img_wrap.add(img);
         layout.pack_start(img_wrap, false, false, 0);
-        img.set_margin_end(4);
         add(widget);
 
         /* Stack o' labels */
@@ -309,6 +309,18 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
         /* Go show up */
         show_all();
+    }
+
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+        int margin = 4;
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            orient = Gtk.Orientation.VERTICAL;
+            margin = 0;
+        }
+        img.set_margin_end(margin);
+        this.layout.set_orientation(orient);
     }
 
     /**
@@ -355,7 +367,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
             Gtk.EventBox wrap = new Gtk.EventBox();
             Gtk.Label displ_label = new Gtk.Label(kbinfo.layout);
             wrap.add(displ_label);
-            displ_label.set_halign(Gtk.Align.START);
+            displ_label.set_halign(Gtk.Align.FILL);
             wrap.get_style_context().add_class("keyboard-label");
 
             /* Pack the display label */

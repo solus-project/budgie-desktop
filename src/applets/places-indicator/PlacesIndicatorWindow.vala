@@ -109,12 +109,10 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         refresh_special_dirs();
         refresh_mounts();
 
-        this.unmap.connect(on_popover_closed);
-
         main_content.show_all();
     }
 
-    private void on_popover_closed()
+    public override void closed()
     {
         foreach (Gtk.Widget item in mounts_listbox.get_children()) {
             ListItem list_item = (ListItem) (item as Gtk.ListBoxRow).get_child();

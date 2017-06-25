@@ -84,6 +84,16 @@ public class SpacerApplet : Budgie.Applet
     {
         min = nat = space_size;
     }
+
+    public override void get_preferred_height(out int min, out int nat)
+    {
+        min = nat = space_size;
+    }
+
+    public override void get_preferred_height_for_width(int h, out int min, out int nat)
+    {
+        min = nat = space_size;
+    }
 }
 
 
