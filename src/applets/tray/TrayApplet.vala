@@ -27,6 +27,8 @@ public class TrayApplet : Budgie.Applet
     int width;
     int height;
 
+    Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+
     public TrayApplet()
     {
         box = new Gtk.EventBox();
@@ -55,6 +57,24 @@ public class TrayApplet : Budgie.Applet
         size_allocate.connect(on_size_allocate);
     }
 
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            this.orient = Gtk.Orientation.VERTICAL;
+        } else {
+            this.orient = Gtk.Orientation.HORIZONTAL;
+        }
+
+        if (tray == null) {
+            return;
+        }
+
+        this.box.remove(this.tray);
+        this.tray = null;
+        this.maybe_integrate_tray();
+        this.show_all();
+    }
+
     void on_size_allocate(Gtk.Allocation alloc)
     {
         if (!get_realized() || get_parent() == null) {
@@ -67,16 +87,58 @@ public class TrayApplet : Budgie.Applet
             this.get_toplevel().queue_resize();
         }
     }
+
+
     public override void get_preferred_height(out int m, out int n)
     {
-        m = icon_size;
-        n = icon_size;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            m = icon_size;
+            n = icon_size;
+            return;
+        }
+        int om, on;
+        base.get_preferred_height(out om, out on);
+        m = om;
+        n = on;
     }
 
     public override void get_preferred_height_for_width(int w, out int m, out int n)
     {
-        m = icon_size;
-        n = icon_size;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            m = icon_size;
+            n = icon_size;
+            return;
+        }
+        int om, on;
+        base.get_preferred_height_for_width(w, out om, out on);
+        m = om;
+        n = on;
+    }
+
+    public override void get_preferred_width(out int m, out int n)
+    {
+        if (this.orient == Gtk.Orientation.VERTICAL) {
+            m = icon_size;
+            n = icon_size;
+            return;
+        }
+        int om, on;
+        base.get_preferred_width(out om, out on);
+        m = om;
+        n = on;
+    }
+
+    public override void get_preferred_width_for_height(int h, out int m, out int n)
+    {
+        if (this.orient == Gtk.Orientation.VERTICAL) {
+            m = icon_size;
+            n = icon_size;
+            return;
+        }
+        int om, on;
+        base.get_preferred_width_for_height(h, out om, out on);
+        m = om;
+        n = on;
     }
 
     protected void maybe_integrate_tray()
@@ -85,7 +147,26 @@ public class TrayApplet : Budgie.Applet
             return;
         }
 
-        tray = new Na.Tray.for_screen(Gtk.Orientation.HORIZONTAL);
+        switch (this.orient) {
+        case Gtk.Orientation.HORIZONTAL:
+            valign = Gtk.Align.CENTER;
+            box.valign = Gtk.Align.CENTER;
+            box.halign = Gtk.Align.START;
+            halign = Gtk.Align.START;
+            box.vexpand = false;
+            vexpand = false;
+            break;
+        case Gtk.Orientation.VERTICAL:
+            valign = Gtk.Align.START;
+            box.valign = Gtk.Align.START;
+            box.halign = Gtk.Align.CENTER;
+            halign = Gtk.Align.CENTER;
+            box.vexpand = false;
+            vexpand = false;
+            break;
+        }
+
+        tray = new Na.Tray.for_screen(this.orient);
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
             add(label);
@@ -93,6 +174,7 @@ public class TrayApplet : Budgie.Applet
             return;
         }
         tray.set_icon_size(icon_size);
+        tray.set_size_request(-1, -1);
 
         Gdk.RGBA fg = {};
         Gdk.RGBA warning = {};
