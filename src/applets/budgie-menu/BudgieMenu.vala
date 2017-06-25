@@ -92,8 +92,7 @@ public class BudgieMenuApplet : Budgie.Applet
         img.no_show_all = true;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        layout.pack_start(img, false, false, 0);
-        img.margin_end = 3;
+        layout.pack_start(img, true, true, 0);
         label = new Gtk.Label("");
         label.halign = Gtk.Align.START;
         layout.pack_start(label, true, true, 3);
@@ -148,6 +147,9 @@ public class BudgieMenuApplet : Budgie.Applet
     public override void panel_position_changed(Budgie.PanelPosition position)
     {
         this.panel_position = position;
+        bool vertical = (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT);
+        int margin = vertical ? 0 : 3;
+        img.set_margin_end(margin);
         on_settings_changed("enable-menu-label");
     }
 
