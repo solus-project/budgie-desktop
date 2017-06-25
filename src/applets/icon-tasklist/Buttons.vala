@@ -597,6 +597,7 @@ public class PinnedIconButton : IconButton
     public void reset()
     {
         image.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+        image.set_pixel_size(this.icon_size);
         set_tooltip_text(app_info.get_display_name());
         get_style_context().remove_class("running");
         set_active(false);
