@@ -58,6 +58,7 @@ public class BudgieMenuApplet : Budgie.Applet
     protected Settings settings;
     Gtk.Image img;
     Gtk.Label label;
+    Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
     private unowned Budgie.PopoverManager? manager = null;
 
@@ -143,6 +144,12 @@ public class BudgieMenuApplet : Budgie.Applet
         });
     }
 
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        this.panel_position = position;
+        on_settings_changed("enable-menu-label");
+    }
+
     public override void invoke_action(Budgie.PanelAction action)
     {
         if ((action & Budgie.PanelAction.MENU) != 0) {
@@ -177,7 +184,10 @@ public class BudgieMenuApplet : Budgie.Applet
                 label.set_label(settings.get_string(key));
                 break;
             case "enable-menu-label":
-                label.set_visible(settings.get_boolean(key));
+                bool visible = (panel_position == Budgie.PanelPosition.TOP ||
+                                panel_position == Budgie.PanelPosition.BOTTOM) &&
+                                settings.get_boolean(key);
+                label.set_visible(visible);
                 break;
             default:
                 break;
