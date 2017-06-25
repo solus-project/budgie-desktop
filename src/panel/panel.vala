@@ -1003,6 +1003,8 @@ public class Panel : Budgie.Toplevel
             main_layout.hexpand = true;
             layout.valign = Gtk.Align.FILL;
         }
+
+        this.queue_resize();
     }
 
     private bool applet_at_start_of_region(Budgie.AppletInfo? info)
