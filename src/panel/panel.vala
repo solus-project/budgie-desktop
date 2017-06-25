@@ -295,8 +295,8 @@ public class Panel : Budgie.Toplevel
 
         var anim = new Budgie.Animation();
         anim.widget = this;
-        anim.length = 512 * Budgie.MSECOND;
-        anim.tween = Budgie.sine_ease_out;
+        anim.length = 360 * Budgie.MSECOND;
+        anim.tween = Budgie.expo_ease_out;
         anim.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
                 property = "nscale",
