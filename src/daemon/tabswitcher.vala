@@ -70,11 +70,11 @@ public class TabSwitcherWidget : Gtk.Image {
         set_property("margin", 10);
 
         if (info != null) {
-            set_from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
+            set_from_gicon(info.get_icon(), Gtk.IconSize.DND);
         } else {
             set_from_pixbuf(wnck_window.get_icon());
         }
-        set_pixel_size(48);
+        set_pixel_size(32);
         halign = Gtk.Align.CENTER;
         valign = Gtk.Align.CENTER;
     }
