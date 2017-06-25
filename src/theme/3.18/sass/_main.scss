@@ -647,6 +647,14 @@ GtkPopover GtkListBoxRow,
       .bottom & {
         border-top-color: transparent;
       }
+
+      .left & {
+        border-right-color: transparent;
+      }
+
+      .right & {
+        border-left-color: transparent;
+      }
     }
 
     .separator { color: transparentize($fg_color, 0.85) }
