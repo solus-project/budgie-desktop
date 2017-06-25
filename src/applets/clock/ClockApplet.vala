@@ -95,6 +95,7 @@ public class ClockApplet : Budgie.Applet
         } else {
             this.orient = Gtk.Orientation.HORIZONTAL;
         }
+        this.seconds_label.set_text("");
         this.layout.set_orientation(this.orient);
         this.update_clock();
     }
