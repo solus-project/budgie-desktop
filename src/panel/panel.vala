@@ -1192,13 +1192,28 @@ public class Panel : Budgie.Toplevel
         propagate_draw(get_child(), cr2);
         var d = (double) intended_size;
         var y = d * render_scale;
+        var x = d * render_scale;
 
-        /* Offset the buffer according to y-screen-edge */
-        if (position == PanelPosition.TOP) {
-            cr.set_source_surface(buffer, 0, -y);
-        } else {
-            cr.set_source_surface(buffer, 0, y);
+        switch (position) {
+            case Budgie.PanelPosition.TOP:
+                // Slide down into view
+                cr.set_source_surface(buffer, 0, -y);
+                break;
+            case Budgie.PanelPosition.LEFT:
+                // Slide into view from left
+                cr.set_source_surface(buffer, -x, 0);
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                // Slide back into view from right
+                cr.set_source_surface(buffer, x, 0);
+                break;
+            case Budgie.PanelPosition.BOTTOM:
+            default:
+                // Slide up into view
+                cr.set_source_surface(buffer, 0, y);
+                break;
         }
+
         cr.paint();
 
         return Gdk.EVENT_STOP;
