@@ -124,6 +124,8 @@ public class BluetoothIndicator : Gtk.Bin
 
     void on_settings_activate()
     {
+        this.popover.hide();
+
         var app_info = new DesktopAppInfo("gnome-bluetooth-panel.desktop");
         if (app_info == null) {
             return;
@@ -137,6 +139,8 @@ public class BluetoothIndicator : Gtk.Bin
 
     void on_send_file()
     {
+        this.popover.hide();
+
         try {
             var app_info = AppInfo.create_from_commandline("bluetooth-sendto", "Bluetooth Transfer", AppInfoCreateFlags.NONE);
             if (app_info == null) {
