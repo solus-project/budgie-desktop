@@ -116,7 +116,6 @@ public class RavenTriggerApplet : Budgie.Applet
 
     private void on_anchor_changed(bool left_anchor)
     {
-        message("Anchor changed");
         if (left_anchor) {
             this.raven_show_icon = "pane-hide-symbolic";
             this.raven_hide_icon = "pane-show-symbolic";
