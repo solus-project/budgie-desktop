@@ -358,7 +358,7 @@ static void budgie_popover_size_allocate(GtkWidget *widget,
 
         self = BUDGIE_POPOVER(widget);
         /* We never have to move the window in these cases */
-        if (self->priv->tail.position == GTK_POS_TOP || self->priv->tail.position == GTK_POS_LEFT) {
+        if (self->priv->tail.position == GTK_POS_TOP) {
                 return;
         }
 
@@ -640,12 +640,10 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
         case GTK_POS_LEFT:
                 /* We need to appear to the right of the widget */
                 y = (widget_rect.y + (widget_rect.height / 2)) - (our_height / 2);
-                y += TAIL_DIMENSION / 4;
                 x = widget_rect.x + widget_rect.width;
                 break;
         case GTK_POS_RIGHT:
                 y = (widget_rect.y + (widget_rect.height / 2)) - (our_height / 2);
-                y += TAIL_DIMENSION / 4;
                 x = widget_rect.x - our_width;
                 break;
         default:
@@ -662,6 +660,16 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
                 self->priv->tail.x_offset -=
                     ((display_geom.x + display_geom.width) - (our_width + pad_num)) - x;
                 x -= (int)(self->priv->tail.x_offset);
+        }
+
+        /* Bound Y to display height */
+        if (y < display_geom.y) {
+                self->priv->tail.y_offset += (y - (display_geom.y + pad_num));
+                y -= (int)(self->priv->tail.y_offset);
+        } else if ((y + our_height) >= display_geom.y + display_geom.height) {
+                self->priv->tail.y_offset -=
+                    ((display_geom.y + display_geom.height) - (our_height + pad_num)) - y;
+                y -= (int)(self->priv->tail.y_offset);
         }
 
         double display_tail_x = x + self->priv->tail.x + self->priv->tail.x_offset;
@@ -683,16 +691,6 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
         } else if (display_tail_y >= ((display_geom.y + display_geom.height) - required_offset_y)) {
                 self->priv->tail.y_offset -=
                     (display_tail_y + required_offset_y) - (display_geom.y + display_geom.height);
-        }
-
-        /* Bound Y to display height */
-        if (y < display_geom.y) {
-                self->priv->tail.y_offset += (y - (display_geom.y + pad_num));
-                y -= (int)(self->priv->tail.y_offset);
-        } else if ((y + our_height) >= display_geom.y + display_geom.height) {
-                self->priv->tail.y_offset -=
-                    ((display_geom.y + display_geom.height) - (our_height + pad_num)) - y;
-                y -= (int)(self->priv->tail.y_offset);
         }
 
         /* Set the target rectangle */
