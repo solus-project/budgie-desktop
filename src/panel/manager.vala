@@ -890,6 +890,7 @@ public class PanelManager : DesktopManager
     {
         Budgie.Toplevel? top = null;
         Budgie.Toplevel? bottom = null;
+        Budgie.Toplevel? right = null;
         Gdk.Rectangle raven_screen;
 
         string? key = null;
@@ -897,13 +898,19 @@ public class PanelManager : DesktopManager
         Screen? area = screens.lookup(primary_monitor);
         var iter = HashTableIter<string,Budgie.Panel?>(panels);
 
-        // First loop, find top and bottom
+        // First loop, edges that conflict with Raven
         while (iter.next(out key, out val)) {
-            if (val.position == Budgie.PanelPosition.TOP) {
+            switch (val.position) {
+            case Budgie.PanelPosition.TOP:
                 top = val;
-            } else if (val.position == Budgie.PanelPosition.BOTTOM) {
+                break;
+            case Budgie.PanelPosition.BOTTOM:
                 bottom = val;
-            } else {
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                right = val;
+                break;
+            default:
                 continue;
             }
         }
@@ -945,6 +952,11 @@ public class PanelManager : DesktopManager
         if (bottom != null) {
             raven_screen.height -= bottom.intended_size - 5;
         }
+
+        if (right != null) {
+            raven_screen.width -= (right.intended_size - 5);
+        }
+
         /* Let Raven update itself accordingly */
         raven.update_geometry(raven_screen);
         this.panels_changed();
