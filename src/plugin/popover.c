@@ -523,7 +523,6 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover *self)
 {
         GtkAllocation alloc = { 0 };
         GtkWidget *toplevel = NULL;
-        GdkWindow *toplevel_window = NULL;
         gint rx, ry = 0;
         gint x, y = 0;
         GdkRectangle display_geom = { 0 };
@@ -539,8 +538,7 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover *self)
         gtk_window_get_size(GTK_WINDOW(self), &our_width, &our_height);
 
         toplevel = gtk_widget_get_toplevel(self->priv->relative_to);
-        toplevel_window = gtk_widget_get_window(toplevel);
-        gdk_window_get_position(toplevel_window, &x, &y);
+        gtk_window_get_position(GTK_WINDOW(toplevel), &x, &y);
         gtk_widget_translate_coordinates(self->priv->relative_to, toplevel, x, y, &rx, &ry);
         gtk_widget_get_allocation(self->priv->relative_to, &alloc);
 
