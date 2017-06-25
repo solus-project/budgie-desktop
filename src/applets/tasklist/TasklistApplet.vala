@@ -33,6 +33,18 @@ public class TasklistApplet : Budgie.Applet
 
         show_all();
     }
+
+    /**
+     * Update the tasklist orientation to match the panel direction
+     */
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            orientation = Gtk.Orientation.VERTICAL;
+        }
+        tlist.set_orientation(orientation);
+    }
 }
 
 
