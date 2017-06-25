@@ -1,6 +1,7 @@
 budgie_applet_info_get_type
 budgie_applet_get_type
 budgie_panel_action_get_type
+budgie_panel_position_get_type
 budgie_plugin_get_type
 budgie_popover_position_policy_get_type
 budgie_popover_get_type

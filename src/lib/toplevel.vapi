@@ -38,16 +38,6 @@ namespace Budgie {
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
     [Flags]
-    public enum PanelPosition {
-        NONE,
-        BOTTOM,
-        TOP,
-        LEFT,
-        RIGHT
-    }
-
-    [CCode (cheader_filename = "BudgieToplevel.h")]
-    [Flags]
     public enum PanelTransparency {
         NONE,
         DYNAMIC,

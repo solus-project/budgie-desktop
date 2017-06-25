@@ -112,15 +112,6 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
 }
 
 [Flags]
-public enum PanelPosition {
-    NONE        = 1 << 0,
-    BOTTOM      = 1 << 1,
-    TOP         = 1 << 2,
-    LEFT        = 1 << 3,
-    RIGHT       = 1 << 4
-}
-
-[Flags]
 public enum PanelTransparency {
     NONE        = 1 << 0,
     DYNAMIC     = 1 << 1,

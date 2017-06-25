@@ -36,6 +36,26 @@ typedef enum {
         BUDGIE_PANEL_ACTION_MAX = 1 << 2
 } BudgiePanelAction;
 
+/**
+ * BudgiePanelPosition:
+ * @BUDGIE_PANEL_POSITION_NONE: No position is yet assigned
+ * @BUDGIE_PANEL_POSITION_BOTTOM: The bottom edge has been assigned
+ * @BUDGIE_PANEL_POSITION_TOP: The top edge has been assigned
+ * @BUDGIE_PANEL_POSITION_LEFT: The left edge has been assigned
+ * @BUDGIE_PANEL_POSITION_RIGHT: The right edge has been assigned
+ *
+ * Each applet lives on a unique panel which can live on any one of
+ * the 4 screen edges. Internally this is represented with a bitmask
+ * to enable efficient screen management.
+ */
+typedef enum {
+        BUDGIE_PANEL_POSITION_NONE = 1 << 0,
+        BUDGIE_PANEL_POSITION_BOTTOM = 1 << 1,
+        BUDGIE_PANEL_POSITION_TOP = 1 << 2,
+        BUDGIE_PANEL_POSITION_LEFT = 1 << 3,
+        BUDGIE_PANEL_POSITION_RIGHT = 1 << 4
+} BudgiePanelPosition;
+
 typedef struct _BudgieAppletPrivate BudgieAppletPrivate;
 typedef struct _BudgieApplet BudgieApplet;
 typedef struct _BudgieAppletClass BudgieAppletClass;
