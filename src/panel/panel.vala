@@ -422,7 +422,7 @@ public class Panel : Budgie.Toplevel
         unowned Budgie.AppletInfo? info = null;
 
         for (int i = 1; i < icon_sizes.length; i++) {
-            if (icon_sizes[i] > intended_size) {
+            if (icon_sizes[i] > intended_size - 5) {
                 break;
             }
             size = icon_sizes[i];
