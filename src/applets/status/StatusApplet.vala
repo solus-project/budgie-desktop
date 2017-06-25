@@ -76,6 +76,15 @@ public class StatusApplet : Budgie.Applet
 #endif
     }
 
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            orient = Gtk.Orientation.VERTICAL;
+        }
+        this.widget.set_orientation(orient);
+    }
+
     public override void update_popovers(Budgie.PopoverManager? manager)
     {
         this.manager = manager;
