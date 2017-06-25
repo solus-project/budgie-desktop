@@ -28,7 +28,10 @@ public class ClockApplet : Budgie.Applet
 {
 
     protected Gtk.EventBox widget;
+    protected Gtk.Box layout;
     protected Gtk.Label clock;
+    protected Gtk.Label date_label;
+    protected Gtk.Label seconds_label;
 
     protected bool ampm = false;
 
@@ -92,17 +95,32 @@ public class ClockApplet : Budgie.Applet
         } else {
             this.orient = Gtk.Orientation.HORIZONTAL;
         }
-        this.queue_draw();
+        this.layout.set_orientation(this.orient);
+        this.update_clock();
     }
 
     public ClockApplet()
     {
         widget = new Gtk.EventBox();
+        layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         clock = new Gtk.Label("");
         clock.valign = Gtk.Align.CENTER;
         time = new DateTime.now_local();
-        widget.add(clock);
+        widget.add(layout);
         margin_bottom = 2;
+
+        layout.pack_start(clock, false, false, 0);
+
+        seconds_label = new Gtk.Label("");
+        seconds_label.get_style_context().add_class("dim-label");
+        layout.pack_start(seconds_label, false, false, 0);
+        seconds_label.no_show_all = true;
+        seconds_label.hide();
+
+        date_label = new Gtk.Label("");
+        layout.pack_start(date_label, false, false, 0);
+        date_label.no_show_all = true;
+        date_label.hide();
 
         settings = new Settings("org.gnome.desktop.interface");
 
@@ -139,11 +157,13 @@ public class ClockApplet : Budgie.Applet
         check_date = new Gtk.CheckButton.with_label(_("Show date"));
         check_date.get_child().set_property("margin-start", 8);
         settings.bind("clock-show-date", check_date, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
+        settings.bind("clock-show-date", date_label, "visible", SettingsBindFlags.DEFAULT);
 
         check_seconds = new Gtk.CheckButton.with_label(_("Show seconds"));
         check_seconds.get_child().set_property("margin-start", 8);
 
         settings.bind("clock-show-seconds", check_seconds, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
+        settings.bind("clock-show-seconds", seconds_label, "visible", SettingsBindFlags.DEFAULT);
 
         clock_format = new Gtk.CheckButton.with_label(_("Use 24 hour time"));
         clock_format.get_child().set_property("margin-start", 8);
@@ -253,14 +273,65 @@ public class ClockApplet : Budgie.Applet
                 ClockFormat f = (ClockFormat)settings.get_enum(key);
                 ampm = f == ClockFormat.TWELVE;
                 clock_format.set_active(f == ClockFormat.TWENTYFOUR);
-                this.queue_draw();
+                this.update_clock();
                 SignalHandler.unblock((void*)this.clock_format, this.check_id);
                 break;
             case "clock-show-seconds":
             case "clock-show-date":
-                this.queue_draw();
+                this.update_clock();
                 break;
         }
+    }
+
+
+    /**
+     * Update the date if necessary
+     */
+    protected void update_date()
+    {
+        if (!check_date.get_active()) {
+            return;
+        }
+        string ftime;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            ftime = "%x";
+        } else {
+            ftime = "<small>%b %d</small>";
+        }
+
+        // Prevent unnecessary redraws
+        var old = date_label.get_label();
+        var ctime = time.format(ftime);
+        if (old == ctime) {
+            return;
+        }
+
+        date_label.set_markup(ctime);
+    }
+
+    /**
+     * Update the seconds if necessary
+     */
+    protected void update_seconds()
+    {
+        if (!check_seconds.get_active()) {
+            return;
+        }
+        string ftime;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            ftime = "";
+        } else {
+            ftime = "<big>%S</big>";
+        }
+
+        // Prevent unnecessary redraws
+        var old = date_label.get_label();
+        var ctime = time.format(ftime);
+        if (old == ctime) {
+            return;
+        }
+
+        seconds_label.set_markup(ctime);
     }
 
     /**
@@ -277,9 +348,13 @@ public class ClockApplet : Budgie.Applet
         } else {
             format = "%H:%M";
         }
-        if (check_seconds.get_active()) {
-            format += ":%S";
+
+        if (orient == Gtk.Orientation.HORIZONTAL) {
+            if (check_seconds.get_active()) {
+                format += ":%S";
+            }
         }
+    
         if (ampm) {
             format += " %p";
         }
@@ -287,15 +362,12 @@ public class ClockApplet : Budgie.Applet
         string ftime;
         if (this.orient == Gtk.Orientation.HORIZONTAL) {
             ftime = " %s ".printf(format);
-            if (check_date.get_active()) {
-                ftime += " %x";
-            }
         } else {
             ftime = " <small>%s</small> ".printf(format);
-            if (check_date.get_active()) {
-                ftime += " <small>%x</small>";
-            }
         }
+
+        this.update_date();
+        this.update_seconds();
 
         // Prevent unnecessary redraws
         var old = clock.get_label();
