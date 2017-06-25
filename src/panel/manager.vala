@@ -910,11 +910,18 @@ public class PanelManager : DesktopManager
 
         var iter2 = HashTableIter<string,Budgie.Panel?>(panels);
 
-        while (iter2.next(out key, out val)) {
-            switch (val.position) {
+        string? key2 = null;
+        Budgie.Panel? val2 = null;
+
+        while (iter2.next(out key2, out val2)) {
+            switch (val2.position) {
             case Budgie.PanelPosition.LEFT:
             case Budgie.PanelPosition.RIGHT:
-                Gdk.Rectangle geom = area.area;
+                Gdk.Rectangle geom = Gdk.Rectangle();
+                geom.x = area.area.x;
+                geom.y = area.area.y;
+                geom.width = area.area.width;
+                geom.height = area.area.height;
                 if (top != null) {
                     geom.y += (top.intended_size - 5);
                     geom.height -= (top.intended_size - 5);
@@ -922,10 +929,10 @@ public class PanelManager : DesktopManager
                 if (bottom != null) {
                     geom.height -= (bottom.intended_size - 5);
                 }
-                val.update_geometry(geom, val.position, val.intended_size);
+                val2.update_geometry(geom, val2.position, val2.intended_size);
                 break;
             default:
-                val.update_geometry(area.area, val.position, val.intended_size);
+                val2.update_geometry(area.area, val2.position, val2.intended_size);
                 break;
             }
         }
