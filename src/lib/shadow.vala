@@ -34,15 +34,25 @@ public class ShadowBlock : Gtk.EventBox
         }
     }
 
-    public int removal {
+    private bool _active = true;
+
+    // Allow making the shadow disappear but still use space
+    public bool active {
         public set {
-            rm = value;
-            queue_resize();
+            this._active = value;
+            if (this._active) {
+                get_style_context().add_class("shadow-block");
+                get_style_context().remove_class("budgie-container");
+            } else {
+                get_style_context().remove_class("shadow-block");
+                get_style_context().add_class("budgie-container");
+            }
         }
         public get {
-            return rm;
+            return this._active;
         }
     }
+
 
     void update_position(PanelPosition? old)
     {
@@ -56,8 +66,7 @@ public class ShadowBlock : Gtk.EventBox
 
     public ShadowBlock(PanelPosition position)
     {
-        get_style_context().add_class("shadow-block");
-        get_style_context().remove_class("background");
+        this.active = true;
         this.position = position;
     }
 

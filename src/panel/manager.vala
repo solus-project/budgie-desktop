@@ -923,11 +923,11 @@ public class PanelManager : DesktopManager
                 geom.width = area.area.width;
                 geom.height = area.area.height;
                 if (top != null) {
-                    geom.y += (top.intended_size - 5);
-                    geom.height -= (top.intended_size - 5);
+                    geom.y += top.intended_size - 5;
+                    geom.height -= top.intended_size - 5;
                 }
                 if (bottom != null) {
-                    geom.height -= (bottom.intended_size - 5);
+                    geom.height -= bottom.intended_size - 5;
                 }
                 val2.update_geometry(geom, val2.position, val2.intended_size);
                 break;

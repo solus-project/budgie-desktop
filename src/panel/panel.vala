@@ -45,8 +45,8 @@ public class MainPanel : Gtk.Box
     public override void get_preferred_height(out int m, out int n)
     {
         if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
-            m = intended_size - 5;
-            n = intended_size - 5;
+            m = intended_size;
+            n = intended_size;
             return;
         }
         int om, on;
@@ -58,8 +58,8 @@ public class MainPanel : Gtk.Box
     public override void get_preferred_height_for_width(int w, out int m, out int n)
     {
         if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
-            m = intended_size - 5;
-            n = intended_size - 5;
+            m = intended_size;
+            n = intended_size;
             return;
         }
         int om, on;
@@ -70,14 +70,14 @@ public class MainPanel : Gtk.Box
 
     public override void get_preferred_width(out int m, out int n)
     {
-        m = intended_size - 5;
-        n = intended_size - 5;
+        m = intended_size;
+        n = intended_size;
     }
 
     public override void get_preferred_width_for_height(int h, out int m, out int n)
     {
-        m = intended_size - 5;
-        n = intended_size - 5;
+        m = intended_size;
+        n = intended_size;
     }
 
 }
@@ -363,13 +363,12 @@ public class Panel : Budgie.Toplevel
 
         /* Shadow.. */
         shadow = new Budgie.ShadowBlock(this.position);
-        shadow.no_show_all = true;
         shadow.hexpand = false;
         shadow.halign = Gtk.Align.FILL;
         shadow.show_all();
         main_layout.pack_start(shadow, false, false, 0);
 
-        this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "visible", SettingsBindFlags.GET);
+        this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "active", SettingsBindFlags.GET);
 
         shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
@@ -423,7 +422,7 @@ public class Panel : Budgie.Toplevel
         unowned Budgie.AppletInfo? info = null;
 
         for (int i = 1; i < icon_sizes.length; i++) {
-            if (icon_sizes[i] > intended_size - 5) {
+            if (icon_sizes[i] > intended_size) {
                 break;
             }
             size = icon_sizes[i];
@@ -435,7 +434,7 @@ public class Panel : Budgie.Toplevel
 
         var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
-            info.applet.panel_size_changed(intended_size - 5, size, small_size);
+            info.applet.panel_size_changed(intended_size, size, small_size);
         }
     }
 
@@ -936,7 +935,7 @@ public class Panel : Budgie.Toplevel
 
     void placement()
     {
-        Budgie.set_struts(this, position, (intended_size - 5)*this.scale);
+        Budgie.set_struts(this, position, intended_size * this.scale);
         bool horizontal = false;
 
         switch (position) {
@@ -983,6 +982,7 @@ public class Panel : Budgie.Toplevel
             main_layout.valign = Gtk.Align.FILL;
             main_layout.halign = Gtk.Align.FILL;
             main_layout.hexpand = false;
+            layout.valign = Gtk.Align.FILL;
         } else {
             start_box.halign = Gtk.Align.FILL;
             center_box.halign = Gtk.Align.FILL;
@@ -1001,6 +1001,7 @@ public class Panel : Budgie.Toplevel
             main_layout.valign = Gtk.Align.FILL;
             main_layout.halign = Gtk.Align.START;
             main_layout.hexpand = true;
+            layout.valign = Gtk.Align.FILL;
         }
     }
 
