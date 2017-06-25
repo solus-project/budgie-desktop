@@ -935,7 +935,7 @@ public class Panel : Budgie.Toplevel
 
     void placement()
     {
-        Budgie.set_struts(this, position, intended_size * this.scale);
+        Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
         bool horizontal = false;
 
         switch (position) {
