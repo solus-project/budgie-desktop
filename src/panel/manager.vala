@@ -891,6 +891,7 @@ public class PanelManager : DesktopManager
         Budgie.Toplevel? top = null;
         Budgie.Toplevel? bottom = null;
         Budgie.Toplevel? right = null;
+        Budgie.Toplevel? left = null;
         Gdk.Rectangle raven_screen;
 
         string? key = null;
@@ -909,6 +910,9 @@ public class PanelManager : DesktopManager
                 break;
             case Budgie.PanelPosition.RIGHT:
                 right = val;
+                break;
+            case Budgie.PanelPosition.LEFT:
+                left = val;
                 break;
             default:
                 continue;
@@ -955,6 +959,14 @@ public class PanelManager : DesktopManager
 
         if (right != null) {
             raven_screen.width -= (right.intended_size);
+        }
+
+        // If we have left panel and no right panel, stick to that edge
+        if (left != null && right == null) {
+            raven.screen_edge = Gtk.PositionType.LEFT;
+            raven_screen.x += left.intended_size;
+        } else {
+            raven.screen_edge = Gtk.PositionType.RIGHT;
         }
 
         /* Let Raven update itself accordingly */

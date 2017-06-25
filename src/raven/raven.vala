@@ -113,6 +113,31 @@ public class Raven : Gtk.Window
     private double intended_size = 0.15;
     private static Raven? _instance = null;
 
+    private Gtk.PositionType _screen_edge = Gtk.PositionType.RIGHT;
+
+    /* Anchor to the right by default */
+    public Gtk.PositionType screen_edge {
+        public set {
+            this._screen_edge = value;
+
+            if (this._screen_edge == Gtk.PositionType.RIGHT) {
+                layout.child_set(shadow, "position", 0);
+                this.get_style_context().add_class(Budgie.position_class_name(PanelPosition.RIGHT));
+                this.get_style_context().remove_class(Budgie.position_class_name(PanelPosition.LEFT));
+                this.shadow.position = Budgie.PanelPosition.RIGHT;
+            } else {
+                layout.child_set(shadow, "position", 1);
+                this.get_style_context().add_class(Budgie.position_class_name(PanelPosition.LEFT));
+                this.get_style_context().remove_class(Budgie.position_class_name(PanelPosition.RIGHT));
+                this.shadow.position = Budgie.PanelPosition.LEFT;
+            }
+        }
+        public get {
+            return this._screen_edge;
+        }
+        default = Gtk.PositionType.RIGHT;
+    }
+
     int our_width = 0;
     int our_height = 0;
     int our_x = 0;
@@ -124,6 +149,7 @@ public class Raven : Gtk.Window
     bool outside_win = false;
 
     Gdk.Rectangle old_rect;
+    Gtk.Box layout;
 
     private double scale = 0.0;
 
@@ -274,7 +300,7 @@ public class Raven : Gtk.Window
         focus_out_event.connect(on_focus_out);
 
         /* Set up our main layout */
-        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
 
 
@@ -286,7 +312,6 @@ public class Raven : Gtk.Window
         shadow = new Budgie.ShadowBlock(PanelPosition.RIGHT);
         layout.pack_start(shadow, false, false, 0);
         /* For now Raven is always on the right */
-        this.get_style_context().add_class(Budgie.position_class_name(PanelPosition.RIGHT));
 
         var frame = new Gtk.Frame(null);
         frame.get_style_context().add_class("raven-frame");
@@ -326,6 +351,8 @@ public class Raven : Gtk.Window
         }
 
         this.get_child().show_all();
+
+        this.screen_edge = Gtk.PositionType.LEFT;
     }
 
 
@@ -365,8 +392,14 @@ public class Raven : Gtk.Window
     public void update_geometry(Gdk.Rectangle rect)
     {
         int width = required_size;
+        int x;
 
-        int x = (rect.x+rect.width)-width;
+        if (this.screen_edge == Gtk.PositionType.RIGHT) {
+            x = (rect.x+rect.width)-width;
+        } else {
+            x = rect.x;
+        }
+
         int y = rect.y;
         int height = rect.height;
 
@@ -408,9 +441,15 @@ public class Raven : Gtk.Window
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
-        var width = alloc.width * nscale;
+        var d = (double) alloc.width;
+        var x = d * nscale;
 
-        cr.set_source_surface(buffer, alloc.width-width, 0);
+        if (this.screen_edge == Gtk.PositionType.RIGHT) {
+            cr.set_source_surface(buffer, alloc.width - x, 0);
+        } else {
+            cr.set_source_surface(buffer, x - alloc.width, 0);
+        }
+
         cr.paint();
 
         return Gdk.EVENT_STOP;
