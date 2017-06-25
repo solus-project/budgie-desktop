@@ -53,6 +53,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
     private PlacesIndicatorWindow? popover;
     private Gtk.Label label;
     private Gtk.Image image;
+    private Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
     private unowned Budgie.PopoverManager? manager = null;
     private GLib.Settings settings;
@@ -83,7 +84,6 @@ public class PlacesIndicatorApplet : Budgie.Applet
         layout.pack_start(image, true, true, 3);
         label = new Gtk.Label(_("Places"));
         label.halign = Gtk.Align.START;
-        label.hide();
         layout.pack_start(label, true, true, 3);
 
         popover = new PlacesIndicatorWindow(image);
@@ -110,9 +110,8 @@ public class PlacesIndicatorApplet : Budgie.Applet
 
     public override void panel_position_changed(Budgie.PanelPosition position)
     {
-        bool visible = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM) &&
-            settings.get_boolean("show-label");
-        label.set_visible(visible);
+        this.panel_position = position;
+        on_settings_changed("show-label");
     }
 
     public void toggle_popover()
@@ -140,7 +139,10 @@ public class PlacesIndicatorApplet : Budgie.Applet
         switch (key)
         {
             case "show-label":
-                label.set_visible(settings.get_boolean(key));
+                bool visible = (panel_position == Budgie.PanelPosition.TOP ||
+                                panel_position == Budgie.PanelPosition.BOTTOM) &&
+                                settings.get_boolean(key);
+                label.set_visible(visible);
                 break;
             case "expand-places":
                 popover.expand_places = settings.get_boolean(key);
