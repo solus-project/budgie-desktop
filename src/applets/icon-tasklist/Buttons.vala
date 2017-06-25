@@ -402,16 +402,13 @@ public class IconButton : Gtk.ToggleButton
         if (this.helper.has_derpy_icon(window) && aicon != null) {
             image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
         } else {
-            if (window.get_icon_is_fallback()) {
-                if (ainfo != null && ainfo.get_icon() != null) {
-                    image.set_from_gicon(ainfo.get_icon(), Gtk.IconSize.INVALID);
-                } else {
-                    image.set_from_pixbuf(window.get_icon());
-                }
+            if (aicon != null) {
+                image.set_from_gicon(aicon, Gtk.IconSize.INVALID);
             } else {
                 image.set_from_pixbuf(window.get_icon());
             }
         }
+
         image.pixel_size = icon_size;
         queue_resize();
     }
