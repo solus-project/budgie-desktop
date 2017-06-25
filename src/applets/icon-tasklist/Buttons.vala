@@ -27,6 +27,22 @@ public class ButtonWrapper : Gtk.Revealer
 {
     unowned IconButton? button;
 
+    public Gtk.Orientation orient {
+        set {
+            if (value == Gtk.Orientation.VERTICAL) {
+                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+            } else {
+                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT);
+            }
+        }
+        get {
+            if (this.get_transition_type() == Gtk.RevealerTransitionType.SLIDE_DOWN) {
+                return Gtk.Orientation.VERTICAL;
+            }
+            return Gtk.Orientation.HORIZONTAL;
+        }
+    }
+
     public ButtonWrapper(IconButton? button)
     {
         this.button = button;
@@ -45,7 +61,11 @@ public class ButtonWrapper : Gtk.Revealer
             return;
         }
 
-        this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
+        } else {
+            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
+        }
         this.notify["child-revealed"].connect_after(()=> {
             this.destroy();
         });

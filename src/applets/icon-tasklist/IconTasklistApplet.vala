@@ -127,6 +127,7 @@ public class IconTasklistApplet : Budgie.Applet
             widget.pack_start(button_wrap, false, false, 0);
         }
         buttons[window] = button;
+        (button.get_parent() as ButtonWrapper).orient = this.orient;
         (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
         Idle.add(()=> {
             button.icon_mapped();
@@ -246,6 +247,7 @@ public class IconTasklistApplet : Budgie.Applet
                 val.icon_size = icon_size;
                 val.panel_size = panel_size;
                 val.orient = this.orient;
+                (val.get_parent() as ButtonWrapper).orient = this.orient;
                 val.update_icon();
             }
 
@@ -254,6 +256,7 @@ public class IconTasklistApplet : Budgie.Applet
                 pin_val.icon_size = icon_size;
                 pin_val.panel_size = panel_size;
                 pin_val.orient = this.orient;
+                (pin_val.get_parent() as ButtonWrapper).orient = this.orient;
                 pin_val.update_icon();
             }
             return false;
@@ -417,6 +420,7 @@ public class IconTasklistApplet : Budgie.Applet
             var button = new PinnedIconButton(settings, info, icon_size, this.helper, panel_size);
             button.orient = this.orient;
             var button_wrap = new ButtonWrapper(button);
+            button_wrap.orient = this.orient;
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
 
@@ -468,6 +472,7 @@ public class IconTasklistApplet : Budgie.Applet
                 (btn.get_parent() as ButtonWrapper).gracefully_die();
                 widget.pack_start(button_wrap, false, false, 0);
                 buttons[b2.window]  = b2;
+                button_wrap.orient = this.orient;
                 button_wrap.set_reveal_child(true);
             }
             removals += key_name;
