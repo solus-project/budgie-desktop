@@ -83,7 +83,7 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
             };
             break;
         case PanelPosition.LEFT:
-            struts = { panel_size, 0, 0, 0,
+            struts = { panel_size + 5, 0, 0, 0,
                 primary_monitor_rect.y, primary_monitor_rect.y+primary_monitor_rect.height, 
                 0, 0, 0, 0, 0, 0
             };
