@@ -84,6 +84,7 @@ struct _BudgieAppletClass {
         GtkWidget *(*get_settings_ui)(BudgieApplet *self);
         void (*panel_size_changed)(BudgieApplet *applet, int panel_size, int icon_size,
                                    int small_icon_size);
+        void (*panel_position_changed)(BudgieApplet *applet, BudgiePanelPosition position);
         void (*update_popovers)(BudgieApplet *applet, BudgiePopoverManager *manager);
 
         gpointer padding[12];

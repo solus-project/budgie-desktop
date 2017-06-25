@@ -36,7 +36,7 @@
  */
 enum { PROP_PREFIX = 1, PROP_SCHEMA, PROP_ACTIONS, N_PROPS };
 
-enum { POSITION_CHANGED = 0, N_SIGNALS };
+enum { APPLET_SIZE_CHANGED = 0, APPLET_POSITION_CHANGED, N_SIGNALS };
 
 struct _BudgieAppletPrivate {
         char *prefix;
@@ -327,7 +327,7 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
          *
          * Used to notify this applet of a change in the panel size
          */
-        applet_signals[POSITION_CHANGED] =
+        applet_signals[APPLET_SIZE_CHANGED] =
             g_signal_new("panel-size-changed",
                          BUDGIE_TYPE_APPLET,
                          G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -340,6 +340,27 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz)
                          G_TYPE_INT,
                          G_TYPE_INT,
                          G_TYPE_INT);
+
+        /**
+         * BudgieApplet::panel-position-changed:
+         * @applet: The applet receiving the signal
+         * @position: The new position (screen edge)
+         *
+         * Used to notify this applet of a change in the panel's placement
+         * on screen, so that it may adjust its own layout to better suit
+         * the geometry.
+         */
+        applet_signals[APPLET_POSITION_CHANGED] =
+            g_signal_new("panel-position-changed",
+                         BUDGIE_TYPE_APPLET,
+                         G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                         G_STRUCT_OFFSET(BudgieAppletClass, panel_position_changed),
+                         NULL,
+                         NULL,
+                         NULL,
+                         G_TYPE_NONE,
+                         1,
+                         BUDGIE_TYPE_PANEL_POSITION);
 
         g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
 }

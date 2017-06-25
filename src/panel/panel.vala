@@ -188,8 +188,10 @@ public class Panel : Budgie.Toplevel
         this.intended_size = size;
         this.get_style_context().add_class(Budgie.position_class_name(position));
 
+        // Check if the position has been altered and notify our applets
         if (position != this.position) {
             this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
+            this.update_positions();
         }
 
         this.position = position;
@@ -435,6 +437,17 @@ public class Panel : Budgie.Toplevel
         var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
         while (iter.next(out key, out info)) {
             info.applet.panel_size_changed(intended_size - 5, size, small_size);
+        }
+    }
+
+    void update_positions()
+    {
+        unowned string? key = null;
+        unowned Budgie.AppletInfo? info = null;
+
+        var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
+        while (iter.next(out key, out info)) {
+            info.applet.panel_position_changed(this.position);
         }
     }
 
@@ -774,6 +787,7 @@ public class Panel : Budgie.Toplevel
 
         info.applet.update_popovers(this.popover_manager);
         info.applet.panel_size_changed(intended_size, this.current_icon_size, this.current_small_icon_size);
+        info.applet.panel_position_changed(this.position);
         pack_target.pack_start(info.applet, false, false, 0);
 
         pack_target.child_set(info.applet, "position", info.position);
