@@ -915,16 +915,20 @@ static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *b
 /**
  * budgie_popover_key_press:
  *
- * If the Escape key is pressed, then we also need to close.
+ * If the Escape/Super key is pressed, then we also need to close.
  */
 static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key,
                                          __budgie_unused__ gpointer udata)
 {
-        if (key->keyval == GDK_KEY_Escape) {
+        switch (key->keyval) {
+        case GDK_KEY_Escape:
+        case GDK_KEY_Super_L:
+        case GDK_KEY_Super_R:
                 gtk_widget_hide(widget);
                 return GDK_EVENT_STOP;
+        default:
+                return GDK_EVENT_PROPAGATE;
         }
-        return GDK_EVENT_PROPAGATE;
 }
 
 /**
