@@ -73,6 +73,8 @@ public class IconTasklistApplet : Budgie.Applet
 
     public string uuid { public set ; public get ; }
 
+    private Gtk.Orientation orient;
+
     protected void window_opened(Wnck.Window window)
     {
         // doesn't go on our list
@@ -119,6 +121,7 @@ public class IconTasklistApplet : Budgie.Applet
         if (button == null) {
             var btn = new IconButton(settings, window, icon_size, pinfo, this.helper, panel_size);
             var button_wrap = new ButtonWrapper(btn);
+            btn.orient = this.orient;
 
             button = btn;
             widget.pack_start(button_wrap, false, false, 0);
@@ -195,7 +198,6 @@ public class IconTasklistApplet : Budgie.Applet
 
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-        pinned.margin_end = 14;
         pinned.get_style_context().add_class("pinned");
         main_layout.pack_start(pinned, false, false, 0);
 
@@ -243,6 +245,7 @@ public class IconTasklistApplet : Budgie.Applet
             while (iter.next(out btn_key, out val)) {
                 val.icon_size = icon_size;
                 val.panel_size = panel_size;
+                val.orient = this.orient;
                 val.update_icon();
             }
 
@@ -250,6 +253,7 @@ public class IconTasklistApplet : Budgie.Applet
             while (iter2.next(out str_key, out pin_val)) {
                 pin_val.icon_size = icon_size;
                 pin_val.panel_size = panel_size;
+                pin_val.orient = this.orient;
                 pin_val.update_icon();
             }
             return false;
@@ -257,6 +261,7 @@ public class IconTasklistApplet : Budgie.Applet
         queue_resize();
         queue_draw();
     }
+
 
     int small_icons = 32;
     int panel_size = 10;
@@ -267,6 +272,33 @@ public class IconTasklistApplet : Budgie.Applet
         this.panel_size = panel;
 
         set_icons_size();
+    }
+
+    /**
+     * Update the tasklist orientation to match the panel direction
+     */
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            orientation = Gtk.Orientation.VERTICAL;
+        }
+
+        // Update spacing
+        if (orientation == Gtk.Orientation.HORIZONTAL) {
+            pinned.margin_end = 14;
+            pinned.margin_bottom = 0;
+        } else {
+            pinned.margin_end = 0;
+            pinned.margin_bottom = 14;
+        }
+
+        widget.set_orientation(orientation);
+        main_layout.set_orientation(orientation);
+        pinned.set_orientation(orientation);
+        this.orient = orientation;
+        set_icons_size();
+        this.queue_resize();
     }
 
     private void move_launcher(string app_id, int position)
@@ -383,6 +415,7 @@ public class IconTasklistApplet : Budgie.Applet
                 continue;
             }
             var button = new PinnedIconButton(settings, info, icon_size, this.helper, panel_size);
+            button.orient = this.orient;
             var button_wrap = new ButtonWrapper(button);
             pin_buttons[desktopfile] = button;
             pinned.pack_start(button_wrap, false, false, 0);
@@ -428,6 +461,8 @@ public class IconTasklistApplet : Budgie.Applet
             } else {
                 /* We need to move this fella.. */
                 IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper, panel_size);
+                b2.orient = this.orient;
+
                 var button_wrap = new ButtonWrapper(b2);
 
                 (btn.get_parent() as ButtonWrapper).gracefully_die();

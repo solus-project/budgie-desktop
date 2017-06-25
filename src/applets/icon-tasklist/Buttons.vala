@@ -78,6 +78,7 @@ public class IconButton : Gtk.ToggleButton
     unowned Settings? settings;
 
     public int panel_size = 10;
+    public Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
 
     protected Gdk.AppLaunchContext launch_context;
 
@@ -311,10 +312,24 @@ public class IconButton : Gtk.ToggleButton
      */
     public override void get_preferred_width(out int min, out int nat)
     {
-        Gtk.Allocation alloc;
         int norm = (int) ((double)panel_size * 1.1);
+        if (orient == Gtk.Orientation.VERTICAL) {
+            norm = panel_size;
+        }
         min = norm;
         nat = norm;
+    }
+
+    public override void get_preferred_height(out int min, out int nat)
+    {
+        if (orient == Gtk.Orientation.VERTICAL) {
+            min = nat = (int) ((double)panel_size * 0.95);
+            return;
+        }
+        int m, n;
+        base.get_preferred_height(out m, out n);
+        min = m;
+        nat = n;
     }
 
 

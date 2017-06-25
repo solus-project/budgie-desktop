@@ -190,11 +190,10 @@ public class Panel : Budgie.Toplevel
 
         // Check if the position has been altered and notify our applets
         if (position != this.position) {
+            this.position = position;
             this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
             this.update_positions();
         }
-
-        this.position = position;
 
         this.shadow.position = position;
         this.layout.queue_resize();
@@ -954,7 +953,7 @@ public class Panel : Budgie.Toplevel
                 break;
             case Budgie.PanelPosition.RIGHT:
                 set_size_request(intended_size, orig_scr.height);
-                get_window().move((orig_scr.x+orig_scr.width) - intended_size, orig_scr.y);
+                move((orig_scr.x+orig_scr.width) - intended_size, orig_scr.y);
                 main_layout.child_set(shadow, "position", 0);
                 break;
             case Budgie.PanelPosition.BOTTOM:
