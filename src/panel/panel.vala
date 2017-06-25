@@ -952,7 +952,7 @@ public class Panel : Budgie.Toplevel
                 break;
             case Budgie.PanelPosition.RIGHT:
                 set_size_request(intended_size, orig_scr.height);
-                move((orig_scr.x+orig_scr.width) - intended_size, orig_scr.y);
+                move((orig_scr.x+orig_scr.width) - intended_size - 5, orig_scr.y);
                 main_layout.child_set(shadow, "position", 0);
                 break;
             case Budgie.PanelPosition.BOTTOM:

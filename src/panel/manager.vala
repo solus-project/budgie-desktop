@@ -954,7 +954,7 @@ public class PanelManager : DesktopManager
         }
 
         if (right != null) {
-            raven_screen.width -= (right.intended_size - 5);
+            raven_screen.width -= (right.intended_size);
         }
 
         /* Let Raven update itself accordingly */
