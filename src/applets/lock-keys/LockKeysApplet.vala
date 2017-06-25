@@ -45,6 +45,15 @@ public class LockKeysApplet : Budgie.Applet
         show_all();
     }
 
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            orient = Gtk.Orientation.VERTICAL;
+        }
+        this.widget.set_orientation(orient);
+    }
+
     /* Handle caps lock changes */
     protected void toggle_caps()
     {
