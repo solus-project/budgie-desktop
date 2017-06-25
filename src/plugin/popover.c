@@ -483,26 +483,26 @@ static void budgie_popover_update_position_hints(BudgiePopover *self)
         case GTK_POS_LEFT:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             4,
+                             5,
                              "margin-bottom",
-                             8,
+                             9,
                              "margin-start",
-                             12,
+                             13,
                              "margin-end",
-                             4,
+                             5,
                              NULL);
                 style_class = "left";
                 break;
         case GTK_POS_RIGHT:
                 g_object_set(self->priv->add_area,
                              "margin-top",
-                             4,
+                             5,
                              "margin-bottom",
-                             8,
+                             9,
                              "margin-start",
-                             4,
+                             5,
                              "margin-end",
-                             12,
+                             13,
                              NULL);
                 style_class = "right";
                 break;
