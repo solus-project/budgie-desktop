@@ -44,6 +44,8 @@ public class ClockApplet : Budgie.Applet
     Gtk.CheckButton check_date;
     ulong check_id;
 
+    Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+
     private unowned Budgie.PopoverManager? manager = null;
 
     // Make a fancy button with a direction indicator
@@ -83,6 +85,16 @@ public class ClockApplet : Budgie.Applet
         return ret;
     }
 
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+            this.orient = Gtk.Orientation.VERTICAL;
+        } else {
+            this.orient = Gtk.Orientation.HORIZONTAL;
+        }
+        this.queue_draw();
+    }
+
     public ClockApplet()
     {
         widget = new Gtk.EventBox();
@@ -93,6 +105,8 @@ public class ClockApplet : Budgie.Applet
         margin_bottom = 2;
 
         settings = new Settings("org.gnome.desktop.interface");
+
+        get_style_context().add_class("budgie-clock-applet");
 
         // Create a submenu system
         popover = new Budgie.Popover(widget);
@@ -269,9 +283,18 @@ public class ClockApplet : Budgie.Applet
         if (ampm) {
             format += " %p";
         }
-        string ftime = " <big>%s</big> ".printf(format);
-        if (check_date.get_active()) {
-            ftime += " <big>%x</big>";
+
+        string ftime;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            ftime = " %s ".printf(format);
+            if (check_date.get_active()) {
+                ftime += " %x";
+            }
+        } else {
+            ftime = " <small>%s</small> ".printf(format);
+            if (check_date.get_active()) {
+                ftime += " <small>%x</small>";
+            }
         }
 
         // Prevent unnecessary redraws
