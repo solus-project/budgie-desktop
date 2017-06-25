@@ -91,7 +91,8 @@ public class BudgieMenuApplet : Budgie.Applet
         img.no_show_all = true;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        layout.pack_start(img, false, false, 3);
+        layout.pack_start(img, false, false, 0);
+        img.margin_end = 3;
         label = new Gtk.Label("");
         label.halign = Gtk.Align.START;
         layout.pack_start(label, true, true, 3);
