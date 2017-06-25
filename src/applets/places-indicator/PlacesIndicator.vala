@@ -80,7 +80,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         ebox.add(layout);
         image = new Gtk.Image.from_icon_name("drive-harddisk-symbolic", Gtk.IconSize.MENU);
-        layout.pack_start(image, false, false, 3);
+        layout.pack_start(image, true, true, 3);
         label = new Gtk.Label(_("Places"));
         label.halign = Gtk.Align.START;
         label.hide();
@@ -106,6 +106,13 @@ public class PlacesIndicatorApplet : Budgie.Applet
         on_settings_changed("show-places");
         on_settings_changed("show-drives");
         on_settings_changed("show-networks");
+    }
+
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        bool visible = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM) &&
+            settings.get_boolean("show-label");
+        label.set_visible(visible);
     }
 
     public void toggle_popover()
