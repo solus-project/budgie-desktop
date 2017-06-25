@@ -39,9 +39,14 @@ public class RavenIface
     }
 
     public signal void ExpansionChanged(bool expanded);
+    public signal void AnchorChanged(bool anchored);
 
     public bool GetExpanded() {
         return this.is_expanded;
+    }
+
+    public bool GetLeftAnchored() {
+        return parent.screen_edge == Gtk.PositionType.LEFT;
     }
 
     public void SetExpanded(bool b) {
@@ -119,6 +124,10 @@ public class Raven : Gtk.Window
     public Gtk.PositionType screen_edge {
         public set {
             this._screen_edge = value;
+
+            if (this.iface != null) {
+                this.iface.AnchorChanged(this.screen_edge == Gtk.PositionType.LEFT);
+            }
 
             if (this._screen_edge == Gtk.PositionType.RIGHT) {
                 layout.child_set(shadow, "position", 0);

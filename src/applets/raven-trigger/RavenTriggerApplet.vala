@@ -17,7 +17,9 @@ public interface RavenTriggerProxy : Object
 {
     public abstract async void ToggleAppletView() throws Error;
     public abstract bool GetExpanded() throws Error;
+    public abstract bool GetLeftAnchored() throws Error;
     public abstract signal void ExpansionChanged(bool expanded);
+    public abstract signal void AnchorChanged(bool left_anchor);
 }
 
 public class RavenTriggerPlugin : Budgie.Plugin, Peas.ExtensionBase
@@ -38,6 +40,9 @@ public class RavenTriggerApplet : Budgie.Applet
     private RavenTriggerProxy? raven_proxy = null;
     private bool raven_expanded = false;
 
+    private string raven_show_icon = "pane-show-symbolic";
+    private string raven_hide_icon = "pane-hide-symbolic";
+
     public RavenTriggerApplet()
     {
         widget = new Gtk.Button();
@@ -46,8 +51,8 @@ public class RavenTriggerApplet : Budgie.Applet
         widget.set_can_focus(false);
         widget.get_style_context().add_class("raven-trigger");
 
-        img_hidden = new Gtk.Image.from_icon_name("pane-show-symbolic", Gtk.IconSize.BUTTON);
-        img_expanded = new Gtk.Image.from_icon_name("pane-hide-symbolic", Gtk.IconSize.BUTTON);
+        img_hidden = new Gtk.Image.from_icon_name(this.raven_show_icon, Gtk.IconSize.BUTTON);
+        img_expanded = new Gtk.Image.from_icon_name(this.raven_hide_icon, Gtk.IconSize.BUTTON);
 
         img_stack = new Gtk.Stack();
         img_stack.add_named(img_hidden, "hidden");
@@ -109,6 +114,32 @@ public class RavenTriggerApplet : Budgie.Applet
         }
     }
 
+    private void on_anchor_changed(bool left_anchor)
+    {
+        message("Anchor changed");
+        if (left_anchor) {
+            this.raven_show_icon = "pane-hide-symbolic";
+            this.raven_hide_icon = "pane-show-symbolic";
+        } else {
+            this.raven_show_icon = "pane-show-symbolic";
+            this.raven_hide_icon = "pane-hide-symbolic";
+        }
+
+        img_hidden.set_from_icon_name(this.raven_show_icon, Gtk.IconSize.BUTTON);
+        img_expanded.set_from_icon_name(this.raven_hide_icon, Gtk.IconSize.BUTTON);
+    }
+
+    // Horrific work around to stop us getting caught up in our own dbus
+    // spam
+    private void* update_anchors()
+    {
+        bool b = raven_proxy.GetLeftAnchored();
+        Gdk.threads_enter();
+        this.on_anchor_changed(b);
+        Gdk.threads_leave();
+        return null;
+    }
+
     /* Hold onto our Raven proxy ref */
     void on_raven_get(GLib.Object? o, GLib.AsyncResult? res)
     {
@@ -120,6 +151,14 @@ public class RavenTriggerApplet : Budgie.Applet
                     return false;
                 });
             });
+            raven_proxy.AnchorChanged.connect((e)=> {
+                Idle.add(()=> {
+                    on_anchor_changed(e);
+                    return false;
+                });
+            });
+
+            var t = Thread.create<void*>(this.update_anchors, false);
         } catch (Error e) {
             warning("Failed to gain Raven proxy: %s", e.message);
         }
