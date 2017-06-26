@@ -23,13 +23,10 @@ public static const string WM_DBUS_OBJECT_PATH = "/org/budgie_desktop/BudgieWM";
  */
 public class MainPanel : Gtk.Box
 {
-
-    public int intended_size { public get ; public set ; }
  
-    public MainPanel(int size)
+    public MainPanel()
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL);
-        this.intended_size = size;
         get_style_context().add_class("budgie-panel");
         get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
     }
@@ -41,45 +38,6 @@ public class MainPanel : Gtk.Box
             get_style_context().remove_class("transparent");
         }
     }
-
-    public override void get_preferred_height(out int m, out int n)
-    {
-        if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
-            m = intended_size;
-            n = intended_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_height(out om, out on);
-        m = om;
-        n = on;
-    }
-
-    public override void get_preferred_height_for_width(int w, out int m, out int n)
-    {
-        if (this.get_orientation() == Gtk.Orientation.VERTICAL) {
-            m = intended_size;
-            n = intended_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_height_for_width(w, out om, out on);
-        m = om;
-        n = on;
-    }
-
-    public override void get_preferred_width(out int m, out int n)
-    {
-        m = intended_size;
-        n = intended_size;
-    }
-
-    public override void get_preferred_width_for_height(int h, out int m, out int n)
-    {
-        m = intended_size;
-        n = intended_size;
-    }
-
 }
 
 /**
@@ -357,7 +315,7 @@ public class Panel : Budgie.Toplevel
         main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(main_layout);
 
-        layout = new MainPanel(this.intended_size);
+        layout = new MainPanel();
         main_layout.pack_start(layout, true, true, 0);
         main_layout.valign = Gtk.Align.START;
 
@@ -372,8 +330,6 @@ public class Panel : Budgie.Toplevel
 
         shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
-
-        this.bind_property("intended-size", layout, "intended-size");
 
         /* Assign our applet holder boxes */
         start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
