@@ -104,6 +104,21 @@ public class Panel : Budgie.Toplevel
         }
     }
 
+    /**
+     * Set the Budgie Panel into dock mode, where it uses a minimal
+     * amount of screen estate
+     */
+    public bool dock_mode {
+        public set {
+            this._dock_mode = value;
+        }
+        public get {
+            return this._dock_mode;
+        }
+        default = false;
+    }
+    private bool _dock_mode = false;
+
     public bool activate_action(int remote_action)
     {
         unowned string? uuid = null;
@@ -936,7 +951,11 @@ public class Panel : Budgie.Toplevel
 
             main_layout.set_orientation(Gtk.Orientation.VERTICAL);
             main_layout.valign = Gtk.Align.FILL;
-            main_layout.halign = Gtk.Align.FILL;
+            if (this._dock_mode) {
+                main_layout.halign = Gtk.Align.START;
+            } else {
+                main_layout.halign = Gtk.Align.FILL;
+            }
             main_layout.hexpand = false;
             layout.valign = Gtk.Align.FILL;
         } else {
@@ -954,7 +973,11 @@ public class Panel : Budgie.Toplevel
             layout.set_orientation(Gtk.Orientation.VERTICAL);
 
             main_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
-            main_layout.valign = Gtk.Align.FILL;
+            if (this._dock_mode) {
+                main_layout.valign = Gtk.Align.START;
+            } else {
+                main_layout.valign = Gtk.Align.FILL;
+            }
             main_layout.halign = Gtk.Align.START;
             main_layout.hexpand = true;
             layout.valign = Gtk.Align.FILL;
