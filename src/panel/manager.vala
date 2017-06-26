@@ -438,6 +438,28 @@ public class PanelManager : DesktopManager
     }
 
     /**
+     * Reset after a failed load
+     */
+    void do_live_reset()
+    {
+        GLib.message("Resetting budgie-panel configuration due to failed load");
+
+        string[]? toplevel_ids = null;
+
+        foreach (var toplevel in this.get_panels()) {
+            toplevel_ids += toplevel.uuid;
+        }
+
+        if (toplevel_ids != null) {
+            foreach (var toplevel_id in toplevel_ids) {
+                this.delete_panel(toplevel_id);
+            }
+        }
+
+        this.do_reset();
+    }
+
+    /**
      * Initial setup, once we've owned the dbus name
      * i.e. no risk of dying
      */
@@ -465,7 +487,10 @@ public class PanelManager : DesktopManager
         int current_migration_level = settings.get_int(PANEL_KEY_MIGRATION);
         if (!load_panels()) {
             message("Creating default panel layout");
-            create_default();
+
+            // TODO: Add gsetting for this name
+            create_default("default");
+
         } else {
             /* Migration required */
             perform_migration(current_migration_level);
@@ -1098,17 +1123,38 @@ public class PanelManager : DesktopManager
         this.settings.set_strv(Budgie.ROOT_KEY_PANELS, keys);
     }
 
+    void create_default(string layout_name)
+    {
+        if (layout_name == "default") {
+            this.create_system_default();
+            return;
+        }
+
+        // /etc/budgie-desktop/layouts then /usr/share/budgie-desktop/layouts
+        string[] panel_dirs = {
+            Budgie.CONFDIR,
+            Budgie.DATADIR
+        };
+
+        foreach (string panel_dir in panel_dirs) {
+            string path = "%s/budgie-desktop/layouts/%s.layout".printf(panel_dir, layout_name);
+            if (this.load_default_from_config(path)) {
+                return;
+            }
+        }
+
+        GLib.warning("Failed to find layout '%s'", layout_name);
+
+        // Absolute fallback = built in INI config
+        this.load_default_from_config("resource:///com/solus-project/budgie/panel/panel.ini");
+    }
+
+
     /**
      * Create new default panel layout
      */
-    void create_default()
+    void create_system_default()
     {
-        File f = null;
-        KeyFile config_file = new KeyFile();
-        StringBuilder builder = new StringBuilder();
-        string? line = null;
-        PanelPosition pos;
-
         /**
          * Try in order, and load the first one that exists:
          *  - /etc/budgie-desktop/panel.ini
@@ -1118,29 +1164,50 @@ public class PanelManager : DesktopManager
         string[] system_configs = {
                 @"file://$(Budgie.CONFDIR)/budgie-desktop/panel.ini",
                 @"file://$(Budgie.DATADIR)/budgie-desktop/panel.ini",
-                "resource:///com/solus-project/budgie/panel/panel.ini"
+                ""
         };
 
         foreach (string? filepath in system_configs) {
-            try {
-                f = File.new_for_uri(filepath);
-                if (!f.query_exists()) {
-                    continue;
-                }
-                var dis = new DataInputStream(f.read());
-                while ((line = dis.read_line()) != null) {
-                    builder.append_printf("%s\n", line);
-                }
-                config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
-                break;
-            } catch (Error e) {
-                warning("Failed to load default config: %s", e.message);
+            if (this.load_default_from_config(filepath)) {
+                return;
             }
+        }
+
+        this.load_default_from_config("resource:///com/solus-project/budgie/panel/panel.ini");
+    }
+
+
+    /**
+     * Attempt to load the configuration from the given URL
+     */
+    bool load_default_from_config(string uri)
+    {
+        File f = null;
+        KeyFile config_file = new KeyFile();
+        StringBuilder builder = new StringBuilder();
+        string? line = null;
+        PanelPosition pos;
+
+        try {
+            f = File.new_for_uri(uri);
+            if (!f.query_exists()) {
+                message("%s nope", uri);
+                return false;
+            }
+            var dis = new DataInputStream(f.read());
+            while ((line = dis.read_line()) != null) {
+                builder.append_printf("%s\n", line);
+            }
+            config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
+        } catch (Error e) {
+            warning("Failed to load default config: %s", e.message);
+            return false;
         }
 
         try {
             if (!config_file.has_key("Panels", "Panels")) {
-                critical("Config is missing required Panels section");
+                warning("Config is missing required Panels section");
+                return false;
             }
 
             var panels = config_file.get_string_list("Panels", "Panels");
@@ -1157,8 +1224,10 @@ public class PanelManager : DesktopManager
             }
         } catch (Error e) {
             warning("Error configuring panels!");
+            this.do_live_reset();
+            return false;
         }
-
+        return true;
     }
 
     private void on_name_lost(DBusConnection conn, string name)
