@@ -908,32 +908,50 @@ public class Panel : Budgie.Toplevel
     {
         Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
         bool horizontal = false;
+        Gtk.Allocation alloc;
+        main_layout.get_allocation(out alloc);
+
+        int width = 0, height = 0;
+        int x = 0, y = 0;
+        int shadow_position = 0;
 
         switch (position) {
             case Budgie.PanelPosition.TOP:
-                set_size_request(orig_scr.width, intended_size);
-                move(orig_scr.x, orig_scr.y);
-                main_layout.child_set(shadow, "position", 1);
+                x = orig_scr.x;
+                y = orig_scr.y;
+                width = orig_scr.width;
+                height = intended_size;
+                shadow_position = 1;
                 horizontal = true;
                 break;
             case Budgie.PanelPosition.LEFT:
-                set_size_request(intended_size, orig_scr.height);
-                move(orig_scr.x, orig_scr.y);
-                main_layout.child_set(shadow, "position", 1);
+                x = orig_scr.x;
+                y = orig_scr.y;
+                width = intended_size;
+                height = orig_scr.height;
+                shadow_position = 1;
                 break;
             case Budgie.PanelPosition.RIGHT:
-                set_size_request(intended_size, orig_scr.height);
-                move((orig_scr.x+orig_scr.width) - intended_size - 5, orig_scr.y);
-                main_layout.child_set(shadow, "position", 0);
+                x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+                y = orig_scr.y;
+                width = intended_size;
+                height = orig_scr.height;
+                shadow_position = 0;
                 break;
             case Budgie.PanelPosition.BOTTOM:
             default:
-                move(orig_scr.x, orig_scr.y+(orig_scr.height-intended_size));
-                set_size_request(orig_scr.width, intended_size);
-                main_layout.child_set(shadow, "position", 0);
+                x = orig_scr.x;
+                y = orig_scr.y + (orig_scr.height - intended_size);
+                width = orig_scr.width;
+                height = intended_size;
+                shadow_position = 0;
                 horizontal = true;
                 break;
         }
+
+        move(x, y);
+        set_size_request(width, height);
+        main_layout.child_set(shadow, "position", shadow_position);
 
         if (horizontal) {
             start_box.halign = Gtk.Align.START;
