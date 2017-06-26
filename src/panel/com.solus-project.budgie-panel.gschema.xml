@@ -108,5 +108,10 @@
       <summary>Current migration level</summary>
       <description>Migration level of the current Budgie installation to permit built-in applet changes</description>
     </key>
+    <key type="s" name="layout">
+      <default>'default'</default>
+      <summary>Name of the default desktop layout</summary>
+      <description>The name of the default layout used when resetting the panel</description>
+    </key>
   </schema>
 </schemalist>

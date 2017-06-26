@@ -91,6 +91,9 @@ public const string PANEL_KEY_REGIONS      = "theme-regions";
 /** Current migration level in settings */
 public const string PANEL_KEY_MIGRATION    = "migration-level";
 
+/** Layout to select when reset/init for the first time */
+public const string PANEL_KEY_LAYOUT       = "layout";
+
 /**
  * The current migration level of Budgie, or format change, if you will.
  */
@@ -146,6 +149,8 @@ public class PanelManager : DesktopManager
 
     Wnck.Screen wnck_screen;
     List<unowned Wnck.Window> window_list;
+
+    private string default_layout = "default";
 
     /**
      * Updated when specific names are queried
@@ -434,7 +439,11 @@ public class PanelManager : DesktopManager
     {
         GLib.message("Resetting budgie-panel configuration to defaults");
         Settings s = new Settings(Budgie.ROOT_SCHEMA);
+        this.default_layout = s.get_string(PANEL_KEY_LAYOUT);
         this.reset_dconf_path(s);
+        // Preserve the default layout once more
+        s = new Settings(Budgie.ROOT_SCHEMA);
+        s.set_string(PANEL_KEY_LAYOUT, this.default_layout);
     }
 
     /**
@@ -489,7 +498,7 @@ public class PanelManager : DesktopManager
             message("Creating default panel layout");
 
             // TODO: Add gsetting for this name
-            create_default("default");
+            create_default(this.default_layout);
 
         } else {
             /* Migration required */
@@ -1191,7 +1200,6 @@ public class PanelManager : DesktopManager
         try {
             f = File.new_for_uri(uri);
             if (!f.query_exists()) {
-                message("%s nope", uri);
                 return false;
             }
             var dis = new DataInputStream(f.read());
