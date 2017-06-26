@@ -367,7 +367,7 @@ public class IconTasklistApplet : Budgie.Applet
 
             (pin_buttons[launchers[i]].get_parent() as ButtonWrapper).get_allocation(out alloc);
 
-            if((this.orient == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) ||
+            if ((this.orient == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) ||
                 (this.orient == Gtk.Orientation.VERTICAL && y <= (alloc.y + (alloc.height / 2) - main_layout_allocation.y))) {
 
                 // Check if launcher is being moved left to the same position as it currently is
