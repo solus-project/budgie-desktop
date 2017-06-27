@@ -286,7 +286,7 @@ public class Raven : Gtk.Window
 
     public Raven(Budgie.DesktopManager? manager)
     {
-        Object(type_hint: Gdk.WindowTypeHint.NOTIFICATION, manager: manager);
+        Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
         get_style_context().add_class("budgie-container");
 
         set_wmclass("raven", "raven");
