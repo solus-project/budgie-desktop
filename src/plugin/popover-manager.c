@@ -347,6 +347,11 @@ static BudgiePopover *budgie_popover_manager_get_popover_for_coords(BudgiePopove
                 gint rx, ry = 0;
                 gint x, y = 0;
 
+                /* Skip hidden widget with broken geometry */
+                if (!gtk_widget_get_visible(parent_widget)) {
+                        continue;
+                }
+
                 /* Determine the parent_widget's absolute x, y on screen */
                 toplevel = gtk_widget_get_toplevel(parent_widget);
                 toplevel_window = gtk_widget_get_window(toplevel);
