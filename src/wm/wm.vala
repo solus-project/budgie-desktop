@@ -661,6 +661,10 @@ public class BudgieWM : Meta.Plugin
                 break;
                 break;
             case Meta.WindowType.NOTIFICATION:
+                if (window.get_wm_class() == "raven") {
+                    this.map_completed(actor);
+                    return;
+                }
                 actor.set("opacity", 0U, "scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
                     "pivot-point", PV_CENTER);
                 actor.show();
