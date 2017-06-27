@@ -234,8 +234,16 @@ public class PanelManager : DesktopManager
 
         wnck_screen.window_opened.connect(window_opened);
         wnck_screen.window_closed.connect(window_closed);
-        wnck_screen.active_window_changed.connect(check_windows);
+        wnck_screen.active_window_changed.connect(active_window_changed);
         wnck_screen.active_workspace_changed.connect(check_windows);
+    }
+
+    private void active_window_changed()
+    {
+        // Handle transparency
+        check_windows();
+
+        check_window_intersections(wnck_screen.get_active_window());
     }
 
     /*
@@ -252,6 +260,10 @@ public class PanelManager : DesktopManager
 
         window.state_changed.connect(() => {
             check_windows();
+        });
+
+        window.geometry_changed.connect_after((window) => {
+            this.check_window_intersections(window);
         });
 
         check_windows();
@@ -271,6 +283,64 @@ public class PanelManager : DesktopManager
         check_windows();
     }
 
+    /**
+     * Determine if the given panel and window intersect in geometry.
+     * The panel is buffered by a predetermined pad amount which allows
+     * for intelligent hiding behaviour, i.e. when the window gets close to
+     * the panel, it should start the hide.
+     */
+    private bool window_intersects_panel(Budgie.Toplevel? panel, Wnck.Window? window)
+    {
+        const int pad_amount = 20;
+        Gdk.Rectangle win = Gdk.Rectangle();
+        Gdk.Rectangle pan = Gdk.Rectangle();
+
+        if (window == null) {
+            return false;
+        }
+
+        if (window != wnck_screen.get_active_window()) {
+            return false;
+        }
+
+        if (window.is_skip_pager() || window.is_skip_tasklist()) {
+            return false;
+        }
+
+        // Figure out where the window is
+        window.get_geometry(out win.x, out win.y, out win.width, out win.height);
+
+        // Figure out where the toplevel is
+        panel.get_position(out pan.x, out pan.y);
+        panel.get_size(out pan.width, out pan.height);
+
+        // Pad our values to get some "near" behaviour
+        pan.x -= pad_amount;
+        pan.width += 2 * pad_amount;
+
+        pan.y -= pad_amount;
+        pan.height += 2 * pad_amount;
+
+        return win.intersect(pan, null);
+    }
+
+    /**
+     * Check all windows against all panels for intersections
+     *
+     * An intersection is classified by a buffer zone match to allow dodging
+     * "near" windows automatically.
+     */
+    void check_window_intersections(Wnck.Window? window)
+    {
+        Budgie.Panel? panel = null;
+        var iter = HashTableIter<string,Budgie.Panel?>(panels);
+
+        while (iter.next(null, out panel)) {
+            // Let the panel know it has been intersected
+            panel.intersected = this.window_intersects_panel(panel, window);
+        }
+    }
+
     /*
      * Decide wether or not the panel should be opaque
      * The panel should be opaque when:
@@ -286,13 +356,14 @@ public class PanelManager : DesktopManager
             set_panel_transparent(false);
             return;
         }
-
         bool found = false;
 
         window_list.foreach((window) => {
             bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
-            if ((is_maximized && !window.is_minimized()) &&
-                window.get_workspace() == wnck_screen.get_active_workspace()) {
+            if (window.get_workspace() != wnck_screen.get_active_workspace()) {
+                return;
+            }
+            if ((is_maximized && !window.is_minimized())) {
                 found = true;
                 return;
             }
