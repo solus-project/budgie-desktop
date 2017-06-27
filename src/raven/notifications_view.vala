@@ -267,9 +267,7 @@ public class NotificationWindow : Gtk.Window
             }
         }
 
-        /* This is so fucking unbelievably wrong I can't believe I'm
-         * supporting this abuse.
-         */
+        /* Fallback for filepath based icons */
         if (app_icon != null && "/" in app_icon) {
             img_path = app_icon;
         }
