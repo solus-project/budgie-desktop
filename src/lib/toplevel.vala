@@ -112,6 +112,23 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
         32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
 }
 
+public static void unset_struts(Gtk.Window? window)
+{
+    Gdk.Atom atom;
+    long struts[12];
+
+    if (!window.get_realized()) {
+        return;
+    }
+
+    struts = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    // all relevant WMs support this, Mutter included
+    atom = Gdk.Atom.intern("_NET_WM_STRUT_PARTIAL", false);
+    Gdk.property_change(window.get_window(), atom, Gdk.Atom.intern("CARDINAL", false),
+        32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+}
+
 [Flags]
 public enum PanelTransparency {
     NONE        = 1 << 0,

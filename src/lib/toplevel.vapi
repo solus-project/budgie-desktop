@@ -48,6 +48,9 @@ namespace Budgie {
     public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size);
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
+    public static void unset_struts(Gtk.Window? window);
+
+    [CCode (cheader_filename = "BudgieToplevel.h")]
     public static string position_class_name(PanelPosition position);
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
