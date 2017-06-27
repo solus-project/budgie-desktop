@@ -647,7 +647,7 @@ public class NotificationsView : Gtk.Box
         int y = 0;
         Gdk.Rectangle rect;
 
-        unowned NotificationWindow? tail = stack.peek_tail();
+        unowned NotificationWindow? tail = stack.peek_head();
         var screen = Gdk.Screen.get_default();
 
         int mon = screen.get_primary_monitor();
