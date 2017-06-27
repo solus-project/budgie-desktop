@@ -993,7 +993,11 @@ public class Panel : Budgie.Toplevel
 
     void placement()
     {
-        Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
+        if (this.dock_mode) {
+            Budgie.unset_struts(this);
+        } else {
+            Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
+        }
         bool horizontal = false;
         Gtk.Allocation alloc;
         main_layout.get_allocation(out alloc);
