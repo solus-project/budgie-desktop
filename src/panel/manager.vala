@@ -921,6 +921,24 @@ public class PanelManager : DesktopManager
     }
 
     /**
+     * Set panel dock mode
+     */
+    public override void set_dock_mode(string uuid, bool dock_mode)
+    {
+        Budgie.Panel? panel = panels.lookup(uuid);
+
+        if (panel == null) {
+            warning("Trying to set dock mode on non-existent panel: %s", uuid);
+            return;
+        }
+
+        panel.dock_mode = dock_mode;
+
+        // Raven needs to know about the dock mode
+        this.update_screen();
+    }
+
+    /**
      * Force update geometry for all panels
      */
     void update_screen()
@@ -999,7 +1017,7 @@ public class PanelManager : DesktopManager
         }
 
         // If we have left panel and no right panel, stick to that edge
-        if (left != null && right == null) {
+        if (left != null && right == null && !left.dock_mode) {
             raven.screen_edge = Gtk.PositionType.LEFT;
             raven_screen.x += left.intended_size;
         } else {

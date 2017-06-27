@@ -422,7 +422,7 @@ public class PanelEditor : Gtk.Box
 
     void on_dock_changed()
     {
-        current_panel.dock_mode = this.switch_dock.active;
+        manager.set_dock_mode(current_panel.uuid, this.switch_dock.active);
     }
 
     void on_region_changed()

@@ -26,6 +26,7 @@ public abstract class DesktopManager : GLib.Object
     public abstract uint slots_used();
     public abstract void set_placement(string uuid, Budgie.PanelPosition position);
     public abstract void set_transparency(string uuid, Budgie.PanelTransparency transparency);
+    public abstract void set_dock_mode(string uuid, bool dock_mode);
     public abstract void set_size(string uuid, int size);
 
     public abstract void create_new_panel();
