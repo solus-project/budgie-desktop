@@ -27,6 +27,7 @@ public abstract class Toplevel : Gtk.Window
 
     public bool shadow_visible { public set ; public get; }
     public bool theme_regions { public set; public get; }
+    public bool dock_mode { public set; public get; default = false; }
 
     /**
      * Unique identifier for this panel

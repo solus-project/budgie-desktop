@@ -112,22 +112,6 @@ public class Panel : Budgie.Toplevel
         }
     }
 
-    /**
-     * Set the Budgie Panel into dock mode, where it uses a minimal
-     * amount of screen estate
-     */
-    public bool dock_mode {
-        public set {
-            this._dock_mode = value;
-            this.update_dock_mode();
-        }
-        public get {
-            return this._dock_mode;
-        }
-        default = false;
-    }
-    private bool _dock_mode = false;
-
     public bool activate_action(int remote_action)
     {
         unowned string? uuid = null;
@@ -354,6 +338,9 @@ public class Panel : Budgie.Toplevel
         main_layout.pack_start(shadow, false, false, 0);
 
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "active", SettingsBindFlags.GET);
+        this.settings.bind(Budgie.PANEL_KEY_DOCK_MODE, this, "dock-mode", SettingsBindFlags.DEFAULT);
+
+        this.notify["dock-mode"].connect(this.update_dock_mode);
 
         shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
         this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
@@ -929,7 +916,7 @@ public class Panel : Budgie.Toplevel
      */
     void update_dock_mode()
     {
-        (this.layout as MainPanel).set_dock_mode(this._dock_mode);
+        (this.layout as MainPanel).set_dock_mode(this.dock_mode);
         this.placement();
     }
 
@@ -941,7 +928,7 @@ public class Panel : Budgie.Toplevel
         int nx = 0, ny = 0;
         this.get_position(out nx, out ny);
 
-        if (this._dock_mode) {
+        if (this.dock_mode) {
             switch (position) {
             case Budgie.PanelPosition.TOP:
                 x = ((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2);
@@ -1050,7 +1037,7 @@ public class Panel : Budgie.Toplevel
         }
 
         // Special considerations for dock mode
-        if (this._dock_mode) {
+        if (this.dock_mode) {
             if (horizontal) {
                 if (alloc.width > orig_scr.width) {
                     width = orig_scr.width;
@@ -1084,7 +1071,7 @@ public class Panel : Budgie.Toplevel
 
             main_layout.set_orientation(Gtk.Orientation.VERTICAL);
             main_layout.valign = Gtk.Align.FILL;
-            if (this._dock_mode) {
+            if (this.dock_mode) {
                 main_layout.halign = Gtk.Align.START;
             } else {
                 main_layout.halign = Gtk.Align.FILL;
@@ -1106,7 +1093,7 @@ public class Panel : Budgie.Toplevel
             layout.set_orientation(Gtk.Orientation.VERTICAL);
 
             main_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
-            if (this._dock_mode) {
+            if (this.dock_mode) {
                 main_layout.valign = Gtk.Align.START;
             } else {
                 main_layout.valign = Gtk.Align.FILL;

@@ -37,6 +37,12 @@
       <description>The transparency mode of the panel</description>
     </key>
 
+    <key type="b" name="dock-mode">
+      <default>false</default>
+      <summary>Enable panel dock mode</summary>
+      <description>Dock mode panels are much smaller and resize to house content</description>
+    </key>
+
     <key type="b" name="enable-shadow">
       <default>true</default>
       <summary>Enable panel shadow</summary>

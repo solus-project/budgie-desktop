@@ -85,6 +85,9 @@ public const string PANEL_KEY_SIZE         = "size";
 /** Shadow */
 public const string PANEL_KEY_SHADOW       = "enable-shadow";
 
+/** Dock mode */
+public const string PANEL_KEY_DOCK_MODE    = "dock-mode";
+
 /** Theme regions permitted? */
 public const string PANEL_KEY_REGIONS      = "theme-regions";
 

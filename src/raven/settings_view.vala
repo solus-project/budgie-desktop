@@ -202,6 +202,10 @@ public class PanelEditor : Gtk.Box
     private ulong shadow_id;
 
     [GtkChild]
+    private Gtk.Switch? switch_dock;
+    private ulong dock_id;
+
+    [GtkChild]
     private Gtk.Switch? switch_regions;
     private ulong region_id;
 
@@ -345,6 +349,7 @@ public class PanelEditor : Gtk.Box
 
         shadow_id = switch_shadow.notify["active"].connect(on_shadow_changed);
         region_id = switch_regions.notify["active"].connect(on_region_changed);
+        dock_id = switch_dock.notify["active"].connect(on_dock_changed);
 
         panels_id = combobox_panels.changed.connect(on_panel_changed);
 
@@ -413,6 +418,11 @@ public class PanelEditor : Gtk.Box
     void on_shadow_changed()
     {
         current_panel.shadow_visible = this.switch_shadow.active;
+    }
+
+    void on_dock_changed()
+    {
+        current_panel.dock_mode = this.switch_dock.active;
     }
 
     void on_region_changed()
@@ -550,6 +560,7 @@ public class PanelEditor : Gtk.Box
 
         switch_shadow.set_active(panel.shadow_visible);
         switch_regions.set_active(panel.theme_regions);
+        switch_dock.set_active(panel.dock_mode);
 
         update_applets();
         init_applets();
@@ -763,6 +774,10 @@ public class PanelEditor : Gtk.Box
             SignalHandler.block(switch_regions, region_id);
             switch_regions.set_active(panel.theme_regions);
             SignalHandler.unblock(switch_regions, region_id);
+        } else if (p.name == "dock-mode") {
+            SignalHandler.block(switch_dock, dock_id);
+            switch_dock.set_active(panel.dock_mode);
+            SignalHandler.unblock(switch_dock, dock_id);
         }
     }
 
