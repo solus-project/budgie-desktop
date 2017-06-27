@@ -38,6 +38,14 @@ public class MainPanel : Gtk.Box
             get_style_context().remove_class("transparent");
         }
     }
+
+    public void set_dock_mode(bool dock_mode) {
+        if (dock_mode) {
+            get_style_context().add_class("dock-mode");
+        } else {
+            get_style_context().add_class("dock-mode");
+        }
+    }
 }
 
 /**
@@ -111,6 +119,7 @@ public class Panel : Budgie.Toplevel
     public bool dock_mode {
         public set {
             this._dock_mode = value;
+            this.update_dock_mode();
         }
         public get {
             return this._dock_mode;
@@ -331,6 +340,9 @@ public class Panel : Budgie.Toplevel
         add(main_layout);
 
         layout = new MainPanel();
+        layout.valign = Gtk.Align.FILL;
+        layout.halign = Gtk.Align.FILL;
+
         main_layout.pack_start(layout, true, true, 0);
         main_layout.valign = Gtk.Align.START;
 
@@ -361,6 +373,8 @@ public class Panel : Budgie.Toplevel
         this.settings.bind(Budgie.PANEL_KEY_REGIONS, this, "theme-regions", SettingsBindFlags.DEFAULT);
         this.update_theme_regions();
 
+        this.size_allocate.connect_after(this.do_size_allocate);
+
         get_child().show_all();
 
         this.manager.extension_loaded.connect_after(this.on_extension_loaded);
@@ -368,6 +382,11 @@ public class Panel : Budgie.Toplevel
         /* bit of a no-op. */
         update_sizes();
         load_applets();
+    }
+
+    void do_size_allocate()
+    {
+        this.update_screen_edge();
     }
 
     void update_theme_regions()
@@ -904,6 +923,87 @@ public class Panel : Budgie.Toplevel
         placement();
     }
 
+    /**
+     * Update the internal representation of the panel based on whether
+     * we're in dock mode or not
+     */
+    void update_dock_mode()
+    {
+        (this.layout as MainPanel).set_dock_mode(this._dock_mode);
+        this.placement();
+    }
+
+    void update_screen_edge()
+    {
+        Gtk.Allocation alloc;
+        main_layout.get_allocation(out alloc);
+        int x = 0, y = 0;
+        int nx = 0, ny = 0;
+        this.get_position(out nx, out ny);
+
+        if (this._dock_mode) {
+            switch (position) {
+            case Budgie.PanelPosition.TOP:
+                x = ((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2);
+                if (x < orig_scr.x) {
+                    x = orig_scr.x;
+                }
+                y = orig_scr.y;
+                break;
+            case Budgie.PanelPosition.LEFT:
+                x = orig_scr.x;
+                y = ((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2);
+                if (y < orig_scr.y) {
+                    y = orig_scr.y;
+                }
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+                y = ((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2);
+                if (y < orig_scr.y) {
+                    y = orig_scr.y;
+                }
+                break;
+            case Budgie.PanelPosition.BOTTOM:
+            default:
+                x = ((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2);
+                y = orig_scr.y + (orig_scr.height - intended_size);
+                if (x < orig_scr.x) {
+                    x = orig_scr.x;
+                }
+                break;
+            }
+        } else {
+            switch (position) {
+            case Budgie.PanelPosition.TOP:
+                x = orig_scr.x;
+                y = orig_scr.y;
+                break;
+            case Budgie.PanelPosition.LEFT:
+                x = orig_scr.x;
+                y = orig_scr.y;
+                break;
+            case Budgie.PanelPosition.RIGHT:
+                x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+                y = orig_scr.y;
+                break;
+            case Budgie.PanelPosition.BOTTOM:
+            default:
+                x = orig_scr.x;
+                y = orig_scr.y + (orig_scr.height - intended_size);
+                break;
+            }
+        }
+
+        // Don't move if we don't need to.
+        if (nx == x && ny == y) {
+            return;
+        }
+
+        move(x, y);
+        this.queue_draw();
+    }
+
     void placement()
     {
         Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
@@ -920,7 +1020,7 @@ public class Panel : Budgie.Toplevel
                 x = orig_scr.x;
                 y = orig_scr.y;
                 width = orig_scr.width;
-                height = intended_size;
+                height = intended_size - 5;
                 shadow_position = 1;
                 horizontal = true;
                 break;
@@ -941,16 +1041,31 @@ public class Panel : Budgie.Toplevel
             case Budgie.PanelPosition.BOTTOM:
             default:
                 x = orig_scr.x;
-                y = orig_scr.y + (orig_scr.height - intended_size);
+                y = orig_scr.y + (orig_scr.height - intended_size - 5);
                 width = orig_scr.width;
-                height = intended_size;
+                height = intended_size - 5;
                 shadow_position = 0;
                 horizontal = true;
                 break;
         }
 
-        move(x, y);
-        set_size_request(width, height);
+        // Special considerations for dock mode
+        if (this._dock_mode) {
+            if (horizontal) {
+                if (alloc.width > orig_scr.width) {
+                    width = orig_scr.width;
+                } else {
+                    width = 100;
+                }
+            } else {
+                if (alloc.height > orig_scr.height) {
+                    height = orig_scr.height;
+                } else {
+                    height = 100;
+                }
+            }
+        }
+
         main_layout.child_set(shadow, "position", shadow_position);
 
         if (horizontal) {
@@ -996,12 +1111,13 @@ public class Panel : Budgie.Toplevel
             } else {
                 main_layout.valign = Gtk.Align.FILL;
             }
-            main_layout.halign = Gtk.Align.START;
+            main_layout.halign = Gtk.Align.FILL;
             main_layout.hexpand = true;
-            layout.valign = Gtk.Align.FILL;
         }
 
-        this.queue_resize();
+        layout.set_size_request(width, height);
+        set_size_request(width, height);
+        this.update_screen_edge();
     }
 
     private bool applet_at_start_of_region(Budgie.AppletInfo? info)
