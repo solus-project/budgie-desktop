@@ -1004,11 +1004,12 @@ public class PanelManager : DesktopManager
         }
 
         raven_screen = area.area;
-        if (top != null) {
+        if (top != null && !top.dock_mode) {
             raven_screen.y += (top.intended_size - 5);
             raven_screen.height -= (top.intended_size - 5);
         }
-        if (bottom != null) {
+
+        if (bottom != null && !bottom.dock_mode) {
             raven_screen.height -= bottom.intended_size - 5;
         }
 
