@@ -14,10 +14,6 @@ using LibUUID;
 namespace Budgie
 {
 
-
-public static const string WM_DBUS_NAME        = "org.budgie_desktop.BudgieWM";
-public static const string WM_DBUS_OBJECT_PATH = "/org/budgie_desktop/BudgieWM";
-
 /**
  * The main panel area - i.e. the bit that's rendered
  */
