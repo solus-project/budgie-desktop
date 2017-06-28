@@ -1432,9 +1432,8 @@ public class Panel : Budgie.Toplevel
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
-        var d = (double) intended_size;
-        var y = d * render_scale;
-        var x = d * render_scale;
+        var y = ((double)alloc.height) * render_scale;
+        var x = ((double)alloc.width) * render_scale;
 
         switch (position) {
             case Budgie.PanelPosition.TOP:
