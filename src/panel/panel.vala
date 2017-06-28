@@ -1386,7 +1386,7 @@ public class Panel : Budgie.Toplevel
         dock_animation.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
                 property = "nscale",
-                old = 0.0,
+                old = this.nscale,
                 @new = 1.0
             }
         };
@@ -1410,7 +1410,7 @@ public class Panel : Budgie.Toplevel
         dock_animation.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
                 property = "nscale",
-                old = 1.0,
+                old = this.nscale,
                 @new = 0.0
             }
         };
