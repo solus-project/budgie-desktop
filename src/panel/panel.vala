@@ -301,7 +301,7 @@ public class Panel : Budgie.Toplevel
             this.placement();
         });
         // Handle intelligent dock behaviour
-        notify["intersected"].connect_after(()=> {
+        notify["intersected"].connect(()=> {
             if (this.autohide != AutohidePolicy.NONE) {
                 this.update_dock_behaviour();
             }

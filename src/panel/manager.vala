@@ -340,7 +340,15 @@ public class PanelManager : DesktopManager
 
         while (iter.next(null, out panel)) {
             // Let the panel know it has been intersected
-            panel.intersected = this.window_intersects_panel(panel, window);
+            if (panel.autohide != AutohidePolicy.INTELLIGENT) {
+                continue;
+            }
+            bool b = panel.intersected;
+            bool bn = this.window_intersects_panel(panel, window);
+            if (b == bn) {
+                continue;
+            }
+            panel.intersected = bn;
         }
     }
 
@@ -386,7 +394,9 @@ public class PanelManager : DesktopManager
             if (panel.transparency == PanelTransparency.DYNAMIC) {
                 panel.set_transparent(transparent);
             }
-            panel.set_occluded(!transparent);
+            if (panel.autohide == AutohidePolicy.AUTOMATIC) {
+                panel.set_occluded(!transparent);
+            }
         }
     }
 

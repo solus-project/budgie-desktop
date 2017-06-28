@@ -40,6 +40,59 @@ public class Animation : Object {
     public bool can_anim;              /**<Whether we can animate ?*/
     public int64 elapsed;             /**<Elapsed time */
     public bool no_reset;             /**<Used sometimes for switching an animation*/
+    private AnimCompletionFunc compl;
+
+    private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock frame)
+    {
+        int64 time = frame.get_frame_time();
+        float factor = 0.0f;
+        var elapsed = time - start_time;
+
+        /* Bail out of the animation, set it to its maximum */
+        if (elapsed >= length || id == 0 || !can_anim) {
+            if (id > 0) {
+                foreach (var p in changes) {
+                    if (object == null) {
+                        widget.set_property(p.property, p.@new);
+                    } else {
+                        object.set_property(p.property, p.@new);
+                    }
+                }
+            }
+            id = 0;
+            if (can_anim) {
+                can_anim = false;
+                if (compl != null) {
+                    compl(this);
+                }
+            }
+            widget.queue_draw();
+            return false;
+        }
+
+        factor = ((float)elapsed / length).clamp(0, 1.0f);
+        foreach (var c in changes) {
+            var old = c.old.get_double();
+            var @new = c.@new.get_double();
+
+            if (tween != null) {
+                /* Drop precision here, start with double we loose it exponentially. */
+                factor = (float)tween((double)factor);
+            }
+
+            var delta = (@new-old) * factor;
+            var nprop = (double)(old + delta);
+            if (object == null) {
+                widget.set_property(c.property, nprop);
+            } else {
+                object.set_property(c.property, nprop);
+            }
+        }
+
+        widget.queue_draw();
+        return can_anim;
+    }
+
 
     /**
      * Start this animation by attaching ourselves to the GdkFrameClock
@@ -51,54 +104,9 @@ public class Animation : Object {
         if (!no_reset) {
             start_time = get_monotonic_time();
         }
+        this.compl = compl;
         can_anim = true;
-        id = widget.add_tick_callback((widget, frame)=> {
-            int64 time = frame.get_frame_time();
-            float factor = 0.0f;
-            var elapsed = time - start_time;
-
-            /* Bail out of the animation, set it to its maximum */
-            if (elapsed >= length || id == 0 || !can_anim) {
-                if (id > 0) {
-                    foreach (var p in changes) {
-                        if (object == null) {
-                            widget.set_property(p.property, p.@new);
-                        } else {
-                            object.set_property(p.property, p.@new);
-                        }
-                    }
-                }
-                id = 0;
-                can_anim = false;
-                if (compl != null) {
-                    compl(this);
-                }
-                widget.queue_draw();
-                return false;
-            }
-
-            factor = ((float)elapsed / length).clamp(0, 1.0f);
-            foreach (var c in changes) {
-                var old = c.old.get_double();
-                var @new = c.@new.get_double();
-
-                if (tween != null) {
-                    /* Drop precision here, start with double we loose it exponentially. */
-                    factor = (float)tween((double)factor);
-                }
-
-                var delta = (@new-old) * factor;
-                var nprop = (double)(old + delta);
-                if (object == null) {
-                    widget.set_property(c.property, nprop);
-                } else {
-                    object.set_property(c.property, nprop);
-                }
-            }
-
-            widget.queue_draw();
-            return can_anim;
-        });
+        id = widget.add_tick_callback(this.tick_callback);
     }
 
 
@@ -107,11 +115,10 @@ public class Animation : Object {
      */
     public void stop()
     {
-        if (id == 0) {
-            return;
-        }
-        widget.remove_tick_callback(id);
         can_anim = false;
+        if (id != 0) {
+            widget.remove_tick_callback(id);
+        }
         id = 0;
     }
 }
