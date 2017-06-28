@@ -110,6 +110,7 @@ public class Panel : Budgie.Toplevel
     private double render_scale = 0.0;
     private PanelAnimation animation = PanelAnimation.SHOW;
     private bool allow_animation = false;
+    private bool screen_occluded = false;
 
     public double nscale {
         public set {
@@ -199,6 +200,8 @@ public class Panel : Budgie.Toplevel
 
     public void set_transparent(bool transparent) {
         (layout as MainPanel).set_transparent(transparent);
+        this.screen_occluded = !transparent;
+        this.update_dock_behaviour();
     }
 
     public override GLib.List<AppletInfo?> get_applets()
@@ -285,6 +288,10 @@ public class Panel : Budgie.Toplevel
         notify["scale-factor"].connect(()=> {
             this.scale = get_scale_factor();
             this.placement();
+        });
+        // Handle intelligent dock behaviour
+        notify["intersected"].connect_after(()=> {
+            this.update_dock_behaviour();
         });
 
         popover_manager = new PopoverManager();
@@ -1280,6 +1287,55 @@ public class Panel : Budgie.Toplevel
     }
 
     /**
+     * Remove existing animations
+     */
+    private void remove_panel_animations()
+    {
+        if (dock_animation == null) {
+            return;
+        }
+        dock_animation.stop();
+        dock_animation = null;
+        animation = PanelAnimation.NONE;
+    }
+
+    /**
+     * Handle dock like functionality
+     */
+    private void update_dock_behaviour()
+    {
+        PanelAnimation target_state = PanelAnimation.NONE;
+
+        if (!this.dock_mode) {
+            this.remove_panel_animations();
+            this.animation = PanelAnimation.NONE;
+            return;
+        }
+
+        /* Intellihide behaviour */
+        if (this.intersected) {
+            target_state = PanelAnimation.HIDE;
+        } else {
+            target_state = PanelAnimation.SHOW;
+        }
+
+        if (target_state == PanelAnimation.SHOW && nscale == 1.0) {
+            return;
+        }
+        if (target_state == PanelAnimation.HIDE && nscale == 0.0) {
+            return;
+        }
+
+        this.remove_panel_animations();
+
+        if (target_state == PanelAnimation.SHOW) {
+            this.show_panel();
+        } else {
+            this.hide_panel();
+        }
+    }
+
+    /**
      * Show the panel through a small animation
      */
     private void show_panel()
@@ -1344,7 +1400,7 @@ public class Panel : Budgie.Toplevel
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
-        var d = (double) intended_size;
+        var d = (double) intended_size + 5;
         var y = d * render_scale;
         var x = d * render_scale;
 
