@@ -291,7 +291,7 @@ public class PanelManager : DesktopManager
      */
     private bool window_intersects_panel(Budgie.Toplevel? panel, Wnck.Window? window)
     {
-        const int pad_amount = 20;
+        const int pad_amount = 15;
         Gdk.Rectangle win = Gdk.Rectangle();
         Gdk.Rectangle pan = Gdk.Rectangle();
 
