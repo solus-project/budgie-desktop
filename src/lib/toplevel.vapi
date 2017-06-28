@@ -46,6 +46,14 @@ namespace Budgie {
     }
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
+    [Flags]
+    public enum AutohidePolicy {
+        NONE,
+        AUTOMATIC,
+        INTELLIGENT
+    }
+
+    [CCode (cheader_filename = "BudgieToplevel.h")]
     public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size);
 
     [CCode (cheader_filename = "BudgieToplevel.h")]
@@ -151,6 +159,7 @@ namespace Budgie {
         public abstract uint slots_used();
         public abstract void set_placement(string uuid, Budgie.PanelPosition position);
         public abstract void set_transparency(string uuid, Budgie.PanelTransparency transparency);
+        public abstract void set_autohide(string uuid, Budgie.AutohidePolicy policy);
         public abstract void set_size(string uuid, int size);
         public abstract void create_new_panel();
         public abstract void delete_panel(string uuid);

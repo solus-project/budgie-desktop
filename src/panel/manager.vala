@@ -82,6 +82,9 @@ public const string PANEL_KEY_DARK_THEME   = "dark-theme";
 /** Panel size */
 public const string PANEL_KEY_SIZE         = "size";
 
+/** Autohide policy */
+public const string PANEL_KEY_AUTOHIDE     = "autohide";
+
 /** Shadow */
 public const string PANEL_KEY_SHADOW       = "enable-shadow";
 
@@ -383,6 +386,7 @@ public class PanelManager : DesktopManager
             if (panel.transparency == PanelTransparency.DYNAMIC) {
                 panel.set_transparent(transparent);
             }
+            panel.set_occluded(!transparent);
         }
     }
 
@@ -858,6 +862,7 @@ public class PanelManager : DesktopManager
         string path = this.create_panel_path(uuid);
         PanelPosition position;
         PanelTransparency transparency;
+        AutohidePolicy policy;
         int size;
 
         var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
@@ -870,7 +875,11 @@ public class PanelManager : DesktopManager
 
         position = (PanelPosition)settings.get_enum(Budgie.PANEL_KEY_POSITION);
         transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
+        policy = (AutohidePolicy)settings.get_enum(Budgie.PANEL_KEY_AUTOHIDE);
+
         panel.transparency = transparency;
+        panel.autohide = policy;
+
         size = settings.get_int(Budgie.PANEL_KEY_SIZE);
         panel.intended_size = (int)size;
         this.show_panel(uuid, position, transparency);
@@ -989,6 +998,18 @@ public class PanelManager : DesktopManager
         }
 
         panel.update_transparency(transparency);
+    }
+
+
+    public override void set_autohide(string uuid, Budgie.AutohidePolicy policy)
+    {
+        Budgie.Panel? panel = panels.lookup(uuid);
+
+        if (panel == null) {
+            warning("Trying to set autohide on non-existent panel: %s", uuid);
+            return;
+        }
+        panel.set_autohide_policy(policy);
     }
 
     /**

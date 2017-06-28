@@ -191,11 +191,13 @@ public class PanelEditor : Gtk.Box
     private ulong transparency_id;
 
     [GtkChild]
+    private Gtk.ComboBox? combobox_autohide;
+    private ulong autohide_id;
+
+    [GtkChild]
     private Gtk.SpinButton? spinbutton_size;
     private ulong spin_id;
 
-    [GtkChild]
-    private Gtk.ComboBox? combobox_policy;
 
     [GtkChild]
     private Gtk.Switch? switch_shadow;
@@ -332,7 +334,6 @@ public class PanelEditor : Gtk.Box
         combobox_position.add_attribute(render, "text", 1);
         combobox_position.set_id_column(0);
 
-
         model = new Gtk.ListStore(2, typeof(string), typeof(string));
         render = new Gtk.CellRendererText();
         combobox_panels.set_model(model);
@@ -342,7 +343,13 @@ public class PanelEditor : Gtk.Box
 
         position_id = combobox_position.changed.connect(on_position_changed);
         transparency_id = combobox_transparency.changed.connect(on_transparency_changed);
+        autohide_id = combobox_autohide.changed.connect(on_autohide_changed);
         spin_id = spinbutton_size.value_changed.connect(on_size_changed);
+
+        render = new Gtk.CellRendererText();
+        combobox_autohide.pack_start(render, true);
+        combobox_autohide.add_attribute(render, "text", 1);
+        combobox_autohide.set_id_column(0);
 
         spinbutton_size.set_range(16, 200);
         spinbutton_size.set_numeric(true);
@@ -475,6 +482,18 @@ public class PanelEditor : Gtk.Box
         }
     }
 
+    string autohide_to_id(AutohidePolicy policy)
+    {
+        switch (policy) {
+            case AutohidePolicy.AUTOMATIC:
+                return "automatic";
+            case AutohidePolicy.INTELLIGENT:
+                return "intelligent";
+            default:
+                return "none";
+        }
+    }
+
     public void on_panels_changed()
     {
         button_add_panel.set_sensitive(manager.slots_available() >= 1);
@@ -553,6 +572,10 @@ public class PanelEditor : Gtk.Box
         SignalHandler.block(combobox_transparency, transparency_id);
         combobox_transparency.set_active_id(transparency_to_id(panel.transparency));
         SignalHandler.unblock(combobox_transparency, transparency_id);
+
+        SignalHandler.block(combobox_autohide, autohide_id);
+        combobox_autohide.set_active_id(autohide_to_id(panel.autohide));
+        SignalHandler.unblock(combobox_autohide, autohide_id);
 
         SignalHandler.block(spinbutton_size, spin_id);
         spinbutton_size.set_value(panel.intended_size);
@@ -762,6 +785,11 @@ public class PanelEditor : Gtk.Box
             SignalHandler.block(combobox_transparency, transparency_id);
             combobox_transparency.set_active_id(transparency);
             SignalHandler.unblock(combobox_transparency, transparency_id);
+        } else if (p.name == "autohide") {
+            var autohide = this.autohide_to_id(panel.autohide);
+            SignalHandler.block(combobox_autohide, autohide_id);
+            combobox_autohide.set_active_id(autohide);
+            SignalHandler.unblock(combobox_autohide, autohide_id);
         } else if (p.name == "intended-size") {
             SignalHandler.block(spinbutton_size, spin_id);
             spinbutton_size.set_value(panel.intended_size);
@@ -820,6 +848,25 @@ public class PanelEditor : Gtk.Box
         }
 
         manager.set_transparency(current_panel.uuid, transparency);
+    }
+
+    void on_autohide_changed()
+    {
+        var id = combobox_autohide.active_id;
+        AutohidePolicy policy;
+        switch (id) {
+            case "automatic":
+                policy = AutohidePolicy.AUTOMATIC;
+                break;
+            case "intelligent":
+                policy = AutohidePolicy.INTELLIGENT;
+                break;
+            default:
+                policy = AutohidePolicy.NONE;
+                break;
+        }
+
+        manager.set_autohide(current_panel.uuid, policy);
     }
 }
 

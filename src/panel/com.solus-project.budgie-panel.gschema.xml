@@ -17,6 +17,11 @@
       <value nick="dynamic" value="2" />
       <value nick="always" value="4" />
   </enum>
+  <enum id="com.solus-project.budgie-panel.AutohidePolicy">
+      <value nick="none" value="1" />
+      <value nick="automatic" value="2" />
+      <value nick="intelligent" value="4" />
+  </enum>
 
   <schema id="com.solus-project.budgie-panel.panel">
     <key enum="com.solus-project.budgie-panel.Position" name="location">
@@ -35,6 +40,12 @@
       <default>'none'</default>
       <summary>Panel transparency</summary>
       <description>The transparency mode of the panel</description>
+    </key>
+
+    <key enum="com.solus-project.budgie-panel.AutohidePolicy" name="autohide">
+      <default>'none'</default>
+      <summary>Panel autohide mode</summary>
+      <description>The automatic hide policy of the panel</description>
     </key>
 
     <key type="b" name="dock-mode">

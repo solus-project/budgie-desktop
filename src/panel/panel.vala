@@ -200,7 +200,18 @@ public class Panel : Budgie.Toplevel
 
     public void set_transparent(bool transparent) {
         (layout as MainPanel).set_transparent(transparent);
-        this.screen_occluded = !transparent;
+        this.update_dock_behaviour();
+    }
+
+    /**
+     * Specific for docks, regardless of transparency, and determines
+     * how our "screen blocked by thingy" policy works.
+     */
+    public void set_occluded(bool occluded) {
+        this.screen_occluded = occluded;
+        if (this.autohide == AutohidePolicy.NONE) {
+            return;
+        }
         this.update_dock_behaviour();
     }
 
@@ -291,7 +302,9 @@ public class Panel : Budgie.Toplevel
         });
         // Handle intelligent dock behaviour
         notify["intersected"].connect_after(()=> {
-            this.update_dock_behaviour();
+            if (this.autohide != AutohidePolicy.NONE) {
+                this.update_dock_behaviour();
+            }
         });
 
         popover_manager = new PopoverManager();
@@ -901,6 +914,15 @@ public class Panel : Budgie.Toplevel
         placement();
     }
 
+    public void set_autohide_policy(AutohidePolicy policy)
+    {
+        if (policy != this.autohide) {
+            this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
+            this.autohide = policy;
+            this.update_dock_behaviour();
+        }
+    }
+
     /**
      * Update the internal representation of the panel based on whether
      * we're in dock mode or not
@@ -984,7 +1006,7 @@ public class Panel : Budgie.Toplevel
 
     void placement()
     {
-        if (this.dock_mode) {
+        if (this.autohide != AutohidePolicy.NONE) {
             Budgie.unset_struts(this);
         } else {
             Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
@@ -1302,21 +1324,32 @@ public class Panel : Budgie.Toplevel
     /**
      * Handle dock like functionality
      */
-    private void update_dock_behaviour()
+    void update_dock_behaviour()
     {
         PanelAnimation target_state = PanelAnimation.NONE;
 
-        if (!this.dock_mode) {
+        if (this.autohide == AutohidePolicy.NONE) {
             this.remove_panel_animations();
             this.animation = PanelAnimation.NONE;
+            this.placement();
+            this.show_panel();
             return;
         }
 
-        /* Intellihide behaviour */
-        if (this.intersected) {
-            target_state = PanelAnimation.HIDE;
+        /* Intellihide is effectively screen occlusion & window intersection
+         * whereas automatic is simply screen occlusion */
+        if (this.autohide == AutohidePolicy.INTELLIGENT) {
+            if (this.intersected || this.screen_occluded) {
+                target_state = PanelAnimation.HIDE;
+            } else {
+                target_state = PanelAnimation.SHOW;
+            }
         } else {
-            target_state = PanelAnimation.SHOW;
+            if (this.screen_occluded) {
+                target_state = PanelAnimation.HIDE;
+            } else {
+                target_state = PanelAnimation.SHOW;
+            }
         }
 
         if (target_state == PanelAnimation.SHOW && nscale == 1.0) {
@@ -1400,7 +1433,7 @@ public class Panel : Budgie.Toplevel
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
-        var d = (double) intended_size + 5;
+        var d = (double) intended_size;
         var y = d * render_scale;
         var x = d * render_scale;
 

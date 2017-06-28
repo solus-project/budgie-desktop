@@ -37,6 +37,7 @@ public abstract class Toplevel : Gtk.Window
 
     public Budgie.PanelPosition position { public set; public get; default = Budgie.PanelPosition.BOTTOM; }
     public Budgie.PanelTransparency transparency { public set; public get; default = Budgie.PanelTransparency.NONE; }
+    public Budgie.AutohidePolicy autohide { public set; public get; default = Budgie.AutohidePolicy.NONE; }
 
 
     public abstract GLib.List<Budgie.AppletInfo?> get_applets();
@@ -135,6 +136,13 @@ public enum PanelTransparency {
     NONE        = 1 << 0,
     DYNAMIC     = 1 << 1,
     ALWAYS      = 1 << 2
+}
+
+[Flags]
+public enum AutohidePolicy {
+    NONE        = 1 << 0,
+    AUTOMATIC   = 1 << 1,
+    INTELLIGENT = 1 << 2
 }
 
 public static string position_class_name(PanelPosition position)

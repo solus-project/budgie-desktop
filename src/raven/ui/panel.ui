@@ -56,6 +56,28 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">none</col>
+        <col id="1" translatable="yes" comments="Never hide the panel">None</col>
+      </row>
+      <row>
+        <col id="0">automatic</col>
+        <col id="1" translatable="yes" comments="Automatically hide panel when a maximized window is present">Automatic</col>
+      </row>
+      <row>
+        <col id="0">intelligent</col>
+        <col id="1" translatable="yes" comments="Hide panel using intelligent behaviour (window dodge)">Intelligent</col>
+      </row>
+    </data>
+  </object>
   <template class="BudgiePanelEditor" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -247,8 +269,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Autohide policy</property>
               </object>
@@ -258,9 +280,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="combobox_policy">
+              <object class="GtkComboBox" id="combobox_autohide">
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
+                <property name="model">liststore2</property>
+                <property name="active">0</property>
+                <property name="id_column">0</property>
+                <property name="active_id">none</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -295,7 +320,6 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Transparency</property>
               </object>
