@@ -1336,10 +1336,9 @@ public class Panel : Budgie.Toplevel
             return;
         }
 
-        /* Intellihide is effectively screen occlusion & window intersection
-         * whereas automatic is simply screen occlusion */
+        /* Intellihide is basically: Are we intersected */
         if (this.autohide == AutohidePolicy.INTELLIGENT) {
-            if (this.intersected || this.screen_occluded) {
+            if (this.intersected) {
                 target_state = PanelAnimation.HIDE;
             } else {
                 target_state = PanelAnimation.SHOW;
