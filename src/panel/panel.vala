@@ -1321,6 +1321,8 @@ public class Panel : Budgie.Toplevel
         animation = PanelAnimation.NONE;
     }
 
+    private bool render_panel = true;
+
     /**
      * Handle dock like functionality
      */
@@ -1368,6 +1370,34 @@ public class Panel : Budgie.Toplevel
     }
 
     /**
+     * Unset the input region to allow peek events
+     */
+    private void unset_input_region()
+    {
+        // TODO: Set 1px input region to recieve enter-notify
+        render_panel = false;
+        var region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+            x = 0, y = 0,
+            width = 0,
+            height = 0
+        });
+        get_window().input_shape_combine_region(region, 0, 0);
+    }
+
+    /**
+     * Restore the full input region for "normal" usage
+     */
+    private void set_input_region()
+    {
+        var region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+            x = 0, y = 0,
+            width = get_allocated_width(),
+            height = get_allocated_height()
+        });
+        get_window().input_shape_combine_region(region, 0, 0);
+    }
+
+    /**
      * Show the panel through a small animation
      */
     private void show_panel()
@@ -1375,8 +1405,8 @@ public class Panel : Budgie.Toplevel
         if (!this.allow_animation) {
             return;
         }
-        this.nscale = 0.0;
         this.animation = PanelAnimation.SHOW;
+        render_panel = true;
 
         this.queue_draw();
         this.show();
@@ -1394,7 +1424,7 @@ public class Panel : Budgie.Toplevel
         };
 
         dock_animation.start((a)=> {
-            a.widget.show();
+            this.set_input_region();
             this.animation = PanelAnimation.NONE;
         });
     }
@@ -1407,6 +1437,8 @@ public class Panel : Budgie.Toplevel
         if (!this.allow_animation) {
             return;
         }
+
+        render_panel = true;
         this.animation = PanelAnimation.SHOW;
         dock_animation = new Budgie.Animation();
         dock_animation.widget = this;
@@ -1421,16 +1453,22 @@ public class Panel : Budgie.Toplevel
         };
 
         dock_animation.start((a)=> {
-            a.widget.hide();
+            this.unset_input_region();
             this.animation = PanelAnimation.NONE;
         });
     }
 
     public override bool draw(Cairo.Context cr)
     {
+        if (!render_panel) {
+            /* Don't need to render */
+            return Gdk.EVENT_STOP;
+        }
+
         if (animation == PanelAnimation.NONE) {
             return base.draw(cr);
         }
+
 
         Gtk.Allocation alloc;
         get_allocation(out alloc);
