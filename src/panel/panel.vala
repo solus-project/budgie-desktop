@@ -45,6 +45,17 @@ public class MainPanel : Gtk.Box
 }
 
 /**
+ * This is used to track panel animations, i.e. within the toplevel
+ * itself to provide dock like behaviour
+ */
+public enum PanelAnimation {
+
+    NONE = 0,
+    SHOW,
+    HIDE
+}
+
+/**
  * The toplevel window for a panel
  */
 public class Panel : Budgie.Toplevel
@@ -97,7 +108,9 @@ public class Panel : Budgie.Toplevel
 
     /* Animation tracking */
     private double render_scale = 0.0;
-    private bool initial_anim = false;
+    private PanelAnimation animation = PanelAnimation.SHOW;
+    private bool allow_animation = false;
+
     public double nscale {
         public set {
             render_scale = value;
@@ -106,6 +119,7 @@ public class Panel : Budgie.Toplevel
         public get {
             return render_scale;
         }
+        default = 0.0;
     }
 
     public bool activate_action(int remote_action)
@@ -249,32 +263,6 @@ public class Panel : Budgie.Toplevel
         }
         /* In half a second, add_migratory so the user sees them added */
         Timeout.add(500, add_migratory);
-    }
-
-    private bool initial_animation()
-    {
-        this.initial_anim = true;
-
-        var anim = new Budgie.Animation();
-        anim.widget = this;
-        anim.length = 360 * Budgie.MSECOND;
-        anim.tween = Budgie.expo_ease_out;
-        anim.changes = new Budgie.PropChange[] {
-            Budgie.PropChange() {
-                property = "nscale",
-                old = 1.0,
-                @new = 0.0
-            }
-        };
-
-        anim.start((a)=> {
-            if ((a.widget as Budgie.Panel).nscale == 1.0) {
-                a.widget.hide();
-            } else {
-                (a.widget as Gtk.Window).show();
-            }
-        });
-        return false;
     }
 
     public Panel(Budgie.PanelManager? manager, string? uuid, Settings? settings)
@@ -1279,12 +1267,75 @@ public class Panel : Budgie.Toplevel
         }
     }
 
+    private bool initial_anim = false;
+    private Budgie.Animation? dock_animation = null;
+
+    private bool initial_animation()
+    {
+        this.allow_animation = true;
+        this.initial_anim = true;
+
+        this.show_panel();
+        return false;
+    }
+
+    /**
+     * Show the panel through a small animation
+     */
+    private void show_panel()
+    {
+        this.nscale = 0.0;
+        this.animation = PanelAnimation.SHOW;
+
+        this.queue_draw();
+        this.show();
+
+        dock_animation = new Budgie.Animation();
+        dock_animation.widget = this;
+        dock_animation.length = 360 * Budgie.MSECOND;
+        dock_animation.tween = Budgie.expo_ease_out;
+        dock_animation.changes = new Budgie.PropChange[] {
+            Budgie.PropChange() {
+                property = "nscale",
+                old = 0.0,
+                @new = 1.0
+            }
+        };
+
+        dock_animation.start((a)=> {
+            a.widget.show();
+            this.animation = PanelAnimation.NONE;
+        });
+    }
+
+    /**
+     * Hide the panel through a small animation
+     */
+    private void hide_panel()
+    {
+        this.animation = PanelAnimation.SHOW;
+        dock_animation = new Budgie.Animation();
+        dock_animation.widget = this;
+        dock_animation.length = 360 * Budgie.MSECOND;
+        dock_animation.tween = Budgie.expo_ease_out;
+        dock_animation.changes = new Budgie.PropChange[] {
+            Budgie.PropChange() {
+                property = "nscale",
+                old = 1.0,
+                @new = 0.0
+            }
+        };
+
+        dock_animation.start((a)=> {
+            a.widget.hide();
+            this.animation = PanelAnimation.NONE;
+        });
+    }
+
     public override bool draw(Cairo.Context cr)
     {
-        if (render_scale == 0.0) {
+        if (animation == PanelAnimation.NONE) {
             return base.draw(cr);
-        } else if (render_scale == 1.0) {
-            return Gdk.EVENT_STOP;
         }
 
         Gtk.Allocation alloc;
@@ -1300,20 +1351,20 @@ public class Panel : Budgie.Toplevel
         switch (position) {
             case Budgie.PanelPosition.TOP:
                 // Slide down into view
-                cr.set_source_surface(buffer, 0, -y);
+                cr.set_source_surface(buffer, 0, y - alloc.height);
                 break;
             case Budgie.PanelPosition.LEFT:
                 // Slide into view from left
-                cr.set_source_surface(buffer, -x, 0);
+                cr.set_source_surface(buffer, x - alloc.width, 0);
                 break;
             case Budgie.PanelPosition.RIGHT:
                 // Slide back into view from right
-                cr.set_source_surface(buffer, x, 0);
+                cr.set_source_surface(buffer, alloc.width - x, 0);
                 break;
             case Budgie.PanelPosition.BOTTOM:
             default:
                 // Slide up into view
-                cr.set_source_surface(buffer, 0, y);
+                cr.set_source_surface(buffer, 0, alloc.height - y);
                 break;
         }
 
