@@ -364,7 +364,7 @@ public class PanelManager : DesktopManager
     public void check_windows()
     {
         if (raven.get_expanded()) {
-            set_panel_transparent(false);
+            set_panel_transparent(false, true);
             return;
         }
         bool found = false;
@@ -372,6 +372,9 @@ public class PanelManager : DesktopManager
         window_list.foreach((window) => {
             bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
             if (window.get_workspace() != wnck_screen.get_active_workspace()) {
+                return;
+            }
+            if (window.is_skip_pager() || window.is_skip_tasklist()) {
                 return;
             }
             if ((is_maximized && !window.is_minimized())) {
@@ -386,7 +389,7 @@ public class PanelManager : DesktopManager
     /*
      * Control the transparency for panels with dynamic transparency on
      */
-    void set_panel_transparent(bool transparent)
+    void set_panel_transparent(bool transparent, bool raven_force = false)
     {
         Budgie.Panel? panel = null;
         var iter = HashTableIter<string,Budgie.Panel?>(panels);
@@ -395,7 +398,7 @@ public class PanelManager : DesktopManager
                 panel.set_transparent(transparent);
             }
             if (panel.autohide == AutohidePolicy.AUTOMATIC) {
-                panel.set_occluded(!transparent);
+                panel.set_occluded(raven_force ? transparent : !transparent);
             }
         }
     }
