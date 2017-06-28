@@ -1372,6 +1372,9 @@ public class Panel : Budgie.Toplevel
      */
     private void show_panel()
     {
+        if (!this.allow_animation) {
+            return;
+        }
         this.nscale = 0.0;
         this.animation = PanelAnimation.SHOW;
 
@@ -1401,6 +1404,9 @@ public class Panel : Budgie.Toplevel
      */
     private void hide_panel()
     {
+        if (!this.allow_animation) {
+            return;
+        }
         this.animation = PanelAnimation.SHOW;
         dock_animation = new Budgie.Animation();
         dock_animation.widget = this;
