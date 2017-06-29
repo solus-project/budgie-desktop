@@ -231,6 +231,9 @@ public class PanelManager : DesktopManager
         wnck_screen.get_windows().foreach((window) => {
             window_list.append(window);
             window.state_changed.connect(() => {
+                if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                    return;
+                }
                 check_windows();
             });
         });
@@ -262,10 +265,16 @@ public class PanelManager : DesktopManager
         window_list.append(window);
 
         window.state_changed.connect(() => {
+            if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                return;
+            }
             check_windows();
         });
 
         window.geometry_changed.connect_after((window) => {
+            if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                return;
+            }
             this.check_window_intersections(window);
         });
 
