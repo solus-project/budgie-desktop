@@ -56,6 +56,9 @@ public class SoundIndicator : Gtk.Bin
         /* Sort out our popover */
         this.create_sound_popover();
 
+        this.get_style_context().add_class("sound-applet");
+        this.popover.get_style_context().add_class("sound-popover");
+
         /* Catch scroll wheel events */
         ebox.add_events(Gdk.EventMask.SCROLL_MASK);
         ebox.scroll_event.connect(on_scroll_event);
@@ -69,22 +72,13 @@ public class SoundIndicator : Gtk.Bin
     private void create_sound_popover()
     {
         popover = new Budgie.Popover(ebox);
-        Gtk.Box? popover_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        popover.add(popover_box);
+        Gtk.Box? main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        main_box.border_width = 6;
+        Gtk.Box? popover_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        main_box.pack_start(popover_box, false, false, 0);
+        popover.add(main_box);
         Gtk.Button? sub_button = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
         Gtk.Button? plus_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
-
-        /* + button */
-        popover_box.pack_start(plus_button, false, false, 1);
-        plus_button.clicked.connect(()=> {
-            adjust_volume_increment(+step_size);
-        });
-
-        volume_scale = new Gtk.Scale.with_range(Gtk.Orientation.VERTICAL, 0, 100, 1);
-        popover_box.pack_start(volume_scale, false, false, 0);
-
-        /* Hook up the value_changed event */
-        scale_id = volume_scale.value_changed.connect(on_scale_changed);
 
         /* - button */
         popover_box.pack_start(sub_button, false, false, 1);
@@ -92,9 +86,21 @@ public class SoundIndicator : Gtk.Bin
             adjust_volume_increment(-step_size);
         });
 
+        volume_scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        popover_box.pack_start(volume_scale, false, false, 0);
+
+        /* Hook up the value_changed event */
+        scale_id = volume_scale.value_changed.connect(on_scale_changed);
+
+        /* + button */
+        popover_box.pack_start(plus_button, false, false, 1);
+        plus_button.clicked.connect(()=> {
+            adjust_volume_increment(+step_size);
+        });
+
         /* Refine visual appearance of the scale.. */
         volume_scale.set_draw_value(false);
-        volume_scale.set_size_request(-1, 100);
+        volume_scale.set_size_request(150, -1);
 
         /* Flat buttons only pls :) */
         sub_button.get_style_context().add_class("flat");
@@ -106,7 +112,16 @@ public class SoundIndicator : Gtk.Bin
         sub_button.set_can_focus(false);
         plus_button.set_can_focus(false);
         volume_scale.set_can_focus(false);
-        volume_scale.set_inverted(true);
+        volume_scale.set_inverted(false);
+
+        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        main_box.pack_start(sep, false, false, 1);
+
+        var button = new Gtk.Button.with_label(_("Sound settings"));
+        button.get_child().set_halign(Gtk.Align.START);
+        button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        button.clicked.connect(open_sound_settings);
+        main_box.pack_start(button, false, false, 0);
 
         popover.get_child().show_all();
     }
@@ -293,6 +308,23 @@ public class SoundIndicator : Gtk.Bin
             Gvc.push_volume(stream);
         }
         SignalHandler.unblock(volume_scale, scale_id);
+    }
+
+
+    void open_sound_settings() {
+        popover.hide();
+
+        var app_info = new DesktopAppInfo("gnome-sound-panel.desktop");
+
+        if (app_info == null) {
+            return;
+        }
+
+        try {
+            app_info.launch(null, null);
+        } catch (Error e) {
+            message("Unable to launch gnome-sound-panel.desktop: %s", e.message);
+        }
     }
 
 } // End class
