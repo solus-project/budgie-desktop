@@ -1328,6 +1328,33 @@ public class Panel : Budgie.Toplevel
     /* Track update dock requests */
     private uint update_dock_id = 0;
 
+    private bool cursor_within_bounds()
+    {
+        int cx = 0, cy = 0;
+        int x = 0, y = 0;
+        int w = 0, h = 0;
+        var display = this.get_display();
+        unowned Gdk.Device? pointer = null;
+
+        /* Technically gtk3.20 but mreh. */
+#if HAVE_GTK_322
+        var seat = display.get_default_seat();
+        pointer = seat.get_pointer();
+#else
+        var man = this.get_display().get_device_manager();
+        pointer = man.get_client_pointer();
+#endif
+        this.get_position(out x, out y);
+        this.get_size(out w, out h);
+        pointer.get_position(null, out cx, out cy);
+
+        if ((cx >= x && cx <= x + w) && (cy >= y && cy <= y + h)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Handle dock like functionality
      */
@@ -1363,6 +1390,7 @@ public class Panel : Budgie.Toplevel
         if (target_state == PanelAnimation.SHOW && nscale == 1.0) {
             return false;
         }
+
         if (target_state == PanelAnimation.HIDE && nscale == 0.0) {
             return false;
         }
@@ -1528,6 +1556,10 @@ public class Panel : Budgie.Toplevel
     private void hide_panel()
     {
         if (!this.allow_animation) {
+            return;
+        }
+
+        if (this.cursor_within_bounds()) {
             return;
         }
 
