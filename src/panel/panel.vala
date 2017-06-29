@@ -365,6 +365,8 @@ public class Panel : Budgie.Toplevel
         this.update_theme_regions();
 
         this.size_allocate.connect_after(this.do_size_allocate);
+        this.enter_notify_event.connect(on_enter_notify);
+        this.leave_notify_event.connect(on_leave_notify);
 
         get_child().show_all();
 
@@ -1323,11 +1325,16 @@ public class Panel : Budgie.Toplevel
 
     private bool render_panel = true;
 
+    /* Track update dock requests */
+    private uint update_dock_id = 0;
+
     /**
      * Handle dock like functionality
      */
-    void update_dock_behaviour()
+    bool update_dock_behaviour()
     {
+        update_dock_id = 0;
+
         PanelAnimation target_state = PanelAnimation.NONE;
 
         if (this.autohide == AutohidePolicy.NONE) {
@@ -1335,7 +1342,7 @@ public class Panel : Budgie.Toplevel
             this.animation = PanelAnimation.NONE;
             this.placement();
             this.show_panel();
-            return;
+            return false;
         }
 
         /* Intellihide is basically: Are we intersected */
@@ -1354,10 +1361,10 @@ public class Panel : Budgie.Toplevel
         }
 
         if (target_state == PanelAnimation.SHOW && nscale == 1.0) {
-            return;
+            return false;
         }
         if (target_state == PanelAnimation.HIDE && nscale == 0.0) {
-            return;
+            return false;
         }
 
         this.remove_panel_animations();
@@ -1367,6 +1374,7 @@ public class Panel : Budgie.Toplevel
         } else {
             this.hide_panel();
         }
+        return false;
     }
 
     /**
@@ -1374,13 +1382,44 @@ public class Panel : Budgie.Toplevel
      */
     private void unset_input_region()
     {
-        // TODO: Set 1px input region to recieve enter-notify
+        // Set 1px input region to recieve enter-notify
         render_panel = false;
-        var region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-            x = 0, y = 0,
-            width = 0,
-            height = 0
-        });
+        Cairo.Region? region = null;
+
+        switch (position) {
+            case PanelPosition.TOP:
+                region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+                    x = 0, y = 0,
+                    width = get_allocated_width() * this.scale_factor,
+                    height = 1 * this.scale_factor
+                });
+                break;
+            case PanelPosition.LEFT:
+                region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+                    x = 0, y = 0,
+                    width = 1 * this.scale_factor,
+                    height = get_allocated_height() * this.scale_factor
+                });
+                break;
+            case PanelPosition.RIGHT:
+                region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+                    x = (get_allocated_width() * this.scale_factor) - (2 * this.scale_factor),
+                    y = 0,
+                    width = 1 * this.scale_factor,
+                    height = get_allocated_height() * this.scale_factor
+                });
+                break;
+            case PanelPosition.BOTTOM:
+            default:
+                region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
+                    x = 0,
+                    y = (get_allocated_height() * this.scale_factor) - (1 * this.scale_factor),
+                    width = get_allocated_width() * this.scale_factor,
+                    height = 1 * this.scale_factor
+                });
+                break;
+        }
+
         get_window().input_shape_combine_region(region, 0, 0);
     }
 
@@ -1398,12 +1437,65 @@ public class Panel : Budgie.Toplevel
     }
 
     /**
+     * In an autohidden mode, if we're not visible, and get peeked, say
+     * hello
+     */
+    private bool on_enter_notify(Gdk.EventCrossing cr)
+    {
+        if (this.render_panel) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        if (this.autohide == AutohidePolicy.NONE) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        if (cr.detail == Gdk.NotifyType.INFERIOR) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        if (update_dock_id > 0) {
+            Source.remove(update_dock_id);
+            update_dock_id = 0;
+        }
+
+        if (show_panel_id > 0) {
+            Source.remove(show_panel_id);
+        }
+        show_panel_id = Timeout.add(150, this.show_panel);
+        return Gdk.EVENT_STOP;
+    }
+
+    private bool on_leave_notify(Gdk.EventCrossing cr)
+    {
+        if (this.autohide == AutohidePolicy.NONE) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        if (cr.detail == Gdk.NotifyType.INFERIOR) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        if (show_panel_id > 0) {
+            Source.remove(show_panel_id);
+            show_panel_id = 0;
+        }
+
+        if (update_dock_id > 0) {
+            Source.remove(update_dock_id);
+        }
+        update_dock_id = Timeout.add(1150, this.update_dock_behaviour);
+        return Gdk.EVENT_STOP;
+    }
+
+    uint show_panel_id = 0;
+
+    /**
      * Show the panel through a small animation
      */
-    private void show_panel()
+    private bool show_panel()
     {
+        show_panel_id = 0;
+
         if (!this.allow_animation) {
-            return;
+            return false;
         }
         this.animation = PanelAnimation.SHOW;
         render_panel = true;
@@ -1427,6 +1519,7 @@ public class Panel : Budgie.Toplevel
             this.set_input_region();
             this.animation = PanelAnimation.NONE;
         });
+        return false;
     }
 
     /**
