@@ -935,13 +935,18 @@ public class Panel : Budgie.Toplevel
         this.placement();
     }
 
+    int old_width = 0;
+    int old_height = 0;
+
     void update_screen_edge()
     {
         Gtk.Allocation alloc;
         main_layout.get_allocation(out alloc);
         int x = 0, y = 0;
         int nx = 0, ny = 0;
+        int nw = 0, nh = 0;
         this.get_position(out nx, out ny);
+        this.get_size(out nw, out nh);
 
         if (this.dock_mode) {
             switch (position) {
@@ -995,6 +1000,15 @@ public class Panel : Budgie.Toplevel
                 y = orig_scr.y + (orig_scr.height - intended_size);
                 break;
             }
+        }
+
+        // Don't update input regions unless needed
+        if (old_width != nw || old_height != nh) {
+            if (get_visible()) {
+                this.set_input_region();
+            }
+            old_width = nw;
+            old_height = nh;
         }
 
         // Don't move if we don't need to.
