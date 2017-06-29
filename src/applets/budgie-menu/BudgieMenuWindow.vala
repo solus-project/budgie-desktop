@@ -78,6 +78,16 @@ public class MenuButton : Gtk.Button
         lab.halign = Gtk.Align.START;
         lab.valign = Gtk.Align.CENTER;
 
+        const Gtk.TargetEntry[] drag_targets = {
+            {"text/uri-list", 0, 0 },
+            {"application/x-desktop", 0, 0 }
+        };
+
+        Gtk.drag_source_set(this, Gdk.ModifierType.BUTTON1_MASK, drag_targets, Gdk.DragAction.COPY);
+        base.drag_begin.connect(this.drag_begin);
+        base.drag_end.connect(this.drag_end);
+        base.drag_data_get.connect(this.drag_data_get);
+
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         layout.pack_start(img, false, false, 0);
         layout.pack_start(lab, true, true, 0);
@@ -88,6 +98,32 @@ public class MenuButton : Gtk.Button
         set_tooltip_text(parent.get_description());
 
         get_style_context().add_class("flat");
+    }
+
+    private bool hide_toplevel()
+    {
+        this.get_toplevel().hide();
+        return false;
+    }
+
+    private new void drag_begin(Gdk.DragContext context)
+    {
+        Gtk.drag_set_icon_gicon(context, this.info.get_icon(), 0, 0);
+    }
+
+    private new void drag_end(Gdk.DragContext context)
+    {
+        Idle.add(this.hide_toplevel);
+    }
+
+    private new void drag_data_get(Gdk.DragContext context, Gtk.SelectionData data, uint info, uint timestamp)
+    {
+        try {
+            string[] urls = { Filename.to_uri(this.info.get_filename()) };
+            data.set_uris(urls);
+        } catch (Error e) {
+            warning("Failed to set copy data: %s", e.message);
+        }
     }
 
     private string? vala_has_no_strstr(string a, string b)
