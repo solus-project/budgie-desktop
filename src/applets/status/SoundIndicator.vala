@@ -100,7 +100,7 @@ public class SoundIndicator : Gtk.Bin
 
         /* Refine visual appearance of the scale.. */
         volume_scale.set_draw_value(false);
-        volume_scale.set_size_request(150, -1);
+        volume_scale.set_size_request(140, -1);
 
         /* Flat buttons only pls :) */
         sub_button.get_style_context().add_class("flat");
