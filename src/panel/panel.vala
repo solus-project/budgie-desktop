@@ -1509,7 +1509,7 @@ public class Panel : Budgie.Toplevel
         if (update_dock_id > 0) {
             Source.remove(update_dock_id);
         }
-        update_dock_id = Timeout.add(1150, this.update_dock_behaviour);
+        update_dock_id = Timeout.add(850, this.update_dock_behaviour);
         return Gdk.EVENT_STOP;
     }
 
