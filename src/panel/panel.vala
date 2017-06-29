@@ -921,6 +921,7 @@ public class Panel : Budgie.Toplevel
         if (policy != this.autohide) {
             this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
             this.autohide = policy;
+            this.apply_strut_policy();
             this.update_dock_behaviour();
         }
     }
@@ -1020,13 +1021,18 @@ public class Panel : Budgie.Toplevel
         this.queue_draw();
     }
 
-    void placement()
+    void apply_strut_policy()
     {
         if (this.autohide != AutohidePolicy.NONE) {
             Budgie.unset_struts(this);
         } else {
             Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
         }
+    }
+
+    void placement()
+    {
+        this.apply_strut_policy();
         bool horizontal = false;
         Gtk.Allocation alloc;
         main_layout.get_allocation(out alloc);
