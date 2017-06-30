@@ -9,13 +9,48 @@
  * (at your option) any later version.
  */
 
-public class BatteryIcon : Gtk.Image
+public class BatteryIcon : Gtk.Box
 {
     /** The battery associated with this icon */
     public unowned Up.Device battery { protected set; public get; }
     bool changing = false;
 
+    private Gtk.Image image;
+    private Gtk.Label percent_label;
+
+    /**
+     * Expose a simple property so the UI can update whether we show
+     * labels or not
+     */
+    public bool label_visible {
+        public set {
+            this.percent_label.visible = value;
+        }
+        public get {
+            return this.percent_label.visible;
+        }
+        default = false;
+    }
+
     public BatteryIcon(Up.Device battery) {
+        Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
+
+        this.get_style_context().add_class("battery-icon");
+
+        /* We'll optionally show percent labels */
+        this.percent_label = new Gtk.Label("");
+        this.percent_label.get_style_context().add_class("percent-label");
+
+        this.percent_label.valign = Gtk.Align.CENTER;
+        this.percent_label.margin_end = 4;
+        pack_start(this.percent_label, false, false, 0);
+        this.percent_label.no_show_all = true;
+
+        this.image = new Gtk.Image();
+        this.image.valign = Gtk.Align.CENTER;
+        this.image.pixel_size = 0;
+        pack_start(this.image, false, false, 0);
+
         this.update_ui(battery);
 
         battery.notify.connect(this.on_battery_change);
@@ -73,10 +108,16 @@ public class BatteryIcon : Gtk.Image
                 tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
         }
 
-        // Set a handy tooltip until we gain a menu in StatusApplet
+        // Set the percentage label text if it's changed
+        string labe = "%d%%".printf((int)battery.percentage);
+        string old = this.percent_label.get_label();
+        if (old != labe) {
+            this.percent_label.set_text(labe);
+        }
 
+        // Set a handy tooltip until we gain a menu in StatusApplet
         set_tooltip_text(tip);
-        set_from_icon_name(image_name, Gtk.IconSize.MENU);
+        this.image.set_from_icon_name(image_name, Gtk.IconSize.MENU);
         this.queue_draw();
     }
 }
@@ -94,6 +135,11 @@ public class PowerIndicator : Gtk.Bin
 
     private HashTable<string,BatteryIcon?> devices;
 
+    public bool label_visible { set ; get ; default = false; }
+    private Gtk.CheckButton check_percent;
+
+    private Settings battery_settings;
+
     public PowerIndicator()
     {
         devices = new HashTable<string,BatteryIcon?>(str_hash, str_equal);
@@ -103,14 +149,28 @@ public class PowerIndicator : Gtk.Bin
         widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
         ebox.add(widget);
 
+        /* TODO: Instaniate label_visible */
+        battery_settings = new Settings("org.gnome.desktop.interface");
+        battery_settings.bind("show-battery-percentage", this, "label-visible", SettingsBindFlags.GET);
+        notify["label-visible"].connect_after(this.update_labels);
+
         popover = new Budgie.Popover(ebox);
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
         box.border_width = 6;
         popover.add(box);
 
+        check_percent = new Gtk.CheckButton.with_label(_("Show battery percentage"));
+        check_percent.get_child().set_property("margin", 4);
+        box.pack_start(check_percent, false, false, 0);
+        battery_settings.bind("show-battery-percentage", check_percent, "active", SettingsBindFlags.DEFAULT);
+
+        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        box.pack_start(sep, false, false, 1);
+
         var button = new Gtk.Button.with_label(_("Power settings"));
         button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
         button.clicked.connect(open_power_settings);
+        button.get_child().set_halign(Gtk.Align.START);
         box.pack_start(button, false, false, 0);
         box.show_all();
 
@@ -120,6 +180,15 @@ public class PowerIndicator : Gtk.Bin
         client.device_added.connect(this.on_device_added);
         client.device_removed.connect(this.on_device_removed);
         toggle_show();
+    }
+
+    private void update_labels()
+    {
+        unowned BatteryIcon? icon = null;
+        var iter = HashTableIter<string,BatteryIcon?>(this.devices);
+        while (iter.next(null, out icon)) {
+            icon.label_visible = this.label_visible;
+        }
     }
 
     private bool is_interesting(Up.Device device)
@@ -162,6 +231,7 @@ public class PowerIndicator : Gtk.Bin
             return;
         }
         var icon = new BatteryIcon(device);
+        icon.label_visible = this.label_visible;
         devices.insert(object_path, icon);
         widget.pack_start(icon);
         toggle_show();
