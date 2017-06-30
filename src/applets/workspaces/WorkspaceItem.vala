@@ -271,6 +271,8 @@ public class WorkspaceItem : Gtk.EventBox
         if (rest_of_the_icons.get_children().length() == 0) {
             popover.hide();
         }
+
+        this.queue_resize();
     }
 
     public override void size_allocate(Gtk.Allocation allocation) {
