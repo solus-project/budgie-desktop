@@ -83,6 +83,7 @@ public class StatusApplet : Budgie.Applet
             orient = Gtk.Orientation.VERTICAL;
         }
         this.widget.set_orientation(orient);
+        this.power.change_orientation(orient);
     }
 
     public override void update_popovers(Budgie.PopoverManager? manager)
