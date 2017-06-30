@@ -11,6 +11,8 @@ custom_target('plugin-file-workspaces',
 
 applet_workspaces_sources = [
     'WorkspacesApplet.vala',
+    'WorkspaceItem.vala',
+    'WindowIcon.vala',
 ]
 
 applet_workspaces_deps = [
@@ -18,6 +20,7 @@ applet_workspaces_deps = [
     dep_gtk3,
     dep_wnck,
     dep_peas,
+    link_libappsys,
     link_libplugin,
 ]
 
@@ -26,6 +29,7 @@ shared_library(
     applet_workspaces_sources,
     dependencies: applet_workspaces_deps,
     vala_args: [
+        '--pkg', 'gio-unix-2.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libwnck-3.0',
