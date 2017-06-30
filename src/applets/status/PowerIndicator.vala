@@ -182,6 +182,20 @@ public class PowerIndicator : Gtk.Bin
         toggle_show();
     }
 
+    public void change_orientation(Gtk.Orientation orient)
+    {
+        int spacing = 0;
+        if (orient == Gtk.Orientation.VERTICAL) {
+            spacing = 5;
+        }
+        unowned BatteryIcon? icon = null;
+        var iter = HashTableIter<string,BatteryIcon?>(this.devices);
+        while (iter.next(null, out icon)) {
+            icon.set_spacing(spacing);
+            icon.set_orientation(orient);
+        }
+    }
+
     private void update_labels()
     {
         unowned BatteryIcon? icon = null;
