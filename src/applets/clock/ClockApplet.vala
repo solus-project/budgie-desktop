@@ -74,6 +74,9 @@ public class ClockApplet : Budgie.Applet
         }
 
         label.halign = Gtk.Align.START;
+        label.margin = 0;
+        box.margin = 0;
+        box.border_width = 0;
         button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
         button.add(box);
         return button;
