@@ -1242,6 +1242,23 @@ public class BudgieWMDBUS : GLib.Object
         this.wm.restore_focused();
     }
 
+    public void RemoveWorkspaceByIndex(int index, uint32 time)
+    {
+        unowned Meta.Screen screen = this.wm.get_screen();
+        unowned Meta.Workspace? workspace = screen.get_workspace_by_index(index);
+        if (workspace == null) {
+            return;
+        }
+        screen.remove_workspace(workspace, time);
+    }
+
+    public int AppendNewWorkspace(uint32 time)
+    {
+        unowned Meta.Screen screen = this.wm.get_screen();
+        unowned Meta.Workspace? space = screen.append_new_workspace(false, time);
+        return space.index();
+    }
+
 } /* End BudgieWMDBUS */
 
 } /* End namespace */
