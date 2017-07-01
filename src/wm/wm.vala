@@ -709,7 +709,7 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
-    static const int MINIMIZE_TIMEOUT = 200;
+    static const int MINIMIZE_TIMEOUT = 195;
 
     public override void minimize(Meta.WindowActor actor)
     {
@@ -735,7 +735,7 @@ public class BudgieWM : Meta.Plugin
 
         state_map.insert(actor, AnimationState.MINIMIZE);
         actor.save_easing_state();
-        actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_SINE);
+        actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_QUAD);
         actor.set_easing_duration(MINIMIZE_TIMEOUT);
         actor.transitions_completed.connect(minimize_done);
 
@@ -764,6 +764,8 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
+    static const int UNMINIMIZE_TIMEOUT = 170;
+
     /**
      * Handle unminimize animation
      */
@@ -789,8 +791,8 @@ public class BudgieWM : Meta.Plugin
         actor.show();
 
         actor.save_easing_state();
-        actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUART);
-        actor.set_easing_duration(MINIMIZE_TIMEOUT);
+        actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+        actor.set_easing_duration(UNMINIMIZE_TIMEOUT);
 
         actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U,
                   "x", d.old_x, "y", d.old_y);
