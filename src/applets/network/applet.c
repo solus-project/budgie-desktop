@@ -30,9 +30,13 @@ struct _BudgieNetworkAppletClass {
 
 struct _BudgieNetworkApplet {
         BudgieApplet parent;
+        GtkWidget *box;
         GtkWidget *popover;
         GtkWidget *image;
         NMClient *client;
+
+        /* unowned */
+        BudgiePopoverManager *manager;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieNetworkApplet, budgie_network_applet, BUDGIE_TYPE_APPLET, 0, )
@@ -40,6 +44,10 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieNetworkApplet, budgie_network_applet, BUDGI
 /**
  * Forward declarations
  */
+static void budgie_network_applet_update_popovers(BudgieApplet *applet,
+                                                  BudgiePopoverManager *manager);
+static gboolean budgie_network_applet_button_press(GtkWidget *widget, GdkEventButton *button,
+                                                   BudgieNetworkApplet *self);
 static void budgie_network_applet_ready(GObject *source, GAsyncResult *res, gpointer v);
 static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevice *device,
                                                NMClient *client);
@@ -65,6 +73,10 @@ static void budgie_network_applet_dispose(GObject *object)
 static void budgie_network_applet_class_init(BudgieNetworkAppletClass *klazz)
 {
         GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+        BudgieAppletClass *b_class = BUDGIE_APPLET_CLASS(klazz);
+
+        /* applet vtable hookup */
+        b_class->update_popovers = budgie_network_applet_update_popovers;
 
         /* gobject vtable hookup */
         obj_class->dispose = budgie_network_applet_dispose;
@@ -84,12 +96,15 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
 {
         GtkWidget *image = NULL;
         GtkWidget *box = NULL;
+        GtkWidget *popover = NULL;
+        GtkWidget *label = NULL;
         GtkStyleContext *style = NULL;
 
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
         gtk_style_context_add_class(style, "network-applet");
 
         box = gtk_event_box_new();
+        self->box = box;
         gtk_container_add(GTK_CONTAINER(self), box);
         g_object_set(box, "halign", GTK_ALIGN_CENTER, "valign", GTK_ALIGN_CENTER, NULL);
 
@@ -101,12 +116,64 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         gtk_container_add(GTK_CONTAINER(box), image);
 
         /* TODO: Hook up signals and popovers and what not */
+        g_signal_connect(box,
+                         "button-press-event",
+                         G_CALLBACK(budgie_network_applet_button_press),
+                         self);
+        popover = budgie_popover_new(box);
+        self->popover = popover;
+
+        /* Dummy content */
+        label = gtk_label_new("<i>What if we didn't use nm-applet...</i>");
+        gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+        style = gtk_widget_get_style_context(label);
+        gtk_style_context_add_class(style, GTK_STYLE_CLASS_DIM_LABEL);
+
+        g_object_set(label, "margin", 10, NULL);
+        gtk_container_add(GTK_CONTAINER(popover), label);
+        gtk_widget_show_all(label);
 
         /* Show up on screen */
         gtk_widget_show_all(GTK_WIDGET(self));
 
         /* Start talking to the network manager */
         nm_client_new_async(NULL, budgie_network_applet_ready, self);
+}
+
+/**
+ * budgie_network_applet_button_press:
+ *
+ * Handle button presses on our main applet to invoke the main popover
+ */
+static gboolean budgie_network_applet_button_press(__budgie_unused__ GtkWidget *widget,
+                                                   GdkEventButton *button,
+                                                   BudgieNetworkApplet *self)
+{
+        if (button->button != 1) {
+                return GDK_EVENT_PROPAGATE;
+        }
+
+        if (gtk_widget_get_visible(self->popover)) {
+                gtk_widget_hide(self->popover);
+        } else {
+                budgie_popover_manager_show_popover(self->manager, self->box);
+        }
+
+        return GDK_EVENT_STOP;
+}
+
+/**
+ * budgie_network_applet_update_popovers:
+ *
+ * Register our popovers with the popover manager
+ */
+static void budgie_network_applet_update_popovers(BudgieApplet *applet,
+                                                  BudgiePopoverManager *manager)
+{
+        BudgieNetworkApplet *self = BUDGIE_NETWORK_APPLET(applet);
+
+        budgie_popover_manager_register_popover(manager, self->box, BUDGIE_POPOVER(self->popover));
+        self->manager = manager;
 }
 
 /**
