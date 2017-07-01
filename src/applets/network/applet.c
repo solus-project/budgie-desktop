@@ -37,6 +37,7 @@ struct _BudgieNetworkApplet {
         GtkWidget *image;
 
         GtkWidget *listbox_ethernet; /**< Visual store for our ethernet */
+        gint n_ethernet;
         GHashTable *devices;
 
         NMClient *client;
@@ -238,8 +239,9 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
         GtkWidget *pack_target = NULL;
 
         if (NM_IS_DEVICE_ETHERNET(device)) {
-                add_widget = budgie_ethernet_item_new(device);
+                add_widget = budgie_ethernet_item_new(device, self->n_ethernet);
                 pack_target = self->listbox_ethernet;
+                ++self->n_ethernet;
         } else {
                 g_message("cannot handle device %s", nm_device_get_description(device));
                 return;

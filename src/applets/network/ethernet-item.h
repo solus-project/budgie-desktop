@@ -39,7 +39,7 @@ void budgie_ethernet_item_init_gtype(GTypeModule *module);
 /**
  * Construct a new BudgieEthernetItem
  */
-GtkWidget *budgie_ethernet_item_new(NMDevice *device);
+GtkWidget *budgie_ethernet_item_new(NMDevice *device, gint index);
 
 G_END_DECLS
 

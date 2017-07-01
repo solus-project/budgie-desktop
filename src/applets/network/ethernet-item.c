@@ -15,6 +15,7 @@
 
 BUDGIE_BEGIN_PEDANTIC
 #include "ethernet-item.h"
+#include <glib/gi18n.h>
 BUDGIE_END_PEDANTIC
 
 struct _BudgieEthernetItemClass {
@@ -25,13 +26,16 @@ struct _BudgieEthernetItem {
         GtkBox parent;
         NMDevice *device;
 
+        gint index;
         GtkWidget *label;
         GtkWidget *switch_active;
 };
 
+DEF_AUTOFREE(gchar, g_free)
+
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieEthernetItem, budgie_ethernet_item, GTK_TYPE_BOX, 0, )
 
-enum { PROP_DEVICE = 1, N_PROPS };
+enum { PROP_DEVICE = 1, PROP_INDEX = 2, N_PROPS };
 
 static GParamSpec *obj_properties[N_PROPS] = {
         NULL,
@@ -71,6 +75,14 @@ static void budgie_ethernet_item_class_init(BudgieEthernetItemClass *klazz)
                                                            "The associated network device",
                                                            "An ethernet device",
                                                            G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+
+        obj_properties[PROP_INDEX] = g_param_spec_int("device-index",
+                                                      "Index of this device type",
+                                                      "Number of this ethernet connection",
+                                                      0,
+                                                      G_MAXINT,
+                                                      0,
+                                                      G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
         g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
 }
 
@@ -90,6 +102,9 @@ static void budgie_ethernet_item_set_property(GObject *object, guint id, const G
         case PROP_DEVICE:
                 self->device = g_value_get_pointer(value);
                 break;
+        case PROP_INDEX:
+                self->index = g_value_get_int(value);
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
                 break;
@@ -104,6 +119,9 @@ static void budgie_ethernet_item_get_property(GObject *object, guint id, GValue 
         switch (id) {
         case PROP_DEVICE:
                 g_value_set_pointer(value, self->device);
+                break;
+        case PROP_INDEX:
+                g_value_set_int(value, self->index);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
@@ -122,6 +140,7 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
         label = gtk_label_new("");
         self->label = label;
         gtk_widget_set_halign(label, GTK_ALIGN_START);
+        gtk_widget_set_margin_end(label, 6);
         gtk_box_pack_start(GTK_BOX(self), label, FALSE, FALSE, 0);
 
         /* Allow turning on/off the connection */
@@ -135,12 +154,15 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
 static void budgie_ethernet_item_constructed(GObject *obj)
 {
         BudgieEthernetItem *self = BUDGIE_ETHERNET_ITEM(obj);
+        autofree(gchar) *label = NULL;
+
+        label = g_strdup_printf(_("Wired connection %d"), self->index + 1);
 
         /* Update our display label */
-        gtk_label_set_text(GTK_LABEL(self->label), nm_device_get_description(self->device));
+        gtk_label_set_text(GTK_LABEL(self->label), label);
 }
 
-GtkWidget *budgie_ethernet_item_new(NMDevice *device)
+GtkWidget *budgie_ethernet_item_new(NMDevice *device, gint index)
 {
         return g_object_new(BUDGIE_TYPE_ETHERNET_ITEM,
                             "orientation",
@@ -149,6 +171,8 @@ GtkWidget *budgie_ethernet_item_new(NMDevice *device)
                             0,
                             "device",
                             device,
+                            "device-index",
+                            index,
                             NULL);
 }
 
