@@ -150,6 +150,28 @@ static void budgie_access_point_item_init(BudgieAccessPointItem *self)
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
+static const gchar *budgie_access_point_strength_to_icon(const guint8 strength)
+{
+        static const gchar *icon_map[] = {
+                "network-wireless-signal-none-symbolic",
+                "network-wireless-signal-weak-symbolic",
+                "network-wireless-signal-ok-symbolic",
+                "network-wireless-signal-good-symbolic",
+                "network-wireless-signal-excellent-symbolic",
+        };
+
+        if (strength >= 85) {
+                return icon_map[4];
+        } else if (strength >= 60) {
+                return icon_map[3];
+        } else if (strength >= 40) {
+                return icon_map[2];
+        } else if (strength >= 25) {
+                return icon_map[1];
+        }
+        return icon_map[0];
+}
+
 /**
  * budgie_access_point_item_update_label:
  *
@@ -165,12 +187,46 @@ static void budgie_access_point_item_update_label(BudgieAccessPointItem *self)
         gtk_label_set_text(GTK_LABEL(self->label), ssid);
 }
 
+/**
+ * budgie_access_point_item_update_icon:
+ *
+ * Update icon with the strength details
+ */
+static void budgie_access_point_item_update_icon(BudgieAccessPointItem *self)
+{
+        const guint8 strength = nm_access_point_get_strength(self->access_point);
+        const gchar *icon = budgie_access_point_strength_to_icon(strength);
+
+        gtk_image_set_from_icon_name(GTK_IMAGE(self->strength_image), icon, GTK_ICON_SIZE_MENU);
+}
+
+/**
+ * budgie_access_point_item_notify:
+ *
+ * Handle property changes on the access point
+ */
+static void budgie_access_point_item_notify(BudgieAccessPointItem *self, GParamSpec *ps,
+                                            __budgie_unused__ NMAccessPoint *ap)
+{
+        if (g_str_equal(ps->name, NM_ACCESS_POINT_STRENGTH)) {
+                budgie_access_point_item_update_icon(self);
+        } else if (g_str_equal(ps->name, NM_ACCESS_POINT_SSID)) {
+                budgie_access_point_item_update_label(self);
+        }
+}
+
 static void budgie_access_point_item_constructed(GObject *obj)
 {
         BudgieAccessPointItem *self = BUDGIE_ACCESS_POINT_ITEM(obj);
 
         /* Update display label */
         budgie_access_point_item_update_label(self);
+        budgie_access_point_item_update_icon(self);
+
+        g_signal_connect_swapped(self->access_point,
+                                 "notify",
+                                 G_CALLBACK(budgie_access_point_item_notify),
+                                 self);
 }
 
 GtkWidget *budgie_access_point_item_new(NMAccessPoint *ap)
