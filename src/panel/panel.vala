@@ -1551,6 +1551,14 @@ public class Panel : Budgie.Toplevel
         this.queue_draw();
         this.show();
 
+        if (!this.get_settings().gtk_enable_animations) {
+            this.nscale = 1.0;
+            this.set_input_region();
+            this.animation = PanelAnimation.NONE;
+            this.queue_draw();
+            return false;
+        }
+
         dock_animation = new Budgie.Animation();
         dock_animation.widget = this;
         dock_animation.length = 360 * Budgie.MSECOND;
@@ -1580,6 +1588,14 @@ public class Panel : Budgie.Toplevel
         }
 
         if (this.cursor_within_bounds()) {
+            return;
+        }
+
+        if (!this.get_settings().gtk_enable_animations) {
+            this.nscale = 0.0;
+            this.unset_input_region();
+            this.animation = PanelAnimation.NONE;
+            this.queue_draw();
             return;
         }
 
