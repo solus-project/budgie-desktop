@@ -494,6 +494,19 @@ public class Raven : Gtk.Window
         this.expanded = exp;
         this.iface.ExpansionChanged(this.expanded);
 
+        if (!this.get_settings().gtk_enable_animations) {
+            if (!exp) {
+                this.nscale = 0.0;
+                this.hide();
+            } else {
+                this.nscale = 1.0;
+                this.present();
+                this.grab_focus();
+                this.steal_focus();
+            }
+            return;
+        }
+
         var anim = new Budgie.Animation();
         anim.widget = this;
         anim.length = 170 * Budgie.MSECOND;
