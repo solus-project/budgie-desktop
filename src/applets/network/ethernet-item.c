@@ -201,6 +201,17 @@ static void budgie_ethernet_item_update_state(BudgieEthernetItem *self,
 
         icon_name = nm_state_to_icon(state);
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), icon_name, GTK_ICON_SIZE_MENU);
+
+        if (state == NM_DEVICE_STATE_ACTIVATED) {
+                gtk_switch_set_active(GTK_SWITCH(self->switch_active), TRUE);
+                gtk_widget_set_sensitive(self->switch_active, TRUE);
+        } else if (state == NM_DEVICE_STATE_DISCONNECTED) {
+                gtk_switch_set_active(GTK_SWITCH(self->switch_active), FALSE);
+                gtk_widget_set_sensitive(self->switch_active, TRUE);
+        } else {
+                gtk_switch_set_active(GTK_SWITCH(self->switch_active), FALSE);
+                gtk_widget_set_sensitive(self->switch_active, FALSE);
+        }
 }
 
 static void budgie_ethernet_item_constructed(GObject *obj)
