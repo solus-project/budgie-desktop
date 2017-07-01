@@ -30,6 +30,8 @@ struct _BudgieEthernetItem {
         GtkWidget *image;
         GtkWidget *label;
         GtkWidget *switch_active;
+
+        gulong switch_id;
 };
 
 DEF_AUTOFREE(gchar, g_free)
@@ -52,6 +54,7 @@ static void budgie_ethernet_item_get_property(GObject *object, guint id, GValue 
                                               GParamSpec *spec);
 static void budgie_ethernet_item_update_state(BudgieEthernetItem *self, guint new_state,
                                               guint old_state, guint reason, NMDevice *device);
+static void budgie_ethernet_item_switched(GObject *o, GParamSpec *ps, BudgieEthernetItem *self);
 
 /**
  * Handle cleanup
@@ -161,7 +164,25 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
         self->switch_active = switch_active;
         gtk_box_pack_end(GTK_BOX(self), switch_active, FALSE, FALSE, 0);
 
+        self->switch_id = g_signal_connect_after(switch_active, "notify::active", G_CALLBACK(budgie_ethernet_item_switched), self);
         gtk_widget_show_all(GTK_WIDGET(self));
+}
+
+/**
+ * budgie_ethernet_item_switched:
+ *
+ * The switch was eithered turned on or off, so activate/deactivate the connection
+ * as appropriate.
+ */
+static void budgie_ethernet_item_switched(GObject *o, __budgie_unused__ GParamSpec *ps, BudgieEthernetItem *self)
+{
+        gboolean active = gtk_switch_get_active(GTK_SWITCH(o));
+
+        if (active) {
+                nm_device_set_autoconnect(self->device, TRUE);
+        } else {
+                nm_device_disconnect(self->device, NULL, NULL);
+        }
 }
 
 static const gchar *nm_state_to_icon(NMDeviceState st)
@@ -202,6 +223,7 @@ static void budgie_ethernet_item_update_state(BudgieEthernetItem *self,
         icon_name = nm_state_to_icon(state);
         gtk_image_set_from_icon_name(GTK_IMAGE(self->image), icon_name, GTK_ICON_SIZE_MENU);
 
+        g_signal_handler_block(self->switch_active, self->switch_id);
         if (state == NM_DEVICE_STATE_ACTIVATED) {
                 gtk_switch_set_active(GTK_SWITCH(self->switch_active), TRUE);
                 gtk_widget_set_sensitive(self->switch_active, TRUE);
@@ -212,6 +234,7 @@ static void budgie_ethernet_item_update_state(BudgieEthernetItem *self,
                 gtk_switch_set_active(GTK_SWITCH(self->switch_active), FALSE);
                 gtk_widget_set_sensitive(self->switch_active, FALSE);
         }
+        g_signal_handler_unblock(self->switch_active, self->switch_id);
 }
 
 static void budgie_ethernet_item_constructed(GObject *obj)
