@@ -386,7 +386,10 @@ public class WorkspacesApplet : Budgie.Applet
                 dynamically_created_workspaces.remove(index);
                 dyn = dynamically_created_workspaces.find(index+1);
                 if (dyn == null) {
-                    wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
+                    GLib.Timeout.add(200, () => {
+                        wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
+                        return false;
+                    });
                 }
             }
             item.update_windows(window_list);
