@@ -1,0 +1,8 @@
+[Plugin]
+Module=networkapplet.so
+Name=Network
+_Description=Network Applet
+Authors=Ikey Doherty
+Copyright=Copyright © 2017 Ikey Doherty
+Website=https://solus-project.com
+Icon=network-transit-symbolic
