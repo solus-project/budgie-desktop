@@ -808,8 +808,8 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
-    static const int DESTROY_TIMEOUT  = 170;
-    static const double DESTROY_SCALE = 0.7;
+    static const int DESTROY_TIMEOUT  = 120;
+    static const double DESTROY_SCALE = 0.88;
 
     public override void destroy(Meta.WindowActor actor)
     {
@@ -839,9 +839,12 @@ public class BudgieWM : Meta.Plugin
                 actor.set("scale-x", DESTROY_SCALE, "scale-y", DESTROY_SCALE, "opacity", 0U);
                 break;
             case Meta.WindowType.MENU:
+            case Meta.WindowType.POPUP_MENU:
+            case Meta.WindowType.DROPDOWN_MENU:
+                actor.set("pivot-point", PV_CENTER);
                 actor.save_easing_state();
                 actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
-
+                actor.set_easing_duration(DESTROY_TIMEOUT);
                 actor.set("opacity", 0U);
                 break;
             default:
