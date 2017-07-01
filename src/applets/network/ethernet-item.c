@@ -164,7 +164,10 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
         self->switch_active = switch_active;
         gtk_box_pack_end(GTK_BOX(self), switch_active, FALSE, FALSE, 0);
 
-        self->switch_id = g_signal_connect_after(switch_active, "notify::active", G_CALLBACK(budgie_ethernet_item_switched), self);
+        self->switch_id = g_signal_connect_after(switch_active,
+                                                 "notify::active",
+                                                 G_CALLBACK(budgie_ethernet_item_switched),
+                                                 self);
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
@@ -174,7 +177,8 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
  * The switch was eithered turned on or off, so activate/deactivate the connection
  * as appropriate.
  */
-static void budgie_ethernet_item_switched(GObject *o, __budgie_unused__ GParamSpec *ps, BudgieEthernetItem *self)
+static void budgie_ethernet_item_switched(GObject *o, __budgie_unused__ GParamSpec *ps,
+                                          BudgieEthernetItem *self)
 {
         gboolean active = gtk_switch_get_active(GTK_SWITCH(o));
 
