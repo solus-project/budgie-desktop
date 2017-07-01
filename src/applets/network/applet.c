@@ -18,6 +18,12 @@ BUDGIE_BEGIN_PEDANTIC
 #include <nm-client.h>
 BUDGIE_END_PEDANTIC
 
+/**
+ * Useful default autofree helpers
+ */
+DEF_AUTOFREE(gchar, g_free)
+DEF_AUTOFREE(GError, g_error_free)
+
 struct _BudgieNetworkAppletClass {
         BudgieAppletClass parent_class;
 };
@@ -104,22 +110,21 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
 static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyncResult *res,
                                         gpointer v)
 {
-        GError *error = NULL;
+        autofree(GError) *error = NULL;
         NMClient *client = NULL;
         BudgieNetworkApplet *self = v;
+        autofree(gchar) *sprint_text = NULL;
 
         /* Handle the errors */
         client = nm_client_new_finish(res, &error);
         if (error) {
-                gchar *sprint_text =
+                sprint_text =
                     g_strdup_printf("Failed to contact Network Manager: %s", error->message);
                 g_message("Unable to obtain network client: %s", error->message);
                 gtk_widget_set_tooltip_text(GTK_WIDGET(self), sprint_text);
-                g_free(sprint_text);
                 gtk_image_set_from_icon_name(GTK_IMAGE(self->image),
                                              "dialog-error-symbolic",
                                              GTK_ICON_SIZE_BUTTON);
-                g_error_free(error);
                 return;
         }
 
