@@ -2,7 +2,7 @@
 
 # This is the only version I can test with, if lower is needed and validated
 # as working, I'll lower the version requirement.
-dep_nmgtk = dependency('libnm-gtk', version: '>= 1.4.2')
+dep_nm = dependency('libnm-glib', version: '>= 1.4.4')
 
 applet_network_dir = applets_dir + '.network'
 
@@ -21,7 +21,7 @@ applet_network_sources = [
 applet_network_deps = [
     dep_gtk3,
     dep_peas,
-    dep_nmgtk,
+    dep_nm,
     link_libplugin,
 ]
 
