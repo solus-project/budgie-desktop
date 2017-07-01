@@ -164,6 +164,7 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
 
         /* Listbox to store our access points */
         listbox = gtk_list_box_new();
+        gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
         gtk_widget_set_margin_top(listbox, 2);
         self->listbox = listbox;
         gtk_box_pack_start(GTK_BOX(self), listbox, FALSE, FALSE, 0);
@@ -210,7 +211,7 @@ static void budgie_wifi_item_ap_removed(BudgieWifiItem *self, NMAccessPoint *ap,
         }
 
         parent = gtk_widget_get_parent(row);
-        gtk_container_remove(GTK_CONTAINER(self->listbox), parent);
+        gtk_widget_destroy(parent);
         g_hash_table_remove(self->access_points, ap);
 }
 
