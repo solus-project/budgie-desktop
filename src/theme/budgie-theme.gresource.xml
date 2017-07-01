@@ -2,14 +2,14 @@
 <gresources>
         <!-- 3.18 assets //-->
         <gresource prefix="/com/solus-project/budgie/theme">
-                <file>3.18/theme.css</file>
-                <file>3.18/theme_hc.css</file>
+                <file>theme_3.18.css</file>
+                <file>theme_hc_3.18.css</file>
         </gresource>
 
         <!-- 3.20 assets //-->
         <gresource prefix="/com/solus-project/budgie/theme">
-                <file>3.20/theme.css</file>
-                <file>3.20/theme_hc.css</file>
+                <file>theme_3.20.css</file>
+                <file>theme_hc_3.20.css</file>
         </gresource>
 
         <gresource prefix="/com/solus-project/budgie/theme">

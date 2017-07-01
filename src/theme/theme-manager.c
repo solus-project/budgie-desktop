@@ -177,9 +177,9 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager *self,
         if (self->builtin_enabled) {
                 g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
                 if (theme_name && g_str_equal(theme_name, "HighContrast")) {
-                        theme_css = "theme_hc.css";
+                        theme_css = "theme_hc";
                 } else {
-                        theme_css = "theme.css";
+                        theme_css = "theme";
                 }
                 g_free(theme_name);
         }

@@ -20,9 +20,9 @@ gchar *budgie_form_theme_path(const gchar *suffix)
         /* Prioritize 3.18 */
         switch (minor_version) {
         case 18:
-                return g_strdup_printf("%s/3.18/%s", THEME_PREFIX, suffix);
+                return g_strdup_printf("%s/%s_3.18.css", THEME_PREFIX, suffix);
         case 20:
         default:
-                return g_strdup_printf("%s/3.20/%s", THEME_PREFIX, suffix);
+                return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
         }
 }
