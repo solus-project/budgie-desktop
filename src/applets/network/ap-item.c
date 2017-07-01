@@ -140,7 +140,7 @@ static void budgie_access_point_item_init(BudgieAccessPointItem *self)
         gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
         self->strength_image = image;
         gtk_box_pack_end(GTK_BOX(self), image, FALSE, FALSE, 0);
-        g_object_set(image, "margin-end", 8, "margin-start", 4, NULL);
+        g_object_set(image, "margin-end", 8, "margin-start", 12, NULL);
 
         /* HACKING */
         gtk_image_set_from_icon_name(GTK_IMAGE(image),
