@@ -28,7 +28,6 @@ struct _BudgieWifiItem {
         NMDevice *device;
 
         gint index;
-        GtkWidget *image;
         GtkWidget *label;
         GtkWidget *switch_active;
 };
@@ -135,7 +134,6 @@ static void budgie_wifi_item_get_property(GObject *object, guint id, GValue *val
  */
 static void budgie_wifi_item_init(BudgieWifiItem *self)
 {
-        GtkWidget *image = NULL;
         GtkWidget *label = NULL;
         GtkWidget *switch_active = NULL;
         GtkWidget *header_layout = NULL;
@@ -143,19 +141,12 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
         header_layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start(GTK_BOX(self), header_layout, FALSE, FALSE, 0);
 
-        /* Display image */
-        image = gtk_image_new();
-        self->image = image;
-        gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
-        gtk_box_pack_start(GTK_BOX(header_layout), image, FALSE, FALSE, 0);
-        gtk_widget_set_margin_end(image, 12);
-        gtk_widget_set_halign(image, GTK_ALIGN_START);
-
         /* Display label */
         label = gtk_label_new("");
         self->label = label;
         gtk_widget_set_halign(label, GTK_ALIGN_START);
-        gtk_widget_set_margin_end(label, 6);
+        gtk_widget_set_margin_end(label, 12);
+        gtk_widget_set_margin_start(label, 8);
         gtk_box_pack_start(GTK_BOX(header_layout), label, FALSE, FALSE, 0);
 
         /* Allow turning on/off the connection */

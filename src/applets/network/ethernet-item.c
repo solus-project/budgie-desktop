@@ -28,7 +28,6 @@ struct _BudgieEthernetItem {
         NMDevice *device;
 
         gint index;
-        GtkWidget *image;
         GtkWidget *label;
         GtkWidget *switch_active;
 
@@ -139,23 +138,15 @@ static void budgie_ethernet_item_get_property(GObject *object, guint id, GValue 
  */
 static void budgie_ethernet_item_init(BudgieEthernetItem *self)
 {
-        GtkWidget *image = NULL;
         GtkWidget *label = NULL;
         GtkWidget *switch_active = NULL;
-
-        /* Display image */
-        image = gtk_image_new();
-        self->image = image;
-        gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
-        gtk_box_pack_start(GTK_BOX(self), image, FALSE, FALSE, 0);
-        gtk_widget_set_margin_end(image, 12);
-        gtk_widget_set_halign(image, GTK_ALIGN_START);
 
         /* Display label */
         label = gtk_label_new("");
         self->label = label;
         gtk_widget_set_halign(label, GTK_ALIGN_START);
-        gtk_widget_set_margin_end(label, 6);
+        gtk_widget_set_margin_end(label, 12);
+        gtk_widget_set_margin_start(label, 8);
         gtk_box_pack_start(GTK_BOX(self), label, FALSE, FALSE, 0);
 
         /* Allow turning on/off the connection */
@@ -195,10 +186,6 @@ static void budgie_ethernet_item_update_state(BudgieEthernetItem *self,
                                               __budgie_unused__ NMDevice *device)
 {
         NMDeviceState state = nm_device_get_state(self->device);
-        const gchar *icon_name = NULL;
-
-        icon_name = nm_state_to_icon(state);
-        gtk_image_set_from_icon_name(GTK_IMAGE(self->image), icon_name, GTK_ICON_SIZE_MENU);
 
         g_signal_handler_block(self->switch_active, self->switch_id);
         if (state == NM_DEVICE_STATE_ACTIVATED) {
