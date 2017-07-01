@@ -8,44 +8,19 @@ $pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
 $asset_suffix: if($variant == 'default', '', '-hc');
 
 // Used to reset all style properties set by the gtk theme
-%reset_style,
 popover list,
 popover row,
 .budgie-popover list,
 .budgie-popover row {
-    background: none;
-    border: none;
-    box-shadow: none;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-    opacity: 1;
-    min-width: 0;
-    min-height: 0;
+    @extend %reset_style
 }
 
 %reset_style,
  menubar {
     menuitem {
-        padding: 4px 8px;
-        border: solid transparent;
-        border-width: 0;
-        }
-
-    menuitem:hover {
-        background-color: $selected_bg_color;
-        color: $fg_color;
-        }
-
-    menuitem:disabled {
-        color: rgba(207, 218, 231, 0.2);
-        border-color: transparent;
-        }
-
-    menuitem label {
-        background: none;
-        color: $fg_color;
-        }
+        @include menu_reset_style(label);
     }
+}
 
 // Container for both the "panel" area and the shadow. Wise to keep
 // this transparent..
