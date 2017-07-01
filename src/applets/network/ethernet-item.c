@@ -14,6 +14,7 @@
 #include "util.h"
 
 BUDGIE_BEGIN_PEDANTIC
+#include "common.h"
 #include "ethernet-item.h"
 #include <glib/gi18n.h>
 BUDGIE_END_PEDANTIC
@@ -33,8 +34,6 @@ struct _BudgieEthernetItem {
 
         gulong switch_id;
 };
-
-DEF_AUTOFREE(gchar, g_free)
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieEthernetItem, budgie_ethernet_item, GTK_TYPE_BOX, 0, )
 
@@ -186,32 +185,6 @@ static void budgie_ethernet_item_switched(GObject *o, __budgie_unused__ GParamSp
                 nm_device_set_autoconnect(self->device, TRUE);
         } else {
                 nm_device_disconnect(self->device, NULL, NULL);
-        }
-}
-
-static const gchar *nm_state_to_icon(NMDeviceState st)
-{
-        switch (st) {
-        case NM_DEVICE_STATE_UNKNOWN:
-        case NM_DEVICE_STATE_UNMANAGED:
-                return "network-wired-offline-symbolic";
-        case NM_DEVICE_STATE_UNAVAILABLE:
-                return "network-wired-no-route-symbolic";
-        case NM_DEVICE_STATE_FAILED:
-                return "network-error-symbolic";
-        case NM_DEVICE_STATE_PREPARE:
-        case NM_DEVICE_STATE_CONFIG:
-        case NM_DEVICE_STATE_IP_CHECK:
-        case NM_DEVICE_STATE_IP_CONFIG:
-        case NM_DEVICE_STATE_SECONDARIES:
-                return "network-wired-acquiring-symbolic";
-        case NM_DEVICE_STATE_DISCONNECTED:
-        case NM_DEVICE_STATE_DEACTIVATING:
-                return "network-wired-disconnected-symbolic";
-        case NM_DEVICE_STATE_ACTIVATED:
-                return "network-wired-symbolic";
-        default:
-                return "network-error-symbolic";
         }
 }
 

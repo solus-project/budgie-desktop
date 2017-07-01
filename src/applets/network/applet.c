@@ -15,16 +15,11 @@
 
 BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
+#include "common.h"
 #include "ethernet-item.h"
 #include <nm-client.h>
 #include <nm-device-ethernet.h>
 BUDGIE_END_PEDANTIC
-
-/**
- * Useful default autofree helpers
- */
-DEF_AUTOFREE(gchar, g_free)
-DEF_AUTOFREE(GError, g_error_free)
 
 struct _BudgieNetworkAppletClass {
         BudgieAppletClass parent_class;
