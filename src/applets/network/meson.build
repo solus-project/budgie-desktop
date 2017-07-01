@@ -15,6 +15,7 @@ custom_target('plugin-file-network',
 
 applet_network_sources = [
     'applet.c',
+    'ap-item.c',
     'common.c',
     'ethernet-item.c',
     'plugin.c',
