@@ -16,6 +16,7 @@
 BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
 #include <nm-client.h>
+#include <nm-device-ethernet.h>
 BUDGIE_END_PEDANTIC
 
 /**
@@ -33,6 +34,10 @@ struct _BudgieNetworkApplet {
         GtkWidget *box;
         GtkWidget *popover;
         GtkWidget *image;
+
+        GtkWidget *listbox_ethernet; /**< Visual store for our ethernet */
+        GHashTable *devices;
+
         NMClient *client;
 
         /* unowned */
@@ -97,8 +102,9 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         GtkWidget *image = NULL;
         GtkWidget *box = NULL;
         GtkWidget *popover = NULL;
-        GtkWidget *label = NULL;
         GtkStyleContext *style = NULL;
+        GtkWidget *listbox = NULL;
+        GtkWidget *layout = NULL;
 
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
         gtk_style_context_add_class(style, "network-applet");
@@ -115,7 +121,7 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
         gtk_container_add(GTK_CONTAINER(box), image);
 
-        /* TODO: Hook up signals and popovers and what not */
+        /* Make sure we we can click stuff */
         g_signal_connect(box,
                          "button-press-event",
                          G_CALLBACK(budgie_network_applet_button_press),
@@ -123,15 +129,20 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         popover = budgie_popover_new(box);
         self->popover = popover;
 
-        /* Dummy content */
-        label = gtk_label_new("<i>What if we didn't use nm-applet...</i>");
-        gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-        style = gtk_widget_get_style_context(label);
-        gtk_style_context_add_class(style, GTK_STYLE_CLASS_DIM_LABEL);
+        /* Fix up the main layout in the popover */
+        layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_set_border_width(GTK_CONTAINER(layout), 6);
+        gtk_container_add(GTK_CONTAINER(popover), layout);
 
-        g_object_set(label, "margin", 10, NULL);
-        gtk_container_add(GTK_CONTAINER(popover), label);
-        gtk_widget_show_all(label);
+        listbox = gtk_list_box_new();
+        self->listbox_ethernet = listbox;
+        gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
+
+        /* Make sure popover body will show */
+        gtk_widget_show_all(layout);
+
+        /* Somewhere to store devices */
+        self->devices = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
 
         /* Show up on screen */
         gtk_widget_show_all(GTK_WIDGET(self));
@@ -221,6 +232,21 @@ static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyn
 static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevice *device,
                                                __budgie_unused__ NMClient *client)
 {
+        /* DUMMY CODE */
+        GtkWidget *add_widget = NULL;
+        GtkWidget *pack_target = NULL;
+
+        if (NM_IS_DEVICE_ETHERNET(device)) {
+                add_widget = gtk_label_new(nm_device_get_description(device));
+                pack_target = self->listbox_ethernet;
+        } else {
+                g_message("cannot handle device %s", nm_device_get_description(device));
+                return;
+        }
+
+        gtk_widget_show_all(add_widget);
+        gtk_container_add(GTK_CONTAINER(pack_target), add_widget);
+        g_hash_table_insert(self->devices, device, add_widget);
         g_message("%s added", nm_device_get_iface(device));
 }
 
@@ -230,6 +256,22 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
 static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDevice *device,
                                                  __budgie_unused__ NMClient *client)
 {
+        GtkWidget *lookup = NULL;
+        GtkWidget *parent = NULL;
+
+        lookup = g_hash_table_lookup(self->devices, device);
+        if (!lookup) {
+                return;
+        }
+
+        parent = gtk_widget_get_parent(lookup);
+        if (GTK_IS_LIST_BOX_ROW(parent)) {
+                gtk_widget_destroy(parent);
+        } else {
+                gtk_container_remove(GTK_CONTAINER(parent), lookup);
+        }
+        g_hash_table_remove(self->devices, device);
+
         g_message("%s removed", nm_device_get_iface(device));
 }
 
