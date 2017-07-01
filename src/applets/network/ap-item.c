@@ -30,6 +30,7 @@ struct _BudgieAccessPointItem {
         NMAccessPoint *access_point;
 
         GtkWidget *label;
+        GtkWidget *strength_image;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieAccessPointItem, budgie_access_point_item, GTK_TYPE_BOX, 0, )
@@ -123,6 +124,9 @@ static void budgie_access_point_item_get_property(GObject *object, guint id, GVa
 static void budgie_access_point_item_init(BudgieAccessPointItem *self)
 {
         GtkWidget *label = NULL;
+        GtkWidget *image = NULL;
+
+        g_object_set(self, "margin", 2, NULL);
 
         /* Display label */
         label = gtk_label_new("");
@@ -131,6 +135,17 @@ static void budgie_access_point_item_init(BudgieAccessPointItem *self)
         gtk_widget_set_margin_end(label, 12);
         gtk_widget_set_margin_start(label, 8);
         gtk_box_pack_start(GTK_BOX(self), label, FALSE, FALSE, 0);
+
+        image = gtk_image_new();
+        gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
+        self->strength_image = image;
+        gtk_box_pack_end(GTK_BOX(self), image, FALSE, FALSE, 0);
+        g_object_set(image, "margin-end", 8, "margin-start", 4, NULL);
+
+        /* HACKING */
+        gtk_image_set_from_icon_name(GTK_IMAGE(image),
+                                     "network-wireless-signal-good-symbolic",
+                                     GTK_ICON_SIZE_MENU);
 
         gtk_widget_show_all(GTK_WIDGET(self));
 }
