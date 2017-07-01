@@ -7,6 +7,15 @@ $border_width: if($variant == 'default', 1px, 2px);
 $pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
 $asset_suffix: if($variant == 'default', '', '-hc');
 
+// Container for both the "panel" area and the shadow. Wise to keep
+// this transparent..
+.budgie-container { background-color: transparent; }
+
+*:drop(active):focus,
+*:drop(active) {
+    box-shadow: inset 0 0 0 1px #F08437;
+}
+
 // Used to reset all style properties set by the gtk theme
 GtkPopover GtkListBox,
 GtkPopover GtkListBoxRow,
@@ -20,15 +29,6 @@ GtkPopover GtkListBoxRow,
     GtkMenuItem {
         @include menu_reset_style(GtkLabel);
     }
-}
-
-// Container for both the "panel" area and the shadow. Wise to keep
-// this transparent..
-.budgie-container { background-color: transparent; }
-
-*:drop(active):focus,
-*:drop(active) {
-    box-shadow: inset 0 0 0 1px #F08437;
 }
 
 // Workspace Switcher
@@ -89,6 +89,49 @@ GtkPopover GtkListBoxRow,
         GtkMenuAccelerator {
             @extend %budgie_menubar_accelerator;
         }
+    }
+}
+
+// Session Dialog
+.budgie-session-dialog {
+    @include budgie_session_dialog('.button');
+    &.background { @extend .drop-shadow; }
+}
+
+// Run Dialog
+.budgie-run-dialog.background {
+    @extend .drop-shadow;
+
+    GtkSearchEntry.entry,
+    GtkSearchEntry.entry:focus {
+        @extend %budgie_run_dialog_entry;
+        &.image {
+            @extend %budgie_run_dialog_image;
+            color: currentColor;
+        }
+    }
+
+    .list .list-row:selected .dim-label { opacity: 1; }
+
+    GtkScrolledWindow { border-top: 1px solid darken($entry_border, 5%); }
+
+    .undershoot, .overshoot { border: none; }
+}
+
+// Alt+tab switcher in Budgie
+// Alt+tab switcher in Budgie
+.budgie-switcher-window {
+    @extend .budgie-notification-window;
+
+    // Lists
+    GtkFlowBox {
+        padding: 0px;
+        margin: 0px;
+        color: $fg_color;
+    }
+    GtkFlowBoxChild {
+        @include budgie_switcher_child(insensitive, '.label');
+        margin: 0px;
     }
 }
 
