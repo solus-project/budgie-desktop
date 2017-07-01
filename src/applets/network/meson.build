@@ -1,5 +1,9 @@
 # Network Applet build
 
+# This is the only version I can test with, if lower is needed and validated
+# as working, I'll lower the version requirement.
+dep_nmgtk = dependency('libnm-gtk', version: '>= 1.4.2')
+
 applet_network_dir = applets_dir + '.network'
 
 custom_target('plugin-file-network',
@@ -17,6 +21,7 @@ applet_network_sources = [
 applet_network_deps = [
     dep_gtk3,
     dep_peas,
+    dep_nmgtk,
     link_libplugin,
 ]
 
