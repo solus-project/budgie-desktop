@@ -560,14 +560,14 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    static const int MAP_TIMEOUT  = 170;
+    static const int MAP_TIMEOUT  = 100;
     static const int MENU_MAP_TIMEOUT = 120;
-    static const float MAP_SCALE  = 0.8f;
+    static const float MAP_SCALE  = 0.94f;
     static const float MENU_MAP_SCALE_X = 0.98f;
     static const float MENU_MAP_SCALE_Y = 0.95f;
     static const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
     static const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
-    static const int FADE_TIMEOUT = 165;
+    static const int FADE_TIMEOUT = 145;
 
     void finalize_animations(Meta.WindowActor? actor)
     {
@@ -688,7 +688,7 @@ public class BudgieWM : Meta.Plugin
                 actor.show();
 
                 actor.save_easing_state();
-                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_CIRC);
+                actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
                 actor.set_easing_duration(MAP_TIMEOUT);
 
                 actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
@@ -809,7 +809,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     static const int DESTROY_TIMEOUT  = 170;
-    static const double DESTROY_SCALE = 0.6;
+    static const double DESTROY_SCALE = 0.7;
 
     public override void destroy(Meta.WindowActor actor)
     {
