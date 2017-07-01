@@ -17,6 +17,7 @@ BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
 #include "common.h"
 #include "ethernet-item.h"
+#include <glib/gi18n.h>
 #include <nm-client.h>
 #include <nm-device-ethernet.h>
 BUDGIE_END_PEDANTIC
@@ -57,6 +58,7 @@ static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDe
                                                  NMClient *client);
 static void budgie_network_applet_sync_display(BudgieNetworkApplet *self, guint new_state,
                                                guint old_state, guint reason, NMDevice *device);
+static void budgie_network_applet_settings_click(GtkWidget *button, BudgieNetworkApplet *self);
 
 /**
  * Handle cleanup
@@ -104,6 +106,8 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         GtkStyleContext *style = NULL;
         GtkWidget *listbox = NULL;
         GtkWidget *layout = NULL;
+        GtkWidget *sep = NULL;
+        GtkWidget *button = NULL;
 
         style = gtk_widget_get_style_context(GTK_WIDGET(self));
         gtk_style_context_add_class(style, "network-applet");
@@ -139,6 +143,16 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         self->listbox_ethernet = listbox;
         gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
 
+        /* Lastly, we need a way to access settings */
+        sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+        gtk_box_pack_start(GTK_BOX(layout), sep, FALSE, FALSE, 1);
+        button = gtk_button_new_with_label(_("Network settings"));
+        g_signal_connect(button, "clicked", G_CALLBACK(budgie_network_applet_settings_click), self);
+        gtk_widget_set_halign(gtk_bin_get_child(GTK_BIN(button)), GTK_ALIGN_START);
+        style = gtk_widget_get_style_context(button);
+        gtk_style_context_add_class(style, GTK_STYLE_CLASS_FLAT);
+        gtk_box_pack_start(GTK_BOX(layout), button, FALSE, FALSE, 0);
+
         /* Make sure popover body will show */
         gtk_widget_show_all(layout);
 
@@ -172,6 +186,31 @@ static gboolean budgie_network_applet_button_press(__budgie_unused__ GtkWidget *
         }
 
         return GDK_EVENT_STOP;
+}
+
+/**
+ * budgie_network_applet_settings_click:
+ *
+ * Settings button got clicked, so throw GNOME Control Center up on screen
+ */
+static void budgie_network_applet_settings_click(__budgie_unused__ GtkWidget *button,
+                                                 BudgieNetworkApplet *self)
+{
+        autofree(GDesktopAppInfo) *info = NULL;
+        autofree(GError) *error = NULL;
+
+        /* Always hide us first due to grabby hands */
+        gtk_widget_hide(self->popover);
+
+        info = g_desktop_app_info_new("gnome-network-panel.desktop");
+        if (!info) {
+                g_message("Failed to find settings");
+                return;
+        }
+
+        if (!g_app_info_launch(G_APP_INFO(info), NULL, NULL, &error)) {
+                g_warning("Failed to launch gnome-network-panel.desktop: %s", error->message);
+        }
 }
 
 /**

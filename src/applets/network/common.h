@@ -12,6 +12,7 @@
 #pragma once
 
 #include "util.h"
+#include <gio/gdesktopappinfo.h>
 #include <nm-device.h>
 
 /**
@@ -19,6 +20,7 @@
  */
 DEF_AUTOFREE(gchar, g_free)
 DEF_AUTOFREE(GError, g_error_free)
+DEF_AUTOFREE(GDesktopAppInfo, g_object_unref)
 
 /**
  * Compute an appropriate display item for the given @state
