@@ -78,76 +78,15 @@ popover row,
 
     // Buttons
     button {
-        background-clip: padding-box;
-        padding: 4px 8px;
-        border: $border_width solid;
-        border-radius: $roundness;
-
-        @include button-normal();
+        @include widget_button(disabled,label);
 
         separator { margin: 4px 1px; }
-
-        &.flat:not(:hover):not(:active):not(:checked) {
-            &, &:disabled {
-                @include button-flat();
-            }
-        }
-        &:hover { @include button-hover(); }
-        &:active, &:checked { @include button-active(); }
-        &:disabled {
-            @include button-insensitive();
-            > label { color: inherit; }
-            &:active, &:checked {
-                opacity: 0.5;
-            }
-        }
-
-        // Destructive and Sugggested action buttons
-        @each $b_type, $b_color in (suggested-action, $suggested_color),
-                                   (destructive-action, $destructive_color) {
-            &.#{$b_type} {
-                @include button-normal($b_color, $selected_fg_color);
-                &:hover { @include button-hover($b_color, $selected_fg_color); }
-                &:active, &:checked { @include button-active($bg:darken($b_color, 10%)); }
-                &:disabled { opacity: 0.5; }
-            }
-        }
-
-        &.text-button { padding: 4px 12px; }
-        &.image-button { padding: 4px; }
     }
 
     stackswitcher button.text-button { min-width: 70px; }
 
     // Linked Widgets
-    .linked {
-        > entry,
-        > button { @extend %linked; }
-
-        // linked square buttons look weird
-        button.image-button { padding: 4px 7px; }
-    }
-
-    %linked_middle {
-        border-radius: 0;
-        border-right-style: none;
-    }
-    %linked {
-        @extend %linked_middle;
-        &:first-child {
-            border-top-left-radius: $roundness;
-            border-bottom-left-radius: $roundness;
-        }
-        &:last-child {
-            border-top-right-radius: $roundness;
-            border-bottom-right-radius: $roundness;
-            border-right-style: solid;
-        }
-        &:only-child {
-            border-radius: $roundness;
-            border-style: solid;
-        }
-    }
+    @include widget_linked(entry,button);
 
     // ComboBoxes
     combobox {
@@ -178,22 +117,7 @@ popover row,
     }
 
     // Progressbars
-    progressbar {
-        padding: 0;
-        font-size: smaller;
-        color: transparentize($fg_color, 0.3);
-
-        progress {
-            background-color: $selected_bg_color;
-            border: none;
-            border-radius: 3px;
-        }
-        trough {
-            border: none;
-            border-radius: 3px;
-            background-color: $trough_bg;
-        }
-    }
+    @include widget_progressbar(progressbar, progress, trough);
 
     // Scale
     scale {
@@ -295,27 +219,15 @@ popover row,
 
     // Scrollbars
     scrollbar {
-        -GtkScrollbar-has-backward-stepper: false;
-        -GtkScrollbar-has-forward-stepper: false;
+        @include widget_scrollbar(button, slider, trought, hidden, disabled);
 
         $_slider_margin: 3px;
         $_slider_fine_tune_margin: 4px;
-
-        button { border: none; }
-
+    
         &.overlay-indicator {
             &:not(.dragging):not(.hovering) {
-                opacity: if($variant == 'default', 0.4, 1);
-
                 slider {
                     margin: 0;
-                    background-color: $scrollbar_bg;
-                    border: 1px solid $scrollbar_border;
-                    background-clip: padding-box;
-                }
-                trough {
-                    border-style: none;
-                    background-color: transparent;
                 }
                 // sizing
                 &.vertical slider {
@@ -324,23 +236,7 @@ popover row,
                     margin-bottom: $_slider_margin - 1px;
                 }
             }
-            &.dragging,
-            &.hovering { opacity: 0.99; }
         }
-
-        slider {
-            border-radius: 100px;
-            margin: $_slider_margin;
-            background-color: transparentize($scrollbar_bg, if($variant == 'default', 0.5, 0));
-
-            &:hover { background-color: transparentize($scrollbar_bg, if($variant == 'default', 0.3, 0)); }
-
-            &:hover:active { background-color: $selected_bg_color;}
-
-            &:disabled { background-color: transparent; }
-        }
-
-        trough { background-color: if($variant == 'default', transparentize(black, 0.6), $trough_bg); }
 
         // sizing
         &.vertical {
@@ -421,36 +317,7 @@ popover row,
     }
 
     // Calendar
-    calendar.raven-calendar {
-        padding: 3px;
-        color: $fg_color;
-
-        &:indeterminate { color: gtkalpha(currentColor,0.3); }
-
-        @if $variant=='default' {
-            &:selected { color: $selected_bg_color; }
-        }
-        @else {
-            &:selected {
-                color: $selected_fg_color;
-                background-color: $selected_bg_color;
-            }
-        }
-        &.header {
-            color: $fg_color;
-            border: none;
-            border-radius: 0;
-        }
-        &.button, &.button:focus {
-            color: gtkalpha(currentColor,0.5);
-            background-color: transparent;
-
-            &:hover {
-                color: $fg_color;
-                background-color: transparent;
-            }
-        }
-    }
+    @include widget_calendar(calendar,indeterminate);
 }
 
 *:drop(active):focus,

@@ -1,0 +1,39 @@
+@mixin widget_scrollbar($button, $slider, $trough, $prelight, $insensitive) {
+    -GtkScrollbar-has-backward-stepper: false;
+    -GtkScrollbar-has-forward-stepper: false;
+    $_slider_margin: 3px;
+    $_slider_fine_tune_margin: 4px;
+
+    #{$button} { border: none; }
+
+    &.overlay-indicator {
+        &:not(.dragging):not(.hovering) {
+            opacity: if($variant == 'default', 0.4, 1);
+
+            #{$slider} {
+                background-color: $scrollbar_bg;
+                border: 1px solid $scrollbar_border;
+                background-clip: padding-box;
+            }
+            #{$trough} {
+                border-style: none;
+                background-color: transparent;
+            }
+        }
+        &.dragging,
+        &.hovering { opacity: 0.99; }
+    }
+
+    #{$slider} {
+        border-radius: 100px;
+        margin: $_slider_margin;
+        background-color: transparentize($scrollbar_bg, if($variant == 'default', 0.5, 0));
+
+        &:hover { background-color: transparentize($scrollbar_bg, if($variant == 'default', 0.3, 0)); }
+
+        &:#{$prelight}:active { background-color: $selected_bg_color;}
+
+        &:#{$insensitive} { background-color: transparent; }
+    }
+    #{$trough} { background-color: if($variant == 'default', transparentize(black, 0.6), $trough_bg); }
+}

@@ -1,0 +1,32 @@
+@mixin widget_calendar($calendar,$inconsistent) {
+    #{$calendar}.raven-calendar {
+        padding: 3px;
+        color: $fg_color;
+
+        &:#{inconsistent} { color: gtkalpha(currentColor,0.3); }
+
+        @if $variant=='default' {
+            &:selected { color: $selected_bg_color; }
+        }
+        @else {
+            &:selected {
+                color: $selected_fg_color;
+                background-color: $selected_bg_color;
+            }
+        }
+        &.header {
+            color: $fg_color;
+            border: none;
+            border-radius: 0;
+        }
+        &.button, &.button:focus {
+            color: gtkalpha(currentColor,0.5);
+            background-color: transparent;
+
+            &:hover {
+                color: $fg_color;
+                background-color: transparent;
+            }
+        }
+    }
+}
