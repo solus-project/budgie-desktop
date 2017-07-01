@@ -15,6 +15,7 @@
 
 BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
+#include "ethernet-item.h"
 #include <nm-client.h>
 #include <nm-device-ethernet.h>
 BUDGIE_END_PEDANTIC
@@ -232,12 +233,11 @@ static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyn
 static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevice *device,
                                                __budgie_unused__ NMClient *client)
 {
-        /* DUMMY CODE */
         GtkWidget *add_widget = NULL;
         GtkWidget *pack_target = NULL;
 
         if (NM_IS_DEVICE_ETHERNET(device)) {
-                add_widget = gtk_label_new(nm_device_get_description(device));
+                add_widget = budgie_ethernet_item_new(device);
                 pack_target = self->listbox_ethernet;
         } else {
                 g_message("cannot handle device %s", nm_device_get_description(device));

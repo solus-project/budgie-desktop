@@ -15,6 +15,7 @@
 
 BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
+#include "ethernet-item.h"
 #include "plugin.h"
 #include <budgie-desktop/plugin.h>
 BUDGIE_END_PEDANTIC
@@ -84,6 +85,7 @@ G_MODULE_EXPORT void peas_register_types(PeasObjectModule *module)
 
         /* Register the actual dynamic types contained in the resulting plugin */
         budgie_network_applet_init_gtype(G_TYPE_MODULE(module));
+        budgie_ethernet_item_init_gtype(G_TYPE_MODULE(module));
 
         peas_object_module_register_extension_type(module,
                                                    BUDGIE_TYPE_PLUGIN,
