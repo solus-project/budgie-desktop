@@ -136,6 +136,7 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         gtk_container_add(GTK_CONTAINER(popover), layout);
 
         listbox = gtk_list_box_new();
+        gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
         self->listbox_ethernet = listbox;
         gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
 

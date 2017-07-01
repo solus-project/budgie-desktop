@@ -26,6 +26,7 @@ struct _BudgieEthernetItem {
         NMDevice *device;
 
         GtkWidget *label;
+        GtkWidget *switch_active;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieEthernetItem, budgie_ethernet_item, GTK_TYPE_BOX, 0, )
@@ -116,10 +117,17 @@ static void budgie_ethernet_item_get_property(GObject *object, guint id, GValue 
 static void budgie_ethernet_item_init(BudgieEthernetItem *self)
 {
         GtkWidget *label = NULL;
+        GtkWidget *switch_active = NULL;
 
         label = gtk_label_new("");
         self->label = label;
-        gtk_container_add(GTK_CONTAINER(self), label);
+        gtk_widget_set_halign(label, GTK_ALIGN_START);
+        gtk_box_pack_start(GTK_BOX(self), label, FALSE, FALSE, 0);
+
+        /* Allow turning on/off the connection */
+        switch_active = gtk_switch_new();
+        self->switch_active = switch_active;
+        gtk_box_pack_end(GTK_BOX(self), switch_active, FALSE, FALSE, 0);
 
         gtk_widget_show_all(GTK_WIDGET(self));
 }
