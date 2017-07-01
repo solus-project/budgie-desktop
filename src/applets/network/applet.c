@@ -117,15 +117,14 @@ static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyn
         autofree(GError) *error = NULL;
         NMClient *client = NULL;
         BudgieNetworkApplet *self = v;
-        autofree(gchar) *sprint_text = NULL;
+        autofree(gchar) *lab = NULL;
 
         /* Handle the errors */
         client = nm_client_new_finish(res, &error);
         if (error) {
-                sprint_text =
-                    g_strdup_printf("Failed to contact Network Manager: %s", error->message);
+                lab = g_strdup_printf("Failed to contact Network Manager: %s", error->message);
                 g_message("Unable to obtain network client: %s", error->message);
-                gtk_widget_set_tooltip_text(GTK_WIDGET(self), sprint_text);
+                gtk_widget_set_tooltip_text(GTK_WIDGET(self), lab);
                 gtk_image_set_from_icon_name(GTK_IMAGE(self->image),
                                              "dialog-error-symbolic",
                                              GTK_ICON_SIZE_BUTTON);
