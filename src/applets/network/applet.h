@@ -14,8 +14,6 @@
 #include <budgie-desktop/plugin.h>
 #include <gtk/gtk.h>
 
-#define __budgie_unused__ __attribute__((unused))
-
 G_BEGIN_DECLS
 
 typedef struct _BudgieNetworkApplet BudgieNetworkApplet;
