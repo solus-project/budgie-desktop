@@ -114,11 +114,12 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         box = gtk_event_box_new();
         self->box = box;
         gtk_container_add(GTK_CONTAINER(self), box);
-        g_object_set(box, "halign", GTK_ALIGN_CENTER, "valign", GTK_ALIGN_CENTER, NULL);
 
         /* Default to disconnected icon */
         image = gtk_image_new_from_icon_name("network-wired-disconnected-symbolic",
                                              GTK_ICON_SIZE_INVALID);
+        g_object_set(image, "halign", GTK_ALIGN_CENTER, "valign", GTK_ALIGN_CENTER, NULL);
+
         self->image = image;
         gtk_image_set_pixel_size(GTK_IMAGE(image), 16);
         gtk_container_add(GTK_CONTAINER(box), image);
