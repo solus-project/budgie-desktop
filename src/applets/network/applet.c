@@ -41,6 +41,10 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieNetworkApplet, budgie_network_applet, BUDGI
  * Forward declarations
  */
 static void budgie_network_applet_ready(GObject *source, GAsyncResult *res, gpointer v);
+static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevice *device,
+                                               NMClient *client);
+static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDevice *device,
+                                                 NMClient *client);
 
 /**
  * Handle cleanup
@@ -131,6 +135,33 @@ static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyn
         /* We've got our client */
         self->client = client;
         g_message("Debug: Have client");
+
+        g_signal_connect_swapped(client,
+                                 "device-added",
+                                 G_CALLBACK(budgie_network_applet_device_added),
+                                 self);
+        g_signal_connect_swapped(client,
+                                 "device-removed",
+                                 G_CALLBACK(budgie_network_applet_device_removed),
+                                 self);
+}
+
+/**
+ * A new device has been added, process it and chuck it into the display
+ */
+static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevice *device,
+                                               __budgie_unused__ NMClient *client)
+{
+        g_message("%s added", nm_device_get_iface(device));
+}
+
+/**
+ * An existing device has been removed
+ */
+static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDevice *device,
+                                                 __budgie_unused__ NMClient *client)
+{
+        g_message("%s removed", nm_device_get_iface(device));
 }
 
 void budgie_network_applet_init_gtype(GTypeModule *module)
