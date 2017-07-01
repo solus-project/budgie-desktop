@@ -14,11 +14,11 @@
 #include "util.h"
 
 BUDGIE_BEGIN_PEDANTIC
+#include "ap-item.h"
 #include "common.h"
 #include "wifi-item.h"
 #include <glib/gi18n.h>
 #include <nm-access-point.h>
-#include <nm-utils.h>
 BUDGIE_END_PEDANTIC
 
 struct _BudgieWifiItemClass {
@@ -32,6 +32,9 @@ struct _BudgieWifiItem {
         gint index;
         GtkWidget *label;
         GtkWidget *switch_active;
+
+        GtkWidget *listbox;
+        GHashTable *access_points;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieWifiItem, budgie_wifi_item, GTK_TYPE_BOX, 0, )
@@ -141,6 +144,7 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
         GtkWidget *label = NULL;
         GtkWidget *switch_active = NULL;
         GtkWidget *header_layout = NULL;
+        GtkWidget *listbox = NULL;
 
         header_layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start(GTK_BOX(self), header_layout, FALSE, FALSE, 0);
@@ -158,6 +162,15 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
         self->switch_active = switch_active;
         gtk_box_pack_end(GTK_BOX(header_layout), switch_active, FALSE, FALSE, 0);
 
+        /* Listbox to store our access points */
+        listbox = gtk_list_box_new();
+        gtk_widget_set_margin_top(listbox, 2);
+        self->listbox = listbox;
+        gtk_box_pack_start(GTK_BOX(self), listbox, FALSE, FALSE, 0);
+
+        /* Actual access points */
+        self->access_points = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, NULL);
+
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
@@ -169,14 +182,15 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
 static void budgie_wifi_item_ap_added(BudgieWifiItem *self, NMAccessPoint *ap,
                                       __budgie_unused__ NMDevice *v)
 {
-        const GByteArray *ap_ssid = nm_access_point_get_ssid(ap);
-        autofree(gchar) *ssid = NULL;
-        const gchar *bssid = NULL;
+        GtkWidget *item = NULL;
 
-        ssid = nm_utils_ssid_to_utf8(ap_ssid);
-        bssid = nm_access_point_get_bssid(ap);
+        if (g_hash_table_contains(self->access_points, ap)) {
+                return;
+        }
 
-        g_message("AP found: %s (%s)", ssid, bssid);
+        item = budgie_access_point_item_new(ap);
+        gtk_container_add(GTK_CONTAINER(self->listbox), item);
+        g_hash_table_insert(self->access_points, ap, item);
 }
 
 /**
@@ -187,12 +201,17 @@ static void budgie_wifi_item_ap_added(BudgieWifiItem *self, NMAccessPoint *ap,
 static void budgie_wifi_item_ap_removed(BudgieWifiItem *self, NMAccessPoint *ap,
                                         __budgie_unused__ NMDevice *v)
 {
-        const GByteArray *ap_ssid = nm_access_point_get_ssid(ap);
-        autofree(gchar) *ssid = NULL;
+        GtkWidget *row = NULL;
+        GtkWidget *parent = NULL;
 
-        ssid = nm_utils_ssid_to_utf8(ap_ssid);
+        row = g_hash_table_lookup(self->access_points, ap);
+        if (!row) {
+                return;
+        }
 
-        g_message("AP removed: %s", ssid);
+        parent = gtk_widget_get_parent(row);
+        gtk_container_remove(GTK_CONTAINER(self->listbox), parent);
+        g_hash_table_remove(self->access_points, ap);
 }
 
 static void budgie_wifi_item_constructed(GObject *obj)
