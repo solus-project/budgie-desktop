@@ -108,7 +108,7 @@ GtkPopover GtkListBoxRow,
             @include button-insensitive();
             > .label { color: inherit; }
             &:active, &:checked {
-                opactiy: 0.5;
+                opacity: 0.5;
             }
         }
 
