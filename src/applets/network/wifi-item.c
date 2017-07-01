@@ -17,6 +17,8 @@ BUDGIE_BEGIN_PEDANTIC
 #include "common.h"
 #include "wifi-item.h"
 #include <glib/gi18n.h>
+#include <nm-access-point.h>
+#include <nm-utils.h>
 BUDGIE_END_PEDANTIC
 
 struct _BudgieWifiItemClass {
@@ -49,6 +51,8 @@ static void budgie_wifi_item_set_property(GObject *object, guint id, const GValu
 static void budgie_wifi_item_get_property(GObject *object, guint id, GValue *value,
                                           GParamSpec *spec);
 static void budgie_wifi_item_switched(GObject *o, GParamSpec *ps, BudgieWifiItem *self);
+static void budgie_wifi_item_ap_added(BudgieWifiItem *self, NMAccessPoint *ap, NMDevice *v);
+static void budgie_wifi_item_ap_removed(BudgieWifiItem *self, NMAccessPoint *ap, NMDevice *v);
 
 /**
  * Handle cleanup
@@ -157,6 +161,40 @@ static void budgie_wifi_item_init(BudgieWifiItem *self)
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
+/**
+ * budgie_wifi_item_ap_added:
+ *
+ * A new access point was made available to this wifi device
+ */
+static void budgie_wifi_item_ap_added(BudgieWifiItem *self, NMAccessPoint *ap,
+                                      __budgie_unused__ NMDevice *v)
+{
+        const GByteArray *ap_ssid = nm_access_point_get_ssid(ap);
+        autofree(gchar) *ssid = NULL;
+        const gchar *bssid = NULL;
+
+        ssid = nm_utils_ssid_to_utf8(ap_ssid);
+        bssid = nm_access_point_get_bssid(ap);
+
+        g_message("AP found: %s (%s)", ssid, bssid);
+}
+
+/**
+ * budgie_wifi_item_ap_removed:
+ *
+ * An existing access point is no longer available to this wifi device
+ */
+static void budgie_wifi_item_ap_removed(BudgieWifiItem *self, NMAccessPoint *ap,
+                                        __budgie_unused__ NMDevice *v)
+{
+        const GByteArray *ap_ssid = nm_access_point_get_ssid(ap);
+        autofree(gchar) *ssid = NULL;
+
+        ssid = nm_utils_ssid_to_utf8(ap_ssid);
+
+        g_message("AP removed: %s", ssid);
+}
+
 static void budgie_wifi_item_constructed(GObject *obj)
 {
         BudgieWifiItem *self = BUDGIE_WIFI_ITEM(obj);
@@ -167,6 +205,16 @@ static void budgie_wifi_item_constructed(GObject *obj)
         } else {
                 label = g_strdup_printf(_("Wi-Fi connection"));
         }
+
+        /* Hook up signals for our device's access points */
+        g_signal_connect_swapped(self->device,
+                                 "access-point-added",
+                                 G_CALLBACK(budgie_wifi_item_ap_added),
+                                 self);
+        g_signal_connect_swapped(self->device,
+                                 "access-point-removed",
+                                 G_CALLBACK(budgie_wifi_item_ap_removed),
+                                 self);
 
         /* Update our display label */
         gtk_label_set_text(GTK_LABEL(self->label), label);
