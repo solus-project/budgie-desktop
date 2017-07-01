@@ -91,3 +91,10 @@ GtkPopover GtkListBoxRow,
         }
     }
 }
+
+// Raven
+.raven {
+    @include raven('.button');
+}
+@include raven-trigger('.button');
+@include raven-mpris('.button');

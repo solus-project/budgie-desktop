@@ -1,0 +1,54 @@
+// Raven
+@mixin raven($button) {
+    @extend %widgets;
+    @extend %menu;
+    color: $fg_color;
+    background-color: $raven_bg;
+    transition: 170ms ease-out;
+
+    .raven-header {
+        color: $fg_color;
+        border: solid $raven_expander_border;
+        border-width: 1px 0;
+        background-color: $raven_expander_bg;
+
+        &.top { border-top-style: none; }
+        &.bottom { border-bottom-style: none; }
+    }
+    @if $variant=='default' {
+        .expander-button { color: gtkalpha(currentColor, 0.5); }
+    }
+    .raven-background {
+        color: $fg_color;
+        background-color: $raven_background_bg;
+        border-bottom: 1px solid $raven_background_border;
+
+        &.middle { border-bottom-style: none; }  // applet background between two headers
+    }
+    .powerstrip #{$button} {
+        padding: 10px;
+    }
+    .option-subtitle {
+        font-size: smaller;
+    }
+}
+
+// Raven Trigger
+@mixin raven-trigger($button) {
+    #{$button}.raven-trigger {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+}
+
+// MPRIS Applet
+@mixin raven-mpris($button){
+    .raven-mpris {
+        color: $mpris_overlay_fg;
+        background-color: $mpris_overlay_bg;
+        border: solid $mpris_overlay_border;
+        border-width: 1px 0;
+
+        #{$button}.image-button { padding: 8px; }
+    }
+}
