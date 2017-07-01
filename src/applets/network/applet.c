@@ -34,10 +34,10 @@ struct _BudgieNetworkApplet {
         GtkWidget *popover;
         GtkWidget *image;
 
-        GtkWidget *listbox_ethernet; /**< Visual store for our ethernet */
+        GtkWidget *box_ethernet; /**< Visual store for our ethernet */
         gint n_ethernet;
 
-        GtkWidget *listbox_wifi; /**< Visual store for our wifi */
+        GtkWidget *box_wifi; /**< Visual store for our wifi */
         gint n_wifi;
 
         GHashTable *devices; /**< Backing store for actual devices */
@@ -110,7 +110,6 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         GtkWidget *box = NULL;
         GtkWidget *popover = NULL;
         GtkStyleContext *style = NULL;
-        GtkWidget *listbox = NULL;
         GtkWidget *layout = NULL;
         GtkWidget *sep = NULL;
         GtkWidget *button = NULL;
@@ -145,16 +144,14 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         gtk_container_add(GTK_CONTAINER(popover), layout);
 
         /* Ethernet */
-        listbox = gtk_list_box_new();
-        gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
-        self->listbox_ethernet = listbox;
-        gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
+        box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        self->box_ethernet = box;
+        gtk_box_pack_start(GTK_BOX(layout), box, FALSE, FALSE, 0);
 
         /* Wifi */
-        listbox = gtk_list_box_new();
-        gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
-        self->listbox_wifi = listbox;
-        gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
+        box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        self->box_wifi = box;
+        gtk_box_pack_start(GTK_BOX(layout), box, FALSE, FALSE, 0);
 
         /* Lastly, we need a way to access settings */
         sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
@@ -290,11 +287,11 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
 
         if (NM_IS_DEVICE_ETHERNET(device)) {
                 add_widget = budgie_ethernet_item_new(device, self->n_ethernet);
-                pack_target = self->listbox_ethernet;
+                pack_target = self->box_ethernet;
                 ++self->n_ethernet;
         } else if (NM_IS_DEVICE_WIFI(device)) {
                 add_widget = budgie_wifi_item_new(device, self->n_wifi);
-                pack_target = self->listbox_wifi;
+                pack_target = self->box_wifi;
                 ++self->n_wifi;
         } else {
                 g_message("cannot handle device %s", nm_device_get_description(device));
@@ -307,7 +304,7 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
                                  self);
 
         gtk_widget_show_all(add_widget);
-        gtk_container_add(GTK_CONTAINER(pack_target), add_widget);
+        gtk_box_pack_start(GTK_BOX(pack_target), add_widget, FALSE, FALSE, 0);
         g_hash_table_insert(self->devices, device, add_widget);
         g_message("%s added", nm_device_get_iface(device));
 
@@ -321,19 +318,13 @@ static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDe
                                                  __budgie_unused__ NMClient *client)
 {
         GtkWidget *lookup = NULL;
-        GtkWidget *parent = NULL;
 
         lookup = g_hash_table_lookup(self->devices, device);
         if (!lookup) {
                 return;
         }
 
-        parent = gtk_widget_get_parent(lookup);
-        if (GTK_IS_LIST_BOX_ROW(parent)) {
-                gtk_widget_destroy(parent);
-        } else {
-                gtk_container_remove(GTK_CONTAINER(parent), lookup);
-        }
+        gtk_widget_destroy(lookup);
         g_hash_table_remove(self->devices, device);
 
         g_message("%s removed", nm_device_get_iface(device));
