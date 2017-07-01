@@ -85,7 +85,7 @@ popover row,
         border-radius: $roundness;
         caret-color: $fg_color;
 
-        @include entry(normal);
+        @extend entry;
 
         image {
             color: $fg_color;
@@ -94,12 +94,6 @@ popover row,
             &.right { padding-right: 0; padding-left: 3px; }
         }
 
-        &:focus {
-            @include entry(focus);
-        }
-        &:disabled {
-            @include entry(insensitive);
-        }
         selection,
         selection:focus {
             color: $selected_fg_color;
@@ -114,21 +108,22 @@ popover row,
         border: $border_width solid;
         border-radius: $roundness;
 
-        @include button(normal);
+        @include button-normal();
 
         separator { margin: 4px 1px; }
 
         &.flat:not(:hover):not(:active):not(:checked) {
             &, &:disabled {
-                @include button(flat);
+                @include button-flat();
             }
         }
-        &:hover { @include button(hover); }
-        &:active, &:checked { @include button(active); }
+        &:hover { @include button-hover(); }
+        &:active, &:checked { @include button-active(); }
         &:disabled {
-            @include button(insensitive);
+            @include button-insensitive();
+            > label { color: inherit; }
             &:active, &:checked {
-                @include button(insensitive-active);
+                opacity: 0.5;
             }
         }
 
@@ -136,9 +131,9 @@ popover row,
         @each $b_type, $b_color in (suggested-action, $suggested_color),
                                    (destructive-action, $destructive_color) {
             &.#{$b_type} {
-                @include button(normal, $b_color, $selected_fg_color);
-                &:hover { @include button(hover, $b_color, $selected_fg_color); }
-                &:active, &:checked { @include button(active, $active_bg:darken($b_color, 10%)); }
+                @include button-normal($b_color, $selected_fg_color);
+                &:hover { @include button-hover($b_color, $selected_fg_color); }
+                &:active, &:checked { @include button-active($bg:darken($b_color, 10%)); }
                 &:disabled { opacity: 0.5; }
             }
         }

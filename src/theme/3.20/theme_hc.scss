@@ -1,5 +1,5 @@
 $variant: 'hc';
 
-@import 'colors';
-@import 'drawing';
+@import '../common/colors';
+@import '../common/drawing';
 @import 'main';
