@@ -113,6 +113,9 @@ extra_includes = [
 # Determine if polkit is allowed.
 with_polkit = get_option('with-polkit')
 
+# Determine how we're going to handle networking
+with_networking_applet = get_option('with-network-applet')
+
 # Get gvc built before we do anything
 gvc = subproject('gvc')
 

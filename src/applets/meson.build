@@ -13,8 +13,10 @@ if dep_mutter.version().version_compare('>=3.24')
     subdir('night-light')
 endif
 
-# TODO: Only do this if the applet is enabled, otherwise install nm-applet.desktop
-subdir('network')
+if with_networking_applet == true
+    subdir('network')
+endif
+
 
 subdir('notifications')
 subdir('raven-trigger')

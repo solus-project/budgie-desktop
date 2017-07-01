@@ -101,14 +101,18 @@ else
     xdg_appdir = join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
 endif
 
-# Merge + install nm-applet
-custom_target('desktop-file-nm-applet',
-    input : 'budgie-desktop-nm-applet.desktop.in',
-    output : 'budgie-desktop-nm-applet.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
-    install : true,
-    install_dir : xdg_appdir,
-)
+if with_networking_applet == false
+
+    # Merge + install nm-applet
+    custom_target('desktop-file-nm-applet',
+        input : 'budgie-desktop-nm-applet.desktop.in',
+        output : 'budgie-desktop-nm-applet.desktop',
+        command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+        install : true,
+        install_dir : xdg_appdir,
+    )
+
+endif
 
 # Merge + install screensaver
 custom_target('desktop-file-screensaver',
