@@ -13,6 +13,16 @@
 
 #include "applet.h"
 
+struct _BudgieNetworkAppletClass {
+        BudgieAppletClass parent_class;
+};
+
+struct _BudgieNetworkApplet {
+        BudgieApplet parent;
+        GtkWidget *popover;
+        GtkWidget *image;
+};
+
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieNetworkApplet, budgie_network_applet, BUDGIE_TYPE_APPLET, 0, )
 
 /**
@@ -46,7 +56,22 @@ static void budgie_network_applet_class_finalize(__budgie_unused__ BudgieNetwork
  */
 static void budgie_network_applet_init(BudgieNetworkApplet *self)
 {
-        /* TODO: Add some UI bits */
+        GtkWidget *image = NULL;
+        GtkWidget *box = NULL;
+        GtkStyleContext *style = NULL;
+
+        style = gtk_widget_get_style_context(GTK_WIDGET(self));
+        gtk_style_context_add_class(style, "network-applet");
+
+        box = gtk_event_box_new();
+        gtk_container_add(GTK_CONTAINER(self), box);
+
+        /* Default to disconnected icon */
+        image = gtk_image_new_from_icon_name("network-offline-symbolic", GTK_ICON_SIZE_BUTTON);
+        self->image = image;
+        gtk_container_add(GTK_CONTAINER(box), image);
+
+        /* TODO: Hook up signals and popovers and what not */
 
         /* Show up on screen */
         gtk_widget_show_all(GTK_WIDGET(self));

@@ -31,14 +31,6 @@ typedef struct _BudgieNetworkAppletClass BudgieNetworkAppletClass;
 #define BUDGIE_NETWORK_APPLET_GET_CLASS(o)                                                         \
         (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_NETWORK_APPLET, BudgieNetworkAppletClass))
 
-struct _BudgieNetworkAppletClass {
-        BudgieAppletClass parent_class;
-};
-
-struct _BudgieNetworkApplet {
-        BudgieApplet parent;
-};
-
 GType budgie_network_applet_get_type(void);
 
 /**
