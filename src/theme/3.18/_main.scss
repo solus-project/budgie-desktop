@@ -1073,35 +1073,17 @@ GtkPopover GtkListBoxRow,
 .budgie-menubar {
     @extend %menu;
     GtkMenu {
-        margin: 4px;
-        padding: 5px;
-        border-radius: 0;
-        background-color: $panel_bg;
-        menuitem:hover {
-            background-color: $selected_bg_color;
-            color: $fg_color;
-            }
-        }
+        @extend %budgie_menubar_menu;
+    }
 
     GtkArrow {
-        border:none;
-
-        &.top {
-            -gtk-icon-source:-gtk-icontheme("pan-up-symbolic");
-            border-bottom: 1px solid mix($fg_color, $raven_bg, 10%);
-        }
-
-        &.bottom {
-            -gtk-icon-source:-gtk-icontheme("pan-down-symbolic");
-            border-top: 1px solid mix($fg_color, $raven_bg, 10%);
-        }
+        @extend %budgie_menubar_arrow;
     }
 
     GtkMenuItem {
         GtkMenuAccelerator {
-            color: transparentize($fg_color, 0.65);
+            @extend %budgie_menubar_accelerator;
         }
-
     }
 }
 

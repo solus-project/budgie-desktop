@@ -1129,35 +1129,18 @@ button.raven-trigger {
 .budgie-menubar {
     @extend %menu;
     menu {
-        margin: 4px;
-        padding: 5px;
-        border-radius: 0;
-        background-color: $panel_bg;
-        menuitem:hover {
-            background-color: $selected_bg_color;
-            color: $fg_color;
-            }
-        }
+        @extend %budgie_menubar_menu;
+    }
 
     arrow {
-        border:none;
+        @extend %budgie_menubar_arrow;
         min-width:16px;
         min-height:16px;
-
-        &.top {
-            -gtk-icon-source:-gtk-icontheme("pan-up-symbolic");
-            border-bottom: 1px solid mix($fg_color, $raven_bg, 10%);
-        }
-
-        &.bottom {
-            -gtk-icon-source:-gtk-icontheme("pan-down-symbolic");
-            border-top: 1px solid mix($fg_color, $raven_bg, 10%);
-        }
     }
 
     menuitem {
         accelerator {
-            color: transparentize($fg_color, 0.65);
+            @extend %budgie_menubar_accelerator;
         }
 
         check, radio {
