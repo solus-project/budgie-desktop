@@ -55,6 +55,8 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
                                                NMClient *client);
 static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDevice *device,
                                                  NMClient *client);
+static void budgie_network_applet_sync_display(BudgieNetworkApplet *self, guint new_state,
+                                               guint old_state, guint reason, NMDevice *device);
 
 /**
  * Handle cleanup
@@ -243,10 +245,17 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
                 return;
         }
 
+        g_signal_connect_swapped(device,
+                                 "state-changed",
+                                 G_CALLBACK(budgie_network_applet_sync_display),
+                                 self);
+
         gtk_widget_show_all(add_widget);
         gtk_container_add(GTK_CONTAINER(pack_target), add_widget);
         g_hash_table_insert(self->devices, device, add_widget);
         g_message("%s added", nm_device_get_iface(device));
+
+        budgie_network_applet_sync_display(self, 0, 0, 0, device);
 }
 
 /**
@@ -272,6 +281,38 @@ static void budgie_network_applet_device_removed(BudgieNetworkApplet *self, NMDe
         g_hash_table_remove(self->devices, device);
 
         g_message("%s removed", nm_device_get_iface(device));
+
+        budgie_network_applet_sync_display(self, 0, 0, 0, device);
+}
+
+/**
+ * budgie_network_applet_sync_display:
+ *
+ * Update our main icon to reflect the state of internal devices
+ */
+static void budgie_network_applet_sync_display(BudgieNetworkApplet *self,
+                                               __budgie_unused__ guint new_state,
+                                               __budgie_unused__ guint old_state,
+                                               __budgie_unused__ guint reason,
+                                               __budgie_unused__ NMDevice *changed_device)
+{
+        GHashTableIter iter = { 0 };
+        g_hash_table_iter_init(&iter, self->devices);
+        NMDevice *device = NULL;
+        NMDeviceState state = NM_DEVICE_STATE_DISCONNECTED;
+        const gchar *icon_name = NULL;
+
+        while (g_hash_table_iter_next(&iter, (void **)&device, NULL)) {
+                NMDeviceState dev_state = nm_device_get_state(device);
+                if (dev_state != state && dev_state != NM_DEVICE_STATE_DISCONNECTED) {
+                        state = dev_state;
+                        break;
+                }
+        }
+
+        icon_name = nm_state_to_icon(state);
+        gtk_image_set_from_icon_name(GTK_IMAGE(self->image), icon_name, GTK_ICON_SIZE_INVALID);
+        gtk_image_set_pixel_size(GTK_IMAGE(self->image), 16);
 }
 
 void budgie_network_applet_init_gtype(GTypeModule *module)
