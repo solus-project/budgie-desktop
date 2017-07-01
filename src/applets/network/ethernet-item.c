@@ -134,7 +134,14 @@ static void budgie_ethernet_item_constructed(GObject *obj)
 
 GtkWidget *budgie_ethernet_item_new(NMDevice *device)
 {
-        return g_object_new(BUDGIE_TYPE_ETHERNET_ITEM, "device", device, NULL);
+        return g_object_new(BUDGIE_TYPE_ETHERNET_ITEM,
+                            "orientation",
+                            GTK_ORIENTATION_HORIZONTAL,
+                            "spacing",
+                            0,
+                            "device",
+                            device,
+                            NULL);
 }
 
 void budgie_ethernet_item_init_gtype(GTypeModule *module)
