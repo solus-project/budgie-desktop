@@ -1,0 +1,66 @@
+@mixin budgie-menu($image_effect, $search, $image, $insensitive, $label, $undershoot, $overshoot) {
+    .container { padding: 0; }
+
+    .button:hover { -gtk-#{$image-effect}: none; }
+
+    #{$search} {
+        @extend %reset_style;
+
+        padding: 12px 5px;
+        border-bottom: 1px solid #{"@borders"};
+        border-radius: 0;
+        font-size: 120%;
+
+        #{$image} {
+            color: currentColor;
+
+            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
+            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
+        }
+    }
+
+    .categories {
+        border-width: 0;
+
+        &:dir(ltr) { border-right: 1px solid #{"@borders"}; }
+        &:dir(rtl) { border-left: 1px solid #{"@borders"}; }
+    }
+
+    .category-button {
+        @extend %reset_style;
+
+        padding: 8px;
+        border-radius: 0;
+
+        &:hover { background-color: #{"mix(@theme_base_color, @theme_fg_color, 0.1);"} }
+        &:active, &:checked {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+        }
+        &:checked:#{$insensitive} {
+            opacity: 0.5;
+
+            #{$label} { color: inherit; }
+        }
+    }
+
+    #{$undershoot}, #{$overshoot} { background: none; }
+}
+
+// Menu Button
+@mixin budgie_menu_button($button) {
+    #{$button}.budgie-menu-launcher {
+        padding: 0 2px;
+    }
+}
+
+// User Menu
+@mixin budgie_user_menu($separator, $color) {
+    .user-menu {
+        .container { padding: 10px; }
+
+        .content-box #{$separator} {
+            #{$color}: #{"alpha(@theme_fg_color, 0.15)"};
+        }
+    }
+}

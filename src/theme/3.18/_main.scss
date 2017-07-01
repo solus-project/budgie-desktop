@@ -1,255 +1,3 @@
-.budgie-popover,
-.budgie-popover.background {
-    border-radius: 3px;
-    background-clip: border-box;
-    box-shadow: 0 2px 3px 1px transparentize(black, 0.65);
-    border: 1px solid #{"@borders"};
-}
-
-.budgie-popover .container {
-    @extend %reset_style;
-    padding: 2px;
-}
-
-// Budgie Menu
-.budgie-menu {
-    .container { padding: 0; }
-
-    .button:hover { -gtk-image-effect: none; }
-
-    GtkSearchEntry.entry:not(:selected) {
-        @extend %reset_style;
-
-        padding: 12px 5px;
-        border-bottom: 1px solid #{"@borders"};
-        border-radius: 0;
-        font-size: 120%;
-
-        &.image {
-            color: currentColor;
-
-            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
-            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
-        }
-    }
-
-    .categories {
-        border-width: 0;
-
-        &:dir(ltr) { border-right: 1px solid #{"@borders"}; }
-        &:dir(rtl) { border-left: 1px solid #{"@borders"}; }
-    }
-
-    .category-button {
-        @extend %reset_style;
-
-        padding: 8px;
-        border-radius: 0;
-
-        &:hover { background-color: #{"mix(@theme_base_color, @theme_fg_color, 0.1);"} }
-        &:active, &:checked {
-            color: $selected_fg_color;
-            background-color: $selected_bg_color;
-        }
-        &:checked:insensitive {
-            opacity: 0.5;
-
-            GtkLabel { color: inherit; }
-        }
-    }
-
-    .undershoot, .overshoot { background: none; }
-}
-
-// Menu Button
-.budgie-menu-launcher.button {
-    padding: 0 2px;
-}
-
-// User Menu
-.user-menu {
-    .container { padding: 10px; }
-
-    .content-box GtkSeparator {
-        color: #{"alpha(@theme_fg_color, 0.15)"};
-    }
-}
-
-// Places Menu
-.places-menu {
-    .container { padding: 0; }
-
-    .message-bar {
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-
-    .name-button {
-        border: 0;
-        border-radius: 0;
-        padding: 4px 6px;
-    }
-
-    .unmount-button {
-        padding: 4px 4px;
-        border: 0;
-        border-radius: 0;
-    }
-
-    .places-section-header {
-        padding: 0;
-        border-bottom: 1px solid $raven_expander_border;
-        box-shadow: 0px 1px 1px #{"alpha(@theme_fg_color, 0.03)"};
-    }
-
-    .places-section-header > .button {
-        padding: 8px;
-        border: none;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    .places-list {
-        background: transparentize($fg_color, 0.96);
-        border-bottom: 1px solid $raven_expander_border;
-    }
-
-    GtkListBox,
-    GtkListBoxRow {
-        padding: 0;
-        margin: 0;
-    }
-
-    .unlock-area {
-        border-top: 1px solid transparentize($raven_expander_border, 0.1);
-        border-bottom: 1px solid transparentize($raven_expander_border, 0.1);
-    }
-
-    .unlock-area .entry {
-        border-radius: 0;
-        border: 0;
-    }
-
-    .unlock-area .button {
-        border-radius: 0;
-        border: 0;
-        border-left: 1px solid transparentize($raven_expander_border, 0.1);
-    }
-
-    .alternative-label {
-        font-size: 15px;
-        padding: 3px;
-    }
-
-    .always-expand {
-        background: transparent;
-        border-bottom: none;
-    }
-}
-
-// Raven Trigger
-.raven-trigger.button {
-    padding-left: 2px;
-    padding-right: 2px;
-}
-
-// Night Light indicator
-.night-light-indicator {
-    .container { padding: 0; }
-
-    .view-header {
-        font-size: 14px;
-        padding: 10px;
-        border-bottom: #{"1px solid mix(@theme_base_color, #000000, 0.35)"};
-        box-shadow: #{"0px 1px 1px alpha(@theme_fg_color, 0.04)"};
-    }
-
-    .display-settings-button {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        border: none;
-        padding: 3px;
-        border-top: #{"1px solid mix(@theme_base_color, #000000, 0.35);"};
-        box-shadow: #{"inset 0px 1px 1px alpha(@theme_fg_color, 0.04);"};
-    }
-}
-
-// Panel
-.budgie-panel {
-    @extend %widgets;
-    color: $fg_color;
-    background-color: $panel_bg;
-    background-image: none;
-    box-shadow: none;
-    border: none;
-    transition: all 150ms ease-in;
-
-    .button {
-      border-top-width: 0;
-      border-bottom-width: 0;
-      border-radius: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-
-      .top & {
-          padding-top: 1px;
-          border-bottom: 1px solid transparentize($panel_bg, 1);
-      }
-      .bottom & {
-          padding-bottom: 1px;
-          border-top: 1px solid transparentize($panel_bg, 1);
-      }
-    }
-
-    &.transparent {
-      background-color: transparent;
-
-      .top & {
-        border-bottom-color: transparent;
-      }
-
-      .bottom & {
-        border-top-color: transparent;
-      }
-
-      .left & {
-        border-right-color: transparent;
-      }
-
-      .right & {
-        border-left-color: transparent;
-      }
-    }
-
-    .separator { color: transparentize($fg_color, 0.85) }
-
-    // End Section needs to be fancy
-    @if $variant == 'default' {
-        .end-region {
-            background-color: rgba(0,0,0,0.2);
-
-            &:dir(ltr) { border-left: 1px solid rgba(0,0,0,0.2); }
-            &:dir(rtl) { border-right: 1px solid rgba(0,0,0,0.2); }
-        }
-    }
-}
-
-// Tasklist
-.budgie-panel WnckTasklist .button,
-.budgie-panel WnckTasklist .button:backdrop {
-
-    border-radius: 0;
-
-    @if $variant == 'default' {
-        &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
-        background: none;
-        background-clip: padding-box;
-        border: none;
-
-        @extend %underscores;
-    }
-}
-
 // Icon Tasklist
 .budgie-panel {
 
@@ -353,6 +101,12 @@
     }
 }
 
+// Raven Trigger
+.raven-trigger.button {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 // MPRIS Applet
 .raven-mpris {
     color: $mpris_overlay_fg;
@@ -363,31 +117,13 @@
     .button.image-button { padding: 8px; }
 }
 
-// Notifications
-.budgie-notification-window {
-    background: none;
+.drop-shadow {
+    @extend %widgets;
+
+    color: $fg_color;
+    background-color: $panel_bg;
+    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
     border-radius: 1px;
-}
-
-.budgie-notification {
-    &.background {
-        border-radius: 1px;
-    }
-    .notification-title {
-        font-size: 110%;
-        color: $fg_color;
-    }
-    .notification-body { color: transparentize($fg_color, 0.3); }
-}
-
-// On Screen Display in Budgie
-.budgie-osd-window {
-    @extend .budgie-notification-window;
-}
-
-// Internal part of the OSD
-.budgie-osd {
-    @extend .budgie-notification;
 }
 
 // Alt+tab switcher in Budgie
@@ -427,15 +163,6 @@
     @extend .budgie-notification;
 }
 
-.drop-shadow {
-    @extend %widgets;
-
-    color: $fg_color;
-    background-color: $panel_bg;
-    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
-    border-radius: 1px;
-}
-
 // Session Dialog
 .budgie-session-dialog {
     &.background { @extend .drop-shadow; }
@@ -443,9 +170,9 @@
     .dialog-title { font-size: 120%; }
 
     .linked.horizontal > .button {
+        padding: 8px;
         border-bottom: none;
         border-radius: 0;
-        padding: 8px;
         &:first-child { border-left: none; border-radius: 0; }
         &:last-child { border-right: none; border-radius: 0; }
     }
@@ -485,22 +212,3 @@
 
     .undershoot, .overshoot { border: none; }
 }
-
-// Budgie styled Gtk Menus
-.budgie-menubar {
-    @extend %menu;
-    GtkMenu {
-        @extend %budgie_menubar_menu;
-    }
-
-    GtkArrow {
-        @extend %budgie_menubar_arrow;
-    }
-
-    GtkMenuItem {
-        GtkMenuAccelerator {
-            @extend %budgie_menubar_accelerator;
-        }
-    }
-}
-

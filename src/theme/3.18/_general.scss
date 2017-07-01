@@ -31,4 +31,63 @@ GtkPopover GtkListBoxRow,
     box-shadow: inset 0 0 0 1px #F08437;
 }
 
+// Workspace Switcher
 @include workspaces();
+
+// Budgie Menu
+.budgie-menu {
+    @include budgie-menu('image-effect', 'GtkSearchEntry.entry:not(:selected)', '&.image',
+                         'insensitive', 'GtkLabel', '.undershoot', '.overshoot');
+}
+
+// Menu Button
+@include budgie_menu_button('.button');
+
+// User Menu
+@include budgie_user_menu(GtkSeparator, 'color');
+
+// Places Menu
+@include places_menu('.button', GtkListBox, GtkListBoxRow, '.entry');
+
+// Panel
+.budgie-panel {
+    @include budgie_panel('.button', '.separator', color);
+
+    .button {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        .top & {
+            padding-top: 1px;
+            border-bottom: 1px solid transparentize($panel_bg, 1);
+        }
+        .bottom & {
+            padding-bottom: 1px;
+            border-top: 1px solid transparentize($panel_bg, 1);
+        }
+    }
+}
+
+// Tasklist
+.budgie-panel WnckTasklist .button,
+.budgie-panel WnckTasklist .button:backdrop {
+    @extend %budgie_panel_tasklist;
+}
+
+// Budgie styled Gtk Menus
+.budgie-menubar {
+    @extend %menu;
+    GtkMenu {
+        @extend %budgie_menubar_menu;
+    }
+
+    GtkArrow {
+        @extend %budgie_menubar_arrow;
+    }
+
+    GtkMenuItem {
+        GtkMenuAccelerator {
+            @extend %budgie_menubar_accelerator;
+        }
+    }
+}

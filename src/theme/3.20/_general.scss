@@ -32,3 +32,61 @@ popover row,
 }
 
 @include workspaces(frame,button);
+
+.budgie-popover .container > border {
+    @extend %reset_style;
+}
+
+// Budgie Menu
+.budgie-menu {
+    @include budgie-menu('icon-effect', 'entry.search', 'image', 'disabled', 
+                         'label', 'undershoot', 'overshoot');
+    button:not(.category-button) { padding-top: 5px; padding-bottom: 5px; }
+}
+
+// Menu Button
+@include budgie_menu_button('button');
+
+// User Menu
+@include budgie_user_menu(separator, 'background-color');
+
+// Places Menu
+@include places_menu(button, list, row, entry);
+
+// Panel
+.budgie-panel {
+    @include budgie_panel(button, separator, 'background-color');
+}
+
+// Tasklist
+.budgie-panel #tasklist-button,
+.budgie-panel #tasklist-button:backdrop {
+    @extend %budgie_panel_tasklist;
+    outline-color: transparent;
+    &:drop(active) { box-shadow: inset 0 0 0 1px $selected_bg_color; }
+}
+
+// Budgie styled Gtk Menus
+.budgie-menubar {
+    @extend %menu;
+    menu {
+        @extend %budgie_menubar_menu;
+    }
+
+    arrow {
+        @extend %budgie_menubar_arrow;
+        min-width:16px;
+        min-height:16px;
+    }
+
+    menuitem {
+        accelerator {
+            @extend %budgie_menubar_accelerator;
+        }
+
+        check, radio {
+            min-height: 16px;
+            min-width: 16px;
+        }
+    }
+}

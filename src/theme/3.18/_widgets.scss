@@ -243,3 +243,12 @@
     // Calendar
     @include widget_calendar(GtkCalendar,inconsistent);
 }
+
+.drop-shadow {
+    @extend %widgets;
+
+    color: $fg_color;
+    background-color: $panel_bg;
+    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    border-radius: 1px;
+}
