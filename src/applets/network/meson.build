@@ -18,6 +18,7 @@ applet_network_sources = [
     'common.c',
     'ethernet-item.c',
     'plugin.c',
+    'wifi-item.c',
 ]
 
 applet_network_deps = [

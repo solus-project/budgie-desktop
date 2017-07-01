@@ -17,9 +17,11 @@ BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
 #include "common.h"
 #include "ethernet-item.h"
+#include "wifi-item.h"
 #include <glib/gi18n.h>
 #include <nm-client.h>
 #include <nm-device-ethernet.h>
+#include <nm-device-wifi.h>
 BUDGIE_END_PEDANTIC
 
 struct _BudgieNetworkAppletClass {
@@ -34,7 +36,11 @@ struct _BudgieNetworkApplet {
 
         GtkWidget *listbox_ethernet; /**< Visual store for our ethernet */
         gint n_ethernet;
-        GHashTable *devices;
+
+        GtkWidget *listbox_wifi; /**< Visual store for our wifi */
+        gint n_wifi;
+
+        GHashTable *devices; /**< Backing store for actual devices */
 
         NMClient *client;
 
@@ -138,9 +144,16 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
         gtk_container_set_border_width(GTK_CONTAINER(layout), 6);
         gtk_container_add(GTK_CONTAINER(popover), layout);
 
+        /* Ethernet */
         listbox = gtk_list_box_new();
         gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
         self->listbox_ethernet = listbox;
+        gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
+
+        /* Wifi */
+        listbox = gtk_list_box_new();
+        gtk_list_box_set_selection_mode(GTK_LIST_BOX(listbox), GTK_SELECTION_NONE);
+        self->listbox_wifi = listbox;
         gtk_box_pack_start(GTK_BOX(layout), listbox, FALSE, FALSE, 0);
 
         /* Lastly, we need a way to access settings */
@@ -279,6 +292,10 @@ static void budgie_network_applet_device_added(BudgieNetworkApplet *self, NMDevi
                 add_widget = budgie_ethernet_item_new(device, self->n_ethernet);
                 pack_target = self->listbox_ethernet;
                 ++self->n_ethernet;
+        } else if (NM_IS_DEVICE_WIFI(device)) {
+                add_widget = budgie_wifi_item_new(device, self->n_wifi);
+                pack_target = self->listbox_wifi;
+                ++self->n_wifi;
         } else {
                 g_message("cannot handle device %s", nm_device_get_description(device));
                 return;
