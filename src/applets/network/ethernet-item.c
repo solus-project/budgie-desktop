@@ -50,6 +50,8 @@ static void budgie_ethernet_item_set_property(GObject *object, guint id, const G
                                               GParamSpec *spec);
 static void budgie_ethernet_item_get_property(GObject *object, guint id, GValue *value,
                                               GParamSpec *spec);
+static void budgie_ethernet_item_update_state(BudgieEthernetItem *self, guint new_state,
+                                              guint old_state, guint reason, NMDevice *device);
 
 /**
  * Handle cleanup
@@ -162,6 +164,45 @@ static void budgie_ethernet_item_init(BudgieEthernetItem *self)
         gtk_widget_show_all(GTK_WIDGET(self));
 }
 
+static const gchar *nm_state_to_icon(NMDeviceState st)
+{
+        switch (st) {
+        case NM_DEVICE_STATE_UNKNOWN:
+        case NM_DEVICE_STATE_UNMANAGED:
+                return "network-wired-offline-symbolic";
+        case NM_DEVICE_STATE_UNAVAILABLE:
+                return "network-wired-no-route-symbolic";
+        case NM_DEVICE_STATE_FAILED:
+                return "network-error-symbolic";
+        case NM_DEVICE_STATE_PREPARE:
+        case NM_DEVICE_STATE_CONFIG:
+        case NM_DEVICE_STATE_IP_CHECK:
+        case NM_DEVICE_STATE_IP_CONFIG:
+        case NM_DEVICE_STATE_SECONDARIES:
+                return "network-wired-acquiring-symbolic";
+        case NM_DEVICE_STATE_DISCONNECTED:
+        case NM_DEVICE_STATE_DEACTIVATING:
+                return "network-wired-disconnected-symbolic";
+        case NM_DEVICE_STATE_ACTIVATED:
+                return "network-wired-symbolic";
+        default:
+                return "network-error-symbolic";
+        }
+}
+
+static void budgie_ethernet_item_update_state(BudgieEthernetItem *self,
+                                              __budgie_unused__ guint new_state,
+                                              __budgie_unused__ guint old_state,
+                                              __budgie_unused__ guint reason,
+                                              __budgie_unused__ NMDevice *device)
+{
+        NMDeviceState state = nm_device_get_state(self->device);
+        const gchar *icon_name = NULL;
+
+        icon_name = nm_state_to_icon(state);
+        gtk_image_set_from_icon_name(GTK_IMAGE(self->image), icon_name, GTK_ICON_SIZE_MENU);
+}
+
 static void budgie_ethernet_item_constructed(GObject *obj)
 {
         BudgieEthernetItem *self = BUDGIE_ETHERNET_ITEM(obj);
@@ -169,13 +210,15 @@ static void budgie_ethernet_item_constructed(GObject *obj)
 
         label = g_strdup_printf(_("Wired connection %d"), self->index + 1);
 
-        /* TODO: Show the right icon */
-        gtk_image_set_from_icon_name(GTK_IMAGE(self->image),
-                                     "network-wired-disconnected-symbolic",
-                                     GTK_ICON_SIZE_MENU);
-
         /* Update our display label */
         gtk_label_set_text(GTK_LABEL(self->label), label);
+
+        g_signal_connect_swapped(self->device,
+                                 "state-changed",
+                                 G_CALLBACK(budgie_ethernet_item_update_state),
+                                 self);
+
+        budgie_ethernet_item_update_state(self, 0, 0, 0, self->device);
 }
 
 GtkWidget *budgie_ethernet_item_new(NMDevice *device, gint index)
