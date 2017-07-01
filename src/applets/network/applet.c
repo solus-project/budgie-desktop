@@ -11,7 +11,12 @@
 
 #define _GNU_SOURCE
 
+#include "util.h"
+
+BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
+#include <nm-client.h>
+BUDGIE_END_PEDANTIC
 
 struct _BudgieNetworkAppletClass {
         BudgieAppletClass parent_class;
@@ -21,15 +26,26 @@ struct _BudgieNetworkApplet {
         BudgieApplet parent;
         GtkWidget *popover;
         GtkWidget *image;
+        NMClient *client;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(BudgieNetworkApplet, budgie_network_applet, BUDGIE_TYPE_APPLET, 0, )
+
+/**
+ * Forward declarations
+ */
+static void budgie_network_applet_ready(GObject *source, GAsyncResult *res, gpointer v);
 
 /**
  * Handle cleanup
  */
 static void budgie_network_applet_dispose(GObject *object)
 {
+        BudgieNetworkApplet *self = BUDGIE_NETWORK_APPLET(object);
+
+        /* Clean up our client */
+        g_clear_object(&self->client);
+
         G_OBJECT_CLASS(budgie_network_applet_parent_class)->dispose(object);
 }
 
@@ -75,6 +91,41 @@ static void budgie_network_applet_init(BudgieNetworkApplet *self)
 
         /* Show up on screen */
         gtk_widget_show_all(GTK_WIDGET(self));
+
+        /* Start talking to the network manager */
+        nm_client_new_async(NULL, budgie_network_applet_ready, self);
+}
+
+/**
+ * budgie_network_applet_ready:
+ *
+ * We've got our NMClient on the async callback
+ */
+static void budgie_network_applet_ready(__budgie_unused__ GObject *source, GAsyncResult *res,
+                                        gpointer v)
+{
+        GError *error = NULL;
+        NMClient *client = NULL;
+        BudgieNetworkApplet *self = v;
+
+        /* Handle the errors */
+        client = nm_client_new_finish(res, &error);
+        if (error) {
+                gchar *sprint_text =
+                    g_strdup_printf("Failed to contact Network Manager: %s", error->message);
+                g_message("Unable to obtain network client: %s", error->message);
+                gtk_widget_set_tooltip_text(GTK_WIDGET(self), sprint_text);
+                g_free(sprint_text);
+                gtk_image_set_from_icon_name(GTK_IMAGE(self->image),
+                                             "dialog-error-symbolic",
+                                             GTK_ICON_SIZE_BUTTON);
+                g_error_free(error);
+                return;
+        }
+
+        /* We've got our client */
+        self->client = client;
+        g_message("Debug: Have client");
 }
 
 void budgie_network_applet_init_gtype(GTypeModule *module)

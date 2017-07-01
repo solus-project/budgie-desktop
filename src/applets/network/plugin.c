@@ -11,10 +11,13 @@
 
 #define _GNU_SOURCE
 
-#include <budgie-desktop/plugin.h>
+#include "util.h"
 
+BUDGIE_BEGIN_PEDANTIC
 #include "applet.h"
 #include "plugin.h"
+#include <budgie-desktop/plugin.h>
+BUDGIE_END_PEDANTIC
 
 static void budgie_network_plugin_iface_init(BudgiePluginIface *iface);
 
