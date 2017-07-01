@@ -246,7 +246,11 @@ static void budgie_ethernet_item_constructed(GObject *obj)
         BudgieEthernetItem *self = BUDGIE_ETHERNET_ITEM(obj);
         autofree(gchar) *label = NULL;
 
-        label = g_strdup_printf(_("Wired connection %d"), self->index + 1);
+        if (self->index > 0) {
+                label = g_strdup_printf(_("Wired connection %d"), self->index + 1);
+        } else {
+                label = g_strdup_printf(_("Wired connection"));
+        }
 
         /* Update our display label */
         gtk_label_set_text(GTK_LABEL(self->label), label);
