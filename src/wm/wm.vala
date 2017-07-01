@@ -143,6 +143,8 @@ public class BudgieWM : Meta.Plugin
     MenuManager? menu_proxy = null;
     Switcher? switcher_proxy = null;
 
+    Settings? iface_settings = null;
+
     private bool force_unredirect = false;
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
@@ -414,6 +416,9 @@ public class BudgieWM : Meta.Plugin
         Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
         Meta.Prefs.override_preference_schema(MUTTER_BUTTON_LAYOUT, WM_SCHEMA);
+
+        iface_settings = new Settings("org.gnome.desktop.interface");
+        iface_settings.bind("enable-animations", this, "use-animations", SettingsBindFlags.DEFAULT);
 
         settings = new Settings(WM_SCHEMA);
         this.settings.changed.connect(this.on_wm_schema_changed);
