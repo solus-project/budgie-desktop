@@ -47,11 +47,12 @@ public class SettingsWindow : Gtk.Window {
         sidebar = new Gtk.ListBox();
         scroll.add(sidebar);
         layout.pack_start(scroll, false, false, 0);
-        scroll.margin_end = 40;
+        scroll.margin_end = 24;
 
         /* Where actual Things go */
         content = new Gtk.Stack();
         layout.pack_start(content, true, true, 0);
+        content.margin_end = 24;
 
         /* Help our theming community out */
         get_style_context().add_class("budgie-settings-window");
