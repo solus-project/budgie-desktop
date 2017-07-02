@@ -1,0 +1,17 @@
+// Icon Tasklist
+@mixin icon_tasklist($launcher_type) {
+    #{$launcher_type}.launcher {
+        transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border-color: transparentize($panel_bg,1); // fixes the transition
+        padding: 0;
+        background-clip: padding-box;
+    }
+    .unpinned #{$launcher_type}.launcher,
+    .pinned #{$launcher_type}.launcher.running { @extend %underscores; }
+
+    .pinned #{$launcher_type}.launcher:not(.running):hover {
+        background-color: transparentize(black, 0.8);
+        box-shadow: inset 1px 0 transparentize(black, 0.8),
+                    inset -1px 0 transparentize(black, 0.8);
+    }
+}

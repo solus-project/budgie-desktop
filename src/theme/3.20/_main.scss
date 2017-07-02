@@ -1,74 +1,162 @@
-// Icon Tasklist
-.budgie-panel {
+@function gtkalpha($c,$a) {
+    @return unquote("alpha(#{$c},#{$a})");
+}
 
-    button.flat.launcher {
-        @extend %reset_style;
+$roundness: 3px;
+$border_width: if($variant == 'default', 1px, 2px);
+$pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
+$asset_suffix: if($variant == 'default', '', '-hc');
 
-        outline-color: transparent;
-        transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        border-color: transparentize($panel_bg,1); // fixes the transition
-        border-radius: 0;
-        padding: 0;
-        background-clip: padding-box;
-    }
-    .unpinned button.flat.launcher,
-    .pinned button.flat.launcher.running { @extend %underscores; }
+// Container for both the "panel" area and the shadow. Wise to keep
+// this transparent..
+.budgie-container { background-color: transparent; }
 
-    .pinned button.flat.launcher:not(.running):hover {
-        background-color: transparentize(black, 0.8);
-        box-shadow: inset 1px 0 transparentize(black, 0.8),
-                    inset -1px 0 transparentize(black, 0.8);
+*:drop(active):focus,
+*:drop(active) {
+    box-shadow: inset 0 0 0 1px #F08437;
+}
+
+// Used to reset all style properties set by the gtk theme
+popover list,
+popover row,
+.budgie-popover .container,
+.budgie-popover list,
+.budgie-popover row {
+    @extend %reset_style
+}
+
+%reset_style,
+ menubar {
+    menuitem {
+        @include menu_reset_style(label);
     }
 }
 
-%underscores {
-    &:hover,
-    &:active, &:checked {
-        background-color: transparentize(black, 0.8);
-        box-shadow: inset 1px 0 transparentize(black, 0.8),
-                    inset -1px 0 transparentize(black, 0.8);
+// Worskpace Switcher
+@include workspaces(frame,button);
+
+// Budgie Menu
+.budgie-menu {
+    @include budgie-menu('icon-effect', 'entry.search', 'image', 'disabled', 
+                         'label', 'undershoot', 'overshoot');
+    button:not(.category-button) { padding-top: 5px; padding-bottom: 5px; }
+}
+
+// Menu Button
+@include budgie_menu_button('button');
+
+// User Menu
+@include budgie_user_menu(separator, 'background-color');
+
+// Places Menu
+@include places_menu(button, list, row, entry);
+
+// Panel
+.budgie-panel {
+    @include budgie_panel(button, separator, 'background-color');
+}
+
+// Tasklist
+.budgie-panel #tasklist-button,
+.budgie-panel #tasklist-button:backdrop {
+    @extend %budgie_panel_tasklist;
+    outline-color: transparent;
+    &:drop(active) { box-shadow: inset 0 0 0 1px $selected_bg_color; }
+}
+
+// Budgie styled Gtk Menus
+.budgie-menubar {
+    @include budgie_menubar(menu, arrow, menuitem, accelerator);
+    arrow {
+        min-width:16px;
+        min-height:16px;
     }
 
-    @each $pos, $b_pos in $pos_list {
-        .#{$pos} & {
-            padding-#{$b_pos}: 2px;
-            border-#{$pos}: 2px solid transparentize($panel_bg,1);
-
-            @at-root {
-                .#{$pos} .budgie-panel .unpinned button.flat.launcher,
-                .#{$pos} .budgie-panel .pinned button.flat.launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
-            }
-            &:hover {
-                border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
-            }
-            &:active, &:checked {
-                border-#{$pos}: 2px solid $selected_bg_color;
-            }
+    menuitem {
+        check, radio {
+            min-height: 16px;
+            min-width: 16px;
         }
     }
 }
 
+// Session Dialog
+.budgie-session-dialog {
+    @extend %widgets;
+    @include budgie_session_dialog(button);
+
+    color: $fg_color;
+    background-color: $panel_bg;
+
+    decoration {
+        border-radius: 1px;
+        box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    }
+}
+
+// Run Dialog
+.budgie-run-dialog {
+    @extend .budgie-session-dialog;
+
+    entry.search, entry.search:focus {
+        @extend %budgie_run_dialog_entry;
+
+        image {
+            @extend %budgie_run_dialog_image;
+        }
+    }
+
+    list row:selected .dim-label { opacity: 1; }
+
+    scrolledwindow { border-top: 1px solid darken($entry_border, 5%); }
+}
+
+// Alt+tab switcher in Budgie
+.budgie-switcher-window {
+    @extend .budgie-notification-window;
+
+    // Flowbox
+    flowbox { color: $fg_color; }
+    flowboxchild {
+        @include budgie_switcher_child(disabled, label); 
+    }
+}
+
+// Icon Tasklist
+.budgie-panel {
+    @include icon_tasklist('button.flat');
+
+    button.flat.launcher {
+        @extend %reset_style;
+        outline-color: transparent;
+        border-radius: 0;
+    }
+}
+
+// Underscores
+%underscores {
+    @include underscores('button.flat');
+}
+
+// Panel Borders
+@include borders($pos_list);
+
+// Raven
+.raven {
+    @include raven(button);
+    .raven-header {
+        min-height: 32px;
+    }
+}
+@include raven-trigger(button);
+@include raven-mpris(button);
+
 @each $pos, $b_pos in $pos_list {
-
-    // Panel borders
-    .#{$pos} .budgie-panel { border-#{$b_pos}: $border_width solid $panel_border; }
-
     // Raven borders
     .#{$pos} .raven-frame {
-        padding: 0;
-        background: none;
-
         border {
             border: none;
             border-#{$b_pos}: $border_width solid $raven_border;
         }
-    }
-
-    // Shadows
-    .#{$pos} .shadow-block {
-        background-color: transparent;
-        background-image: linear-gradient(to $b_pos,
-                                          $panel_shadow,
-                                          transparent);
     }
 }
