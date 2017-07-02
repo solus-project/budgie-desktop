@@ -89,7 +89,7 @@ public class PanelPage : Budgie.SettingsPage {
         combobox_position = new Gtk.ComboBox();
         ret.add_row(new SettingsRow(combobox_position,
             _("Position"),
-            _("Set which edge of the screen this panel will stay on. If another " +
+            _("Set the edge of the screen that this panel will stay on. If another " +
               "panel is already there, they will automatically swap positions")));
 
         /* Autohide */
@@ -97,7 +97,7 @@ public class PanelPage : Budgie.SettingsPage {
         ret.add_row(new SettingsRow(combobox_autohide,
             _("Automatically hide"),
             _("When set, this panel will hide from view to maximize screen estate. " +
-              "Use the intelligent mode to make this panel automatically avoid windows")));
+              "Use the intelligent mode to make this panel automatically avoid active windows")));
 
         /* Transparency */
         combobox_transparency = new Gtk.ComboBox();
