@@ -169,7 +169,7 @@ public class PanelPage : Budgie.SettingsPage {
         ret.add_row(new SettingsRow(switch_shadow,
             _("Shadow"),
             _("Adds a decorative drop-shadow, ideal for opaque panels")));
-        shadow_id = switch_shadow.notify["active"].connect_after(this.set_shadow);
+        shadow_id = switch_shadow.notify["active"].connect(this.set_shadow);
 
         /* Regions */
         switch_regions = new Gtk.Switch();
@@ -177,7 +177,7 @@ public class PanelPage : Budgie.SettingsPage {
             _("Stylize regions"),
             _("Adds a hint to the panel so that each of the panel's three main areas " +
               "may be themed differently.")));
-        region_id = switch_regions.notify["active"].connect_after(this.set_region);
+        region_id = switch_regions.notify["active"].connect(this.set_region);
 
         /* Dock */
         switch_dock = new Gtk.Switch();
@@ -185,7 +185,7 @@ public class PanelPage : Budgie.SettingsPage {
             _("Dock mode"),
             _("When in dock mode, the panel will use the minimal amount of space possible, " +
               "freeing up valuable screen estate")));
-        dock_id = switch_dock.notify["active"].connect_after(this.set_dock);
+        dock_id = switch_dock.notify["active"].connect(this.set_dock);
 
         /* Allow deletion of the panel */
         var button_remove_panel = new Gtk.Button.with_label(_("Remove"));
