@@ -56,6 +56,7 @@ public class SettingsPage : Gtk.Grid {
 
     construct {
         border_width = 20;
+        margin_end = 24;
         halign = Gtk.Align.CENTER;
         valign = Gtk.Align.FILL;
         get_style_context().add_class("settings-page");

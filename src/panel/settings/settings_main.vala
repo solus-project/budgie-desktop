@@ -55,7 +55,6 @@ public class SettingsWindow : Gtk.Window {
         content = new Gtk.Stack();
         content.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         layout.pack_start(content, true, true, 0);
-        content.margin_end = 24;
 
         /* Help our theming community out */
         get_style_context().add_class("budgie-settings-window");
@@ -97,7 +96,11 @@ public class SettingsWindow : Gtk.Window {
         settings_item.show_all();
         sidebar.add(settings_item);
 
-        content.add_named(page, page.content_id);
+        var scroll = new Gtk.ScrolledWindow(null, null);
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        scroll.add(page);
+
+        content.add_named(scroll, page.content_id);
     }
 
 } /* End SettingsWindow */
