@@ -64,7 +64,7 @@ public class WindowsPage : Budgie.SettingsPage {
         switch_unredirect = new Gtk.Switch();
         this.add_row(new SettingsRow(switch_unredirect,
             _("Disable unredirection of windows"),
-            _("This option is for advanced users and will override the default window manager behaviour. " +
+            _("This option is for advanced users. " +
               "Use this if you are having graphical or performance issues with dedicated GPUs")));
 
         /* Hook up settings */
