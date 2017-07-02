@@ -59,8 +59,17 @@ public class SettingsWindow : Gtk.Window {
         content.get_style_context().add_class("content-view");
         sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 
+        this.dummy_content();
+
         layout.show_all();
         header.show_all();
+    }
+
+    void dummy_content()
+    {
+       sidebar.add(new SettingsItem("appearance", "desktop", _("Desktop"), "user-desktop"));
+       sidebar.add(new SettingsItem("appearance", "fonts", _("Fonts"), "preferences-desktop-font"));
+       sidebar.add(new SettingsItem("appearance", "theming", _("Theming"), "preferences-desktop-theme"));
     }
 
 } /* End SettingsWindow */
