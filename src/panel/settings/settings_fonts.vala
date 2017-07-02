@@ -30,7 +30,7 @@ public class FontPage : Budgie.SettingsPage {
         Object(group: SETTINGS_GROUP_APPEARANCE,
                content_id: "fonts",
                title: _("Fonts"),
-               icon_name: "preferences-desktop-fonts");
+               icon_name: "preferences-desktop-font");
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
 
