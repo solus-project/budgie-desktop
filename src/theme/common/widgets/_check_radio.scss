@@ -3,15 +3,15 @@
                    ('radio','radio') {
       #{$dot}#{$w} {
         color: $fg_color;
-        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}.png"),url("../assets/#{$a}@2.png")),
+        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}.png"),url("assets/#{$a}@2.png")),
                                                     -gtk-icontheme('#{$a}-symbolic'));
 
         &:checked, &:active {
-            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}-active.png"),url("../assets/#{$a}-active@2.png")),
+            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("assets/#{$a}-active.png"),url("assets/#{$a}-active@2.png")),
                                                         -gtk-icontheme('#{$a}-checked-symbolic'));
         }
         &:#{$insensitive} { color: transparentize($fg_color, 0.65); }
-        &:#{inconsistent} { -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic'); }
+        &:#{$inconsistent} { -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic'); }
       }
     }
 }

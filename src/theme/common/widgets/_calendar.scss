@@ -3,7 +3,7 @@
         padding: 3px;
         color: $fg_color;
 
-        &:#{inconsistent} { color: gtkalpha(currentColor,0.3); }
+        &:#{$inconsistent} { color: gtkalpha(currentColor,0.3); }
 
         @if $variant=='default' {
             &:selected { color: $selected_bg_color; }

@@ -7,7 +7,7 @@
     @include button-normal();
 
     &.flat:not(:hover):not(:active):not(:checked) {
-        &, &:insensitive {
+        &, &:#{$disabled} {
             @include button-flat();
         }
     }

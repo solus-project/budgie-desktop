@@ -16,7 +16,7 @@
 
     // Entries
     entry {
-        @include entry(selection);
+        @include entry(selection,disabled);
 
         caret-color: $fg_color;
 
@@ -149,15 +149,15 @@
             &:dir(rtl) { background-position: left center; }
         }
 
-        background-image: -gtk-scaled(url("../assets/switch#{$asset_suffix}.png"),url("../assets/switch#{$asset_suffix}@2.png"));
+        background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.png"),url("assets/switch#{$asset_suffix}@2.png"));
 
-        &:checked { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
+        &:checked { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.png"),url("assets/switch-active#{$asset_suffix}@2.png")); }
         &:disabled { opacity: 0.4; }
     }
 
     // Scrollbars
     scrollbar {
-        @include widget_scrollbar(button, slider, trought, hidden, disabled);
+        @include widget_scrollbar(button, slider, trought, hover, disabled);
     
         $_slider_margin: 3px;
         $_slider_fine_tune_margin: 4px;

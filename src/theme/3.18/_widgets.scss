@@ -11,7 +11,7 @@
 
     // Entries
     .entry {
-        @include entry('&:selected');
+        @include entry('&:selected',insensitive);
     }
 
     // Buttons
@@ -81,7 +81,7 @@
             border-radius: 50%;
 
             @if $variant == 'default' {
-                background-image: -gtk-scaled(url("../assets/scale-slider.png"),url("../assets/scale-slider@2.png"));
+                background-image: -gtk-scaled(url("assets/scale-slider.png"),url("assets/scale-slider@2.png"));
             }
             @else {
                 background-color: $selected_bg_color;
@@ -119,9 +119,9 @@
             &:dir(rtl) { background-position: left center; }
         }
         &.trough {
-            background-image: -gtk-scaled(url("../assets/switch#{$asset_suffix}.png"),url("../assets/switch#{$asset_suffix}@2.png"));
+            background-image: -gtk-scaled(url("assets/switch#{$asset_suffix}.png"),url("assets/switch#{$asset_suffix}@2.png"));
 
-            &:active { background-image: -gtk-scaled(url("../assets/switch-active#{$asset_suffix}.png"),url("../assets/switch-active#{$asset_suffix}@2.png")); }
+            &:active { background-image: -gtk-scaled(url("assets/switch-active#{$asset_suffix}.png"),url("assets/switch-active#{$asset_suffix}@2.png")); }
         }
     }
 

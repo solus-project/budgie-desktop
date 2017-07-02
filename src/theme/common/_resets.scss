@@ -10,7 +10,7 @@
     min-height: 0;
 }
 
-@mixin menu_reset_style($label) {
+@mixin menu_reset_style($label,$insensitive) {
     padding: 4px 8px;
     border: solid transparent;
     border-width: 0;
@@ -20,7 +20,7 @@
         color: $fg_color;
     }
 
-    &:insensitive {
+    &:#{$insensitive} {
         color: rgba(207, 218, 231, 0.2);
         border-color: transparent;
     }

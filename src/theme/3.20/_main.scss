@@ -1,7 +1,3 @@
-@function gtkalpha($c,$a) {
-    @return unquote("alpha(#{$c},#{$a})");
-}
-
 $roundness: 3px;
 $border_width: if($variant == 'default', 1px, 2px);
 $pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
@@ -28,7 +24,7 @@ popover row,
 %reset_style,
  menubar {
     menuitem {
-        @include menu_reset_style(label);
+        @include menu_reset_style(label,disabled);
     }
 }
 

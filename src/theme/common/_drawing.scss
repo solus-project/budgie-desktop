@@ -1,5 +1,5 @@
 // Entries
-@mixin entry($selected) {
+@mixin entry($selected,$insensitive) {
     padding: 4px 8px;
     border: $border_width solid;
     border-radius: $roundness;
@@ -21,7 +21,7 @@
         }
     }
 
-    &:insensitive {
+    &:#{$insensitive} {
         color: transparentize($entry_fg, 0.65);
         background-color: transparentize($entry_bg, 0.3);
         border-color: transparentize($entry_border, 0.3);
