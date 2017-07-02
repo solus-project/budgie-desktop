@@ -56,7 +56,7 @@ public class SettingsPage : Gtk.Grid {
 
     construct {
         border_width = 20;
-        halign = Gtk.Align.FILL;
+        halign = Gtk.Align.CENTER;
         valign = Gtk.Align.FILL;
         get_style_context().add_class("settings-page");
     }
@@ -70,7 +70,6 @@ public class SettingsPage : Gtk.Grid {
         var lab_main = new Gtk.Label(row.label);
         lab_main.halign = Gtk.Align.START;
         lab_main.hexpand = true;
-        lab_main.margin_end = 14;
 
         attach(lab_main, 0, current_row, 1, 1);
         attach(row.widget, 1, current_row, 1, 1);
@@ -79,6 +78,7 @@ public class SettingsPage : Gtk.Grid {
         row.widget.vexpand = false;
 
         lab_main.margin_top = 12;
+        row.widget.margin_left = 28;
         row.widget.margin_top = 12;
 
         ++current_row;
