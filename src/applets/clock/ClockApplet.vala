@@ -107,13 +107,14 @@ public class ClockApplet : Budgie.Applet
     {
         widget = new Gtk.EventBox();
         layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+
         clock = new Gtk.Label("");
-        clock.valign = Gtk.Align.CENTER;
         time = new DateTime.now_local();
         widget.add(layout);
-        margin_bottom = 2;
 
         layout.pack_start(clock, false, false, 0);
+        layout.margin = 0;
+        layout.border_width = 0;
 
         seconds_label = new Gtk.Label("");
         seconds_label.get_style_context().add_class("dim-label");
@@ -125,6 +126,10 @@ public class ClockApplet : Budgie.Applet
         layout.pack_start(date_label, false, false, 0);
         date_label.no_show_all = true;
         date_label.hide();
+
+        clock.valign = Gtk.Align.CENTER;
+        seconds_label.valign = Gtk.Align.CENTER;
+        date_label.valign = Gtk.Align.CENTER;
 
         settings = new Settings("org.gnome.desktop.interface");
 
