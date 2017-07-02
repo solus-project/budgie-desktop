@@ -192,7 +192,7 @@ public class PanelPage : Budgie.SettingsPage {
         var render = new Gtk.CellRendererText();
 
         /* Now let's sort out some models */
-        var model = new Gtk.ListStore(2, typeof(Budgie.PanelPosition), typeof(string));
+        var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelPosition));
         Gtk.TreeIter iter;
         const Budgie.PanelPosition[] positions = {
             Budgie.PanelPosition.TOP,
@@ -202,7 +202,7 @@ public class PanelPage : Budgie.SettingsPage {
         };
         foreach (var pos in positions) {
             model.append(out iter);
-            model.set(iter, 0, pos, 1, PanelPage.pos_to_display(pos), -1);
+            model.set(iter, 0, pos.to_string(), 1, PanelPage.pos_to_display(pos), 2, pos, -1);
         }
         combobox_position.set_model(model);
         combobox_position.pack_start(render, true);
@@ -210,7 +210,7 @@ public class PanelPage : Budgie.SettingsPage {
         combobox_position.set_id_column(0);
 
         /* Transparency types */
-        model = new Gtk.ListStore(2, typeof(Budgie.PanelTransparency), typeof(string));
+        model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelTransparency));
         const Budgie.PanelTransparency transps[] = {
             Budgie.PanelTransparency.ALWAYS,
             Budgie.PanelTransparency.DYNAMIC,
@@ -218,7 +218,7 @@ public class PanelPage : Budgie.SettingsPage {
         };
         foreach (var t in transps) {
             model.append(out iter);
-            model.set(iter, 0, t, 1, PanelPage.transparency_to_display(t), -1);
+            model.set(iter, 0, t.to_string(), 1, PanelPage.transparency_to_display(t), 2, t, -1);
         }
         combobox_transparency.set_model(model);
         combobox_transparency.pack_start(render, true);
@@ -226,7 +226,7 @@ public class PanelPage : Budgie.SettingsPage {
         combobox_transparency.set_id_column(0);
 
         /* Autohide types */
-        model = new Gtk.ListStore(2, typeof(Budgie.AutohidePolicy), typeof(string));
+        model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.AutohidePolicy));
         const Budgie.AutohidePolicy policies[] = {
             Budgie.AutohidePolicy.AUTOMATIC,
             Budgie.AutohidePolicy.INTELLIGENT,
@@ -234,12 +234,29 @@ public class PanelPage : Budgie.SettingsPage {
         };
         foreach (var p in policies) {
             model.append(out iter);
-            model.set(iter, 0, p, 1, PanelPage.policy_to_display(p), -1);
+            model.set(iter, 0, p.to_string(), 1, PanelPage.policy_to_display(p), 2, p, -1);
         }
         combobox_autohide.set_model(model);
         combobox_autohide.pack_start(render, true);
         combobox_autohide.add_attribute(render, "text", 1);
         combobox_autohide.set_id_column(0);
+
+        /* Properties we needed to know about */
+        const string[] needed_props = {
+            "position",
+            "transparency",
+            "autohide",
+            "shadow-visible",
+            "theme-regions",
+            "dock-mode",
+            "intended-size", /* Not yet handled */
+        };
+
+        foreach (var init in needed_props) {
+            this.update_from_property(init);
+        }
+
+        this.toplevel.notify.connect_after(this.panel_notify);
 
         return ret;
     }
@@ -247,6 +264,40 @@ public class PanelPage : Budgie.SettingsPage {
     private Gtk.Widget? applets_page()
     {
         return new SettingsGrid();
+    }
+
+    private void panel_notify(Object? o, ParamSpec ps)
+    {
+        this.update_from_property(ps.name);
+    }
+
+    /**
+     * Update our state from a given property
+     */
+    private void update_from_property(string property)
+    {
+        switch (property) {
+            case "position":
+                this.combobox_position.active_id = this.toplevel.position.to_string();
+                break;
+            case "transparency":
+                this.combobox_transparency.active_id = this.toplevel.transparency.to_string();
+                break;
+            case "autohide":
+                this.combobox_autohide.active_id = this.toplevel.autohide.to_string();
+                break;
+            case "shadow-visible":
+                this.switch_shadow.active = this.toplevel.shadow_visible;
+                break;
+            case "theme-regions":
+                this.switch_regions.active = this.toplevel.theme_regions;
+                break;
+            case "dock-mode":
+                this.switch_dock.active = this.toplevel.dock_mode;
+                break;
+            default:
+                break;
+        }
     }
     
 } /* End class */
