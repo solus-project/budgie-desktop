@@ -39,7 +39,7 @@ public class SettingsWindow : Gtk.Window {
         set_icon_name("preferences-desktop");
 
         /* Fit even on a spud resolution */
-        set_size_request(750, 550);
+        set_default_size(750, 550);
 
         /* Sidebar navigation */
         var scroll = new Gtk.ScrolledWindow(null, null);
