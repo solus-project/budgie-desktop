@@ -45,6 +45,8 @@ public class SettingsWindow : Gtk.Window {
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         sidebar = new Gtk.ListBox();
+        sidebar.row_selected.connect(this.on_row_selected);
+        sidebar.set_activate_on_single_click(true);
         scroll.add(sidebar);
         layout.pack_start(scroll, false, false, 0);
         scroll.margin_end = 24;
@@ -72,6 +74,18 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.FontPage());
     }
 
+
+    /**
+     * Handle transition between various pages
+     */
+    void on_row_selected(Gtk.ListBoxRow? row)
+    {
+        if (row == null) {
+            return;
+        }
+        SettingsItem? item = row.get_child() as SettingsItem;
+        this.content.set_visible_child_name(item.content_id);
+    }
 
     /**
      * Add a new page to our sidebar + stack
