@@ -19,6 +19,13 @@ public class PanelPage : Budgie.SettingsPage {
     unowned Budgie.Toplevel? toplevel;
     Gtk.Stack stack;
     Gtk.StackSwitcher switcher;
+    Gtk.ComboBox combobox_position;
+    Gtk.ComboBox combobox_autohide;
+    Gtk.ComboBox combobox_transparency;
+
+    Gtk.Switch switch_shadow;
+    Gtk.Switch switch_regions;
+    Gtk.Switch switch_dock;
 
     public PanelPage(Budgie.Toplevel? toplevel)
     {
@@ -31,6 +38,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Main layout bits */
         switcher = new Gtk.StackSwitcher();
+        switcher.halign = Gtk.Align.CENTER;
         stack = new Gtk.Stack();
         switcher.set_stack(stack);
         this.pack_start(switcher, false, false, 0);
@@ -76,6 +84,46 @@ public class PanelPage : Budgie.SettingsPage {
     private Gtk.Widget? settings_page()
     {
         SettingsGrid? ret = new SettingsGrid();
+
+        /* Position */
+        combobox_position = new Gtk.ComboBox();
+        ret.add_row(new SettingsRow(combobox_position,
+            _("Position"),
+            _("Set which edge of the screen this panel will stay on. If another " +
+              "panel is already there, they will automatically swap positions")));
+
+        /* Autohide */
+        combobox_autohide = new Gtk.ComboBox();
+        ret.add_row(new SettingsRow(combobox_autohide,
+            _("Automatically hide"),
+            _("When set, this panel will hide from view to maximize screen estate. " +
+              "Use the intelligent mode to make this panel automatically avoid windows")));
+
+        /* Transparency */
+        combobox_transparency = new Gtk.ComboBox();
+        ret.add_row(new SettingsRow(combobox_transparency,
+            _("Transparency"),
+            _("Control when this panel should have a solid background")));
+
+        /* Shadow */
+        switch_shadow = new Gtk.Switch();
+        ret.add_row(new SettingsRow(switch_shadow,
+            _("Shadow"),
+            _("Adds a decorative drop-shadow, ideal for opaque panels")));
+
+        /* Regions */
+        switch_regions = new Gtk.Switch();
+        ret.add_row(new SettingsRow(switch_regions,
+            _("Stylize regions"),
+            _("Adds a hint to the panel so that each of the panel's three main areas " +
+              "may be themed differently.")));
+
+        /* Dock */
+        switch_dock = new Gtk.Switch();
+        ret.add_row(new SettingsRow(switch_dock,
+            _("Dock mode"),
+            _("When in dock mode, the panel will use the minimum amount of space possible, " +
+              "freeing up valuable screen estate")));
 
         /* Allow deletion of the panel */
         var button_remove_panel = new Gtk.Button.with_label(_("Remove"));
