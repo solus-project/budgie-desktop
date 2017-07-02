@@ -20,8 +20,11 @@ public class PanelPage : Budgie.SettingsPage {
     Gtk.Stack stack;
     Gtk.StackSwitcher switcher;
     Gtk.ComboBox combobox_position;
+    ulong position_id;
     Gtk.ComboBox combobox_autohide;
+    ulong autohide_id;
     Gtk.ComboBox combobox_transparency;
+    ulong transparency_id;
 
     Gtk.Switch switch_shadow;
     ulong shadow_id;
@@ -143,6 +146,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Position */
         combobox_position = new Gtk.ComboBox();
+        position_id = combobox_position.changed.connect(this.set_position);
         group.add_widget(combobox_position);
         ret.add_row(new SettingsRow(combobox_position,
             _("Position"),
@@ -151,6 +155,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Autohide */
         combobox_autohide = new Gtk.ComboBox();
+        autohide_id = combobox_autohide.changed.connect(this.set_autohide);
         group.add_widget(combobox_autohide);
         ret.add_row(new SettingsRow(combobox_autohide,
             _("Automatically hide"),
@@ -159,6 +164,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Transparency */
         combobox_transparency = new Gtk.ComboBox();
+        transparency_id = combobox_transparency.changed.connect(this.set_transparency);
         group.add_widget(combobox_transparency);
         ret.add_row(new SettingsRow(combobox_transparency,
             _("Transparency"),
@@ -287,14 +293,20 @@ public class PanelPage : Budgie.SettingsPage {
     {
         switch (property) {
             case "position":
+                SignalHandler.block(this.combobox_position, this.position_id);
                 this.combobox_position.active_id = this.toplevel.position.to_string();
                 this.title = PanelPage.get_panel_name(toplevel);
+                SignalHandler.unblock(this.combobox_position, this.position_id);
                 break;
             case "transparency":
+                SignalHandler.block(this.combobox_transparency, this.transparency_id);
                 this.combobox_transparency.active_id = this.toplevel.transparency.to_string();
+                SignalHandler.unblock(this.combobox_transparency, this.transparency_id);
                 break;
             case "autohide":
+                SignalHandler.block(this.combobox_autohide, this.autohide_id);
                 this.combobox_autohide.active_id = this.toplevel.autohide.to_string();
+                SignalHandler.unblock(this.combobox_autohide, this.autohide_id);
                 break;
             case "shadow-visible":
                 SignalHandler.block(this.switch_shadow, this.shadow_id);
@@ -339,6 +351,54 @@ public class PanelPage : Budgie.SettingsPage {
     private void set_dock()
     {
         this.manager.set_dock_mode(this.toplevel.uuid, this.switch_dock.active);
+    }
+
+    /**
+     * Update the panel position on screen
+     */
+    private void set_position()
+    {
+        Gtk.TreeIter iter;
+        Budgie.PanelPosition position = this.toplevel.position;
+
+        if (!combobox_position.get_active_iter(out iter)) {
+            return;
+        }
+
+        combobox_position.model.get(iter, 2, out position, -1);
+        this.manager.set_placement(toplevel.uuid, position);
+    }
+
+    /**
+     * Update the autohide policy for the panel
+     */
+    private void set_autohide()
+    {
+        Gtk.TreeIter iter;
+        Budgie.AutohidePolicy policy = this.toplevel.autohide;
+
+        if (!combobox_autohide.get_active_iter(out iter)) {
+            return;
+        }
+
+        combobox_autohide.model.get(iter, 2, out policy, -1);
+        this.manager.set_autohide(toplevel.uuid, policy);
+    }
+
+    /**
+     * Update the transparency setting for the panel
+     */
+    private void set_transparency()
+    {
+        Gtk.TreeIter iter;
+        Budgie.PanelTransparency transparency = this.toplevel.transparency;
+
+        if (!combobox_transparency.get_active_iter(out iter)) {
+            return;
+        }
+
+        combobox_transparency.model.get(iter, 2, out transparency, -1);
+        this.manager.set_transparency(toplevel.uuid, transparency);
     }
     
 } /* End class */
