@@ -2,7 +2,7 @@
 Module=workspacesapplet.so
 Name=Workspace Switcher
 _Description=Workspace Switcher
-Authors=Ikey Doherty
-Copyright=Copyright © 2015-2017 Ikey Doherty
+Authors=Stefan Ric
+Copyright=Copyright © 2017 Stefan Ric
 Website=https://solus-project.com
 Icon=workspace-switcher-symbolic
