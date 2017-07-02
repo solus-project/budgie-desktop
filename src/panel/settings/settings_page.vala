@@ -12,6 +12,7 @@
 namespace Budgie {
 
 public const string SETTINGS_GROUP_APPEARANCE = "appearance";
+public const string SETTINGS_GROUP_PANEL = "panel";
 
 /**
  * A SettingsRow is used to control the content layout in a SettingsPage

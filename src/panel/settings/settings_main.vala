@@ -30,6 +30,7 @@ public class SettingsWindow : Gtk.Window {
 
         group_map = new HashTable<string,string>(str_hash, str_equal);
         group_map["appearance"] = _("Appearance");
+        group_map["panel"] = _("Panels");
 
         /* Don't die when closed. */
         delete_event.connect(this.hide_on_delete);
@@ -79,6 +80,9 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.StylePage());
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
+
+        /* TOTALLY DEMO ! */
+        this.add_page(new Budgie.PanelPage(null));
     }
 
     /**
