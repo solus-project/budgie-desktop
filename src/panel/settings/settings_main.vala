@@ -17,6 +17,7 @@ public class SettingsWindow : Gtk.Window {
     Gtk.ListBox sidebar;
     Gtk.Stack content;
     Gtk.Box layout;
+    HashTable<string,string> group_map;
 
     public SettingsWindow()
     {
@@ -26,6 +27,9 @@ public class SettingsWindow : Gtk.Window {
         header = new Gtk.HeaderBar();
         header.set_show_close_button(true);
         set_titlebar(header);
+
+        group_map = new HashTable<string,string>(str_hash, str_equal);
+        group_map["appearance"] = _("Appearance");
 
         /* Don't die when closed. */
         delete_event.connect(this.hide_on_delete);
@@ -45,6 +49,7 @@ public class SettingsWindow : Gtk.Window {
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         sidebar = new Gtk.ListBox();
+        sidebar.set_header_func(this.do_headers);
         sidebar.row_selected.connect(this.on_row_selected);
         sidebar.set_activate_on_single_click(true);
         scroll.add(sidebar);
@@ -74,7 +79,6 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.FontPage());
     }
 
-
     /**
      * Handle transition between various pages
      */
@@ -103,6 +107,39 @@ public class SettingsWindow : Gtk.Window {
         content.add_named(scroll, page.content_id);
     }
 
+    /**
+     * Provide categorisation for our sidebar items
+     */
+    void do_headers(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        SettingsItem? child = null;
+        string? prev = null;
+        string? next = null;
+
+        if (before != null) {
+            child = before.get_child() as SettingsItem;
+            prev = child.group;
+        }
+
+        if (after != null) {
+            child = after.get_child() as SettingsItem;
+            next = child.group;
+        }
+
+        if (after == null || prev != next) {
+            string? title = group_map.lookup(prev);
+            Gtk.Label label = new Gtk.Label("<big>%s</big>".printf(title));
+            label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
+            label.halign = Gtk.Align.START;
+            label.use_markup = true;
+            label.margin_top = 6;
+            label.margin_bottom = 6;
+            label.margin_start = 6;
+            before.set_header(label);
+        } else {
+            before.set_header(null);
+        }
+    }
 } /* End SettingsWindow */
 
 
