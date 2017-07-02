@@ -19,6 +19,8 @@ public class WindowsPage : Budgie.SettingsPage {
     private GLib.Settings budgie_wm_settings;
     private Gtk.ComboBox combo_layouts;
     private Gtk.Switch switch_unredirect;
+    private Gtk.Switch switch_dialogs;
+    private Gtk.Switch switch_tiling;
 
     public WindowsPage()
     {
@@ -47,6 +49,17 @@ public class WindowsPage : Budgie.SettingsPage {
         combo_layouts.add_attribute(render, "text", 1);
         combo_layouts.set_id_column(0);
 
+        /* Dialogs attach modally */
+        switch_dialogs = new Gtk.Switch();
+        this.add_row(new SettingsRow(switch_dialogs,
+            _("Attach modal dialogs to windows"),
+            _("Modal dialogs will become attached to the parent window and move together when dragged")));
+
+        switch_tiling = new Gtk.Switch();
+        this.add_row(new SettingsRow(switch_tiling,
+            _("Automatic tiling"),
+            _("Windows will automatically tile when dragged into the top of the screen or the far corners")));
+
         /* Unredirect.. */
         switch_unredirect = new Gtk.Switch();
         this.add_row(new SettingsRow(switch_unredirect,
@@ -56,7 +69,9 @@ public class WindowsPage : Budgie.SettingsPage {
 
         /* Hook up settings */
         budgie_wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+        budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
+        budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
     }
     
