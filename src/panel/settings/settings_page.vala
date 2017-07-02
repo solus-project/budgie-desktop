@@ -34,33 +34,12 @@ public class SettingsRow : GLib.Object {
 } /* End SettingsRow */
 
 /**
- * A settings page is just a helper with some properties and methods to add
- * new setting items easily without buggering about with the internals of
- * GtkGrids
+ * A settings grid is just a helper with some methods to add new setting items
+ * easily without buggering about with the internals of GtkGrids
  */
-public class SettingsPage : Gtk.Grid {
-
-    /* Allow sorting the header */
-    public string group { public set; public get; }
-
-    /* Assign a page */
-    public string content_id { public set ; public get; }
-
-    /* The icon we want in the sidebar */
-    public string icon_name { public set; public get; }
-
-    /* The title to display in the sidebar */
-    public string title { public set ; public get; }
+public class SettingsGrid : Gtk.Grid {
 
     private int current_row = 0;
-
-    construct {
-        border_width = 20;
-        margin_end = 24;
-        halign = Gtk.Align.CENTER;
-        valign = Gtk.Align.FILL;
-        get_style_context().add_class("settings-page");
-    }
 
     /**
      * Add a new row into this SettingsPage, taking ownership of the row
@@ -103,7 +82,35 @@ public class SettingsPage : Gtk.Grid {
 
         ++current_row;
     }
+}
 
+/**
+ * A base SettingsPage exposes properties to allow it to fit into the UI
+ * and sidebar navigation
+ */
+public class SettingsPage : Gtk.Box {
+
+    /* Allow sorting the header */
+    public string group { public set; public get; }
+
+    /* Assign a page */
+    public string content_id { public set ; public get; }
+
+    /* The icon we want in the sidebar */
+    public string icon_name { public set; public get; }
+
+    /* The title to display in the sidebar */
+    public string title { public set ; public get; }
+
+
+    construct {
+        orientation = Gtk.Orientation.VERTICAL;
+        border_width = 20;
+        margin_end = 24;
+        halign = Gtk.Align.CENTER;
+        valign = Gtk.Align.FILL;
+        get_style_context().add_class("settings-page");
+    }
 } /* End SettingsPage */
 
 } /* End namespace */

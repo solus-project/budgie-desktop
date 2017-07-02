@@ -29,8 +29,11 @@ public class WindowsPage : Budgie.SettingsPage {
                title: _("Windows"),
                icon_name: "preferences-system-windows");
 
+        var grid = new SettingsGrid();
+        this.add(grid);
+
         combo_layouts = new Gtk.ComboBox();
-        this.add_row(new SettingsRow(combo_layouts,
+        grid.add_row(new SettingsRow(combo_layouts,
             _("Button layout"),
             _("Change the layout of buttons in application titlebars")));
 
@@ -51,18 +54,18 @@ public class WindowsPage : Budgie.SettingsPage {
 
         /* Dialogs attach modally */
         switch_dialogs = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_dialogs,
+        grid.add_row(new SettingsRow(switch_dialogs,
             _("Attach modal dialogs to windows"),
             _("Modal dialogs will become attached to the parent window and move together when dragged")));
 
         switch_tiling = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_tiling,
+        grid.add_row(new SettingsRow(switch_tiling,
             _("Automatic tiling"),
             _("Windows will automatically tile when dragged into the top of the screen or the far corners")));
 
         /* Unredirect.. */
         switch_unredirect = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_unredirect,
+        grid.add_row(new SettingsRow(switch_unredirect,
             _("Disable unredirection of windows"),
             _("This option is for advanced users. " +
               "Use this if you are having graphical or performance issues with dedicated GPUs")));

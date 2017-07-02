@@ -35,19 +35,21 @@ public class StylePage : Budgie.SettingsPage {
                icon_name: "preferences-desktop-theme");
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
+        var grid = new SettingsGrid();
+        this.add(grid);
 
         combobox_gtk = new Gtk.ComboBox();
-        this.add_row(new SettingsRow(combobox_gtk,
+        grid.add_row(new SettingsRow(combobox_gtk,
             _("Widgets"),
             _("Set the appearance of window decorations, controls and input fields")));
 
         combobox_icon = new Gtk.ComboBox();
-        this.add_row(new SettingsRow(combobox_icon,
+        grid.add_row(new SettingsRow(combobox_icon,
             _("Icons"),
             _("Set the global icon theme used for applications and the desktop")));
 
         combobox_cursor = new Gtk.ComboBox();
-        this.add_row(new SettingsRow(combobox_cursor,
+        grid.add_row(new SettingsRow(combobox_cursor,
             _("Cursors"),
             _("Set the global cursor theme used for applications and the desktop")));
 
@@ -57,15 +59,15 @@ public class StylePage : Budgie.SettingsPage {
         group.add_widget(combobox_cursor);
 
         switch_dark = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_dark, _("Dark theme")));
+        grid.add_row(new SettingsRow(switch_dark, _("Dark theme")));
 
         switch_builtin = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_builtin,
+        grid.add_row(new SettingsRow(switch_builtin,
             _("Built-in theme"),
             _("When enabled, the desktop component style will be overriden with the built-in one")));
 
         switch_animations = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_animations,
+        grid.add_row(new SettingsRow(switch_animations,
             _("Enable animations"),
             _("Control whether windows and controls use animations")));
 
