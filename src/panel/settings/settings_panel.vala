@@ -279,6 +279,7 @@ public class PanelPage : Budgie.SettingsPage {
         switch (property) {
             case "position":
                 this.combobox_position.active_id = this.toplevel.position.to_string();
+                this.title = PanelPage.get_panel_name(toplevel);
                 break;
             case "transparency":
                 this.combobox_transparency.active_id = this.toplevel.transparency.to_string();
@@ -294,6 +295,7 @@ public class PanelPage : Budgie.SettingsPage {
                 break;
             case "dock-mode":
                 this.switch_dock.active = this.toplevel.dock_mode;
+                this.title = PanelPage.get_panel_name(toplevel);
                 break;
             default:
                 break;

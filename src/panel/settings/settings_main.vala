@@ -123,6 +123,8 @@ public class SettingsWindow : Gtk.Window {
         scroll.add(page);
         scroll.show();
 
+        page.bind_property("title", settings_item, "label", BindingFlags.DEFAULT);
+
         this.sidebar_map[page.content_id] = settings_item;
         this.page_map[page.content_id] = page;
         content.add_named(scroll, page.content_id);
