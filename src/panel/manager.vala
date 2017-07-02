@@ -127,7 +127,11 @@ public class PanelManagerIface
     {
         this.manager.activate_action(action);
     }
-        
+
+    public void OpenSettings()
+    {
+        this.manager.open_settings();
+    }
 }
 
 public class PanelManager : DesktopManager
@@ -152,6 +156,9 @@ public class PanelManager : DesktopManager
     private Budgie.Raven? raven = null;
 
     private Budgie.ThemeManager theme_manager;
+
+    /* Manage all of the Budgie settings */
+    private Budgie.SettingsWindow? settings_window = null;
 
     Wnck.Screen wnck_screen;
     List<unowned Wnck.Window> window_list;
@@ -1404,6 +1411,25 @@ public class PanelManager : DesktopManager
             list.append((Budgie.Toplevel)panel);
         }
         return list;
+    }
+
+    /**
+     * Open up the settings window on screen
+     */
+    public void open_settings()
+    {
+        Idle.add(()=> {
+            if (this.settings_window == null) {
+                this.settings_window = new Budgie.SettingsWindow();
+            }
+            this.settings_window.present();
+            this.settings_window.grab_focus();
+            Gdk.Window? window = this.settings_window.get_window();
+            if (window != null) {
+                window.focus(Gdk.CURRENT_TIME);
+            }
+            return false;
+        });
     }
 }
 
