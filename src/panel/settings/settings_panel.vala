@@ -122,7 +122,7 @@ public class PanelPage : Budgie.SettingsPage {
         switch_dock = new Gtk.Switch();
         ret.add_row(new SettingsRow(switch_dock,
             _("Dock mode"),
-            _("When in dock mode, the panel will use the minimum amount of space possible, " +
+            _("When in dock mode, the panel will use the minimal amount of space possible, " +
               "freeing up valuable screen estate")));
 
         /* Allow deletion of the panel */
