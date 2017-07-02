@@ -1420,7 +1420,7 @@ public class PanelManager : DesktopManager
     {
         Idle.add(()=> {
             if (this.settings_window == null) {
-                this.settings_window = new Budgie.SettingsWindow();
+                this.settings_window = new Budgie.SettingsWindow(this);
             }
             this.settings_window.present();
             this.settings_window.grab_focus();

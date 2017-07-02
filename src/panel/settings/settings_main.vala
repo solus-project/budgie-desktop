@@ -19,10 +19,14 @@ public class SettingsWindow : Gtk.Window {
     Gtk.Box layout;
     HashTable<string,string> group_map;
 
-    public SettingsWindow()
+    public Budgie.DesktopManager? manager { public set ; public get ; }
+
+
+    public SettingsWindow(Budgie.DesktopManager? manager)
     {
         Object(type: Gtk.WindowType.TOPLEVEL,
-               window_position: Gtk.WindowPosition.CENTER);
+               window_position: Gtk.WindowPosition.CENTER,
+               manager: manager);
 
         header = new Gtk.HeaderBar();
         header.set_show_close_button(true);
