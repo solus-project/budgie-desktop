@@ -1,0 +1,26 @@
+%widgets {
+
+    * {
+        @extend %reset_style;
+
+        padding: 0;
+        outline-color: transparentize($fg_color, 0.7);
+        outline-style: dashed;
+        outline-offset: -3px;
+        outline-width: 1px;
+    }
+
+    .dim-label { opacity: 0.55; }
+
+    // used to indicate unread notifications
+    .alert { color: $alert_color; }
+}
+
+.drop-shadow {
+    @extend %widgets;
+
+    color: $fg_color;
+    background-color: $panel_bg;
+    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
+    border-radius: 1px;
+}

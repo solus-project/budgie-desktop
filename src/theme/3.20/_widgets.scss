@@ -1,18 +1,10 @@
 %widgets {
 
     * {
-        padding: 0;
-        outline-color: transparentize($fg_color, 0.7);
-        outline-style: dashed;
-        outline-offset: -3px;
-        outline-width: 1px;
         -gtk-outline-radius: 2px;
         margin: 0;
-
-        @extend %reset_style;
     }
 
-    .dim-label { opacity: 0.55; }
     label:disabled { color: transparentize($fg_color, 0.65); }
     label, image { color: inherit; }
 
@@ -22,29 +14,16 @@
         min-height: 1px;
     }
 
-    // used to indicate unread notifications
-    .alert { color: $alert_color; }
-
     // Entries
     entry {
-        padding: 4px 8px;
-        border: $border_width solid;
-        border-radius: $roundness;
-        caret-color: $fg_color;
+        @include entry(selection);
 
-        @extend entry;
+        caret-color: $fg_color;
 
         image {
             color: $fg_color;
-
             &.left { padding-left: 0; padding-right: 3px; }
             &.right { padding-right: 0; padding-left: 3px; }
-        }
-
-        selection,
-        selection:focus {
-            color: $selected_fg_color;
-            background-color: $selected_bg_color;
         }
     }
 
@@ -141,21 +120,8 @@
     }
 
     // Check and Radio Items
-    @each $w,$a in ('check', 'checkbox'),
-                   ('radio','radio') {
-      #{$w} {
-        color: $fg_color;
-        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}.png"),url("../assets/#{$a}@2.png")),
-                                                    -gtk-icontheme('#{$a}-symbolic'));
+    @include check-radio('.',disabled,indeterminate);
 
-        &:checked, &:active {
-            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}-active.png"),url("../assets/#{$a}-active@2.png")),
-                                                        -gtk-icontheme('#{$a}-checked-symbolic'));
-        }
-        &:disabled { color: transparentize($fg_color, 0.65); }
-        &:indeterminate { -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic'); }
-      }
-    }
     radiobutton radio,
     checkbutton check {
       min-width: 16px;
@@ -192,10 +158,10 @@
     // Scrollbars
     scrollbar {
         @include widget_scrollbar(button, slider, trought, hidden, disabled);
-
+    
         $_slider_margin: 3px;
         $_slider_fine_tune_margin: 4px;
-    
+
         &.overlay-indicator {
             &:not(.dragging):not(.hovering) {
                 slider {
@@ -225,6 +191,7 @@
     }
 
     // Lists
+    @include lists(list, row, label, disabled);
     list { color: $fg_color; }
     row.activatable {
         padding: 3px;
@@ -247,23 +214,8 @@
     }
     @at-root %menu {
         .menu, menu {
-            margin: 4px;
-            padding: 0;
-            border-radius: 0;
-            background-color: $raven_bg;
-
-            menuitem {
-                padding: 5px;
-                color: $fg_color;
-                &:hover {
-                    color: $selected_fg_color;
-                    background-color: $selected_bg_color;
-                }
-                &:disabled { color: transparentize($fg_color, 0.65); }
-                separator { background-color: transparentize($raven_bg, 1); }
-            }
+            @include widget_menu(menuitem, disabled, separator, 'background-color', arrow);
             arrow {
-                border: none;
                 min-width: 16px;
                 min-height: 16px;
 
@@ -275,28 +227,13 @@
                     -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
                     border-top: 1px solid mix($fg_color, $raven_bg, 10%);
                 }
-                &:hover { background-color: $selected_bg_color; }
-                &:disabled {
-                    color: transparentize($fg_color, 0.65);
-                    background-color: transparent;
-                }
             }
         }
         .csd.popup decoration {
-            box-shadow: 0 3px 6px transparentize(black, 0.55),
-                        0 0 0 1px transparentize(black, 0.55);
+            @extend %widget_menu_popup
         }
     }
 
     // Calendar
     @include widget_calendar(calendar,indeterminate);
-}
-
-.drop-shadow {
-    @extend %widgets;
-
-    color: $fg_color;
-    background-color: $panel_bg;
-    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
-    border-radius: 1px;
 }

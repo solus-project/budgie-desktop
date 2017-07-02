@@ -1,38 +1,17 @@
 %widgets {
 
     * {
-        padding: 0;
-        outline-color: transparentize($fg_color, 0.7);
-        outline-style: dashed;
-        outline-offset: -3px;
-        outline-width: 1px;
         outline-radius: 2px;
-
-        @extend %reset_style;
     }
 
-    .dim-label { opacity: 0.55; }
     .label:insensitive { color: transparentize($fg_color, 0.65); }
     .separator { color: rgba(0,0,0,0.25); }
     .cell { color: $fg_color; }
     GtkLabel, GtkImage { color: inherit; }
 
-    // used to indicate unread notifications
-    .alert { color: $alert_color; }
-
     // Entries
     .entry {
-        padding: 4px 8px;
-        border: $border_width solid;
-        border-radius: $roundness;
-
-        @extend %entry;
-
-        &:selected,
-        &:selected:focus {
-            color: $selected_fg_color;
-            background-color: $selected_bg_color;
-        }
+        @include entry('&:selected');
     }
 
     // Buttons
@@ -120,21 +99,7 @@
     }
 
     // Check and Radio Items
-    @each $w,$a in ('check', 'checkbox'),
-                   ('radio','radio') {
-      .#{$w} {
-        color: $fg_color;
-        -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}.png"),url("../assets/#{$a}@2.png")),
-                                                    -gtk-icontheme('#{$a}-symbolic'));
-
-        &:checked, &:active {
-            -gtk-icon-source: if($variant == 'default', -gtk-scaled(url("../assets/#{$a}-active.png"),url("../assets/#{$a}-active@2.png")),
-                                                        -gtk-icontheme('#{$a}-checked-symbolic'));
-        }
-        &:insensitive { color: transparentize($fg_color, 0.65); }
-        &:inconsistent { -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic'); }
-      }
-    }
+    @include check-radio('.',insensitive,inconsistent);
 
     // Switches
     GtkSwitch {
@@ -164,14 +129,14 @@
     .scrollbar {
         @include widget_scrollbar('.button', '.slider', '.trough', 'prelight', 'insensitive');
 
+        $_slider_margin: 3px;
+        $_slider_fine_tune_margin: 4px;
+
         -GtkRange-slider-width: 13;
         -GtkRange-trough-border: 0;
         -GtkScrollbar-min-slider-length: 42;
         -GtkRange-stepper-spacing: 0;
         -GtkRange-trough-under-steppers: 1;
-
-        $_slider_margin: 3px;
-        $_slider_fine_tune_margin: 4px;
 
         &.overlay-indicator {
             &:not(.dragging):not(.hovering) {
@@ -186,69 +151,19 @@
     }
 
     // Lists
-    .list { color: $fg_color; }
-    .list-row.activatable {
-        padding: 3px;
-        color: $fg_color;
+    @include lists('.list','.list-row','.label',insensitive);
 
-        &:hover { background-color: $button_bg; }
-        &:active { color: $fg_color; }
-        &:selected {
-            color: $selected_fg_color;
-            background-color: $selected_bg_color;
-
-            &:active { color: $selected_fg_color; }
-            &:hover { background-color: mix(black, $selected_bg_color, 10%); }
-            &:insensitive {
-                color: transparentize($selected_fg_color, 0.3);
-                background-color: transparentize($selected_bg_color, 0.3);
-                .label { color: inherit; }
-            }
-        }
-    }
     @at-root %menu {
         .menu {
+            @include widget_menu('.menuitem', insensitive, '&:separator', color, '&.button');
+
             .cell { color: inherit; }
-
-            margin: 4px;
-            padding: 0;
-            border-radius: 0;
-            background-color: $raven_bg;
-
-            .menuitem {
-                padding: 5px;
-                color: $fg_color;
-                &:hover {
-                    color: $selected_fg_color;
-                    background-color: $selected_bg_color;
-              }
-              &:insensitive { color: transparentize($fg_color, 0.65); }
-              &.separator { color: transparentize($raven_bg, 1); }
-            }
-            &.button {
-                border: none;
-                &:hover { background-color: $selected_bg_color; }
-                &:insensitive {
-                    color: transparentize($fg_color, 0.65);
-                    background-color: transparent;
-                }
-            }
         }
         .window-frame.csd.popup {
-            box-shadow: 0 3px 6px transparentize(black, 0.55),
-                        0 0 0 1px transparentize(black, 0.55);
+            @extend %widget_menu_popup
         }
     }
 
     // Calendar
     @include widget_calendar(GtkCalendar,inconsistent);
-}
-
-.drop-shadow {
-    @extend %widgets;
-
-    color: $fg_color;
-    background-color: $panel_bg;
-    box-shadow: 0 2px 4px 0 $panel_shadow, 0 0 0 1px $panel_border;
-    border-radius: 1px;
 }

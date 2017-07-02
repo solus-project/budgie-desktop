@@ -1,6 +1,7 @@
 @mixin widget_scrollbar($button, $slider, $trough, $prelight, $insensitive) {
     -GtkScrollbar-has-backward-stepper: false;
     -GtkScrollbar-has-forward-stepper: false;
+
     $_slider_margin: 3px;
     $_slider_fine_tune_margin: 4px;
 

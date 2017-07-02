@@ -1,5 +1,8 @@
 // Entries
-%entry {
+@mixin entry($selected) {
+    padding: 4px 8px;
+    border: $border_width solid;
+    border-radius: $roundness;
 
     color: $entry_fg;
     background-color: $entry_bg;
@@ -22,6 +25,12 @@
         color: transparentize($entry_fg, 0.65);
         background-color: transparentize($entry_bg, 0.3);
         border-color: transparentize($entry_border, 0.3);
+    }
+
+    #{$selected},
+    #{$selected}:focus {
+        color: $selected_fg_color;
+        background-color: $selected_bg_color;
     }
 
 }
