@@ -1189,6 +1189,8 @@ public class PanelManager : DesktopManager
         Screen? area = screens.lookup(primary_monitor);
         area.slots ^= panel.position;
 
+        this.panel_deleted(uuid);
+
         var spath = this.create_panel_path(panel.uuid);
         panels.steal(panel.uuid);
         set_panels();
@@ -1246,6 +1248,7 @@ public class PanelManager : DesktopManager
         show_panel(uuid, position, transparency);
 
         if (new_defaults == null || name == null) {
+            this.panel_added(uuid, panels.lookup(uuid));
             return;
         }
         /* TODO: Add size clamp */
@@ -1256,6 +1259,7 @@ public class PanelManager : DesktopManager
         var panel = panels.lookup(uuid);
         /* TODO: Pass off the configuration here.. */
         panel.create_default_layout(name, new_defaults);
+        this.panel_added(uuid, panel);
     }
 
     /**

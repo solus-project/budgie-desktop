@@ -153,6 +153,8 @@ namespace Budgie {
     {
 
         public signal void panels_changed();
+        public signal void panel_deleted(string uuid);
+        public signal void panel_added(string uuid, Budgie.Toplevel toplevel);
 
         public virtual GLib.List<Budgie.Toplevel?> get_panels();
         public abstract uint slots_available();
