@@ -12,9 +12,9 @@
 namespace Budgie {
 
 /**
- * ThemePage simply provides a bunch of theme controls
+ * StylePage simply provides a bunch of theme controls
  */
-public class ThemePage : Budgie.SettingsPage {
+public class StylePage : Budgie.SettingsPage {
 
 
     private Gtk.ComboBox? combobox_gtk;
@@ -27,11 +27,11 @@ public class ThemePage : Budgie.SettingsPage {
     private GLib.Settings budgie_settings;
     private ThemeScanner? theme_scanner;
 
-    public ThemePage()
+    public StylePage()
     {
         Object(group: SETTINGS_GROUP_APPEARANCE,
-               content_id: "theme",
-               title: _("Theming"),
+               content_id: "style",
+               title: _("Style"),
                icon_name: "preferences-desktop-theme");
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
