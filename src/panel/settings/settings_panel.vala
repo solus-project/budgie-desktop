@@ -114,6 +114,22 @@ public class PanelPage : Budgie.SettingsPage {
         }
     }
 
+    /**
+     * Get a usable display string for the autohide type
+     */
+    static string policy_to_display(Budgie.AutohidePolicy policy)
+    {
+        switch (policy) {
+            case AutohidePolicy.AUTOMATIC:
+                return _("Automatic");
+            case AutohidePolicy.INTELLIGENT:
+                return _("Intelligent");
+            case AutohidePolicy.NONE:
+            default:
+                return _("Never");
+        }
+    }
+
     private Gtk.Widget? settings_page()
     {
         SettingsGrid? ret = new SettingsGrid();
@@ -208,6 +224,22 @@ public class PanelPage : Budgie.SettingsPage {
         combobox_transparency.pack_start(render, true);
         combobox_transparency.add_attribute(render, "text", 1);
         combobox_transparency.set_id_column(0);
+
+        /* Autohide types */
+        model = new Gtk.ListStore(2, typeof(Budgie.AutohidePolicy), typeof(string));
+        const Budgie.AutohidePolicy policies[] = {
+            Budgie.AutohidePolicy.AUTOMATIC,
+            Budgie.AutohidePolicy.INTELLIGENT,
+            Budgie.AutohidePolicy.NONE,
+        };
+        foreach (var p in policies) {
+            model.append(out iter);
+            model.set(iter, 0, p, 1, PanelPage.policy_to_display(p), -1);
+        }
+        combobox_autohide.set_model(model);
+        combobox_autohide.pack_start(render, true);
+        combobox_autohide.add_attribute(render, "text", 1);
+        combobox_autohide.set_id_column(0);
 
         return ret;
     }
