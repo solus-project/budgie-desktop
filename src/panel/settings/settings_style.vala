@@ -65,7 +65,9 @@ public class StylePage : Budgie.SettingsPage {
             _("When enabled, the desktop component style will be overriden with the built-in one")));
 
         switch_animations = new Gtk.Switch();
-        this.add_row(new SettingsRow(switch_animations, _("Enable animations")));
+        this.add_row(new SettingsRow(switch_animations,
+            _("Enable animations"),
+            _("Control whether windows and controls use animations")));
 
         /* Sort out renderers for all of our dropdowns */
         var render = new Gtk.CellRendererText();
