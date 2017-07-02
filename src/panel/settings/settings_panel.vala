@@ -75,7 +75,18 @@ public class PanelPage : Budgie.SettingsPage {
 
     private Gtk.Widget? settings_page()
     {
-        return new SettingsGrid();
+        SettingsGrid? ret = new SettingsGrid();
+
+        /* Allow deletion of the panel */
+        var button_remove_panel = new Gtk.Button.with_label(_("Remove"));
+        button_remove_panel.valign = Gtk.Align.CENTER;
+        button_remove_panel.vexpand = false;
+        button_remove_panel.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+        ret.add_row(new SettingsRow(button_remove_panel,
+            _("Delete panel"),
+            _("Permanently remove the panel and applets from the screen. This action cannot be undone")));
+
+        return ret;
     }
 
     private Gtk.Widget? applets_page()
