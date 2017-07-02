@@ -23,10 +23,12 @@ public class SettingsWindow : Gtk.Window {
         Object(type: Gtk.WindowType.TOPLEVEL,
                window_position: Gtk.WindowPosition.CENTER);
 
-
         header = new Gtk.HeaderBar();
         header.set_show_close_button(true);
         set_titlebar(header);
+
+        /* Don't die when closed. */
+        delete_event.connect(this.hide_on_delete);
 
         layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
@@ -56,6 +58,9 @@ public class SettingsWindow : Gtk.Window {
         content.get_style_context().add_class("view");
         content.get_style_context().add_class("content-view");
         sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+
+        layout.show_all();
+        header.show_all();
     }
 
 } /* End SettingsWindow */
