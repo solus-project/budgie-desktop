@@ -192,7 +192,7 @@ public class SettingsWindow : Gtk.Window {
         if (content_id in this.page_map) {
             return;
         }
-        this.add_page(new PanelPage(toplevel));
+        this.add_page(new PanelPage(this.manager, toplevel));
     }
 
     /**

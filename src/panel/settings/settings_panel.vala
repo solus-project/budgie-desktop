@@ -24,16 +24,22 @@ public class PanelPage : Budgie.SettingsPage {
     Gtk.ComboBox combobox_transparency;
 
     Gtk.Switch switch_shadow;
+    ulong shadow_id;
     Gtk.Switch switch_regions;
+    ulong region_id;
     Gtk.Switch switch_dock;
+    ulong dock_id;
 
-    public PanelPage(Budgie.Toplevel? toplevel)
+    unowned Budgie.DesktopManager? manager = null;
+
+    public PanelPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel)
     {
         Object(group: SETTINGS_GROUP_PANEL,
                content_id: "panel-%s".printf(toplevel.uuid),
                title: PanelPage.get_panel_name(toplevel),
                icon_name: "gnome-panel");
 
+        this.manager = manager;
         this.toplevel = toplevel;
 
         /* Main layout bits */
@@ -163,6 +169,7 @@ public class PanelPage : Budgie.SettingsPage {
         ret.add_row(new SettingsRow(switch_shadow,
             _("Shadow"),
             _("Adds a decorative drop-shadow, ideal for opaque panels")));
+        shadow_id = switch_shadow.notify["active"].connect_after(this.set_shadow);
 
         /* Regions */
         switch_regions = new Gtk.Switch();
@@ -170,6 +177,7 @@ public class PanelPage : Budgie.SettingsPage {
             _("Stylize regions"),
             _("Adds a hint to the panel so that each of the panel's three main areas " +
               "may be themed differently.")));
+        region_id = switch_regions.notify["active"].connect_after(this.set_region);
 
         /* Dock */
         switch_dock = new Gtk.Switch();
@@ -177,6 +185,7 @@ public class PanelPage : Budgie.SettingsPage {
             _("Dock mode"),
             _("When in dock mode, the panel will use the minimal amount of space possible, " +
               "freeing up valuable screen estate")));
+        dock_id = switch_dock.notify["active"].connect_after(this.set_dock);
 
         /* Allow deletion of the panel */
         var button_remove_panel = new Gtk.Button.with_label(_("Remove"));
@@ -271,7 +280,8 @@ public class PanelPage : Budgie.SettingsPage {
     }
 
     /**
-     * Update our state from a given property
+     * Update our state from a given property, taking care to not
+     * fire off our own handlers and causing a cycle
      */
     private void update_from_property(string property)
     {
@@ -287,18 +297,48 @@ public class PanelPage : Budgie.SettingsPage {
                 this.combobox_autohide.active_id = this.toplevel.autohide.to_string();
                 break;
             case "shadow-visible":
+                SignalHandler.block(this.switch_shadow, this.shadow_id);
                 this.switch_shadow.active = this.toplevel.shadow_visible;
+                SignalHandler.unblock(this.switch_shadow, this.shadow_id);
                 break;
             case "theme-regions":
+                SignalHandler.block(this.switch_regions, this.region_id);
                 this.switch_regions.active = this.toplevel.theme_regions;
+                SignalHandler.unblock(this.switch_regions, this.region_id);
                 break;
             case "dock-mode":
+                SignalHandler.block(this.switch_dock, this.dock_id);
                 this.switch_dock.active = this.toplevel.dock_mode;
                 this.title = PanelPage.get_panel_name(toplevel);
+                SignalHandler.unblock(this.switch_dock, this.dock_id);
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * We're asking the panel to update the shadow state
+     */
+    private void set_shadow()
+    {
+        this.toplevel.shadow_visible = this.switch_shadow.active;
+    }
+
+    /**
+     * We're asking the panel to update the shadow state
+     */
+    private void set_region()
+    {
+        this.toplevel.theme_regions = this.switch_regions.active;
+    }
+
+    /**
+     * Ask the manager to change the dock state of the panel
+     */
+    private void set_dock()
+    {
+        this.manager.set_dock_mode(this.toplevel.uuid, this.switch_dock.active);
     }
     
 } /* End class */
