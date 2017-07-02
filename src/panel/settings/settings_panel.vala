@@ -98,6 +98,22 @@ public class PanelPage : Budgie.SettingsPage {
         }
     }
 
+    /**
+     * Get a usable display string for the transparency type
+     */
+    static string transparency_to_display(Budgie.PanelTransparency transp)
+    {
+        switch (transp) {
+            case PanelTransparency.ALWAYS:
+                return _("Always");
+            case PanelTransparency.DYNAMIC:
+                return _("Dynamic");
+            case PanelTransparency.NONE:
+            default:
+                return _("None");
+        }
+    }
+
     private Gtk.Widget? settings_page()
     {
         SettingsGrid? ret = new SettingsGrid();
@@ -156,6 +172,9 @@ public class PanelPage : Budgie.SettingsPage {
             _("Permanently remove the panel and applets from the screen. This action cannot be undone")));
 
 
+        /* We'll reuse this guy */
+        var render = new Gtk.CellRendererText();
+
         /* Now let's sort out some models */
         var model = new Gtk.ListStore(2, typeof(Budgie.PanelPosition), typeof(string));
         Gtk.TreeIter iter;
@@ -170,13 +189,25 @@ public class PanelPage : Budgie.SettingsPage {
             model.set(iter, 0, pos, 1, PanelPage.pos_to_display(pos), -1);
         }
         combobox_position.set_model(model);
-        combobox_position.set_id_column(0);
-
-        /* We'll reuse this guy */
-        var render = new Gtk.CellRendererText();
         combobox_position.pack_start(render, true);
         combobox_position.add_attribute(render, "text", 1);
         combobox_position.set_id_column(0);
+
+        /* Transparency types */
+        model = new Gtk.ListStore(2, typeof(Budgie.PanelTransparency), typeof(string));
+        const Budgie.PanelTransparency transps[] = {
+            Budgie.PanelTransparency.ALWAYS,
+            Budgie.PanelTransparency.DYNAMIC,
+            Budgie.PanelTransparency.NONE,
+        };
+        foreach (var t in transps) {
+            model.append(out iter);
+            model.set(iter, 0, t, 1, PanelPage.transparency_to_display(t), -1);
+        }
+        combobox_transparency.set_model(model);
+        combobox_transparency.pack_start(render, true);
+        combobox_transparency.add_attribute(render, "text", 1);
+        combobox_transparency.set_id_column(0);
 
         return ret;
     }
