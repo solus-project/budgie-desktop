@@ -77,6 +77,7 @@ public class SettingsWindow : Gtk.Window {
     {
         this.add_page(new Budgie.StylePage());
         this.add_page(new Budgie.FontPage());
+        this.add_page(new Budgie.WindowsPage());
     }
 
     /**
