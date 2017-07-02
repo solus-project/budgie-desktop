@@ -24,6 +24,7 @@ panel_sources = [
     'uuid.vala',
     'settings/settings_item.vala',
     'settings/settings_main.vala',
+    'settings/settings_page.vala',
     panel_resources,
 ]
 
