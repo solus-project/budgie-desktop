@@ -67,9 +67,20 @@ public class SettingsWindow : Gtk.Window {
 
     void dummy_content()
     {
-       sidebar.add(new SettingsItem("appearance", "desktop", _("Desktop"), "user-desktop"));
-       sidebar.add(new SettingsItem("appearance", "fonts", _("Fonts"), "preferences-desktop-font"));
-       sidebar.add(new SettingsItem("appearance", "theming", _("Theming"), "preferences-desktop-theme"));
+        this.add_page(new Budgie.ThemePage());
+    }
+
+
+    /**
+     * Add a new page to our sidebar + stack
+     */
+    void add_page(Budgie.SettingsPage? page)
+    {
+        var settings_item = new SettingsItem(page.group, page.content_id, page.title, page.icon_name);
+        settings_item.show_all();
+        sidebar.add(settings_item);
+
+        content.add_named(page, page.content_id);
     }
 
 } /* End SettingsWindow */
