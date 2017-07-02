@@ -22,7 +22,6 @@ public class PanelPage : Budgie.SettingsPage {
 
     public PanelPage(Budgie.Toplevel? toplevel)
     {
-        /* TODO: Set the right panel name .. */
         Object(group: SETTINGS_GROUP_PANEL,
                content_id: "panel-%s".printf(toplevel.uuid),
                title: PanelPage.get_panel_name(toplevel),
