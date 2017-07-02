@@ -33,6 +33,9 @@ public class PanelPage : Budgie.SettingsPage {
     Gtk.Switch switch_dock;
     ulong dock_id;
 
+    private Gtk.SpinButton? spinbutton_size;
+    private ulong size_id;
+
     unowned Budgie.DesktopManager? manager = null;
 
     public PanelPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel)
@@ -153,6 +156,15 @@ public class PanelPage : Budgie.SettingsPage {
             _("Set the edge of the screen that this panel will stay on. If another " +
               "panel is already there, they will automatically swap positions")));
 
+        /* Size of the panel */
+        spinbutton_size = new Gtk.SpinButton.with_range(16, 200, 1);
+        spinbutton_size.set_numeric(true);
+        size_id = spinbutton_size.value_changed.connect(this.set_size);
+        group.add_widget(spinbutton_size);
+        ret.add_row(new SettingsRow(spinbutton_size,
+            _("Size"),
+            _("Set the size (width or height, depending on orientation) of this panel")));
+
         /* Autohide */
         combobox_autohide = new Gtk.ComboBox();
         autohide_id = combobox_autohide.changed.connect(this.set_autohide);
@@ -259,12 +271,12 @@ public class PanelPage : Budgie.SettingsPage {
         /* Properties we needed to know about */
         const string[] needed_props = {
             "position",
+            "intended-size",
             "transparency",
             "autohide",
             "shadow-visible",
             "theme-regions",
             "dock-mode",
-            "intended-size", /* Not yet handled */
         };
 
         foreach (var init in needed_props) {
@@ -297,6 +309,11 @@ public class PanelPage : Budgie.SettingsPage {
                 this.combobox_position.active_id = this.toplevel.position.to_string();
                 this.title = PanelPage.get_panel_name(toplevel);
                 SignalHandler.unblock(this.combobox_position, this.position_id);
+                break;
+            case "intended-size":
+                SignalHandler.block(this.spinbutton_size, this.size_id);
+                this.spinbutton_size.set_value(this.toplevel.intended_size);
+                SignalHandler.unblock(this.spinbutton_size, this.size_id);
                 break;
             case "transparency":
                 SignalHandler.block(this.combobox_transparency, this.transparency_id);
@@ -400,7 +417,14 @@ public class PanelPage : Budgie.SettingsPage {
         combobox_transparency.model.get(iter, 2, out transparency, -1);
         this.manager.set_transparency(toplevel.uuid, transparency);
     }
-    
+
+    /**
+     * Update the panel size
+     */
+    private void set_size()
+    {
+        this.manager.set_size(this.toplevel.uuid, (int)this.spinbutton_size.get_value());
+    }
 } /* End class */
 
 } /* End namespace */
