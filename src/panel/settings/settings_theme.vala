@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -22,6 +22,7 @@ public class ThemePage : Budgie.SettingsPage {
     private Gtk.ComboBox? combobox_cursor;
     private Gtk.Switch? switch_dark;
     private Gtk.Switch? switch_builtin;
+    private Gtk.Switch? switch_animations;
     private GLib.Settings ui_settings;
     private GLib.Settings budgie_settings;
     private ThemeScanner? theme_scanner;
@@ -63,6 +64,9 @@ public class ThemePage : Budgie.SettingsPage {
             _("Built-in theme"),
             _("When enabled, the desktop component style will be overriden with the built-in one")));
 
+        switch_animations = new Gtk.Switch();
+        this.add_row(new SettingsRow(switch_animations, _("Enable animations")));
+
         /* Sort out renderers for all of our dropdowns */
         var render = new Gtk.CellRendererText();
         combobox_gtk.pack_start(render, true);
@@ -77,6 +81,7 @@ public class ThemePage : Budgie.SettingsPage {
         budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
         budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
         budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+        ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
         this.theme_scanner = new ThemeScanner();
 
         Idle.add(()=> {
@@ -147,7 +152,7 @@ public class ThemePage : Budgie.SettingsPage {
             queue_resize();
         });
     }
-    
+
 } /* End class */
 
 } /* End namespace */
