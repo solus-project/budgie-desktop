@@ -254,9 +254,8 @@ public class PanelPage : Budgie.SettingsPage {
 
         foreach (var init in needed_props) {
             this.update_from_property(init);
+            this.toplevel.notify[init].connect_after(this.panel_notify);
         }
-
-        this.toplevel.notify.connect_after(this.panel_notify);
 
         return ret;
     }
