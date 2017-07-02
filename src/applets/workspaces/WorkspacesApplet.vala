@@ -43,14 +43,12 @@ public class WorkspacesApplet : Budgie.Applet
     public static Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
     public static int panel_size = 0;
     public static unowned Budgie.PopoverManager? manager = null;
-    public static Budgie.AppSystem? app_system = null;
     public static Wnck.Screen wnck_screen;
     public static bool dragging = false;
 
     public WorkspacesApplet()
     {
         WorkspacesApplet.wnck_screen = Wnck.Screen.get_default();
-        WorkspacesApplet.app_system = new Budgie.AppSystem();
 
         dynamically_created_workspaces = new GLib.List<int>();
         window_connections = new GLib.HashTable<unowned Wnck.Window, ulong>(str_hash, str_equal);
