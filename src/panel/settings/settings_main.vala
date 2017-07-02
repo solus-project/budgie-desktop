@@ -53,6 +53,7 @@ public class SettingsWindow : Gtk.Window {
 
         /* Where actual Things go */
         content = new Gtk.Stack();
+        content.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
         layout.pack_start(content, true, true, 0);
         content.margin_end = 24;
 
