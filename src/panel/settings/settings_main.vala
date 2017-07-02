@@ -60,15 +60,16 @@ public class SettingsWindow : Gtk.Window {
         content.get_style_context().add_class("content-view");
         sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 
-        this.dummy_content();
+        this.build_content();
 
         layout.show_all();
         header.show_all();
     }
 
-    void dummy_content()
+    void build_content()
     {
         this.add_page(new Budgie.ThemePage());
+        this.add_page(new Budgie.FontPage());
     }
 
 
