@@ -119,6 +119,12 @@ class MinimizeData {
     public double old_y;
 }
 
+[CompactClass]
+class AnimationInfo {
+    public Clutter.Actor? actor_clone;
+    public Meta.Rectangle old_rect;
+}
+
 public class BudgieWM : Meta.Plugin
 {
     static Meta.PluginInfo info;
@@ -148,6 +154,8 @@ public class BudgieWM : Meta.Plugin
     private bool force_unredirect = false;
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
+    Clutter.Actor? screen_group;
+    ulong current_window_resize;
 
     static construct
     {
@@ -406,7 +414,7 @@ public class BudgieWM : Meta.Plugin
     public override void start()
     {
         var screen = this.get_screen();
-        var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
+        screen_group = Meta.Compositor.get_window_group_for_screen(screen);
         var stage = Meta.Compositor.get_stage_for_screen(screen);
 
         var display = screen.get_display();
@@ -701,6 +709,146 @@ public class BudgieWM : Meta.Plugin
         actor.transitions_completed.connect(map_done);
         state_map.insert(actor, AnimationState.MAP);
         actor.restore_easing_state();
+    }
+
+    public override void size_change(Meta.WindowActor actor, Meta.SizeChange which_change, Meta.Rectangle old_frame_rect, Meta.Rectangle old_buffer_rect)
+    {
+        if (!this.use_animations) {
+            size_change_completed(actor);
+            return;
+        }
+
+        if (which_change != Meta.SizeChange.MAXIMIZE && which_change != Meta.SizeChange.UNMAXIMIZE) {
+            size_change_completed(actor);
+            return;
+        }
+
+        if (old_frame_rect.width > 0 && old_frame_rect.height > 0) {
+            prepare_animation(actor, old_frame_rect, old_buffer_rect);
+            current_window_resize = actor.get_meta_window().size_changed.connect(() => {
+                animate_size_change(actor);
+                SignalHandler.disconnect(actor.get_meta_window(), current_window_resize);
+            });
+        } else {
+            size_change_completed(actor);
+        }
+    }
+
+    void prepare_animation(Meta.WindowActor actor, Meta.Rectangle old_frame_rect, Meta.Rectangle old_buffer_rect)
+    {
+        AnimationInfo? info = actor.get_data("_animation_info");
+        if (info != null) {
+            actor.set_data("_animation_info", null);
+            size_change_completed(actor);
+        }
+
+        Clutter.Actor? actor_clone = get_window_actor_snapshot(actor, old_frame_rect);
+        if (actor_clone == null) {
+            size_change_completed(actor);
+            return;
+        }
+        actor_clone.offscreen_redirect = Clutter.OffscreenRedirect.ALWAYS;
+        actor_clone.set_position(old_frame_rect.x, old_frame_rect.y);
+        actor_clone.set_size(old_frame_rect.width, old_frame_rect.height);
+
+        info = new AnimationInfo();
+        info.actor_clone = actor_clone;
+        info.old_rect = old_frame_rect;
+
+        actor.set_data("_animation_info", info);
+    }
+
+    void animate_size_change_done(Clutter.Actor? actor)
+    {
+        SignalHandler.disconnect_by_func(actor, (void*)animate_size_change_done, this);
+        actor.scale_x = 1.0f;
+        actor.scale_y = 1.0f;
+        actor.translation_x = 0;
+        actor.translation_y = 0;
+        actor.set_data("_animation_info", null);
+        actor.remove_all_transitions();
+    }
+
+    public void animate_size_change(Meta.WindowActor actor)
+    {
+        AnimationInfo? info = actor.get_data("_animation_info");
+
+        if (info == null) {
+            size_change_completed(actor);
+            return;
+        }
+
+        Clutter.Actor? actor_clone = info.actor_clone;
+        Meta.Rectangle target_rect = actor.get_meta_window().get_frame_rect();
+        Meta.Rectangle source_rect = info.old_rect;
+
+        screen_group.add(actor_clone);
+
+        actor.set_size(target_rect.width, target_rect.height);
+        actor_clone.set_size(source_rect.width, source_rect.height);
+
+        const int duration = 150;
+
+        double scale_x = (double)target_rect.width / source_rect.width;
+        double scale_y = (double)target_rect.height / source_rect.height;
+
+        actor_clone.save_easing_state ();
+        actor_clone.set_easing_mode(Clutter.AnimationMode.EASE_IN_OUT_QUAD);
+        actor_clone.set_easing_duration(duration);
+        actor_clone.set_opacity(0);
+        actor_clone.set_position(target_rect.x, target_rect.y);
+        actor_clone.set_scale(scale_x, scale_y);
+        actor_clone.restore_easing_state();
+
+        actor.translation_x = -target_rect.x + source_rect.x;
+        actor.translation_y = -target_rect.y + source_rect.y;
+        actor.scale_x = 1 / scale_x;
+        actor.scale_y = 1 / scale_y;
+        actor.save_easing_state();
+        actor.set_easing_mode(Clutter.AnimationMode.EASE_IN_OUT_QUAD);
+        actor.set_easing_duration(duration);
+        actor.set_scale(1.0f, 1.0f);
+        actor.set_translation(0.0f, 0.0f, 0.0f);
+        actor.restore_easing_state();
+        actor.transitions_completed.connect(animate_size_change_done);
+
+        size_change_completed(actor);
+    }
+
+    public Clutter.Actor? get_window_actor_snapshot(Meta.WindowActor actor, Meta.Rectangle frame_rect)
+    {
+        Meta.ShapedTexture texture = actor.get_texture() as Meta.ShapedTexture;
+
+        if (texture == null) {
+            return null;
+        }
+
+        Cairo.RectangleInt clip = Cairo.RectangleInt();
+
+        clip.x = frame_rect.x - (int)actor.x;
+        clip.y = frame_rect.y - (int)actor.y;
+        clip.width = frame_rect.width;
+        clip.height = frame_rect.height;
+
+        var surface = texture.get_image(clip);
+
+        if (surface == null) {
+            return null;
+        }
+
+        var canvas = new Clutter.Canvas();
+        var handler = canvas.draw.connect((cr) => {
+            cr.set_source_surface(surface, 0, 0);
+            cr.paint();
+            return false;
+        });
+        canvas.set_size(clip.width, clip.height);
+        SignalHandler.disconnect(canvas, handler);
+
+        var snapshot = new Clutter.Actor();
+        snapshot.content = canvas;
+
+        return snapshot;
     }
 
     void minimize_done(Clutter.Actor? actor)
