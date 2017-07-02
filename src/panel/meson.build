@@ -22,6 +22,7 @@ panel_sources = [
     'manager.vala',
     'panel.vala',
     'uuid.vala',
+    'settings/settings_main.vala',
     panel_resources,
 ]
 
