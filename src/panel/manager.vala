@@ -1426,7 +1426,9 @@ public class PanelManager : DesktopManager
             if (this.settings_window == null) {
                 this.settings_window = new Budgie.SettingsWindow(this);
                 /* Say hullo to the settings_window */
-                this.panels_changed();
+                foreach (var panel in this.get_panels()) {
+                    this.panel_added(panel.uuid, panel);
+                }
             }
             this.settings_window.present();
             this.settings_window.grab_focus();
