@@ -81,12 +81,31 @@ public class PanelPage : Budgie.SettingsPage {
         }
     }
 
+    /**
+     * Convert a position into a usable, renderable Thing™
+     */
+    static string pos_to_display(Budgie.PanelPosition position)
+    {
+        switch (position) {
+            case PanelPosition.TOP:
+                return _("Top");
+            case PanelPosition.RIGHT:
+                return _("Right");
+            case PanelPosition.LEFT:
+                return _("Left");
+            default:
+                return _("Bottom");
+        }
+    }
+
     private Gtk.Widget? settings_page()
     {
         SettingsGrid? ret = new SettingsGrid();
+        Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
 
         /* Position */
         combobox_position = new Gtk.ComboBox();
+        group.add_widget(combobox_position);
         ret.add_row(new SettingsRow(combobox_position,
             _("Position"),
             _("Set the edge of the screen that this panel will stay on. If another " +
@@ -94,6 +113,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Autohide */
         combobox_autohide = new Gtk.ComboBox();
+        group.add_widget(combobox_autohide);
         ret.add_row(new SettingsRow(combobox_autohide,
             _("Automatically hide"),
             _("When set, this panel will hide from view to maximize screen estate. " +
@@ -101,6 +121,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Transparency */
         combobox_transparency = new Gtk.ComboBox();
+        group.add_widget(combobox_transparency);
         ret.add_row(new SettingsRow(combobox_transparency,
             _("Transparency"),
             _("Control when this panel should have a solid background")));
@@ -133,6 +154,29 @@ public class PanelPage : Budgie.SettingsPage {
         ret.add_row(new SettingsRow(button_remove_panel,
             _("Delete panel"),
             _("Permanently remove the panel and applets from the screen. This action cannot be undone")));
+
+
+        /* Now let's sort out some models */
+        var model = new Gtk.ListStore(2, typeof(Budgie.PanelPosition), typeof(string));
+        Gtk.TreeIter iter;
+        const Budgie.PanelPosition[] positions = {
+            Budgie.PanelPosition.TOP,
+            Budgie.PanelPosition.BOTTOM,
+            Budgie.PanelPosition.LEFT,
+            Budgie.PanelPosition.RIGHT,
+        };
+        foreach (var pos in positions) {
+            model.append(out iter);
+            model.set(iter, 0, pos, 1, PanelPage.pos_to_display(pos), -1);
+        }
+        combobox_position.set_model(model);
+        combobox_position.set_id_column(0);
+
+        /* We'll reuse this guy */
+        var render = new Gtk.CellRendererText();
+        combobox_position.pack_start(render, true);
+        combobox_position.add_attribute(render, "text", 1);
+        combobox_position.set_id_column(0);
 
         return ret;
     }
