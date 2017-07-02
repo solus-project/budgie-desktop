@@ -61,6 +61,7 @@ public class SettingsItem : Gtk.Box {
         this.icon_name = icon_name;
         this.label = label;
         this.group = group;
+        this.content_id = content_id;
     }
 
 } /* End SettingsItem */
