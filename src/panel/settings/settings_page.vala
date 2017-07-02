@@ -54,9 +54,10 @@ public class SettingsPage : Gtk.Grid {
 
     private int current_row = 0;
 
-    public SettingsPage(string group, string content_id, string label, string icon_name)
-    {
-        Object(border_width: 20);
+    construct {
+        border_width = 20;
+        halign = Gtk.Align.FILL;
+        valign = Gtk.Align.FILL;
         get_style_context().add_class("settings-page");
     }
 
@@ -68,10 +69,10 @@ public class SettingsPage : Gtk.Grid {
     {
         var lab_main = new Gtk.Label(row.label);
         lab_main.halign = Gtk.Align.START;
+        lab_main.hexpand = true;
         lab_main.margin_end = 14;
 
         attach(lab_main, 0, current_row, 1, 1);
-        lab_main.hexpand = false;
         attach(row.widget, 1, current_row, 1, 1);
         row.widget.halign = Gtk.Align.END;
 
