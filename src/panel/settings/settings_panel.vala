@@ -38,7 +38,7 @@ public class PanelPage : Budgie.SettingsPage {
         this.pack_start(stack, true, true, 0);
 
         this.stack.add_titled(this.applets_page(), "main", _("Applets"));
-        this.stack.add_titled(this.settings_page(), "main", _("Settings"));
+        this.stack.add_titled(this.settings_page(), "applets", _("Settings"));
     }
 
     private Gtk.Widget? settings_page()

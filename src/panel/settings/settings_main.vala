@@ -75,6 +75,9 @@ public class SettingsWindow : Gtk.Window {
 
         this.build_content();
 
+        /* We'll need to build panel items for each toplevel */
+        this.manager.panels_changed.connect(this.on_panels_changed);
+
         layout.show_all();
         header.show_all();
     }
@@ -150,6 +153,12 @@ public class SettingsWindow : Gtk.Window {
             before.set_header(null);
         }
     }
+
+    private void on_panels_changed()
+    {
+        message("Rawr.");
+    }
+
 } /* End SettingsWindow */
 
 
