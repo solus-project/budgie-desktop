@@ -25,7 +25,7 @@ public class PanelPage : Budgie.SettingsPage {
         /* TODO: Set the right panel name .. */
         Object(group: SETTINGS_GROUP_PANEL,
                content_id: "panel-%s".printf(toplevel.uuid),
-               title: _("Panel"),
+               title: PanelPage.get_panel_name(toplevel),
                icon_name: "gnome-panel");
 
         this.toplevel = toplevel;
@@ -41,6 +41,23 @@ public class PanelPage : Budgie.SettingsPage {
         this.stack.add_titled(this.settings_page(), "applets", _("Settings"));
 
         this.show_all();
+    }
+
+    /**
+     * Determine a human readable named based on the panel's position on screen
+     */
+    static string get_panel_name(Budgie.Toplevel? panel)
+    {
+        switch (panel.position) {
+            case PanelPosition.TOP:
+                return _("Top Panel");
+            case PanelPosition.RIGHT:
+                return _("Right Panel");
+            case PanelPosition.LEFT:
+                return _("Left Panel");
+            default:
+                return _("Bottom Panel");
+        }
     }
 
     private Gtk.Widget? settings_page()
