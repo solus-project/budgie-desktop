@@ -24,7 +24,7 @@ public class PanelPage : Budgie.SettingsPage {
     {
         /* TODO: Set the right panel name .. */
         Object(group: SETTINGS_GROUP_PANEL,
-               content_id: "panel",
+               content_id: "panel-%s".printf(toplevel.uuid),
                title: _("Panel"),
                icon_name: "gnome-panel");
 
@@ -39,6 +39,8 @@ public class PanelPage : Budgie.SettingsPage {
 
         this.stack.add_titled(this.applets_page(), "main", _("Applets"));
         this.stack.add_titled(this.settings_page(), "applets", _("Settings"));
+
+        this.show_all();
     }
 
     private Gtk.Widget? settings_page()

@@ -18,6 +18,8 @@ public class SettingsWindow : Gtk.Window {
     Gtk.Stack content;
     Gtk.Box layout;
     HashTable<string,string> group_map;
+    HashTable<string,SettingsPage?> page_map;
+    HashTable<string,SettingsItem?> sidebar_map;
 
     public Budgie.DesktopManager? manager { public set ; public get ; }
 
@@ -35,6 +37,8 @@ public class SettingsWindow : Gtk.Window {
         group_map = new HashTable<string,string>(str_hash, str_equal);
         group_map["appearance"] = _("Appearance");
         group_map["panel"] = _("Panels");
+        page_map = new HashTable<string,SettingsPage?>(str_hash, str_equal);
+        sidebar_map = new HashTable<string,SettingsItem?>(str_hash, str_equal);
 
         /* Don't die when closed. */
         delete_event.connect(this.hide_on_delete);
@@ -76,20 +80,21 @@ public class SettingsWindow : Gtk.Window {
         this.build_content();
 
         /* We'll need to build panel items for each toplevel */
-        this.manager.panels_changed.connect(this.on_panels_changed);
+        this.manager.panel_added.connect(this.on_panel_added);
+        this.manager.panel_deleted.connect(this.on_panel_deleted);
 
         layout.show_all();
         header.show_all();
     }
 
+    /**
+     * Static pages that will always be part of the UI
+     */
     void build_content()
     {
         this.add_page(new Budgie.StylePage());
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
-
-        /* TOTALLY DEMO ! */
-        this.add_page(new Budgie.PanelPage(null));
     }
 
     /**
@@ -116,8 +121,30 @@ public class SettingsWindow : Gtk.Window {
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         scroll.add(page);
+        scroll.show();
 
+        this.sidebar_map[page.content_id] = settings_item;
+        this.page_map[page.content_id] = page;
         content.add_named(scroll, page.content_id);
+    }
+
+    /**
+     * Remove a page from the sidebar and content stack
+     */
+    void remove_page(string content_id)
+    {
+        Budgie.SettingsPage? page = this.page_map.lookup(content_id);
+        Budgie.SettingsItem? item = this.sidebar_map.lookup(content_id);
+
+        /* Remove from listbox */
+        if (item != null) {
+            item.get_parent().destroy();
+        }
+
+        /* Remove from content view */
+        if (page != null) {
+            page.destroy();
+        }
     }
 
     /**
@@ -154,11 +181,26 @@ public class SettingsWindow : Gtk.Window {
         }
     }
 
-    private void on_panels_changed()
+    /**
+     * New panel added, let's make a page for it
+     */
+    private void on_panel_added(string uuid, Budgie.Toplevel? toplevel)
     {
-        message("Rawr.");
+        string content_id = "panel-" + uuid;
+        if (content_id in this.page_map) {
+            return;
+        }
+        this.add_page(new PanelPage(toplevel));
     }
 
+    /**
+     * A panel was destroyed, remove our knowledge of it
+     */
+    private void on_panel_deleted(string uuid)
+    {
+        /* Nuke from orbit */
+        this.remove_page("panel-" + uuid);
+    }
 } /* End SettingsWindow */
 
 
