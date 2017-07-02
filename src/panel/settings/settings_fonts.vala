@@ -34,7 +34,7 @@ public class FontPage : Budgie.SettingsPage {
 
         var grid = new SettingsGrid();
         this.add(grid);
-        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
+        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
         /* Titlebar */
         fontbutton_title = new Gtk.FontButton();

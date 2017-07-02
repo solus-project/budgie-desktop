@@ -34,7 +34,7 @@ public class StylePage : Budgie.SettingsPage {
                title: _("Style"),
                icon_name: "preferences-desktop-theme");
 
-        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
+        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
         var grid = new SettingsGrid();
         this.add(grid);
 

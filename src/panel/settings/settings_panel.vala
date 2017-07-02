@@ -145,7 +145,7 @@ public class PanelPage : Budgie.SettingsPage {
     private Gtk.Widget? settings_page()
     {
         SettingsGrid? ret = new SettingsGrid();
-        Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.BOTH);
+        Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
         /* Position */
         combobox_position = new Gtk.ComboBox();

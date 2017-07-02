@@ -53,7 +53,7 @@ public class SettingsGrid : Gtk.Grid {
         lab_main.hexpand = true;
 
         attach(lab_main, 0, current_row, 1, 1);
-        attach(row.widget, 1, current_row, 1, 1);
+        attach(row.widget, 1, current_row, 1, row.description == null ? 1 : 2);
         row.widget.halign = Gtk.Align.END;
         row.widget.valign = Gtk.Align.CENTER;
         row.widget.vexpand = false;
