@@ -36,22 +36,30 @@ public class FontPage : Budgie.SettingsPage {
 
         /* Titlebar */
         fontbutton_title = new Gtk.FontButton();
-        this.add_row(new SettingsRow(fontbutton_title, _("Window Titles")));
+        this.add_row(new SettingsRow(fontbutton_title,
+            _("Window Titles"),
+            _("Set the font used in the titlebars of applications")));
         group.add_widget(fontbutton_title);
 
         /* Documents */
         fontbutton_document = new Gtk.FontButton();
-        this.add_row(new SettingsRow(fontbutton_document, _("Documents")));
+        this.add_row(new SettingsRow(fontbutton_document,
+            _("Documents"),
+            _("Set the display font used by applications such as word editors")));
         group.add_widget(fontbutton_document);
 
         /* Interface */
         fontbutton_interface = new Gtk.FontButton();
-        this.add_row(new SettingsRow(fontbutton_interface, _("Interface")));
+        this.add_row(new SettingsRow(fontbutton_interface,
+            _("Interface"),
+            _("Set the primary font used by application controls")));
         group.add_widget(fontbutton_interface);
 
         /* Monospace */
         fontbutton_monospace = new Gtk.FontButton();
-        this.add_row(new SettingsRow(fontbutton_monospace, _("Monospace")));
+        this.add_row(new SettingsRow(fontbutton_monospace,
+            _("Monospace"),
+            _("Set the fixed-width font used by text dominant applications")));
         group.add_widget(fontbutton_monospace);
 
         /* Hook up settings */
