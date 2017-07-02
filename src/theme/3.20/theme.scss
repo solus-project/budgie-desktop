@@ -1,5 +1,5 @@
 $variant: 'default';
 
-@import 'colors';
-@import 'drawing';
+@import '../common/imports';
 @import 'main';
+@import 'widgets';
