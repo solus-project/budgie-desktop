@@ -23,6 +23,14 @@ public class SettingsRow : GLib.Object {
     public string label { construct set ; public get; }
     public string? description { construct set ; public get; }
 
+    /* Convenience */
+    public SettingsRow(Gtk.Widget? widget, string label, string? description = null)
+    {
+        this.widget = widget;
+        this.label = label;
+        this.description = description;
+    }
+
 } /* End SettingsRow */
 
 /**
@@ -68,6 +76,7 @@ public class SettingsPage : Gtk.Grid {
         row.widget.halign = Gtk.Align.END;
 
         lab_main.margin_top = 12;
+        row.widget.margin_top = 12;
 
         ++current_row;
 
