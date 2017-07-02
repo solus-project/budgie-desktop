@@ -44,18 +44,32 @@ public class PanelPage : Budgie.SettingsPage {
 
     /**
      * Determine a human readable named based on the panel's position on screen
+     * For brownie points we'll identify docks differently
      */
     static string get_panel_name(Budgie.Toplevel? panel)
     {
-        switch (panel.position) {
-            case PanelPosition.TOP:
-                return _("Top Panel");
-            case PanelPosition.RIGHT:
-                return _("Right Panel");
-            case PanelPosition.LEFT:
-                return _("Left Panel");
-            default:
-                return _("Bottom Panel");
+        if (panel.dock_mode) {
+            switch (panel.position) {
+                case PanelPosition.TOP:
+                    return _("Top Dock");
+                case PanelPosition.RIGHT:
+                    return _("Right Dock");
+                case PanelPosition.LEFT:
+                    return _("Left Dock");
+                default:
+                    return _("Bottom Dock");
+            }
+        } else {
+            switch (panel.position) {
+                case PanelPosition.TOP:
+                    return _("Top Panel");
+                case PanelPosition.RIGHT:
+                    return _("Right Panel");
+                case PanelPosition.LEFT:
+                    return _("Left Panel");
+                default:
+                    return _("Bottom Panel");
+            }
         }
     }
 
