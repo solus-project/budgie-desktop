@@ -11,6 +11,8 @@
 
 namespace Budgie {
 
+public const string SETTINGS_GROUP_APPEARANCE = "appearance";
+
 /**
  * A SettingsRow is used to control the content layout in a SettingsPage
  * to ensure everyone conforms to the page grid
@@ -35,6 +37,12 @@ public class SettingsPage : Gtk.Grid {
 
     /* Assign a page */
     public string content_id { public set ; public get; }
+
+    /* The icon we want in the sidebar */
+    public string icon_name { public set; public get; }
+
+    /* The title to display in the sidebar */
+    public string title { public set ; public get; }
 
     private int current_row = 0;
 

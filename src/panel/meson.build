@@ -25,6 +25,7 @@ panel_sources = [
     'settings/settings_item.vala',
     'settings/settings_main.vala',
     'settings/settings_page.vala',
+    'settings/settings_theme.vala',
     panel_resources,
 ]
 
