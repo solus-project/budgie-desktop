@@ -52,6 +52,7 @@ public class PanelPage : Budgie.SettingsPage {
 
         /* Main layout bits */
         switcher = new Gtk.StackSwitcher();
+        switcher.margin_top = 8;
         switcher.halign = Gtk.Align.CENTER;
         stack = new Gtk.Stack();
         stack.set_homogeneous(false);
