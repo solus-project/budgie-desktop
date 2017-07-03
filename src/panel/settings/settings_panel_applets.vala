@@ -188,7 +188,7 @@ public class AppletsPage : Gtk.Box {
 
         settings_stack = new Gtk.Stack();
         settings_stack.set_homogeneous(false);
-        settings_stack.halign = Gtk.Align.START;
+        settings_stack.halign = Gtk.Align.FILL;
         settings_stack.valign = Gtk.Align.START;
         settings_stack.margin_top = 24;
         grid.attach(settings_stack, 0, ++grid.current_row, 2, 1);

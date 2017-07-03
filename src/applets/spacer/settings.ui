@@ -10,10 +10,14 @@
   <template class="SpacerSettings" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
     <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="hexpand">True</property>
         <property name="label" translatable="yes">Spacer size</property>
       </object>
       <packing>
@@ -26,6 +30,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
+        <property name="valign">center</property>
         <property name="hexpand">True</property>
         <property name="adjustment">adjustment1</property>
       </object>
