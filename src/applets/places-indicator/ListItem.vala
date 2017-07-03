@@ -18,6 +18,7 @@ public abstract class ListItem : Gtk.Box
     protected Gtk.Spinner spin;
 
     public signal void send_message(string message_content);
+    public signal void close_popover();
 
     public ListItem()
     {
@@ -112,6 +113,7 @@ public abstract class ListItem : Gtk.Box
 
         try {
             GLib.AppInfo.get_default_for_type("inode/directory", true).launch(file_list, launch_context);
+            close_popover();
         } catch (GLib.Error e) {
             warning(e.message);
         }

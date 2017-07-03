@@ -411,6 +411,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         string? volume_class = volume.get_identifier("class");
 
         VolumeItem volume_item = new VolumeItem(volume);
+        volume_item.close_popover.connect(() => { this.hide(); });
 
         if (volume_class == "network") {
             networks_listbox.add(volume_item);
@@ -437,6 +438,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         }
 
         MountItem mount_item = new MountItem(mount, mount_class);
+        mount_item.close_popover.connect(() => { this.hide(); });
 
         if (mount_class == "network") {
             networks_listbox.add(mount_item);
@@ -464,6 +466,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         GLib.File file = GLib.File.new_for_uri(unescaped_path);
 
         PlaceItem place_item = new PlaceItem(file, "place");
+        place_item.close_popover.connect(() => { this.hide(); });
         places_list.add(unescaped_path);
         places_section.add_item(place_item);
 
