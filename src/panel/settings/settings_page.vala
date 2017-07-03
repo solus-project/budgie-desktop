@@ -40,7 +40,7 @@ public class SettingsRow : GLib.Object {
  */
 public class SettingsGrid : Gtk.Grid {
 
-    private int current_row = 0;
+    public int current_row = 0;
     public bool small_mode = false;
 
     /**
