@@ -1,8 +1,3 @@
-$roundness: 3px;
-$border_width: if($variant == 'default', 1px, 2px);
-$pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
-$asset_suffix: if($variant == 'default', '', '-hc');
-
 // Container for both the "panel" area and the shadow. Wise to keep
 // this transparent..
 .budgie-container { background-color: transparent; }
@@ -12,23 +7,20 @@ $asset_suffix: if($variant == 'default', '', '-hc');
     box-shadow: inset 0 0 0 1px #F08437;
 }
 
-// Used to reset all style properties set by the gtk theme
-popover list,
-popover row,
-.budgie-popover .container,
-.budgie-popover list,
-.budgie-popover row {
-    @extend %reset_style
+// Underscores
+%underscores {
+    @include underscores('button.flat');
 }
 
-%reset_style,
- menubar {
-    menuitem {
-        @include menu_reset_style(label,disabled);
-    }
+// Panel
+.budgie-panel {
+    @include budgie_panel(button, separator, 'background-color');
 }
 
-// Worskpace Switcher
+// Panel Borders
+@include borders($pos_list);
+
+// Workspace Switcher
 @include workspaces(frame,button);
 
 // Budgie Menu
@@ -46,11 +38,6 @@ popover row,
 
 // Places Menu
 @include places_menu(button, list, row, entry);
-
-// Panel
-.budgie-panel {
-    @include budgie_panel(button, separator, 'background-color');
-}
 
 // Tasklist
 .budgie-panel #tasklist-button,
@@ -128,14 +115,6 @@ popover row,
         border-radius: 0;
     }
 }
-
-// Underscores
-%underscores {
-    @include underscores('button.flat');
-}
-
-// Panel Borders
-@include borders($pos_list);
 
 // Raven
 .raven {

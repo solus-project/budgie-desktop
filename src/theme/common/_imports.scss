@@ -1,8 +1,11 @@
-//This MUST be first
+//These MUST be first
 @import 'functions';
-
-@import 'borders';
 @import 'colors';
+@import 'resets';
+@import 'popover';
+
+// Everything else
+@import 'borders';
 @import 'dialogs';
 @import 'drawing';
 @import 'icon_tasklist';
@@ -12,9 +15,7 @@
 @import 'notifications';
 @import 'panel';
 @import 'places';
-@import 'popover';
 @import 'raven';
-@import 'resets';
 @import 'switcher';
 @import 'underscores';
 @import 'widgets/imports';

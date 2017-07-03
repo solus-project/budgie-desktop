@@ -1,8 +1,3 @@
-$roundness: 3px;
-$border_width: if($variant == 'default', 1px, 2px);
-$pos_list: ((top, bottom),(bottom,top),(left,right),(right,left));
-$asset_suffix: if($variant == 'default', '', '-hc');
-
 // Container for both the "panel" area and the shadow. Wise to keep
 // this transparent..
 .budgie-container { background-color: transparent; }
@@ -12,38 +7,10 @@ $asset_suffix: if($variant == 'default', '', '-hc');
     box-shadow: inset 0 0 0 1px #F08437;
 }
 
-// Used to reset all style properties set by the gtk theme
-GtkPopover GtkListBox,
-GtkPopover GtkListBoxRow,
-.budgie-popover GtkListBox,
-.budgie-popover GtkListBoxRow {
-    @extend %reset_style;
+// Underscores
+%underscores {
+    @include underscores('');
 }
-
-%reset_style,
- GtkMenuBar {
-    GtkMenuItem {
-        @include menu_reset_style(GtkLabel,insensitive);
-    }
-}
-
-// Workspace Switcher
-@include workspaces();
-
-// Budgie Menu
-.budgie-menu {
-    @include budgie-menu('image-effect', 'GtkSearchEntry.entry:not(:selected)', '&.image',
-                         'insensitive', 'GtkLabel', '.undershoot', '.overshoot');
-}
-
-// Menu Button
-@include budgie_menu_button('.button');
-
-// User Menu
-@include budgie_user_menu(GtkSeparator, 'color');
-
-// Places Menu
-@include places_menu('.button', GtkListBox, GtkListBoxRow, '.entry');
 
 // Panel
 .budgie-panel {
@@ -63,6 +30,27 @@ GtkPopover GtkListBoxRow,
         }
     }
 }
+
+// Panel Borders
+@include borders($pos_list); 
+
+// Workspace Switcher
+@include workspaces();
+
+// Budgie Menu
+.budgie-menu {
+    @include budgie-menu('image-effect', 'GtkSearchEntry.entry:not(:selected)', '&.image',
+                         'insensitive', 'GtkLabel', '.undershoot', '.overshoot');
+}
+
+// Menu Button
+@include budgie_menu_button('.button');
+
+// User Menu
+@include budgie_user_menu(GtkSeparator, 'color');
+
+// Places Menu
+@include places_menu('.button', GtkListBox, GtkListBoxRow, '.entry');
 
 // Tasklist
 .budgie-panel WnckTasklist .button,
@@ -122,14 +110,6 @@ GtkPopover GtkListBoxRow,
 .budgie-panel {
     @include icon_tasklist('');
 }
-
-// Underscores
-%underscores {
-    @include underscores('');
-}
-
-// Panel Borders
-@include borders($pos_list); 
 
 // Raven
 .raven {
