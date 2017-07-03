@@ -182,6 +182,7 @@ public class AppletsPage : Gtk.Box {
             _("Choose a new applet to add to this panel")));
 
         settings_stack = new Gtk.Stack();
+        settings_stack.set_homogeneous(false);
         settings_stack.halign = Gtk.Align.START;
         settings_stack.valign = Gtk.Align.START;
         settings_stack.margin_top = 24;
