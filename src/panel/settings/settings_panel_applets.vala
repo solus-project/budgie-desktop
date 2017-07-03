@@ -106,7 +106,6 @@ public class AppletsPage : Gtk.Box {
         move_box.add(move_down_button);
 
         var button_remove_applet = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
-        button_remove_applet.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
         move_box.add(button_remove_applet);
 
         frame_box.pack_start(move_box, false, false, 0);
