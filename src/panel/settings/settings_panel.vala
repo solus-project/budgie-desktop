@@ -48,6 +48,8 @@ public class PanelPage : Budgie.SettingsPage {
         this.manager = manager;
         this.toplevel = toplevel;
 
+        border_width = 0;
+
         /* Main layout bits */
         switcher = new Gtk.StackSwitcher();
         switcher.halign = Gtk.Align.CENTER;
@@ -147,6 +149,8 @@ public class PanelPage : Budgie.SettingsPage {
     {
         SettingsGrid? ret = new SettingsGrid();
         Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+
+        ret.border_width = 20;
 
         /* Position */
         combobox_position = new Gtk.ComboBox();
@@ -290,7 +294,9 @@ public class PanelPage : Budgie.SettingsPage {
 
     private Gtk.Widget? applets_page()
     {
-        return new AppletsPage(this.manager, this.toplevel);
+        AppletsPage ret = new AppletsPage(this.manager, this.toplevel);
+        ret.border_width = 20;
+        return ret;
     }
 
     private void panel_notify(Object? o, ParamSpec ps)
