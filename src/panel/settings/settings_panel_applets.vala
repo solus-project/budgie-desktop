@@ -103,6 +103,7 @@ public class AppletsPage : Gtk.Box {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
         this.manager = manager;
         this.toplevel = toplevel;
+        valign = Gtk.Align.START;
 
         margin = 6;
 
@@ -136,7 +137,7 @@ public class AppletsPage : Gtk.Box {
         /* Allow moving the applet */
         var move_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
         move_box.set_layout(Gtk.ButtonBoxStyle.START);
-        move_box.get_style_context().add_class("linked");
+        move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
         var move_up_button = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
         var move_down_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
         move_box.add(move_up_button);
@@ -154,8 +155,12 @@ public class AppletsPage : Gtk.Box {
         listbox_applets = new Gtk.ListBox();
         listbox_applets.set_activate_on_single_click(true);
         listbox_applets.row_selected.connect(row_selected);
-        frame_box.pack_start(listbox_applets, true, true, 0);
-        this.pack_start(frame, true, true, 0);
+        frame_box.pack_start(listbox_applets, false, false, 0);
+        this.pack_start(frame, false, false, 0);
+
+        /* Ensure themes link them together properly */
+        move_box.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
+        listbox_applets.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
 
         /* Make sure we can sort + header */
         listbox_applets.set_sort_func(this.do_sort);
