@@ -68,7 +68,7 @@ public class StylePage : Budgie.SettingsPage {
 
         switch_animations = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_animations,
-            _("Enable animations"),
+            _("Animations"),
             _("Control whether windows and controls use animations")));
 
         /* Sort out renderers for all of our dropdowns */
