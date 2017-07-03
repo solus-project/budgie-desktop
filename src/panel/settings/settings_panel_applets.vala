@@ -201,14 +201,15 @@ public class AppletsPage : Gtk.Box {
 
         /* Placeholder for no settings */
         var placeholder = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        placeholder.margin_top = 6;
         placeholder.valign = Gtk.Align.START;
-        var placeholder_img = new Gtk.Image.from_icon_name("dialog-info-symbolic", Gtk.IconSize.MENU);
+        var placeholder_img = new Gtk.Image.from_icon_name("dialog-information-symbolic", Gtk.IconSize.MENU);
         var placeholder_text = new Gtk.Label(_("No settings available"));
-        placeholder_text.set_margin_start(14);
+        placeholder_text.set_margin_start(10);
         placeholder.pack_start(placeholder_img, false, false, 0);
         placeholder.pack_start(placeholder_text, false, false, 0);
         placeholder.show_all();
+        placeholder_img.valign = Gtk.Align.CENTER;
+        placeholder_text.valign = Gtk.Align.CENTER;
         settings_stack.add_named(placeholder, "no-settings");
 
         /* Empty placeholder for no selection .. */
