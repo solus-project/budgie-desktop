@@ -115,16 +115,21 @@ public class SettingsWindow : Gtk.Window {
         settings_item.show_all();
         sidebar.add(settings_item);
 
-        var scroll = new Gtk.ScrolledWindow(null, null);
-        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        scroll.add(page);
-        scroll.show();
-
         page.bind_property("title", settings_item, "label", BindingFlags.DEFAULT);
 
         this.sidebar_map[page.content_id] = settings_item;
         this.page_map[page.content_id] = page;
-        content.add_named(scroll, page.content_id);
+
+        if (page.want_scroll) {
+            var scroll = new Gtk.ScrolledWindow(null, null);
+            scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+            scroll.add(page);
+            scroll.show();
+            content.add_named(scroll, page.content_id);
+        } else {
+            page.show();
+            content.add_named(page, page.content_id);
+        }
     }
 
     /**

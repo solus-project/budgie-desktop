@@ -110,6 +110,9 @@ public class SettingsPage : Gtk.Box {
     /* The title to display in the sidebar */
     public string title { public set ; public get; }
 
+    /* If we want to be automatically wrapped in a scrolled window */
+    public bool want_scroll { public set; public get; default = true; }
+
 
     construct {
         orientation = Gtk.Orientation.VERTICAL;
