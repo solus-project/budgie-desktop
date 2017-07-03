@@ -73,8 +73,6 @@ public class SettingsWindow : Gtk.Window {
 
         /* Help our theming community out */
         get_style_context().add_class("budgie-settings-window");
-        content.get_style_context().add_class("view");
-        content.get_style_context().add_class("content-view");
         sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 
         this.build_content();
