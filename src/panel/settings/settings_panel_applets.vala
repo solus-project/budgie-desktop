@@ -103,7 +103,8 @@ public class AppletsPage : Gtk.Box {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
         this.manager = manager;
         this.toplevel = toplevel;
-        valign = Gtk.Align.START;
+        valign = Gtk.Align.FILL;
+        vexpand = false;
 
         margin = 6;
 
@@ -148,6 +149,7 @@ public class AppletsPage : Gtk.Box {
 
         frame_box.pack_start(move_box, false, false, 0);
         var frame = new Gtk.Frame(null);
+        frame.vexpand = false;
         frame.margin_end = 20;
         frame.margin_top = 12;
         frame.add(frame_box);
@@ -155,8 +157,11 @@ public class AppletsPage : Gtk.Box {
         listbox_applets = new Gtk.ListBox();
         listbox_applets.set_activate_on_single_click(true);
         listbox_applets.row_selected.connect(row_selected);
-        frame_box.pack_start(listbox_applets, false, false, 0);
-        this.pack_start(frame, false, false, 0);
+        Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow(null, null);
+        scroll.add(listbox_applets);
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        frame_box.pack_start(scroll, true, true, 0);
+        this.pack_start(frame, false, true, 0);
 
         /* Ensure themes link them together properly */
         move_box.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
