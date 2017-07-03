@@ -1,5 +1,7 @@
 $variant: 'default';
 
+@import 'settings';
 @import '../common/imports';
-@import 'main';
 @import 'widgets';
+@import 'main';
+@import 'resets';
