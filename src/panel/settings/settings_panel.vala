@@ -52,6 +52,7 @@ public class PanelPage : Budgie.SettingsPage {
         switcher = new Gtk.StackSwitcher();
         switcher.halign = Gtk.Align.CENTER;
         stack = new Gtk.Stack();
+        stack.set_homogeneous(false);
         switcher.set_stack(stack);
         this.pack_start(switcher, false, false, 0);
         this.pack_start(stack, true, true, 0);
@@ -289,7 +290,7 @@ public class PanelPage : Budgie.SettingsPage {
 
     private Gtk.Widget? applets_page()
     {
-        return new SettingsGrid();
+        return new AppletsPage(this.manager, this.toplevel);
     }
 
     private void panel_notify(Object? o, ParamSpec ps)
