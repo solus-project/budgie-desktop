@@ -43,7 +43,7 @@ public class PanelPage : Budgie.SettingsPage {
         Object(group: SETTINGS_GROUP_PANEL,
                content_id: "panel-%s".printf(toplevel.uuid),
                title: PanelPage.get_panel_name(toplevel),
-               icon_name: "gnome-panel");
+               icon_name: "user-desktop");
 
         this.manager = manager;
         this.toplevel = toplevel;
