@@ -37,12 +37,12 @@ public class AppletItem : Gtk.Box {
         margin_bottom = 4;
 
         image = new Gtk.Image();
-        image.margin_start = 6;
+        image.margin_start = 12;
         image.margin_end = 14;
         pack_start(image, false, false, 0);
 
         label = new Gtk.Label("");
-        label.margin_end = 14;
+        label.margin_end = 18;
         label.halign = Gtk.Align.START;
         pack_start(label, false, false, 0);
 
@@ -68,21 +68,14 @@ public class AppletsPage : Gtk.Box {
 
     public AppletsPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel)
     {
-        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+        Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
         this.manager = manager;
         this.toplevel = toplevel;
 
         margin = 6;
 
-        items = new HashTable<string,AppletItem?>(str_hash, str_equal);
-        listbox_applets = new Gtk.ListBox();
-        var frame = new Gtk.Frame(null);
-        frame.add(listbox_applets);
-        this.pack_start(frame, false, false, 0);
-
-        /* Make sure we can sort + header */
-        listbox_applets.set_sort_func(this.do_sort);
-        listbox_applets.set_header_func(this.do_headers);
+        this.configure_list();
+        this.configure_actions();
 
         /* Insert them now */
         foreach (var applet in this.toplevel.get_applets()) {
@@ -91,6 +84,64 @@ public class AppletsPage : Gtk.Box {
 
         toplevel.applet_added.connect(this.applet_added);
         toplevel.applet_removed.connect(this.applet_removed);
+    }
+
+    /**
+     * Configure the main display list used to show the currently used
+     * applets for the panel
+     */
+    void configure_list()
+    {
+        items = new HashTable<string,AppletItem?>(str_hash, str_equal);
+
+        var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+
+        /* Allow moving the applet */
+        var move_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
+        move_box.set_layout(Gtk.ButtonBoxStyle.START);
+        move_box.get_style_context().add_class("linked");
+        var move_up_button = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
+        var move_down_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
+        move_box.add(move_up_button);
+        move_box.add(move_down_button);
+
+        var button_remove_applet = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+        button_remove_applet.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+        move_box.add(button_remove_applet);
+
+        frame_box.pack_start(move_box, false, false, 0);
+        var frame = new Gtk.Frame(null);
+        frame.margin_end = 20;
+        frame.margin_top = 12;
+        frame.add(frame_box);
+
+        listbox_applets = new Gtk.ListBox();
+        frame_box.pack_start(listbox_applets, true, true, 0);
+        this.pack_start(frame, true, true, 0);
+
+        /* Make sure we can sort + header */
+        listbox_applets.set_sort_func(this.do_sort);
+        listbox_applets.set_header_func(this.do_headers);
+    }
+
+    /**
+     * Configure the action grid to manipulation the applets
+     */
+    void configure_actions()
+    {
+        var grid = new SettingsGrid();
+        grid.small_mode = true;
+        this.pack_start(grid, false, false, 0);
+
+        /* Allow adding new applets*/
+        var button_add = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
+        button_add.valign = Gtk.Align.CENTER;
+        button_add.vexpand = false;
+        button_add.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+        button_add.get_style_context().add_class("round-button");
+        grid.add_row(new SettingsRow(button_add,
+            _("Add applet"),
+            _("Choose a new applet to add to this panel")));
     }
 
     /**

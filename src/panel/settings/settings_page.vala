@@ -21,11 +21,11 @@ public const string SETTINGS_GROUP_PANEL = "panel";
 public class SettingsRow : GLib.Object {
 
     public Gtk.Widget widget { construct set ; public get; }
-    public string label { construct set ; public get; }
+    public string? label { construct set ; public get; }
     public string? description { construct set ; public get; }
 
     /* Convenience */
-    public SettingsRow(Gtk.Widget? widget, string label, string? description = null)
+    public SettingsRow(Gtk.Widget? widget, string? label, string? description = null)
     {
         this.widget = widget;
         this.label = label;
@@ -41,6 +41,7 @@ public class SettingsRow : GLib.Object {
 public class SettingsGrid : Gtk.Grid {
 
     private int current_row = 0;
+    public bool small_mode = false;
 
     /**
      * Add a new row into this SettingsPage, taking ownership of the row
@@ -48,18 +49,24 @@ public class SettingsGrid : Gtk.Grid {
      */
     public void add_row(SettingsRow? row)
     {
-        var lab_main = new Gtk.Label(row.label);
-        lab_main.halign = Gtk.Align.START;
-        lab_main.hexpand = true;
+        Gtk.Label? lab_main = null;
 
-        attach(lab_main, 0, current_row, 1, 1);
-        attach(row.widget, 1, current_row, 1, row.description == null ? 1 : 2);
+        if (row.label != null) {
+            lab_main = new Gtk.Label(row.label);
+            lab_main.halign = Gtk.Align.START;
+            lab_main.margin_top = 12;
+            lab_main.hexpand = true;
+            attach(lab_main, 0, current_row, 1, 1);
+            attach(row.widget, 1, current_row, 1, row.description == null ? 1 : 2);
+        } else {
+            attach(row.widget, 0, current_row, 2, row.description == null ? 1 : 2);
+        }
+
         row.widget.halign = Gtk.Align.END;
         row.widget.valign = Gtk.Align.CENTER;
         row.widget.vexpand = false;
 
-        lab_main.margin_top = 12;
-        row.widget.margin_left = 28;
+        row.widget.margin_left = small_mode ? 8 : 28;
         row.widget.margin_top = 12;
 
         ++current_row;
@@ -70,7 +77,7 @@ public class SettingsGrid : Gtk.Grid {
 
         var desc_lab = new Gtk.Label(row.description);
         desc_lab.halign = Gtk.Align.START;
-        desc_lab.margin_end = 40;
+        desc_lab.margin_end = small_mode ? 12 : 40;
 
         /* Deprecated but we need this to make line wrap actually work */
         desc_lab.set_property("xalign", 0.0);
