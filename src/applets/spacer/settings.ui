@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -10,10 +10,6 @@
   <template class="SpacerSettings" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">8</property>
-    <property name="margin_right">6</property>
-    <property name="margin_top">4</property>
-    <property name="margin_bottom">6</property>
     <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
