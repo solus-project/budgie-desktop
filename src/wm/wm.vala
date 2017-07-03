@@ -747,15 +747,29 @@ public class BudgieWM : Meta.Plugin
             size_change_completed(actor);
             return;
         }
-        actor_clone.offscreen_redirect = Clutter.OffscreenRedirect.ALWAYS;
         actor_clone.set_position(old_frame_rect.x, old_frame_rect.y);
         actor_clone.set_size(old_frame_rect.width, old_frame_rect.height);
+
+        if (clear_animation_info(actor)) {
+            size_change_completed(actor);
+            return;
+        }
 
         info = new AnimationInfo();
         info.actor_clone = actor_clone;
         info.old_rect = old_frame_rect;
 
         actor.set_data("_animation_info", info);
+    }
+
+    private bool clear_animation_info(Clutter.Actor? actor) {
+        AnimationInfo? info = actor.get_data("_animation_info");
+        if (info != null) {
+            info.actor_clone.destroy();
+            actor.set_data("_animation_info", null);
+            return true;
+        }
+        return false;
     }
 
     void animate_size_change_done(Clutter.Actor? actor)
@@ -765,8 +779,8 @@ public class BudgieWM : Meta.Plugin
         actor.scale_y = 1.0f;
         actor.translation_x = 0;
         actor.translation_y = 0;
-        actor.set_data("_animation_info", null);
         actor.remove_all_transitions();
+        clear_animation_info(actor);
     }
 
     public void animate_size_change(Meta.WindowActor actor)
