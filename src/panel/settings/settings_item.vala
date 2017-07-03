@@ -40,8 +40,8 @@ public class SettingsItem : Gtk.Box {
                spacing: 0);
 
         widget_icon = new Gtk.Image();
-        widget_icon.icon_size = Gtk.IconSize.LARGE_TOOLBAR;
-        widget_icon.pixel_size = 24;
+        widget_icon.icon_size = Gtk.IconSize.DND;
+        widget_icon.pixel_size = 32;
 
         widget_label = new Gtk.Label(label);
         widget_label.halign = Gtk.Align.START;
@@ -52,6 +52,9 @@ public class SettingsItem : Gtk.Box {
         widget_label.margin_start = 6;
         widget_icon.margin_end = 8;
         widget_icon.margin_start = 12;
+
+        margin_top = 2;
+        margin_bottom = 2;
 
         pack_start(widget_icon, false, false, 0);
         pack_start(widget_label, false, false, 0);
