@@ -176,9 +176,9 @@ public class SettingsWindow : Gtk.Window {
             label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
             label.halign = Gtk.Align.START;
             label.use_markup = true;
-            label.margin_top = 6;
-            label.margin_bottom = 6;
-            label.margin_start = 6;
+            label.margin_top = 8;
+            label.margin_bottom = 8;
+            label.margin_start = 12;
             before.set_header(label);
         } else {
             before.set_header(null);

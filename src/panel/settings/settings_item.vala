@@ -48,7 +48,7 @@ public class SettingsItem : Gtk.Box {
         widget_label.use_markup = true;
 
         /* Set up some margins */
-        widget_label.margin_end = 18;
+        widget_label.margin_end = 24;
         widget_label.margin_start = 6;
         widget_icon.margin_end = 8;
         widget_icon.margin_start = 12;
