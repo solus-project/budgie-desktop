@@ -170,7 +170,7 @@ public class SettingsWindow : Gtk.Window {
 
         if (after == null || prev != next) {
             string? title = group_map.lookup(prev);
-            Gtk.Label label = new Gtk.Label("<big>%s</big>".printf(title));
+            Gtk.Label label = new Gtk.Label(title);
             label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
             label.halign = Gtk.Align.START;
             label.use_markup = true;

@@ -24,7 +24,7 @@ public class SettingsItem : Gtk.Box {
         }
         /* Force <big> usage on all plain gettext labels */
         public set {
-            this.widget_label.set_markup("<big>%s</big>".printf(value));
+            this.widget_label.set_markup(value);
         }
     }
 
@@ -40,8 +40,8 @@ public class SettingsItem : Gtk.Box {
                spacing: 0);
 
         widget_icon = new Gtk.Image();
-        widget_icon.pixel_size = 32;
         widget_icon.icon_size = Gtk.IconSize.LARGE_TOOLBAR;
+        widget_icon.pixel_size = 24;
 
         widget_label = new Gtk.Label(label);
         widget_label.halign = Gtk.Align.START;
