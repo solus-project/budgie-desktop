@@ -23,6 +23,9 @@ public class SettingsWindow : Gtk.Window {
 
     public Budgie.DesktopManager? manager { public set ; public get ; }
 
+    /* Special item that allows us to add new items to the display */
+    SettingsItem? item_add_panel;
+    bool new_panel_requested = false;
 
     public SettingsWindow(Budgie.DesktopManager? manager)
     {
@@ -59,7 +62,7 @@ public class SettingsWindow : Gtk.Window {
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         sidebar = new Gtk.ListBox();
         sidebar.set_header_func(this.do_headers);
-        sidebar.row_selected.connect(this.on_row_selected);
+        sidebar.row_activated.connect(this.on_row_activate);
         sidebar.set_activate_on_single_click(true);
         scroll.add(sidebar);
         layout.pack_start(scroll, false, false, 0);
@@ -75,6 +78,13 @@ public class SettingsWindow : Gtk.Window {
         sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 
         this.build_content();
+
+        this.item_add_panel = new SettingsItem(SETTINGS_GROUP_PANEL,
+                                               "x-add-panel",
+                                               _("Create new panel"),
+                                               "list-add-symbolic");
+
+        this.sidebar.add(this.item_add_panel);
 
         /* We'll need to build panel items for each toplevel */
         this.manager.panel_added.connect(this.on_panel_added);
@@ -97,13 +107,20 @@ public class SettingsWindow : Gtk.Window {
     /**
      * Handle transition between various pages
      */
-    void on_row_selected(Gtk.ListBoxRow? row)
+    void on_row_activate(Gtk.ListBoxRow? row)
     {
         if (row == null) {
             return;
         }
         SettingsItem? item = row.get_child() as SettingsItem;
-        this.content.set_visible_child_name(item.content_id);
+        if (item != this.item_add_panel) {
+            this.content.set_visible_child_name(item.content_id);
+            return;
+        }
+        this.new_panel_requested = true;
+        if (this.manager.slots_available() >= 1) {
+            this.manager.create_new_panel();
+        }
     }
 
     /**
@@ -186,6 +203,20 @@ public class SettingsWindow : Gtk.Window {
     }
 
     /**
+     * Emulate sidebar activation for the user
+     */
+    void force_select_page(string content_id)
+    {
+        Idle.add(()=> {
+            Gtk.ListBoxRow? row = this.sidebar_map[content_id].get_parent() as Gtk.ListBoxRow;
+            sidebar.select_row(row);
+            row.grab_focus();
+            content.set_visible_child_name(content_id);
+            return false;
+        });
+    }
+
+    /**
      * New panel added, let's make a page for it
      */
     private void on_panel_added(string uuid, Budgie.Toplevel? toplevel)
@@ -195,6 +226,9 @@ public class SettingsWindow : Gtk.Window {
             return;
         }
         this.add_page(new PanelPage(this.manager, toplevel));
+        if (new_panel_requested) {
+            this.force_select_page(content_id);
+        }
     }
 
     /**
@@ -202,6 +236,15 @@ public class SettingsWindow : Gtk.Window {
      */
     private void on_panel_deleted(string uuid)
     {
+        string content_id = "panel-" + uuid;
+
+        /* TODO: Set the visible name to another panel that isn't the
+         * one being deleted, only when already looking at the panel.
+         */
+        if (this.content.get_visible_child_name() == content_id) {
+            this.force_select_page("style");
+        }
+
         /* Nuke from orbit */
         this.remove_page("panel-" + uuid);
     }
