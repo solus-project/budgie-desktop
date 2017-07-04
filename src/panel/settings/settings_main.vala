@@ -62,6 +62,7 @@ public class SettingsWindow : Gtk.Window {
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         sidebar = new Gtk.ListBox();
         sidebar.set_header_func(this.do_headers);
+        sidebar.set_sort_func(this.do_sort);
         sidebar.row_activated.connect(this.on_row_activate);
         sidebar.set_activate_on_single_click(true);
         scroll.add(sidebar);
@@ -158,6 +159,8 @@ public class SettingsWindow : Gtk.Window {
             page.show();
             content.add_named(page, page.content_id);
         }
+        this.sidebar.invalidate_sort();
+        this.sidebar.invalidate_headers();
     }
 
     /**
@@ -177,6 +180,8 @@ public class SettingsWindow : Gtk.Window {
         if (page != null) {
             page.destroy();
         }
+        this.sidebar.invalidate_sort();
+        this.sidebar.invalidate_headers();
     }
 
     /**
@@ -211,6 +216,34 @@ public class SettingsWindow : Gtk.Window {
         } else {
             before.set_header(null);
         }
+    }
+
+    /**
+     * Sort the sidebar items, enforcing clustering of the same groups
+     */
+    int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
+    {
+        int score = 0;
+        SettingsItem? child_before = null;
+        SettingsItem? child_after = null;
+
+        child_before = before.get_child() as SettingsItem;
+        child_after = after.get_child() as SettingsItem;
+
+        /* Match untranslated group string only */
+        if (child_before.group != child_after.group) {
+            return strcmp(child_before.group, child_after.group);
+        }
+
+        /* Always ensure the "new panel" button is last, at the tail of panels group */
+        if (child_after == this.item_add_panel) {
+            return -1;
+        } else if (child_before == this.item_add_panel) {
+            return 1;
+        }
+
+        /* Sort within the group */
+        return strcmp(child_before.label, child_after.label);
     }
 
     /**
