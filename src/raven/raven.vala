@@ -180,7 +180,6 @@ public class Raven : Gtk.Window
             } else {
                 required_size = get_allocated_width();
             }
-            queue_draw();
         }
         public get {
             return scale;
