@@ -1432,6 +1432,10 @@ public class PanelManager : DesktopManager
         Idle.add(()=> {
             if (this.settings_window == null) {
                 this.settings_window = new Budgie.SettingsWindow(this);
+                this.settings_window.destroy.connect(()=> {
+                    this.settings_window = null;
+                });
+
                 /* Say hullo to the settings_window */
                 foreach (var panel in this.get_panels()) {
                     this.panel_added(panel.uuid, panel);

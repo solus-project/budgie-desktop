@@ -43,9 +43,6 @@ public class SettingsWindow : Gtk.Window {
         page_map = new HashTable<string,SettingsPage?>(str_hash, str_equal);
         sidebar_map = new HashTable<string,SettingsItem?>(str_hash, str_equal);
 
-        /* Don't die when closed. */
-        delete_event.connect(this.hide_on_delete);
-
         layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
 
