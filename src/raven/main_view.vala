@@ -23,8 +23,6 @@ public class MainView : Gtk.Box
     private Gtk.Stack? main_stack = null;
     private Gtk.StackSwitcher? switcher = null;
 
-    public signal void view_switch();
-
     public void expose_notification()
     {
         main_stack.set_visible_child_name("notifications");
@@ -34,8 +32,6 @@ public class MainView : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
-        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.VERTICAL);
-
         var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         header.get_style_context().add_class("raven-header");
         header.get_style_context().add_class("top");
@@ -44,20 +40,7 @@ public class MainView : Gtk.Box
 
         /* Anim */
         main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
-
-        var settings = new Gtk.Button.from_icon_name("applications-system-symbolic", Gtk.IconSize.BUTTON);
-        settings.clicked.connect(()=> {
-            this.view_switch();
-        });
-        settings.margin_top = 4;
-        settings.margin_bottom = 4;
-        settings.margin_right = 4;
-        header.pack_end(settings, false, false, 0);
-        settings.valign = Gtk.Align.CENTER;
-
         switcher = new Gtk.StackSwitcher();
-        group.add_widget(switcher);
-        group.add_widget(settings);
 
         switcher.valign = Gtk.Align.CENTER;
         switcher.margin_top = 4;
