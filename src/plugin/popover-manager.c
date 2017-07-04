@@ -165,6 +165,10 @@ void budgie_popover_manager_unregister_popover(BudgiePopoverManager *self, GtkWi
  */
 static gboolean show_one_popover(gpointer v)
 {
+        if (gtk_grab_get_current()) {
+                return FALSE;
+        }
+
         gtk_widget_show(GTK_WIDGET(v));
         return FALSE;
 }
@@ -391,6 +395,14 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover,
         }
 
         self->priv->active_popover = popover;
+
+        /* Don't attempt to steal grabs */
+        if (gtk_grab_get_current()) {
+                gtk_widget_hide(GTK_WIDGET(popover));
+                self->priv->active_popover = NULL;
+                self->priv->grabbed = FALSE;
+                return GDK_EVENT_PROPAGATE;
+        }
 
         /* If we don't do this wierd cycle then the rollover enter-notify
          * event becomes broken, defeating the purpose of a manager.
