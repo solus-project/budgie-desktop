@@ -175,11 +175,6 @@ public class Raven : Gtk.Window
     public double nscale {
         public set {
             scale = value;
-            if (nscale > 0.0 && nscale < 1.0) {
-                required_size = (int)(get_allocated_width() * nscale);
-            } else {
-                required_size = get_allocated_width();
-            }
         }
         public get {
             return scale;
@@ -371,7 +366,7 @@ public class Raven : Gtk.Window
      * need to be on */
     public void update_geometry(Gdk.Rectangle rect)
     {
-        int width = required_size;
+        int width = layout.get_allocated_width();
         int x;
 
         if (this.screen_edge == Gtk.PositionType.RIGHT) {
@@ -428,8 +423,7 @@ public class Raven : Gtk.Window
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
-        var d = (double) alloc.width;
-        var x = d * nscale;
+        var x = ((double)alloc.width) * nscale;
 
         if (this.screen_edge == Gtk.PositionType.RIGHT) {
             cr.set_source_surface(buffer, alloc.width - x, 0);
