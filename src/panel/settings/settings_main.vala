@@ -89,6 +89,9 @@ public class SettingsWindow : Gtk.Window {
         /* We'll need to build panel items for each toplevel */
         this.manager.panel_added.connect(this.on_panel_added);
         this.manager.panel_deleted.connect(this.on_panel_deleted);
+        this.manager.panels_changed.connect(this.on_panels_changed);
+
+        this.on_panels_changed();
 
         layout.show_all();
         header.show_all();
@@ -102,6 +105,14 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.StylePage());
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
+    }
+
+    /**
+     * Update the state of the add-panel button in relation to slots
+     */
+    void on_panels_changed()
+    {
+        item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
     }
 
     /**
