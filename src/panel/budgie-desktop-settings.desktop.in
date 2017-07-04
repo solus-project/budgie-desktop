@@ -6,4 +6,5 @@ Exec=budgie-desktop-settings
 TryExec=budgie-desktop-settings
 Terminal=false
 Type=Application
+Categories=GNOME;GTK;System;
 OnlyShowIn=Budgie;
