@@ -1,0 +1,9 @@
+[Desktop Entry]
+_Name=Budgie Desktop Settings
+_Comment=Change desktop appearance and behaviour
+Icon=preferences-desktop
+Exec=budgie-desktop-settings
+TryExec=budgie-desktop-settings
+Terminal=false
+Type=Application
+OnlyShowIn=Budgie;

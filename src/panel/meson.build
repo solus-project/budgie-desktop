@@ -84,6 +84,28 @@ executable(
     install: true,
 )
 
+executable(
+    'budgie-desktop-settings',
+    'budgie-desktop-settings.vala',
+    dependencies: [
+        dep_glib,
+        dep_giounix,
+    ],
+    vala_args: [
+        '--pkg', 'gio-unix-2.0',
+    ],
+    install: true,
+)
+
+# Now merge the translations of the .desktop.in to a .desktop
+custom_target('desktop-file-settings',
+    input : 'budgie-desktop-settings.desktop.in',
+    output : 'budgie-desktop-settings.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : join_paths(datadir, 'applications'),
+)
+
 # gschemas
 install_data(
     'com.solus-project.budgie-panel.gschema.xml',
