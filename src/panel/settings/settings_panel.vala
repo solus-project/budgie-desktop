@@ -11,6 +11,50 @@
 
 namespace Budgie {
 
+public class DeletionButton : Gtk.Button {
+
+    Gtk.Revealer revealer;
+
+    public DeletionButton(string text)
+    {
+        var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        this.add(box);
+
+        var image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+
+        revealer = new Gtk.Revealer();
+        revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
+        box.pack_start(revealer, false, false, 0);
+        box.pack_start(image, true, true, 0);
+        image.halign = Gtk.Align.START;
+
+        margin_start = 4;
+        margin_end = 4;
+
+        var label = new Gtk.Label(text);
+        label.halign = Gtk.Align.START;
+        label.margin_end = 6;
+        label.valign = Gtk.Align.CENTER;
+        revealer.add(label);
+        revealer.set_reveal_child(false);
+
+        get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+
+        enter_notify_event.connect(()=> {
+            get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            this.revealer.set_reveal_child(true);
+            return Gdk.EVENT_PROPAGATE;
+        });
+
+        leave_notify_event.connect(()=> {
+            get_style_context().remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            this.revealer.set_reveal_child(false);
+            return Gdk.EVENT_PROPAGATE;
+        });
+    }
+
+} /* End class */
+
 /**
  * PanelPage allows users to change aspects of the fonts used
  */
@@ -53,14 +97,21 @@ public class PanelPage : Budgie.SettingsPage {
 
         border_width = 0;
 
+        var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        var button = new DeletionButton(_("Remove panel"));
+        button.valign = Gtk.Align.CENTER;
+
         /* Main layout bits */
         switcher = new Gtk.StackSwitcher();
-        switcher.margin_top = 8;
+        box.margin_top = 8;
         switcher.halign = Gtk.Align.CENTER;
         stack = new Gtk.Stack();
         stack.set_homogeneous(false);
         switcher.set_stack(stack);
-        this.pack_start(switcher, false, false, 0);
+        box.pack_start(switcher, true, true, 0);
+        box.pack_end(button, false, false, 0);
+
+        this.pack_start(box, false, false, 0);
         this.pack_start(stack, true, true, 0);
 
         this.stack.add_titled(this.applets_page(), "main", _("Applets"));
