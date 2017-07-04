@@ -479,11 +479,12 @@ public class Raven : Gtk.Window
 
         var anim = new Budgie.Animation();
         anim.widget = this;
-        anim.length = 220 * Budgie.MSECOND;
         if (exp) {
-            anim.tween = Budgie.quad_ease_out;
+            anim.length = 360 * Budgie.MSECOND;
+            anim.tween = Budgie.expo_ease_out;
         } else {
-            anim.tween = Budgie.quad_ease_in;
+            anim.tween = Budgie.sine_ease_in;
+            anim.length = 190 * Budgie.MSECOND;
         }
         anim.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
