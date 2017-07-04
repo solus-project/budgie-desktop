@@ -36,6 +36,8 @@ public class PanelPage : Budgie.SettingsPage {
     private Gtk.SpinButton? spinbutton_size;
     private ulong size_id;
 
+    Gtk.Button button_remove_panel;
+
     unowned Budgie.DesktopManager? manager = null;
 
     public PanelPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel)
@@ -63,7 +65,15 @@ public class PanelPage : Budgie.SettingsPage {
         this.stack.add_titled(this.applets_page(), "main", _("Applets"));
         this.stack.add_titled(this.settings_page(), "applets", _("Settings"));
 
+        manager.panels_changed.connect(this.on_panels_changed);
+        this.on_panels_changed();
         this.show_all();
+    }
+
+    void on_panels_changed()
+    {
+        /* Must have at least *one* panel */
+        button_remove_panel.set_sensitive(manager.slots_used() > 1);
     }
 
     /**
@@ -212,7 +222,8 @@ public class PanelPage : Budgie.SettingsPage {
         dock_id = switch_dock.notify["active"].connect(this.set_dock);
 
         /* Allow deletion of the panel */
-        var button_remove_panel = new Gtk.Button.with_label(_("Remove"));
+        button_remove_panel = new Gtk.Button.with_label(_("Remove"));
+        button_remove_panel.clicked.connect_after(this.delete_panel);
         button_remove_panel.valign = Gtk.Align.CENTER;
         button_remove_panel.vexpand = false;
         button_remove_panel.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
@@ -433,6 +444,19 @@ public class PanelPage : Budgie.SettingsPage {
     {
         this.manager.set_size(this.toplevel.uuid, (int)this.spinbutton_size.get_value());
     }
+
+    /**
+     * Delete ourselves
+     *
+     * TODO: Stick up a confirm dialog!
+     */
+    void delete_panel()
+    {
+        if (this.manager.slots_used() > 1) {
+            this.manager.delete_panel(this.toplevel.uuid);
+        }
+    }
+
 } /* End class */
 
 } /* End namespace */
