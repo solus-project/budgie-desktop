@@ -415,6 +415,13 @@ public class Raven : Gtk.Window
             return base.draw(cr);
         }
 
+        /* Clear out the background before we draw anything */
+        cr.save();
+        cr.set_source_rgba(1.0, 1.0, 1.0, 0.0);
+        cr.set_operator(Cairo.Operator.SOURCE);
+        cr.paint();
+        cr.restore();
+
         Gtk.Allocation alloc;
         get_allocation(out alloc);
         var buffer = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
@@ -478,8 +485,12 @@ public class Raven : Gtk.Window
 
         var anim = new Budgie.Animation();
         anim.widget = this;
-        anim.length = 170 * Budgie.MSECOND;
-        anim.tween = Budgie.sine_ease_in_out;
+        anim.length = 220 * Budgie.MSECOND;
+        if (exp) {
+            anim.tween = Budgie.quad_ease_out;
+        } else {
+            anim.tween = Budgie.quad_ease_in;
+        }
         anim.changes = new Budgie.PropChange[] {
             Budgie.PropChange() {
                 property = "nscale",
