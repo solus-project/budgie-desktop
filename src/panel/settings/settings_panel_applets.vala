@@ -90,6 +90,7 @@ public class AppletsPage : Gtk.Box {
 
     unowned Budgie.Toplevel? toplevel;
     unowned Budgie.DesktopManager? manager = null;
+    Gtk.Button button_add;
 
     /* Used applet storage */
     Gtk.ListBox listbox_applets;
@@ -182,11 +183,12 @@ public class AppletsPage : Gtk.Box {
         this.pack_start(grid, false, false, 0);
 
         /* Allow adding new applets*/
-        var button_add = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
+        button_add = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
         button_add.valign = Gtk.Align.CENTER;
         button_add.vexpand = false;
         button_add.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
         button_add.get_style_context().add_class("round-button");
+        button_add.clicked.connect(this.add_applet);
         grid.add_row(new SettingsRow(button_add,
             _("Add applet"),
             _("Choose a new applet to add to this panel")));
@@ -373,6 +375,20 @@ public class AppletsPage : Gtk.Box {
         } else {
             before.set_header(null);
         }
+    }
+
+    /**
+     * User requested to add a new applet to the active panel,
+     * show a chooser dialog
+     */
+    void add_applet()
+    {
+        var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
+        dlg.set_plugin_list(this.manager.get_panel_plugins());
+        var resp = dlg.run();
+        dlg.destroy();
+
+        message("Response was %s", resp.to_string());
     }
 
 } /* End class */
