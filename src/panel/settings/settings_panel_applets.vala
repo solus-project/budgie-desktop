@@ -124,6 +124,15 @@ public class AppletsPage : Gtk.Box {
 
         toplevel.applet_added.connect(this.applet_added);
         toplevel.applet_removed.connect(this.applet_removed);
+        toplevel.applets_changed.connect(this.applets_changed);
+
+        this.applets_changed();
+    }
+
+    void applets_changed()
+    {
+        this.listbox_applets.invalidate_sort();
+        this.listbox_applets.invalidate_headers();
     }
 
     /**
