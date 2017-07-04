@@ -91,6 +91,9 @@ public class AppletsPage : Gtk.Box {
     unowned Budgie.Toplevel? toplevel;
     unowned Budgie.DesktopManager? manager = null;
     Gtk.Button button_add;
+    Gtk.Button button_move_applet_up;
+    Gtk.Button button_move_applet_down;
+    Gtk.Button button_remove_applet;
 
     /* Used applet storage */
     Gtk.ListBox listbox_applets;
@@ -98,6 +101,8 @@ public class AppletsPage : Gtk.Box {
 
     /* Allow us to display settings when each item is selected */
     Gtk.Stack settings_stack;
+
+    unowned Budgie.AppletInfo? current_info = null;
 
     public AppletsPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel)
     {
@@ -111,6 +116,8 @@ public class AppletsPage : Gtk.Box {
 
         this.configure_list();
         this.configure_actions();
+
+        this.update_action_buttons();
 
         /* Insert them now */
         foreach (var applet in this.toplevel.get_applets()) {
@@ -129,10 +136,43 @@ public class AppletsPage : Gtk.Box {
         this.applets_changed();
     }
 
+    /**
+     * Something in the applet availability changed for this panel.
+     */
     void applets_changed()
     {
         this.listbox_applets.invalidate_sort();
         this.listbox_applets.invalidate_headers();
+        this.update_action_buttons();
+    }
+
+    /**
+     * Update the sensitivity of the action buttons based on the current
+     * selection.
+     */
+    void update_action_buttons()
+    {
+        unowned Gtk.ListBoxRow? row = this.listbox_applets.get_selected_row();
+        Budgie.AppletInfo? info = null;
+
+        if (row != null) {
+            info = (row.get_child() as AppletItem).applet;
+        }
+
+        /* Require applet info to be useful. */
+        if (info == null) {
+            current_info = null;
+            button_remove_applet.set_sensitive(false);
+            button_move_applet_up.set_sensitive(false);
+            button_move_applet_down.set_sensitive(false);
+            return;
+        }
+
+        current_info = info;
+
+        button_remove_applet.set_sensitive(true);
+        button_move_applet_up.set_sensitive(toplevel.can_move_applet_left(info));
+        button_move_applet_down.set_sensitive(toplevel.can_move_applet_right(info));
     }
 
     /**
@@ -149,12 +189,15 @@ public class AppletsPage : Gtk.Box {
         var move_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
         move_box.set_layout(Gtk.ButtonBoxStyle.START);
         move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
-        var move_up_button = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
-        var move_down_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
-        move_box.add(move_up_button);
-        move_box.add(move_down_button);
+        button_move_applet_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
+        button_move_applet_up.clicked.connect(move_applet_up);
+        button_move_applet_down = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
+        button_move_applet_down.clicked.connect(move_applet_down);
+        move_box.add(button_move_applet_up);
+        move_box.add(button_move_applet_down);
 
-        var button_remove_applet = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+        button_remove_applet = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+        button_remove_applet.clicked.connect(remove_applet);
         move_box.add(button_remove_applet);
 
         frame_box.pack_start(move_box, false, false, 0);
@@ -237,6 +280,8 @@ public class AppletsPage : Gtk.Box {
             this.settings_stack.set_visible_child_name("main");
             return;
         }
+
+        this.update_action_buttons();
         unowned AppletItem? item = row.get_child() as AppletItem;
         unowned Gtk.Widget? lookup = this.settings_stack.get_child_by_name(item.applet.uuid);
         if (lookup == null) {
@@ -401,6 +446,36 @@ public class AppletsPage : Gtk.Box {
         }
 
         this.toplevel.add_new_applet(applet_id);
+    }
+
+    /**
+     * User requested we delete this applet
+     */
+    void remove_applet()
+    {
+        if (current_info != null) {
+            this.toplevel.remove_applet(this.current_info);
+        }
+    }
+
+    /**
+     * User moved the applet up in the list (left in budgie terms)
+     */
+    void move_applet_up()
+    {
+        if (current_info != null && this.toplevel.can_move_applet_left(this.current_info)) {
+            this.toplevel.move_applet_left(this.current_info);
+        }
+    }
+
+    /**
+     * User moved the applet down in the list (right in budgie terms)
+     */
+    void move_applet_down()
+    {
+        if (current_info != null && this.toplevel.can_move_applet_right(this.current_info)) {
+            this.toplevel.move_applet_right(this.current_info);
+        }
     }
 
 } /* End class */
