@@ -113,6 +113,8 @@ public class SettingsPage : Gtk.Box {
     /* If we want to be automatically wrapped in a scrolled window */
     public bool want_scroll { public set; public get; default = true; }
 
+    /* Control the display weight in the sidebar, i.e. where it list */
+    public int display_weight { public set; public get; default = 0; }
 
     construct {
         orientation = Gtk.Orientation.VERTICAL;

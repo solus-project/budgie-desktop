@@ -30,6 +30,7 @@ public class FontPage : Budgie.SettingsPage {
         Object(group: SETTINGS_GROUP_APPEARANCE,
                content_id: "fonts",
                title: _("Fonts"),
+               display_weight: 1,
                icon_name: "preferences-desktop-font");
 
         var grid = new SettingsGrid();

@@ -16,6 +16,9 @@ public class SettingsItem : Gtk.Box {
     private Gtk.Image widget_icon;
     private Gtk.Label widget_label;
 
+    /* Bindable for sorting */
+    public int display_weight { public set ; public get; default = 0 ; }
+
 
     public string icon_name { public get ; public set ; }
     public string label {

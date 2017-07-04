@@ -90,7 +90,7 @@ public class SettingsWindow : Gtk.Window {
         /* We'll need to build panel items for each toplevel */
         this.manager.panel_added.connect(this.on_panel_added);
         this.manager.panel_deleted.connect(this.on_panel_deleted);
-        this.manager.panels_changed.connect(this.on_panels_changed);
+        this.manager.panels_changed.connect_after(this.on_panels_changed);
 
         this.on_panels_changed();
 
@@ -114,6 +114,11 @@ public class SettingsWindow : Gtk.Window {
     void on_panels_changed()
     {
         item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
+        Idle.add(()=> {
+            this.sidebar.invalidate_sort();
+            this.sidebar.invalidate_filter();
+            return false;
+        });
     }
 
     /**
@@ -145,6 +150,7 @@ public class SettingsWindow : Gtk.Window {
         sidebar.add(settings_item);
 
         page.bind_property("title", settings_item, "label", BindingFlags.DEFAULT);
+        page.bind_property("display-weight", settings_item, "display-weight", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
 
         this.sidebar_map[page.content_id] = settings_item;
         this.page_map[page.content_id] = page;
@@ -242,8 +248,12 @@ public class SettingsWindow : Gtk.Window {
             return 1;
         }
 
-        /* Sort within the group */
-        return strcmp(child_before.label, child_after.label);
+        if (child_before.display_weight > child_after.display_weight) {
+            return 1;
+        } else if (child_before.display_weight < child_after.display_weight) {
+            return -1;
+        }
+        return 0;
     }
 
     /**

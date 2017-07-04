@@ -45,6 +45,7 @@ public class PanelPage : Budgie.SettingsPage {
         Object(group: SETTINGS_GROUP_PANEL,
                content_id: "panel-%s".printf(toplevel.uuid),
                title: PanelPage.get_panel_name(toplevel),
+               display_weight: PanelPage.get_panel_weight(toplevel),
                icon_name: "user-desktop");
 
         this.manager = manager;
@@ -74,6 +75,7 @@ public class PanelPage : Budgie.SettingsPage {
     {
         /* Must have at least *one* panel */
         button_remove_panel.set_sensitive(manager.slots_used() > 1);
+        this.display_weight = PanelPage.get_panel_weight(this.toplevel);
     }
 
     /**
@@ -105,6 +107,33 @@ public class PanelPage : Budgie.SettingsPage {
                     return _("Bottom Panel");
             }
         }
+    }
+
+    /**
+     * Assign a display weight to a given panel
+     */
+    static int get_panel_weight(Budgie.Toplevel? toplevel)
+    {
+        int base_score = 0;
+        switch (toplevel.position) {
+            case PanelPosition.TOP:
+                base_score = 1;
+                break;
+            case PanelPosition.BOTTOM:
+                base_score = 2;
+                break;
+            case PanelPosition.LEFT:
+                base_score = 3;
+                break;
+            case PanelPosition.RIGHT:
+            default:
+                base_score = 4;
+                break;
+        }
+        if (toplevel.dock_mode) {
+            base_score += 10;
+        }
+        return base_score;
     }
 
     /**
