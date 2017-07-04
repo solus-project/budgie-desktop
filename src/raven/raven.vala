@@ -503,6 +503,11 @@ public class Raven : Gtk.Window
     public bool get_expanded() {
         return this.expanded;
     }
+
+    /* As cheap as it looks. The DesktopManager responds to this signal and
+     * will show the Settings UI
+     */
+    public signal void request_settings_ui();
 }
 
 } /* End namespace */

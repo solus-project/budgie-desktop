@@ -68,12 +68,8 @@ class PowerStrip : Gtk.EventBox
 
         var btn = new Gtk.Button.from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         btn.clicked.connect(()=> {
-            try {
-                raven.set_expanded(false);
-                Process.spawn_command_line_async("gnome-control-center");
-            } catch (Error e) {
-                message("Error invoking gnome-control-center: %s", e.message);
-            }
+            raven.set_expanded(false);
+            raven.request_settings_ui();
         });
         btn.halign = Gtk.Align.START;
         btn.get_style_context().add_class("flat");

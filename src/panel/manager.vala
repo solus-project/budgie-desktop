@@ -592,6 +592,7 @@ public class PanelManager : DesktopManager
         settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
         theme_manager = new Budgie.ThemeManager();
         raven = new Budgie.Raven(this);
+        raven.request_settings_ui.connect(this.on_settings_requested);
 
         this.on_monitors_changed();
 
@@ -1415,6 +1416,12 @@ public class PanelManager : DesktopManager
             list.append((Budgie.Toplevel)panel);
         }
         return list;
+    }
+
+    /* Raven asked for the settings to be shown */
+    private void on_settings_requested()
+    {
+        this.open_settings();
     }
 
     /**
