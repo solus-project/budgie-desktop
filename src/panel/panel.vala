@@ -1225,7 +1225,7 @@ public class Panel : Budgie.Toplevel
         conflict.position = old_position;
     }
 
-    void budge_em_right(string alignment)
+    void budge_em_right(string alignment, int after = -1)
     {
         unowned string key;
         unowned Budgie.AppletInfo? val;
@@ -1233,9 +1233,12 @@ public class Panel : Budgie.Toplevel
 
         while (iter.next(out key, out val)) {
             if (val.alignment == alignment) {
-                val.position++;
+                if (val.position > after) {
+                    val.position++;
+                }
             }
         }
+        this.reinforce_positions();
     }
 
     void budge_em_left(string alignment, int after)
@@ -1251,6 +1254,21 @@ public class Panel : Budgie.Toplevel
                 }
             }
         }
+        this.reinforce_positions();
+    }
+
+    private void reinforce_positions()
+    {
+        unowned string key;
+        unowned Budgie.AppletInfo? val;
+        var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
+
+        while (iter.next(out key, out val)) {
+            applet_reposition(val);
+        }
+
+        /* We may have ugly artifacts now */
+        this.queue_draw();
     }
 
     public override void move_applet_left(Budgie.AppletInfo? info)
@@ -1311,9 +1329,10 @@ public class Panel : Budgie.Toplevel
             return;
         }
         if ((new_home = get_box_right(info)) != null) {
-            budge_em_right(new_home);
             info.alignment = new_home;
+            budge_em_right(new_home);
             info.position = 0;
+            this.reinforce_positions();
             applets_changed();
         }
     }
