@@ -385,10 +385,13 @@ public class AppletsPage : Gtk.Box {
     {
         var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
         dlg.set_plugin_list(this.manager.get_panel_plugins());
-        var resp = dlg.run();
+        string? applet_id = dlg.run();
         dlg.destroy();
+        if (applet_id == null) {
+            return;
+        }
 
-        message("Response was %s", resp.to_string());
+        this.toplevel.add_new_applet(applet_id);
     }
 
 } /* End class */

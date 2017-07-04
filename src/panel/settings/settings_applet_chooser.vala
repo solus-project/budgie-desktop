@@ -68,6 +68,9 @@ public class PluginItem : Gtk.Grid {
 public class AppletChooser : Gtk.Dialog
 {
     Gtk.ListBox applets;
+    Gtk.Widget button_ok;
+
+    private string? applet_id = null;
 
     public AppletChooser(Gtk.Window parent)
     {
@@ -78,20 +81,55 @@ public class AppletChooser : Gtk.Dialog
 
         Gtk.Box content_area = get_content_area() as Gtk.Box;
 
-        var cancel = this.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-        var ok = this.add_button(_("Add applet"), Gtk.ResponseType.ACCEPT);
-
-        ok.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+        this.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
+        button_ok = this.add_button(_("Add applet"), Gtk.ResponseType.ACCEPT);
+        button_ok.set_sensitive(false);
+        button_ok.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         applets = new Gtk.ListBox();
         scroll.add(applets);
 
+        applets.set_activate_on_single_click(true);
+        applets.row_selected.connect(row_selected);
+
         content_area.pack_start(scroll, true, true, 0);
         content_area.show_all();
 
         set_default_size(400, 450);
+    }
+
+    /**
+     * Simple accessor to get the new applet ID to be added
+     */
+    public new string? run()
+    {
+        Gtk.ResponseType resp = (Gtk.ResponseType)base.run();
+        switch (resp) {
+            case Gtk.ResponseType.ACCEPT:
+                return this.applet_id;
+            case Gtk.ResponseType.CANCEL:
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * User picked a plugin
+     */
+    void row_selected(Gtk.ListBoxRow? row)
+    {
+        if (row == null) {
+            this.applet_id = null;
+            this.button_ok.set_sensitive(false);
+            return;
+        }
+
+        this.button_ok.set_sensitive(true);
+
+        /* TODO: Switch name -> module_name */
+        this.applet_id = (row.get_child() as PluginItem).plugin.get_name();
     }
 
     /**
