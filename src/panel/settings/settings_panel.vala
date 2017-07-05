@@ -198,8 +198,7 @@ public class PanelPage : Budgie.SettingsPage {
         group.add_widget(combobox_position);
         ret.add_row(new SettingsRow(combobox_position,
             _("Position"),
-            _("Set the edge of the screen that this panel will stay on. If another " +
-              "panel is already there, they will automatically swap positions")));
+            _("Set the edge of the screen that this panel will stay on")));
 
         /* Size of the panel */
         spinbutton_size = new Gtk.SpinButton.with_range(16, 200, 1);
