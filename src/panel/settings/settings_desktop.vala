@@ -73,10 +73,23 @@ public class DesktopPage : Budgie.SettingsPage {
 
         bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
 
+        bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
+
         nautilus_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
+
+        update_switches();
+    }
+
+    void update_switches()
+    {
+        bool b = bg_settings.get_boolean("show-desktop-icons");
+        switch_home.sensitive = b;
+        switch_network.sensitive = b;
+        switch_trash.sensitive = b;
+        switch_mounts.sensitive = b;
     }
     
 } /* End class */
