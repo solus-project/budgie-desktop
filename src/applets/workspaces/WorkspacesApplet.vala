@@ -135,9 +135,9 @@ public class WorkspacesApplet : Budgie.Applet
             unowned Wnck.Workspace? next = null;
 
             if (e.direction == Gdk.ScrollDirection.DOWN) {
-                next = wnck_screen.get_workspace(current.get_number()+1);
+                next = wnck_screen.get_workspace(current.get_number() + 1);
             } else if (e.direction == Gdk.ScrollDirection.UP) {
-                next = wnck_screen.get_workspace(current.get_number()-1);
+                next = wnck_screen.get_workspace(current.get_number() - 1);
             }
 
             if (next != null) {
