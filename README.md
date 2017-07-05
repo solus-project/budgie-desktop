@@ -102,25 +102,6 @@ As and when new features are implemented - it can be helpful to reset the config
 budgie-panel --reset --replace &
 ```
 
-Distro Integration
-------------------
-
-In order to override the default panel layout, you should provide your own  `panel.ini` in the system-wide vendor directory:
-
-```bash
-$(datadir)/budgie-desktop/panel.ini`
-```
-
-Note that the system configuration directory is the domain of the system administrator, and you should not ship a `panel.ini` in this location. This location is:
-
-```bash
-$(sysconfdir)/budgie-desktop/panel.ini
-```
-
-This is to allow users to make global layout changes for all users on the system. Please see `./data/panel.ini` for a reference.
-
-To override the specific GSettings, you should implement gschema overrides. For an example
-of this, please see [our branding package](https://github.com/solus-project/budgie-desktop-branding).
 
 License
 -------
