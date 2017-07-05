@@ -23,6 +23,7 @@ panel_sources = [
     'panel.vala',
     'uuid.vala',
     'settings/settings_applet_chooser.vala',
+    'settings/settings_autostart.vala',
     'settings/settings_desktop.vala',
     'settings/settings_fonts.vala',
     'settings/settings_item.vala',
@@ -63,6 +64,7 @@ budgie_panel_vala_args = [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
+        '--pkg', 'gio-unix-2.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
