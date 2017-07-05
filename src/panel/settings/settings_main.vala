@@ -40,6 +40,7 @@ public class SettingsWindow : Gtk.Window {
         group_map = new HashTable<string,string>(str_hash, str_equal);
         group_map["appearance"] = _("Appearance");
         group_map["panel"] = _("Panels");
+        group_map["session"] = _("Session");
         page_map = new HashTable<string,SettingsPage?>(str_hash, str_equal);
         sidebar_map = new HashTable<string,SettingsItem?>(str_hash, str_equal);
 
@@ -104,6 +105,7 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.DesktopPage());
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
+        this.add_page(new Budgie.AutostartPage());
     }
 
     /**
