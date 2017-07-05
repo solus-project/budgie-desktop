@@ -27,7 +27,7 @@ public class WindowsPage : Budgie.SettingsPage {
         Object(group: SETTINGS_GROUP_APPEARANCE,
                content_id: "windows",
                title: _("Windows"),
-               display_weight: 2,
+               display_weight: 3,
                icon_name: "preferences-system-windows");
 
         var grid = new SettingsGrid();

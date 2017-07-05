@@ -23,6 +23,7 @@ panel_sources = [
     'panel.vala',
     'uuid.vala',
     'settings/settings_applet_chooser.vala',
+    'settings/settings_desktop.vala',
     'settings/settings_fonts.vala',
     'settings/settings_item.vala',
     'settings/settings_main.vala',
