@@ -46,6 +46,8 @@ public class WorkspacesApplet : Budgie.Applet
     public static Wnck.Screen wnck_screen;
     public static bool dragging = false;
 
+    private int64 last_scroll_time = 0;
+
     public WorkspacesApplet()
     {
         WorkspacesApplet.wnck_screen = Wnck.Screen.get_default();
@@ -57,6 +59,7 @@ public class WorkspacesApplet : Budgie.Applet
             has_wm, lost_wm);
 
         ebox = new Gtk.EventBox();
+        ebox.add_events(Gdk.EventMask.SCROLL_MASK);
         this.add(ebox);
 
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -117,6 +120,32 @@ public class WorkspacesApplet : Budgie.Applet
             add_button_revealer.set_transition_type(hide_transition);
             add_button_revealer.set_reveal_child(false);
             return false;
+        });
+
+        ebox.scroll_event.connect((e) => {
+            if (e.direction >= 4) {
+                return Gdk.EVENT_STOP;
+            }
+
+            if (GLib.get_monotonic_time() - last_scroll_time < 300000) {
+                return Gdk.EVENT_STOP;
+            }
+
+            unowned Wnck.Workspace current = wnck_screen.get_active_workspace();
+            unowned Wnck.Workspace? next = null;
+
+            if (e.direction == Gdk.ScrollDirection.DOWN) {
+                next = wnck_screen.get_workspace(current.get_number()+1);
+            } else if (e.direction == Gdk.ScrollDirection.UP) {
+                next = wnck_screen.get_workspace(current.get_number()-1);
+            }
+
+            if (next != null) {
+                next.activate(e.time);
+                last_scroll_time = GLib.get_monotonic_time();
+            }
+
+            return Gdk.EVENT_STOP;
         });
     }
 
