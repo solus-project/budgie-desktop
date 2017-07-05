@@ -120,7 +120,7 @@
     }
 
     // Check and Radio Items
-    @include check-radio('.',disabled,indeterminate);
+    @include check-radio('',disabled,indeterminate);
 
     radiobutton radio,
     checkbutton check {
