@@ -216,8 +216,7 @@ public class PanelPage : Budgie.SettingsPage {
         group.add_widget(combobox_autohide);
         ret.add_row(new SettingsRow(combobox_autohide,
             _("Automatically hide"),
-            _("When set, this panel will hide from view to maximize screen estate. " +
-              "Use the intelligent mode to make this panel automatically avoid active windows")));
+            _("When set, this panel will hide from view to maximize screen estate")));
 
         /* Transparency */
         combobox_transparency = new Gtk.ComboBox();

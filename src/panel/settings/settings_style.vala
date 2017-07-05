@@ -42,17 +42,17 @@ public class StylePage : Budgie.SettingsPage {
         combobox_gtk = new Gtk.ComboBox();
         grid.add_row(new SettingsRow(combobox_gtk,
             _("Widgets"),
-            _("Set the appearance of window decorations, controls and input fields")));
+            _("Set the appearance of window decorations and controls")));
 
         combobox_icon = new Gtk.ComboBox();
         grid.add_row(new SettingsRow(combobox_icon,
             _("Icons"),
-            _("Set the global icon theme used for applications and the desktop")));
+            _("Set the globally used icon theme")));
 
         combobox_cursor = new Gtk.ComboBox();
         grid.add_row(new SettingsRow(combobox_cursor,
             _("Cursors"),
-            _("Set the global cursor theme used for applications and the desktop")));
+            _("Set the globally used mouse cursor theme")));
 
         /* Stick the combos in a size group */
         group.add_widget(combobox_gtk);

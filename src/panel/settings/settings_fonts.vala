@@ -48,7 +48,7 @@ public class FontPage : Budgie.SettingsPage {
         fontbutton_document = new Gtk.FontButton();
         grid.add_row(new SettingsRow(fontbutton_document,
             _("Documents"),
-            _("Set the display font used by applications such as word processors")));
+            _("Set the display font used by for documents")));
         group.add_widget(fontbutton_document);
 
         /* Interface */
