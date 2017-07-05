@@ -209,6 +209,10 @@ of each source file.
 Authors
 =======
 
-Copyright © 2014-2017 Ikey Doherty, Solus Project & Others
+Copyright © 2014-2017 Budgie Desktop Developers
 
-Also see our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!
+Budgie Desktop is primarily authored by the [Solus](https://solus-project.com) project which oversees
+the development and leadership of the project. Budgie Desktop is developed as a distribution-agnostic
+project for everyone to enjoy and contribute to.
+
+See our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!
