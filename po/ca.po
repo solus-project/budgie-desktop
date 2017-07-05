@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
 # Davidmp <medipas@gmail.com>, 2015-2016
@@ -8,563 +8,972 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 22:09+0100\n"
-"PO-Revision-Date: 2016-10-13 13:25+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>\n"
-"Language-Team: Catalan (http://www.transifex.com/solus-project/budgie-desktop/language/ca/)\n"
+"POT-Creation-Date: 2017-07-05 23:55+0100\n"
+"PO-Revision-Date: 2017-07-05 22:56+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
+"Language-Team: Catalan (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../daemon/endsession.vala:167
-msgid "Log out"
-msgstr "Surt"
-
-#: ../daemon/endsession.vala:171
-msgid "Restart device"
-msgstr "Reinicia el dispositiu"
-
-#: ../daemon/endsession.vala:183 ../daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Apaga"
-
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:7
-msgid "Applets"
-msgstr "Miniaplicacions"
-
-#: ../raven/main_view.vala:75
-#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
-msgid "Notifications"
-msgstr "Notificacions"
-
-#: ../raven/settings_view.vala:266
-msgid "Top"
-msgstr "A dalt"
-
-#: ../raven/settings_view.vala:268
-msgid "Bottom"
-msgstr "A baix"
-
-#: ../raven/settings_view.vala:376
-msgid "Top Panel"
-msgstr "Plafó de dalt"
-
-#: ../raven/settings_view.vala:378
-msgid "Right Panel"
-msgstr "Plafó dret"
-
-#: ../raven/settings_view.vala:380
-msgid "Left Panel"
-msgstr "Plafó esquerre"
-
-#: ../raven/settings_view.vala:382
-msgid "Bottom Panel"
-msgstr "Botó del plafó"
-
-#: ../raven/settings_view.vala:616
-msgid "Start"
-msgstr "Inici"
-
-#: ../raven/settings_view.vala:619
-msgid "Center"
-msgstr "Centre"
-
-#: ../raven/settings_view.vala:622
-msgid "End"
-msgstr "Final"
-
-#. Appearance expander
-#: ../raven/settings_view.vala:960
-msgid "Appearance"
-msgstr "Aparença"
-
-#: ../raven/settings_view.vala:967
-msgid "Background"
-msgstr "Fons"
-
-#: ../raven/settings_view.vala:974
-msgid "Fonts"
-msgstr "Lletres"
-
-#: ../raven/settings_view.vala:980
-msgid "Windows"
-msgstr "Finestres"
-
-#: ../raven/settings_view.vala:984
-msgid "General"
-msgstr "General"
-
-#: ../raven/settings_view.vala:995 ../raven/settings_view.vala:996
-msgid "Panel"
-msgstr "Plafó"
-
-#: ../raven/notifications_view.vala:52
+#: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
 msgstr "Aqui no hi ha res per veure."
 
-#: ../raven/notifications_view.vala:494
-#: ../panel/applets/notifications/NotificationsApplet.vala:75
+#: src/raven/notifications_view.vala:582
+#: src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u notificacions per llegir"
 
-#: ../raven/notifications_view.vala:496
-#: ../panel/applets/notifications/NotificationsApplet.vala:77
+#: src/raven/notifications_view.vala:584
+#: src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 notificació per llegir"
 
-#: ../raven/notifications_view.vala:498
-#: ../panel/applets/notifications/NotificationsApplet.vala:79
+#: src/raven/notifications_view.vala:586
+#: src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "No hi ha notificacions per llegir"
 
-#: ../raven/notifications_view.vala:624
+#: src/raven/notifications_view.vala:710
 msgid "No new notifications"
 msgstr "No hi ha notificacions noves."
 
-#: ../raven/sound.vala:78
+#: src/raven/sound.vala:78
 msgid "Output"
 msgstr "Sortida"
 
-#: ../raven/sound.vala:95
+#: src/raven/sound.vala:95
 msgid "Input"
 msgstr "Entrada"
 
-#. End class
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../panel/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr "Mida de l'espaiador"
+#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:66
+msgid "Applets"
+msgstr "Miniaplicacions"
 
-#: ../raven/ui/settings.ui.h:1
-msgid "Budgie Settings"
-msgstr "Paràmetres del Budgie"
+#: src/raven/main_view.vala:58
+#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "Notificacions"
 
-#: ../raven/ui/settings.ui.h:2
-msgid "Exit"
+#. translators:
+#. * The number of sound outputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1873
+#, c-format
+msgid "%u Output"
+msgid_plural "%u Outputs"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators:
+#. * The number of sound inputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1883
+#, c-format
+msgid "%u Input"
+msgid_plural "%u Inputs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/daemon/endsession.vala:172
+msgid "Log out"
 msgstr "Surt"
 
-#: ../raven/ui/applets.ui.h:1
-msgid "Add new applet"
-msgstr "Afegeix una miniaplicació nova"
+#: src/daemon/endsession.vala:176
+msgid "Restart device"
+msgstr "Reinicia el dispositiu"
 
-#: ../raven/ui/appearance.ui.h:1
-msgid "Use the dark theme"
-msgstr "Usa el tema fosc"
-
-#: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "Tema fosc"
-
-#: ../raven/ui/appearance.ui.h:3
-msgid "Select a GTK+ theme"
-msgstr "Seleccioneu un tema de GTK+"
-
-#: ../raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
-msgstr "Tema dels estris"
-
-#: ../raven/ui/appearance.ui.h:5
-msgid "Select an icon theme"
-msgstr "Seleccioneu un tema per a les icones"
-
-#: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "Tema de les icones"
-
-#: ../raven/ui/appearance.ui.h:7
-msgid "Override defaults"
-msgstr "Substitueix els valors per defecte"
-
-#: ../raven/ui/appearance.ui.h:8
-msgid "Built-in theme"
-msgstr "Tema incorporat"
-
-#: ../raven/ui/appearance.ui.h:9
-msgid "Select a cursor theme"
-msgstr "Seleccioneu un tema per al cursor"
-
-#: ../raven/ui/appearance.ui.h:10
-msgid "Cursor Theme"
-msgstr "Tema del cursor"
-
-#: ../raven/ui/panel.ui.h:1
-msgid "Manage Panels"
-msgstr "Gestió dels plafons"
-
-#: ../raven/ui/panel.ui.h:2
-msgid "Position"
-msgstr "Posició"
-
-#: ../raven/ui/panel.ui.h:3
-msgid "Size"
-msgstr "Mida"
-
-#: ../raven/ui/panel.ui.h:4
-msgid "Shadow"
-msgstr "Ombra"
-
-#: ../raven/ui/panel.ui.h:5
-msgid "Autohide policy"
-msgstr "Amaga automàticament"
-
-#: ../raven/ui/panel.ui.h:6
-msgid "Stylize regions"
-msgstr "Estilitza les regions"
-
-#: ../raven/ui/background.ui.h:1
-msgid "Show desktop icons"
-msgstr "Mostra icones a l'escriptori"
-
-#: ../raven/ui/background.ui.h:2
-msgid "Desktop Icons"
-msgstr "Icones de l'escriptori"
-
-#: ../raven/ui/fonts.ui.h:1
-msgid "Window Titles"
-msgstr "Títols de les finestres"
-
-#: ../raven/ui/fonts.ui.h:2
-msgid "Interface"
-msgstr "Interfície"
-
-#: ../raven/ui/fonts.ui.h:3
-msgid "Documents"
-msgstr "Documents"
-
-#: ../raven/ui/fonts.ui.h:4
-msgid "Monospace"
-msgstr "Monoespai"
-
-#: ../raven/ui/wm.ui.h:1
-msgid "Disable unredirect of fullscreen windows"
-msgstr "Inhabilita la no-redirecció de finestres de pantalla completa"
-
-#: ../raven/ui/wm.ui.h:2
-msgid "Disable unredirect"
-msgstr "Inhabilita la no-redirecció"
-
-#: ../raven/ui/wm.ui.h:3
-msgid "Change the layout of the window buttons"
-msgstr "Canvia la disposició dels botons de les finestres"
-
-#: ../raven/ui/wm.ui.h:4
-msgid "Button layout"
-msgstr "Disposició dels botons"
-
-#: ../session/budgie-desktop.desktop.in.in.h:1
-#: ../session/budgie-desktop.session.in.in.h:1
-msgid "Budgie Desktop"
-msgstr "Escriptori Budgie"
-
-#: ../session/budgie-desktop.desktop.in.in.h:2
-msgid "This session logs you into the Budgie Desktop"
-msgstr "Aquesta sessió us fa entrar a l'escriptori Budgie"
-
-#: ../daemon/endsession.ui.h:2
-msgid "Are you sure you want to end your session?"
-msgstr "Segur que voleu acabar la sessió?"
-
-#: ../daemon/endsession.ui.h:3
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
-#. "network-transmit-receive-symbolic", false);
-#: ../daemon/endsession.ui.h:4
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:179
-msgid "Logout"
-msgstr "Surt"
-
-#: ../daemon/endsession.ui.h:5
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:104
-msgid "Restart"
-msgstr "Reinicia"
-
-#: ../daemon/endsession.ui.h:6
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:105
-msgid "Shutdown"
+#: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
+msgid "Power Off"
 msgstr "Apaga"
 
-#: ../panel/applets/clock/ClockApplet.vala:55
-msgid "Time and date settings"
-msgstr "Paràmetres de la data i l'hora"
+#: src/daemon/menus.vala:52
+msgid "Change background"
+msgstr "Canvia el fons"
 
-#: ../panel/applets/clock/ClockApplet.vala:56
-msgid "Calendar"
-msgstr "Calendari"
+#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:67
+msgid "Settings"
+msgstr "Paràmetres"
 
-#: ../panel/applets/icon-tasklist/Buttons.vala:90
-msgid "Pin to panel"
-msgstr "Encasta al plafó"
-
-#: ../panel/applets/icon-tasklist/Buttons.vala:91
-msgid "Unpin from panel"
-msgstr "Desencasta del plafó"
-
-#. Special case, "All"
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:31
-msgid "All"
-msgstr "Tot"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:53
-msgid "Caps lock is active"
-msgstr "El bloqueig de majúscules està activat"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:56
-msgid "Caps lock is not active"
-msgstr "El bloqueig de majúscules no està activat"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:66
-msgid "Num lock is active"
-msgstr "El bloqueig numèric està activat"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:69
-msgid "Num lock is not active"
-msgstr "El bloqueig numèric no està activat"
-
-#: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
+#: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
 msgstr "Commuta l'escriptori"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:101
+#: src/applets/icon-tasklist/Buttons.vala:113
+msgid "Pin to panel"
+msgstr "Encasta al plafó"
+
+#: src/applets/icon-tasklist/Buttons.vala:114
+#: src/applets/icon-tasklist/Buttons.vala:483
+msgid "Unpin from panel"
+msgstr "Desencasta del plafó"
+
+#: src/applets/places-indicator/PlaceItem.vala:36
+#: src/applets/places-indicator/MountItem.vala:65
+#, c-format
+msgid "Open \"%s\""
+msgstr "Obre %s"
+
+#: src/applets/places-indicator/MountItem.vala:25
+#: src/applets/places-indicator/VolumeItem.vala:27
+msgid "Removable devices"
+msgstr "Dispositius extraïbles"
+
+#: src/applets/places-indicator/MountItem.vala:27
+#: src/applets/places-indicator/VolumeItem.vala:29
+msgid "Local volumes"
+msgstr "Volums locals"
+
+#: src/applets/places-indicator/MountItem.vala:31
+#: src/applets/places-indicator/VolumeItem.vala:33
+msgid "Network folders"
+msgstr "Carpetes de xarxa"
+
+#: src/applets/places-indicator/MountItem.vala:34
+#: src/applets/places-indicator/VolumeItem.vala:36
+msgid "Other"
+msgstr "Altres"
+
+#: src/applets/places-indicator/MountItem.vala:60
+#: src/applets/places-indicator/VolumeItem.vala:57
+msgid "Eject"
+msgstr "Expulsa"
+
+#: src/applets/places-indicator/MountItem.vala:62
+msgid "Unmount"
+msgstr "Desmunta"
+
+#: src/applets/places-indicator/MountItem.vala:78
+#: src/applets/places-indicator/VolumeItem.vala:87
+msgid "You can now safely remove"
+msgstr "Ara podeu desconnectar amb seguretat"
+
+#: src/applets/places-indicator/MountItem.vala:79
+msgid "Unknown Device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:88
+msgid "Error while ejecting device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:105
+msgid "Error while unmounting volume"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicator.vala:85
+#: src/applets/places-indicator/PlacesSection.vala:24
+#: src/applets/places-indicator/PlacesSection.vala:46
+#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Places"
+msgstr "Llocs"
+
+#: src/applets/places-indicator/VolumeItem.vala:43
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr "Munta i obre %s"
+
+#: src/applets/places-indicator/VolumeItem.vala:76
+#: src/applets/places-indicator/VolumeItem.vala:121
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:119
+msgid "The password you entered is incorrect"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:123
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:39
+msgid "Volume is in use by other processes"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:45
+msgid "Operation aborted"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:57
+msgid "Type your password"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
+msgid "Nothing to display right now"
+msgstr "Ara no hi ha res per mostrar"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Mount some drives"
+msgstr "Munta alguns dispositius"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Enable more sections"
+msgstr "Habilita més seccions"
+
+#. User Menu Creation
+#: src/applets/user-indicator/UserIndicatorWindow.vala:95
+msgid "User"
+msgstr "Usuari"
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/applets/user-indicator/UserIndicatorWindow.vala:101
+msgid "Lock"
+msgstr "Bloqueja"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:102
+msgid "Suspend"
+msgstr "Suspèn"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "Hibernate"
+msgstr "Hiberna"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:104
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "Reinicia"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:105
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Apaga"
+
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: src/applets/user-indicator/UserIndicatorWindow.vala:179
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "Surt"
+
+#: src/applets/clock/ClockApplet.vala:148
+msgid "Time and date settings"
+msgstr "Paràmetres de la data i l'hora"
+
+#: src/applets/clock/ClockApplet.vala:149
+msgid "Calendar"
+msgstr "Calendari"
+
+#. pack page2
+#: src/applets/clock/ClockApplet.vala:156
+#: src/applets/clock/ClockApplet.vala:187
+msgid "Preferences"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:166
+msgid "Show date"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:171
+msgid "Show seconds"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:177
+msgid "Use 24 hour time"
+msgstr ""
+
+#. Special case, "All"
+#: src/applets/budgie-menu/BudgieMenuWindow.vala:43
+msgid "All"
+msgstr "Tot"
+
+#: src/applets/status/PowerIndicator.vala:91
+msgid "Battery fully charged."
+msgstr "La bateria està totalment carregada."
+
+#: src/applets/status/PowerIndicator.vala:94
+msgid "Unknown"
+msgstr "Desconegut"
+
+#. Set inner charging duration to hours:minutes
+#: src/applets/status/PowerIndicator.vala:103
+msgid "Battery charging"
+msgstr "Carregant la bateria"
+
+#: src/applets/status/PowerIndicator.vala:108
+msgid "Battery remaining"
+msgstr "Càrrega de la bateria"
+
+#: src/applets/status/PowerIndicator.vala:162
+msgid "Show battery percentage"
+msgstr ""
+
+#: src/applets/status/PowerIndicator.vala:170
+msgid "Power settings"
+msgstr "Paràmetres de l'energia"
+
+#: src/applets/status/SoundIndicator.vala:120
+msgid "Sound settings"
+msgstr ""
+
+#: src/applets/status/BluetoothIndicator.vala:102
 msgid "Bluetooth is disabled"
 msgstr "El Bluetooth està inhabilitat"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:105
+#: src/applets/status/BluetoothIndicator.vala:106
 msgid "Bluetooth is active"
 msgstr "El Bluetooth està actiu"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:110
+#: src/applets/status/BluetoothIndicator.vala:111
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
 msgstr[0] "Connectat a %d dispositiu"
 msgstr[1] "Connectat a %d dispostius"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:171
+#. Settings button
+#: src/applets/status/BluetoothIndicator.vala:176
 msgid "Bluetooth Settings"
 msgstr "Paràmetres del "
 
-#: ../panel/applets/status/BluetoothIndicator.vala:172
+#. Send files button
+#: src/applets/status/BluetoothIndicator.vala:183
 msgid "Send Files"
 msgstr "Envia fitxers"
 
-#: ../panel/applets/status/BluetoothIndicator.vala:173
+#. Airplane mode
+#: src/applets/status/BluetoothIndicator.vala:193
 msgid "Bluetooth Airplane Mode"
 msgstr "Mode d'avió del "
 
-#: ../panel/applets/status/PowerIndicator.vala:56
-msgid "Battery fully charged."
-msgstr "La bateria està totalment carregada."
+#: src/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr ""
 
-#: ../panel/applets/status/PowerIndicator.vala:59
-msgid "Unknown"
-msgstr "Desconegut"
+#. Allow deletion of the panel
+#: src/applets/workspaces/WorkspaceItem.vala:79
+#: src/panel/settings/settings_panel.vala:252
+msgid "Remove"
+msgstr ""
 
-#. Set inner charging duration to hours:minutes
-#: ../panel/applets/status/PowerIndicator.vala:68
-msgid "Battery charging"
-msgstr "Carregant la bateria"
+#: src/applets/lock-keys/LockKeysApplet.vala:62
+msgid "Caps lock is active"
+msgstr "El bloqueig de majúscules està activat"
 
-#: ../panel/applets/status/PowerIndicator.vala:73
-msgid "Battery remaining"
-msgstr "Càrrega de la bateria"
+#: src/applets/lock-keys/LockKeysApplet.vala:65
+msgid "Caps lock is not active"
+msgstr "El bloqueig de majúscules no està activat"
 
-#: ../panel/applets/status/PowerIndicator.vala:107
-msgid "Power settings"
-msgstr "Paràmetres de l'energia"
+#: src/applets/lock-keys/LockKeysApplet.vala:75
+msgid "Num lock is active"
+msgstr "El bloqueig numèric està activat"
 
-#. User Menu Creation
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:95
-msgid "User"
-msgstr "Usuari"
+#: src/applets/lock-keys/LockKeysApplet.vala:78
+msgid "Num lock is not active"
+msgstr "El bloqueig numèric no està activat"
 
-#. Default to "User" and symbolic icon
-#. The rest
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:101
-msgid "Lock"
-msgstr "Bloqueja"
+#: src/polkit/polkitdialog.vala:131
+msgid "Authentication failed"
+msgstr ""
 
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:102
-msgid "Suspend"
-msgstr "Suspèn"
+#: src/polkit/polkitdialog.vala:230
+msgid "Group:"
+msgstr ""
 
-#: ../panel/applets/user-indicator/UserIndicatorWindow.vala:103
-msgid "Hibernate"
-msgstr "Hiberna"
+#: src/panel/settings/settings_main.vala:41
+msgid "Appearance"
+msgstr "Aparença"
 
-#: ../wm/windowmenu.vala:124
-msgid "Minimize"
-msgstr "Minimitza"
+#: src/panel/settings/settings_main.vala:42
+msgid "Panels"
+msgstr ""
 
-#: ../wm/windowmenu.vala:129
-msgid "Unmaximize"
-msgstr "Desmaximitza"
+#: src/panel/settings/settings_main.vala:43
+msgid "Session"
+msgstr ""
 
-#: ../wm/windowmenu.vala:134
-msgid "Maximize"
-msgstr "Maximitza"
+#. Have to override wmclass for pinning support
+#: src/panel/settings/settings_main.vala:51
+msgid "Budgie Settings"
+msgstr "Paràmetres del Budgie"
 
-#: ../wm/windowmenu.vala:139
-msgid "Move"
-msgstr "Mou"
+#: src/panel/settings/settings_main.vala:83
+msgid "Create new panel"
+msgstr ""
 
-#: ../wm/windowmenu.vala:144
-msgid "Resize"
-msgstr "Redimensiona"
+#: src/panel/settings/settings_style.vala:34
+msgid "Style"
+msgstr ""
 
-#: ../wm/windowmenu.vala:149
-msgid "Always On Top"
-msgstr "Sempre a dalt"
+#: src/panel/settings/settings_style.vala:44
+msgid "Widgets"
+msgstr ""
 
-#: ../wm/windowmenu.vala:154
-msgid "Close"
-msgstr "Tanca"
+#: src/panel/settings/settings_style.vala:45
+msgid "Set the appearance of window decorations and controls"
+msgstr ""
 
-#: ../wm/wm.vala:515
-msgid "Change background"
-msgstr "Canvia el fons"
+#: src/panel/settings/settings_style.vala:49
+msgid "Icons"
+msgstr ""
 
-#: ../wm/wm.vala:524
-msgid "Settings"
-msgstr "Paràmetres"
+#: src/panel/settings/settings_style.vala:50
+msgid "Set the globally used icon theme"
+msgstr ""
 
-#. End namespace
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
-msgid "Clock"
-msgstr "Rellotge"
+#: src/panel/settings/settings_style.vala:54
+msgid "Cursors"
+msgstr ""
 
-#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
-msgid "Show Desktop Button"
-msgstr "Mostra el botó de l'escriptori"
+#: src/panel/settings/settings_style.vala:55
+msgid "Set the globally used mouse cursor theme"
+msgstr ""
 
-#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
-msgid "Task List"
-msgstr "Llista de tasques"
+#: src/panel/settings/settings_style.vala:63
+msgid "Dark theme"
+msgstr "Tema fosc"
 
-#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
-msgid "Icon Task List"
-msgstr "Icona de la llista de tasques"
+#: src/panel/settings/settings_style.vala:67
+msgid "Built-in theme"
+msgstr "Tema incorporat"
 
-#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Lock Keys Indicator"
-msgstr "Indicador de bloqueig de tecles"
+#: src/panel/settings/settings_style.vala:68
+msgid ""
+"When enabled, the desktop component style will be overriden with the built-"
+"in one"
+msgstr ""
 
-#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Spacer"
-msgstr "Espaiador"
+#: src/panel/settings/settings_style.vala:72
+msgid "Animations"
+msgstr ""
 
-#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Workspace Switcher"
-msgstr "Canviador d'espais de treball"
+#: src/panel/settings/settings_style.vala:73
+msgid "Control whether windows and controls use animations"
+msgstr ""
 
-#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System Tray"
-msgstr "Safata del sistema"
+#: src/panel/settings/settings_applet_chooser.vala:79
+msgid "Choose an applet"
+msgstr ""
 
-#: ../panel/applets/status/StatusApplet.plugin.in.h:1
-msgid "Status Indicator"
-msgstr "Indicador d'estat"
+#: src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:198
+#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "Cancel·la"
 
-#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
-msgid "Budgie Menu"
-msgstr "Menú del Budgie"
+#: src/panel/settings/settings_applet_chooser.vala:85
+#: src/panel/settings/settings_panel_applets.vala:245
+msgid "Add applet"
+msgstr ""
 
-#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
-msgid "Separator"
-msgstr "Separador"
+#: src/panel/settings/settings_autostart.vala:136
+msgid "Untitled"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:23
-#: ../panel/applets/places-indicator/VolumeItem.vala:23
-msgid "Removable devices"
-msgstr "Dispositius extraïbles"
+#: src/panel/settings/settings_autostart.vala:143
+msgid "No description"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:25
-#: ../panel/applets/places-indicator/VolumeItem.vala:25
-msgid "Local volumes"
-msgstr "Volums locals"
+#: src/panel/settings/settings_autostart.vala:166
+msgid "running"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:29
-#: ../panel/applets/places-indicator/VolumeItem.vala:29
-msgid "Network folders"
-msgstr "Carpetes de xarxa"
+#: src/panel/settings/settings_autostart.vala:189
+msgid "Applications"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:49
-#: ../panel/applets/places-indicator/VolumeItem.vala:46
-msgid "Eject"
-msgstr "Expulsa"
+#: src/panel/settings/settings_autostart.vala:199
+#: src/panel/settings/settings_autostart.vala:362
+msgid "Add"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:51
-msgid "Unmount"
-msgstr "Desmunta"
+#: src/panel/settings/settings_autostart.vala:356
+#: src/panel/settings/settings_autostart.vala:389
+msgid "Command"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:54
-#: ../panel/applets/places-indicator/PlaceItem.vala:27
-#, c-format
-msgid "Open \"%s\""
-msgstr "Obre %s"
+#: src/panel/settings/settings_autostart.vala:372
+msgid "An entry with that title already exists"
+msgstr ""
 
-#: ../panel/applets/places-indicator/MountItem.vala:78
-#: ../panel/applets/places-indicator/VolumeItem.vala:53
-msgid "You can now safely remove"
-msgstr "Ara podeu desconnectar amb seguretat"
+#: src/panel/settings/settings_autostart.vala:375
+msgid "Title"
+msgstr ""
 
-#: ../panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr "Llocs"
+#: src/panel/settings/settings_autostart.vala:379
+#: src/panel/settings/settings_autostart.vala:393
+msgid "Required"
+msgstr ""
 
-#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
-msgid "Nothing to display right now"
-msgstr "Ara no hi ha res per mostrar"
+#: src/panel/settings/settings_autostart.vala:382
+msgid "Description"
+msgstr ""
 
-#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
-msgid "Mount some drives"
-msgstr "Munta alguns dispositius"
+#: src/panel/settings/settings_autostart.vala:386
+msgid "Optional"
+msgstr ""
 
-#: ../panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
-msgid "Enable more sections"
-msgstr "Habilita més seccions"
+#: src/panel/settings/settings_autostart.vala:450
+msgid "Autostart"
+msgstr ""
 
-#: ../panel/applets/places-indicator/VolumeItem.vala:64
-#, c-format
-msgid "Mount and open \"%s\""
-msgstr "Munta i obre %s"
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Finestres"
 
-#: ../panel/applets/places-indicator/settings.ui.h:1
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Disposició dels botons"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Right (standard)"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:47
+#: src/panel/settings/settings_panel.vala:150
+msgid "Left"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:59
+msgid "Attach modal dialogs to windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:60
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:65
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Disable unredirection of windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:71
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:32
+msgid "Fonts"
+msgstr "Lletres"
+
+#: src/panel/settings/settings_fonts.vala:43
+msgid "Window Titles"
+msgstr "Títols de les finestres"
+
+#: src/panel/settings/settings_fonts.vala:44
+msgid "Set the font used in the titlebars of applications"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:50
+msgid "Documents"
+msgstr "Documents"
+
+#: src/panel/settings/settings_fonts.vala:51
+msgid "Set the display font used by for documents"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:57
+msgid "Interface"
+msgstr "Interfície"
+
+#: src/panel/settings/settings_fonts.vala:58
+msgid "Set the primary font used by application controls"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:64
+msgid "Monospace"
+msgstr "Monoespai"
+
+#: src/panel/settings/settings_fonts.vala:65
+msgid "Set the fixed-width font used by text dominant applications"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:90
+msgid "Top Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Right Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:94
+msgid "Left Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:96
+msgid "Bottom Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:101
+msgid "Top Panel"
+msgstr "Plafó de dalt"
+
+#: src/panel/settings/settings_panel.vala:103
+msgid "Right Panel"
+msgstr "Plafó dret"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Left Panel"
+msgstr "Plafó esquerre"
+
+#: src/panel/settings/settings_panel.vala:107
+msgid "Bottom Panel"
+msgstr "Botó del plafó"
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Top"
+msgstr "A dalt"
+
+#: src/panel/settings/settings_panel.vala:148
+msgid "Right"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:152
+msgid "Bottom"
+msgstr "A baix"
+
+#: src/panel/settings/settings_panel.vala:163
+msgid "Always"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:165
+msgid "Dynamic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:168
+msgid "None"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:179
+msgid "Automatic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:181
+msgid "Intelligent"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:184
+msgid "Never"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:200
+msgid "Position"
+msgstr "Posició"
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:209
+msgid "Size"
+msgstr "Mida"
+
+#: src/panel/settings/settings_panel.vala:210
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:217
+msgid "Automatically hide"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:218
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:225
+msgid "Transparency"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:226
+msgid "Control when this panel should have a solid background"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:231
+msgid "Shadow"
+msgstr "Ombra"
+
+#: src/panel/settings/settings_panel.vala:232
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:238
+msgid "Stylize regions"
+msgstr "Estilitza les regions"
+
+#: src/panel/settings/settings_panel.vala:239
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Dock mode"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:247
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Delete panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:259
+msgid ""
+"Permanently remove the panel and applets from the screen. This action cannot"
+" be undone"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:22
+msgid "Configure applet"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Choose a new applet to add to this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:260
+msgid "No settings available"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:411
+msgid "Start"
+msgstr "Inici"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Center"
+msgstr "Centre"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "End"
+msgstr "Final"
+
+#: src/panel/settings/settings_desktop.vala:33
+msgid "Desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:43
+msgid "Desktop Icons"
+msgstr "Icones de l'escriptori"
+
+#: src/panel/settings/settings_desktop.vala:44
+msgid "Control whether to allow launchers and icons on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:49
+msgid "Home directory"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:50
+msgid "Add a shortcut to your home directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:55
+msgid "Network servers"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:56
+msgid "Add a shortcut to your local network servers on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:61
+msgid "Trash"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:62
+msgid "Add a shortcut to the Trash directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:67
+msgid "Mounted volumes"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:68
+msgid "Mounted volumes & drives will appear on the desktop"
+msgstr ""
+
+#: src/daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Segur que voleu acabar la sessió?"
+
+#: src/daemon/tabswitcher.ui.h:1
+msgid " - "
+msgstr ""
+
+#: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
 msgstr "Mostra'n l'etiqueta"
 
-#: ../panel/applets/places-indicator/settings.ui.h:2
+#: src/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
 msgstr "Mostra els llocs"
 
-#: ../panel/applets/places-indicator/settings.ui.h:3
+#: src/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr "Mostra les carpetes de xarxa"
+
+#: src/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
 msgstr "Mostra els dispositius extraïbles"
 
-#: ../panel/applets/places-indicator/settings.ui.h:4
-msgid "Show network folders"
-msgstr "Mostra les carpetes de xarxa"
+#: src/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:1
+#: src/applets/night-light/NightLight.plugin.in.h:1
+msgid "Night Light"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:1
+msgid "Show Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:2
+msgid "Compact Mode"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:3
+msgid "Show Headers"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:4
+msgid "Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:5
+msgid "Roll-over mouse"
+msgstr ""
+
+#: src/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Mida de l'espaiador"
+
+#: src/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:5
+msgid "Authenticate"
+msgstr ""
+
+#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Escriptori Budgie"
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Aquesta sessió us fa entrar a l'escriptori Budgie"
+
+#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Indicador de la disposició del teclat"
+
+#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "Mostra el botó de l'escriptori"
+
+#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Control de la barra lateral Raven"
+
+#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "Icona de la llista de tasques"
+
+#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Indicador de l'usuari"
+
+#: src/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "Rellotge"
+
+#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Menú del Budgie"
+
+#: src/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "Safata del sistema"
+
+#: src/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "Separador"
+
+#: src/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "Indicador d'estat"
+
+#: src/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "Espaiador"
+
+#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "Llista de tasques"
+
+#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "Canviador d'espais de treball"
+
+#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Indicador de bloqueig de tecles"
+
+#: src/panel/budgie-panel.desktop.in.h:1
+msgid "Budgie Panel"
+msgstr ""
+
+#: src/panel/budgie-panel.desktop.in.h:2
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:1
+msgid "Budgie Desktop Settings"
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behaviour"
+msgstr ""

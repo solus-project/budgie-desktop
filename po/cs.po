@@ -1,319 +1,986 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
-# Martin Furejta <hackis.bell@gmail.com>, 2015
+# Blendcore <hackis.bell@gmail.com>, 2016
+# Blendcore <hackis.bell@gmail.com>, 2015
+# Martin Orszulik <orszulik.m@outlook.com>, 2016
 # Michal Vlasák, 2015
-# Michal Vlasák <lahcim8@seznam.cz>, 2015
+# Michal Vlasák <lahcim8@seznam.cz>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-29 22:01+0000\n"
-"PO-Revision-Date: 2015-12-31 10:10+0000\n"
-"Last-Translator: Martin Furejta <hackis.bell@gmail.com>\n"
-"Language-Team: Czech (http://www.transifex.com/solus-project/budgie-desktop/language/cs/)\n"
+"POT-Creation-Date: 2017-07-05 23:55+0100\n"
+"PO-Revision-Date: 2017-07-05 22:56+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
+"Language-Team: Czech (http://www.transifex.com/budgie-desktop/budgie-desktop/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../raven/main_view.vala:72 ../raven/ui/panel.ui.h:8
-msgid "Applets"
-msgstr "Applety"
+#: src/raven/notifications_view.vala:79
+msgid "Nothing to see here"
+msgstr "Nic tady není"
 
-#: ../raven/main_view.vala:75
-#: ../panel/applets/notifications/NotificationsApplet.plugin.in.h:1
-msgid "Notifications"
-msgstr "Oznámení"
-
-#: ../raven/settings_view.vala:354
-msgid "Top Panel"
-msgstr "Horní Panel"
-
-#: ../raven/settings_view.vala:356
-msgid "Right Panel"
-msgstr "Pravý Panel"
-
-#: ../raven/settings_view.vala:358
-msgid "Left Panel"
-msgstr "Levý Panel"
-
-#: ../raven/settings_view.vala:360
-msgid "Bottom Panel"
-msgstr "Dolní Panel"
-
-#: ../raven/settings_view.vala:593
-msgid "Start"
-msgstr "Začátek"
-
-#: ../raven/settings_view.vala:596
-msgid "Center"
-msgstr "Střed"
-
-#: ../raven/settings_view.vala:599
-msgid "End"
-msgstr "Konec"
-
-#: ../raven/settings_view.vala:877
-msgid "General"
-msgstr "Obecné"
-
-#: ../raven/settings_view.vala:889 ../raven/settings_view.vala:890
-msgid "Panel"
-msgstr "Panel"
-
-#: ../raven/notifications_view.vala:410
-#, c-format
-msgid "%u new notifications"
-msgstr "%u nových oznámení"
-
-#: ../raven/notifications_view.vala:412
-msgid "1 new notification"
-msgstr "1 nové oznámení"
-
-#: ../raven/notifications_view.vala:414
-msgid "No new notifications"
-msgstr "Žádná nová oznámení"
-
-#: ../raven/sound.vala:90
-msgid "Output"
-msgstr "Výstupní"
-
-#: ../raven/sound.vala:107
-msgid "Input"
-msgstr "Vstupní"
-
-#. End class
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../panel/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr "Velikost mezery"
-
-#: ../raven/ui/settings.ui.h:1
-msgid "Budgie Settings"
-msgstr "Budgie Nastavení"
-
-#: ../raven/ui/settings.ui.h:2
-msgid "Exit"
-msgstr "Zpět"
-
-#: ../raven/ui/applets.ui.h:1
-msgid "Add new applet"
-msgstr "Přidat nový applet"
-
-#: ../raven/ui/appearance.ui.h:1
-msgid "Appearance"
-msgstr "Vzhled"
-
-#: ../raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "Tmavý motiv"
-
-#: ../raven/ui/appearance.ui.h:3
-msgid "Use the dark theme"
-msgstr "Použít tmavý motiv"
-
-#: ../raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
-msgstr "Motiv Oken"
-
-#: ../raven/ui/appearance.ui.h:5
-msgid "Select a GTK+ theme"
-msgstr "Vyberte GTK+ motiv"
-
-#: ../raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "Motiv Ikon"
-
-#: ../raven/ui/appearance.ui.h:7
-msgid "Select an icon theme"
-msgstr "Vyberte motiv ikon"
-
-#: ../raven/ui/appearance.ui.h:8
-msgid "Built-in theme"
-msgstr "Vestavěný motiv"
-
-#: ../raven/ui/appearance.ui.h:9
-msgid "Override defaults"
-msgstr "Přepsat výchozí"
-
-#: ../raven/ui/panel.ui.h:1
-msgid "Panel 1\n"
-msgstr "Panel 1\n"
-
-#: ../raven/ui/panel.ui.h:3
-msgid "Manage Panels"
-msgstr "Správa panelů"
-
-#: ../raven/ui/panel.ui.h:4
-msgid "Position"
-msgstr "Pozice"
-
-#: ../raven/ui/panel.ui.h:5
-msgid "Size"
-msgstr "Velikost"
-
-#: ../raven/ui/panel.ui.h:6
-msgid "Shadow"
-msgstr "Stín"
-
-#: ../raven/ui/panel.ui.h:7
-msgid "Autohide policy"
-msgstr "Automatické skrývání"
-
-#: ../session/budgie-desktop.desktop.in.in.h:1
-#: ../session/budgie-desktop.session.in.in.h:1
-msgid "Budgie Desktop"
-msgstr "Prostředí Budgie"
-
-#: ../session/budgie-desktop.desktop.in.in.h:2
-msgid "This session logs you into the Budgie Desktop"
-msgstr "Tato sekce vás přihlásí do desktopového prostředí Budgie"
-
-#: ../panel/applets/clock/ClockApplet.vala:56
-msgid "Time and date settings"
-msgstr "Nastavení data a času"
-
-#: ../panel/applets/clock/ClockApplet.vala:57
-msgid "Calendar"
-msgstr "Kalendář"
-
-#: ../panel/applets/budgie-menu/BudgieMenuWindow.vala:34
-msgid "All"
-msgstr "Vše"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:53
-msgid "Caps lock is active"
-msgstr "Caps Lock je aktivní"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:56
-msgid "Caps lock is not active"
-msgstr "Caps Lock není aktivní"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:66
-msgid "Num lock is active"
-msgstr "Num lock je aktivní"
-
-#: ../panel/applets/lock-keys/LockKeysApplet.vala:69
-msgid "Num lock is not active"
-msgstr "Num lock není aktivní"
-
-#: ../panel/applets/notifications/NotificationsApplet.vala:77
+#: src/raven/notifications_view.vala:582
+#: src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u nepřečtených oznámení"
 
-#: ../panel/applets/notifications/NotificationsApplet.vala:79
+#: src/raven/notifications_view.vala:584
+#: src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 nepřečtené oznámení"
 
-#: ../panel/applets/notifications/NotificationsApplet.vala:81
+#: src/raven/notifications_view.vala:586
+#: src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Žádná nepřečtená oznámení"
 
-#: ../panel/applets/show-desktop/ShowDesktopApplet.vala:33
-msgid "Toggle the desktop"
-msgstr "Zobrazit Plochu"
+#: src/raven/notifications_view.vala:710
+msgid "No new notifications"
+msgstr "Žádná nová oznámení"
 
-#: ../wm/windowmenu.vala:124
-msgid "Minimize"
-msgstr "Minimalizovat"
+#: src/raven/sound.vala:78
+msgid "Output"
+msgstr "Výstupní"
 
-#: ../wm/windowmenu.vala:129
-msgid "Unmaximize"
-msgstr "Obnovit"
+#: src/raven/sound.vala:95
+msgid "Input"
+msgstr "Vstupní"
 
-#: ../wm/windowmenu.vala:134
-msgid "Maximize"
-msgstr "Maximalizovat"
+#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:66
+msgid "Applets"
+msgstr "Applety"
 
-#: ../wm/windowmenu.vala:139
-msgid "Move"
-msgstr "Přesunout"
+#: src/raven/main_view.vala:58
+#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "Oznámení"
 
-#: ../wm/windowmenu.vala:144
-msgid "Resize"
-msgstr "Změnit velikost"
+#. translators:
+#. * The number of sound outputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1873
+#, c-format
+msgid "%u Output"
+msgid_plural "%u Outputs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: ../wm/windowmenu.vala:149
-msgid "Always On Top"
-msgstr "Vždy na vrchu"
+#. translators:
+#. * The number of sound inputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1883
+#, c-format
+msgid "%u Input"
+msgid_plural "%u Inputs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: ../wm/windowmenu.vala:154
-msgid "Close"
-msgstr "Zavřít"
+#: src/daemon/endsession.vala:172
+msgid "Log out"
+msgstr "Odhlásit se"
 
-#: ../wm/wm.vala:363
-msgid "Change background\\u2026"
-msgstr "Změnit pozadí\\u2026"
+#: src/daemon/endsession.vala:176
+msgid "Restart device"
+msgstr "Restartovat"
 
-#: ../wm/wm.vala:372
+#: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Vypnout"
+
+#: src/daemon/menus.vala:52
+msgid "Change background"
+msgstr "Změnit pozadí"
+
+#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:67
 msgid "Settings"
 msgstr "Nastavení"
 
-#. End namespace
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../panel/applets/clock/ClockApplet.plugin.in.h:1
-msgid "Clock"
-msgstr "Hodiny"
+#: src/applets/show-desktop/ShowDesktopApplet.vala:33
+msgid "Toggle the desktop"
+msgstr "Zobrazit Plochu"
 
-#: ../panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+#: src/applets/icon-tasklist/Buttons.vala:113
+msgid "Pin to panel"
+msgstr "Připnout k panelu"
+
+#: src/applets/icon-tasklist/Buttons.vala:114
+#: src/applets/icon-tasklist/Buttons.vala:483
+msgid "Unpin from panel"
+msgstr "Odepnout z panelu"
+
+#: src/applets/places-indicator/PlaceItem.vala:36
+#: src/applets/places-indicator/MountItem.vala:65
+#, c-format
+msgid "Open \"%s\""
+msgstr "Otevřít \"%s\""
+
+#: src/applets/places-indicator/MountItem.vala:25
+#: src/applets/places-indicator/VolumeItem.vala:27
+msgid "Removable devices"
+msgstr "Odnímatelná zařízení"
+
+#: src/applets/places-indicator/MountItem.vala:27
+#: src/applets/places-indicator/VolumeItem.vala:29
+msgid "Local volumes"
+msgstr "Místní oddíly"
+
+#: src/applets/places-indicator/MountItem.vala:31
+#: src/applets/places-indicator/VolumeItem.vala:33
+msgid "Network folders"
+msgstr "Síťové složky"
+
+#: src/applets/places-indicator/MountItem.vala:34
+#: src/applets/places-indicator/VolumeItem.vala:36
+msgid "Other"
+msgstr "Ostatní"
+
+#: src/applets/places-indicator/MountItem.vala:60
+#: src/applets/places-indicator/VolumeItem.vala:57
+msgid "Eject"
+msgstr "Odebrat"
+
+#: src/applets/places-indicator/MountItem.vala:62
+msgid "Unmount"
+msgstr "Odpojit"
+
+#: src/applets/places-indicator/MountItem.vala:78
+#: src/applets/places-indicator/VolumeItem.vala:87
+msgid "You can now safely remove"
+msgstr "Můžete nyní bezpečně odebrat"
+
+#: src/applets/places-indicator/MountItem.vala:79
+msgid "Unknown Device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:88
+msgid "Error while ejecting device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:105
+msgid "Error while unmounting volume"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicator.vala:85
+#: src/applets/places-indicator/PlacesSection.vala:24
+#: src/applets/places-indicator/PlacesSection.vala:46
+#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Places"
+msgstr "Místa"
+
+#: src/applets/places-indicator/VolumeItem.vala:43
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr "Připojit a otevřít \"%s\""
+
+#: src/applets/places-indicator/VolumeItem.vala:76
+#: src/applets/places-indicator/VolumeItem.vala:121
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:119
+msgid "The password you entered is incorrect"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:123
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:39
+msgid "Volume is in use by other processes"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:45
+msgid "Operation aborted"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:57
+msgid "Type your password"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
+msgid "Nothing to display right now"
+msgstr "Není tu nic k zobrazení"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Mount some drives"
+msgstr "Připojte disky"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Enable more sections"
+msgstr "Povolit více sekcí"
+
+#. User Menu Creation
+#: src/applets/user-indicator/UserIndicatorWindow.vala:95
+msgid "User"
+msgstr "Uživatel"
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/applets/user-indicator/UserIndicatorWindow.vala:101
+msgid "Lock"
+msgstr "Uzamknout"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:102
+msgid "Suspend"
+msgstr "Režim spánku"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "Hibernate"
+msgstr "Režim hibernace"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:104
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "Restartovat"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:105
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Vypnout"
+
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: src/applets/user-indicator/UserIndicatorWindow.vala:179
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "Odhlásit se"
+
+#: src/applets/clock/ClockApplet.vala:148
+msgid "Time and date settings"
+msgstr "Nastavení data a času"
+
+#: src/applets/clock/ClockApplet.vala:149
+msgid "Calendar"
+msgstr "Kalendář"
+
+#. pack page2
+#: src/applets/clock/ClockApplet.vala:156
+#: src/applets/clock/ClockApplet.vala:187
+msgid "Preferences"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:166
+msgid "Show date"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:171
+msgid "Show seconds"
+msgstr ""
+
+#: src/applets/clock/ClockApplet.vala:177
+msgid "Use 24 hour time"
+msgstr ""
+
+#. Special case, "All"
+#: src/applets/budgie-menu/BudgieMenuWindow.vala:43
+msgid "All"
+msgstr "Vše"
+
+#: src/applets/status/PowerIndicator.vala:91
+msgid "Battery fully charged."
+msgstr "Baterie je plně nabita."
+
+#: src/applets/status/PowerIndicator.vala:94
+msgid "Unknown"
+msgstr "Neznámý"
+
+#. Set inner charging duration to hours:minutes
+#: src/applets/status/PowerIndicator.vala:103
+msgid "Battery charging"
+msgstr "Nabíjení baterie"
+
+#: src/applets/status/PowerIndicator.vala:108
+msgid "Battery remaining"
+msgstr "Baterie zbývá"
+
+#: src/applets/status/PowerIndicator.vala:162
+msgid "Show battery percentage"
+msgstr ""
+
+#: src/applets/status/PowerIndicator.vala:170
+msgid "Power settings"
+msgstr "Nastavení spotřeby"
+
+#: src/applets/status/SoundIndicator.vala:120
+msgid "Sound settings"
+msgstr ""
+
+#: src/applets/status/BluetoothIndicator.vala:102
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth je vypnuto"
+
+#: src/applets/status/BluetoothIndicator.vala:106
+msgid "Bluetooth is active"
+msgstr "Bluetooth je zapnuto"
+
+#: src/applets/status/BluetoothIndicator.vala:111
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Připojen k %d zařízení"
+msgstr[1] "Připojen ke %d zařízením"
+msgstr[2] "Připojen ke %d zařízení(m)"
+
+#. Settings button
+#: src/applets/status/BluetoothIndicator.vala:176
+msgid "Bluetooth Settings"
+msgstr "Nastavení Bluetooth"
+
+#. Send files button
+#: src/applets/status/BluetoothIndicator.vala:183
+msgid "Send Files"
+msgstr "Poslat soubory"
+
+#. Airplane mode
+#: src/applets/status/BluetoothIndicator.vala:193
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth režim letadlo"
+
+#: src/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr ""
+
+#. Allow deletion of the panel
+#: src/applets/workspaces/WorkspaceItem.vala:79
+#: src/panel/settings/settings_panel.vala:252
+msgid "Remove"
+msgstr ""
+
+#: src/applets/lock-keys/LockKeysApplet.vala:62
+msgid "Caps lock is active"
+msgstr "Caps Lock je aktivní"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:65
+msgid "Caps lock is not active"
+msgstr "Caps Lock není aktivní"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:75
+msgid "Num lock is active"
+msgstr "Num lock je aktivní"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:78
+msgid "Num lock is not active"
+msgstr "Num lock není aktivní"
+
+#: src/polkit/polkitdialog.vala:131
+msgid "Authentication failed"
+msgstr ""
+
+#: src/polkit/polkitdialog.vala:230
+msgid "Group:"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:41
+msgid "Appearance"
+msgstr "Vzhled"
+
+#: src/panel/settings/settings_main.vala:42
+msgid "Panels"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:43
+msgid "Session"
+msgstr ""
+
+#. Have to override wmclass for pinning support
+#: src/panel/settings/settings_main.vala:51
+msgid "Budgie Settings"
+msgstr "Budgie Nastavení"
+
+#: src/panel/settings/settings_main.vala:83
+msgid "Create new panel"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:34
+msgid "Style"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:44
+msgid "Widgets"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:45
+msgid "Set the appearance of window decorations and controls"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:49
+msgid "Icons"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:50
+msgid "Set the globally used icon theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:54
+msgid "Cursors"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:55
+msgid "Set the globally used mouse cursor theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Dark theme"
+msgstr "Tmavý motiv"
+
+#: src/panel/settings/settings_style.vala:67
+msgid "Built-in theme"
+msgstr "Vestavěný motiv"
+
+#: src/panel/settings/settings_style.vala:68
+msgid ""
+"When enabled, the desktop component style will be overriden with the built-"
+"in one"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Animations"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:73
+msgid "Control whether windows and controls use animations"
+msgstr ""
+
+#: src/panel/settings/settings_applet_chooser.vala:79
+msgid "Choose an applet"
+msgstr ""
+
+#: src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:198
+#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: src/panel/settings/settings_applet_chooser.vala:85
+#: src/panel/settings/settings_panel_applets.vala:245
+msgid "Add applet"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:136
+msgid "Untitled"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:143
+msgid "No description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:166
+msgid "running"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:189
+msgid "Applications"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:199
+#: src/panel/settings/settings_autostart.vala:362
+msgid "Add"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:356
+#: src/panel/settings/settings_autostart.vala:389
+msgid "Command"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:372
+msgid "An entry with that title already exists"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:375
+msgid "Title"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:379
+#: src/panel/settings/settings_autostart.vala:393
+msgid "Required"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:382
+msgid "Description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:386
+msgid "Optional"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:450
+msgid "Autostart"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Okna"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Rozložení tlačítek"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Right (standard)"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:47
+#: src/panel/settings/settings_panel.vala:150
+msgid "Left"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:59
+msgid "Attach modal dialogs to windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:60
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:65
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Disable unredirection of windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:71
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:32
+msgid "Fonts"
+msgstr "Písmo"
+
+#: src/panel/settings/settings_fonts.vala:43
+msgid "Window Titles"
+msgstr "Titulek okna"
+
+#: src/panel/settings/settings_fonts.vala:44
+msgid "Set the font used in the titlebars of applications"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:50
+msgid "Documents"
+msgstr "Dokumenty"
+
+#: src/panel/settings/settings_fonts.vala:51
+msgid "Set the display font used by for documents"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:57
+msgid "Interface"
+msgstr "Prostředí"
+
+#: src/panel/settings/settings_fonts.vala:58
+msgid "Set the primary font used by application controls"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:64
+msgid "Monospace"
+msgstr "Monospace"
+
+#: src/panel/settings/settings_fonts.vala:65
+msgid "Set the fixed-width font used by text dominant applications"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:90
+msgid "Top Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Right Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:94
+msgid "Left Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:96
+msgid "Bottom Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:101
+msgid "Top Panel"
+msgstr "Horní Panel"
+
+#: src/panel/settings/settings_panel.vala:103
+msgid "Right Panel"
+msgstr "Pravý Panel"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Left Panel"
+msgstr "Levý Panel"
+
+#: src/panel/settings/settings_panel.vala:107
+msgid "Bottom Panel"
+msgstr "Dolní Panel"
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Top"
+msgstr "Nahoře"
+
+#: src/panel/settings/settings_panel.vala:148
+msgid "Right"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:152
+msgid "Bottom"
+msgstr "Dole"
+
+#: src/panel/settings/settings_panel.vala:163
+msgid "Always"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:165
+msgid "Dynamic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:168
+msgid "None"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:179
+msgid "Automatic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:181
+msgid "Intelligent"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:184
+msgid "Never"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:200
+msgid "Position"
+msgstr "Pozice"
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:209
+msgid "Size"
+msgstr "Velikost"
+
+#: src/panel/settings/settings_panel.vala:210
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:217
+msgid "Automatically hide"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:218
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:225
+msgid "Transparency"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:226
+msgid "Control when this panel should have a solid background"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:231
+msgid "Shadow"
+msgstr "Stín"
+
+#: src/panel/settings/settings_panel.vala:232
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:238
+msgid "Stylize regions"
+msgstr "Stylizovat oblasti"
+
+#: src/panel/settings/settings_panel.vala:239
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Dock mode"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:247
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Delete panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:259
+msgid ""
+"Permanently remove the panel and applets from the screen. This action cannot"
+" be undone"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:22
+msgid "Configure applet"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Choose a new applet to add to this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:260
+msgid "No settings available"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:411
+msgid "Start"
+msgstr "Začátek"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Center"
+msgstr "Střed"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "End"
+msgstr "Konec"
+
+#: src/panel/settings/settings_desktop.vala:33
+msgid "Desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:43
+msgid "Desktop Icons"
+msgstr "Ikony na ploše"
+
+#: src/panel/settings/settings_desktop.vala:44
+msgid "Control whether to allow launchers and icons on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:49
+msgid "Home directory"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:50
+msgid "Add a shortcut to your home directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:55
+msgid "Network servers"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:56
+msgid "Add a shortcut to your local network servers on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:61
+msgid "Trash"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:62
+msgid "Add a shortcut to the Trash directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:67
+msgid "Mounted volumes"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:68
+msgid "Mounted volumes & drives will appear on the desktop"
+msgstr ""
+
+#: src/daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Jste si jisti, že chcete ukončit relaci?"
+
+#: src/daemon/tabswitcher.ui.h:1
+msgid " - "
+msgstr ""
+
+#: src/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr "Zobrazit štítek"
+
+#: src/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr "Zobrazit místa"
+
+#: src/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr "Zobrazit síťové složky"
+
+#: src/applets/places-indicator/settings.ui.h:4
+msgid "Show removable drives"
+msgstr "Zobrazit odnímatelná zařízení"
+
+#: src/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:1
+#: src/applets/night-light/NightLight.plugin.in.h:1
+msgid "Night Light"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:1
+msgid "Show Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:2
+msgid "Compact Mode"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:3
+msgid "Show Headers"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:4
+msgid "Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:5
+msgid "Roll-over mouse"
+msgstr ""
+
+#: src/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Velikost mezery"
+
+#: src/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:5
+msgid "Authenticate"
+msgstr ""
+
+#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Prostředí Budgie"
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Tato sekce vás přihlásí do desktopového prostředí Budgie"
+
+#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Indikátor rozložení klávesnice"
+
+#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
 msgstr "Tlačítko Zobrazení Plochy"
 
-#: ../panel/applets/tasklist/TasklistApplet.plugin.in.h:1
-msgid "Task List"
-msgstr "Seznam Procesů"
+#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Ovládání postranního panelu Raven"
 
-#: ../panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
 msgstr "Ikonový Seznam Procesů"
 
-#: ../panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Lock Keys Indicator"
-msgstr "Indikátor Klávesy Lock"
+#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Uživatelský indikátor"
 
-#: ../panel/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Spacer"
-msgstr "Mezerník"
+#: src/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "Hodiny"
 
-#: ../panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Workspace Switcher"
-msgstr "Přepínač Pracovních Ploch"
-
-#: ../panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System Tray"
-msgstr "Systémová Lišta"
-
-#: ../panel/applets/status/StatusApplet.plugin.in.h:1
-msgid "Status Indicator"
-msgstr "Indikátor Stavu"
-
-#: ../panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
 msgstr "Menu Budgie"
 
-#: ../panel/applets/separator/SeparatorApplet.plugin.in.h:1
+#: src/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "Systémová Lišta"
+
+#: src/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
 msgstr "Oddělovač"
+
+#: src/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "Indikátor Stavu"
+
+#: src/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "Mezerník"
+
+#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "Seznam Procesů"
+
+#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "Přepínač Pracovních Ploch"
+
+#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Indikátor Klávesy Lock"
+
+#: src/panel/budgie-panel.desktop.in.h:1
+msgid "Budgie Panel"
+msgstr ""
+
+#: src/panel/budgie-panel.desktop.in.h:2
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:1
+msgid "Budgie Desktop Settings"
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behaviour"
+msgstr ""

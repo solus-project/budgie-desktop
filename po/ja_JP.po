@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
 # ふうせん Fu-sen. | BALLOON a.k.a. Fu-sen., 2016
@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-26 04:02+0100\n"
-"PO-Revision-Date: 2017-04-16 09:51+0000\n"
-"Last-Translator: あわしろいくや <ikunya@gmail.com>\n"
+"POT-Creation-Date: 2017-07-05 23:55+0100\n"
+"PO-Revision-Date: 2017-07-05 22:56+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,572 +22,959 @@ msgstr ""
 "Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/daemon/endsession.vala:167
-msgid "Log out"
-msgstr "ログアウト"
-
-#: ../src/daemon/endsession.vala:171
-msgid "Restart device"
-msgstr "デバイスの再起動"
-
-#: ../src/daemon/endsession.vala:183 ../src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "電源オフ"
-
-#: ../src/raven/main_view.vala:72 ../src/raven/ui/panel.ui.h:7
-msgid "Applets"
-msgstr "アプレット"
-
-#: ../src/raven/main_view.vala:75
-#: ../src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
-msgid "Notifications"
-msgstr "通知"
-
-#: ../src/raven/settings_view.vala:266
-msgid "Top"
-msgstr "上"
-
-#: ../src/raven/settings_view.vala:268
-msgid "Bottom"
-msgstr "下"
-
-#: ../src/raven/settings_view.vala:376
-msgid "Top Panel"
-msgstr "上パネル"
-
-#: ../src/raven/settings_view.vala:378
-msgid "Right Panel"
-msgstr "右パネル"
-
-#: ../src/raven/settings_view.vala:380
-msgid "Left Panel"
-msgstr "左パネル"
-
-#: ../src/raven/settings_view.vala:382
-msgid "Bottom Panel"
-msgstr "下パネル"
-
-#: ../src/raven/settings_view.vala:616
-msgid "Start"
-msgstr "始点"
-
-#: ../src/raven/settings_view.vala:619
-msgid "Center"
-msgstr "中央"
-
-#: ../src/raven/settings_view.vala:622
-msgid "End"
-msgstr "終点"
-
-#. Appearance expander
-#: ../src/raven/settings_view.vala:960
-msgid "Appearance"
-msgstr "外観"
-
-#: ../src/raven/settings_view.vala:967
-msgid "Background"
-msgstr "背景"
-
-#: ../src/raven/settings_view.vala:974
-msgid "Fonts"
-msgstr "フォント"
-
-#: ../src/raven/settings_view.vala:980
-msgid "Windows"
-msgstr "ウィンドウ"
-
-#: ../src/raven/settings_view.vala:984
-msgid "General"
-msgstr "全般"
-
-#: ../src/raven/settings_view.vala:995 ../src/raven/settings_view.vala:996
-msgid "Panel"
-msgstr "パネル"
-
-#: ../src/raven/notifications_view.vala:74
+#: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
 msgstr "表示することはありません"
 
-#: ../src/raven/notifications_view.vala:516
-#: ../src/panel/applets/notifications/NotificationsApplet.vala:75
+#: src/raven/notifications_view.vala:582
+#: src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u 個の未読通知があります"
+msgstr "未読通知が %u 件あります"
 
-#: ../src/raven/notifications_view.vala:518
-#: ../src/panel/applets/notifications/NotificationsApplet.vala:77
+#: src/raven/notifications_view.vala:584
+#: src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1個の未読通知があります"
+msgstr "未読通知が1件あります"
 
-#: ../src/raven/notifications_view.vala:520
-#: ../src/panel/applets/notifications/NotificationsApplet.vala:79
+#: src/raven/notifications_view.vala:586
+#: src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "未読通知はありません"
 
-#: ../src/raven/notifications_view.vala:646
+#: src/raven/notifications_view.vala:710
 msgid "No new notifications"
 msgstr "新しい通知はありません"
 
-#: ../src/raven/sound.vala:78
+#: src/raven/sound.vala:78
 msgid "Output"
 msgstr "出力"
 
-#: ../src/raven/sound.vala:95
+#: src/raven/sound.vala:95
 msgid "Input"
 msgstr "入力"
 
-#. End class
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../src/panel/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr "スペーサーの幅"
+#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:66
+msgid "Applets"
+msgstr "アプレット"
 
-#: ../src/raven/ui/settings.ui.h:1
-msgid "Budgie Settings"
-msgstr "Budgie設定"
+#: src/raven/main_view.vala:58
+#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "通知"
 
-#: ../src/raven/ui/settings.ui.h:2
-msgid "Exit"
-msgstr "終了"
+#. translators:
+#. * The number of sound outputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1873
+#, c-format
+msgid "%u Output"
+msgid_plural "%u Outputs"
+msgstr[0] ""
 
-#: ../src/raven/ui/applets.ui.h:1
-msgid "Add new applet"
-msgstr "新しいアプレットの追加"
+#. translators:
+#. * The number of sound inputs on a particular device
+#: src/gvc/gvc-mixer-control.c:1883
+#, c-format
+msgid "%u Input"
+msgid_plural "%u Inputs"
+msgstr[0] ""
 
-#: ../src/raven/ui/appearance.ui.h:1
-msgid "Use the dark theme"
-msgstr "ダークテーマの使用"
-
-#: ../src/raven/ui/appearance.ui.h:2
-msgid "Dark theme"
-msgstr "ダークテーマ"
-
-#: ../src/raven/ui/appearance.ui.h:3
-msgid "Select a GTK+ theme"
-msgstr "GTK+ テーマの選択"
-
-#: ../src/raven/ui/appearance.ui.h:4
-msgid "Widget Theme"
-msgstr "ウィジェットテーマ"
-
-#: ../src/raven/ui/appearance.ui.h:5
-msgid "Select an icon theme"
-msgstr "アイコンテーマの選択"
-
-#: ../src/raven/ui/appearance.ui.h:6
-msgid "Icon Theme"
-msgstr "アイコンテーマ"
-
-#: ../src/raven/ui/appearance.ui.h:7
-msgid "Override defaults"
-msgstr "デフォルトを無効にする"
-
-#: ../src/raven/ui/appearance.ui.h:8
-msgid "Built-in theme"
-msgstr "ビルドインテーマ"
-
-#: ../src/raven/ui/appearance.ui.h:9
-msgid "Select a cursor theme"
-msgstr "カーソルテーマの選択"
-
-#: ../src/raven/ui/appearance.ui.h:10
-msgid "Cursor Theme"
-msgstr "カーソルテーマ"
-
-#: ../src/raven/ui/panel.ui.h:1
-msgid "Manage Panels"
-msgstr "パネルの管理"
-
-#: ../src/raven/ui/panel.ui.h:2
-msgid "Position"
-msgstr "位置"
-
-#: ../src/raven/ui/panel.ui.h:3
-msgid "Size"
-msgstr "大きさ"
-
-#: ../src/raven/ui/panel.ui.h:4
-msgid "Shadow"
-msgstr "影"
-
-#: ../src/raven/ui/panel.ui.h:5
-msgid "Autohide policy"
-msgstr "自動的に隠す"
-
-#: ../src/raven/ui/panel.ui.h:6
-msgid "Stylize regions"
-msgstr "領域に合わせる"
-
-#: ../src/raven/ui/background.ui.h:1
-msgid "Show desktop icons"
-msgstr "デスクトップアイコンの表示"
-
-#: ../src/raven/ui/background.ui.h:2
-msgid "Desktop Icons"
-msgstr "デスクトップアイコン"
-
-#: ../src/raven/ui/fonts.ui.h:1
-msgid "Window Titles"
-msgstr "ウィンドウタイトル"
-
-#: ../src/raven/ui/fonts.ui.h:2
-msgid "Interface"
-msgstr "インターフェース"
-
-#: ../src/raven/ui/fonts.ui.h:3
-msgid "Documents"
-msgstr "ドキュメント"
-
-#: ../src/raven/ui/fonts.ui.h:4
-msgid "Monospace"
-msgstr "Monospace"
-
-#: ../src/raven/ui/wm.ui.h:1
-msgid "Disable unredirect of fullscreen windows"
-msgstr "全画面ウィンドウのアンリダイレクトを無効にする"
-
-#: ../src/raven/ui/wm.ui.h:2
-msgid "Disable unredirect"
-msgstr "アンリダイレクトの無効"
-
-#: ../src/raven/ui/wm.ui.h:3
-msgid "Change the layout of the window buttons"
-msgstr "ウィンドウボタンのレイアウトを変更する"
-
-#: ../src/raven/ui/wm.ui.h:4
-msgid "Button layout"
-msgstr "ボタンレイアウト"
-
-#: ../src/session/budgie-desktop.desktop.in.in.h:1
-#: ../src/session/budgie-desktop.session.in.in.h:1
-msgid "Budgie Desktop"
-msgstr "Budgieデスクトップ"
-
-#: ../src/session/budgie-desktop.desktop.in.in.h:2
-msgid "This session logs you into the Budgie Desktop"
-msgstr "このセッションではBudgieデスクトップにログインします"
-
-#: ../src/daemon/endsession.ui.h:2
-msgid "Are you sure you want to end your session?"
-msgstr "本当にこのセッションを終了しますか？"
-
-#: ../src/daemon/endsession.ui.h:3
-msgid "Cancel"
-msgstr "キャンセル"
-
-#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
-#. "network-transmit-receive-symbolic", false);
-#: ../src/daemon/endsession.ui.h:4
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:179
-msgid "Logout"
+#: src/daemon/endsession.vala:172
+msgid "Log out"
 msgstr "ログアウト"
 
-#: ../src/daemon/endsession.ui.h:5
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
-msgid "Restart"
-msgstr "再起動"
+#: src/daemon/endsession.vala:176
+msgid "Restart device"
+msgstr "デバイスの再起動"
 
-#: ../src/daemon/endsession.ui.h:6
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
-msgid "Shutdown"
-msgstr "シャットダウン"
+#: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "電源オフ"
 
-#: ../src/panel/applets/clock/ClockApplet.vala:55
-msgid "Time and date settings"
-msgstr "日付と時刻の設定"
+#: src/daemon/menus.vala:52
+msgid "Change background"
+msgstr "壁紙の変更"
 
-#: ../src/panel/applets/clock/ClockApplet.vala:56
-msgid "Calendar"
-msgstr "カレンダー"
+#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:67
+msgid "Settings"
+msgstr "設定"
 
-#: ../src/panel/applets/icon-tasklist/Buttons.vala:90
-msgid "Pin to panel"
-msgstr "パネルに留める"
-
-#: ../src/panel/applets/icon-tasklist/Buttons.vala:91
-#: ../src/panel/applets/icon-tasklist/Buttons.vala:455
-msgid "Unpin from panel"
-msgstr "パネルから分離する"
-
-#. Special case, "All"
-#: ../src/panel/applets/budgie-menu/BudgieMenuWindow.vala:31
-msgid "All"
-msgstr "すべて"
-
-#: ../src/panel/applets/lock-keys/LockKeysApplet.vala:53
-msgid "Caps lock is active"
-msgstr "Caps lockが有効です"
-
-#: ../src/panel/applets/lock-keys/LockKeysApplet.vala:56
-msgid "Caps lock is not active"
-msgstr "Caps lockが無効です"
-
-#: ../src/panel/applets/lock-keys/LockKeysApplet.vala:66
-msgid "Num lock is active"
-msgstr "Num lockが有効です"
-
-#: ../src/panel/applets/lock-keys/LockKeysApplet.vala:69
-msgid "Num lock is not active"
-msgstr "Num lockが無効です"
-
-#: ../src/panel/applets/show-desktop/ShowDesktopApplet.vala:33
+#: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
 msgstr "デスクトップの切り替え"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:101
-msgid "Bluetooth is disabled"
-msgstr "Bluetoothが無効です"
+#: src/applets/icon-tasklist/Buttons.vala:113
+msgid "Pin to panel"
+msgstr "パネルに留める"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:105
-msgid "Bluetooth is active"
-msgstr "Bluetoothが有効です"
+#: src/applets/icon-tasklist/Buttons.vala:114
+#: src/applets/icon-tasklist/Buttons.vala:483
+msgid "Unpin from panel"
+msgstr "パネルから分離する"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:110
+#: src/applets/places-indicator/PlaceItem.vala:36
+#: src/applets/places-indicator/MountItem.vala:65
 #, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "\"%d デバイスが接続されました"
+msgid "Open \"%s\""
+msgstr "\"%s\" を開く"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:171
-msgid "Bluetooth Settings"
-msgstr "Bluetooth設定"
+#: src/applets/places-indicator/MountItem.vala:25
+#: src/applets/places-indicator/VolumeItem.vala:27
+msgid "Removable devices"
+msgstr "リムーバブルデバイス"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:172
-msgid "Send Files"
-msgstr "ファイルを送信する"
+#: src/applets/places-indicator/MountItem.vala:27
+#: src/applets/places-indicator/VolumeItem.vala:29
+msgid "Local volumes"
+msgstr "ローカルボリューム"
 
-#: ../src/panel/applets/status/BluetoothIndicator.vala:173
-msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth機内モード"
+#: src/applets/places-indicator/MountItem.vala:31
+#: src/applets/places-indicator/VolumeItem.vala:33
+msgid "Network folders"
+msgstr "ネットワークフォルダー"
 
-#: ../src/panel/applets/status/PowerIndicator.vala:56
-msgid "Battery fully charged."
-msgstr "バッテリーは満充電です。"
+#: src/applets/places-indicator/MountItem.vala:34
+#: src/applets/places-indicator/VolumeItem.vala:36
+msgid "Other"
+msgstr "その他"
 
-#: ../src/panel/applets/status/PowerIndicator.vala:59
-msgid "Unknown"
-msgstr "不明"
+#: src/applets/places-indicator/MountItem.vala:60
+#: src/applets/places-indicator/VolumeItem.vala:57
+msgid "Eject"
+msgstr "取り出し"
 
-#. Set inner charging duration to hours:minutes
-#: ../src/panel/applets/status/PowerIndicator.vala:68
-msgid "Battery charging"
-msgstr "バッテリー充電中"
+#: src/applets/places-indicator/MountItem.vala:62
+msgid "Unmount"
+msgstr "アンマウント"
 
-#: ../src/panel/applets/status/PowerIndicator.vala:73
-msgid "Battery remaining"
-msgstr "バッテリーの残り時間"
+#: src/applets/places-indicator/MountItem.vala:78
+#: src/applets/places-indicator/VolumeItem.vala:87
+msgid "You can now safely remove"
+msgstr "安全に取り外せます"
 
-#: ../src/panel/applets/status/PowerIndicator.vala:107
-msgid "Power settings"
-msgstr "電源設定"
+#: src/applets/places-indicator/MountItem.vala:79
+msgid "Unknown Device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:88
+msgid "Error while ejecting device"
+msgstr ""
+
+#: src/applets/places-indicator/MountItem.vala:105
+msgid "Error while unmounting volume"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicator.vala:85
+#: src/applets/places-indicator/PlacesSection.vala:24
+#: src/applets/places-indicator/PlacesSection.vala:46
+#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Places"
+msgstr "場所"
+
+#: src/applets/places-indicator/VolumeItem.vala:43
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr "マウントして \"%s\" を開く"
+
+#: src/applets/places-indicator/VolumeItem.vala:76
+#: src/applets/places-indicator/VolumeItem.vala:121
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:119
+msgid "The password you entered is incorrect"
+msgstr ""
+
+#: src/applets/places-indicator/VolumeItem.vala:123
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:39
+msgid "Volume is in use by other processes"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:45
+msgid "Operation aborted"
+msgstr ""
+
+#: src/applets/places-indicator/MountHelper.vala:57
+msgid "Type your password"
+msgstr ""
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
+msgid "Nothing to display right now"
+msgstr "表示するものはありません"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Mount some drives"
+msgstr "ドライブをマウントしました"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
+msgid "Enable more sections"
+msgstr "ほかのセクションも有効にする"
 
 #. User Menu Creation
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:95
+#: src/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
 msgstr "ユーザー"
 
 #. Default to "User" and symbolic icon
 #. The rest
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:101
+#: src/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
 msgstr "ロック"
 
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:102
+#: src/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
 msgstr "サスペンド"
 
-#: ../src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
+#: src/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
 msgstr "ハイバネート"
 
-#: ../src/wm/windowmenu.vala:124
-msgid "Minimize"
-msgstr "最小化"
+#: src/applets/user-indicator/UserIndicatorWindow.vala:104
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "再起動"
 
-#: ../src/wm/windowmenu.vala:129
-msgid "Unmaximize"
-msgstr "最大化の解除"
+#: src/applets/user-indicator/UserIndicatorWindow.vala:105
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "シャットダウン"
 
-#: ../src/wm/windowmenu.vala:134
-msgid "Maximize"
-msgstr "最大化"
+#. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
+#. "network-transmit-receive-symbolic", false);
+#: src/applets/user-indicator/UserIndicatorWindow.vala:179
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "ログアウト"
 
-#: ../src/wm/windowmenu.vala:139
-msgid "Move"
-msgstr "移動"
+#: src/applets/clock/ClockApplet.vala:148
+msgid "Time and date settings"
+msgstr "日付と時刻の設定"
 
-#: ../src/wm/windowmenu.vala:144
-msgid "Resize"
-msgstr "サイズ変更"
+#: src/applets/clock/ClockApplet.vala:149
+msgid "Calendar"
+msgstr "カレンダー"
 
-#: ../src/wm/windowmenu.vala:149
-msgid "Always On Top"
-msgstr "常に上に表示"
+#. pack page2
+#: src/applets/clock/ClockApplet.vala:156
+#: src/applets/clock/ClockApplet.vala:187
+msgid "Preferences"
+msgstr ""
 
-#: ../src/wm/windowmenu.vala:154
-msgid "Close"
-msgstr "閉じる"
+#: src/applets/clock/ClockApplet.vala:166
+msgid "Show date"
+msgstr ""
 
-#: ../src/wm/wm.vala:519
-msgid "Change background"
-msgstr "壁紙の変更"
+#: src/applets/clock/ClockApplet.vala:171
+msgid "Show seconds"
+msgstr ""
 
-#: ../src/wm/wm.vala:528
-msgid "Settings"
-msgstr "設定"
+#: src/applets/clock/ClockApplet.vala:177
+msgid "Use 24 hour time"
+msgstr ""
 
-#. End BudgieWMDBUS
-#. End namespace
-#. * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
-#. *
-#. * Local variables:
-#. * c-basic-offset: 4
-#. * tab-width: 4
-#. * indent-tabs-mode: nil
-#. * End:
-#. *
-#. * vi: set shiftwidth=4 tabstop=4 expandtab:
-#. * :indentSize=4:tabSize=4:noTabs=true:
-#: ../src/panel/applets/clock/ClockApplet.plugin.in.h:1
-msgid "Clock"
-msgstr "時計"
+#. Special case, "All"
+#: src/applets/budgie-menu/BudgieMenuWindow.vala:43
+msgid "All"
+msgstr "すべて"
 
-#: ../src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
-msgid "Show Desktop Button"
-msgstr "デスクトップボタンの表示"
+#: src/applets/status/PowerIndicator.vala:91
+msgid "Battery fully charged."
+msgstr "バッテリーは満充電です。"
 
-#: ../src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
-msgid "Task List"
-msgstr "タスクリスト"
+#: src/applets/status/PowerIndicator.vala:94
+msgid "Unknown"
+msgstr "不明"
 
-#: ../src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
-#: ../src/panel/applets/places-indicator/PlacesIndicator.vala:80
-#: ../src/panel/applets/places-indicator/PlacesSection.vala:32
-msgid "Places"
-msgstr "場所"
+#. Set inner charging duration to hours:minutes
+#: src/applets/status/PowerIndicator.vala:103
+msgid "Battery charging"
+msgstr "バッテリー充電中"
 
-#: ../src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
-msgid "Icon Task List"
-msgstr "アイコンのタスクリスト"
+#: src/applets/status/PowerIndicator.vala:108
+msgid "Battery remaining"
+msgstr "バッテリーの残り時間"
 
-#: ../src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Lock Keys Indicator"
-msgstr "ロックキーインジケーター"
+#: src/applets/status/PowerIndicator.vala:162
+msgid "Show battery percentage"
+msgstr ""
 
-#: ../src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
-msgid "Raven Sidebar Control"
-msgstr "Ravenサイドバーの設定"
+#: src/applets/status/PowerIndicator.vala:170
+msgid "Power settings"
+msgstr "電源設定"
 
-#: ../src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Spacer"
-msgstr "スペーサー"
+#: src/applets/status/SoundIndicator.vala:120
+msgid "Sound settings"
+msgstr ""
 
-#: ../src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
-msgid "User Indicator"
-msgstr "ユーザーインジケーター"
+#: src/applets/status/BluetoothIndicator.vala:102
+msgid "Bluetooth is disabled"
+msgstr "Bluetoothが無効です"
 
-#: ../src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Workspace Switcher"
-msgstr "ワークスペースの切替え"
+#: src/applets/status/BluetoothIndicator.vala:106
+msgid "Bluetooth is active"
+msgstr "Bluetoothが有効です"
 
-#: ../src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
-msgid "Keyboard Layout Indicator"
-msgstr "キーボードレイアウトインジケーター"
-
-#: ../src/panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System Tray"
-msgstr "システムトレイ"
-
-#: ../src/panel/applets/status/StatusApplet.plugin.in.h:1
-msgid "Status Indicator"
-msgstr "ステータスインジケーター"
-
-#: ../src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
-msgid "Budgie Menu"
-msgstr "Budgieメニュー"
-
-#: ../src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
-msgid "Separator"
-msgstr "セパレーター"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:23
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:23
-msgid "Removable devices"
-msgstr "リムーバブルデバイス"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:25
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:25
-msgid "Local volumes"
-msgstr "ローカルボリューム"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:29
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:29
-msgid "Network folders"
-msgstr "ネットワークフォルダー"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:32
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:32
-msgid "Other"
-msgstr "その他"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:52
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:49
-msgid "Eject"
-msgstr "取り出し"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:54
-msgid "Unmount"
-msgstr "アンマウント"
-
-#: ../src/panel/applets/places-indicator/MountItem.vala:57
-#: ../src/panel/applets/places-indicator/PlaceItem.vala:27
+#: src/applets/status/BluetoothIndicator.vala:111
 #, c-format
-msgid "Open \"%s\""
-msgstr "\"%s\" を開く"
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "\"%d デバイスが接続されました"
 
-#: ../src/panel/applets/places-indicator/MountItem.vala:81
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:56
-msgid "You can now safely remove"
-msgstr "安全に取り外せます"
+#. Settings button
+#: src/applets/status/BluetoothIndicator.vala:176
+msgid "Bluetooth Settings"
+msgstr "Bluetooth設定"
 
-#: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:139
-msgid "Nothing to display right now"
-msgstr "表示するものはありません"
+#. Send files button
+#: src/applets/status/BluetoothIndicator.vala:183
+msgid "Send Files"
+msgstr "ファイルを送信する"
 
-#: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
-msgid "Mount some drives"
-msgstr "ドライブをマウントしました"
+#. Airplane mode
+#: src/applets/status/BluetoothIndicator.vala:193
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth機内モード"
 
-#: ../src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:143
-msgid "Enable more sections"
-msgstr "ほかのセクションも有効にする"
+#: src/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr ""
 
-#: ../src/panel/applets/places-indicator/VolumeItem.vala:67
-#, c-format
-msgid "Mount and open \"%s\""
-msgstr "マウントして \\\"%s\\\" を開く"
+#. Allow deletion of the panel
+#: src/applets/workspaces/WorkspaceItem.vala:79
+#: src/panel/settings/settings_panel.vala:252
+msgid "Remove"
+msgstr ""
 
-#: ../src/panel/applets/places-indicator/settings.ui.h:1
+#: src/applets/lock-keys/LockKeysApplet.vala:62
+msgid "Caps lock is active"
+msgstr "Caps lockが有効です"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:65
+msgid "Caps lock is not active"
+msgstr "Caps lockが無効です"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:75
+msgid "Num lock is active"
+msgstr "Num lockが有効です"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:78
+msgid "Num lock is not active"
+msgstr "Num lockが無効です"
+
+#: src/polkit/polkitdialog.vala:131
+msgid "Authentication failed"
+msgstr ""
+
+#: src/polkit/polkitdialog.vala:230
+msgid "Group:"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:41
+msgid "Appearance"
+msgstr "外観"
+
+#: src/panel/settings/settings_main.vala:42
+msgid "Panels"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:43
+msgid "Session"
+msgstr ""
+
+#. Have to override wmclass for pinning support
+#: src/panel/settings/settings_main.vala:51
+msgid "Budgie Settings"
+msgstr "Budgie設定"
+
+#: src/panel/settings/settings_main.vala:83
+msgid "Create new panel"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:34
+msgid "Style"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:44
+msgid "Widgets"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:45
+msgid "Set the appearance of window decorations and controls"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:49
+msgid "Icons"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:50
+msgid "Set the globally used icon theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:54
+msgid "Cursors"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:55
+msgid "Set the globally used mouse cursor theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Dark theme"
+msgstr "ダークテーマ"
+
+#: src/panel/settings/settings_style.vala:67
+msgid "Built-in theme"
+msgstr "ビルドインテーマ"
+
+#: src/panel/settings/settings_style.vala:68
+msgid ""
+"When enabled, the desktop component style will be overriden with the built-"
+"in one"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Animations"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:73
+msgid "Control whether windows and controls use animations"
+msgstr ""
+
+#: src/panel/settings/settings_applet_chooser.vala:79
+msgid "Choose an applet"
+msgstr ""
+
+#: src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:198
+#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: src/panel/settings/settings_applet_chooser.vala:85
+#: src/panel/settings/settings_panel_applets.vala:245
+msgid "Add applet"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:136
+msgid "Untitled"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:143
+msgid "No description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:166
+msgid "running"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:189
+msgid "Applications"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:199
+#: src/panel/settings/settings_autostart.vala:362
+msgid "Add"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:356
+#: src/panel/settings/settings_autostart.vala:389
+msgid "Command"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:372
+msgid "An entry with that title already exists"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:375
+msgid "Title"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:379
+#: src/panel/settings/settings_autostart.vala:393
+msgid "Required"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:382
+msgid "Description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:386
+msgid "Optional"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:450
+msgid "Autostart"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "ウィンドウ"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "ボタンレイアウト"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Right (standard)"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:47
+#: src/panel/settings/settings_panel.vala:150
+msgid "Left"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:59
+msgid "Attach modal dialogs to windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:60
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:65
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Disable unredirection of windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:71
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:32
+msgid "Fonts"
+msgstr "フォント"
+
+#: src/panel/settings/settings_fonts.vala:43
+msgid "Window Titles"
+msgstr "ウィンドウタイトル"
+
+#: src/panel/settings/settings_fonts.vala:44
+msgid "Set the font used in the titlebars of applications"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:50
+msgid "Documents"
+msgstr "ドキュメント"
+
+#: src/panel/settings/settings_fonts.vala:51
+msgid "Set the display font used by for documents"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:57
+msgid "Interface"
+msgstr "インターフェース"
+
+#: src/panel/settings/settings_fonts.vala:58
+msgid "Set the primary font used by application controls"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:64
+msgid "Monospace"
+msgstr "Monospace"
+
+#: src/panel/settings/settings_fonts.vala:65
+msgid "Set the fixed-width font used by text dominant applications"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:90
+msgid "Top Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Right Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:94
+msgid "Left Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:96
+msgid "Bottom Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:101
+msgid "Top Panel"
+msgstr "上パネル"
+
+#: src/panel/settings/settings_panel.vala:103
+msgid "Right Panel"
+msgstr "右パネル"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Left Panel"
+msgstr "左パネル"
+
+#: src/panel/settings/settings_panel.vala:107
+msgid "Bottom Panel"
+msgstr "下パネル"
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Top"
+msgstr "上"
+
+#: src/panel/settings/settings_panel.vala:148
+msgid "Right"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:152
+msgid "Bottom"
+msgstr "下"
+
+#: src/panel/settings/settings_panel.vala:163
+msgid "Always"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:165
+msgid "Dynamic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:168
+msgid "None"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:179
+msgid "Automatic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:181
+msgid "Intelligent"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:184
+msgid "Never"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:200
+msgid "Position"
+msgstr "位置"
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:209
+msgid "Size"
+msgstr "大きさ"
+
+#: src/panel/settings/settings_panel.vala:210
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:217
+msgid "Automatically hide"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:218
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:225
+msgid "Transparency"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:226
+msgid "Control when this panel should have a solid background"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:231
+msgid "Shadow"
+msgstr "影"
+
+#: src/panel/settings/settings_panel.vala:232
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:238
+msgid "Stylize regions"
+msgstr "領域に合わせる"
+
+#: src/panel/settings/settings_panel.vala:239
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Dock mode"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:247
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Delete panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:259
+msgid ""
+"Permanently remove the panel and applets from the screen. This action cannot"
+" be undone"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:22
+msgid "Configure applet"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Choose a new applet to add to this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:260
+msgid "No settings available"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:411
+msgid "Start"
+msgstr "始点"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Center"
+msgstr "中央"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "End"
+msgstr "終点"
+
+#: src/panel/settings/settings_desktop.vala:33
+msgid "Desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:43
+msgid "Desktop Icons"
+msgstr "デスクトップアイコン"
+
+#: src/panel/settings/settings_desktop.vala:44
+msgid "Control whether to allow launchers and icons on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:49
+msgid "Home directory"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:50
+msgid "Add a shortcut to your home directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:55
+msgid "Network servers"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:56
+msgid "Add a shortcut to your local network servers on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:61
+msgid "Trash"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:62
+msgid "Add a shortcut to the Trash directory on the desktop"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:67
+msgid "Mounted volumes"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:68
+msgid "Mounted volumes & drives will appear on the desktop"
+msgstr ""
+
+#: src/daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "本当にこのセッションを終了しますか？"
+
+#: src/daemon/tabswitcher.ui.h:1
+msgid " - "
+msgstr ""
+
+#: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
 msgstr "ラベルの表示"
 
-#: ../src/panel/applets/places-indicator/settings.ui.h:2
+#: src/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
 msgstr "場所の表示"
 
-#: ../src/panel/applets/places-indicator/settings.ui.h:3
+#: src/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr "ネットワークフォルダーの表示"
+
+#: src/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
 msgstr "リムーバブルドライブの表示"
 
-#: ../src/panel/applets/places-indicator/settings.ui.h:4
-msgid "Show network folders"
-msgstr "ネットワークフォルダーの表示"
+#: src/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:1
+#: src/applets/night-light/NightLight.plugin.in.h:1
+msgid "Night Light"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr ""
+
+#: src/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:1
+msgid "Show Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:2
+msgid "Compact Mode"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:3
+msgid "Show Headers"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:4
+msgid "Menu Label"
+msgstr ""
+
+#: src/applets/budgie-menu/settings.ui.h:5
+msgid "Roll-over mouse"
+msgstr ""
+
+#: src/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "スペーサーの幅"
+
+#: src/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr ""
+
+#: src/polkit/dialog.ui.h:5
+msgid "Authenticate"
+msgstr ""
+
+#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Budgieデスクトップ"
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "このセッションではBudgieデスクトップにログインします"
+
+#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "キーボードレイアウトインジケーター"
+
+#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "デスクトップボタンの表示"
+
+#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Ravenサイドバーの設定"
+
+#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "アイコンのタスクリスト"
+
+#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "ユーザーインジケーター"
+
+#: src/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "時計"
+
+#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Budgieメニュー"
+
+#: src/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "システムトレイ"
+
+#: src/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "セパレーター"
+
+#: src/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "ステータスインジケーター"
+
+#: src/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "スペーサー"
+
+#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "タスクリスト"
+
+#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "ワークスペースの切替え"
+
+#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "ロックキーインジケーター"
+
+#: src/panel/budgie-panel.desktop.in.h:1
+msgid "Budgie Panel"
+msgstr ""
+
+#: src/panel/budgie-panel.desktop.in.h:2
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:1
+msgid "Budgie Desktop Settings"
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behaviour"
+msgstr ""
