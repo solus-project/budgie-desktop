@@ -5,10 +5,6 @@ The Budgie Desktop a modern desktop designed to keep out the way of the user. It
 
 ![main_desktop](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainDesktop.png)
 
-We are slowly moving to a modular architecture, which you see via our 
-[organization page](https://github.com/budgie-desktop) as well as our 
-[Budgie 11 workboard](https://github.com/budgie-desktop/budgie-desktop/projects/1).
-
 ![logo](https://solus-project.com/imgs/budgie-small.png)
 
 IRC: #budgie-desktop-dev on irc.freenode.net
