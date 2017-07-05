@@ -69,30 +69,6 @@ The `budgie-polkit-dialog` provides a PolicyKit agent for the session, ensuring 
 
 ![budgie_polkit](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/Polkit.png)
 
-
-Theming
-------
-
-Please look at `./src//3.20/sass` and `./src/theme/3.18/sass` to override aspects of the default theming. Budgie theming is created using SASS, and the CSS files shipped are minified. Check out `./src/theme/README.md` for more information on regenerating the theme from SASS.
-
-Alternatively, you may invoke the panel with the GTK Inspector to analyse the structure:
-
-```bash
-budgie-panel --gtk-debug=interactive --replace
-```
-
-If you are validating changes from a git clone, then:
-
-```bash
-./src/panel/budgie-panel --gtk-debug=interactive --replace
-```
-
-Note that for local changes, GSettings schemas and applets are expected to be installed first with `make install`.
-
-Note that it is intentional for the toplevel `BudgiePanel` object to be transparent, as it contains the `BudgieMainPanel` and `BudgieShadowBlock` within a singular window.
-
-Also note that by default Budgie overrides all theming with the stylesheet, and in future we'll also make it possible for you to set a custom theme. To do this, test your changes in tree first. When you have a reasonable theme put together, please open an issue and we'll enable setting of a custom theme (no point until they exist.)
-
 Testing
 ------
 
