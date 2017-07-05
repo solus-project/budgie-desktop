@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2016-2017 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2016-2017 Budgie Desktop Developers
  * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
  *
  * This program is free software; you can redistribute it and/or modify

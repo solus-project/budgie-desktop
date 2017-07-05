@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2017 Ikey Doherty <ikey@solus-project.com>
+ * Copyright © 2015-2017 Budgie Desktop Developers
  * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie 10)
  * 
  * This program is free software; you can redistribute it and/or modify
@@ -681,7 +681,7 @@ public class NotificationsView : Gtk.Box
                                       out string version, out string spec_version) 
     {
         name = "Raven";
-        vendor = "Solus Project";
+        vendor = "Budgie Desktop Developers";
         version = Budgie.VERSION;
         spec_version = "1.2";
     }

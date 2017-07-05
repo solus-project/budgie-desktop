@@ -2,7 +2,7 @@
 Module=tasklistapplet.so
 Name=Task List
 _Description=Task List
-Authors=Ikey Doherty
-Copyright=Copyright © 2015-2017 Ikey Doherty
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2015-2017 Budgie Desktop Developers
 Website=https://solus-project.com
 Icon=task-list-symbolic
