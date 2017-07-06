@@ -414,7 +414,7 @@ public class CommandDialog : Gtk.Dialog
         string command_text = command_entry.get_text();
         bool exists = false;
         foreach (string title in AutostartPage.autostart_files.get_values()) {
-            if (title == title_text) {
+            if (title.down() == title_text.down()) {
                 exists = true;
                 break;
             }
