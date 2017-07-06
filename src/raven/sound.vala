@@ -211,7 +211,7 @@ public class SoundWidget : Gtk.Box
             var check = outputs.lookup(did);
 
             if (check != null) {
-                SignalHandler.unblock_by_func((void*)check, (void*)on_output_selected, this);
+                SignalHandler.block_by_func((void*)check, (void*)on_output_selected, this);
                 check.active = true;
                 SignalHandler.unblock_by_func((void*)check, (void*)on_output_selected, this);
             }
