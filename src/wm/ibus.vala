@@ -142,6 +142,9 @@ public class IBusManager : GLib.Object
      */
     public weak IBus.EngineDesc? get_engine(string name)
     {
+        if (this.engines == null) {
+            return null;
+        }
         return this.engines.lookup(name);
     }
 

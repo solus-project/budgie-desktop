@@ -36,14 +36,17 @@ class InputSource
         this.layout = layout;
         this.variant = variant;
         this.xkb = xkb;
+        weak IBus.EngineDesc? engine = null;
 
         /* Attempt to fetch engine in the ibus daemon engine list */
-        var engine = iman.get_engine(id);
-        if (engine == null) {
-            if (!xkb) {
-                throw new InputMethodError.UNKNOWN_IME("Unknown input method: id");
+        if (iman != null) {
+            engine = iman.get_engine(id);
+            if (engine == null) {
+                if (!xkb) {
+                    throw new InputMethodError.UNKNOWN_IME("Unknown input method: id");
+                }
+                return;
             }
-            return;
         }
 
         string? e_variant = engine.layout_variant;
@@ -173,10 +176,11 @@ public class KeyboardManager : GLib.Object
             } else {
                 try {
                     source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
-                    sources.append_val(source);
                 } catch (Error e) {
                     message("Error adding source %s|%s: %s", id, type, e.message);
+                    continue;
                 }
+                sources.append_val(source);
             }
         }
 
