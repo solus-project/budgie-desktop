@@ -294,9 +294,9 @@ public class WorkspacesApplet : Budgie.Applet
     {
         bool dnd_success = false;
         if (selection_data != null && selection_data.get_length() >= 0) {
-            long* data = (long*)selection_data.get_data();
+            ulong* data = (ulong*)selection_data.get_data();
             if (data != null) {
-                Wnck.Window window = Wnck.Window.@get((ulong)*data);
+                Wnck.Window window = Wnck.Window.@get(*data);
                 int index = wm_proxy.AppendNewWorkspace(time);
                 dynamically_created_workspaces.append(index);
                 GLib.Timeout.add(50, () => {

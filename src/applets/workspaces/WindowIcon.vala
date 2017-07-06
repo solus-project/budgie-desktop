@@ -70,9 +70,9 @@ public class WindowIcon : Gtk.Button
 
     public void on_drag_data_get(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time)
     {
-        long window_xid = (long)window.get_xid();
+        ulong window_xid = window.get_xid();
         uchar[] buf;
-        convert_long_to_bytes(window_xid, out buf);
+        convert_ulong_to_bytes(window_xid, out buf);
         selection_data.set(
             selection_data.get_target(),
             8,
@@ -80,9 +80,9 @@ public class WindowIcon : Gtk.Button
         );
     }
 
-    private void convert_long_to_bytes(long number, out uchar[] buffer) {
-        buffer = new uchar[sizeof(long)];
-        for (int i=0; i<sizeof(long); i++) {
+    private void convert_ulong_to_bytes(ulong number, out uchar[] buffer) {
+        buffer = new uchar[sizeof(ulong)];
+        for (int i=0; i<sizeof(ulong); i++) {
             buffer[i] = (uchar)(number & 0xFF);
             number = number >> 8;
         }
