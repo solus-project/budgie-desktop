@@ -155,7 +155,6 @@ public class Raven : Gtk.Window
     private Budgie.ShadowBlock? shadow;
     private RavenIface? iface = null;
     bool expanded = false;
-    bool outside_win = false;
 
     Gdk.Rectangle old_rect;
     Gtk.Box layout;
@@ -228,30 +227,10 @@ public class Raven : Gtk.Window
         }
     }
 
-    bool on_enter_notify()
-    {
-        this.outside_win = false;
-        return Gdk.EVENT_PROPAGATE;
-    }
-
     bool on_focus_out()
     {
-        if (this.outside_win && this.expanded) {
+        if (this.expanded) {
             this.set_expanded(false);
-        }
-        return Gdk.EVENT_PROPAGATE;
-    }
-
-    bool on_leave_notify(Gtk.Widget? widget, Gdk.EventCrossing? evt)
-    {
-        if (evt.x_root < this.our_x ||
-            evt.x_root > (this.our_x+this.our_width) ||
-            evt.y_root < this.our_y ||
-            evt.y_root > (this.our_y+this.our_height))
-        {
-            this.outside_win = true;
-        } else {
-            this.outside_win = false;
         }
         return Gdk.EVENT_PROPAGATE;
     }
@@ -295,8 +274,6 @@ public class Raven : Gtk.Window
             queue_resize();
         });
 
-        leave_notify_event.connect(on_leave_notify);
-        enter_notify_event.connect(on_enter_notify);
         focus_out_event.connect(on_focus_out);
 
         /* Set up our main layout */
@@ -456,8 +433,6 @@ public class Raven : Gtk.Window
         nscale = old_op;
 
         if (exp) {
-            /* Until we're told otherwise */
-            outside_win = true;
             show_all();
         }
 
@@ -500,6 +475,7 @@ public class Raven : Gtk.Window
             } else {
                 (a.widget as Gtk.Window).present();
                 (a.widget as Gtk.Window).grab_focus();
+                this.steal_focus();
                 steal_focus();
             }
         });
