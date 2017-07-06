@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
-# Stefan Ric (cybre) <stfric369@gmail.com>, 2016
+# Stefan Ric (cybre) <stfric369@gmail.com>, 2016-2017
 # Stefan Ric (cybre) <stfric369@gmail.com>, 2015-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-05 23:55+0100\n"
-"PO-Revision-Date: 2017-07-05 22:56+0000\n"
-"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
+"PO-Revision-Date: 2017-07-06 01:33+0000\n"
+"Last-Translator: Stefan Ric (cybre) <stfric369@gmail.com>\n"
 "Language-Team: Serbian (Latin) (Serbia) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/sr_RS@latin/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -155,15 +155,15 @@ msgstr "Možete sigurno ukloniti"
 
 #: src/applets/places-indicator/MountItem.vala:79
 msgid "Unknown Device"
-msgstr ""
+msgstr "Nepoznat uređaj"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr ""
+msgstr "Problem tokom izbacivanja uređaja"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr ""
+msgstr "Problem tokon odvajanja uređaja"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
@@ -262,19 +262,19 @@ msgstr "Kalendar"
 #: src/applets/clock/ClockApplet.vala:156
 #: src/applets/clock/ClockApplet.vala:187
 msgid "Preferences"
-msgstr ""
+msgstr "Postavke"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr ""
+msgstr "Prikaži datum"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
-msgstr ""
+msgstr "Prikaži sekunde"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
-msgstr ""
+msgstr "Koristi 24-oro časovno vreme"
 
 #. Special case, "All"
 #: src/applets/budgie-menu/BudgieMenuWindow.vala:43
@@ -300,7 +300,7 @@ msgstr "Preostalo baterije"
 
 #: src/applets/status/PowerIndicator.vala:162
 msgid "Show battery percentage"
-msgstr ""
+msgstr "Prikaži procenat baterije"
 
 #: src/applets/status/PowerIndicator.vala:170
 msgid "Power settings"
@@ -308,7 +308,7 @@ msgstr "Postavke napajanja"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr ""
+msgstr "Postavke zvuka"
 
 #: src/applets/status/BluetoothIndicator.vala:102
 msgid "Bluetooth is disabled"
@@ -343,13 +343,13 @@ msgstr "Bluetooth režim letenja"
 
 #: src/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr ""
+msgstr "Preimenuj"
 
 #. Allow deletion of the panel
 #: src/applets/workspaces/WorkspaceItem.vala:79
 #: src/panel/settings/settings_panel.vala:252
 msgid "Remove"
-msgstr ""
+msgstr "Ukloni"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:62
 msgid "Caps lock is active"
@@ -373,7 +373,7 @@ msgstr ""
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr ""
+msgstr "Grupa"
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
@@ -381,11 +381,11 @@ msgstr "Izgled"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr ""
+msgstr "Paneli"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr ""
+msgstr "Sesija"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
@@ -394,15 +394,15 @@ msgstr "Badži postavke"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr ""
+msgstr "Kreiraj novi panel"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
-msgstr ""
+msgstr "Vidžeti"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
@@ -410,7 +410,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
-msgstr ""
+msgstr "Ikonice"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
-msgstr ""
+msgstr "Pokazivači"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr ""
+msgstr "Animacije"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
@@ -448,7 +448,7 @@ msgstr ""
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr ""
+msgstr "Izaberi aplet"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
 #: src/panel/settings/settings_autostart.vala:198
@@ -460,33 +460,33 @@ msgstr "Otkaži"
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr ""
+msgstr "Dodaj aplet"
 
 #: src/panel/settings/settings_autostart.vala:136
 msgid "Untitled"
-msgstr ""
+msgstr "Neimenovano"
 
 #: src/panel/settings/settings_autostart.vala:143
 msgid "No description"
-msgstr ""
+msgstr "Bez opisa"
 
 #: src/panel/settings/settings_autostart.vala:166
 msgid "running"
-msgstr ""
+msgstr "u pokretu"
 
 #: src/panel/settings/settings_autostart.vala:189
 msgid "Applications"
-msgstr ""
+msgstr "Aplikacije"
 
 #: src/panel/settings/settings_autostart.vala:199
 #: src/panel/settings/settings_autostart.vala:362
 msgid "Add"
-msgstr ""
+msgstr "Dodaj"
 
 #: src/panel/settings/settings_autostart.vala:356
 #: src/panel/settings/settings_autostart.vala:389
 msgid "Command"
-msgstr ""
+msgstr "Komanda"
 
 #: src/panel/settings/settings_autostart.vala:372
 msgid "An entry with that title already exists"
@@ -494,24 +494,24 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:375
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: src/panel/settings/settings_autostart.vala:379
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Required"
-msgstr ""
+msgstr "Obavezno"
 
 #: src/panel/settings/settings_autostart.vala:382
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Optional"
-msgstr ""
+msgstr "Neobavezno"
 
 #: src/panel/settings/settings_autostart.vala:450
 msgid "Autostart"
-msgstr ""
+msgstr "Automatsko pokretanje"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
