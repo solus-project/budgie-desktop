@@ -365,7 +365,7 @@ public class KeyboardLayoutApplet : Budgie.Applet
 
             /* Firstly we create our display label.. */
             Gtk.EventBox wrap = new Gtk.EventBox();
-            Gtk.Label displ_label = new Gtk.Label(kbinfo.layout);
+            Gtk.Label displ_label = new Gtk.Label(kbinfo.layout.up());
             wrap.add(displ_label);
             displ_label.set_halign(Gtk.Align.FILL);
             wrap.get_style_context().add_class("keyboard-label");
