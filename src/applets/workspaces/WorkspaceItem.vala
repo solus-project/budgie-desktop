@@ -175,10 +175,10 @@ public class WorkspaceItem : Gtk.EventBox
     {
         bool dnd_success = false;
 
-        long* data = (long*)selection_data.get_data();
+        ulong* data = (ulong*)selection_data.get_data();
 
         if (data != null) {
-            Wnck.Window window = Wnck.Window.@get((ulong)*data);
+            Wnck.Window window = Wnck.Window.@get(*data);
             window.move_to_workspace(this.workspace);
             dnd_success = true;
         }
