@@ -89,6 +89,7 @@ public class AppletChooser : Gtk.Dialog
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         applets = new Gtk.ListBox();
+        applets.set_sort_func(this.sort_applets);
         scroll.add(applets);
 
         applets.set_activate_on_single_click(true);
@@ -113,6 +114,17 @@ public class AppletChooser : Gtk.Dialog
             default:
                 return null;
         }
+    }
+
+    /**
+     * Super simple sorting of applets in alphabetical listing
+     */
+    int sort_applets(Gtk.ListBoxRow? a, Gtk.ListBoxRow? b)
+    {
+        Peas.PluginInfo? infoA = (a.get_child() as PluginItem).plugin;
+        Peas.PluginInfo? infoB = (b.get_child() as PluginItem).plugin;
+
+        return GLib.strcmp(infoA.get_name().down(), infoB.get_name().down());
     }
 
     /**
@@ -144,6 +156,7 @@ public class AppletChooser : Gtk.Dialog
         foreach (var plugin in plugins) {
             this.add_plugin(plugin);
         }
+        this.applets.invalidate_sort();
     }
 
     /**
