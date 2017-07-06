@@ -491,9 +491,11 @@ public class AutostartPage : Budgie.SettingsPage {
             string[] files = list_directory.end(res);
             foreach (string file in files) {
                 GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(file);
-                AutostartItem item = new AutostartItem.from_app_info(info);
-                add_item(item);
-                autostart_files.set(item.id, item.title);
+                if (item != null) {
+                    AutostartItem item = new AutostartItem.from_app_info(info);
+                    add_item(item);
+                    autostart_files.set(item.id, item.title);
+                }
             }
         });
     }
