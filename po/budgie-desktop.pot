@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 23:55+0100\n"
+"POT-Creation-Date: 2017-07-06 20:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -446,8 +446,8 @@ msgid "Choose an applet"
 msgstr ""
 
 #: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:198
-#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_autostart.vala:203
+#: src/panel/settings/settings_autostart.vala:366 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr ""
@@ -457,54 +457,54 @@ msgstr ""
 msgid "Add applet"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:136
+#: src/panel/settings/settings_autostart.vala:141
 msgid "Untitled"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:143
+#: src/panel/settings/settings_autostart.vala:148
 msgid "No description"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:166
+#: src/panel/settings/settings_autostart.vala:171
 msgid "running"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:189
+#: src/panel/settings/settings_autostart.vala:194
 msgid "Applications"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:199
-#: src/panel/settings/settings_autostart.vala:362
+#: src/panel/settings/settings_autostart.vala:204
+#: src/panel/settings/settings_autostart.vala:367
 msgid "Add"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:356
-#: src/panel/settings/settings_autostart.vala:389
+#: src/panel/settings/settings_autostart.vala:361
+#: src/panel/settings/settings_autostart.vala:394
 msgid "Command"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:372
+#: src/panel/settings/settings_autostart.vala:377
 msgid "An entry with that title already exists"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:375
+#: src/panel/settings/settings_autostart.vala:380
 msgid "Title"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:379
-#: src/panel/settings/settings_autostart.vala:393
+#: src/panel/settings/settings_autostart.vala:384
+#: src/panel/settings/settings_autostart.vala:398
 msgid "Required"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:382
+#: src/panel/settings/settings_autostart.vala:387
 msgid "Description"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:386
+#: src/panel/settings/settings_autostart.vala:391
 msgid "Optional"
 msgstr ""
 
-#: src/panel/settings/settings_autostart.vala:450
+#: src/panel/settings/settings_autostart.vala:455
 msgid "Autostart"
 msgstr ""
 
