@@ -75,8 +75,13 @@ public class AutostartItem : GLib.Object
                 if (file.query_exists()) {
                     GLib.DataOutputStream data_stream = new GLib.DataOutputStream(file_stream);
                     data_stream.put_string(@"[Desktop Entry]\nType=Application\nName=$title\nDescription=$description\nExec=$command\n");
-                    this.id = (new GLib.DesktopAppInfo.from_filename(file.get_path())).get_id();
                     this.filename = file.get_path();
+                    GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(file.get_path());
+                    if (info == null) {
+                        this.delete();
+                        return null;
+                    }
+                    this.id = info.get_id();
                 } else {
                     return null;
                 }
@@ -491,7 +496,7 @@ public class AutostartPage : Budgie.SettingsPage {
             string[] files = list_directory.end(res);
             foreach (string file in files) {
                 GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(file);
-                if (item != null) {
+                if (info != null) {
                     AutostartItem item = new AutostartItem.from_app_info(info);
                     add_item(item);
                     autostart_files.set(item.id, item.title);
