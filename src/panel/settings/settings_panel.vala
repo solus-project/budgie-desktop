@@ -474,13 +474,16 @@ public class PanelPage : Budgie.SettingsPage {
 
     /**
      * Delete ourselves
-     *
-     * TODO: Stick up a confirm dialog!
      */
     void delete_panel()
     {
         if (this.manager.slots_used() > 1) {
-            this.manager.delete_panel(this.toplevel.uuid);
+            var dlg = new RemovePanelDialog(this.get_toplevel() as Gtk.Window);
+            bool del = dlg.run();
+            dlg.destroy();
+            if (del) {
+                this.manager.delete_panel(this.toplevel.uuid);
+            }
         }
     }
 

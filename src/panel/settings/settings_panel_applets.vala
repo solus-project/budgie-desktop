@@ -449,11 +449,18 @@ public class AppletsPage : Gtk.Box {
     }
 
     /**
-     * User requested we delete this applet
+     * User requested we delete this applet. Make sure they meant it!
      */
     void remove_applet()
     {
-        if (current_info != null) {
+        if (current_info == null) {
+            return;
+        }
+
+        var dlg = new RemoveAppletDialog(this.get_toplevel() as Gtk.Window);
+        bool del = dlg.run();
+        dlg.destroy();
+        if (del) {
             this.toplevel.remove_applet(this.current_info);
         }
     }
