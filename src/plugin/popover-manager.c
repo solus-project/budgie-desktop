@@ -341,6 +341,7 @@ static BudgiePopover *budgie_popover_manager_get_popover_for_coords(BudgiePopove
 {
         GHashTableIter iter = { 0 };
         GtkWidget *parent_widget = NULL;
+        GtkWidget *grandparent = NULL;
         BudgiePopover *assoc_popover = NULL;
 
         g_hash_table_iter_init(&iter, self->priv->popovers);
@@ -354,6 +355,15 @@ static BudgiePopover *budgie_popover_manager_get_popover_for_coords(BudgiePopove
                 /* Skip hidden widget with broken geometry */
                 if (!gtk_widget_get_visible(parent_widget)) {
                         continue;
+                }
+
+                /* Might be hidden through ancestory. Find out. */
+                grandparent = gtk_widget_get_parent(parent_widget);
+                if (grandparent) {
+                        if (!gtk_widget_get_visible(grandparent) ||
+                            !gtk_widget_get_child_visible(grandparent)) {
+                                continue;
+                        }
                 }
 
                 /* Determine the parent_widget's absolute x, y on screen */
