@@ -2,7 +2,7 @@
 
 # We bash-quote already.
 session_data = configuration_data()
-session_data.set('PACKAGE_VERSION', meson.project_version())
+session_data.set('PACKAGE_VERSION', package_version)
 
 gnome_session_components = [
     'gnome-settings-daemon',

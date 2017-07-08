@@ -11,6 +11,8 @@ project(
     ],
 )
 
+git = find_program('git', required: false)
+
 am_cflags = [
     '-fstack-protector',
     '-pedantic',
@@ -56,7 +58,18 @@ dep_accountsservice = dependency('accountsservice', version: '>= 0.6.40')
 
 # Create config.h
 cdata = configuration_data()
-cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
+
+# Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
+package_version = meson.project_version()
+
+if git.found()
+    git_version = run_command('git', ['describe'])
+    if git_version.returncode() == 0
+        package_version = git_version.stdout().strip()
+    endif
+endif
+
+cdata.set_quoted('PACKAGE_VERSION', package_version)
 
 # Make gettext work
 cdata.set_quoted('GETTEXT_PACKAGE', meson.project_name())
