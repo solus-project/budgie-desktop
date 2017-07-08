@@ -113,7 +113,6 @@ public class AutostartItemWidget : Gtk.ListBoxRow
     public AutostartItemWidget(AutostartItem item, bool show_delete = true, bool running = false)
     {
         Object(can_focus: false,
-               focus_on_click: false,
                activatable: false);
 
         this.autostart_item = item;
