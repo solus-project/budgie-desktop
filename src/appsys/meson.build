@@ -18,7 +18,6 @@ libappsys = static_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'libwnck-3.0',
-        '-H', 'BudgieAppSystem.h',
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
