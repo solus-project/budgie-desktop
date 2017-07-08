@@ -26,6 +26,17 @@ struct _BudgiePopoverManagerPrivate {
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
 
+#if !GTK_CHECK_VERSION(3, 20, 0)
+/*
+ * Borrowed from brisk's popover-manager.c (in turn borrowed from) gdkseatdefault.c
+ */
+#define KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK)
+#define POINTER_EVENTS                                                                             \
+        (GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |               \
+         GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK | GDK_ENTER_NOTIFY_MASK |                        \
+         GDK_LEAVE_NOTIFY_MASK | GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK)
+#endif
+
 static gboolean budgie_popover_manager_enter_notify(BudgiePopoverManager *manager,
                                                     GdkEventCrossing *crossing, GtkWidget *widget);
 static void budgie_popover_manager_link_signals(BudgiePopoverManager *manager,
@@ -451,9 +462,7 @@ static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover,
 static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopover *popover)
 {
         GdkDisplay *display = NULL;
-        GdkSeat *seat = NULL;
         GdkWindow *window = NULL;
-        GdkSeatCapabilities caps = 0;
         GdkGrabStatus st;
 
         if (self->priv->grabbed || popover != self->priv->active_popover) {
@@ -468,15 +477,56 @@ static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopove
         }
 
         display = gtk_widget_get_display(GTK_WIDGET(popover));
-        seat = gdk_display_get_default_seat(display);
 
-        caps = GDK_SEAT_CAPABILITY_ALL;
+#if GTK_CHECK_VERSION(3, 20, 0)
+        /* 3.20 and newer use GdkSeat API */
+        GdkSeat *seat = NULL;
+        GdkSeatCapabilities caps = GDK_SEAT_CAPABILITY_ALL;
+
+        seat = gdk_display_get_default_seat(display);
 
         st = gdk_seat_grab(seat, window, caps, TRUE, NULL, NULL, NULL, NULL);
         if (st == GDK_GRAB_SUCCESS) {
                 self->priv->grabbed = TRUE;
                 gtk_grab_add(GTK_WIDGET(popover));
         }
+#else
+        /* Likely 3.18, use old GdkDevice API */
+        GdkDeviceManager *manager = NULL;
+        GdkDevice *pointer, *keyboard = NULL;
+
+        manager = gdk_display_get_device_manager(display);
+
+        pointer = gdk_device_manager_get_client_pointer(manager);
+        keyboard = gdk_device_get_associated_device(pointer);
+
+        st = gdk_device_grab(pointer,
+                             window,
+                             GDK_OWNERSHIP_NONE,
+                             TRUE,
+                             POINTER_EVENTS,
+                             NULL,
+                             GDK_CURRENT_TIME);
+
+        if (st != GDK_GRAB_SUCCESS) {
+                return;
+        }
+        if (keyboard) {
+                st = gdk_device_grab(keyboard,
+                                     window,
+                                     GDK_OWNERSHIP_NONE,
+                                     TRUE,
+                                     KEYBOARD_EVENTS,
+                                     NULL,
+                                     GDK_CURRENT_TIME);
+                if (st != GDK_GRAB_SUCCESS) {
+                        gdk_device_ungrab(keyboard, GDK_CURRENT_TIME);
+                        return;
+                }
+        }
+        self->priv->grabbed = TRUE;
+        gtk_grab_add(GTK_WIDGET(popover));
+#endif
 }
 
 /**
@@ -487,18 +537,40 @@ static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopove
 static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopover *popover)
 {
         GdkDisplay *display = NULL;
-        GdkSeat *seat = NULL;
 
         if (!self->priv->grabbed || popover != self->priv->active_popover) {
                 return;
         }
 
         display = gtk_widget_get_display(GTK_WIDGET(popover));
+
+#if GTK_CHECK_VERSION(3, 20, 0)
+        /* 3.20 and newer use GdkSeat API */
+        GdkSeat *seat = NULL;
+
         seat = gdk_display_get_default_seat(display);
 
         gtk_grab_remove(GTK_WIDGET(popover));
         gdk_seat_ungrab(seat);
         self->priv->grabbed = FALSE;
+#else
+        /* Likely 3.18 */
+        GdkDeviceManager *manager = NULL;
+        GdkDevice *pointer, *keyboard = NULL;
+
+        manager = gdk_display_get_device_manager(display);
+
+        pointer = gdk_device_manager_get_client_pointer(manager);
+        keyboard = gdk_device_get_associated_device(pointer);
+
+        gtk_grab_remove(GTK_WIDGET(popover));
+
+        gdk_device_ungrab(pointer, GDK_CURRENT_TIME);
+        if (keyboard) {
+                gdk_device_ungrab(keyboard, GDK_CURRENT_TIME);
+        }
+        self->priv->grabbed = FALSE;
+#endif
 }
 
 /**
