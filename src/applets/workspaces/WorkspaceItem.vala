@@ -24,7 +24,7 @@ public class WorkspaceItem : Gtk.EventBox
     public signal void remove_workspace(int index, uint32 time);
     public signal void pls_update_windows();
     private Gtk.Grid icon_grid;
-    private Gtk.Allocation definite_fucking_allocation;
+    private Gtk.Allocation real_alloc;
 
     public WorkspaceItem(Wnck.Workspace space)
     {
@@ -32,8 +32,8 @@ public class WorkspaceItem : Gtk.EventBox
         this.workspace = space;
         this.set_tooltip_text(workspace.get_name());
 
-        definite_fucking_allocation.width = 0;
-        definite_fucking_allocation.height = 0;
+        real_alloc.width = 0;
+        real_alloc.height = 0;
 
         icon_grid = new Gtk.Grid();
         icon_grid.set_column_spacing(0);
@@ -198,8 +198,8 @@ public class WorkspaceItem : Gtk.EventBox
             column_offset = 10;
             row_offset = 15;
         }
-        int num_columns = (definite_fucking_allocation.width - column_offset) / 16;
-        int num_rows = (definite_fucking_allocation.height - row_offset) / 16;
+        int num_columns = (real_alloc.width - column_offset) / 16;
+        int num_rows = (real_alloc.height - row_offset) / 16;
 
         if (num_columns <= 0) {
             num_columns = 1;
@@ -277,7 +277,7 @@ public class WorkspaceItem : Gtk.EventBox
 
     public override void size_allocate(Gtk.Allocation allocation) {
         this.queue_resize();
-        base.size_allocate(definite_fucking_allocation);
+        base.size_allocate(real_alloc);
     }
 
     public override bool button_release_event(Gdk.EventButton event)
@@ -301,18 +301,18 @@ public class WorkspaceItem : Gtk.EventBox
     {
         if (WorkspacesApplet.get_orientation() == Gtk.Orientation.VERTICAL) {
             base.get_preferred_width(out min, out nat);
-            min = nat = definite_fucking_allocation.width = WorkspacesApplet.panel_size;
+            min = nat = real_alloc.width = WorkspacesApplet.panel_size;
             return;
         }
         float w_width = (float)workspace.get_width();
         float width = (w_width/workspace.get_height()) * WorkspacesApplet.panel_size;
         min = nat = (int)width;
-        definite_fucking_allocation.width = (int)width;
+        real_alloc.width = (int)width;
     }
 
     public override void get_preferred_height(out int min, out int nat) {
         base.get_preferred_height(out min, out nat);
-        min = nat = definite_fucking_allocation.height = WorkspacesApplet.panel_size;
+        min = nat = real_alloc.height = WorkspacesApplet.panel_size;
     }
 
     public Wnck.Workspace get_workspace() {

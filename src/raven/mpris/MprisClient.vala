@@ -10,7 +10,7 @@
  */
 
 /**
- * Simple wrapper to ensure vala doesn't unref our shit.
+ * Simple wrapper to ensure a lifetime reference to the encapsulated objects
  */
 public class MprisClient : Object
 {
