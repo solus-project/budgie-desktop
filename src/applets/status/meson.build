@@ -35,6 +35,11 @@ if with_bluetooth == true
     applet_status_vala_args += ['-D', 'WITH_BLUETOOTH']
 endif
 
+# For old schemas that don't have show-battery-percentage
+if dep_gtk318.found()
+    applet_status_vala_args += ['-D', 'HAVE_GTK_318']
+endif
+
 shared_library(
     'statusapplet',
     applet_status_sources,

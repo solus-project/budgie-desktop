@@ -71,9 +71,9 @@ budgie_panel_vala_args = [
         '--gresources=' + gresource,
 ]
 
-# For popdown/popup methods
-if dep_gtk322.found()
-    budgie_panel_vala_args += ['-D', 'HAVE_GTK_322']
+# For pointer methods
+if dep_gtk318.found()
+    budgie_panel_vala_args += ['-D', 'HAVE_GTK_318']
 endif
 
 budgie_panel_c_args = [
