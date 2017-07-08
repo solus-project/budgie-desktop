@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-05 23:55+0100\n"
-"PO-Revision-Date: 2017-07-06 19:45+0000\n"
+"PO-Revision-Date: 2017-07-06 20:55+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/budgie-desktop/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -444,11 +444,11 @@ msgstr "Animacijos"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
-msgstr ""
+msgstr "Valdyti ar langai ir valdikliai naudos animacijas"
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr ""
+msgstr "Pasirinkti programėlę"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
 #: src/panel/settings/settings_autostart.vala:198
@@ -472,7 +472,7 @@ msgstr "Nėra aprašo"
 
 #: src/panel/settings/settings_autostart.vala:166
 msgid "running"
-msgstr ""
+msgstr "vykdoma"
 
 #: src/panel/settings/settings_autostart.vala:189
 msgid "Applications"
@@ -511,7 +511,7 @@ msgstr "Nebūtina"
 
 #: src/panel/settings/settings_autostart.vala:450
 msgid "Autostart"
-msgstr ""
+msgstr "Automatinis paleidimas"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
@@ -536,33 +536,33 @@ msgstr "Kairėje"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
-msgstr ""
+msgstr "Pritvirtinti modalinius dialogus prie langų"
 
 #: src/panel/settings/settings_wm.vala:60
 msgid ""
 "Modal dialogs will become attached to the parent window and move together "
 "when dragged"
-msgstr ""
+msgstr "Modaliniai dialogai bus pritvirtinti prie pirminių langų ir juos velkant, bus perkeliami kartu su jais"
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr ""
+msgstr "Automatinis išklojimas"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr ""
+msgstr "Langai bus automatiškai išklojami, velkant juos į ekrano viršų ar tolimuosius kampus"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr ""
+msgstr "Išjungti netiesioginę langų išvestį"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
-msgstr ""
+msgstr "Šis parametras yra pažengusiems naudotojams. Naudokite jį, jeigu turite grafikos ar našumo problemų su paskirtais grafikos procesoriais."
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -574,7 +574,7 @@ msgstr "Langų antraštės"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr ""
+msgstr "Nustatyti šriftą, kuris bus naudojamas programų antraštės juostose"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -582,7 +582,7 @@ msgstr "Dokumentai"
 
 #: src/panel/settings/settings_fonts.vala:51
 msgid "Set the display font used by for documents"
-msgstr ""
+msgstr "Nustatyti šriftą, kuris bus naudojamas atvaizduoti dokumentus"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
@@ -590,7 +590,7 @@ msgstr "Sąsaja"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr ""
+msgstr "Nustatyti šriftą, kurį naudos programų valdikliai"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -598,23 +598,23 @@ msgstr "Lygiaplotis"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
-msgstr ""
+msgstr "Nustatyti lygiaplotį šriftą, kurį naudos programos, kuriose vyrauja tekstas"
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Top Dock"
-msgstr ""
+msgstr "Viršutinis dokas"
 
 #: src/panel/settings/settings_panel.vala:92
 msgid "Right Dock"
-msgstr ""
+msgstr "Dešinysis dokas"
 
 #: src/panel/settings/settings_panel.vala:94
 msgid "Left Dock"
-msgstr ""
+msgstr "Kairysis dokas"
 
 #: src/panel/settings/settings_panel.vala:96
 msgid "Bottom Dock"
-msgstr ""
+msgstr "Apatinis dokas"
 
 #: src/panel/settings/settings_panel.vala:101
 msgid "Top Panel"
@@ -638,7 +638,7 @@ msgstr "Viršuje"
 
 #: src/panel/settings/settings_panel.vala:148
 msgid "Right"
-msgstr ""
+msgstr "Dešinėje"
 
 #: src/panel/settings/settings_panel.vala:152
 msgid "Bottom"
@@ -650,19 +650,19 @@ msgstr "Visada"
 
 #: src/panel/settings/settings_panel.vala:165
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamiškai"
 
 #: src/panel/settings/settings_panel.vala:168
 msgid "None"
-msgstr ""
+msgstr "Nėra"
 
 #: src/panel/settings/settings_panel.vala:179
 msgid "Automatic"
-msgstr ""
+msgstr "Automatiškai"
 
 #: src/panel/settings/settings_panel.vala:181
 msgid "Intelligent"
-msgstr ""
+msgstr "Išmaniai"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Never"
@@ -686,11 +686,11 @@ msgstr "Nustatyti šio skydelio dydį (plotį ar aukštį, priklausomai nuo orie
 
 #: src/panel/settings/settings_panel.vala:217
 msgid "Automatically hide"
-msgstr ""
+msgstr "Automatiškai slėpti"
 
 #: src/panel/settings/settings_panel.vala:218
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
+msgstr "Nustačius, šis skydelis bus slepiamas iš rodinio, kad atlaisvintų ekrano plotą"
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Transparency"
@@ -698,7 +698,7 @@ msgstr "Permatomumas"
 
 #: src/panel/settings/settings_panel.vala:226
 msgid "Control when this panel should have a solid background"
-msgstr ""
+msgstr "Valdyti kada šis skydelis turės vietisą foną"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Shadow"
@@ -706,7 +706,7 @@ msgstr "Šešėlis"
 
 #: src/panel/settings/settings_panel.vala:232
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
+msgstr "Prideda dekoratyvų šešėlį, puikiai tinkantį nepermatomiems skydeliams"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Stylize regions"
@@ -716,17 +716,17 @@ msgstr "Stilizuoti sritis"
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr ""
+msgstr "Pridėti į skydelį užuominą, kad tokiu būdu kiekviena iš trijų skydelio sričių galėtų būti skirtingai stilizuojama."
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "Dock mode"
-msgstr ""
+msgstr "Doko veiksena"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr ""
+msgstr "Esant doko veiksenoje, skydelis naudos kaip įmanoma mažiau vietos, atlaisvindamas vertingą ekrano plotą."
 
 #: src/panel/settings/settings_panel.vala:258
 msgid "Delete panel"
@@ -744,7 +744,7 @@ msgstr "Konfigūruoti programėlę"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Pasirinkti naują programėlę, kurią pridėti į šį skydelį"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
@@ -772,7 +772,7 @@ msgstr "Darbalaukio piktogramos"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr ""
+msgstr "Valdyti ar darbalaukyje bus leidžiami leistukai ir piktogramos"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
@@ -804,7 +804,7 @@ msgstr "Prijungti tomai"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr ""
+msgstr "Prijungti tomai ir diskai bus rodomi darbalaukyje"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -832,12 +832,12 @@ msgstr "Rodyti keičiamuosius diskus"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr ""
+msgstr "Visada išskleisti vietas"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
 msgid "Night Light"
-msgstr ""
+msgstr "Naktinis apšvietimas"
 
 #: src/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
@@ -845,19 +845,19 @@ msgstr "Temperatūra"
 
 #: src/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr ""
+msgstr "Tvarkaraštis"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr ""
+msgstr "Nuo saulėlydžio iki saulėtekio"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr ""
+msgstr "Rankinis"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Rodymo nustatymai"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -865,11 +865,11 @@ msgstr "Rodyti meniu etiketę"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
-msgstr ""
+msgstr "Kompaktiška veiksena"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr ""
+msgstr "Rodyti antraštes"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
@@ -877,7 +877,7 @@ msgstr "Meniu etiketė"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr ""
+msgstr "Užvedus pelę"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
@@ -972,7 +972,7 @@ msgstr "Budgie skydelis"
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr ""
+msgstr "Paleisti kitas programas ir pateikti įvairius reikmenis, skirtus tvarkyti langus, rodyti laiką ir t.t."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
