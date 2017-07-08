@@ -89,11 +89,12 @@ public class AppletChooser : Gtk.Dialog
         var scroll = new Gtk.ScrolledWindow(null, null);
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         applets = new Gtk.ListBox();
+        applets.set_activate_on_single_click(false);
         applets.set_sort_func(this.sort_applets);
         scroll.add(applets);
 
-        applets.set_activate_on_single_click(true);
         applets.row_selected.connect(row_selected);
+        applets.row_activated.connect(row_activated);
 
         content_area.pack_start(scroll, true, true, 0);
         content_area.show_all();
@@ -142,6 +143,18 @@ public class AppletChooser : Gtk.Dialog
 
         /* TODO: Switch name -> module_name */
         this.applet_id = (row.get_child() as PluginItem).plugin.get_name();
+    }
+
+    /**
+     * Special sauce to allow us to double-click activate an applet
+     */
+    void row_activated(Gtk.ListBoxRow? row)
+    {
+        this.row_selected(row);
+
+        if (this.applet_id != null) {
+            this.response(Gtk.ResponseType.ACCEPT);
+        }
     }
 
     /**
