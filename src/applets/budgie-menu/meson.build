@@ -42,6 +42,7 @@ shared_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libgnome-menu-3.0',
         '--pkg', 'gio-unix-2.0',
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
