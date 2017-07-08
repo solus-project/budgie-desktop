@@ -157,7 +157,8 @@ public class RavenTriggerApplet : Budgie.Applet
                 });
             });
 
-            var t = Thread.create<void*>(this.update_anchors, false);
+            /* Stop Vala from getting scared. */
+            unowned Thread<void*> t = Thread.create<void*>(this.update_anchors, false);
         } catch (Error e) {
             warning("Failed to gain Raven proxy: %s", e.message);
         }
