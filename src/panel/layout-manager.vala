@@ -98,7 +98,7 @@ public class LayoutManager : GLib.Object {
                         continue;
                     }
 
-                    this.known_layouts.insert(name, path_name);
+                    this.known_layouts.insert(name, "file://" + path_name);
                 }
             }
             yield enumf.close_async();

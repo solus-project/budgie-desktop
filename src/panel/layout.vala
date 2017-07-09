@@ -36,7 +36,7 @@ public class Layout : GLib.Object {
     /**
      * Attempt to construct a new layout from the given filename
      */
-    public Layout.from_file(string filename) throws NotRealErrors
+    public Layout.from_url(string url) throws NotRealErrors
     {
         throw new NotRealErrors.NOT_YET_IMPLEMENTED("Not yet implemented");
     }
