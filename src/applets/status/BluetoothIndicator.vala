@@ -28,8 +28,10 @@ public class BluetoothIndicator : Gtk.Bin
     public Budgie.Popover? popover = null;
 
     Rfkill? killer = null;
+    DBusProxy? db = null;
 
     Gtk.CheckButton radio_airplane;
+    ulong radio_id;
     Gtk.Button send_to;
 
     async void setup_dbus()
@@ -37,6 +39,7 @@ public class BluetoothIndicator : Gtk.Bin
         try {
             killer = yield Bus.get_proxy(BusType.SESSION, "org.gnome.SettingsDaemon.Rfkill", "/org/gnome/SettingsDaemon/Rfkill");
         } catch (Error e) {
+            killer = null;
             warning("Unable to contact RfKill manager: %s", e.message);
             return;
         }
@@ -192,7 +195,7 @@ public class BluetoothIndicator : Gtk.Bin
         // Airplane mode
         radio_airplane = new Gtk.CheckButton.with_label(_("Bluetooth Airplane Mode"));
         radio_airplane.get_child().set_property("margin", 4);
-        radio_airplane.clicked.connect(on_set_airplane);
+        radio_id = radio_airplane.notify["active"].connect_after(on_set_airplane);
         box.pack_start(radio_airplane, false, false, 0);
 
         // Ensure all content is shown
@@ -219,7 +222,8 @@ public class BluetoothIndicator : Gtk.Bin
     /* We set */
     void on_set_airplane()
     {
-        bool s = !(radio_airplane.get_active());
+        bool s = radio_airplane.get_active();
+
         try {
             killer.BluetoothAirplaneMode = s;
         } catch (Error e) {
@@ -231,16 +235,17 @@ public class BluetoothIndicator : Gtk.Bin
     /* Notify */
     void on_airplane_change()
     {
+        SignalHandler.block(radio_airplane, radio_id);
         radio_airplane.set_active(killer.BluetoothAirplaneMode);
+        SignalHandler.unblock(radio_airplane, radio_id);
         this.resync();
     }
 
     void sync_rfkill()
     {
-        bool b = killer.BluetoothAirplaneMode;
-        var db = killer as DBusProxy;
+        db = killer as DBusProxy;
         db.g_properties_changed.connect(on_airplane_change);
         this.resync();
-        radio_airplane.set_active(killer.BluetoothAirplaneMode);
+        this.on_airplane_change();
     }
 } // End class
