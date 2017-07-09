@@ -15,6 +15,10 @@ errordomain NotRealErrors {
     NOT_YET_IMPLEMENTED,
 }
 
+errordomain LayoutError {
+    MISSING_PANELS,
+}
+
 /**
  * A Layout defines the initial configuration for the desktop in a nicely
  * encapsulated fashion
@@ -33,12 +37,62 @@ public class Layout : GLib.Object {
         throw new NotRealErrors.NOT_YET_IMPLEMENTED("Not yet implemented");
     }
 
+    private string? file_to_string(File f) throws Error
+    {
+        StringBuilder builder = new StringBuilder();
+        string? line = null;
+        var dis = new DataInputStream(f.read());
+        while ((line = dis.read_line()) != null) {
+            builder.append_printf("%s\n", line);
+        }
+        return "" + builder.str;
+    }
+
     /**
      * Attempt to construct a new layout from the given filename
      */
-    public Layout.from_url(string url) throws NotRealErrors
+    public Layout.from_url(string url) throws Error, NotRealErrors, LayoutError
     {
+        Object();
+
+        this.load_from_url(url);
+    }
+
+    /**
+     * Handle the actual loading
+     */
+    private void load_from_url(string url) throws Error, NotRealErrors, LayoutError
+    {
+        File f = File.new_for_uri(url);
+        KeyFile keyfile = new KeyFile();
+        string? contents = null;
+        string[] toplevels;
+
+        try {
+            contents = this.file_to_string(f);
+            keyfile.load_from_data(contents, contents.length, KeyFileFlags.KEEP_TRANSLATIONS);
+        } catch (Error e) {
+            throw e;
+        }
+
+        if (!keyfile.has_key("Panels", "Panels")) {
+            throw new LayoutError.MISSING_PANELS("Panels section is missing");
+        }
+
+        /* Load all the toplevels */
+        toplevels = keyfile.get_string_list("Panels", "Panels");
+        foreach (unowned string toplevel in toplevels) {
+            this.load_toplevel(keyfile, toplevel);
+        }
+
         throw new NotRealErrors.NOT_YET_IMPLEMENTED("Not yet implemented");
+    }
+
+    /**
+     * Load a toplevel from the keyfile and store it locally..
+     */
+    private void load_toplevel(KeyFile? keyfile, string toplevel_id) throws Error
+    {
     }
 
 } /* End Layout */
