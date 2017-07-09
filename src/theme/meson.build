@@ -1,38 +1,11 @@
 gnome = import('gnome')
 pkgconfig = import('pkgconfig')
 
-# Compile to CSS dynamically.
-sassc = find_program('sassc')
-
-# Normal and high contrast
-theme_variants = [
-    '',
-    '_hc',
-]
-
-theme_deps = []
-theme_versions = [
-    '3.18',
-    '3.20',
-]
-
-foreach version : theme_versions
-    foreach variant : theme_variants
-        # Build the main CSS stylesheet
-        theme_deps += custom_target('theme' + variant + '_' + version + '.css',
-            input: version + '/theme' + variant + '.scss',
-            output: 'theme' + variant + '_' + version + '.css',
-            command: [sassc, '-M', '-t', 'compressed', '@INPUT@', '@OUTPUT@'],
-        )
-    endforeach
-endforeach
-
 # Compile the assets into the .so
 theme_resources = gnome.compile_resources(
     'budgie-theme-resources',
     'budgie-theme.gresource.xml',
     source_dir: meson.current_build_dir(),
-    dependencies: theme_deps,
     c_name: 'budgie_desktop_theme',
 )
 
