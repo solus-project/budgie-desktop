@@ -18,6 +18,7 @@ panel_resources = gnome.compile_resources(
 )
 
 panel_sources = [
+    'layout.vala',
     'layout-manager.vala',
     'main.vala',
     'manager.vala',
