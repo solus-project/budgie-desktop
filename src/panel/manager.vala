@@ -1040,6 +1040,9 @@ public class PanelManager : DesktopManager
             return;
         }
         panel.set_autohide_policy(policy);
+
+        // Raven needs to know about the autohide mode
+        this.update_screen();
     }
 
     /**
@@ -1126,30 +1129,66 @@ public class PanelManager : DesktopManager
         }
 
         raven_screen = area.area;
-        if (top != null && !top.dock_mode) {
+        if (top != null && !top.dock_mode && top.autohide == AutohidePolicy.NONE) {
             raven_screen.y += (top.intended_size - 5);
             raven_screen.height -= (top.intended_size - 5);
         }
 
-        if (bottom != null && !bottom.dock_mode) {
+        if (bottom != null && !bottom.dock_mode && bottom.autohide == AutohidePolicy.NONE) {
             raven_screen.height -= bottom.intended_size - 5;
         }
 
-        if (right != null) {
-            raven_screen.width -= (right.intended_size);
-        }
-
-        // If we have left panel and no right panel, stick to that edge
-        if (left != null && right == null && !left.dock_mode) {
+        if (left != null & right == null) {
+            if (this.is_panel_huggable(left)) {
+                /* Hug left */
+                raven.screen_edge = Gtk.PositionType.LEFT;
+                raven_screen.x += left.intended_size;
+            } else {
+                /* Stick right */
+                raven.screen_edge = Gtk.PositionType.RIGHT;
+            }
+        } else if (right != null && left == null) {
+            if (this.is_panel_huggable(right)) {
+                /* Hug right */
+                raven_screen.width -= (right.intended_size);
+                raven.screen_edge = Gtk.PositionType.RIGHT;
+            } else {
+                /* Stick left */
+                raven.screen_edge = Gtk.PositionType.LEFT;
+            }
+        } else if (is_panel_huggable(left) && !is_panel_huggable(right)) {
+            /* Hug left */
             raven.screen_edge = Gtk.PositionType.LEFT;
             raven_screen.x += left.intended_size;
-        } else {
+        } else if (is_panel_huggable(right) && !is_panel_huggable(left)) {
+            /* Hug right */
+            raven_screen.width -= (right.intended_size);
             raven.screen_edge = Gtk.PositionType.RIGHT;
+        } else {
+            /* Stick/maybe hug right */
+            raven.screen_edge = Gtk.PositionType.RIGHT;
+            if (right != null) {
+                raven_screen.width -= (right.intended_size);
+            }
         }
 
         /* Let Raven update itself accordingly */
         raven.update_geometry(raven_screen);
         this.panels_changed();
+    }
+
+    bool is_panel_huggable(Budgie.Toplevel? panel)
+    {
+        if (panel == null) {
+            return false;
+        }
+        if (panel.autohide != AutohidePolicy.NONE) {
+            return false;
+        }
+        if (panel.dock_mode) {
+            return false;
+        }
+        return true;
     }
 
     /**
