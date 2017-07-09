@@ -165,6 +165,9 @@ public class PanelManager : DesktopManager
 
     private string default_layout = "default";
 
+    /* Unsurprisingly, manages layouts */
+    private LayoutManager layout_manager;
+
     /**
      * Updated when specific names are queried
      */
@@ -584,6 +587,9 @@ public class PanelManager : DesktopManager
         if (this.reset) {
             this.do_reset();
         }
+
+        this.layout_manager = new LayoutManager();
+
         var scr = Gdk.Screen.get_default();
         primary_monitor = scr.get_primary_monitor();
         scr.monitors_changed.connect(this.on_monitors_changed);
