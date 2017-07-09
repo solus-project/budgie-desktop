@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 23:55+0100\n"
-"PO-Revision-Date: 2017-07-06 08:07+0000\n"
+"POT-Creation-Date: 2017-07-09 14:30+0100\n"
+"PO-Revision-Date: 2017-07-09 17:10+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish (http://www.transifex.com/budgie-desktop/budgie-desktop/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -68,8 +68,8 @@ msgstr "Ilmoitukset"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u ulostulo"
+msgstr[1] "%u ulostuloa"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -77,8 +77,8 @@ msgstr[1] ""
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u sisääntulo"
+msgstr[1] "%u sisääntuloa"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
@@ -159,11 +159,11 @@ msgstr "Tuntematon laite"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr ""
+msgstr "Virhe laitetta irrottaessa"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr ""
+msgstr "Virhe taltion liitosta irrottaessa"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
@@ -281,28 +281,28 @@ msgstr "Käytä 24 tunnin kelloa"
 msgid "All"
 msgstr "Kaikki"
 
-#: src/applets/status/PowerIndicator.vala:91
+#: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
 msgstr "Akku ladattu täyteen."
 
-#: src/applets/status/PowerIndicator.vala:94
+#: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
 msgstr "Tuntematon"
 
 #. Set inner charging duration to hours:minutes
-#: src/applets/status/PowerIndicator.vala:103
+#: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
 msgstr "Akku latautuu"
 
-#: src/applets/status/PowerIndicator.vala:108
+#: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
 msgstr "Akkua jäljellä"
 
-#: src/applets/status/PowerIndicator.vala:162
+#: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
 msgstr "Näytä akun prosentti"
 
-#: src/applets/status/PowerIndicator.vala:170
+#: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
 msgstr "Virranhallinta-asetukset"
 
@@ -310,15 +310,15 @@ msgstr "Virranhallinta-asetukset"
 msgid "Sound settings"
 msgstr "Ääniasetukset"
 
-#: src/applets/status/BluetoothIndicator.vala:102
+#: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth on pois käytöstä"
 
-#: src/applets/status/BluetoothIndicator.vala:106
+#: src/applets/status/BluetoothIndicator.vala:109
 msgid "Bluetooth is active"
 msgstr "Bluetooth on käytössä"
 
-#: src/applets/status/BluetoothIndicator.vala:111
+#: src/applets/status/BluetoothIndicator.vala:114
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
@@ -326,17 +326,17 @@ msgstr[0] "Yhdistetty %d laitteeseen"
 msgstr[1] "Yhdistetty %d laitteeseen"
 
 #. Settings button
-#: src/applets/status/BluetoothIndicator.vala:176
+#: src/applets/status/BluetoothIndicator.vala:179
 msgid "Bluetooth Settings"
 msgstr "Bluetooth-asetukset"
 
 #. Send files button
-#: src/applets/status/BluetoothIndicator.vala:183
+#: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
 msgstr "Lähetä tiedostoja"
 
 #. Airplane mode
-#: src/applets/status/BluetoothIndicator.vala:193
+#: src/applets/status/BluetoothIndicator.vala:196
 msgid "Bluetooth Airplane Mode"
 msgstr "Bluetoothin lentokonetila"
 
@@ -439,7 +439,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr ""
+msgstr "Animaatiot"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
@@ -447,11 +447,11 @@ msgstr ""
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr ""
+msgstr "Valitse appletti"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:198
-#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_autostart.vala:202
+#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr "Peru"
@@ -459,56 +459,56 @@ msgstr "Peru"
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr ""
+msgstr "Lisää appletti"
 
-#: src/panel/settings/settings_autostart.vala:136
+#: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
-msgstr ""
+msgstr "Nimetön"
 
-#: src/panel/settings/settings_autostart.vala:143
+#: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
 msgstr "Ei kuvausta"
 
-#: src/panel/settings/settings_autostart.vala:166
+#: src/panel/settings/settings_autostart.vala:170
 msgid "running"
 msgstr "käynnissä"
 
-#: src/panel/settings/settings_autostart.vala:189
+#: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
 msgstr "Sovellukset"
 
-#: src/panel/settings/settings_autostart.vala:199
-#: src/panel/settings/settings_autostart.vala:362
+#: src/panel/settings/settings_autostart.vala:203
+#: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
 msgstr "Lisää"
 
-#: src/panel/settings/settings_autostart.vala:356
-#: src/panel/settings/settings_autostart.vala:389
+#: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
 msgstr "Komento"
 
-#: src/panel/settings/settings_autostart.vala:372
+#: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:375
-msgid "Title"
-msgstr ""
+msgstr "Samalla nimellä on jo olemassa kohde"
 
 #: src/panel/settings/settings_autostart.vala:379
-#: src/panel/settings/settings_autostart.vala:393
+msgid "Title"
+msgstr "Nimi"
+
+#: src/panel/settings/settings_autostart.vala:383
+#: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
 msgstr "Vaadittu"
 
-#: src/panel/settings/settings_autostart.vala:382
+#: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
 msgstr "Kuvaus"
 
-#: src/panel/settings/settings_autostart.vala:386
+#: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
 msgstr "Valinnainen"
 
-#: src/panel/settings/settings_autostart.vala:450
+#: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
 msgstr "Automaattinen käynnistys"
 
@@ -526,12 +526,12 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr ""
+msgstr "Oikea (standardi)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:150
 msgid "Left"
-msgstr ""
+msgstr "Vasen"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
@@ -599,6 +599,44 @@ msgstr "Monospace"
 msgid "Set the fixed-width font used by text dominant applications"
 msgstr ""
 
+#: src/panel/settings/settings_panel_dialogs.vala:29
+msgid "Confirm panel removal"
+msgstr "Vahvista paneelin poistaminen"
+
+#: src/panel/settings/settings_panel_dialogs.vala:36
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr "Haluatko varmasti poistaa tämän paneelin? Tätä toimintoa ei voi perua."
+
+#: src/panel/settings/settings_panel_dialogs.vala:51
+#: src/panel/settings/settings_panel_dialogs.vala:114
+msgid "Don't ask me again"
+msgstr "Älä kysy uudelleen"
+
+#: src/panel/settings/settings_panel_dialogs.vala:60
+msgid "Remove panel"
+msgstr "Poista paneeli"
+
+#: src/panel/settings/settings_panel_dialogs.vala:61
+msgid "Keep panel"
+msgstr "Säilytä paneeli"
+
+#: src/panel/settings/settings_panel_dialogs.vala:92
+msgid "Confirm applet removal"
+msgstr "Vahvista appletin poistaminen"
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr "Haluatko varmasti poistaa tämän appletin? Tätä toimintoa ei voi perua."
+
+#: src/panel/settings/settings_panel_dialogs.vala:123
+msgid "Remove applet"
+msgstr "Poista appletti"
+
+#: src/panel/settings/settings_panel_dialogs.vala:124
+msgid "Keep applet"
+msgstr "Säilytä appletti"
+
 #: src/panel/settings/settings_panel.vala:90
 msgid "Top Dock"
 msgstr ""
@@ -649,11 +687,11 @@ msgstr "Aina"
 
 #: src/panel/settings/settings_panel.vala:165
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynaaminen"
 
 #: src/panel/settings/settings_panel.vala:168
 msgid "None"
-msgstr ""
+msgstr "Ei mitään"
 
 #: src/panel/settings/settings_panel.vala:179
 msgid "Automatic"
@@ -661,7 +699,7 @@ msgstr "Automaattinen"
 
 #: src/panel/settings/settings_panel.vala:181
 msgid "Intelligent"
-msgstr ""
+msgstr "Älykäs"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Never"
@@ -735,15 +773,15 @@ msgstr "Poista paneeli"
 msgid ""
 "Permanently remove the panel and applets from the screen. This action cannot"
 " be undone"
-msgstr ""
+msgstr "Poista paneeli ja appletit näytöltä pysyvästi. Tätä toimintoa ei voi perua"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr ""
+msgstr "Muokkaa applettia"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Valitse tähän paneeliin lisättävä uusi appletti"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
@@ -856,7 +894,7 @@ msgstr ""
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Näytön asetukset"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"

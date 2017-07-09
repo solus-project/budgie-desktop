@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 23:55+0100\n"
-"PO-Revision-Date: 2017-07-06 20:55+0000\n"
+"POT-Creation-Date: 2017-07-09 14:30+0100\n"
+"PO-Revision-Date: 2017-07-09 16:39+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/budgie-desktop/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -281,28 +281,28 @@ msgstr "Naudoti 24 valandų laiką"
 msgid "All"
 msgstr "Visos"
 
-#: src/applets/status/PowerIndicator.vala:91
+#: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
 msgstr "Baterija pilnai įkrauta."
 
-#: src/applets/status/PowerIndicator.vala:94
+#: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
 msgstr "Nežinoma"
 
 #. Set inner charging duration to hours:minutes
-#: src/applets/status/PowerIndicator.vala:103
+#: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
 msgstr "Baterija įkraunama"
 
-#: src/applets/status/PowerIndicator.vala:108
+#: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
 msgstr "Liko baterijos"
 
-#: src/applets/status/PowerIndicator.vala:162
+#: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
 msgstr "Rodyti baterijos procentinę dalį"
 
-#: src/applets/status/PowerIndicator.vala:170
+#: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
 msgstr "Energijos nustatymai"
 
@@ -310,15 +310,15 @@ msgstr "Energijos nustatymai"
 msgid "Sound settings"
 msgstr "Garso nustatymai"
 
-#: src/applets/status/BluetoothIndicator.vala:102
+#: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth išjungtas"
 
-#: src/applets/status/BluetoothIndicator.vala:106
+#: src/applets/status/BluetoothIndicator.vala:109
 msgid "Bluetooth is active"
 msgstr "Bluetooth aktyvus"
 
-#: src/applets/status/BluetoothIndicator.vala:111
+#: src/applets/status/BluetoothIndicator.vala:114
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
@@ -327,17 +327,17 @@ msgstr[1] "Prisijungta prie %d įrenginių"
 msgstr[2] "Prisijungta prie %d įrenginių"
 
 #. Settings button
-#: src/applets/status/BluetoothIndicator.vala:176
+#: src/applets/status/BluetoothIndicator.vala:179
 msgid "Bluetooth Settings"
 msgstr "Bluetooth nustatymai"
 
 #. Send files button
-#: src/applets/status/BluetoothIndicator.vala:183
+#: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
 msgstr "Siųsti failus"
 
 #. Airplane mode
-#: src/applets/status/BluetoothIndicator.vala:193
+#: src/applets/status/BluetoothIndicator.vala:196
 msgid "Bluetooth Airplane Mode"
 msgstr "Bluetooth lėktuvo veiksena"
 
@@ -451,8 +451,8 @@ msgid "Choose an applet"
 msgstr "Pasirinkti programėlę"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:198
-#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_autostart.vala:202
+#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr "Atsisakyti"
@@ -462,54 +462,54 @@ msgstr "Atsisakyti"
 msgid "Add applet"
 msgstr "Pridėti programėlę"
 
-#: src/panel/settings/settings_autostart.vala:136
+#: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
 msgstr "Be pavadinimo"
 
-#: src/panel/settings/settings_autostart.vala:143
+#: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
 msgstr "Nėra aprašo"
 
-#: src/panel/settings/settings_autostart.vala:166
+#: src/panel/settings/settings_autostart.vala:170
 msgid "running"
 msgstr "vykdoma"
 
-#: src/panel/settings/settings_autostart.vala:189
+#: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
 msgstr "Programos"
 
-#: src/panel/settings/settings_autostart.vala:199
-#: src/panel/settings/settings_autostart.vala:362
+#: src/panel/settings/settings_autostart.vala:203
+#: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
 msgstr "Pridėti"
 
-#: src/panel/settings/settings_autostart.vala:356
-#: src/panel/settings/settings_autostart.vala:389
+#: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
 msgstr "Komanda"
 
-#: src/panel/settings/settings_autostart.vala:372
+#: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
 msgstr "Įrašas tokiu pavadinimu jau yra"
 
-#: src/panel/settings/settings_autostart.vala:375
+#: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: src/panel/settings/settings_autostart.vala:379
-#: src/panel/settings/settings_autostart.vala:393
+#: src/panel/settings/settings_autostart.vala:383
+#: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
 msgstr "Būtina"
 
-#: src/panel/settings/settings_autostart.vala:382
+#: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
 msgstr "Aprašas"
 
-#: src/panel/settings/settings_autostart.vala:386
+#: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
 msgstr "Nebūtina"
 
-#: src/panel/settings/settings_autostart.vala:450
+#: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
 msgstr "Automatinis paleidimas"
 
@@ -599,6 +599,44 @@ msgstr "Lygiaplotis"
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
 msgstr "Nustatyti lygiaplotį šriftą, kurį naudos programos, kuriose vyrauja tekstas"
+
+#: src/panel/settings/settings_panel_dialogs.vala:29
+msgid "Confirm panel removal"
+msgstr "Patvirtinti skydelio šalinimą"
+
+#: src/panel/settings/settings_panel_dialogs.vala:36
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr "Ar tikrai norite pašalinti šį skydelį? Šio veiksmo negalima bus atšaukti."
+
+#: src/panel/settings/settings_panel_dialogs.vala:51
+#: src/panel/settings/settings_panel_dialogs.vala:114
+msgid "Don't ask me again"
+msgstr "Daugiau nebeklausti"
+
+#: src/panel/settings/settings_panel_dialogs.vala:60
+msgid "Remove panel"
+msgstr "Šalinti skydelį"
+
+#: src/panel/settings/settings_panel_dialogs.vala:61
+msgid "Keep panel"
+msgstr "Palikti skydelį"
+
+#: src/panel/settings/settings_panel_dialogs.vala:92
+msgid "Confirm applet removal"
+msgstr "Patvirtinti programėlės šalinimą"
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr "Ar tikrai norite pašalinti šią programėlę? Šio veiksmo negalima bus atšaukti."
+
+#: src/panel/settings/settings_panel_dialogs.vala:123
+msgid "Remove applet"
+msgstr "Šalinti programėlę"
+
+#: src/panel/settings/settings_panel_dialogs.vala:124
+msgid "Keep applet"
+msgstr "Palikti programėlę"
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Top Dock"

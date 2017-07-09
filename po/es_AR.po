@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 23:55+0100\n"
-"PO-Revision-Date: 2017-07-06 04:29+0000\n"
-"Last-Translator: Federico Damián Schonborn <federico.d.schonborn@gmail.com>\n"
+"POT-Creation-Date: 2017-07-09 14:30+0100\n"
+"PO-Revision-Date: 2017-07-09 13:31+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -283,28 +283,28 @@ msgstr "Usar formato de 24 horas"
 msgid "All"
 msgstr "Todo"
 
-#: src/applets/status/PowerIndicator.vala:91
+#: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
 msgstr "Batería completamente cargada."
 
-#: src/applets/status/PowerIndicator.vala:94
+#: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
 msgstr "Desconocido"
 
 #. Set inner charging duration to hours:minutes
-#: src/applets/status/PowerIndicator.vala:103
+#: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
 msgstr "Batería cargando"
 
-#: src/applets/status/PowerIndicator.vala:108
+#: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
 msgstr "Batería restante"
 
-#: src/applets/status/PowerIndicator.vala:162
+#: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
 msgstr "Mostrar el porcentaje de batería"
 
-#: src/applets/status/PowerIndicator.vala:170
+#: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
 msgstr "Ajustes de energía"
 
@@ -312,15 +312,15 @@ msgstr "Ajustes de energía"
 msgid "Sound settings"
 msgstr "Ajustes de sonido"
 
-#: src/applets/status/BluetoothIndicator.vala:102
+#: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth está activo"
 
-#: src/applets/status/BluetoothIndicator.vala:106
+#: src/applets/status/BluetoothIndicator.vala:109
 msgid "Bluetooth is active"
 msgstr "Bluetooth está inactivo"
 
-#: src/applets/status/BluetoothIndicator.vala:111
+#: src/applets/status/BluetoothIndicator.vala:114
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
@@ -328,17 +328,17 @@ msgstr[0] "Conectado a %d dispositivo"
 msgstr[1] "Conectado a %d dispositivos"
 
 #. Settings button
-#: src/applets/status/BluetoothIndicator.vala:176
+#: src/applets/status/BluetoothIndicator.vala:179
 msgid "Bluetooth Settings"
 msgstr "Ajustes de Bluetooth"
 
 #. Send files button
-#: src/applets/status/BluetoothIndicator.vala:183
+#: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
 msgstr "Enviar archivos"
 
 #. Airplane mode
-#: src/applets/status/BluetoothIndicator.vala:193
+#: src/applets/status/BluetoothIndicator.vala:196
 msgid "Bluetooth Airplane Mode"
 msgstr "Bluetooth Modo Avión"
 
@@ -452,8 +452,8 @@ msgid "Choose an applet"
 msgstr "Elije un componente"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:198
-#: src/panel/settings/settings_autostart.vala:361 src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_autostart.vala:202
+#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr "Cancelar"
@@ -463,54 +463,54 @@ msgstr "Cancelar"
 msgid "Add applet"
 msgstr "Agregar componente"
 
-#: src/panel/settings/settings_autostart.vala:136
+#: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
 msgstr "Sin título"
 
-#: src/panel/settings/settings_autostart.vala:143
+#: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
 msgstr "Sin descripción"
 
-#: src/panel/settings/settings_autostart.vala:166
+#: src/panel/settings/settings_autostart.vala:170
 msgid "running"
 msgstr "corriendo"
 
-#: src/panel/settings/settings_autostart.vala:189
+#: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
 msgstr "Aplicaciones"
 
-#: src/panel/settings/settings_autostart.vala:199
-#: src/panel/settings/settings_autostart.vala:362
+#: src/panel/settings/settings_autostart.vala:203
+#: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
 msgstr "Agregar"
 
-#: src/panel/settings/settings_autostart.vala:356
-#: src/panel/settings/settings_autostart.vala:389
+#: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
 msgstr "Comando"
 
-#: src/panel/settings/settings_autostart.vala:372
+#: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
 msgstr "Ya existe una entrada con ese título"
 
-#: src/panel/settings/settings_autostart.vala:375
+#: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
 msgstr "Título"
 
-#: src/panel/settings/settings_autostart.vala:379
-#: src/panel/settings/settings_autostart.vala:393
+#: src/panel/settings/settings_autostart.vala:383
+#: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
 msgstr "Requerido"
 
-#: src/panel/settings/settings_autostart.vala:382
+#: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
 msgstr "Descripción"
 
-#: src/panel/settings/settings_autostart.vala:386
+#: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
 msgstr "Opcional"
 
-#: src/panel/settings/settings_autostart.vala:450
+#: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
 msgstr "Autoinicio"
 
@@ -600,6 +600,44 @@ msgstr "Monoespacio"
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
 msgstr "Establece la fuente de ancho fijo usada por las aplicaciones donde el texto es dominante"
+
+#: src/panel/settings/settings_panel_dialogs.vala:29
+msgid "Confirm panel removal"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:36
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:51
+#: src/panel/settings/settings_panel_dialogs.vala:114
+msgid "Don't ask me again"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:60
+msgid "Remove panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:61
+msgid "Keep panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:92
+msgid "Confirm applet removal"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:123
+msgid "Remove applet"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:124
+msgid "Keep applet"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Top Dock"
