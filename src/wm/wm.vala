@@ -12,11 +12,11 @@
 namespace Budgie {
 
 
-public const string MUTTER_EDGE_TILING  = "edge-tiling";
-public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
+public const string MUTTER_EDGE_TILING   = "edge-tiling";
+public const string MUTTER_MODAL_ATTACH  = "attach-modal-dialogs";
 public const string MUTTER_BUTTON_LAYOUT = "button-layout";
-public const string WM_FORCE_UNREDIRECT = "force-unredirect";
-public const string WM_SCHEMA           = "com.solus-project.budgie-wm";
+public const string WM_FORCE_UNREDIRECT  = "force-unredirect";
+public const string WM_SCHEMA            = "com.solus-project.budgie-wm";
 
 public const bool CLUTTER_EVENT_PROPAGATE = false;
 public const bool CLUTTER_EVENT_STOP      = true;
@@ -1172,7 +1172,7 @@ public class BudgieWM : Meta.Plugin
         if (cur_tabs == null) {
             return;
         }
-        switch_switcher();
+        switch_switcher(true); /* true as in "yes, backward" */
     }
 
     public void switch_windows(Meta.Display display, Meta.Screen screen,
@@ -1208,16 +1208,24 @@ public class BudgieWM : Meta.Plugin
         switch_switcher();
     }
 
-    public void switch_switcher()
+    public void switch_switcher(bool backward = false)
     {
         /* Pass each window over to tabswitcher */
         foreach (var child in cur_tabs) {
             uint32 xid = (uint32)child.get_xwindow();
             switcher_proxy.PassItem(xid, child.get_user_time());
         }
-        cur_index++;
-        if (cur_index > cur_tabs.length()-1) {
-            cur_index = 0;
+        /* Either choose previous or choose next window */
+        if (backward) {
+            cur_index--;
+            if (cur_index < 0) {
+                cur_index = (int)cur_tabs.length() - 1;
+            }
+        } else {
+            cur_index++;
+            if (cur_index > cur_tabs.length() - 1) {
+                cur_index = 0;
+            }
         }
         /* Get the new selected window over to TabSwitcher */
         var win = cur_tabs.nth_data(cur_index);

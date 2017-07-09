@@ -15,7 +15,7 @@ namespace Budgie
 /**
  * Default width for an Switcher notification
  */
-public const int SWITCHER_SIZE= 350;
+public const int SWITCHER_SIZE = 350;
 
 /**
  * How often it is checked if the meta key is still pressed
@@ -25,7 +25,7 @@ public const int SWITCHER_MOD_EXPIRE_TIME = 50;
 /**
  * Our name on the session bus. Reserved for Budgie use
  */
-public const string SWITCHER_DBUS_NAME        = "org.budgie_desktop.TabSwitcher";
+public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 
 /**
  * Unique object path on SWITCHER_DBUS_NAME
