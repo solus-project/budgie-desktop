@@ -22,6 +22,7 @@ applet_budgiemenu_resources = gnome.compile_resources(
 applet_budgiemenu_sources = [
     'BudgieMenu.vala',
     'BudgieMenuWindow.vala',
+    'IconChooser.vala',
     applet_budgiemenu_resources,
 ]
 

@@ -53,8 +53,20 @@ public class BudgieMenuSettings : Gtk.Grid
         settings.bind("menu-categories-hover", switch_menu_categories_hover, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-label", entry_label, "text", SettingsBindFlags.DEFAULT);
         settings.bind("menu-icon", entry_icon_pick, "text", SettingsBindFlags.DEFAULT);
+
+        this.button_icon_pick.clicked.connect(on_pick_click);
     }
 
+    /**
+     * Handle the icon picker
+     */
+    void on_pick_click()
+    {
+        IconChooser chooser = new IconChooser(this.get_toplevel() as Gtk.Window);
+        string? response = chooser.run();
+        chooser.destroy();
+        message("Chose: %s", response);
+    }
 }
 
 public class BudgieMenuApplet : Budgie.Applet
