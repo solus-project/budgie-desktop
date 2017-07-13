@@ -358,7 +358,7 @@ public class BudgieMenuWindow : Budgie.Popover
         content.row_activated.connect(on_row_activate);
         content.set_selection_mode(Gtk.SelectionMode.NONE);
         content_scroll = new Gtk.ScrolledWindow(null, null);
-        content_scroll.set_overlay_scrolling(false);
+        content_scroll.set_overlay_scrolling(true);
         content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         content_scroll.add(content);
         right_layout.pack_start(content_scroll, true, true, 0);
