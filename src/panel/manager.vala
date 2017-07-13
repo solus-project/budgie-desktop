@@ -1333,7 +1333,7 @@ public class PanelManager : DesktopManager
         };
 
         foreach (string panel_dir in panel_dirs) {
-            string path = "%s/budgie-desktop/layouts/%s.layout".printf(panel_dir, layout_name);
+            string path = "file://%s/budgie-desktop/layouts/%s.layout".printf(panel_dir, layout_name);
             if (this.load_default_from_config(path)) {
                 return;
             }
