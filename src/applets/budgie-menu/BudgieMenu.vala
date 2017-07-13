@@ -59,6 +59,7 @@ public class BudgieMenuApplet : Budgie.Applet
     Gtk.Image img;
     Gtk.Label label;
     Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
+    int pixel_size = 32;
 
     private unowned Budgie.PopoverManager? manager = null;
 
@@ -88,7 +89,7 @@ public class BudgieMenuApplet : Budgie.Applet
         widget = new Gtk.ToggleButton();
         widget.relief = Gtk.ReliefStyle.NONE;
         img = new Gtk.Image.from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID);
-        img.pixel_size = 32;
+        img.pixel_size = pixel_size;
         img.no_show_all = true;
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -132,8 +133,12 @@ public class BudgieMenuApplet : Budgie.Applet
         on_settings_changed("menu-icon");
         on_settings_changed("menu-label");
 
+        /* Potentially reload icon on pixel size jumps */
         panel_size_changed.connect((p,i,s)=> {
-            img.pixel_size = (int)i;
+            if (this.pixel_size != p) {
+                this.pixel_size = (int)i;
+                this.on_settings_changed("menu-icon");
+            }
         });
 
         popover.key_release_event.connect((e)=> {
@@ -175,12 +180,13 @@ public class BudgieMenuApplet : Budgie.Applet
                 string? icon = settings.get_string(key);
                 if ("/" in icon) {
                     Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(icon);
-                    img.set_from_pixbuf(pixbuf.scale_simple(32, 32, Gdk.InterpType.BILINEAR));
+                    img.set_from_pixbuf(pixbuf.scale_simple(this.pixel_size, this.pixel_size, Gdk.InterpType.BILINEAR));
                 } else if (icon == "") {
                     should_show = false;
                 } else {
                     img.set_from_icon_name(icon, Gtk.IconSize.INVALID);
                 }
+                img.set_pixel_size(this.pixel_size);
                 img.set_visible(should_show);
                 break;
             case "menu-label":
