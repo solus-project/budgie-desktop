@@ -80,7 +80,7 @@ public class PlacesIndicatorApplet : Budgie.Applet
         ebox = new Gtk.EventBox();
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         ebox.add(layout);
-        image = new Gtk.Image.from_icon_name("drive-harddisk-symbolic", Gtk.IconSize.MENU);
+        image = new Gtk.Image.from_icon_name("folder-symbolic", Gtk.IconSize.MENU);
         layout.pack_start(image, true, true, 3);
         label = new Gtk.Label(_("Places"));
         label.halign = Gtk.Align.START;
