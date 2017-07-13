@@ -102,7 +102,12 @@ public class SettingsWindow : Gtk.Window {
     void build_content()
     {
         this.add_page(new Budgie.StylePage());
-        this.add_page(new Budgie.DesktopPage());
+
+        /* So we don't bust a nut on start up */
+        if (Environment.find_program_in_path("nautilus") != null) {
+            this.add_page(new Budgie.DesktopPage());
+        }
+
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
         this.add_page(new Budgie.AutostartPage());
