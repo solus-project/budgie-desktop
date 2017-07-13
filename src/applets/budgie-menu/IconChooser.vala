@@ -19,6 +19,7 @@ public class IconChooser : Gtk.Dialog
     Gtk.Stack stack;
     Gtk.StackSwitcher switcher;
     string? icon_pick = null;
+    Gtk.Button button_set_icon;
 
     /**
      * Construct a new modal IconChooser with the given parent
@@ -30,7 +31,8 @@ public class IconChooser : Gtk.Dialog
                use_header_bar: 1);
 
         add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-        add_button(_("Set icon"), Gtk.ResponseType.ACCEPT).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+        button_set_icon = add_button(_("Set icon"), Gtk.ResponseType.ACCEPT) as Gtk.Button;
+        button_set_icon.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
         switcher = new Gtk.StackSwitcher();
         (get_header_bar() as Gtk.HeaderBar).set_custom_title(switcher);
@@ -65,9 +67,49 @@ public class IconChooser : Gtk.Dialog
      */
     void create_file_area()
     {
-        var w = new Gtk.EventBox();
+        Gtk.FileChooserWidget w = new Gtk.FileChooserWidget(Gtk.FileChooserAction.OPEN);
+        w.set_select_multiple(false);
+        w.set_show_hidden(false);
+
+        /* We need gdk-pixbuf usable files */
+        Gtk.FileFilter filter = new Gtk.FileFilter();
+        filter.add_pixbuf_formats();
+        filter.set_name(_("Image files"));
+        w.add_filter(filter);
+
+        /* Also need an Any filter to be a human about it */
+        filter = new Gtk.FileFilter();
+        filter.add_pattern("*");
+        filter.set_name(_("Any file"));
+        w.add_filter(filter);
+
+        /* i.e. don't allow weird selections like Google Drive in gvfs and make Budgie hang */
+        w.set_local_only(true);
+
+        /* Prefer the users XDG pictures directory by default */
+        string? picture_dir = Environment.get_user_special_dir(UserDirectory.PICTURES);
+        if (picture_dir != null) {
+            w.set_current_folder(picture_dir);
+        }
+
+        w.selection_changed.connect(on_file_selection_changed);
         this.stack.add_titled(w, "files", _("Local file"));
         w.show_all();
+    }
+
+    /**
+     * Handle selections in the file chooser
+     */
+    void on_file_selection_changed(Gtk.FileChooser? w)
+    {
+        string? selection = w.get_uri();
+        if (selection == null) {
+            icon_pick = null;
+            button_set_icon.sensitive = false;
+            return;
+        }
+        icon_pick = "" + selection;
+        button_set_icon.sensitive = true;
     }
 
     /**
