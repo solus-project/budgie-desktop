@@ -65,7 +65,9 @@ public class BudgieMenuSettings : Gtk.Grid
         IconChooser chooser = new IconChooser(this.get_toplevel() as Gtk.Window);
         string? response = chooser.run();
         chooser.destroy();
-        message("Chose: %s", response);
+        if (response != null) {
+            this.entry_icon_pick.set_text(response);
+        }
     }
 }
 
