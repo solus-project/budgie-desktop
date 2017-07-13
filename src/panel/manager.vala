@@ -590,6 +590,7 @@ public class PanelManager : DesktopManager
         scr.size_changed.connect(this.on_monitors_changed);
 
         settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
+        this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
         theme_manager = new Budgie.ThemeManager();
         raven = new Budgie.Raven(this);
         raven.request_settings_ui.connect(this.on_settings_requested);
