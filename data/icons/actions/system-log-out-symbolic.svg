@@ -1,1 +1,14 @@
-<svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" enable-background="new"><title>Solus Symbolic Icon Theme</title><defs><filter id="a" color-interpolation-filters="sRGB"><feBlend in2="BackgroundImage" mode="darken"/></filter></defs><g fill="#4f555d"><path d="M8 2.007c3.301 0 6 2.697 6 5.998s-2.699 5.998-6 5.998c-3.302 0-6-2.697-6-5.998 0-3.3 2.698-5.998 6-5.998zm0 2c-2.222 0-4 1.779-4 3.998a3.984 3.984 0 0 0 4 3.998c2.22 0 4-1.778 4-3.998a3.984 3.984 0 0 0-4-3.998z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" color="#000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" enable-background="accumulate"/><path d="M12 8.003L6 4.54v6.928z"/></g></svg>
+<svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" enable-background="new">
+    <title>
+        Solus Symbolic Icon Theme
+    </title>
+    <defs>
+        <filter id="a" color-interpolation-filters="sRGB">
+            <feBlend in2="BackgroundImage" mode="darken"/>
+        </filter>
+    </defs>
+    <g fill="#4f555d">
+        <path d="M8 2.007c3.301 0 6 2.697 6 5.998s-2.699 5.998-6 5.998c-3.302 0-6-2.697-6-5.998 0-3.3 2.698-5.998 6-5.998zm0 2c-2.222 0-4 1.779-4 3.998a3.984 3.984 0 0 0 4 3.998c2.22 0 4-1.778 4-3.998a3.984 3.984 0 0 0-4-3.998z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" color="#000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" enable-background="accumulate"/>
+        <path d="M12 8.003L6 4.54v6.928z"/>
+    </g>
+</svg>
