@@ -7,6 +7,7 @@ actions_icons = [
 ]
 
 app_icons = [
+    join_paths('.', 'icons', 'apps', 'budgie-desktop-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'system-tray-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'icon-task-list-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'spacer-symbolic.svg'),
