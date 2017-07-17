@@ -99,9 +99,9 @@ public class UserIndicatorWindow : Budgie.Popover {
         Gtk.Separator separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 
         IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
-        IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "media-playback-pause-symbolic", false);
-        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "document-save-symbolic", false);
-        IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "media-playlist-repeat-symbolic", false);
+        IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "system-suspend-symbolic", false);
+        IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "system-hibernate-symbolic", false);
+        IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "system-restart-symbolic", false);
         IndicatorItem shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 
         // Adding stuff
@@ -176,7 +176,7 @@ public class UserIndicatorWindow : Budgie.Popover {
         Gtk.Revealer user_section = new Gtk.Revealer();
         Gtk.Box user_section_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         //IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"), "network-transmit-receive-symbolic", false);
-        IndicatorItem logout_menu = new IndicatorItem(_("Logout"), "application-exit-symbolic", false);
+        IndicatorItem logout_menu = new IndicatorItem(_("Logout"), "system-log-out-symbolic", false);
         //user_section_box.pack_start(switch_user_menu, false, false, 0); // Add the Switch User item
         user_section_box.pack_start(logout_menu, false, false, 0); // Add the Logout item
         user_section.add(user_section_box); // Add the User Section box
