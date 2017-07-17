@@ -12,6 +12,25 @@
 namespace Budgie {
 
 /**
+ * Simple trash button which can then be styled by the GTK theme
+ */
+public class TrashButton : Gtk.Button
+{
+
+    public TrashButton()
+    {
+        Object();
+        var img = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+        this.add(img);
+        var st = this.get_style_context();
+        st.add_class("image-button");
+        st.add_class(Gtk.STYLE_CLASS_FLAT);
+        st.add_class("budgie-trash-button");
+    }
+
+} /* End TrashButton */
+
+/**
  * PanelPage allows users to change aspects of the fonts used
  */
 public class PanelPage : Budgie.SettingsPage {
@@ -53,14 +72,25 @@ public class PanelPage : Budgie.SettingsPage {
 
         border_width = 0;
 
+        var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        swbox.margin_top = 8;
+        this.pack_start(swbox, false, false, 0);
+
+        button_remove_panel = new TrashButton();
+        button_remove_panel.set_tooltip_text(_("Remove this panel from the screen"));
+        button_remove_panel.clicked.connect_after(this.delete_panel);
+        button_remove_panel.valign = Gtk.Align.CENTER;
+        button_remove_panel.vexpand = false;
+
+        swbox.pack_end(button_remove_panel, false, false, 0);
+
         /* Main layout bits */
         switcher = new Gtk.StackSwitcher();
-        switcher.margin_top = 8;
         switcher.halign = Gtk.Align.CENTER;
         stack = new Gtk.Stack();
         stack.set_homogeneous(false);
         switcher.set_stack(stack);
-        this.pack_start(switcher, false, false, 0);
+        swbox.pack_start(switcher, true, true, 0);
         this.pack_start(stack, true, true, 0);
 
         this.stack.add_titled(this.applets_page(), "main", _("Applets"));
@@ -247,17 +277,6 @@ public class PanelPage : Budgie.SettingsPage {
             _("When in dock mode, the panel will use the minimal amount of space possible, " +
               "freeing up valuable screen estate")));
         dock_id = switch_dock.notify["active"].connect(this.set_dock);
-
-        /* Allow deletion of the panel */
-        button_remove_panel = new Gtk.Button.with_label(_("Remove"));
-        button_remove_panel.clicked.connect_after(this.delete_panel);
-        button_remove_panel.valign = Gtk.Align.CENTER;
-        button_remove_panel.vexpand = false;
-        button_remove_panel.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
-        ret.add_row(new SettingsRow(button_remove_panel,
-            _("Delete panel"),
-            _("Permanently remove the panel and applets from the screen. This action cannot be undone")));
-
 
         /* We'll reuse this guy */
         var render = new Gtk.CellRendererText();
