@@ -17,14 +17,15 @@
 # theSoenke, 2016-2017
 # theSoenke, 2015
 # Tim <taaem@mailbox.org>, 2015-2016
+# Tim <taaem@mailbox.org>, 2017
 # Tristan Storch <tristan.storch@gmx.de>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-09 13:31+0000\n"
-"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
+"PO-Revision-Date: 2017-07-15 14:37+0000\n"
+"Last-Translator: theSoenke\n"
 "Language-Team: German (http://www.transifex.com/budgie-desktop/budgie-desktop/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -166,15 +167,15 @@ msgstr "Sie können nun sicher entfernen"
 
 #: src/applets/places-indicator/MountItem.vala:79
 msgid "Unknown Device"
-msgstr ""
+msgstr "Unbekanntes Gerät"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr ""
+msgstr "Fehler beim Auswerfen"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr ""
+msgstr "Fehler beim  Aushängen"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
@@ -191,15 +192,15 @@ msgstr "\"%s\" einhängen und öffnen"
 #: src/applets/places-indicator/VolumeItem.vala:76
 #: src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr ""
+msgstr "Passwort eingeben zum Entsperren"
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
-msgstr ""
+msgstr "Das eingebene Passwort ist falsch"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
+msgstr "Ein unbekannter Fehler trat beim Einhängen dieses Geräts auf"
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
@@ -211,7 +212,7 @@ msgstr ""
 
 #: src/applets/places-indicator/MountHelper.vala:57
 msgid "Type your password"
-msgstr ""
+msgstr "Passwort eingeben"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
 msgid "Nothing to display right now"
@@ -277,11 +278,11 @@ msgstr "Einstellungen"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr ""
+msgstr "Datum anzeigen"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
-msgstr ""
+msgstr "Sekunden anzeigen"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
@@ -391,11 +392,11 @@ msgstr "Erscheinungsbild"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr ""
+msgstr "Leisten"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr ""
+msgstr "Sitzung"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
@@ -470,7 +471,7 @@ msgstr "Abbrechen"
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr ""
+msgstr "Applet hinzufügen"
 
 #: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
@@ -478,7 +479,7 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
-msgstr ""
+msgstr "Keine Beschreibung"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
@@ -496,7 +497,7 @@ msgstr "Hinzufügen"
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
-msgstr ""
+msgstr "Befehl"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
@@ -504,7 +505,7 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397

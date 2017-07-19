@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-11 03:36+0000\n"
+"PO-Revision-Date: 2017-07-13 21:37+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/budgie-desktop/budgie-desktop/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +180,7 @@ msgstr "Monter og åbn \"%s\""
 #: src/applets/places-indicator/VolumeItem.vala:76
 #: src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr ""
+msgstr "Indtast den krypterede adgangsfrase for at låse denne volume op"
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
@@ -188,7 +188,7 @@ msgstr "Adgangskoden som du har indtastet er forkert"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
+msgstr "Der opstod en fejl ved forsøg på at montere denne volume"
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
@@ -368,7 +368,7 @@ msgstr "NumLock er ikke aktiv"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr ""
+msgstr "Autentifikation mislykkede"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
@@ -498,7 +498,7 @@ msgstr "Titel"
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr ""
+msgstr "Krævet"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
@@ -522,7 +522,7 @@ msgstr "Knaplayout"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr ""
+msgstr "Skift layoutet af knapper i programtitellinjer"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
@@ -535,7 +535,7 @@ msgstr "Venstre"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
-msgstr ""
+msgstr "Tilkobl modale dialoger til vinduer"
 
 #: src/panel/settings/settings_wm.vala:60
 msgid ""
@@ -545,7 +545,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr ""
+msgstr "Automatisk fliselægning"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
@@ -601,16 +601,16 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
-msgstr ""
+msgstr "Bekræft fjernelse af panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr ""
+msgstr "Vil du virkelig fjerne denne panel? Denne handling kan ikke fortrydes."
 
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr ""
+msgstr "Sprøg mig ikke igen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
@@ -622,12 +622,12 @@ msgstr "Behold panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
-msgstr ""
+msgstr "Bekræft fjernelse af applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
+msgstr "Vil du virkelig fjerne denne applet? Denne handling kan ikke fortrydes."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
@@ -699,7 +699,7 @@ msgstr "Automatisk"
 
 #: src/panel/settings/settings_panel.vala:181
 msgid "Intelligent"
-msgstr ""
+msgstr "Intelligent"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Never"
@@ -757,7 +757,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "Dock mode"
-msgstr ""
+msgstr "Doktilstand"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid ""
@@ -777,15 +777,15 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr ""
+msgstr "Konfigurer applet"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Vælg en ny applet som skal tilføjes til dette panel"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr ""
+msgstr "Ingen indstillinger tilgængelige"
 
 #: src/panel/settings/settings_panel_applets.vala:411
 msgid "Start"
@@ -817,7 +817,7 @@ msgstr "Hjemmemappe"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr ""
+msgstr "Tilføj en genvej til din hjemmemappe på skrivebordet"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
@@ -837,11 +837,11 @@ msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
-msgstr ""
+msgstr "Monteret volumener"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr ""
+msgstr "Monteret volumener og drev vil blive vist på skrivebordet"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -869,7 +869,7 @@ msgstr "Vis drev der kan fjernes"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr ""
+msgstr "Udvid altid steder"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
@@ -882,11 +882,11 @@ msgstr "Temperatur"
 
 #: src/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr ""
+msgstr "Planlægning"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr ""
+msgstr "Solnedgang til solopgang"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
@@ -894,23 +894,23 @@ msgstr "Manuel"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Visningsindstillinger"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr ""
+msgstr "Vis menuetiket"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
-msgstr ""
+msgstr "Kompakt tilstand"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr ""
+msgstr "Vis hoveder"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
-msgstr ""
+msgstr "Menuetiket"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
@@ -922,7 +922,7 @@ msgstr "Størrelse på afstandsstykke"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr ""
+msgstr "Autentifikation kræves"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
@@ -930,11 +930,11 @@ msgstr "Adgangskode:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr ""
+msgstr "Autentifikation kræves"
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr ""
+msgstr "Autentificer"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -1013,8 +1013,8 @@ msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr ""
+msgstr "Budgie-skrivebordsindstillinger"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
-msgstr ""
+msgstr "Skift skrivebordsudseende og -opførsel"

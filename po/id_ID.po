@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-10 03:13+0000\n"
+"PO-Revision-Date: 2017-07-19 06:55+0000\n"
 "Last-Translator: Yurizal Susanto <rizal.sagi@gmail.com>\n"
 "Language-Team: Indonesian (Indonesia) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/id_ID/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
-msgstr "Tidak ada apa-apa dis"
+msgstr "Tidak ada apa-apa disini"
 
 #: src/raven/notifications_view.vala:582
 #: src/applets/notifications/NotificationsApplet.vala:75
@@ -82,7 +82,7 @@ msgstr "Keluar"
 
 #: src/daemon/endsession.vala:176
 msgid "Restart device"
-msgstr "Mula ulang perangkat"
+msgstr "Mulai ulang perangkat"
 
 #: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
 msgid "Power Off"
