@@ -155,7 +155,7 @@
 
     @at-root %menu {
         .menu {
-            @include widget_menu('.menuitem', insensitive, '&:separator', color, '&.button');
+            @include widget_menu('.menuitem', insensitive, '.separator', color, '.button');
 
             .cell { color: inherit; }
         }
