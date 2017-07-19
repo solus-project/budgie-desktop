@@ -1,5 +1,17 @@
 $variant: 'default';
 
+// Used to reset all style properties set by the gtk theme
+%reset_style {
+    background: none;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
+    opacity: 1;
+    min-width: 0;
+    min-height: 0;
+}
+
 @import 'settings';
 @import '../common/imports';
 @import 'widgets';
