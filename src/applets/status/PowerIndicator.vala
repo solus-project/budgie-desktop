@@ -217,6 +217,8 @@ public class PowerIndicator : Gtk.Bin
         while (iter.next(null, out icon)) {
             icon.label_visible = this.label_visible;
         }
+        /* Fix glitching with Arc theming + "theme-regions" */
+        this.get_toplevel().queue_draw();
     }
 #endif
 
