@@ -25,10 +25,16 @@
     @each $b_type, $b_color in (suggested-action, $suggested_color),
                                (destructive-action, $destructive_color) {
         &.#{$b_type} {
-            @include button-normal($b_color, $selected_fg_color);
-            &:hover { @include button-hover($b_color, $selected_fg_color); }
+            @include button-normal($selected_fg_color, $b_color);
+            &:hover { @include button-hover($selected_fg_color, $b_color); }
             &:active, &:checked { @include button-active($bg:darken($b_color, 10%)); }
             &:#{$disabled} { opacity: 0.5; }
+
+            &.flat:not(:hover):not(:active):not(:checked) {
+                &, &:#{$disabled} {
+                    @include button-flat($selected_fg_color, $b_color);
+                }
+            }
         }
     }
 
