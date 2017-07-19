@@ -30,7 +30,7 @@
 @include borders($pos_list); 
 
 // Workspace Switcher
-@include workspaces();
+@include workspaces($iname: '-gtk-image-effect');
 
 // Budgie Menu
 .budgie-menu {

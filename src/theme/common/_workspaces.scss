@@ -1,4 +1,4 @@
-@mixin workspaces($frame:'',$button:'') {
+@mixin workspaces($frame:'',$button:'', $iname:'-gtk-icon-effect') {
     .workspace-popover {
         #{$frame}.container { padding: 0; }
 
@@ -11,7 +11,7 @@
 
             &:hover {
                 background: $button_bg;
-                -gtk-icon-effect: none;
+                #{$iname}: none;
             }
         }
 
