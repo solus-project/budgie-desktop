@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-14 23:09+0000\n"
+"PO-Revision-Date: 2017-07-19 19:01+0000\n"
 "Last-Translator: John Smith <aboutafteragain@gmail.com>\n"
 "Language-Team: Basque (http://www.transifex.com/budgie-desktop/budgie-desktop/language/eu/)\n"
 "MIME-Version: 1.0\n"
@@ -339,13 +339,13 @@ msgstr "Bluetooth Hegazkin Modua"
 
 #: src/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr ""
+msgstr "Izena aldatu"
 
 #. Allow deletion of the panel
 #: src/applets/workspaces/WorkspaceItem.vala:79
 #: src/panel/settings/settings_panel.vala:252
 msgid "Remove"
-msgstr ""
+msgstr "Ezabatu"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:62
 msgid "Caps lock is active"
@@ -369,7 +369,7 @@ msgstr ""
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr ""
+msgstr "Taldea:"
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
@@ -377,11 +377,11 @@ msgstr "Itxura"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr ""
+msgstr "Panelak"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr ""
+msgstr "Saioa"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
@@ -390,7 +390,7 @@ msgstr "Budgie-ren aukerak"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr ""
+msgstr "Panel berria sortu"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
@@ -398,7 +398,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
-msgstr ""
+msgstr "Widgetak"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
@@ -406,7 +406,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
-msgstr ""
+msgstr "Ikonoak"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
@@ -414,7 +414,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
-msgstr ""
+msgstr "Kurtsoreak"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"

@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-15 14:37+0000\n"
+"PO-Revision-Date: 2017-07-19 17:08+0000\n"
 "Last-Translator: theSoenke\n"
 "Language-Team: German (http://www.transifex.com/budgie-desktop/budgie-desktop/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: src/applets/places-indicator/MountHelper.vala:45
 msgid "Operation aborted"
-msgstr ""
+msgstr "Operation abgebrochen"
 
 #: src/applets/places-indicator/MountHelper.vala:57
 msgid "Type your password"
@@ -320,7 +320,7 @@ msgstr "Energieeinstellungen"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr ""
+msgstr "Audioeinstellungen"
 
 #: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
@@ -380,7 +380,7 @@ msgstr "Num-Lock-Taste ist nicht aktiv"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr ""
+msgstr "Authentifizierung fehlgeschlagen"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
@@ -405,7 +405,7 @@ msgstr "Budgie Einstellungen"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr ""
+msgstr "Neue Leiste"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
@@ -538,12 +538,12 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr ""
+msgstr "Rechts (standard)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:150
 msgid "Left"
-msgstr ""
+msgstr "Links"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
@@ -622,15 +622,15 @@ msgstr ""
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr ""
+msgstr "Nicht erneut fragen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
-msgstr ""
+msgstr "Leiste entfernen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:61
 msgid "Keep panel"
-msgstr ""
+msgstr "Leiste behalten"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
@@ -687,7 +687,7 @@ msgstr "Oben"
 
 #: src/panel/settings/settings_panel.vala:148
 msgid "Right"
-msgstr ""
+msgstr "Rechts"
 
 #: src/panel/settings/settings_panel.vala:152
 msgid "Bottom"
@@ -695,11 +695,11 @@ msgstr "Unten"
 
 #: src/panel/settings/settings_panel.vala:163
 msgid "Always"
-msgstr ""
+msgstr "Immer"
 
 #: src/panel/settings/settings_panel.vala:165
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisch"
 
 #: src/panel/settings/settings_panel.vala:168
 msgid "None"
@@ -707,15 +707,15 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:179
 msgid "Automatic"
-msgstr ""
+msgstr "Automatisch"
 
 #: src/panel/settings/settings_panel.vala:181
 msgid "Intelligent"
-msgstr ""
+msgstr "Intelligent"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Never"
-msgstr ""
+msgstr "Nie"
 
 #: src/panel/settings/settings_panel.vala:200
 msgid "Position"
@@ -743,7 +743,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Transparency"
-msgstr ""
+msgstr "Transparenz"
 
 #: src/panel/settings/settings_panel.vala:226
 msgid "Control when this panel should have a solid background"
@@ -779,7 +779,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:258
 msgid "Delete panel"
-msgstr ""
+msgstr "Leiste löschen"
 
 #: src/panel/settings/settings_panel.vala:259
 msgid ""
@@ -797,7 +797,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr ""
+msgstr "Keine Einstellungen verfügbar"
 
 #: src/panel/settings/settings_panel_applets.vala:411
 msgid "Start"
@@ -938,7 +938,7 @@ msgstr ""
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr ""
+msgstr "Passwort:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr ""
+msgstr "Budgie Desktop Einstellungen"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
