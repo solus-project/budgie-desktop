@@ -303,12 +303,16 @@ public class AppletsPage : Gtk.Box {
         /* Allow viewing settings on demand */
         if (applet.applet.supports_settings()) {
             var frame = new AppletSettingsFrame();
-            frame.add(applet.applet.get_settings_ui());
+            var ui = applet.applet.get_settings_ui();
+            frame.add(ui);
+            ui.show();
+            frame.show();
             settings_stack.add_named(frame, applet.uuid);
         }
 
         /* Stuff the new item into display */
         var item = new AppletItem(applet);
+        item.show_all();
         listbox_applets.add(item);
         items[applet.uuid] = item;
     }
