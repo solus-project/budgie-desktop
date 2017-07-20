@@ -115,6 +115,7 @@ public class StylePage : Budgie.SettingsPage {
                 if (hit) {
                     combobox_gtk.sensitive = true;
                     ui_settings.bind("gtk-theme", combobox_gtk, "active-id", SettingsBindFlags.DEFAULT);
+                    combobox_gtk.active_id = ui_settings.get_string("gtk-theme");
                 }
             }
             /* Icon themes */
@@ -133,6 +134,7 @@ public class StylePage : Budgie.SettingsPage {
                 if (hit) {
                     combobox_icon.sensitive = true;
                     ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
+                    combobox_icon.active_id = ui_settings.get_string("icon-theme");
                 }
             }
 
@@ -152,6 +154,7 @@ public class StylePage : Budgie.SettingsPage {
                 if (hit) {
                     combobox_cursor.sensitive = true;
                     ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
+                    combobox_cursor.active_id = ui_settings.get_string("cursor-theme");
                 }
             }
             queue_resize();
