@@ -1578,6 +1578,8 @@ public class Panel : Budgie.Toplevel
             return false;
         }
 
+        this.set_input_region();
+
         dock_animation = new Budgie.Animation();
         dock_animation.widget = this;
         dock_animation.length = 360 * Budgie.MSECOND;
@@ -1617,6 +1619,8 @@ public class Panel : Budgie.Toplevel
             this.queue_draw();
             return;
         }
+
+        this.unset_input_region();
 
         render_panel = true;
         this.animation = PanelAnimation.SHOW;
