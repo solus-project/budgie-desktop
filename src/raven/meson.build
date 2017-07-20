@@ -26,12 +26,14 @@ libraven_sources = [
 ]
 
 libraven_deps = [
+    # XXX: Keep this order the same to work around
+    # https://github.com/mesonbuild/meson/issues/2096
+    link_libtoplevel,
     libplugin_vapi,
     dep_gtk3,
     dep_peas,
     link_libconfig,
     link_libplugin,
-    link_libtoplevel,
     link_libtheme,
     gvc.get_variable('link_libgvc'),
 ]
