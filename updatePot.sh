@@ -13,7 +13,7 @@ function do_intltool()
 rm budgie-desktop.po -f
 touch budgie-desktop.po
 
-for file in `find src -name "*.c" -or -name "*.vala" -not -path '*/gvc/*'`; do
+for file in `find src -not -path '*/gvc/*' -name "*.c" -or -name "*.vala"`; do
     if [[ `grep -F "_(\"" $file` ]]; then
         do_gettext $file --add-comments
     fi
