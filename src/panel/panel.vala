@@ -952,7 +952,7 @@ public class Panel : Budgie.Toplevel
         if (this.dock_mode) {
             switch (position) {
             case Budgie.PanelPosition.TOP:
-                x = ((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2);
+                x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2));
                 if (x < orig_scr.x) {
                     x = orig_scr.x;
                 }
@@ -960,21 +960,21 @@ public class Panel : Budgie.Toplevel
                 break;
             case Budgie.PanelPosition.LEFT:
                 x = orig_scr.x;
-                y = ((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2);
+                y = (orig_scr.y / 2) + (((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2));
                 if (y < orig_scr.y) {
                     y = orig_scr.y;
                 }
                 break;
             case Budgie.PanelPosition.RIGHT:
                 x = (orig_scr.x + orig_scr.width) - intended_size - 5;
-                y = ((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2);
+                y = (orig_scr.y / 2) + (((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2));
                 if (y < orig_scr.y) {
                     y = orig_scr.y;
                 }
                 break;
             case Budgie.PanelPosition.BOTTOM:
             default:
-                x = ((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2);
+                x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2)  - (alloc.width / 2));
                 y = orig_scr.y + (orig_scr.height - intended_size);
                 if (x < orig_scr.x) {
                     x = orig_scr.x;
