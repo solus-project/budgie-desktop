@@ -56,6 +56,8 @@ public class AutostartItem : GLib.Object
     }
 
     public string? make_autostart() {
+        DirUtils.create_with_parents(GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH), 00755);
+
         if (filename != "") {
             string destination_path = GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH, GLib.Filename.display_basename(filename));
             GLib.File destination = GLib.File.new_for_path(destination_path);
