@@ -493,6 +493,11 @@ public class AutostartPage : Budgie.SettingsPage {
         frame_box.pack_start(listbox_autostart, true, true, 0);
         listbox_autostart.set_selection_mode(Gtk.SelectionMode.NONE);
 
+        /* No sense in iterating it if it doesn't exist .. */
+        if (!FileUtils.test(AUTOSTART_PATH, FileTest.EXISTS|FileTest.IS_DIR)) {
+            return;
+        }
+
         list_directory.begin(AUTOSTART_PATH, (obj, res) => {
             string[] files = list_directory.end(res);
             foreach (string file in files) {
