@@ -1114,11 +1114,11 @@ public class PanelManager : DesktopManager
                 geom.y = area.area.y;
                 geom.width = area.area.width;
                 geom.height = area.area.height;
-                if (top != null) {
+                if (this.is_panel_huggable(top)) {
                     geom.y += top.intended_size - 5;
                     geom.height -= top.intended_size - 5;
                 }
-                if (bottom != null) {
+                if (this.is_panel_huggable(bottom)) {
                     geom.height -= bottom.intended_size - 5;
                 }
                 val2.update_geometry(geom, val2.position, val2.intended_size);
