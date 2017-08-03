@@ -23,6 +23,7 @@ applet_status_deps = [
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libplugin,
     gvc.get_variable('link_libgvc'),
+    meson.get_compiler('c').find_library('m', required: false)
 ]
 
 # Bluetooth is optional to allow smaller builds
