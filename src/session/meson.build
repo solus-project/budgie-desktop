@@ -18,7 +18,6 @@ gnome_session_324_components = [
     'org.gnome.SettingsDaemon.Keyboard',
     'org.gnome.SettingsDaemon.MediaKeys',
     'org.gnome.SettingsDaemon.Mouse',
-    'org.gnome.SettingsDaemon.Orientation',
     'org.gnome.SettingsDaemon.Power',
     'org.gnome.SettingsDaemon.PrintNotifications',
     'org.gnome.SettingsDaemon.Rfkill',
@@ -27,8 +26,12 @@ gnome_session_324_components = [
     'org.gnome.SettingsDaemon.Smartcard',
     'org.gnome.SettingsDaemon.Sound',
     'org.gnome.SettingsDaemon.Wacom',
-    'org.gnome.SettingsDaemon.XRANDR',
     'org.gnome.SettingsDaemon.XSettings',
+]
+
+gsd_324_max = [
+    'org.gnome.SettingsDaemon.Orientation',
+    'org.gnome.SettingsDaemon.XRANDR',
 ]
 
 # Always in Budgie
@@ -43,8 +46,10 @@ if with_polkit == true
 endif
 
 # Merge the list depending on the GNOME version. We pick mutter arbitrarily.
-if dep_mutter.version().version_compare('>=3.23.3')
+if dep_mutter.version().version_compare('>=3.25.4')
     session_components = budgie_components + gnome_session_324_components
+elif dep_mutter.version().version_compare('>=3.23.3')
+    session_components = budgie_components + gnome_session_324_components + gsd_324_max
 else
     session_components = gnome_session_components + budgie_components
 endif
