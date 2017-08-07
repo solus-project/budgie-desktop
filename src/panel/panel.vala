@@ -175,6 +175,7 @@ public class Panel : Budgie.Toplevel
         this.shadow.position = position;
         this.layout.queue_resize();
         queue_resize();
+        queue_draw();
         placement();
         update_sizes();
     }
