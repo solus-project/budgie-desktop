@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="budgie">
   <schema id="com.solus-project.icon-tasklist">
+    <key type="b" name="restrict-to-workspace">
+      <default>false</default>
+      <summary>Restrict to current workspace</summary>
+      <description>Only show windows on the current workspace.</description>
+    </key>
+
+    <key type="b" name="only-pinned">
+      <default>false</default>
+      <summary>Only show pinned applications</summary>
+      <description>Only show pinned applications</description>
+    </key>
+
+    <key type="b" name="lock-icons">
+      <default>false</default>
+      <summary>Lock icons</summary>
+      <description>Don't allow any changes to items</description>
+    </key>
+
     <key type="as" name="pinned-launchers">
       <default>[]</default>
       <summary>Pinned launchers</summary>

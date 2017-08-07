@@ -6,12 +6,16 @@
         padding: 0;
         background-clip: padding-box;
     }
-    .unpinned #{$launcher_type}.launcher,
-    .pinned #{$launcher_type}.launcher.running { @extend %underscores; }
 
     .pinned #{$launcher_type}.launcher:not(.running):hover {
-        background-color: transparentize(black, 0.8);
         box-shadow: inset 1px 0 transparentize(black, 0.8),
                     inset -1px 0 transparentize(black, 0.8);
+    }
+
+    .pinned #{$launcher_type}.launcher {
+        &:hover,
+        &:active, &:checked {
+            background-color: transparentize(black, 0.8);
+        }
     }
 }
