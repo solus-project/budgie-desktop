@@ -13,6 +13,7 @@
 # Patrycjusz Dolega <patrick.dolega@outlook.com>, 2016-2017
 # Philippe Loctaux <loctauxphilippe@gmail.com>, 2015
 # Roro Titi <inactive+RoroTiti@transifex.com>, 2015
+# Mathieu Provençal <mth.provencal@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
@@ -74,8 +75,8 @@ msgstr "Notifications"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u sortie"
+msgstr[1] "%u sorties"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -83,8 +84,8 @@ msgstr[1] ""
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "#u entrée"
+msgstr[1] "#u entrées"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
@@ -161,11 +162,11 @@ msgstr " Vous pouvez retirer le média en toute sécurité"
 
 #: src/applets/places-indicator/MountItem.vala:79
 msgid "Unknown Device"
-msgstr ""
+msgstr "Périphérique inconnu"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr ""
+msgstr "Erreur durant l'éjection du périphérique"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
@@ -190,7 +191,7 @@ msgstr ""
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
-msgstr ""
+msgstr "Le mot de passe est incorrect"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
@@ -206,7 +207,7 @@ msgstr ""
 
 #: src/applets/places-indicator/MountHelper.vala:57
 msgid "Type your password"
-msgstr ""
+msgstr "Entrer votre mot de passe"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
 msgid "Nothing to display right now"
@@ -268,15 +269,15 @@ msgstr "Agenda"
 #: src/applets/clock/ClockApplet.vala:156
 #: src/applets/clock/ClockApplet.vala:187
 msgid "Preferences"
-msgstr ""
+msgstr "Préférences"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr ""
+msgstr "Afficher la date"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
-msgstr ""
+msgstr "Afficher les secondes"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
@@ -306,7 +307,7 @@ msgstr "Batterie restante"
 
 #: src/applets/status/PowerIndicator.vala:162
 msgid "Show battery percentage"
-msgstr ""
+msgstr "Afficher le pourcentage de batterie"
 
 #: src/applets/status/PowerIndicator.vala:170
 msgid "Power settings"
@@ -314,7 +315,7 @@ msgstr " Paramètres d'alimentation"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr ""
+msgstr "Paramètres du son"
 
 #: src/applets/status/BluetoothIndicator.vala:102
 msgid "Bluetooth is disabled"
@@ -348,13 +349,13 @@ msgstr "Bluetooth en mode avion"
 
 #: src/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr ""
+msgstr "Renommer"
 
 #. Allow deletion of the panel
 #: src/applets/workspaces/WorkspaceItem.vala:79
 #: src/panel/settings/settings_panel.vala:252
 msgid "Remove"
-msgstr ""
+msgstr "Retirer"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:62
 msgid "Caps lock is active"
@@ -374,11 +375,11 @@ msgstr "La touche Verrouillage Numérique est désactivée"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr ""
+msgstr "Échec de l'authentification"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr ""
+msgstr "Groupe: "
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
@@ -386,11 +387,11 @@ msgstr "Apparence"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr ""
+msgstr "Panneau"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr ""
+msgstr "Session"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
@@ -399,11 +400,11 @@ msgstr "Paramètres de Budgie"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr ""
+msgstr "Créer un nouveau panneau"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
@@ -411,23 +412,23 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
-msgstr ""
+msgstr "Régler l'apparence des contrôles de fenêtre"
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
-msgstr ""
+msgstr "Icônes"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
-msgstr ""
+msgstr "Régler le thème global des icônes"
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
-msgstr ""
+msgstr "Curseurs"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
-msgstr ""
+msgstr "Régler le thème global du thème de curseur"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Dark theme"
@@ -445,7 +446,7 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr ""
+msgstr "Animations"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
@@ -453,7 +454,7 @@ msgstr ""
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr ""
+msgstr "Choisir un applet"
 
 #: src/panel/settings/settings_applet_chooser.vala:84
 #: src/panel/settings/settings_autostart.vala:198
@@ -465,15 +466,15 @@ msgstr "Annuler"
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr ""
+msgstr "Ajouter un applet"
 
 #: src/panel/settings/settings_autostart.vala:136
 msgid "Untitled"
-msgstr ""
+msgstr "Sans titre"
 
 #: src/panel/settings/settings_autostart.vala:143
 msgid "No description"
-msgstr ""
+msgstr "Aucune description"
 
 #: src/panel/settings/settings_autostart.vala:166
 msgid "running"
@@ -481,17 +482,17 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:189
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #: src/panel/settings/settings_autostart.vala:199
 #: src/panel/settings/settings_autostart.vala:362
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: src/panel/settings/settings_autostart.vala:356
 #: src/panel/settings/settings_autostart.vala:389
 msgid "Command"
-msgstr ""
+msgstr "Commande"
 
 #: src/panel/settings/settings_autostart.vala:372
 msgid "An entry with that title already exists"
@@ -499,24 +500,24 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:375
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 #: src/panel/settings/settings_autostart.vala:379
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Required"
-msgstr ""
+msgstr "Requis"
 
 #: src/panel/settings/settings_autostart.vala:382
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Optional"
-msgstr ""
+msgstr "Optionnel"
 
 #: src/panel/settings/settings_autostart.vala:450
 msgid "Autostart"
-msgstr ""
+msgstr "Démarrage automatique"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
@@ -532,12 +533,12 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr ""
+msgstr "Droite (standard)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:150
 msgid "Left"
-msgstr ""
+msgstr "Gauche"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
@@ -643,7 +644,7 @@ msgstr "Haut"
 
 #: src/panel/settings/settings_panel.vala:148
 msgid "Right"
-msgstr ""
+msgstr "Droite"
 
 #: src/panel/settings/settings_panel.vala:152
 msgid "Bottom"
@@ -651,27 +652,27 @@ msgstr "Bas"
 
 #: src/panel/settings/settings_panel.vala:163
 msgid "Always"
-msgstr ""
+msgstr "Toujours"
 
 #: src/panel/settings/settings_panel.vala:165
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamique"
 
 #: src/panel/settings/settings_panel.vala:168
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: src/panel/settings/settings_panel.vala:179
 msgid "Automatic"
-msgstr ""
+msgstr "Automatique"
 
 #: src/panel/settings/settings_panel.vala:181
 msgid "Intelligent"
-msgstr ""
+msgstr "Intelligent"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Never"
-msgstr ""
+msgstr "Jamais"
 
 #: src/panel/settings/settings_panel.vala:200
 msgid "Position"
@@ -691,7 +692,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:217
 msgid "Automatically hide"
-msgstr ""
+msgstr "Masquage automatique"
 
 #: src/panel/settings/settings_panel.vala:218
 msgid "When set, this panel will hide from view to maximize screen estate"
@@ -699,7 +700,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Transparency"
-msgstr ""
+msgstr "Transparence"
 
 #: src/panel/settings/settings_panel.vala:226
 msgid "Control when this panel should have a solid background"
@@ -735,7 +736,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:258
 msgid "Delete panel"
-msgstr ""
+msgstr "Retirer le panneau"
 
 #: src/panel/settings/settings_panel.vala:259
 msgid ""
@@ -745,7 +746,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr ""
+msgstr "Configurer l'applet"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
@@ -753,7 +754,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr ""
+msgstr "Aucun paramétrage disponnible"
 
 #: src/panel/settings/settings_panel_applets.vala:411
 msgid "Start"
@@ -769,7 +770,7 @@ msgstr "Fin"
 
 #: src/panel/settings/settings_desktop.vala:33
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: src/panel/settings/settings_desktop.vala:43
 msgid "Desktop Icons"
@@ -797,7 +798,7 @@ msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
-msgstr ""
+msgstr "Corbeille"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
@@ -902,7 +903,7 @@ msgstr ""
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr ""
+msgstr "Authentification"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -971,7 +972,7 @@ msgstr "Indicateur de verrouillage des touches"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr ""
+msgstr "Panneau Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
@@ -981,7 +982,7 @@ msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr ""
+msgstr "Paramètres de Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
