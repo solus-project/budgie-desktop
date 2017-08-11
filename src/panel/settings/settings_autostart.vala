@@ -57,7 +57,6 @@ public class AutostartItem : GLib.Object
 
     public string? make_autostart() {
         DirUtils.create_with_parents(GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH), 00755);
-
         if (filename != "") {
             string destination_path = GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH, GLib.Filename.display_basename(filename));
             GLib.File destination = GLib.File.new_for_path(destination_path);
@@ -115,7 +114,7 @@ public class AutostartItemWidget : Gtk.ListBoxRow
     public AutostartItemWidget(AutostartItem item, bool show_delete = true, bool running = false)
     {
         Object(can_focus: false,
-               activatable: false);
+               focus_on_click: false);
 
         this.autostart_item = item;
         this.running = running;
@@ -235,8 +234,9 @@ public class AppChooser : Gtk.Dialog
         scroll.add(app_listbox);
         app_listbox.set_filter_func(search_filter);
         app_listbox.set_sort_func(sort_function);
-        app_listbox.set_activate_on_single_click(true);
+        app_listbox.set_activate_on_single_click(false);
         app_listbox.row_selected.connect(row_selected);
+        app_listbox.row_activated.connect(row_activated);
 
         content_area.show_all();
 
@@ -293,6 +293,15 @@ public class AppChooser : Gtk.Dialog
         this.button_ok.set_sensitive(true);
 
         this.selected_item = (row as AutostartItemWidget).autostart_item;
+    }
+
+    private void row_activated(Gtk.ListBoxRow? row)
+    {
+        this.row_selected(row);
+
+        if (this.selected_item != null) {
+            this.response(Gtk.ResponseType.ACCEPT);
+        }
     }
 
     private void set_app_list(GLib.List<GLib.AppInfo> app_list)
