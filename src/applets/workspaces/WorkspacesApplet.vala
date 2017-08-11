@@ -11,10 +11,32 @@
 
 namespace Workspaces {
 
+[Flags]
+public enum AddButtonVisibility {
+    NEVER  = 1 << 0,
+    HOVER  = 1 << 1,
+    ALWAYS = 1 << 2
+}
+
 public class WorkspacesPlugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid) {
-        return new WorkspacesApplet();
+        return new WorkspacesApplet(uuid);
+    }
+}
+
+[GtkTemplate (ui = "/com/solus-project/workspaces/settings.ui")]
+public class WorkspacesAppletSettings : Gtk.Grid
+{
+    [GtkChild]
+    private Gtk.ComboBoxText? combobox_visibility;
+
+    private GLib.Settings? settings;
+
+    public WorkspacesAppletSettings(GLib.Settings? settings)
+    {
+        this.settings = settings;
+        settings.bind("addbutton-visibility", combobox_visibility, "active_id", SettingsBindFlags.DEFAULT);
     }
 }
 
@@ -39,6 +61,10 @@ public class WorkspacesApplet : Budgie.Applet
     private ulong[] wnck_connections = {};
     private GLib.HashTable<unowned Wnck.Window, ulong> window_connections;
     private GLib.List<int> dynamically_created_workspaces;
+    private GLib.Settings settings;
+    private AddButtonVisibility button_visibility = AddButtonVisibility.ALWAYS;
+
+    public string uuid { public set ; public get ; }
 
     public static Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
     public static int panel_size = 0;
@@ -48,8 +74,24 @@ public class WorkspacesApplet : Budgie.Applet
 
     private int64 last_scroll_time = 0;
 
-    public WorkspacesApplet()
+    public override Gtk.Widget? get_settings_ui() {
+        return new WorkspacesAppletSettings(this.get_applet_settings(uuid));
+    }
+
+    public override bool supports_settings() {
+        return true;
+    }
+
+    public WorkspacesApplet(string uuid)
     {
+        Object(uuid: uuid);
+
+        settings_schema = "com.solus-project.workspaces";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/workspaces";
+
+        settings = this.get_applet_settings(uuid);
+        settings.changed.connect(on_settings_change);
+
         WorkspacesApplet.wnck_screen = Wnck.Screen.get_default();
 
         dynamically_created_workspaces = new GLib.List<int>();
@@ -78,6 +120,8 @@ public class WorkspacesApplet : Budgie.Applet
         add_button.get_style_context().add_class("workspace-add-button");
         add_button_revealer.add(add_button);
         main_layout.pack_start(add_button_revealer, false, false, 0);
+
+        on_settings_change("addbutton-visibility");
 
         Gtk.drag_dest_set(
             add_button,
@@ -108,13 +152,17 @@ public class WorkspacesApplet : Budgie.Applet
         this.show_all();
 
         ebox.enter_notify_event.connect(() => {
+            if (button_visibility != AddButtonVisibility.HOVER) {
+                return false;
+            }
+
             add_button_revealer.set_transition_type(show_transition);
             add_button_revealer.set_reveal_child(true);
             return false;
         });
 
         ebox.leave_notify_event.connect(() => {
-            if (dragging) {
+            if (dragging || button_visibility != AddButtonVisibility.HOVER) {
                 return false;
             }
             add_button_revealer.set_transition_type(hide_transition);
@@ -147,6 +195,16 @@ public class WorkspacesApplet : Budgie.Applet
 
             return Gdk.EVENT_STOP;
         });
+    }
+
+    private void on_settings_change(string key)
+    {
+        if (key != "addbutton-visibility") {
+            return;
+        }
+
+        button_visibility = (AddButtonVisibility)settings.get_enum(key);
+        add_button_revealer.set_reveal_child(button_visibility == AddButtonVisibility.ALWAYS);
     }
 
     private void populate_workspaces()

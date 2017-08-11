@@ -9,10 +9,21 @@ custom_target('plugin-file-workspaces',
     install : true,
     install_dir : applet_workspaces_dir)
 
+gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
+
+# Compile the assets into the binary
+applet_workspaces_resources = gnome.compile_resources(
+    'workspaces-applet-resources',
+    gresource,
+    source_dir: meson.current_source_dir(),
+    c_name: 'budgie_workspaces',
+)
+
 applet_workspaces_sources = [
     'WorkspacesApplet.vala',
     'WorkspaceItem.vala',
     'WindowIcon.vala',
+    applet_workspaces_resources,
 ]
 
 applet_workspaces_deps = [
@@ -33,10 +44,18 @@ shared_library(
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libwnck-3.0',
+        # Make gresource work
+        '--target-glib=2.38',
+        '--gresources=' + gresource,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_workspaces_dir,
+)
+
+install_data(
+    'com.solus-project.workspaces.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )
