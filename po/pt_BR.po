@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-13 03:09+0000\n"
-"Last-Translator: Marcelo Ferreira <marceloffdeoliveira@gmail.com>\n"
+"POT-Creation-Date: 2017-07-20 12:33+0100\n"
+"PO-Revision-Date: 2017-08-03 11:53+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -57,7 +57,7 @@ msgstr "Saída"
 msgid "Input"
 msgstr "Entrada"
 
-#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:66
+#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
 msgstr "Aplicações"
 
@@ -65,24 +65,6 @@ msgstr "Aplicações"
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
 msgstr "Notificações"
-
-#. translators:
-#. * The number of sound outputs on a particular device
-#: src/gvc/gvc-mixer-control.c:1873
-#, c-format
-msgid "%u Output"
-msgid_plural "%u Outputs"
-msgstr[0] "%u Saída"
-msgstr[1] "%u Saídas"
-
-#. translators:
-#. * The number of sound inputs on a particular device
-#: src/gvc/gvc-mixer-control.c:1883
-#, c-format
-msgid "%u Input"
-msgid_plural "%u Inputs"
-msgstr[0] "%u Entrada"
-msgstr[1] "%u Entradas"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
@@ -100,7 +82,7 @@ msgstr "Desligar"
 msgid "Change background"
 msgstr "Alterar plano de fundo"
 
-#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:67
+#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:97
 msgid "Settings"
 msgstr "Configurações"
 
@@ -285,6 +267,30 @@ msgstr "Usar formato de 24 horas"
 msgid "All"
 msgstr "Todos"
 
+#: src/applets/budgie-menu/IconChooser.vala:27
+msgid "Set menu icon from file"
+msgstr ""
+
+#: src/applets/budgie-menu/IconChooser.vala:37
+msgid "Image files"
+msgstr ""
+
+#: src/applets/budgie-menu/IconChooser.vala:43
+msgid "Any file"
+msgstr ""
+
+#: src/applets/budgie-menu/IconChooser.vala:55
+#: src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:202
+#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
+#: src/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/applets/budgie-menu/IconChooser.vala:56
+msgid "Set icon"
+msgstr ""
+
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
 msgstr "Bateria totalmente carregada."
@@ -348,9 +354,7 @@ msgstr "Bluetooth em modo avião"
 msgid "Rename"
 msgstr "Renomear"
 
-#. Allow deletion of the panel
 #: src/applets/workspaces/WorkspaceItem.vala:79
-#: src/panel/settings/settings_panel.vala:252
 msgid "Remove"
 msgstr "Remover"
 
@@ -453,13 +457,6 @@ msgstr "Controla se as janelas e controles usam animações"
 msgid "Choose an applet"
 msgstr "Escolha um applet"
 
-#: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:202
-#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
-#: src/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "Cancelar"
-
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
@@ -533,7 +530,7 @@ msgid "Right (standard)"
 msgstr "Direito (padrão)"
 
 #: src/panel/settings/settings_wm.vala:47
-#: src/panel/settings/settings_panel.vala:150
+#: src/panel/settings/settings_panel.vala:180
 msgid "Left"
 msgstr "Esquerdo"
 
@@ -641,143 +638,137 @@ msgstr "Remover aplicação"
 msgid "Keep applet"
 msgstr "Manter aplicação"
 
-#: src/panel/settings/settings_panel.vala:90
+#: src/panel/settings/settings_panel.vala:80
+msgid "Remove this panel from the screen"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
 msgstr "Dock Superior"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
 msgstr "Dock Direito"
 
-#: src/panel/settings/settings_panel.vala:94
+#: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
 msgstr "Dock Esquerdo"
 
-#: src/panel/settings/settings_panel.vala:96
+#: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
 msgstr "Dock Inferior"
 
-#: src/panel/settings/settings_panel.vala:101
+#: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
 msgstr "Painel superior"
 
-#: src/panel/settings/settings_panel.vala:103
+#: src/panel/settings/settings_panel.vala:133
 msgid "Right Panel"
 msgstr "Painel direito"
 
-#: src/panel/settings/settings_panel.vala:105
+#: src/panel/settings/settings_panel.vala:135
 msgid "Left Panel"
 msgstr "Painel esquerdo"
 
-#: src/panel/settings/settings_panel.vala:107
+#: src/panel/settings/settings_panel.vala:137
 msgid "Bottom Panel"
 msgstr "Painel inferior"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:176
 msgid "Top"
 msgstr "Topo"
 
-#: src/panel/settings/settings_panel.vala:148
+#: src/panel/settings/settings_panel.vala:178
 msgid "Right"
 msgstr "Direito"
 
-#: src/panel/settings/settings_panel.vala:152
+#: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
 msgstr "Inferior"
 
-#: src/panel/settings/settings_panel.vala:163
+#: src/panel/settings/settings_panel.vala:193
 msgid "Always"
 msgstr "Sempre"
 
-#: src/panel/settings/settings_panel.vala:165
+#: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
 msgstr "Dinâmico"
 
-#: src/panel/settings/settings_panel.vala:168
+#: src/panel/settings/settings_panel.vala:198
 msgid "None"
 msgstr "Nenhum"
 
-#: src/panel/settings/settings_panel.vala:179
+#: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"
 msgstr "Automático"
 
-#: src/panel/settings/settings_panel.vala:181
+#: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
 msgstr "Inteligente"
 
-#: src/panel/settings/settings_panel.vala:184
+#: src/panel/settings/settings_panel.vala:214
 msgid "Never"
 msgstr "Nunca"
 
-#: src/panel/settings/settings_panel.vala:200
+#: src/panel/settings/settings_panel.vala:230
 msgid "Position"
 msgstr "Posição"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Definir a borda da tela em que este painel permanecerá"
 
-#: src/panel/settings/settings_panel.vala:209
+#: src/panel/settings/settings_panel.vala:239
 msgid "Size"
 msgstr "Tamanho"
 
-#: src/panel/settings/settings_panel.vala:210
+#: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr "Definir o tamanho (largura ou altura, dependendo da orientação) desse painel"
 
-#: src/panel/settings/settings_panel.vala:217
+#: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
 msgstr "Ocultar automaticamente"
 
-#: src/panel/settings/settings_panel.vala:218
+#: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr "Quando definido, este painel se ocultará para maximizar a utilização da tela."
 
-#: src/panel/settings/settings_panel.vala:225
+#: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
 msgstr "Transparência"
 
-#: src/panel/settings/settings_panel.vala:226
+#: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
 msgstr "Controla quando este painel deve ter um fundo sólido"
 
-#: src/panel/settings/settings_panel.vala:231
+#: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
 msgstr "Sombra"
 
-#: src/panel/settings/settings_panel.vala:232
+#: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "Adiciona uma sombra decorativa, ideal para painéis opacos"
 
-#: src/panel/settings/settings_panel.vala:238
+#: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
 msgstr "Regiões estilizadas"
 
-#: src/panel/settings/settings_panel.vala:239
+#: src/panel/settings/settings_panel.vala:269
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr "Adiciona uma dica ao painel para que cada uma das três áreas principais do painel possa ter um tema diferente."
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
 msgstr "Modo dock"
 
-#: src/panel/settings/settings_panel.vala:247
+#: src/panel/settings/settings_panel.vala:277
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
 msgstr "Quando no modo de dock, o painel usará a quantidade mínima de espaço possível, liberando propriedade de tela valiosa"
-
-#: src/panel/settings/settings_panel.vala:258
-msgid "Delete panel"
-msgstr "Deletar painel"
-
-#: src/panel/settings/settings_panel.vala:259
-msgid ""
-"Permanently remove the panel and applets from the screen. This action cannot"
-" be undone"
-msgstr "Remova permanentemente o painel e as aplicações da tela. Essa ação não poderá ser desfeita"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
@@ -791,15 +782,15 @@ msgstr "Escolha uma nova aplicação para adicionar neste painel"
 msgid "No settings available"
 msgstr "Nenhuma opção disponível"
 
-#: src/panel/settings/settings_panel_applets.vala:411
+#: src/panel/settings/settings_panel_applets.vala:415
 msgid "Start"
 msgstr "Início"
 
-#: src/panel/settings/settings_panel_applets.vala:414
+#: src/panel/settings/settings_panel_applets.vala:418
 msgid "Center"
 msgstr "Centro"
 
-#: src/panel/settings/settings_panel_applets.vala:417
+#: src/panel/settings/settings_panel_applets.vala:421
 msgid "End"
 msgstr "Fim"
 
@@ -919,6 +910,10 @@ msgstr "Rótulos do menu"
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
 msgstr "Giro do mouse"
+
+#: src/applets/budgie-menu/settings.ui.h:6
+msgid "Menu Icon"
+msgstr ""
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"

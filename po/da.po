@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-07-26 22:53+0000\n"
+"PO-Revision-Date: 2017-08-03 11:53+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/budgie-desktop/budgie-desktop/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -439,7 +439,7 @@ msgstr "Indbygget tema"
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr ""
+msgstr "Når den er aktiveret, så tilsidesættes skrivebordskomponentstilen med den indbyggede"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
@@ -486,7 +486,7 @@ msgstr "Kommando"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr ""
+msgstr "Der findes allerede et punkt med den titel"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
@@ -538,7 +538,7 @@ msgstr "Tilkobl modale dialoger til vinduer"
 msgid ""
 "Modal dialogs will become attached to the parent window and move together "
 "when dragged"
-msgstr ""
+msgstr "Modale dialoger vil blive tilknyttet forældervinduet og flyttes sammen når der trækkes"
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
@@ -548,17 +548,17 @@ msgstr "Automatisk fliselægning"
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr ""
+msgstr "Vinduer fliselægges automatisk når der trækkes ind i den øverst del i skærmen eller de fjerne hjørner"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr ""
+msgstr "Deaktivér uomdirigering af vinduer"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
-msgstr ""
+msgstr "Denne valgmulighed er til avancerede brugere. Brug den hvis du har problemer med dedikerede GPU'ers grafik eller ydelse"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -636,7 +636,7 @@ msgstr "Behold applet"
 
 #: src/panel/settings/settings_panel.vala:80
 msgid "Remove this panel from the screen"
-msgstr ""
+msgstr "Fjern dette panel fra skærmen"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
@@ -712,7 +712,7 @@ msgstr "Placering"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr ""
+msgstr "Sæt den kant af skærmen hvor dette panel skal være på"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
@@ -720,7 +720,7 @@ msgstr "Størrelse"
 
 #: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
+msgstr "Sæt panelets størrelse (bredde og højde, afhænger af orientering)"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
@@ -728,7 +728,7 @@ msgstr "Skjul automatisk"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
+msgstr "Hvis den er sat, så skjules dette panel fra visningen for at gøre bedst brug af skærmens område"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
@@ -754,7 +754,7 @@ msgstr "Stilisér regioner"
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr ""
+msgstr "Tilføjer et hint til panelet, så hver af panelernes tre hovedområder kan bruge forskellige temaer."
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
@@ -764,7 +764,7 @@ msgstr "Doktilstand"
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr ""
+msgstr "I doktilstand, bruger panelet mindst muligt plads, så værdifulde områder af skærmen frigøres"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
@@ -800,7 +800,7 @@ msgstr "Skrivebordsikoner"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr ""
+msgstr "Bestemt hvorvidt programstartere og ikoner skal tilladelses på skrivebordet"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
@@ -905,7 +905,7 @@ msgstr "Menuetiket"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr ""
+msgstr "Hold musen over"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"
@@ -1004,7 +1004,7 @@ msgstr "Budgie-panel"
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr ""
+msgstr "Start andre programmer og giv diverse redskaber til at håndtere vinduer, vise klokkeslættet, osv."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"

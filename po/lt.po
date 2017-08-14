@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-09 14:30+0100\n"
-"PO-Revision-Date: 2017-07-09 16:39+0000\n"
+"POT-Creation-Date: 2017-07-20 12:33+0100\n"
+"PO-Revision-Date: 2017-08-03 11:53+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/budgie-desktop/budgie-desktop/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,7 @@ msgstr "Išvestis"
 msgid "Input"
 msgstr "Įvestis"
 
-#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:66
+#: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
 msgstr "Programėlės"
 
@@ -59,26 +59,6 @@ msgstr "Programėlės"
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
 msgstr "Pranešimai"
-
-#. translators:
-#. * The number of sound outputs on a particular device
-#: src/gvc/gvc-mixer-control.c:1873
-#, c-format
-msgid "%u Output"
-msgid_plural "%u Outputs"
-msgstr[0] "%u išvestis"
-msgstr[1] "%u išvestys"
-msgstr[2] "%u išvesčių"
-
-#. translators:
-#. * The number of sound inputs on a particular device
-#: src/gvc/gvc-mixer-control.c:1883
-#, c-format
-msgid "%u Input"
-msgid_plural "%u Inputs"
-msgstr[0] "%u įvestis"
-msgstr[1] "%u įvestys"
-msgstr[2] "%u įvesčių"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
@@ -96,7 +76,7 @@ msgstr "Išjungti"
 msgid "Change background"
 msgstr "Keisti foną"
 
-#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:67
+#: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:97
 msgid "Settings"
 msgstr "Nustatymai"
 
@@ -281,6 +261,30 @@ msgstr "Naudoti 24 valandų laiką"
 msgid "All"
 msgstr "Visos"
 
+#: src/applets/budgie-menu/IconChooser.vala:27
+msgid "Set menu icon from file"
+msgstr "Nustatyti meniu piktogramą iš failo"
+
+#: src/applets/budgie-menu/IconChooser.vala:37
+msgid "Image files"
+msgstr "Paveikslų failai"
+
+#: src/applets/budgie-menu/IconChooser.vala:43
+msgid "Any file"
+msgstr "Bet koks failas"
+
+#: src/applets/budgie-menu/IconChooser.vala:55
+#: src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:202
+#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
+#: src/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "Atsisakyti"
+
+#: src/applets/budgie-menu/IconChooser.vala:56
+msgid "Set icon"
+msgstr "Nustatyti piktogramą"
+
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
 msgstr "Baterija pilnai įkrauta."
@@ -345,9 +349,7 @@ msgstr "Bluetooth lėktuvo veiksena"
 msgid "Rename"
 msgstr "Pervadinti"
 
-#. Allow deletion of the panel
 #: src/applets/workspaces/WorkspaceItem.vala:79
-#: src/panel/settings/settings_panel.vala:252
 msgid "Remove"
 msgstr "Šalinti"
 
@@ -450,13 +452,6 @@ msgstr "Valdyti ar langai ir valdikliai naudos animacijas"
 msgid "Choose an applet"
 msgstr "Pasirinkti programėlę"
 
-#: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:202
-#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
-#: src/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "Atsisakyti"
-
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
@@ -530,7 +525,7 @@ msgid "Right (standard)"
 msgstr "Dešinėje (standartinis)"
 
 #: src/panel/settings/settings_wm.vala:47
-#: src/panel/settings/settings_panel.vala:150
+#: src/panel/settings/settings_panel.vala:180
 msgid "Left"
 msgstr "Kairėje"
 
@@ -638,143 +633,137 @@ msgstr "Šalinti programėlę"
 msgid "Keep applet"
 msgstr "Palikti programėlę"
 
-#: src/panel/settings/settings_panel.vala:90
+#: src/panel/settings/settings_panel.vala:80
+msgid "Remove this panel from the screen"
+msgstr "Šalinti šį skydelį iš ekrano"
+
+#: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
 msgstr "Viršutinis dokas"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
 msgstr "Dešinysis dokas"
 
-#: src/panel/settings/settings_panel.vala:94
+#: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
 msgstr "Kairysis dokas"
 
-#: src/panel/settings/settings_panel.vala:96
+#: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
 msgstr "Apatinis dokas"
 
-#: src/panel/settings/settings_panel.vala:101
+#: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
 msgstr "Viršutinis skydelis"
 
-#: src/panel/settings/settings_panel.vala:103
+#: src/panel/settings/settings_panel.vala:133
 msgid "Right Panel"
 msgstr "Dešinysis skydelis"
 
-#: src/panel/settings/settings_panel.vala:105
+#: src/panel/settings/settings_panel.vala:135
 msgid "Left Panel"
 msgstr "Kairysis skydelis"
 
-#: src/panel/settings/settings_panel.vala:107
+#: src/panel/settings/settings_panel.vala:137
 msgid "Bottom Panel"
 msgstr "Apatinis skydelis"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:176
 msgid "Top"
 msgstr "Viršuje"
 
-#: src/panel/settings/settings_panel.vala:148
+#: src/panel/settings/settings_panel.vala:178
 msgid "Right"
 msgstr "Dešinėje"
 
-#: src/panel/settings/settings_panel.vala:152
+#: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
 msgstr "Apačioje"
 
-#: src/panel/settings/settings_panel.vala:163
+#: src/panel/settings/settings_panel.vala:193
 msgid "Always"
 msgstr "Visada"
 
-#: src/panel/settings/settings_panel.vala:165
+#: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
 msgstr "Dinamiškai"
 
-#: src/panel/settings/settings_panel.vala:168
+#: src/panel/settings/settings_panel.vala:198
 msgid "None"
 msgstr "Nėra"
 
-#: src/panel/settings/settings_panel.vala:179
+#: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"
 msgstr "Automatiškai"
 
-#: src/panel/settings/settings_panel.vala:181
+#: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
 msgstr "Išmaniai"
 
-#: src/panel/settings/settings_panel.vala:184
+#: src/panel/settings/settings_panel.vala:214
 msgid "Never"
 msgstr "Niekada"
 
-#: src/panel/settings/settings_panel.vala:200
+#: src/panel/settings/settings_panel.vala:230
 msgid "Position"
 msgstr "Vieta"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Nustatyti ekrano kraštą, kuriame išliks skydelis"
 
-#: src/panel/settings/settings_panel.vala:209
+#: src/panel/settings/settings_panel.vala:239
 msgid "Size"
 msgstr "Dydis"
 
-#: src/panel/settings/settings_panel.vala:210
+#: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr "Nustatyti šio skydelio dydį (plotį ar aukštį, priklausomai nuo orientacijos)"
 
-#: src/panel/settings/settings_panel.vala:217
+#: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
 msgstr "Automatiškai slėpti"
 
-#: src/panel/settings/settings_panel.vala:218
+#: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr "Nustačius, šis skydelis bus slepiamas iš rodinio, kad atlaisvintų ekrano plotą"
 
-#: src/panel/settings/settings_panel.vala:225
+#: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
 msgstr "Permatomumas"
 
-#: src/panel/settings/settings_panel.vala:226
+#: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
 msgstr "Valdyti kada šis skydelis turės vietisą foną"
 
-#: src/panel/settings/settings_panel.vala:231
+#: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
 msgstr "Šešėlis"
 
-#: src/panel/settings/settings_panel.vala:232
+#: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "Prideda dekoratyvų šešėlį, puikiai tinkantį nepermatomiems skydeliams"
 
-#: src/panel/settings/settings_panel.vala:238
+#: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
 msgstr "Stilizuoti sritis"
 
-#: src/panel/settings/settings_panel.vala:239
+#: src/panel/settings/settings_panel.vala:269
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr "Pridėti į skydelį užuominą, kad tokiu būdu kiekviena iš trijų skydelio sričių galėtų būti skirtingai stilizuojama."
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
 msgstr "Doko veiksena"
 
-#: src/panel/settings/settings_panel.vala:247
+#: src/panel/settings/settings_panel.vala:277
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
 msgstr "Esant doko veiksenoje, skydelis naudos kaip įmanoma mažiau vietos, atlaisvindamas vertingą ekrano plotą."
-
-#: src/panel/settings/settings_panel.vala:258
-msgid "Delete panel"
-msgstr "Ištrinti skydelį"
-
-#: src/panel/settings/settings_panel.vala:259
-msgid ""
-"Permanently remove the panel and applets from the screen. This action cannot"
-" be undone"
-msgstr "Visam laikui pašalinti iš ekrano skydelį ir programėles. Šio veiksmo negalima bus atšaukti "
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
@@ -788,15 +777,15 @@ msgstr "Pasirinkti naują programėlę, kurią pridėti į šį skydelį"
 msgid "No settings available"
 msgstr "Nėra prieinamų nustatymų"
 
-#: src/panel/settings/settings_panel_applets.vala:411
+#: src/panel/settings/settings_panel_applets.vala:415
 msgid "Start"
 msgstr "Pradžia"
 
-#: src/panel/settings/settings_panel_applets.vala:414
+#: src/panel/settings/settings_panel_applets.vala:418
 msgid "Center"
 msgstr "Centras"
 
-#: src/panel/settings/settings_panel_applets.vala:417
+#: src/panel/settings/settings_panel_applets.vala:421
 msgid "End"
 msgstr "Pabaiga"
 
@@ -916,6 +905,10 @@ msgstr "Meniu etiketė"
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
 msgstr "Užvedus pelę"
+
+#: src/applets/budgie-menu/settings.ui.h:6
+msgid "Menu Icon"
+msgstr "Meniu piktograma"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
