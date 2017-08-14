@@ -368,6 +368,18 @@ public class PanelManager : DesktopManager
         }
     }
 
+    /**
+     * Determine if the window is on the primary screen, i.e. where the main
+     * budgie panels will show
+     */
+    bool window_on_primary(Wnck.Window? window)
+    {
+        Gdk.Rectangle area = Gdk.Rectangle();
+        window.get_geometry(out area.x, out area.y, out area.width, out area.height);
+        var primary = screens.lookup(this.primary_monitor);
+        return area.intersect(primary.area, null);
+    }
+
     /*
      * Decide wether or not the panel should be opaque
      * The panel should be opaque when:
@@ -391,6 +403,9 @@ public class PanelManager : DesktopManager
                 return;
             }
             if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                return;
+            }
+            if (!this.window_on_primary(window)) {
                 return;
             }
             if ((is_maximized && !window.is_minimized())) {
