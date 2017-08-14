@@ -19,9 +19,16 @@ vapi_mutter = 'libmutter'
 dep_mutter = dependency('libmutter', version: gnome_minimum_version, required: false)
 
 if not dep_mutter.found()
-    dep_mutter = dependency('libmutter-0', version: gnome_minimum_version)
-    message('Using new libmutter-0 ABI from GNOME 3.24')
+    dep_mutter = dependency('libmutter-0', version: gnome_minimum_version, required: false)
+    message('Using stable libmutter-0 ABI from GNOME 3.24')
     vapi_mutter = 'libmutter-0'
+endif
+
+# now try libmutter-1 ...
+if not dep_mutter.found()
+    dep_mutter = dependency('libmutter-1', version: gnome_minimum_version)
+    message('Using new libmutter-1 ABI from GNOME 3.26')
+    vapi_mutter = 'libmutter-1'
 endif
 
 budgie_wm_deps = [
