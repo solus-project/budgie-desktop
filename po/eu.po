@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-03 11:53+0000\n"
-"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
+"PO-Revision-Date: 2017-08-16 04:24+0000\n"
+"Last-Translator: John Smith <aboutafteragain@gmail.com>\n"
 "Language-Team: Basque (http://www.transifex.com/budgie-desktop/budgie-desktop/language/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -262,15 +262,15 @@ msgstr "Denak"
 
 #: src/applets/budgie-menu/IconChooser.vala:27
 msgid "Set menu icon from file"
-msgstr ""
+msgstr "Menu ikonoa fitxategitik ezarri"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
-msgstr ""
+msgstr "Irudi fitxategiak"
 
 #: src/applets/budgie-menu/IconChooser.vala:43
 msgid "Any file"
-msgstr ""
+msgstr "Edozein fitxategi"
 
 #: src/applets/budgie-menu/IconChooser.vala:55
 #: src/panel/settings/settings_applet_chooser.vala:84
@@ -282,7 +282,7 @@ msgstr "Utzi"
 
 #: src/applets/budgie-menu/IconChooser.vala:56
 msgid "Set icon"
-msgstr ""
+msgstr "Ikonoa ezarri"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
@@ -303,7 +303,7 @@ msgstr "Gainerako bateria"
 
 #: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
-msgstr ""
+msgstr "Bateriaren ehunekoa erakutsi"
 
 #: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
@@ -311,7 +311,7 @@ msgstr "Argi-indar ezarpenak"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr ""
+msgstr "Soinu ezarpenak"
 
 #: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
@@ -369,7 +369,7 @@ msgstr "Bloq Num ez dago aktibatuta "
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr ""
+msgstr "Autentifikazioak huts egin du"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
@@ -398,7 +398,7 @@ msgstr "Panel berria sortu"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr ""
+msgstr "Estiloa"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
@@ -406,7 +406,7 @@ msgstr "Widgetak"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
-msgstr ""
+msgstr "Leihoen apaingarrien eta kontrolen itxura ezarri"
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
@@ -414,7 +414,7 @@ msgstr "Ikonoak"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
-msgstr ""
+msgstr "Ezarri orokorrean erabilitako ikono gaia"
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
@@ -422,7 +422,7 @@ msgstr "Kurtsoreak"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
-msgstr ""
+msgstr "Ezarri orokorrean erabilitako sagu kurtsorearen gaia"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Dark theme"
@@ -440,71 +440,71 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr ""
+msgstr "Animazioak"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
-msgstr ""
+msgstr "Leiho eta kontrolek animazioak erabiltzen dituzten kontrolatu"
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr ""
+msgstr "Applet bat aukeratu"
 
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr ""
+msgstr "Applet-a gehitu"
 
 #: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
-msgstr ""
+msgstr "Titulu gabea"
 
 #: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
-msgstr ""
+msgstr "Azalpenik ez"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
-msgstr ""
+msgstr "exekutatzen"
 
 #: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
-msgstr ""
+msgstr "Aplikazioak"
 
 #: src/panel/settings/settings_autostart.vala:203
 #: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
-msgstr ""
+msgstr "Gehitu"
 
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
-msgstr ""
+msgstr "Agindua"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr ""
+msgstr "Titulu hori duen sarrera dagoeneko badago"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
-msgstr ""
+msgstr "Titulua"
 
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr ""
+msgstr "Beharrezkoa"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
-msgstr ""
+msgstr "Deskribapena"
 
 #: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
-msgstr ""
+msgstr "Aukerazkoa"
 
 #: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
-msgstr ""
+msgstr "Auto-hasiera"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
@@ -520,16 +520,16 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr ""
+msgstr "Eskuina (arrunta)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:180
 msgid "Left"
-msgstr ""
+msgstr "Ezkerra"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
-msgstr ""
+msgstr "Modaleko elkarrizketak leihoetara erantsi"
 
 #: src/panel/settings/settings_wm.vala:60
 msgid ""
@@ -595,61 +595,61 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
-msgstr ""
+msgstr "Panelaren kentzea berretsi"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr ""
+msgstr "Benetan ezabatu nahi duzu panel hau? Ekintza hau ezin da desegin."
 
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr ""
+msgstr "Ez galdetu berriro"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
-msgstr ""
+msgstr "Panela kendu"
 
 #: src/panel/settings/settings_panel_dialogs.vala:61
 msgid "Keep panel"
-msgstr ""
+msgstr "Panela mantendu"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
-msgstr ""
+msgstr "Applet-aren kentzea berretsi"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
+msgstr "Benetan kendu nahi duzu applet hau? Ekintza hau ezin da desegin."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
-msgstr ""
+msgstr "Appleta kendu"
 
 #: src/panel/settings/settings_panel_dialogs.vala:124
 msgid "Keep applet"
-msgstr ""
+msgstr "Appleta mantendu"
 
 #: src/panel/settings/settings_panel.vala:80
 msgid "Remove this panel from the screen"
-msgstr ""
+msgstr "Panel hau pantailatik kendu"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
-msgstr ""
+msgstr "Goiko Dock-a"
 
 #: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
-msgstr ""
+msgstr "Eskuineko Dock-a"
 
 #: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
-msgstr ""
+msgstr "Ezkerreko Dock-a"
 
 #: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
-msgstr ""
+msgstr "Beheko Dock-a"
 
 #: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
@@ -673,7 +673,7 @@ msgstr "Goian"
 
 #: src/panel/settings/settings_panel.vala:178
 msgid "Right"
-msgstr ""
+msgstr "Eskuin"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
@@ -681,27 +681,27 @@ msgstr "Behean"
 
 #: src/panel/settings/settings_panel.vala:193
 msgid "Always"
-msgstr ""
+msgstr "Beti"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamikoa"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "None"
-msgstr ""
+msgstr "Ezer ez"
 
 #: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"
-msgstr ""
+msgstr "Automatikoa"
 
 #: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
-msgstr ""
+msgstr "Adimentsua"
 
 #: src/panel/settings/settings_panel.vala:214
 msgid "Never"
-msgstr ""
+msgstr "Inoiz"
 
 #: src/panel/settings/settings_panel.vala:230
 msgid "Position"
@@ -709,7 +709,7 @@ msgstr "Kokalekua"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr ""
+msgstr "Panela pantailaren zein ertzetan egongo den ezarri"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
@@ -717,23 +717,23 @@ msgstr "Tamaina"
 
 #: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
+msgstr "Panel honen neurria (zabalera edo altuera, orientazioaren arabera) ezarri"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
-msgstr ""
+msgstr "Automatikoki ezkutatu"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
+msgstr "Ezarritakoan, panel hau pantailaren egoera maximizatzeko ezkutatuko da"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
-msgstr ""
+msgstr "Gardentasuna"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr ""
+msgstr "Kontrolatu panel honek noiz edukiko duen atzealde solidoa "
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
@@ -765,15 +765,15 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr ""
+msgstr "Appleta konfiguratu"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Panel honetara gehitzeko applet berri bat aukeratu"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr ""
+msgstr "Ezarpenik ez dago"
 
 #: src/panel/settings/settings_panel_applets.vala:415
 msgid "Start"
@@ -789,7 +789,7 @@ msgstr "Amaiera"
 
 #: src/panel/settings/settings_desktop.vala:33
 msgid "Desktop"
-msgstr ""
+msgstr "Mahaigaina"
 
 #: src/panel/settings/settings_desktop.vala:43
 msgid "Desktop Icons"
@@ -797,39 +797,39 @@ msgstr "Mahaigaineko Ikonoak"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr ""
+msgstr "Mahaigainean abiarazleak eta ikonoak onartu ala ez kontrolatu"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
-msgstr ""
+msgstr "Karpeta nagusia"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr ""
+msgstr "Zure karpeta nagusiko lasterbidea mahaigainean gehitu"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
-msgstr ""
+msgstr "Sareko zerbitzariak"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr ""
+msgstr "Sareko zerbitzarien lasterbidea mahaigainean gehitu"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
-msgstr ""
+msgstr "Zaborra"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
-msgstr ""
+msgstr "Zaborrerako lasterbidea mahaigainean gehitu"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
-msgstr ""
+msgstr "Muntatutako bolumenak"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr ""
+msgstr "Muntatutako bolumenak eta unitateak mahaigainean agertuko dira "
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -837,7 +837,7 @@ msgstr "Zure saioa amaitu nahi duzula ziur zaude?"
 
 #: src/daemon/tabswitcher.ui.h:1
 msgid " - "
-msgstr ""
+msgstr "-"
 
 #: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
@@ -862,51 +862,51 @@ msgstr ""
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
 msgid "Night Light"
-msgstr ""
+msgstr "Gaueko Argia"
 
 #: src/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr ""
+msgstr "Tenperatura"
 
 #: src/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr ""
+msgstr "Ordutegia"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr ""
+msgstr "Ilunabarretik Egunsentira "
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr ""
+msgstr "Eskuz"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Pantaila Ezarpenak"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr ""
+msgstr "Menuko Etiketa Erakutsi"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
-msgstr ""
+msgstr "Modu Trinkoa"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr ""
+msgstr "Goiburuak Erakutsi"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
-msgstr ""
+msgstr "Menuaren Etiketa"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr ""
+msgstr "Saguarekin biratu"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"
-msgstr ""
+msgstr "Menuaren Ikonoa"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
@@ -914,19 +914,19 @@ msgstr "Banatzailearen tamaina"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr ""
+msgstr "Autentifikazioa Beharrezkoa"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr ""
+msgstr "Pasahitza:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr ""
+msgstr "Autentifikazioa beharrezkoa da"
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr ""
+msgstr "Autentifikatu"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -995,18 +995,18 @@ msgstr "Lock Keys Indicator"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr ""
+msgstr "Budgie Panela"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr ""
+msgstr "Beste aplikazio batzuk abiarazi eta leihoak kudeatzeko, denbora erakusteko, etab. hainbat utilitate eskaini"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr ""
+msgstr "Budgie Mahaigainaren Ezarpenak"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
-msgstr ""
+msgstr "Mahaigainaren itxura eta portaera aldatu"
