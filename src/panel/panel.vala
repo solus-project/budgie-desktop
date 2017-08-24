@@ -836,7 +836,6 @@ public class Panel : Budgie.Toplevel
     void add_new(string plugin_name, string? initial_uuid = null)
     {
         string? uuid = null;
-        string? rname = null;
         unowned HashTable<string,string>? table = null;
 
         if (!this.manager.is_extension_valid(plugin_name)) {

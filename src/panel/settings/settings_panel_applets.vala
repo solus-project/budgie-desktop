@@ -392,7 +392,6 @@ public class AppletsPage : Gtk.Box {
      */
     void do_headers(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
     {
-        Gtk.Widget? child = null;
         string? prev = null;
         string? next = null;
         unowned Budgie.AppletInfo? before_info = null;

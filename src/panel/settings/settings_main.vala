@@ -234,7 +234,6 @@ public class SettingsWindow : Gtk.Window {
      */
     int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
     {
-        int score = 0;
         SettingsItem? child_before = null;
         SettingsItem? child_after = null;
 

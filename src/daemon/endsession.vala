@@ -86,8 +86,6 @@ public class EndSessionDialog : Gtk.Window
         ConfirmedShutdown();
     }
 
-    private bool showing = false;
-
     [DBus (visible = false)]
     void on_bus_acquired(DBusConnection conn)
     {
