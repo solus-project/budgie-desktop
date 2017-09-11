@@ -48,7 +48,7 @@ public class SettingsWindow : Gtk.Window {
         add(layout);
 
         /* Have to override wmclass for pinning support */
-        set_title(_("Budgie Settings"));
+        set_title(_("Budgie Desktop Settings"));
         set_wmclass("budgie-desktop-settings", "budgie-desktop-settings");
         set_icon_name("preferences-desktop");
 
