@@ -8,3 +8,4 @@ Terminal=false
 Type=Application
 Categories=GNOME;GTK;System;
 OnlyShowIn=Budgie;
+StartupWMClass=budgie-desktop-settings
