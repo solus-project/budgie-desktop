@@ -75,6 +75,8 @@ public class MenuButton : Gtk.Button
         img.pixel_size = icon_size;
         img.margin_end = 7;
         var lab = new Gtk.Label(parent.get_display_name());
+        lab.set_ellipsize (Pango.EllipsizeMode.END);
+        lab.set_max_width_chars (28);
         lab.halign = Gtk.Align.START;
         lab.valign = Gtk.Align.CENTER;
 
