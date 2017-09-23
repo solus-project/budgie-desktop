@@ -140,5 +140,10 @@
       <summary>Name of the default desktop layout</summary>
       <description>The name of the default layout used when resetting the panel</description>
     </key>
+    <key type="s" name="date-format">
+      <default>'%x'</default>
+      <summary>Date format of the clock applet</summary>
+      <description>Set the date format. Uses the same format as date command.</description>
+    </key>
   </schema>
 </schemalist>
