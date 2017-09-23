@@ -514,6 +514,10 @@ public class NotificationsView : Gtk.Box
 
     private HeaderWidget? header = null;
     private Gtk.ListBox? listbox;
+    private Gtk.Button btnDontDisturb;
+    private bool dontDisturb = false;
+    private Gtk.Image enableNotificationsIcon = new Gtk.Image.from_icon_name("document-properties-symbolic", Gtk.IconSize.MENU);
+    private Gtk.Image disableNotificationsIcon = new Gtk.Image.from_icon_name("image-red-eye-symbolic", Gtk.IconSize.MENU);
 
     private GLib.Queue<NotificationWindow?> stack = null;
 
@@ -605,8 +609,11 @@ public class NotificationsView : Gtk.Box
 
         int32 expire = expire_timeout;
 
+        if (dontDisturb) {
+            /* Don't show the notification */
+            expire = 0;
         /* Prevent pure derpery. */
-        if (expire_timeout < 4000 || expire_timeout > 20000) {
+        } else if (expire_timeout < 4000 || expire_timeout > 20000) {
             expire = 4000;
         }
 
@@ -697,6 +704,19 @@ public class NotificationsView : Gtk.Box
     }
 
     [DBus (visible = false)]
+    void do_not_disturb_toggle()
+    {
+        if (dontDisturb) {
+            btnDontDisturb.set_image(enableNotificationsIcon);
+            dontDisturb = false;
+        } else {
+            btnDontDisturb.set_image(disableNotificationsIcon);
+            dontDisturb = true;
+        }
+    }
+
+
+    [DBus (visible = false)]
     public NotificationsView()
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
@@ -706,10 +726,19 @@ public class NotificationsView : Gtk.Box
 
         var btn = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         btn.relief = Gtk.ReliefStyle.NONE;
+        
+        btnDontDisturb = new Gtk.Button();
+        btnDontDisturb.set_image(enableNotificationsIcon);
+        btnDontDisturb.relief = Gtk.ReliefStyle.NONE;
+        
+        var controlButtons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        controlButtons.pack_start(btn, false, false, 0);
+        controlButtons.pack_start(btnDontDisturb, false, false, 0);
 
-        header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, btn);
+        header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, controlButtons);
         header.margin_top = 6;
 
+        btnDontDisturb.clicked.connect(this.do_not_disturb_toggle);
         btn.clicked.connect(this.clear_all);
 
         pack_start(header, false, false, 0);
