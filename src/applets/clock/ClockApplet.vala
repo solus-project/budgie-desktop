@@ -303,7 +303,13 @@ public class ClockApplet : Budgie.Applet
         }
 
         settings = new Settings("com.solus-project.budgie-panel");
-        string ftime = (string)settings.get_string("date-format");
+
+        string ftime;
+        if (this.orient == Gtk.Orientation.HORIZONTAL) {
+            ftime = settings.get_string("date-format");
+        } else {
+            ftime = settings.get_string("date-format-vertical");
+        }
 
         // Prevent unnecessary redraws
         var old = date_label.get_label();

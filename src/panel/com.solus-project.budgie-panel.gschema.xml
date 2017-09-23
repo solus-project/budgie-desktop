@@ -145,5 +145,10 @@
       <summary>Date format of the clock applet</summary>
       <description>Set the date format. Uses the same format as date command.</description>
     </key>
+    <key type="s" name="date-format-vertical">
+      <default><![CDATA['<small>%b %d</small>']]></default>
+      <summary>Date format of the clock applet</summary>
+      <description>Set the date format when using vertical panel. Uses the same format as date command.</description>
+    </key>
   </schema>
 </schemalist>
