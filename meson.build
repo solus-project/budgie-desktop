@@ -114,7 +114,12 @@ extra_includes = [
 with_polkit = get_option('with-polkit')
 
 # Get gvc built before we do anything
-gvc = subproject('gvc')
+gvc = subproject('gvc',
+    default_options: [
+    'c_std=c89',
+    'static=true',
+  ]
+)
 
 # Prep translations prior to build
 subdir('po')
