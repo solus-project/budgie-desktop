@@ -50,7 +50,7 @@ panel_deps = [
     link_libtheme,
     link_libplugin,
     link_libraven,
-    gvc.get_variable('link_libgvc'),
+    gvc.get_variable('libgvc_dep'),
 ]
 
 top_vapidir = join_paths(meson.source_root(), 'vapi')

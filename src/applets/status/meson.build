@@ -22,7 +22,7 @@ applet_status_deps = [
     dep_accountsservice,
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libplugin,
-    gvc.get_variable('link_libgvc'),
+    gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
