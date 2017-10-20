@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-03 11:53+0000\n"
+"PO-Revision-Date: 2017-09-22 03:47+0000\n"
 "Last-Translator: Geert Verheyde <geert.verheyde@gmail.com>\n"
 "Language-Team: Dutch (Belgium) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/nl_BE/)\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +174,7 @@ msgstr "Een onbekende fout deed zich voor tijdens het aankoppelen van dit volume
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
-msgstr "Dit volume is in gebruik door andere processen"
+msgstr "Dit volume wordt gebruikt door andere processen"
 
 #: src/applets/places-indicator/MountHelper.vala:45
 msgid "Operation aborted"
@@ -548,7 +548,7 @@ msgstr "Automatisch uitvouwen "
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr "Vensters vouwen zich automatisch uit wanneer ze naar de top van het schermof naar een van de hoekranden gesleept worden "
+msgstr "Vensters vouwen zich automatisch uit wanneer ze naar de bovenkant van het scherm of naar een van de hoekranden gesleept worden "
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
@@ -570,7 +570,7 @@ msgstr "Venster titels"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "Het lettertype bepalen dat gebruikt wordt in de titelbalken van de toepassingen"
+msgstr "Het lettertype van titelbalken instellen"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -712,7 +712,7 @@ msgstr "Positie"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Op welke zijde van het schem moet het paneel vastgepind worden?"
+msgstr "Op welke rand van het schem moet het paneel vastgepind worden?"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"

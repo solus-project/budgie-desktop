@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-03 11:53+0000\n"
+"PO-Revision-Date: 2017-10-19 20:55+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/budgie-desktop/budgie-desktop/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -109,7 +109,7 @@ msgstr "Fjernbare enheder"
 #: src/applets/places-indicator/MountItem.vala:27
 #: src/applets/places-indicator/VolumeItem.vala:29
 msgid "Local volumes"
-msgstr "Lokale volumener"
+msgstr "Lokale diskenheder"
 
 #: src/applets/places-indicator/MountItem.vala:31
 #: src/applets/places-indicator/VolumeItem.vala:33
@@ -145,7 +145,7 @@ msgstr "Fejl ved udskubning af enhed"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr "Fejl ved afmontering af volume"
+msgstr "Fejl ved afmontering af diskenhed"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
@@ -162,7 +162,7 @@ msgstr "Monter og åbn \"%s\""
 #: src/applets/places-indicator/VolumeItem.vala:76
 #: src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Indtast den krypterede adgangsfrase for at låse denne volume op"
+msgstr "Indtast den krypterede adgangsfrase for at låse diskenheden op"
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
@@ -170,11 +170,11 @@ msgstr "Adgangskoden som du har indtastet er forkert"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Der opstod en fejl ved forsøg på at montere denne volume"
+msgstr "Der opstod en fejl ved forsøg på at montere diskenheden"
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
-msgstr "Volumen er i brug af andre processer"
+msgstr "Diskenheden bruges af andre processer"
 
 #: src/applets/places-indicator/MountHelper.vala:45
 msgid "Operation aborted"
@@ -209,11 +209,11 @@ msgstr "Lås"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Hviletilstand"
+msgstr "Hvile"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Dvaletilstand"
+msgstr "Dvale"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:104
 #: src/daemon/endsession.ui.h:5
@@ -289,7 +289,7 @@ msgstr "Sæt ikon"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
-msgstr "Batteri fuldt opladet."
+msgstr "Batteriet er fuldt opladet."
 
 #: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
@@ -298,7 +298,7 @@ msgstr "Ukendt"
 #. Set inner charging duration to hours:minutes
 #: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
-msgstr "Batteri lader op"
+msgstr "Batteriet lader op"
 
 #: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
@@ -306,7 +306,7 @@ msgstr "Tilbageværende batteri"
 
 #: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
-msgstr "Vis batteriprocent"
+msgstr "Vis batteriets procent"
 
 #: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
@@ -519,7 +519,7 @@ msgstr "Knaplayout"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr "Skift layoutet af knapper i programtitellinjer"
+msgstr "Skift layoutet af knapperne i programmernes titellinjer"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
@@ -558,7 +558,7 @@ msgstr "Deaktivér uomdirigering af vinduer"
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
-msgstr "Denne valgmulighed er til avancerede brugere. Brug den hvis du har problemer med dedikerede GPU'ers grafik eller ydelse"
+msgstr "Valgmuligheden er til avancerede brugere. Brug den hvis du har problemer med dedikerede GPU'ers grafik eller ydelse"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -570,7 +570,7 @@ msgstr "Vinduestitler"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "Sæt skrifttypen som skal bruges i titellinjerne af programmer"
+msgstr "Sæt skrifttypen som skal bruges i programmernes titellinjer"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -590,7 +590,7 @@ msgstr "Sæt den primære skrifttype som skal bruges af programkontroller"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
-msgstr "Fastbredde"
+msgstr "Fast bredde"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
@@ -602,7 +602,7 @@ msgstr "Bekræft fjernelse af panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Vil du virkelig fjerne denne panel? Denne handling kan ikke fortrydes."
+msgstr "Vil du virkelig fjerne panelet? Handlingen kan ikke fortrydes."
 
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
@@ -624,7 +624,7 @@ msgstr "Bekræft fjernelse af applet"
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Vil du virkelig fjerne denne applet? Denne handling kan ikke fortrydes."
+msgstr "Vil du virkelig fjerne appleten? Handlingen kan ikke fortrydes."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
@@ -636,7 +636,7 @@ msgstr "Behold applet"
 
 #: src/panel/settings/settings_panel.vala:80
 msgid "Remove this panel from the screen"
-msgstr "Fjern dette panel fra skærmen"
+msgstr "Fjern panelet fra skærmen"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
@@ -672,7 +672,7 @@ msgstr "Bundpanel"
 
 #: src/panel/settings/settings_panel.vala:176
 msgid "Top"
-msgstr "Top"
+msgstr "Øverst"
 
 #: src/panel/settings/settings_panel.vala:178
 msgid "Right"
@@ -680,7 +680,7 @@ msgstr "Højre"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
-msgstr "Bund"
+msgstr "Nederst"
 
 #: src/panel/settings/settings_panel.vala:193
 msgid "Always"
@@ -712,7 +712,7 @@ msgstr "Placering"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Sæt den kant af skærmen hvor dette panel skal være på"
+msgstr "Sæt skærmkanten hvor panelet skal være på"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
@@ -728,7 +728,7 @@ msgstr "Skjul automatisk"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Hvis den er sat, så skjules dette panel fra visningen for at gøre bedst brug af skærmens område"
+msgstr "Hvis den er sat, så skjules panelet fra visningen for at gøre bedst brug af skærmens område"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
@@ -736,7 +736,7 @@ msgstr "Transparens"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr "Bestem hvornår dette panel skal bruge en ensfarvet baggrund"
+msgstr "Bestem hvornår panelet skal bruge en ensfarvet baggrund"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
@@ -772,7 +772,7 @@ msgstr "Konfigurer applet"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr "Vælg en ny applet som skal tilføjes til dette panel"
+msgstr "Vælg en ny applet som skal tilføjes til panelet"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
@@ -800,7 +800,7 @@ msgstr "Skrivebordsikoner"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr "Bestemt hvorvidt programstartere og ikoner skal tilladelses på skrivebordet"
+msgstr "Bestemt hvorvidt programstartere og ikoner skal tillades på skrivebordet"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
@@ -828,11 +828,11 @@ msgstr "Tilføj en genvej til papirkurvsmappen på skrivebordet"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
-msgstr "Monteret volumener"
+msgstr "Monterede diskenheder"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr "Monteret volumener og drev vil blive vist på skrivebordet"
+msgstr "Monterede diskenheder og drev vil blive vist på skrivebordet"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -881,7 +881,7 @@ msgstr "Solnedgang til solopgang"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "Manuel"
+msgstr "Manuelt"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
@@ -938,7 +938,7 @@ msgstr "Budgie-skrivebord"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Denne session logger dig ind i Budgie-skrivebordet"
+msgstr "Sessionen logger dig ind i Budgie-skrivebordet"
 
 #: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"

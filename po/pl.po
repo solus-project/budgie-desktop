@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Axel Rechenberg <axelreche@gmail.com>, 2017
-# Daniel Dietrich <dietrich.daniel.96@gmail.com>, 2016
+# Daniel Dietrich <inactive+Daniel_Die@transifex.com>, 2016
 # Gosciu Goscicki <g1485232@trbvm.com>, 2015
 # Grass Hopper <1301grasshopper@gmail.com>, 2016
 # Jakub Gawlik <info@jgawlik.co.uk>, 2016
@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-16 16:01+0000\n"
+"PO-Revision-Date: 2017-09-22 03:47+0000\n"
 "Last-Translator: Axel Rechenberg <axelreche@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/budgie-desktop/budgie-desktop/language/pl/)\n"
 "MIME-Version: 1.0\n"

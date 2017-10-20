@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-16 22:13+0000\n"
+"PO-Revision-Date: 2017-09-22 18:59+0000\n"
 "Last-Translator: Fabio Forni <fabio94xx@gmail.com>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr "Impostazioni"
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Mostra il desktop"
+msgstr "Mostra/nascondi deskop"
 
 #: src/applets/icon-tasklist/Buttons.vala:113
 msgid "Pin to panel"
@@ -189,7 +189,7 @@ msgstr "Inserisci la password"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
 msgid "Nothing to display right now"
-msgstr "Nulla da visualizare ora"
+msgstr "Non c'è niente da visualizzare al momento"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
 msgid "Mount some drives"
@@ -259,7 +259,7 @@ msgstr "Mostra secondi"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
-msgstr "Mostra orario in formato 24 ore"
+msgstr "Usa formato 24 ore"
 
 #. Special case, "All"
 #: src/applets/budgie-menu/BudgieMenuWindow.vala:43
@@ -342,7 +342,7 @@ msgstr "Impostazioni Bluetooth"
 #. Send files button
 #: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
-msgstr "Invia File"
+msgstr "Invia file"
 
 #. Airplane mode
 #: src/applets/status/BluetoothIndicator.vala:196
@@ -442,7 +442,7 @@ msgstr "Tema Predefinito"
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr ""
+msgstr "Quando abilitato, lo stile dei componenti del desktop sarà rimpiazzato con quello predefinito"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
@@ -450,7 +450,7 @@ msgstr "Animazioni"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
-msgstr ""
+msgstr "Imposta se le finestre e i controlli faranno uso di animazioni"
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
@@ -555,7 +555,7 @@ msgstr "Le finestre verranno ridimensionate automaticamente quando trascinate ve
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr ""
+msgstr "Disabilita l'unredirection delle finestre"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
@@ -573,7 +573,7 @@ msgstr "Titoli delle finestre"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "Imposta il font usato nella barra del titolo delle applicazioni"
+msgstr "Imposta il carattere usato nella barra del titolo delle applicazioni"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -581,7 +581,7 @@ msgstr "Documenti"
 
 #: src/panel/settings/settings_fonts.vala:51
 msgid "Set the display font used by for documents"
-msgstr ""
+msgstr "Imposta il carattere usato nei documenti"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
@@ -589,19 +589,19 @@ msgstr "Interfaccia"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr ""
+msgstr "Imposta il carattere principale per i controlli delle applicazioni"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
-msgstr "Monospazio"
+msgstr "Monospace"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
-msgstr ""
+msgstr "Imposta il carattere a grandezza fissa usato in applicazioni a dominanza testuale"
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
-msgstr ""
+msgstr "Conferma rimozione del pannello"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
@@ -739,7 +739,7 @@ msgstr "Trasparenza"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr ""
+msgstr "Controlla quando il pannello dovrà essere in tinta unita"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
@@ -747,7 +747,7 @@ msgstr "Ombra"
 
 #: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
+msgstr "Aggiunge un'ombreggiatura esterna, ideale per pannelli opachi"
 
 #: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
@@ -757,7 +757,7 @@ msgstr "Applica stili alle regioni"
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr ""
+msgstr "Aggiunge un'opzione al pannello così che le tre aree principali possano avere aspetti differenti."
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
@@ -767,7 +767,7 @@ msgstr "Modalità dock"
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr ""
+msgstr "Quando in modalità dock, il pannello sfrutterà il minimo spazio possibile, liberando una preziosa area di schermo"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
@@ -775,7 +775,7 @@ msgstr "Configura applet"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Scegli un nuovo applet da aggiungere al pannello"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
@@ -803,7 +803,7 @@ msgstr "Icone del desktop"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr ""
+msgstr "Imposta la disponibilità di icone e collegamenti sul desktop"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
@@ -815,11 +815,11 @@ msgstr "Aggiungi collegamento alla tua cartella home sul desktop"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
-msgstr ""
+msgstr "Server di rete"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr ""
+msgstr "Aggiungi collegamento ai server di rete sul desktop"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
@@ -888,7 +888,7 @@ msgstr "Manuale"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Impostazioni display"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -900,7 +900,7 @@ msgstr "Modalità compatta"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr ""
+msgstr "Mostra intestazioni"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
@@ -908,7 +908,7 @@ msgstr "Etichetta menu"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr ""
+msgstr "Scorrimento del mouse"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-12 10:38+0000\n"
+"PO-Revision-Date: 2017-09-22 18:57+0000\n"
 "Last-Translator: ric\n"
 "Language-Team: Portuguese (Portugal) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -249,7 +249,7 @@ msgstr "Preferências"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr "Mostrar dia"
+msgstr "Mostrar data"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
@@ -689,11 +689,11 @@ msgstr "Sempre"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr "Dinâmico"
+msgstr "Dinâmica"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "None"
-msgstr "Nenhum"
+msgstr "Nenhuma"
 
 #: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"

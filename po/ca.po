@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-03 11:53+0000\n"
+"PO-Revision-Date: 2017-10-13 08:49+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgstr "Reinicia el dispositiu"
 
 #: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Apaga"
+msgstr "Atura"
 
 #: src/daemon/menus.vala:52
 msgid "Change background"
@@ -220,7 +220,7 @@ msgstr "Reinicia"
 #: src/applets/user-indicator/UserIndicatorWindow.vala:105
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Apaga"
+msgstr "Atura"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
@@ -665,7 +665,7 @@ msgstr "Plafó esquerre"
 
 #: src/panel/settings/settings_panel.vala:137
 msgid "Bottom Panel"
-msgstr "Plafó inferior"
+msgstr "Plafó de baix"
 
 #: src/panel/settings/settings_panel.vala:176
 msgid "Top"
@@ -697,7 +697,7 @@ msgstr "Automàtic"
 
 #: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
-msgstr "Intel·lingent"
+msgstr "Intel·ligent"
 
 #: src/panel/settings/settings_panel.vala:214
 msgid "Never"

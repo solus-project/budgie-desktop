@@ -4,12 +4,13 @@
 # 
 # Translators:
 # John Smith <aboutafteragain@gmail.com>, 2016-2017
+# Osoitz <oelkoro@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-16 04:24+0000\n"
+"PO-Revision-Date: 2017-10-19 19:02+0000\n"
 "Last-Translator: John Smith <aboutafteragain@gmail.com>\n"
 "Language-Team: Basque (http://www.transifex.com/budgie-desktop/budgie-desktop/language/eu/)\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +437,7 @@ msgstr "Built-in gaia"
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr ""
+msgstr "Gaitzean, barnek osagaiak mahaigaineko osagaia ordezkatuko du"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
@@ -516,7 +517,7 @@ msgstr "Botoien diseinua"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr ""
+msgstr "Aldatu aplikazioen izenburu-barretako ikonoen antolaketa"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
@@ -539,7 +540,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr ""
+msgstr "Lauzatze automatikoa"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
@@ -567,7 +568,7 @@ msgstr "Leihoen Izenburuak"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr ""
+msgstr "Ezarri aplikazioen izenburu-barran erabiliotako letra-tipoa"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -575,7 +576,7 @@ msgstr "Dokumentuak"
 
 #: src/panel/settings/settings_fonts.vala:51
 msgid "Set the display font used by for documents"
-msgstr ""
+msgstr "Ezarri dokumentuetan erabilitako letra-tipoa"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
@@ -583,7 +584,7 @@ msgstr "Interfazea"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr ""
+msgstr "Ezarri aplikazioen kontroletan erabilitako letra-tipoa nagusia"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -755,13 +756,13 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
-msgstr ""
+msgstr "Dock modua"
 
 #: src/panel/settings/settings_panel.vala:277
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr ""
+msgstr "Dock moduan panelak gutxieneko espazio kopurua erabiliko du, pantailari ahal den leku libre gehien uzten. "
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
@@ -857,7 +858,7 @@ msgstr "Aldagarri gailuak erakutsi"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr ""
+msgstr "Beti hedatu lekuak"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1

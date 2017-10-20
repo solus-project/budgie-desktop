@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-08-17 13:16+0000\n"
+"PO-Revision-Date: 2017-10-14 19:00+0000\n"
 "Last-Translator: Ondřej Pucholt <o.pucholt@windowslive.com>\n"
 "Language-Team: Czech (http://www.transifex.com/budgie-desktop/budgie-desktop/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -51,11 +51,11 @@ msgstr "Žádná nová oznámení"
 
 #: src/raven/sound.vala:78
 msgid "Output"
-msgstr "Výstupní"
+msgstr "Výstup"
 
 #: src/raven/sound.vala:95
 msgid "Input"
-msgstr "Vstupní"
+msgstr "Vstup"
 
 #: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
@@ -369,15 +369,15 @@ msgstr "Caps Lock není aktivní"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:75
 msgid "Num lock is active"
-msgstr "Num lock je aktivní"
+msgstr "Num Lock je aktivní"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:78
 msgid "Num lock is not active"
-msgstr "Num lock není aktivní"
+msgstr "Num Lock není aktivní"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr "Autentizace selhala"
+msgstr "Ověření selhalo"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
@@ -398,7 +398,7 @@ msgstr "Sezení"
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
 msgid "Budgie Settings"
-msgstr "Budgie Nastavení"
+msgstr "Nastavení Budgie"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
@@ -414,7 +414,7 @@ msgstr "Widgety"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
-msgstr "Nastavit vzhled dekorace oken a ovládacích prvků"
+msgstr "Nastavit vzhled dekorací oken a ovládacích prvků"
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
@@ -444,7 +444,7 @@ msgstr "Vestavěný motiv"
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr "Pokud je aktivováno, styl komponentů plochy bude přepsán vestavěným stylem"
+msgstr "Přepsat styl komponent desktopového prostředí vestavěným stylem"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
@@ -473,7 +473,7 @@ msgstr "Žádný popis"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
-msgstr "běh"
+msgstr "běží"
 
 #: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
@@ -495,7 +495,7 @@ msgstr "Položka s tímto názvem již existuje"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
-msgstr "Titulek"
+msgstr "Název"
 
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
@@ -547,7 +547,7 @@ msgstr "Modální dialogy budou spojeny s nadřazeným oknem a budou se společn
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr "Automatické rozmístění oken"
+msgstr "Automatické zarovnání oken"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
@@ -557,7 +557,7 @@ msgstr "Okna přetažená na roh nebo horní okraj obrazovky se automaticky rozm
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr ""
+msgstr "Povolit přesměrování oken"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
@@ -645,19 +645,19 @@ msgstr "Odstranit tento panel z obrazovky"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
-msgstr "Horní Dock"
+msgstr "Horní dok"
 
 #: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
-msgstr "Pravý Dock"
+msgstr "Pravý dok"
 
 #: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
-msgstr "Levý Dock"
+msgstr "Levý dok"
 
 #: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
-msgstr "Spodní Dock"
+msgstr "Spodní dok"
 
 #: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
@@ -693,7 +693,7 @@ msgstr "Vždy"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr "Dynamický"
+msgstr "Dynamicky"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "None"
@@ -717,7 +717,7 @@ msgstr "Pozice"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Nastavit stranu obrazovky, ke které bude panel přiléhat"
+msgstr "Nastavit, ke které straně obrazovky bude panel přiléhat"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
@@ -737,11 +737,11 @@ msgstr "Panel se automaticky skryje, aby na obrazovce bylo více místa"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
-msgstr "Průhledný"
+msgstr "Průhlednost"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr "Nastavit, jestli tento panel má mít jednobarevné pozadí"
+msgstr "Nastavit, jestli tento panel má mít průhledné pozadí"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
@@ -759,11 +759,11 @@ msgstr "Stylizovat oblasti"
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr ""
+msgstr "Odlišit tři hlavní sekce panelu, aby každá mohla používat jiný motiv"
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
-msgstr "Režim Docku"
+msgstr "Režim doku"
 
 #: src/panel/settings/settings_panel.vala:277
 msgid ""
@@ -837,7 +837,7 @@ msgstr "Připojené svazky"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr "Připojené svazky & disky zobrazovat na ploše"
+msgstr "Zobrazovat připojené svazky a disky na ploše"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -882,11 +882,11 @@ msgstr "Rozvrh"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "Od západu do východu"
+msgstr "Od soumraku do rozbřesku"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "Manuál"
+msgstr "Manuální"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
@@ -902,7 +902,7 @@ msgstr "Kompaktní režim"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr "Zobrazit Hlavičky"
+msgstr "Zobrazit hlavičky"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
@@ -910,7 +910,7 @@ msgstr "Štítek menu"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr ""
+msgstr "Při přejetí myší zobrazit nabídku"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"
@@ -922,7 +922,7 @@ msgstr "Velikost mezery"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Požadována autentizace"
+msgstr "Požadováno ověření"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
@@ -930,11 +930,11 @@ msgstr "Heslo:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr "Je nutná autentizace"
+msgstr "Je nutné ověření"
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr "Autentizace"
+msgstr "Ověřit"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -999,7 +999,7 @@ msgstr "Přepínač pracovních ploch"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indikátor klávesy Lock"
+msgstr "Indikátor kláves Lock"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
@@ -1009,7 +1009,7 @@ msgstr "Budgie Panel"
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr ""
+msgstr "Spouští ostatní aplikace a poskytuje různé nástroje pro správu oken, zobrazení času atd."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
