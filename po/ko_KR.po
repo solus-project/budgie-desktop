@@ -4,7 +4,8 @@
 # 
 # Translators:
 # David Kang <hpdk97@gmail.com>, 2015
-# jemin_jeon <jemin.jeon@posteo.net>, 2017
+# Ikey Doherty <ikey@solus-project.com>, 2017
+# jemin_jeon, 2017
 # Joshua Huh <mr.saint@gmail.com>, 2016
 # Youngbin Han <sukso96100@gmail.com>, 2016
 msgid ""
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-09-22 18:57+0000\n"
-"Last-Translator: jemin_jeon <jemin.jeon@posteo.net>\n"
+"PO-Revision-Date: 2017-10-31 15:12+0000\n"
+"Last-Translator: Ikey Doherty <ikey@solus-project.com>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -84,7 +85,7 @@ msgstr "설정"
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "데스크톱 보기/숨기기"
+msgstr "바탕화면 보기/숨기기"
 
 #: src/applets/icon-tasklist/Buttons.vala:113
 msgid "Pin to panel"
@@ -223,7 +224,7 @@ msgstr "재시작"
 #: src/applets/user-indicator/UserIndicatorWindow.vala:105
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "종료"
+msgstr "시스템 종료"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
@@ -265,7 +266,7 @@ msgstr "전체"
 
 #: src/applets/budgie-menu/IconChooser.vala:27
 msgid "Set menu icon from file"
-msgstr "메뉴 아이콘 파일 중에서 선택하기"
+msgstr "선택한 파일로 메뉴 아이콘 설정하기"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
@@ -289,7 +290,7 @@ msgstr "아이콘 설정하기"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
-msgstr "배터리 완전히 충전됨"
+msgstr "배터리 충전 완료."
 
 #: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
@@ -400,7 +401,7 @@ msgstr "새 작업표시줄 생성하기"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr "스타일"
+msgstr "모양새"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
@@ -424,7 +425,7 @@ msgstr "마우스 커서"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
-msgstr "시스템 전반적으로 사용할 마우스 커서 테마 정하기"
+msgstr "시스템 전반적으로 사용할 마우스 커서 테마 설정하기"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Dark theme"
@@ -494,7 +495,7 @@ msgstr "제목"
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr "필수"
+msgstr "필수항목"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
@@ -502,7 +503,7 @@ msgstr "설명"
 
 #: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
-msgstr "선택"
+msgstr "선택항목"
 
 #: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
@@ -518,7 +519,7 @@ msgstr "단추 구성"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr "응용프로그램 제목표시줄 단추 구성 변경하기"
+msgstr "응용 프로그램 제목표시줄 단추 구성 변경하기"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
@@ -569,7 +570,7 @@ msgstr "창 제목"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "응용프로그램 제목표시줄 글꼴 설정하기"
+msgstr "응용 프로그램 제목표시줄 글꼴 설정하기"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -585,11 +586,11 @@ msgstr "인터페이스"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr "응용프로그램 메뉴 글꼴 설정하기"
+msgstr "응용 프로그램 메뉴 글꼴 설정하기"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
-msgstr "고정폭"
+msgstr "고정폭 글꼴"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
@@ -606,7 +607,7 @@ msgstr "이 작업표시줄을 정말 삭제하시겠습니까? 이 작업은 �
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr "더이상 묻지 않기"
+msgstr "더 이상 묻지 않기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
@@ -699,7 +700,7 @@ msgstr "자동"
 
 #: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
-msgstr "적응"
+msgstr "능동적"
 
 #: src/panel/settings/settings_panel.vala:214
 msgid "Never"
@@ -743,7 +744,7 @@ msgstr "그림자"
 
 #: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "불투명한 패널에 잘 어울리는 가장자리 그림자 추가하기"
+msgstr "불투명한 작업표시줄에 잘 어울리는 가장자리 그림자 추가하기"
 
 #: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
@@ -795,7 +796,7 @@ msgstr "바탕화면"
 
 #: src/panel/settings/settings_desktop.vala:43
 msgid "Desktop Icons"
-msgstr "데스크톱 아이콘"
+msgstr "바탕화면 아이콘"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
@@ -807,7 +808,7 @@ msgstr "홈 폴더"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr "바탕화면에 홈 폴더 바로가기 생성하기"
+msgstr "바탕화면에 홈 폴더 바로가기 추가하기"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
@@ -815,7 +816,7 @@ msgstr "네트워크 서버"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr "바탕화면에 로컬 네트워크 서버 바로가기 생성하기"
+msgstr "바탕화면에 로컬 네트워크 서버 바로가기 추가하기"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
@@ -823,7 +824,7 @@ msgstr "휴지통"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
-msgstr "바탕화면에 휴지통 바로가기 생성하기"
+msgstr "바탕화면에 휴지통 바로가기 추가하기"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
@@ -896,7 +897,7 @@ msgstr "간소화 모드"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr "응용프로그램 구분 표시하기"
+msgstr "응용 프로그램 구분 표시하기"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
@@ -949,7 +950,7 @@ msgstr "바탕 화면 보기 버튼"
 
 #: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "Option 1: 알림센터 설정 (Notification Center Control)\nOption 2: Raven Sidebar 설정 (keep original English name)\nOption 3: 레이븐 사이드바 설정 (Raven Sidebar Control, written as it sounds in English)\n- Please refer to my comment below."
+msgstr "레이븐 사이드바 설"
 
 #: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
@@ -989,7 +990,7 @@ msgstr "작업 목록"
 
 #: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "작업공간 전환기"
+msgstr "작업공간 전환"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
