@@ -1,43 +1,43 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-# 
+#
 # Translators:
-# Csizmazia József <djjoccc@gmail.com>, 2016
-# Kardos László <kardiweb@protonmail.ch>, 2017
-# Levente Krisztián Büte (Chris) <chris020891@gmail.com>, 2016
+# Miklos Horvath <hmiki@blackpantheros.eu>, 2017
+# Charles Barcza <charles.barcza@blackpantheros.eu>, 2017
 # Róbert Kanócz <kanoczr@gmail.com>, 2017
+# Kardos László <kardiweb@protonmail.ch>, 2017
+# Csizmazia József <djjoccc@gmail.com>, 2016
+# Levente Krisztián Büte (Chris) <chris020891@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-10-13 18:42+0000\n"
-"Last-Translator: Róbert Kanócz <kanoczr@gmail.com>\n"
+"PO-Revision-Date: 2017-12-13 01:57+0100\n"
+"Last-Translator: Miklos Horvath <hmiki@blackpantheros.eu>\n"
 "Language-Team: Hungarian (http://www.transifex.com/budgie-desktop/budgie-desktop/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
 msgstr "Nincs itt semmi látnivaló"
 
-#: src/raven/notifications_view.vala:582
-#: src/applets/notifications/NotificationsApplet.vala:75
+#: src/raven/notifications_view.vala:582 src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u olvasatlan értesítés"
 
-#: src/raven/notifications_view.vala:584
-#: src/applets/notifications/NotificationsApplet.vala:77
+#: src/raven/notifications_view.vala:584 src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
 msgstr "1 olvasatlan értesítés"
 
-#: src/raven/notifications_view.vala:586
-#: src/applets/notifications/NotificationsApplet.vala:79
+#: src/raven/notifications_view.vala:586 src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
 msgstr "Nincs olvasatlan értesítés"
 
@@ -57,8 +57,7 @@ msgstr "Bemenet"
 msgid "Applets"
 msgstr "Appletek"
 
-#: src/raven/main_view.vala:58
-#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
+#: src/raven/main_view.vala:58 src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
 msgstr "Értesítések"
 
@@ -90,39 +89,32 @@ msgstr "Váltás az asztalra"
 msgid "Pin to panel"
 msgstr "Rögzítés a panelre"
 
-#: src/applets/icon-tasklist/Buttons.vala:114
-#: src/applets/icon-tasklist/Buttons.vala:483
+#: src/applets/icon-tasklist/Buttons.vala:114 src/applets/icon-tasklist/Buttons.vala:483
 msgid "Unpin from panel"
 msgstr "Rögzítés feloldása"
 
-#: src/applets/places-indicator/PlaceItem.vala:36
-#: src/applets/places-indicator/MountItem.vala:65
+#: src/applets/places-indicator/PlaceItem.vala:36 src/applets/places-indicator/MountItem.vala:65
 #, c-format
 msgid "Open \"%s\""
 msgstr "\"%s\" megnyitása"
 
-#: src/applets/places-indicator/MountItem.vala:25
-#: src/applets/places-indicator/VolumeItem.vala:27
+#: src/applets/places-indicator/MountItem.vala:25 src/applets/places-indicator/VolumeItem.vala:27
 msgid "Removable devices"
 msgstr "Eltávolítható eszközök"
 
-#: src/applets/places-indicator/MountItem.vala:27
-#: src/applets/places-indicator/VolumeItem.vala:29
+#: src/applets/places-indicator/MountItem.vala:27 src/applets/places-indicator/VolumeItem.vala:29
 msgid "Local volumes"
 msgstr "Helyi kötetek"
 
-#: src/applets/places-indicator/MountItem.vala:31
-#: src/applets/places-indicator/VolumeItem.vala:33
+#: src/applets/places-indicator/MountItem.vala:31 src/applets/places-indicator/VolumeItem.vala:33
 msgid "Network folders"
 msgstr "Hálózati mappák"
 
-#: src/applets/places-indicator/MountItem.vala:34
-#: src/applets/places-indicator/VolumeItem.vala:36
+#: src/applets/places-indicator/MountItem.vala:34 src/applets/places-indicator/VolumeItem.vala:36
 msgid "Other"
 msgstr "Egyéb"
 
-#: src/applets/places-indicator/MountItem.vala:60
-#: src/applets/places-indicator/VolumeItem.vala:57
+#: src/applets/places-indicator/MountItem.vala:60 src/applets/places-indicator/VolumeItem.vala:57
 msgid "Eject"
 msgstr "Kiadás"
 
@@ -130,8 +122,7 @@ msgstr "Kiadás"
 msgid "Unmount"
 msgstr "Leválasztás"
 
-#: src/applets/places-indicator/MountItem.vala:78
-#: src/applets/places-indicator/VolumeItem.vala:87
+#: src/applets/places-indicator/MountItem.vala:78 src/applets/places-indicator/VolumeItem.vala:87
 msgid "You can now safely remove"
 msgstr "Most biztonságosan eltávolíthatja"
 
@@ -147,10 +138,8 @@ msgstr "Hiba az eszköz kiadása során"
 msgid "Error while unmounting volume"
 msgstr "Hiba a kötet lecsatolása során"
 
-#: src/applets/places-indicator/PlacesIndicator.vala:85
-#: src/applets/places-indicator/PlacesSection.vala:24
-#: src/applets/places-indicator/PlacesSection.vala:46
-#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+#: src/applets/places-indicator/PlacesIndicator.vala:85 src/applets/places-indicator/PlacesSection.vala:24
+#: src/applets/places-indicator/PlacesSection.vala:46 src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Places"
 msgstr "Helyek"
 
@@ -159,8 +148,7 @@ msgstr "Helyek"
 msgid "Mount and open \"%s\""
 msgstr "\"%s\" csatolása és megnyitása"
 
-#: src/applets/places-indicator/VolumeItem.vala:76
-#: src/applets/places-indicator/VolumeItem.vala:121
+#: src/applets/places-indicator/VolumeItem.vala:76 src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
 msgstr "A kötet feloldásához adja meg a titkosítási jelszót"
 
@@ -215,20 +203,17 @@ msgstr "Felfüggesztés"
 msgid "Hibernate"
 msgstr "Hibernálás"
 
-#: src/applets/user-indicator/UserIndicatorWindow.vala:104
-#: src/daemon/endsession.ui.h:5
+#: src/applets/user-indicator/UserIndicatorWindow.vala:104 src/daemon/endsession.ui.h:5
 msgid "Restart"
 msgstr "Újraindítás"
 
-#: src/applets/user-indicator/UserIndicatorWindow.vala:105
-#: src/daemon/endsession.ui.h:6
+#: src/applets/user-indicator/UserIndicatorWindow.vala:105 src/daemon/endsession.ui.h:6
 msgid "Shutdown"
 msgstr "Leállítás"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
-#: src/applets/user-indicator/UserIndicatorWindow.vala:179
-#: src/daemon/endsession.ui.h:4
+#: src/applets/user-indicator/UserIndicatorWindow.vala:179 src/daemon/endsession.ui.h:4
 msgid "Logout"
 msgstr "Kijelentkezés"
 
@@ -241,8 +226,7 @@ msgid "Calendar"
 msgstr "Naptár"
 
 #. pack page2
-#: src/applets/clock/ClockApplet.vala:156
-#: src/applets/clock/ClockApplet.vala:187
+#: src/applets/clock/ClockApplet.vala:156 src/applets/clock/ClockApplet.vala:187
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -265,7 +249,7 @@ msgstr "Minden"
 
 #: src/applets/budgie-menu/IconChooser.vala:27
 msgid "Set menu icon from file"
-msgstr "Állítsa be a menü ikonját a fájlból"
+msgstr "Menüikon beállítása fájlból"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
@@ -275,10 +259,8 @@ msgstr "Képfájlok"
 msgid "Any file"
 msgstr "Bármilyen fájl"
 
-#: src/applets/budgie-menu/IconChooser.vala:55
-#: src/panel/settings/settings_applet_chooser.vala:84
-#: src/panel/settings/settings_autostart.vala:202
-#: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
+#: src/applets/budgie-menu/IconChooser.vala:55 src/panel/settings/settings_applet_chooser.vala:84
+#: src/panel/settings/settings_autostart.vala:202 src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr "Mégse"
@@ -436,9 +418,7 @@ msgid "Built-in theme"
 msgstr "Beépített téma"
 
 #: src/panel/settings/settings_style.vala:68
-msgid ""
-"When enabled, the desktop component style will be overriden with the built-"
-"in one"
+msgid "When enabled, the desktop component style will be overriden with the built-in one"
 msgstr "Ha engedélyezve van, az asztali összetevő stílusa felülbírálható a beépített eszközzel"
 
 #: src/panel/settings/settings_style.vala:72
@@ -453,8 +433,7 @@ msgstr "Meghatározhatja, hogy az ablakok és vezérlők animációkat használj
 msgid "Choose an applet"
 msgstr "Válasszon egy appletet"
 
-#: src/panel/settings/settings_applet_chooser.vala:85
-#: src/panel/settings/settings_panel_applets.vala:245
+#: src/panel/settings/settings_applet_chooser.vala:85 src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
 msgstr "Applet hozzáadás"
 
@@ -474,13 +453,11 @@ msgstr "fut"
 msgid "Applications"
 msgstr "Alkalmazások"
 
-#: src/panel/settings/settings_autostart.vala:203
-#: src/panel/settings/settings_autostart.vala:366
+#: src/panel/settings/settings_autostart.vala:203 src/panel/settings/settings_autostart.vala:366
 msgid "Add"
 msgstr "Hozzáadás"
 
-#: src/panel/settings/settings_autostart.vala:360
-#: src/panel/settings/settings_autostart.vala:393
+#: src/panel/settings/settings_autostart.vala:360 src/panel/settings/settings_autostart.vala:393
 msgid "Command"
 msgstr "Parancs"
 
@@ -492,10 +469,9 @@ msgstr "Már létezik egy bejegyzés ezzel a címmel"
 msgid "Title"
 msgstr "Cím"
 
-#: src/panel/settings/settings_autostart.vala:383
-#: src/panel/settings/settings_autostart.vala:397
+#: src/panel/settings/settings_autostart.vala:383 src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr "Kötelező"
+msgstr "Szükséges"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
@@ -525,8 +501,7 @@ msgstr "Módosítsa az alkalmazások címsorainak gombelrendezését"
 msgid "Right (standard)"
 msgstr "Jobb (alapértelmezett)"
 
-#: src/panel/settings/settings_wm.vala:47
-#: src/panel/settings/settings_panel.vala:180
+#: src/panel/settings/settings_wm.vala:47 src/panel/settings/settings_panel.vala:180
 msgid "Left"
 msgstr "Bal"
 
@@ -535,9 +510,7 @@ msgid "Attach modal dialogs to windows"
 msgstr "Csatolja a felbukkanó párbeszédablakokat a szülőablakokra"
 
 #: src/panel/settings/settings_wm.vala:60
-msgid ""
-"Modal dialogs will become attached to the parent window and move together "
-"when dragged"
+msgid "Modal dialogs will become attached to the parent window and move together when dragged"
 msgstr "A felbukkanó párbeszédpanelek a szülőablakhoz csatlakoznak, és velük együtt mozognak"
 
 #: src/panel/settings/settings_wm.vala:64
@@ -545,9 +518,7 @@ msgid "Automatic tiling"
 msgstr "Automatikus csempézés"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners"
+msgid "Windows will automatically tile when dragged into the top of the screen or the far corners"
 msgstr "Az ablakok automatikusan csempéződnek, amikor a képernyő tetejére, vagy a sarkokhoz közel húzza őket"
 
 #: src/panel/settings/settings_wm.vala:70
@@ -555,9 +526,7 @@ msgid "Disable unredirection of windows"
 msgstr "Ablakok közti átirányítás kikapcsolása"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs"
+msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs"
 msgstr "Haladó fejlesztők számára. Használja ezt, ha megjelenítési, vagy teljesítményproblémákat tapasztal a dedikált GPU-val kapcsolatban"
 
 #: src/panel/settings/settings_fonts.vala:32
@@ -604,8 +573,7 @@ msgstr "Erősítse meg a panel eltávolítását"
 msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr "Biztosan el akarja távolítani a panelt? Ez a művelet visszavonhatatlan."
 
-#: src/panel/settings/settings_panel_dialogs.vala:51
-#: src/panel/settings/settings_panel_dialogs.vala:114
+#: src/panel/settings/settings_panel_dialogs.vala:51 src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
 msgstr "Ne kérdezze többször"
 
@@ -622,8 +590,7 @@ msgid "Confirm applet removal"
 msgstr "Applet eltávolításának megerősítése"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
-msgid ""
-"Do you really want to remove this applet? This action cannot be undone."
+msgid "Do you really want to remove this applet? This action cannot be undone."
 msgstr "Biztosan el akarja távolítani az appletet? Ez a művelet visszavonhatatlan."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
@@ -751,9 +718,7 @@ msgid "Stylize regions"
 msgstr "Terület testreszabása"
 
 #: src/panel/settings/settings_panel.vala:269
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
+msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
 msgstr "A panel három fő részre való felosztása a jobb elkülönítés érdekében."
 
 #: src/panel/settings/settings_panel.vala:276
@@ -761,9 +726,7 @@ msgid "Dock mode"
 msgstr "Dokkoló mód"
 
 #: src/panel/settings/settings_panel.vala:277
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
+msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
 msgstr "Dokkoló módban a panel a lehető legkevesebb helyet használja fel, felszabadítva a képernyő értékes területeit"
 
 #: src/panel/settings/settings_panel_applets.vala:22
@@ -840,7 +803,7 @@ msgstr "Biztosan be szeretné fejezni a munkamenetet?"
 
 #: src/daemon/tabswitcher.ui.h:1
 msgid " - "
-msgstr "-"
+msgstr " - "
 
 #: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
@@ -862,8 +825,7 @@ msgstr "Eltávolítható eszközök mutatása"
 msgid "Always expand places"
 msgstr "Mindig bővítse a helyeket"
 
-#: src/applets/night-light/indicator_window.ui.h:1
-#: src/applets/night-light/NightLight.plugin.in.h:1
+#: src/applets/night-light/indicator_window.ui.h:1 src/applets/night-light/NightLight.plugin.in.h:1
 msgid "Night Light"
 msgstr "Éjszakai fény"
 
@@ -931,8 +893,7 @@ msgstr "Hitelesítés szükséges"
 msgid "Authenticate"
 msgstr "Hitelesítés"
 
-#: src/session/budgie-desktop.session.in.in.h:1
-#: src/session/budgie-desktop.desktop.in.in.h:1
+#: src/session/budgie-desktop.session.in.in.h:1 src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
 msgstr "Budgie asztal"
 
@@ -994,16 +955,14 @@ msgstr "Munkaterület váltó"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Lock billentyűk indikátor"
+msgstr "Lock billentyűk indikátora"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
 msgstr "Budgie Panel"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid ""
-"Launch other applications and provide various utilities to manage windows, "
-"show the time, etc."
+msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
 msgstr "Indítson el egyéb alkalmazásokat, és nyújtson különféle segédprogramokat az ablakok kezeléséhez, az idő megjelenítéséhez, stb."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
