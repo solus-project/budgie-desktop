@@ -18,7 +18,6 @@ namespace Budgie
 public class ShadowBlock : Gtk.EventBox
 {
 
-    private int size;
     private PanelPosition pos;
     private bool horizontal = false;
     int rm = 0;

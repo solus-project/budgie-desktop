@@ -26,8 +26,6 @@ public class SessionHandler : GLib.Object
     public signal void Canceled();
     public signal void Closed();
 
-    private bool showing = false;
-
     private EndSessionDialog? proxy = null;
 
     public SessionHandler()

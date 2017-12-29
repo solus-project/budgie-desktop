@@ -17,8 +17,6 @@ namespace Budgie
  */
 public class ServiceManager : GLib.Object
 {
-    private string? current_theme_uri;
-    private Settings? settings;
     private Budgie.ThemeManager theme_manager;
     /* Keep track of our SessionManager */
     private LibSession.SessionClient? sclient;
