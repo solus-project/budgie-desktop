@@ -1258,8 +1258,9 @@ public class BudgieWM : Meta.Plugin
         var screen = this.get_screen();
 
         foreach (var actor in Meta.Compositor.get_window_actors(screen)) {
-            Clutter.Actor? orig_parent = actor.get_data("orig-parent");
+            actor.show();
 
+            Clutter.Actor? orig_parent = actor.get_data("orig-parent");
             if (orig_parent == null) {
                 continue;
             }
@@ -1326,7 +1327,6 @@ public class BudgieWM : Meta.Plugin
             var win_space = space.index();
 
             if (win_space == to || win_space == from) {
-
                 var orig_parent = actor.get_parent();
                 unowned Clutter.Actor? new_parent = win_space == to ? in_group : out_group;
                 actor.set_data("orig-parent", orig_parent);
@@ -1335,6 +1335,8 @@ public class BudgieWM : Meta.Plugin
                 orig_parent.remove_child(actor);
                 new_parent.add_child(actor);
                 actor.unref();
+            } else {
+                actor.hide();
             }
         }
 
