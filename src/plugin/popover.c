@@ -543,7 +543,7 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover *self)
         gtk_widget_get_allocation(self->priv->relative_to, &alloc);
 
         self->priv->widget_rect =
-            (GdkRectangle){.x = rx, .y = ry, .width = alloc.width, .height = alloc.height };
+            (GdkRectangle){ .x = rx, .y = ry, .width = alloc.width, .height = alloc.height };
 
         /* Determine our position now based on the widget's geometry and our own */
         if (self->priv->policy == BUDGIE_POPOVER_POSITION_TOPLEVEL_HINT) {
@@ -554,7 +554,7 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover *self)
                                                                          self->priv->widget_rect);
         }
 
-        /* Don't do this unless somethign changed */
+        /* Don't do this unless something changed */
         if (self->priv->tail.position != tail_position) {
                 self->priv->tail.position = tail_position;
                 budgie_popover_update_position_hints(self);
@@ -688,7 +688,7 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
         }
 
         /* Set the target rectangle */
-        *target = (GdkRectangle){.x = x, .y = y, .width = width, .height = height };
+        *target = (GdkRectangle){ .x = x, .y = y, .width = width, .height = height };
 }
 
 static void budgie_popover_compute_tail(BudgiePopover *self)

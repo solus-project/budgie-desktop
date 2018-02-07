@@ -1449,7 +1449,7 @@ public class Panel : Budgie.Toplevel
      */
     private void unset_input_region()
     {
-        // Set 1px input region to recieve enter-notify
+        // Set 1px input region to receive enter-notify
         render_panel = false;
         Cairo.Region? region = null;
 

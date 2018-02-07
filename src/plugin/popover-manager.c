@@ -368,7 +368,7 @@ static BudgiePopover *budgie_popover_manager_get_popover_for_coords(BudgiePopove
                         continue;
                 }
 
-                /* Might be hidden through ancestory. Find out. */
+                /* Might be hidden through ancestry. Find out. */
                 grandparent = gtk_widget_get_parent(parent_widget);
                 if (grandparent) {
                         if (!gtk_widget_get_visible(grandparent) ||
@@ -425,7 +425,7 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover,
                 return GDK_EVENT_PROPAGATE;
         }
 
-        /* If we don't do this wierd cycle then the rollover enter-notify
+        /* If we don't do this weird cycle then the rollover enter-notify
          * event becomes broken, defeating the purpose of a manager.
          */
         budgie_popover_manager_grab(self, popover);
