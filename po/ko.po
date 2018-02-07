@@ -3,11 +3,8 @@
 # This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
-# David Kang <hpdk97@gmail.com>, 2015
-# Ikey Doherty <ikey@solus-project.com>, 2017
 # jemin_jeon, 2017-2018
-# Joshua Huh <mr.saint@gmail.com>, 2016
-# Youngbin Han <sukso96100@gmail.com>, 2016
+# SD SkyKlouD <koongchi135@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
@@ -15,11 +12,11 @@ msgstr ""
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
 "PO-Revision-Date: 2018-01-03 13:14+0000\n"
 "Last-Translator: jemin_jeon\n"
-"Language-Team: Korean (Korea) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ko_KR/)\n"
+"Language-Team: Korean (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko_KR\n"
+"Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/raven/notifications_view.vala:79
@@ -376,7 +373,7 @@ msgstr "인증 실패"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr "그룹:"
+msgstr "그룹 : "
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
@@ -477,7 +474,7 @@ msgstr "응용 프로그램"
 #: src/panel/settings/settings_autostart.vala:203
 #: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
-msgstr "추가하"
+msgstr "추가"
 
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_autostart.vala:393
@@ -611,11 +608,11 @@ msgstr "더 이상 묻지 않기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
-msgstr "작업표시줄 제거하기"
+msgstr "작업표시줄 제거"
 
 #: src/panel/settings/settings_panel_dialogs.vala:61
 msgid "Keep panel"
-msgstr "작업표시줄 유지하기"
+msgstr "작업표시줄 유지"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
@@ -624,11 +621,11 @@ msgstr "애플릿 제거 확인"
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "작업표시줄 유지하기"
+msgstr " 이 애플릿을 정말 제거하시겠습니까? 이 작업은 취소할 수 없습니다. "
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
-msgstr "애플릿 제거하"
+msgstr "애플릿 제거"
 
 #: src/panel/settings/settings_panel_dialogs.vala:124
 msgid "Keep applet"
@@ -950,7 +947,7 @@ msgstr "바탕 화면 보기 버튼"
 
 #: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "레이븐 사이드바 설"
+msgstr "레이븐 사이드바 설정"
 
 #: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
@@ -978,7 +975,7 @@ msgstr "구분자"
 
 #: src/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "상태 표시"
+msgstr "상태 표시기"
 
 #: src/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"

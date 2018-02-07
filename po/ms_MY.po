@@ -3,278 +3,275 @@
 # This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
-# David Kang <hpdk97@gmail.com>, 2015
-# Ikey Doherty <ikey@solus-project.com>, 2017
-# jemin_jeon, 2017-2018
-# Joshua Huh <mr.saint@gmail.com>, 2016
-# Youngbin Han <sukso96100@gmail.com>, 2016
+# abuyop <abuyop@gmail.com>, 2018
+# Adam Amee <inactive+puppeteerzzz@transifex.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2018-01-03 13:14+0000\n"
-"Last-Translator: jemin_jeon\n"
-"Language-Team: Korean (Korea) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ko_KR/)\n"
+"PO-Revision-Date: 2018-01-20 04:44+0000\n"
+"Last-Translator: abuyop <abuyop@gmail.com>\n"
+"Language-Team: Malay (Malaysia) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/ms_MY/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko_KR\n"
+"Language: ms_MY\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
-msgstr "현재 표시할 알림이 없습니다."
+msgstr "Tiada apa-apa di sini"
 
 #: src/raven/notifications_view.vala:582
 #: src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "읽지 않은 알림 %u개"
+msgstr "%u pemberitahuan belum dibaca"
 
 #: src/raven/notifications_view.vala:584
 #: src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "읽지 않은 알림 1개"
+msgstr "1 pemberitahuan belum baca"
 
 #: src/raven/notifications_view.vala:586
 #: src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "읽지 않은 알림 없음"
+msgstr "Tiada pemberitahuan belum baca"
 
 #: src/raven/notifications_view.vala:710
 msgid "No new notifications"
-msgstr "새 알림 없음"
+msgstr "Tiada pemberitahuan baharu"
 
 #: src/raven/sound.vala:78
 msgid "Output"
-msgstr "출력"
+msgstr "Output"
 
 #: src/raven/sound.vala:95
 msgid "Input"
-msgstr "입력"
+msgstr "Input"
 
 #: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
-msgstr "애플릿"
+msgstr "Aplet"
 
 #: src/raven/main_view.vala:58
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "알림"
+msgstr "Pemberitahuan"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
-msgstr "로그아웃"
+msgstr "Daftar Keluar"
 
 #: src/daemon/endsession.vala:176
 msgid "Restart device"
-msgstr "시스템 재시작"
+msgstr "Mula semula peranti"
 
 #: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "시스템 종료"
+msgstr "Matikan"
 
 #: src/daemon/menus.vala:52
 msgid "Change background"
-msgstr "바탕화면 바꾸기"
+msgstr "Ubah latar belakang"
 
 #: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:97
 msgid "Settings"
-msgstr "설정"
+msgstr "Tetapan"
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "바탕화면 보기/숨기기"
+msgstr "Togol desktop"
 
 #: src/applets/icon-tasklist/Buttons.vala:113
 msgid "Pin to panel"
-msgstr "작업표시줄에 고정하기"
+msgstr "Cemat ke panel"
 
 #: src/applets/icon-tasklist/Buttons.vala:114
 #: src/applets/icon-tasklist/Buttons.vala:483
 msgid "Unpin from panel"
-msgstr "작업표시줄에서 제거하기"
+msgstr "Nyahcemat dari panel"
 
 #: src/applets/places-indicator/PlaceItem.vala:36
 #: src/applets/places-indicator/MountItem.vala:65
 #, c-format
 msgid "Open \"%s\""
-msgstr "\"%s\" 열기"
+msgstr "Buka \"%s\""
 
 #: src/applets/places-indicator/MountItem.vala:25
 #: src/applets/places-indicator/VolumeItem.vala:27
 msgid "Removable devices"
-msgstr "이동식 장치"
+msgstr "Peranti boleh alih"
 
 #: src/applets/places-indicator/MountItem.vala:27
 #: src/applets/places-indicator/VolumeItem.vala:29
 msgid "Local volumes"
-msgstr "로컬 볼륨"
+msgstr "Volum setempat"
 
 #: src/applets/places-indicator/MountItem.vala:31
 #: src/applets/places-indicator/VolumeItem.vala:33
 msgid "Network folders"
-msgstr "네트워크 폴더"
+msgstr "Fail rangkaian"
 
 #: src/applets/places-indicator/MountItem.vala:34
 #: src/applets/places-indicator/VolumeItem.vala:36
 msgid "Other"
-msgstr "기타"
+msgstr "Lain-lain"
 
 #: src/applets/places-indicator/MountItem.vala:60
 #: src/applets/places-indicator/VolumeItem.vala:57
 msgid "Eject"
-msgstr "안전하게 제거"
+msgstr "Lenting"
 
 #: src/applets/places-indicator/MountItem.vala:62
 msgid "Unmount"
-msgstr "꺼내기"
+msgstr "Nyahlekap"
 
 #: src/applets/places-indicator/MountItem.vala:78
 #: src/applets/places-indicator/VolumeItem.vala:87
 msgid "You can now safely remove"
-msgstr "이제 안전하게 제거해도 됩니다."
+msgstr "Anda boleh tanggalkan dengan selamat"
 
 #: src/applets/places-indicator/MountItem.vala:79
 msgid "Unknown Device"
-msgstr "알 수 없는 장치"
+msgstr "Peranti Tidak Diketahui"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr "장치 제거 중 오류가 발생했습니다."
+msgstr "Ralat ketika melenting peranti"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr "볼륨을 꺼내는 중 오류가 발생했습니다."
+msgstr "Ralat ketika menyahlekap volum"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
 #: src/applets/places-indicator/PlacesSection.vala:46
 #: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Places"
-msgstr "위치"
+msgstr "Tempat"
 
 #: src/applets/places-indicator/VolumeItem.vala:43
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "\"%s\" 장착하고 열기"
+msgstr "Lekap dan buka \"%s\""
 
 #: src/applets/places-indicator/VolumeItem.vala:76
 #: src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "이 볼륨을 잠금해제하려면 비밀번호를 입력하세요."
+msgstr "Masukkan frasa laluan penyulitan untuk membuka volum ini"
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
-msgstr "입력하신 비밀번호가 틀렸습니다."
+msgstr "Kata laluan yang anda masukkan adalah salah"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "이 볼륨을 장착하는 중 알 수 없는 오류가 발생했습니다."
+msgstr "Satu ralat tidak diketahui berlaku ketika cuba melekapkan volum ini"
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
-msgstr "현재 다른 프로세스가 볼륨을 사용 중입니다."
+msgstr "Volum ini telah digunakan oleh proses lain"
 
 #: src/applets/places-indicator/MountHelper.vala:45
 msgid "Operation aborted"
-msgstr "작업이 중지되었습니다."
+msgstr "Operasi dihenti paksa"
 
 #: src/applets/places-indicator/MountHelper.vala:57
 msgid "Type your password"
-msgstr "비밀번호를 입력하세요."
+msgstr "Taip kata laluan anda"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
 msgid "Nothing to display right now"
-msgstr "현재 표시할 내용이 없습니다."
+msgstr "Tiada apa-apa hendak dipaparkan"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
 msgid "Mount some drives"
-msgstr "드라이브 장착하기"
+msgstr "Lekap beberapa pemacu"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
 msgid "Enable more sections"
-msgstr "섹션 더 활성화하기"
+msgstr "Benarkan lagi seksyen"
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "사용자"
+msgstr "Pengguna"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: src/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "잠금"
+msgstr "Kunci"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "절전"
+msgstr "Tangguh"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "잠자기"
+msgstr "Hibernasi"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:104
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "재시작"
+msgstr "Mula Semula"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:105
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "시스템 종료"
+msgstr "Matikan"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: src/applets/user-indicator/UserIndicatorWindow.vala:179
 #: src/daemon/endsession.ui.h:4
 msgid "Logout"
-msgstr "로그아웃"
+msgstr "Daftar Keluar"
 
 #: src/applets/clock/ClockApplet.vala:148
 msgid "Time and date settings"
-msgstr "날짜 및 시간"
+msgstr "Tetapan waktu dan tarikh"
 
 #: src/applets/clock/ClockApplet.vala:149
 msgid "Calendar"
-msgstr "달력"
+msgstr "Kalendar"
 
 #. pack page2
 #: src/applets/clock/ClockApplet.vala:156
 #: src/applets/clock/ClockApplet.vala:187
 msgid "Preferences"
-msgstr "설정"
+msgstr "Keutamaan"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr "날짜 표시"
+msgstr "Tunjuk tarikh"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
-msgstr "초단위 표시"
+msgstr "Tunjuk saat"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
-msgstr "24시간제 사용"
+msgstr "Guna waktu 24 jam"
 
 #. Special case, "All"
 #: src/applets/budgie-menu/BudgieMenuWindow.vala:43
 msgid "All"
-msgstr "모두"
+msgstr "Semua"
 
 #: src/applets/budgie-menu/IconChooser.vala:27
 msgid "Set menu icon from file"
-msgstr "선택한 파일로부터 메뉴 아이콘 설정하기"
+msgstr "Tetapkan ikom menu dari fail"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
-msgstr "이미지 파일"
+msgstr "Fail imej"
 
 #: src/applets/budgie-menu/IconChooser.vala:43
 msgid "Any file"
-msgstr "모든 파일 형식"
+msgstr "Apa-apa fail"
 
 #: src/applets/budgie-menu/IconChooser.vala:55
 #: src/panel/settings/settings_applet_chooser.vala:84
@@ -282,734 +279,734 @@ msgstr "모든 파일 형식"
 #: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
-msgstr "취소"
+msgstr "Batal"
 
 #: src/applets/budgie-menu/IconChooser.vala:56
 msgid "Set icon"
-msgstr "아이콘 설정하기"
+msgstr "Tetapkan ikon"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
-msgstr "배터리가 완전히 충전되었습니다."
+msgstr "Bateri telah dicas sepenuhnya."
 
 #: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
-msgstr "알 수 없음"
+msgstr "Tidak diketahui"
 
 #. Set inner charging duration to hours:minutes
 #: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
-msgstr "배터리 충전 중"
+msgstr "Mengecas bateri"
 
 #: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
-msgstr "남은 배터리"
+msgstr "Kuasa bateri berbaki"
 
 #: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
-msgstr "배터리 잔량 퍼센티지로 표시하기"
+msgstr "Tunjuk peratusan kuasa bateri"
 
 #: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
-msgstr "전원 설정"
+msgstr "Tetapan kuasa"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr "소리 설정"
+msgstr "Tetapan bunyi"
 
 #: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
-msgstr "블루투스 꺼짐"
+msgstr "Bluetooth dilumpuhkan"
 
 #: src/applets/status/BluetoothIndicator.vala:109
 msgid "Bluetooth is active"
-msgstr "블루투스 켜짐"
+msgstr "Bluetooth aktif"
 
 #: src/applets/status/BluetoothIndicator.vala:114
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "장치 %d개에 연결됨"
+msgstr[0] "Bersambung dengan %d peranti"
 
 #. Settings button
 #: src/applets/status/BluetoothIndicator.vala:179
 msgid "Bluetooth Settings"
-msgstr "블루투스 설정"
+msgstr "Tetapan Bluetooth"
 
 #. Send files button
 #: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
-msgstr "파일 보내기"
+msgstr "Hantar Fail"
 
 #. Airplane mode
 #: src/applets/status/BluetoothIndicator.vala:196
 msgid "Bluetooth Airplane Mode"
-msgstr "블루투스 비행기 모드"
+msgstr "Mod Bluetooth Dalam Penerbangan"
 
 #: src/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr "이름 변경"
+msgstr "Nama Semula"
 
 #: src/applets/workspaces/WorkspaceItem.vala:79
 msgid "Remove"
-msgstr "제거"
+msgstr "Buang"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:62
 msgid "Caps lock is active"
-msgstr "Caps lock 켜짐"
+msgstr "Kunci huruf besar aktif"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:65
 msgid "Caps lock is not active"
-msgstr "Caps lock 꺼짐"
+msgstr "Kunci huruf besar tidak aktif"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:75
 msgid "Num lock is active"
-msgstr "Num lock 켜짐"
+msgstr "Kunci nombor aktif"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:78
 msgid "Num lock is not active"
-msgstr "Num lock 꺼짐"
+msgstr "Kunci nombor tidak aktif"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr "인증 실패"
+msgstr "Pengesahihan gagal"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr "그룹:"
+msgstr "Kumpulan:"
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
-msgstr "모양새"
+msgstr "Penampilan"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr "작업표시줄"
+msgstr "Panel"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr "세션"
+msgstr "Sesi"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
 msgid "Budgie Settings"
-msgstr "Budgie 설정"
+msgstr "Tetapan Budgie"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr "새 작업표시줄 생성하기"
+msgstr "Cipta panel baharu"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr "모양새"
+msgstr "Gaya"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
-msgstr "위젯"
+msgstr "Widjet"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
-msgstr "창과 제어단추의 모습을 설정합니다."
+msgstr "Tetapkan penampilan hiasan dan kawalan tetingkap"
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
-msgstr "아이콘"
+msgstr "Ikon"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
-msgstr "시스템 전반적으로 사용할 아이콘 테마 설정하기"
+msgstr "Tetapkan tema ikon digunakan secara sejagat"
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
-msgstr "마우스 커서"
+msgstr "Kursor"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
-msgstr "시스템 전반적으로 사용할 마우스 커서 테마 설정하기"
+msgstr "Tetapkan tema kursor tetikus digunakan secara sejagat"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Dark theme"
-msgstr "어두운 테마"
+msgstr "Tema gelap"
 
 #: src/panel/settings/settings_style.vala:67
 msgid "Built-in theme"
-msgstr "기본 테마"
+msgstr "Tema terbina-dalam"
 
 #: src/panel/settings/settings_style.vala:68
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr "이 옵션을 활성화하면 데스크톱 구성요소 모양새를 시스템 기본 모양새로 덮어씁니다."
+msgstr "Bila dibenarkan, gaya komponen desktop akan ditulis-ganti dengan tema terbina-dalam"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr "애니메이션"
+msgstr "Animasi"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
-msgstr "창과 제어단추들이 애니메이션을 사용할지 설정하기"
+msgstr "Kawal sama ada tetingkap dan kawalan menggunakan animasi"
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr "애플릿 선택하기"
+msgstr "Pilih satu aplet"
 
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr "애플릿 추가하기"
+msgstr "Tambah aplet"
 
 #: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
-msgstr "제목 없음"
+msgstr "Tidak Bertajuk"
 
 #: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
-msgstr "설명 없음"
+msgstr "Tiada keterangan"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
-msgstr "실행 중"
+msgstr "berjalan"
 
 #: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
-msgstr "응용 프로그램"
+msgstr "Aplikasi"
 
 #: src/panel/settings/settings_autostart.vala:203
 #: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
-msgstr "추가하"
+msgstr "Tambah"
 
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
-msgstr "명령어"
+msgstr "Perintah"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr "같은 제목을 가진 항목이 이미 존재합니다."
+msgstr "Satu masukan dengan tajuk sudah pun wujud"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
-msgstr "제목"
+msgstr "Tajuk"
 
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr "필수"
+msgstr "Diperlukan"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
-msgstr "설명"
+msgstr "Keterangan"
 
 #: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
-msgstr "선택"
+msgstr "Pilihan"
 
 #: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
-msgstr "자동 시작"
+msgstr "Automula"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
-msgstr "창"
+msgstr "Tetingkap"
 
 #: src/panel/settings/settings_wm.vala:38
 msgid "Button layout"
-msgstr "단추 구성"
+msgstr "Bentangan butang"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr "응용 프로그램 제목표시줄 단추 구성 변경하기"
+msgstr "Ubah bentangan butang dalam palang tajuk aplikasi"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr "오른쪽 (기본값)"
+msgstr "Kanan (piawai)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:180
 msgid "Left"
-msgstr "왼쪽"
+msgstr "Kiri"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
-msgstr "대화상자를 창과 같이 띄우기"
+msgstr "Lampirkan dialog modal ke dalam tetingkap"
 
 #: src/panel/settings/settings_wm.vala:60
 msgid ""
 "Modal dialogs will become attached to the parent window and move together "
 "when dragged"
-msgstr "창을 마우스로 끌어서 이동시 대화상자도 같이 이동합니다."
+msgstr "Dialog modal akan dilampirkan dengan tetingkap induk dan bergerak bersama-sama jika diseret"
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr "자동 배치"
+msgstr "Penjubinan automatik"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr "마우스로 창을 화면 맨 위나 가장자리 구석에 가져다 대면 자동으로 창의 크기를 맞게 조절합니다."
+msgstr "Tetingkap akan dijubinkan secara automatik bila diseret ke bucu skrin atau bucu jauh"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr "창의 역방향지정을 비활성화합니다."
+msgstr "Lumpuhkan nyaharahan semula tetingkap"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
-msgstr "이 설정은 고급 사용자를 위한 설정입니다. 외장 그래픽카드 사용 중 성능저하 문제가 있다면 설정하세요."
+msgstr "Pilihan ini untuk pengguna mahir. Guna ia jika anda menghadapi masalah grafik atau prestasi dengan GPU sedia ada"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
-msgstr "글꼴"
+msgstr "Fo"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Window Titles"
-msgstr "창 제목"
+msgstr "Tajuk Tetingkap"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "응용 프로그램 제목표시줄 글꼴 설정하기"
+msgstr "Tetapkan fon yang digunakan dalam palang tajuk aplikasi"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
-msgstr "문서"
+msgstr "Dokumen"
 
 #: src/panel/settings/settings_fonts.vala:51
 msgid "Set the display font used by for documents"
-msgstr "문서에 사용할 글꼴 설정하기"
+msgstr "Tetapkan fon paparan yang digunakan untuk dokumen"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
-msgstr "인터페이스"
+msgstr "Antaramuka"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr "응용 프로그램 메뉴 글꼴 설정하기"
+msgstr "Tetapkan fon utama yang digunakan oleh kawalan aplikasi"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
-msgstr "고정폭 글꼴"
+msgstr "Monospace"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
-msgstr "글자 위주 응용프로그램에 사용할 고정폭 글꼴 설정하기"
+msgstr "Tetapkan fon lebar-tetap yang digunakan oleh aplikasi dominan"
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
-msgstr "작업표시줄 제거 확인"
+msgstr "Sahkan pembuangan panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "이 작업표시줄을 정말 삭제하시겠습니까? 이 작업은 취소할 수 없습니다."
+msgstr "Anda pasti mahu membuang panel ini? Tindakan ini tidak boleh dikembalikan."
 
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr "더 이상 묻지 않기"
+msgstr "Jangan tanya saya lagi"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
-msgstr "작업표시줄 제거하기"
+msgstr "Buang panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:61
 msgid "Keep panel"
-msgstr "작업표시줄 유지하기"
+msgstr "Kekalkan panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
-msgstr "애플릿 제거 확인"
+msgstr "Sahkan pembuangan aplet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "작업표시줄 유지하기"
+msgstr "Anda pasti mahu membuang aplet ini? Tindakan ini tidak boleh dikembalikan."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
-msgstr "애플릿 제거하"
+msgstr "Buang aplet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:124
 msgid "Keep applet"
-msgstr "애플릿 유지"
+msgstr "Kekalkan aplet"
 
 #: src/panel/settings/settings_panel.vala:80
 msgid "Remove this panel from the screen"
-msgstr "화면에서 이 작업표시줄 제거하기"
+msgstr "Buang panel ini dari skrin"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
-msgstr "위쪽 간소화된 작업표시줄"
+msgstr "Labuh Atas"
 
 #: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
-msgstr "오른쪽 간소화된 작업표시줄"
+msgstr "Labuh Kanan"
 
 #: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
-msgstr "왼쪽 간소화된 작업표시줄"
+msgstr "Labuh Kiri"
 
 #: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
-msgstr "아래쪽 간소화된 작업표시줄"
+msgstr "Labuh Bawah"
 
 #: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
-msgstr "위쪽 작업표시줄"
+msgstr "Panel Atas"
 
 #: src/panel/settings/settings_panel.vala:133
 msgid "Right Panel"
-msgstr "오른쪽 작업표시줄"
+msgstr "Panel Kanan"
 
 #: src/panel/settings/settings_panel.vala:135
 msgid "Left Panel"
-msgstr "왼쪽 작업표시줄"
+msgstr "Panel Kiri"
 
 #: src/panel/settings/settings_panel.vala:137
 msgid "Bottom Panel"
-msgstr "아래쪽 작업표시줄"
+msgstr "Panel Bawah"
 
 #: src/panel/settings/settings_panel.vala:176
 msgid "Top"
-msgstr "위쪽"
+msgstr "Atas"
 
 #: src/panel/settings/settings_panel.vala:178
 msgid "Right"
-msgstr "오른쪽"
+msgstr "Kanan"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
-msgstr "아래쪽"
+msgstr "Bawah"
 
 #: src/panel/settings/settings_panel.vala:193
 msgid "Always"
-msgstr "항상"
+msgstr "Sentiasa"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr "적응"
+msgstr "Dinamik"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "None"
-msgstr "없음"
+msgstr "Tiada"
 
 #: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"
-msgstr "자동"
+msgstr "Automatik"
 
 #: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
-msgstr "스마트"
+msgstr "Pintar"
 
 #: src/panel/settings/settings_panel.vala:214
 msgid "Never"
-msgstr "사용안함"
+msgstr "Tidak Sesekali"
 
 #: src/panel/settings/settings_panel.vala:230
 msgid "Position"
-msgstr "위치"
+msgstr "Kedudukan"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "이 작업표시줄이 위치할 화면의 가장자리 부분을 설정합니다."
+msgstr "Tetapkan pinggir skrin yang mana panel berada di atasnya"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
-msgstr "크기"
+msgstr "Saiz"
 
 #: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "이 작업표시줄의 크기(방향에 따른 가로길이와 높이) 설정하기"
+msgstr "Tetapkan saiz (lebar atau tinggi, bergantung pada orientasi) panel ini"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
-msgstr "자동으로 숨기기"
+msgstr "Sembunyi secara automatik"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "설정하면 화면 공간을 최대화하기 위해 작업표시줄을 자동으로 숨깁니다."
+msgstr "Bila ditetapkan, panel ini akan disembunyikan dari pandangan untuk maksimumkan ruang skrin"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
-msgstr "투명도"
+msgstr "Kelutsinaran"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr "작업표시줄을 단일 색상으로 표시할 때 설정"
+msgstr "Kawal sama ada panel ini patut mempunyai latar belakang tegar"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
-msgstr "그림자"
+msgstr "Bayang"
 
 #: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "불투명한 작업표시줄에 잘 어울리는 가장자리 그림자 추가하기"
+msgstr "Tambah bayang-letak hiasan, sesuai untuk panel legap"
 
 #: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
-msgstr "작업표시줄 알림영역 꾸미기"
+msgstr "Gayakan bahagian"
 
 #: src/panel/settings/settings_panel.vala:269
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr "작업표시줄의 세가지 주요 영역을 다르게 꾸밀 수 있도록 미리보기 보여주기"
+msgstr "Tambah pembayang pada panel supaya setiap tiga kawasan utama panel boleh ditemakan secara berlainan."
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
-msgstr "간소화된 작업표시줄"
+msgstr "Mod labuh"
 
 #: src/panel/settings/settings_panel.vala:277
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다."
+msgstr "Bila dalam mod labuh, panel akan gunakan ruang seminimum yang mungkin, bebaskan ruang skrin yang penting"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr "애플릿 설정하기"
+msgstr "Konfigur aplet"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr "이 작업표시줄에 추가할 새 애플릿 선택하세요."
+msgstr "Pilih satu aplet untuk ditambah ke dalam panel ini"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr "사용 가능한 설정이 없습니다."
+msgstr "Tiada tetapan yang tersedia"
 
 #: src/panel/settings/settings_panel_applets.vala:415
 msgid "Start"
-msgstr "시작"
+msgstr "Mula"
 
 #: src/panel/settings/settings_panel_applets.vala:418
 msgid "Center"
-msgstr "가운데"
+msgstr "Tengah"
 
 #: src/panel/settings/settings_panel_applets.vala:421
 msgid "End"
-msgstr "끝"
+msgstr "Tamat"
 
 #: src/panel/settings/settings_desktop.vala:33
 msgid "Desktop"
-msgstr "바탕화면"
+msgstr "Desktop"
 
 #: src/panel/settings/settings_desktop.vala:43
 msgid "Desktop Icons"
-msgstr "바탕화면 아이콘"
+msgstr "Ikon Desktop"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr "바탕화면에 바로가기와 아이콘을 표시할지 설정하기"
+msgstr "Kawal sama ada hendak benarkan pelancar dan ikon di atas desktop"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
-msgstr "사용자 홈 폴더"
+msgstr "Direktori rumah"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr "바탕화면에 사용자 홈 폴더 바로가기 추가하기"
+msgstr "Tambah satu pintasan ke direktori rumah di atas dekstop"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
-msgstr "네트워크 서버"
+msgstr "Pelayang rangkaian"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr "바탕화면에 로컬 네트워크 서버 바로가기 추가하기"
+msgstr "Tambah satu pintasan ke pelayan rangkaian di atas dekstop"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
-msgstr "휴지통"
+msgstr "Tong Sampah"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
-msgstr "데스크톱에 휴지통의 바로가기를 추가합니다."
+msgstr "Tambah satu pintasan ke direktori Tong Sampah di atas dekstop"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
-msgstr "장착된 볼륨"
+msgstr "Volum terlekap"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr "장착된 볼륨과 장치를 바탕화면에 표시합니다."
+msgstr "Volum & pemacu terlekap akan muncul di atas desktop"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "정말로 세션을 종료하시겠습니까?"
+msgstr "Anda pasti mahu tamatkan sesi anda?"
 
 #: src/daemon/tabswitcher.ui.h:1
 msgid " - "
-msgstr "-"
+msgstr " - "
 
 #: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "이름 표시"
+msgstr "Tunjuk label"
 
 #: src/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "위치 표시"
+msgstr "Tunjuk tempat"
 
 #: src/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "네트워크 폴더 표시"
+msgstr "Tunjuk folder rangkaian"
 
 #: src/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
-msgstr "이동식 장치 표시"
+msgstr "Tunjuk pemacu boleh alih"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "위치 항상 확장하기"
+msgstr "Sentiasa kembangkan tempat"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
 msgid "Night Light"
-msgstr "야간모드"
+msgstr "Cahaya Malam"
 
 #: src/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr "색 온도"
+msgstr "Suhu"
 
 #: src/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "일정"
+msgstr "Jadual"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "일몰에서 일출까지"
+msgstr "Matahari Terbenam hingga Matahari Terbit"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "사용자 지정"
+msgstr "Manual"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "디스플레이 설정"
+msgstr "Tetapan Paparan"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "메뉴 이름 표시"
+msgstr "Tunjuk Label Menu"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
-msgstr "간소화 모드"
+msgstr "Mod Padat"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr "응용 프로그램 종류 표시하기"
+msgstr "Tunjuk Pengepala"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
-msgstr "메뉴 이름"
+msgstr "Label Menu"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr "마우스 커서를 올려놓으면 자동으로 해당항목 표시"
+msgstr "Tetikus gulung-atas"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"
-msgstr "메뉴 아이콘"
+msgstr "Ikon Menu"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "빈 공간 크기"
+msgstr "Saiz jarak"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "인증 필요"
+msgstr "Pengesahihan Diperlukan"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr "비밀번호:"
+msgstr "Kata Laluan:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr "인증이 필요합니다."
+msgstr "Pengesahihan diperlukan"
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr "인증"
+msgstr "Sahihkan"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie 데스크톱"
+msgstr "Desktop Budgie"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Budgie 데스크톱에 로그인합니다."
+msgstr "Sesi ini mendaftar masuk anda ke Desktop Budgie"
 
 #: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"
-msgstr "키보드 배열 표시하기"
+msgstr "Penunjuk Bentangan Papan Kekunci"
 
 #: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "바탕 화면 보기 버튼"
+msgstr "Tunjuk Butang Desktop"
 
 #: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "레이븐 사이드바 설"
+msgstr "Kawalan Palang Sisi Raven"
 
 #: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "아이콘 작업 목록"
+msgstr "Senarai Tugas Ikon"
 
 #: src/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"
-msgstr "사용자 계정 표시"
+msgstr "Penunjuk Pengguna"
 
 #: src/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "시계"
+msgstr "Jam"
 
 #: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Budgie 메뉴"
+msgstr "Menu Budgie"
 
 #: src/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "작업표시줄 알림영역"
+msgstr "Talam Sistem"
 
 #: src/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "구분자"
+msgstr "Pemisah"
 
 #: src/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "상태 표시"
+msgstr "Penunjuk Status"
 
 #: src/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "빈 공간"
+msgstr "Ruangan"
 
 #: src/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "작업 목록"
+msgstr "Senarai Tugas"
 
 #: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "작업공간 전환"
+msgstr "Penukar Ruang Kerja"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Caps/Num lock 상태"
+msgstr "Penunjuk Kekunci Kunci"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Budgie 작업표시줄"
+msgstr "Panel Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr "창 관리, 시간 표시 등을 위한 유틸리티를 제공하고 다른 응용프로그램 실행하기"
+msgstr "Lancar lain-lain aplikasi dan menyediakan pelbagai utiliti untuk mengurus tetingkap, tunjuk waktu, dll."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr "Budgie 데스크톱 설정"
+msgstr "Tetapan Desktop Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
-msgstr "데스크톱 모양새와 행동방식 변경하기"
+msgstr "Ubah penampilan dan kelakuan desktop"
