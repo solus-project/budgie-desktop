@@ -85,7 +85,7 @@ class PowerStrip : Gtk.EventBox
         btn.get_style_context().add_class("flat");
         bottom.pack_start(btn, false, false, 0);
 
-        btn = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+        btn = new Gtk.Button.from_icon_name("system-log-out-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         power_btn = btn;
         btn.clicked.connect(()=> {
             try {
