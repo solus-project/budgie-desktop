@@ -11,12 +11,14 @@
 
 public class PlaceItem : ListItem
 {
-    public PlaceItem(GLib.File file, string class)
+    public PlaceItem(GLib.File file, string class, string? bookmark_name)
     {
         item_class = class;
 
         string name = "";
-        if (file.get_basename() == "/" && file.get_uri() != "file:///") {
+        if (bookmark_name != null) {
+            name = bookmark_name;
+        } else if (file.get_basename() == "/" && file.get_uri() != "file:///") {
             name = file.get_uri().split("://")[1];
             if (name.has_suffix("/")) {
                 name = name[0:name.length - 1];
