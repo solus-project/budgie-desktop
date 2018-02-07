@@ -65,7 +65,7 @@ public class StylePage : Budgie.SettingsPage {
         switch_builtin = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_builtin,
             _("Built-in theme"),
-            _("When enabled, the desktop component style will be overriden with the built-in one")));
+            _("When enabled, the desktop component style will override the built-in one")));
 
         switch_animations = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_animations,
