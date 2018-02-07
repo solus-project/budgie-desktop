@@ -213,7 +213,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         }
 
         try {
-            bookmarks_monitor = bookmarks_file.monitor_file(GLib.FileMonitorFlags.NONE, null);
+            bookmarks_monitor = bookmarks_file.monitor_file(GLib.FileMonitorFlags.WATCH_MOVES, null);
             bookmarks_monitor.set_rate_limit(1000);
 
             // Refresh special directories (including the bookmarks) when the file changes
@@ -225,7 +225,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 
     private void on_bookmarks_change(GLib.File src, GLib.File? dest, GLib.FileMonitorEvent event)
     {
-        if (event == GLib.FileMonitorEvent.CHANGES_DONE_HINT) {
+        if ((event == GLib.FileMonitorEvent.CHANGES_DONE_HINT) || (event == GLib.FileMonitorEvent.RENAMED)) {
             refresh_special_dirs();
         }
     }
