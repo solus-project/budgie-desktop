@@ -516,7 +516,7 @@ public class NotificationsView : Gtk.Box
     private Gtk.ListBox? listbox;
     private Gtk.Button btnDontDisturb;
     private bool dontDisturb = false;
-    private Gtk.Image enableNotificationsIcon = new Gtk.Image.from_icon_name("document-properties-symbolic", Gtk.IconSize.MENU);
+    private Gtk.Image enableNotificationsIcon = new Gtk.Image.from_icon_name("mail-send-receive-symbolic", Gtk.IconSize.MENU);
     private Gtk.Image disableNotificationsIcon = new Gtk.Image.from_icon_name("image-red-eye-symbolic", Gtk.IconSize.MENU);
 
     private GLib.Queue<NotificationWindow?> stack = null;
