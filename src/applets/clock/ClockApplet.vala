@@ -301,11 +301,14 @@ public class ClockApplet : Budgie.Applet
         if (!check_date.get_active()) {
             return;
         }
+
+        settings = new Settings("com.solus-project.budgie-panel");
+
         string ftime;
         if (this.orient == Gtk.Orientation.HORIZONTAL) {
-            ftime = "%x";
+            ftime = settings.get_string("date-format");
         } else {
-            ftime = "<small>%b %d</small>";
+            ftime = settings.get_string("date-format-vertical");
         }
 
         // Prevent unnecessary redraws
