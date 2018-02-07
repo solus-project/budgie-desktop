@@ -46,7 +46,7 @@ dep_libuuid = dependency('uuid')
 dep_gtk318 = dependency('gtk+-3.0', version: '< 3.19', required: false)
 
 # Needed for keyboardy bits
-dep_ibus = dependency('ibus-1.0', verion: '>= 1.5.10')
+dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
 
