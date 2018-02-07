@@ -1,3 +1,5 @@
+find_program('gtkdocize', required: true)
+
 # Handles gtkdoc installation
 gnome = import('gnome')
 
