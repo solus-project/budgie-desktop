@@ -115,8 +115,7 @@ public class IconButton : Gtk.ToggleButton
         sep.show();
         menu.append(pinnage);
         menu.append(unpinnage);
- 
-        
+         
 	/* Handle running instance pin/unpin */
         pinnage.activate.connect(()=> {
             requested_pin = true;
@@ -417,7 +416,7 @@ public class IconButton : Gtk.ToggleButton
         queue_resize();
     }
    
-	 /**
+     /**
      * Either show the actions menu, or activate our window
      */
 
@@ -531,12 +530,11 @@ public class PinnedIconButton : IconButton
         launch_context.launch_failed.connect(this.on_launch_failed);
 
         drag_data_get.connect((widget, context, selection_data, info, time)=> {
-            selection_data.set(selection_data.get_target(), 8, (uchar []) this.app_info.get_id().to_utf8());
+        selection_data.set(selection_data.get_target(), 8, (uchar []) this.app_info.get_id().to_utf8());
         });
     }
 
-    
-    
+       
     /**
      * Handle startup notification, set our own ID to the ID selected
      */
