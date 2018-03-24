@@ -21,7 +21,7 @@ public class TrayApplet : Budgie.Applet
 {
     protected Na.Tray? tray = null;
     /* Fix this. Please. */
-    protected int icon_size = 22;
+    protected int icon_size = Gtk.IconSize.MENU;
     Gtk.EventBox box;
 
     int width;
