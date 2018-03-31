@@ -39,13 +39,6 @@
 // Places Menu
 @include places_menu(button, list, row, entry);
 
-// Tasklist
-.budgie-panel #tasklist-button,
-.budgie-panel #tasklist-button:backdrop {
-    @extend %budgie_panel_tasklist;
-    outline-color: transparent;
-    &:drop(active) { box-shadow: inset 0 0 0 1px $selected_bg_color; }
-}
 
 // Budgie styled Gtk Menus
 .budgie-menubar {

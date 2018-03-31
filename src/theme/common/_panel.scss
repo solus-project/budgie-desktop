@@ -46,17 +46,3 @@
         }
     }
 }
-
-// Tasklist
-%budgie_panel_tasklist {
-    border-radius: 0;
-
-    @if $variant == 'default' {
-        &:not(:hover):not(:active):not(:checked) { color: gtkalpha(currentColor, 0.5); }
-        background: none;
-        background-clip: padding-box;
-        border: none;
-
-        @extend %underscores;
-    }
-}

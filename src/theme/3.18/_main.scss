@@ -47,11 +47,6 @@
 // Places Menu
 @include places_menu('.button', GtkListBox, GtkListBoxRow, '.entry');
 
-// Tasklist
-.budgie-panel WnckTasklist .button,
-.budgie-panel WnckTasklist .button:backdrop {
-    @extend %budgie_panel_tasklist;
-}
 
 // Budgie styled Gtk Menus
 .budgie-menubar {
