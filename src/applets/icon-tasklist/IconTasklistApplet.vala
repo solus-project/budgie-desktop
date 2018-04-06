@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
- * Copyright © 2015-2017 Budgie Desktop Developers
- * 
+ *
+ * Copyright © 2015-2018 Budgie Desktop Developers
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -11,491 +11,603 @@
 
 public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase
 {
-    public Budgie.Applet get_panel_widget(string uuid)
-    {
+    public Budgie.Applet get_panel_widget(string uuid) {
         return new IconTasklistApplet(uuid);
     }
+}
+
+[GtkTemplate (ui = "/com/solus-project/icon-tasklist/settings.ui")]
+public class IconTasklistSettings : Gtk.Grid
+{
+    [GtkChild]
+    private Gtk.Switch? switch_grouping;
+
+    [GtkChild]
+    private Gtk.Switch? switch_restrict;
+
+    [GtkChild]
+    private Gtk.Switch? switch_lock_icons;
+
+    [GtkChild]
+    private Gtk.Switch? switch_only_pinned;
+
+    private GLib.Settings? settings;
+
+    public IconTasklistSettings(GLib.Settings? settings)
+    {
+        this.settings = settings;
+        settings.bind("grouping", switch_grouping, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("restrict-to-workspace", switch_restrict, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("lock-icons", switch_lock_icons, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("only-pinned", switch_only_pinned, "active", SettingsBindFlags.DEFAULT);
+    }
+
 }
 
 /**
  * Trivial helper for IconTasklist - i.e. desktop lookups
  */
-public class DesktopHelper : Object
+public class DesktopHelper : GLib.Object
 {
+    public static GLib.Settings settings;
+    public static Wnck.Screen screen;
+    public static Gtk.Box icon_layout;
+    public static bool lock_icons = false;
+    public static Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
+    public static int panel_size = 40;
+    public static int icon_size = 32;
+    public static Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+
     public const Gtk.TargetEntry[] targets = {
-        { "application/x-icon-tasklist-launcher-id", 0, 0 }
+        { "application/x-icon-tasklist-launcher-id", 0, 0 },
+        { "text/uri-list", 0, 0 },
+        { "application/x-desktop", 0, 0 }
     };
 
-    public static void set_pinned(Settings? settings, DesktopAppInfo app_info, bool pinned)
+    public static void update_pinned()
     {
-        string[] launchers = settings.get_strv("pinned-launchers");
-        if (pinned) {
-            if (app_info.get_id() in launchers) {
-                return;
+        string[] buttons = {};
+        foreach (Gtk.Widget widget in icon_layout.get_children()) {
+            IconButton button = (widget as ButtonWrapper).button;
+            if (!button.is_pinned()) {
+                continue;
             }
-            launchers += app_info.get_id();
-            settings.set_strv("pinned-launchers", launchers);
-            return;
-        }
-        // Unpin a launcher
-        string[] new_launchers = {};
-        bool did_remove = false;
-        foreach (var launcher in launchers) {
-            if (launcher != app_info.get_id()) {
-                new_launchers += launcher;
-            } else {
-                did_remove = true;
+            if (button.get_appinfo() == null) {
+                continue;
             }
+            string id = button.get_appinfo().get_id();
+            if (id in buttons) {
+                continue;
+            }
+            buttons += id;
         }
-        // Go ahead and set
-        if (did_remove) {
-            settings.set_strv("pinned-launchers", new_launchers);
-        }
+
+        settings.set_strv("pinned-launchers", buttons);
+    }
+
+    public static GLib.List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group)
+    {
+        GLib.List<unowned Wnck.Window> list = new GLib.List<unowned Wnck.Window>();
+        screen.get_windows_stacked().foreach((window) => {
+            if (window.get_class_group() == class_group && !window.is_skip_tasklist()) {
+                if (window.get_workspace() == get_active_workspace()) {
+                    list.append(window);
+                }
+            }
+        });
+
+        return list.copy();
+    }
+
+    public static Wnck.Window get_active_window() {
+        return screen.get_active_window();
+    }
+
+    public static Wnck.Workspace get_active_workspace() {
+        return screen.get_active_workspace();
     }
 }
 
 public class IconTasklistApplet : Budgie.Applet
 {
+    private Wnck.Screen? wnck_screen = null;
+    private Budgie.AppSystem? app_system = null;
+    private GLib.Settings? settings = null;
+    private GLib.HashTable<string, IconButton> buttons;
+    private GLib.HashTable<string, string> id_map;
+    private Gtk.Box? main_layout = null;
+    private bool grouping = true;
+    private bool restrict_to_workspace = false;
+    private bool only_show_pinned = false;
 
-    protected Gtk.Box widget;
-    protected Gtk.Box main_layout;
-    protected Gtk.Box pinned;
+    public string uuid { public set; public get; }
 
-    protected Wnck.Screen screen;
-    protected HashTable<Wnck.Window,IconButton> buttons;
-    protected HashTable<string?,PinnedIconButton?> pin_buttons;
-    protected int icon_size = 32;
-    private Settings settings;
-
-    protected Budgie.AppSystem? helper;
-
-    private unowned IconButton? active_button;
-
-    public string uuid { public set ; public get ; }
-
-    private Gtk.Orientation orient;
-
-    protected void window_opened(Wnck.Window window)
-    {
-        // doesn't go on our list
-        if (window.is_skip_tasklist()) {
-            return;
-        }
-        string? launch_id = null;
-        IconButton? button = null;
-        if (window.get_application() != null) {
-            launch_id = window.get_application().get_startup_id();
-        }
-        var pinfo = helper.query_window(window);
-
-        // Check whether its launched with startup notification, if so
-        // attempt to use a pin button where appropriate.
-        if (launch_id != null) {
-            PinnedIconButton? btn = null;
-            PinnedIconButton? pbtn = null;
-            var iter = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
-            while (iter.next(null, out pbtn)) {
-                if (pbtn.id != null && pbtn.id == launch_id) {
-                    btn = pbtn;
-                    break;
-                }
-            }
-            if (btn != null) {
-                btn.window = window;
-                btn.update_from_window();
-                btn.id = null;
-                button = btn;
-            }
-        }
-        // Alternatively.. find a "free slot"
-        if (pinfo != null) {
-            var pinfo2 = pin_buttons[pinfo.get_id()];
-            if (pinfo2 != null && pinfo2.window == null) {
-                pinfo2.window = window;
-                pinfo2.update_from_window();
-                button = pinfo2;
-            }
-        }
-
-        // Fallback to new button.
-        if (button == null) {
-            var btn = new IconButton(settings, window, icon_size, pinfo, this.helper, panel_size);
-            var button_wrap = new ButtonWrapper(btn);
-            btn.orient = this.orient;
-
-            button = btn;
-            widget.pack_start(button_wrap, false, false, 0);
-        }
-        buttons[window] = button;
-        (button.get_parent() as ButtonWrapper).orient = this.orient;
-        (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
-        Idle.add(()=> {
-            button.icon_mapped();
-            return false;
-        });
+    public override Gtk.Widget? get_settings_ui() {
+        return new IconTasklistSettings(this.get_applet_settings(uuid));
     }
 
-    protected void window_closed(Wnck.Window window)
-    {
-        IconButton? btn = null;
-        if (!buttons.contains(window)) {
-            return;
-        }
-        btn = buttons[window];
-        // We'll destroy a PinnedIconButton if it got unpinned
-        if (btn is PinnedIconButton && btn.get_parent() != widget) {
-            var pbtn = btn as PinnedIconButton;
-            pbtn.reset();
-        } else {
-            (btn.get_parent() as ButtonWrapper).gracefully_die();
-        }
-        buttons.remove(window);
-    }
-
-    /**
-     * Just update the active state on the buttons
-     */
-    protected void active_window_changed(Wnck.Window? previous_window)
-    {
-        IconButton? btn;
-        Wnck.Window? new_active;
-        if (previous_window != null)
-        {
-            // Update old active button
-            if (buttons.contains(previous_window)) {
-                btn = buttons[previous_window];
-                btn.set_active(false);
-            } 
-        }
-        new_active = screen.get_active_window();
-        if (new_active == null || !buttons.contains(new_active)) {
-            active_button = null;
-            queue_draw();
-            return;
-        }
-        btn = buttons[new_active];
-        btn.set_active(true);
-        if (!btn.get_realized()) {
-            btn.realize();
-            btn.queue_resize();
-        }
-
-        active_button = btn;
-        queue_draw();
+    public override bool supports_settings() {
+        return true;
     }
 
     public IconTasklistApplet(string uuid)
     {
-        Object(uuid: uuid);
+        GLib.Object(uuid: uuid);
+
+        Wnck.set_client_type(Wnck.ClientType.PAGER);
+
+        wnck_screen = Wnck.Screen.get_default();
+        DesktopHelper.screen = wnck_screen;
+        app_system = new Budgie.AppSystem();
+        buttons = new GLib.HashTable<string, IconButton>(str_hash, str_equal);
+        id_map = new GLib.HashTable<string, string>(str_hash, str_equal);
+        main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        DesktopHelper.icon_layout = main_layout;
 
         settings_schema = "com.solus-project.icon-tasklist";
         settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
 
-        helper = new Budgie.AppSystem();
-
-        // Easy mapping :)
-        buttons = new HashTable<Wnck.Window,IconButton>(direct_hash, direct_equal);
-        pin_buttons = new HashTable<string?,PinnedIconButton?>(str_hash, str_equal);
-
-        main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        pinned = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-        pinned.get_style_context().add_class("pinned");
-        main_layout.pack_start(pinned, false, false, 0);
-
-        widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-        widget.get_style_context().add_class("unpinned");
-        main_layout.pack_start(widget, false, false, 0);
-
-        add(main_layout);
-        show_all();
-
         settings = this.get_applet_settings(uuid);
-        settings.changed.connect(on_settings_change);
+        settings.changed.connect(on_settings_changed);
+        DesktopHelper.settings = settings;
 
-        on_settings_change("pinned-launchers");
+        this.add(main_layout);
 
-        // Init wnck
-        screen = Wnck.Screen.get_default();
-        screen.window_opened.connect(window_opened);
-        screen.window_closed.connect(window_closed);
-        screen.active_window_changed.connect(active_window_changed);
+        Gtk.drag_dest_set(main_layout, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.COPY);
+        main_layout.drag_data_received.connect(on_drag_data_received);
 
-        panel_size_changed.connect(on_panel_size_changed);
-
-        Gtk.drag_dest_set(pinned, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.MOVE);
-
-        pinned.drag_data_received.connect(on_drag_data_received);
-
-        get_style_context().add_class("icon-tasklist");
-
-        show_all();
-    }
-
-    void set_icons_size()
-    {
-        unowned Wnck.Window? btn_key = null;
-        unowned string? str_key = null;
-        unowned IconButton? val = null;
-        unowned PinnedIconButton? pin_val = null;
-
-        icon_size = small_icons;    
-        Wnck.set_default_icon_size(icon_size);
-
-        Idle.add(()=> {
-            var iter = HashTableIter<Wnck.Window?,IconButton?>(buttons);
-            while (iter.next(out btn_key, out val)) {
-                val.icon_size = icon_size;
-                val.panel_size = panel_size;
-                val.orient = this.orient;
-                (val.get_parent() as ButtonWrapper).orient = this.orient;
-                val.update_icon();
+        app_system.app_launched.connect((desktop_file) => {
+            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(desktop_file);
+            if (info == null) {
+                return;
             }
-
-            var iter2 = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
-            while (iter2.next(out str_key, out pin_val)) {
-                pin_val.icon_size = icon_size;
-                pin_val.panel_size = panel_size;
-                pin_val.orient = this.orient;
-                (pin_val.get_parent() as ButtonWrapper).orient = this.orient;
-                pin_val.update_icon();
+            if (buttons.contains(info.get_id())) {
+                IconButton button = buttons[info.get_id()];
+                if (!button.icon.waiting) {
+                    button.icon.waiting = true;
+                    button.icon.animate_wait();
+                }
             }
+        });
+
+        on_settings_changed("grouping");
+        on_settings_changed("restrict-to-workspace");
+        on_settings_changed("lock-icons");
+        on_settings_changed("only-pinned");
+
+        GLib.Timeout.add(1000, () => {
+            connect_wnck_signals();
+            on_active_window_changed(null);
             return false;
         });
-        queue_resize();
-        queue_draw();
+
+        this.get_style_context().add_class("icon-tasklist");
+        this.show_all();
     }
 
-
-    int small_icons = 32;
-    int panel_size = 10;
-
-    void on_panel_size_changed(int panel, int icon, int small_icon)
+    private void startup()
     {
-        this.small_icons = small_icon;
-        this.panel_size = panel;
+        string[] pinned = settings.get_strv("pinned-launchers");
 
-        set_icons_size();
+        foreach (string launcher in pinned) {
+            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo(launcher);
+            if (info == null) {
+                continue;
+            }
+            IconButton button = new IconButton(info, true);
+            button.update();
+            ButtonWrapper wrapper = new ButtonWrapper(button);
+            wrapper.orient = this.get_orientation();
+
+            buttons.insert(launcher, button);
+
+            main_layout.add(wrapper);
+            this.show_all();
+            wrapper.set_reveal_child(true);
+
+            button.became_empty.connect(() => {
+                buttons.remove(launcher);
+                wrapper.gracefully_die();
+            });
+        }
     }
 
-    /**
-     * Update the tasklist orientation to match the panel direction
-     */
-    public override void panel_position_changed(Budgie.PanelPosition position)
+    private void connect_wnck_signals()
     {
-        Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
-        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-            orientation = Gtk.Orientation.VERTICAL;
-        }
-
-        // Update spacing
-        if (orientation == Gtk.Orientation.HORIZONTAL) {
-            pinned.margin_end = 14;
-            pinned.margin_bottom = 0;
-        } else {
-            pinned.margin_end = 0;
-            pinned.margin_bottom = 14;
-        }
-
-        widget.set_orientation(orientation);
-        main_layout.set_orientation(orientation);
-        pinned.set_orientation(orientation);
-        this.orient = orientation;
-        set_icons_size();
-        this.queue_resize();
+        wnck_screen.class_group_opened.connect_after(on_class_group_opened);
+        wnck_screen.class_group_closed.connect_after(on_class_group_closed);
+        wnck_screen.window_opened.connect_after(on_window_opened);
+        wnck_screen.window_closed.connect_after(on_window_closed);
+        wnck_screen.active_window_changed.connect_after(on_active_window_changed);
+        wnck_screen.active_workspace_changed.connect_after(update_buttons);
     }
 
-    private void move_launcher(string app_id, int position)
+    private void rebuild_items()
     {
-        string[] launchers = settings.get_strv("pinned-launchers");
-
-        if(position > launchers.length || position < 0) {
-            return;
+        foreach (Gtk.Widget widget in this.main_layout.get_children()) {
+            widget.destroy();
         }
 
-        // Create a new list for holding the launchers
-        var temp_launchers = new List<string>();
+        buttons.remove_all();
 
-        var old_index = 0;
-        var new_position = position;
+        startup();
 
-        for(var i = 0; i < launchers.length; i++) {
-
-            // Add launcher to the next position if it is not the one that has to be moved
-            if(launchers[i] != app_id) {
-                temp_launchers.append(launchers[i]);
+        foreach (unowned Wnck.Window window in wnck_screen.get_windows()) {
+            if (grouping) {
+                on_class_group_opened(window.get_class_group());
             } else {
-                old_index = i;
+                on_window_opened(window);
             }
         }
+    }
 
-        // Check if the indexes changed after removing the launcher from the list
-        if(new_position > old_index) {
-            new_position--;
+    private void on_settings_changed(string key)
+    {
+        switch (key) {
+            case "grouping":
+                this.grouping = settings.get_boolean(key);
+                GLib.Idle.add(() => {
+                    rebuild_items();
+                    return false;
+                });
+                break;
+            case "lock-icons":
+                DesktopHelper.lock_icons = settings.get_boolean(key);
+                break;
+            case "restrict-to-workspace":
+                this.restrict_to_workspace = settings.get_boolean(key);
+                break;
+            case "only-pinned":
+                this.only_show_pinned = settings.get_boolean(key);
+                break;
         }
-
-        temp_launchers.insert(app_id, new_position);
-
-        // Convert launchers list back to array
-        for(var i = 0; i < launchers.length; i++) {
-            launchers[i] = temp_launchers.nth_data(i);
+        if (key != "grouping") {
+            update_buttons();
         }
+    }
 
-        // Save pinned launchers
-        settings.set_strv("pinned-launchers", launchers);
+    private void update_buttons()
+    {
+        buttons.foreach((id, button) => {
+            bool visible = true;
+
+            if (this.restrict_to_workspace) {
+                visible = button.has_window_on_workspace(this.wnck_screen.get_active_workspace());
+            }
+
+            if (this.only_show_pinned) {
+                visible = button.is_pinned();
+            }
+
+            visible = visible || button.is_pinned();
+
+            (button.get_parent() as ButtonWrapper).orient = this.get_orientation();
+            (button.get_parent() as Gtk.Revealer).set_reveal_child(visible);
+            button.update();
+        });
     }
 
     private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint item, uint time)
     {
-        string[] launchers = settings.get_strv("pinned-launchers");
-        Gtk.Allocation main_layout_allocation;
-
-        // Get allocation of main layout
-        main_layout.get_allocation(out main_layout_allocation);
-
-        if(item != 0) {
+        if (item != 0) {
             message("Invalid target type");
             return;
         }
 
         // id of app that is currently being dragged
-        var app_id = (string) selection_data.get_data();
+        var app_id = (string)selection_data.get_data();
+        ButtonWrapper? original_button = null;
+
+        if (app_id.has_prefix("file://")) {
+            app_id = app_id.split("://")[1];
+            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id.strip());
+            if (info == null) {
+                stdout.printf("info was null\n");
+                return;
+            }
+            app_id = info.get_id();
+            if (buttons.contains(app_id)) {
+                original_button = (buttons[app_id].get_parent() as ButtonWrapper);
+            } else {
+                IconButton button = new IconButton(info, true);
+                button.update();
+
+                buttons.set(app_id, button);
+                original_button = new ButtonWrapper(button);
+                original_button.orient = this.get_orientation();
+                button.became_empty.connect(() => {
+                    buttons.remove(app_id);
+                    original_button.gracefully_die();
+                });
+                main_layout.pack_start(original_button, false, false, 0);
+            }
+        } else {
+            unowned IconButton? button = buttons.get(app_id) ?? buttons.get(id_map.get(app_id));
+            original_button = (button != null) ? button.get_parent() as ButtonWrapper : null;
+        }
+
+        if (original_button == null) {
+            return;
+        }
 
         // Iterate through launchers
-        for(var i = 0; i < launchers.length; i++) {
+        foreach (Gtk.Widget widget1 in main_layout.get_children()) {
+            ButtonWrapper current_button = (widget1 as ButtonWrapper);
 
             Gtk.Allocation alloc;
 
-            (pin_buttons[launchers[i]].get_parent() as ButtonWrapper).get_allocation(out alloc);
+            current_button.get_allocation(out alloc);
 
-            if ((this.orient == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + (alloc.width / 2) - main_layout_allocation.x)) ||
-                (this.orient == Gtk.Orientation.VERTICAL && y <= (alloc.y + (alloc.height / 2) - main_layout_allocation.y))) {
+            if ((get_orientation() == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + (alloc.width / 2))) ||
+                (get_orientation() == Gtk.Orientation.VERTICAL && y <= (alloc.y + (alloc.height / 2))))
+            {
+                int new_position, old_position;
+                main_layout.child_get(original_button, "position", out old_position, null);
+                main_layout.child_get(current_button, "position", out new_position, null);
 
-                // Check if launcher is being moved left to the same position as it currently is
-                if(launchers[i] == app_id) {
+                if (new_position == old_position) {
                     break;
                 }
 
-                // Check if launcher is being moved right to the same position as it currently is
-                if(i > 0 && launchers[i - 1] == app_id) {
+                if (new_position == old_position + 1) {
                     break;
                 }
 
-                move_launcher(app_id, i);
+                if (new_position > old_position) {
+                    new_position = new_position - 1;
+                }
 
+                main_layout.reorder_child(original_button, new_position);
                 break;
             }
 
-            // Move launcher to the very end
-            if(i == launchers.length - 1) {
+            if ((get_orientation() == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + alloc.width)) ||
+                (get_orientation() == Gtk.Orientation.VERTICAL && y <= (alloc.y + alloc.height)))
+            {
+                int new_position, old_position;
+                main_layout.child_get(original_button, "position", out old_position, null);
+                main_layout.child_get(current_button, "position", out new_position, null);
 
-                // Check if launcher is already at the end
-                if(launchers[i] == app_id) {
+                if (new_position == old_position) {
                     break;
                 }
 
-                move_launcher(app_id, launchers.length);
+                if (new_position == old_position - 1) {
+                    break;
+                }
+
+                if (new_position < old_position) {
+                    new_position = new_position + 1;
+                }
+
+                main_layout.reorder_child(original_button, new_position);
+                break;
             }
         }
+        original_button.set_transition_type(Gtk.RevealerTransitionType.NONE);
+        original_button.set_reveal_child(true);
+
+        DesktopHelper.update_pinned();
 
         Gtk.drag_finish(context, true, true, time);
     }
 
-    protected void on_settings_change(string key)
+    private void on_class_group_opened(Wnck.ClassGroup class_group)
     {
-        if (key != "pinned-launchers") {
+        if (!grouping) {
             return;
         }
 
-        string[] files = settings.get_strv(key);
-        /* We don't actually remove anything >_> */
-        foreach (string desktopfile in settings.get_strv(key)) {
-            /* Ensure we don't have this fella already. */
-            if (pin_buttons.contains(desktopfile)) {
-                continue;
+        bool has_valid = false;
+        foreach (Wnck.Window window in class_group.get_windows()) {
+            if (!window.is_skip_tasklist()) {
+                has_valid = true;
             }
-            var info = new DesktopAppInfo(desktopfile);
-            if (info == null) {
-                message("Invalid application! %s", desktopfile);
-                continue;
-            }
-            var button = new PinnedIconButton(settings, info, icon_size, this.helper, panel_size);
-            button.orient = this.orient;
-            var button_wrap = new ButtonWrapper(button);
-            button_wrap.orient = this.orient;
-            pin_buttons[desktopfile] = button;
-            pinned.pack_start(button_wrap, false, false, 0);
-
-            // Do we already have an icon button for this?
-            var iter = HashTableIter<Wnck.Window,IconButton>(buttons);
-            Wnck.Window? keyn;
-            IconButton? btn;
-            while (iter.next(out keyn, out btn)) {
-                if (btn.ainfo == null) {
-                    continue;
-                }
-                if (btn.ainfo.get_id() == info.get_id() && btn.requested_pin) {
-                    // Pinning an already active button.
-                    button.window = btn.window;
-                    // destroy old one
-                    (btn.get_parent() as ButtonWrapper).gracefully_die();
-                    buttons.remove(keyn);
-                    buttons[keyn] = button;
-                    button.update_from_window();
-                    break;
-                }
-            }
-
-            (button.get_parent() as Gtk.Revealer).set_reveal_child(true);
-            Idle.add(()=> {
-                button.icon_mapped();
-                return false;
-            });
-        }
-        string[] removals = {};
-        /* Conversely, remove ones which have been unset. */
-        var iter = HashTableIter<string?,PinnedIconButton?>(pin_buttons);
-        string? key_name;
-        PinnedIconButton? btn;
-        while (iter.next(out key_name, out btn)) {
-            if (key_name in files) {
-                continue;
-            }
-            /* We have a removal. */
-            if (btn.window == null) {
-                (btn.get_parent() as ButtonWrapper).gracefully_die();
-            } else {
-                /* We need to move this fella.. */
-                IconButton b2 = new IconButton(settings, btn.window, icon_size, (owned)btn.app_info, this.helper, panel_size);
-                b2.orient = this.orient;
-
-                var button_wrap = new ButtonWrapper(b2);
-
-                (btn.get_parent() as ButtonWrapper).gracefully_die();
-                widget.pack_start(button_wrap, false, false, 0);
-                buttons[b2.window]  = b2;
-                button_wrap.orient = this.orient;
-                button_wrap.set_reveal_child(true);
-            }
-            removals += key_name;
         }
 
-        foreach (string rkey in removals) {
-            pin_buttons.remove(rkey);
+        if (!has_valid) {
+            return;
         }
 
-        /* Properly reorder the children */
-        int j = 0;
-        for (int i = 0; i < files.length; i++) {
-            string lkey = files[i];
-            if (!pin_buttons.contains(lkey)) {
-                continue;
+        GLib.DesktopAppInfo? app_info = null;
+
+        foreach (Wnck.Window window in class_group.get_windows()) {
+            app_info = app_system.query_window(window);
+            if (app_info != null) {
+                break;
             }
-            unowned Gtk.Widget? parent = pin_buttons[lkey].get_parent();
-            pinned.reorder_child(parent, j);
-            ++j;
+        }
+
+        string app_id = (app_info == null) ? "NOTGOOD-%s".printf(class_group.get_id()) : app_info.get_id();
+        id_map.insert(class_group.get_id(), app_id);
+
+        if (buttons.contains(app_id)) {
+            buttons.get(app_id).set_class_group(class_group);
+            buttons.get(app_id).update();
+            return;
+        }
+
+        IconButton button = new IconButton.from_group(class_group, app_info);
+        ButtonWrapper wrapper = new ButtonWrapper(button);
+        wrapper.orient = this.get_orientation();
+
+        buttons.insert(app_id, button);
+
+        button.became_empty.connect(() => {
+            buttons.remove(app_id);
+            wrapper.gracefully_die();
+        });
+
+        main_layout.add(wrapper);
+        this.show_all();
+        (wrapper as Gtk.Revealer).set_reveal_child(true);
+    }
+
+    private void on_class_group_closed(Wnck.ClassGroup class_group)
+    {
+        if (!grouping) {
+            return;
+        }
+
+        string? app_id = id_map.get(class_group.get_id());
+        app_id = (app_id == null) ? "NOTGOOD-%s".printf(class_group.get_id()) : app_id;
+
+        IconButton? button = buttons.get(app_id);
+
+        if (button == null) {
+            return;
+        }
+
+        if (button.is_pinned()) {
+            button.set_class_group(null);
+            button.update();
+            return;
+        }
+
+        ButtonWrapper wrapper = (ButtonWrapper)button.get_parent();
+        wrapper.gracefully_die();
+
+        id_map.remove(class_group.get_id());
+        buttons.remove(app_id);
+    }
+
+    private void on_window_opened(Wnck.Window window)
+    {
+        if (window.is_skip_tasklist()) {
+            return;
+        }
+
+        GLib.DesktopAppInfo? app_info = app_system.query_window(window);
+        string app_id = (app_info == null) ? "NOTGOOD-%lu".printf(window.get_xid()) : app_info.get_id();
+        id_map.insert("%lu".printf(window.get_xid()), "%s|%lu".printf(app_id, window.get_xid()));
+        id_map.insert(app_id, "%s|%lu".printf(app_id, window.get_xid()));
+        stdout.printf("Window opened: %s\n", app_id);
+
+        IconButton? button = buttons.get(app_id);
+        if (button == null) {
+            button = buttons.get("%s|%lu".printf(app_id, window.get_xid()));
+        }
+        if (button != null && button.is_empty()) {
+            if (!grouping) {
+                button.set_wnck_window(window);
+            }
+            button.update();
+            return;
+        }
+
+
+        if (grouping) {
+            return;
+        }
+
+        bool pinned = (app_id in settings.get_strv("pinned-launchers"));
+
+        button = new IconButton.from_window(window, app_info, pinned);
+        ButtonWrapper wrapper = new ButtonWrapper(button);
+        wrapper.orient = this.get_orientation();
+
+        buttons.insert("%s|%lu".printf(app_id, window.get_xid()), button);
+
+        button.became_empty.connect(() => {
+            buttons.remove("%s|%lu".printf(app_id, window.get_xid()));
+            wrapper.gracefully_die();
+        });
+
+        main_layout.add(wrapper);
+        this.show_all();
+        wrapper.set_reveal_child(true);
+    }
+
+    private void on_window_closed(Wnck.Window window)
+    {
+        if (window.is_skip_tasklist()) {
+            return;
+        }
+
+        string? app_id = id_map.get("%lu".printf(window.get_xid()));
+        app_id = (app_id == null) ? "NOTGOOD-%lu".printf(window.get_xid()) : app_id;
+        IconButton? button = buttons.get(app_id);
+        if (button != null) {
+            button.set_wnck_window(null);
+            button.update();
+        } else {
+            app_id = app_id.split("|")[0];
+            button = buttons.get(app_id);
+        }
+
+        if (grouping) {
+            return;
+        }
+
+        if (button.is_pinned()) {
+            button.set_wnck_window(null);
+            button.update();
+            return;
+        }
+
+        ButtonWrapper wrapper = (ButtonWrapper)button.get_parent();
+        wrapper.gracefully_die();
+
+        buttons.remove(app_id);
+    }
+
+    private void on_active_window_changed(Wnck.Window? previous_window)
+    {
+        foreach (IconButton button in buttons.get_values()) {
+            if (button.has_window(DesktopHelper.get_active_window())) {
+                button.last_active_window = DesktopHelper.get_active_window();
+                button.attention(false);
+            }
+            button.update();
         }
     }
-} // End class
+
+
+    void set_icons_size()
+    {
+        Wnck.set_default_icon_size(DesktopHelper.icon_size);
+
+        Idle.add(()=> {
+            buttons.foreach((id, button) => {
+                button.update_icon();
+            });
+            return false;
+        });
+
+        queue_resize();
+        queue_draw();
+    }
+
+    public override void panel_position_changed(Budgie.PanelPosition position) {
+        DesktopHelper.panel_position = position;
+        DesktopHelper.orientation = this.get_orientation();
+        main_layout.set_orientation(DesktopHelper.orientation);
+
+        set_icons_size();
+    }
+
+    public override void panel_size_changed(int panel, int icon, int small_icon)
+    {
+        DesktopHelper.icon_size = small_icon;
+
+        DesktopHelper.panel_size = panel - 1;
+        if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
+            DesktopHelper.panel_size = panel - 6;
+        }
+
+        set_icons_size();
+    }
+
+    private Gtk.Orientation get_orientation() {
+        switch (DesktopHelper.panel_position) {
+            case Budgie.PanelPosition.TOP:
+            case Budgie.PanelPosition.BOTTOM:
+                return Gtk.Orientation.HORIZONTAL;
+            default:
+                return Gtk.Orientation.VERTICAL;
+        }
+    }
+}
 
 [ModuleInit]
 public void peas_register_types(TypeModule module)

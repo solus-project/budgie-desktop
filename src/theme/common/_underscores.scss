@@ -1,26 +1,3 @@
 @mixin underscores($launcher_type) {
-    &:hover,
-    &:active, &:checked {
-        background-color: transparentize(black, 0.8);
-        box-shadow: inset 1px 0 transparentize(black, 0.8),
-                    inset -1px 0 transparentize(black, 0.8);
-    }
 
-    @each $pos, $b_pos in $pos_list {
-        .#{$pos} & {
-            padding-#{$b_pos}: 2px;
-            border-#{$pos}: 2px solid transparentize($panel_bg,1);
-
-            @at-root {
-                .#{$pos} .budgie-panel .unpinned #{$launcher_type}.launcher,
-                .#{$pos} .budgie-panel .pinned #{$launcher_type}.launcher.running { border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5); }
-            }
-            &:hover {
-                border-#{$pos}: 2px solid transparentize($selected_bg_color, 0.5);
-            }
-            &:active, &:checked {
-                border-#{$pos}: 2px solid $selected_bg_color;
-            }
-        }
-    }
 }
