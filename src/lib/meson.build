@@ -1,15 +1,15 @@
-# libtoplevel provides an in-tree ABI for Raven + Panel
+# libbudgieprivate provides a private ABI for Raven + Panel
 
-libtoplevel_sources = [
+libbudgieprivate_sources = [
     'animation.vala',
     'toplevel.vala',
     'shadow.vala',
     'manager.vala',
 ]
 
-libtoplevel = static_library(
-    'toplevel',
-    libtoplevel_sources,
+libbudgieprivate = shared_library(
+    'budgie-private',
+    libbudgieprivate_sources,
     dependencies: [
         libplugin_vapi,
         link_libplugin,
@@ -22,14 +22,16 @@ libtoplevel = static_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libpeas-1.0',
     ],
+    version: '0.0.0',
+    install: true,
 )
 
-link_libtoplevel = declare_dependency(
-    link_with: libtoplevel,
+link_libbudgieprivate = declare_dependency(
+    link_with: libbudgieprivate,
     include_directories: [
         include_directories('.'),
     ],
 )
 
 # Expose the current directory so that we can use vapidir
-dir_libtoplevel = meson.current_source_dir()
+dir_libbudgieprivate = meson.current_source_dir()

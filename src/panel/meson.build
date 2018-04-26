@@ -46,7 +46,7 @@ panel_deps = [
     dep_wnck,
     link_libconfig,
     link_libsession,
-    link_libtoplevel,
+    link_libbudgieprivate,
     link_libtheme,
     link_libplugin,
     link_libraven,
