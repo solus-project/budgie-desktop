@@ -11,10 +11,11 @@ libbudgieprivate = shared_library(
     'budgie-private',
     libbudgieprivate_sources,
     dependencies: [
-        link_libplugin,
+        libplugin_vapi,
         dep_peas,
         dep_gtk3,
         meson.get_compiler('c').find_library('m', required: false),
+        link_libplugin,
     ],
     vala_args: [
         '--pkg', 'gio-unix-2.0',
