@@ -11,7 +11,6 @@ libbudgieprivate = shared_library(
     'budgie-private',
     libbudgieprivate_sources,
     dependencies: [
-        libplugin_vapi,
         link_libplugin,
         dep_peas,
         dep_gtk3,
@@ -28,6 +27,9 @@ libbudgieprivate = shared_library(
 
 link_libbudgieprivate = declare_dependency(
     link_with: libbudgieprivate,
+    dependencies: [
+        link_libplugin,
+    ],
     include_directories: [
         include_directories('.'),
     ],
