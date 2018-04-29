@@ -99,6 +99,7 @@ executable(
         '--pkg', 'gio-unix-2.0',
     ],
     install: true,
+    install_rpath: rpath_libdir,
 )
 
 # Now merge the translations of the .desktop.in to a .desktop

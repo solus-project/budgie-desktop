@@ -59,4 +59,5 @@ shared_library(
     ],
     install: true,
     install_dir: applet_status_dir,
+    install_rpath: rpath_libdir,
 )

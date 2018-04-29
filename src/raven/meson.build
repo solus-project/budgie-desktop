@@ -61,6 +61,7 @@ libraven = shared_library(
         '--gresources=' + gresource,
     ],
     install: true,
+    install_rpath: rpath_libdir,
 )
 
 link_libraven = declare_dependency(

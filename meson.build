@@ -99,6 +99,10 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
 
+# GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
+# so we have to use a shared library to prevent multiple registration of the same types..
+rpath_libdir = join_paths(libdir, meson.project_name())
+
 # Write config.h
 configure_file(
     output: 'config.h',
@@ -117,8 +121,10 @@ with_polkit = get_option('with-polkit')
 gvc = subproject('gvc',
     default_options: [
     'c_std=c89',
-    'static=true',
-  ]
+    'package-name=@0@'.format(meson.project_name()),
+    'static=false',
+    'pkglibdir=@0@'.format(rpath_libdir),
+  ],
 )
 
 # Prep translations prior to build
