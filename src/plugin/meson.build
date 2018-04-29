@@ -47,7 +47,6 @@ plugin_sources = [
 plugin_deps = [
     dep_gtk3,
     dep_peas,
-    link_libenum,
 ]
 
 # build plugin
