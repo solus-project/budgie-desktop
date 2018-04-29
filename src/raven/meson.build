@@ -36,6 +36,7 @@ libraven_deps = [
     link_libplugin,
     link_libtheme,
     gvc.get_variable('libgvc_dep'),
+    meson.get_compiler('c').find_library('m', required: false),
 ]
 
 top_vapidir = join_paths(meson.source_root(), 'vapi')
