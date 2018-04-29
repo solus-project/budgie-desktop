@@ -43,6 +43,12 @@ public class DesktopPage : Budgie.SettingsPage {
             _("Desktop Icons"),
             _("Control whether to allow launchers and icons on the desktop")));
 
+        /* Hook up settings */
+        bg_settings = new GLib.Settings("org.gnome.desktop.background");
+        bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
+        bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
+
+#if 0
         /* Show home */
         switch_home = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_home,
@@ -67,29 +73,26 @@ public class DesktopPage : Budgie.SettingsPage {
             _("Mounted volumes"),
             _("Mounted volumes & drives will appear on the desktop")));
 
-        /* Hook up settings */
-        bg_settings = new GLib.Settings("org.gnome.desktop.background");
+
         nautilus_settings = new GLib.Settings("org.gnome.nautilus.desktop");
-
-        bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
-
-        bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
-
         nautilus_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
 
+#endif
         update_switches();
     }
 
     void update_switches()
     {
         bool b = bg_settings.get_boolean("show-desktop-icons");
+#if 0
         switch_home.sensitive = b;
         switch_network.sensitive = b;
         switch_trash.sensitive = b;
         switch_mounts.sensitive = b;
+#endif
     }
     
 } /* End class */
