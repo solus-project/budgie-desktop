@@ -32,7 +32,7 @@ plugin_headers = [
 	'plugin.h',
 	'applet.h',
 	'applet-info.h',
-        'popover.h',
+    'popover.h',
 	'popover-manager.h',
 ]
 
