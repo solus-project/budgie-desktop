@@ -302,7 +302,6 @@ public class IconTasklistApplet : Budgie.Applet
             app_id = app_id.split("://")[1];
             GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id.strip());
             if (info == null) {
-                stdout.printf("info was null\n");
                 return;
             }
             app_id = info.get_id();
@@ -481,7 +480,6 @@ public class IconTasklistApplet : Budgie.Applet
         string app_id = (app_info == null) ? "NOTGOOD-%lu".printf(window.get_xid()) : app_info.get_id();
         id_map.insert("%lu".printf(window.get_xid()), "%s|%lu".printf(app_id, window.get_xid()));
         id_map.insert(app_id, "%s|%lu".printf(app_id, window.get_xid()));
-        stdout.printf("Window opened: %s\n", app_id);
 
         IconButton? button = buttons.get(app_id);
         if (button == null) {

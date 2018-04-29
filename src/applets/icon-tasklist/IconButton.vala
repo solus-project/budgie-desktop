@@ -601,6 +601,7 @@ public class IconButton : Gtk.ToggleButton
 
         int counter = 0;
         int previous_x = 0;
+        int previous_y = 0;
         int spacing = width % count;
         spacing = (spacing == 0) ? 1 : spacing;
         foreach (Wnck.Window window in windows) {
@@ -622,22 +623,31 @@ public class IconButton : Gtk.ToggleButton
                         indicator_y = y;
                         break;
                     case Budgie.PanelPosition.BOTTOM:
-                        indicator_x = x + (width / 2);
-                        indicator_x -= ((count * (INDICATOR_SIZE + INDICATOR_SPACING)) / 2) - INDICATOR_SPACING;
-                        indicator_x += (((INDICATOR_SIZE) + INDICATOR_SPACING) * counter);
-                        indicator_y = y + height - (INDICATOR_SIZE / 2);
+                        if (counter == 0) {
+                            indicator_x = x;
+                        } else {
+                            previous_x = indicator_x = previous_x + (width/count);
+                            indicator_x += spacing;
+                        }
+                        indicator_y = y + height;
                         break;
                     case Budgie.PanelPosition.LEFT:
-                        indicator_y = x + (height / 2);
-                        indicator_y -= ((count * (INDICATOR_SIZE + INDICATOR_SPACING)) / 2) - (INDICATOR_SPACING * 2);
-                        indicator_y += (((INDICATOR_SIZE) + INDICATOR_SPACING) * counter);
-                        indicator_x = y + (INDICATOR_SIZE / 2);
+                        if (counter == 0) {
+                            indicator_y = y;
+                        } else {
+                            previous_y = indicator_y = previous_y + (height/count);
+                            indicator_y += spacing;
+                        }
+                        indicator_x = x;
                         break;
                     case Budgie.PanelPosition.RIGHT:
-                        indicator_y = x + (height / 2);
-                        indicator_y -= ((count * (INDICATOR_SIZE + INDICATOR_SPACING)) / 2) - INDICATOR_SPACING;
-                        indicator_y += ((INDICATOR_SIZE + INDICATOR_SPACING) * counter);
-                        indicator_x = y + width - (INDICATOR_SIZE / 2);
+                        if (counter == 0) {
+                            indicator_y = y;
+                        } else {
+                            previous_y = indicator_y = previous_y + (height/count);
+                            indicator_y += spacing;
+                        }
+                        indicator_x = x + width;
                         break;
                     default:
                         break;
@@ -654,13 +664,29 @@ public class IconButton : Gtk.ToggleButton
                     cr.set_source_rgba(col.red, col.green, col.blue, 1);
                 }
                 cr.move_to(indicator_x, indicator_y);
-                int to = 0;
-                if (counter == count-1) {
-                    to = x + width; 
-                } else {
-                    to = previous_x+(width/count);
+
+                switch (DesktopHelper.panel_position) {
+                    case Budgie.PanelPosition.LEFT:
+                    case Budgie.PanelPosition.RIGHT:
+                        int to = 0;
+                        if (counter == count-1) {
+                            to = y + height; 
+                        } else {
+                            to = previous_y+(height/count);
+                        }
+                        cr.line_to(indicator_x, to);
+                        break;
+                    default:
+                        int to = 0;
+                        if (counter == count-1) {
+                            to = x + width; 
+                        } else {
+                            to = previous_x+(width/count);
+                        }
+                        cr.line_to(to, indicator_y);
+                        break;
                 }
-                cr.line_to(to, indicator_y);
+
                 cr.stroke();
                 counter++;
             }
