@@ -105,6 +105,11 @@ if with_desktop_icons ==  'nautilus'
     warning('You must have Nautilus 3.26 or older for desktop icons with Budgie')
 endif
 
+with_stateless = get_option('with-stateless')
+if with_stateless == true
+    warning('Only use stateless option with a supported OS like Solus')
+endif
+
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
 # so we have to use a shared library to prevent multiple registration of the same types..
 rpath_libdir = join_paths(libdir, meson.project_name())
@@ -160,11 +165,12 @@ report = [
     '    module library directory:               @0@'.format(plugin_libdir),
     '    module data directory:                  @0@'.format(plugin_datadir),
     '',
-    '    Extra modules:',
+    '    Extra options:',
     '    ==============',
     '',
     '    gtk-doc:                                @0@'.format(with_gtk_doc),
     '    desktop icons:                          @0@'.format(with_desktop_icons),
+    '    stateless:                              @0@'.format(with_stateless),
 ]
 
 
