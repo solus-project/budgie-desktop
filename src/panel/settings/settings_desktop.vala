@@ -48,7 +48,6 @@ public class DesktopPage : Budgie.SettingsPage {
         bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
         bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
 
-#if 0
         /* Show home */
         switch_home = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_home,
@@ -80,7 +79,6 @@ public class DesktopPage : Budgie.SettingsPage {
         nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
         nautilus_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
 
-#endif
         update_switches();
     }
 

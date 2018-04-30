@@ -2,3 +2,4 @@ option('with-stateless', type: 'boolean', value: false, description: 'Enable sta
 option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
 option('with-bluetooth', type: 'boolean', value: true, description: 'Enable gnome-bluetooth support')
 option('with-gtk-doc', type: 'boolean', value: true, description: 'Build gtk-doc documentation')
+option('with-desktop-icons', type: 'combo', choices: ['nautilus', 'none'], value: 'nautilus', description: 'Desktop icon handling')

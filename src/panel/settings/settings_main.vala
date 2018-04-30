@@ -103,10 +103,12 @@ public class SettingsWindow : Gtk.Window {
     {
         this.add_page(new Budgie.StylePage());
 
+#if HAVE_NAUTILUS
         /* So we don't bust a nut on start up */
         if (Environment.find_program_in_path("nautilus") != null) {
             this.add_page(new Budgie.DesktopPage());
         }
+#endif
 
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());

@@ -24,7 +24,6 @@ panel_sources = [
     'uuid.vala',
     'settings/settings_applet_chooser.vala',
     'settings/settings_autostart.vala',
-    'settings/settings_desktop.vala',
     'settings/settings_fonts.vala',
     'settings/settings_item.vala',
     'settings/settings_main.vala',
@@ -37,6 +36,11 @@ panel_sources = [
     'settings/themes.vala',
     panel_resources,
 ]
+
+# Only build desktop icons pane for Nautilus right now
+if with_desktop_icons == 'nautilus'
+    panel_sources +=  'settings/settings_desktop.vala'
+endif
 
 panel_deps = [
     libplugin_vapi,
@@ -70,6 +74,10 @@ budgie_panel_vala_args = [
         '--target-glib=2.38',
         '--gresources=' + gresource,
 ]
+
+if with_desktop_icons == 'nautilus'
+    budgie_panel_vala_args += ['-D', 'HAVE_NAUTILUS']
+endif
 
 # For pointer methods
 if dep_gtk318.found()
