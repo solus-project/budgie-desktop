@@ -15,7 +15,7 @@ namespace Budgie
 /**
  * Default width for an Switcher notification
  */
-public const int SWITCHER_SIZE = 350;
+public const int SWITCHER_SIZE = -1;
 
 /**
  * How often it is checked if the meta key is still pressed
@@ -70,11 +70,11 @@ public class TabSwitcherWidget : Gtk.Image {
         set_property("margin", 10);
 
         if (info != null) {
-            set_from_gicon(info.get_icon(), Gtk.IconSize.DND);
+            set_from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
         } else {
             set_from_pixbuf(wnck_window.get_icon());
         }
-        set_pixel_size(32);
+        set_pixel_size(48);
         halign = Gtk.Align.CENTER;
         valign = Gtk.Align.CENTER;
     }
@@ -218,7 +218,17 @@ public class TabSwitcherWindow : Gtk.Window
 
         var child = new TabSwitcherWidget(window, desktop, usertime);
         xids.insert(xid, child);
+
+        /* Adjust to a maximum of 8 children per row */
+        var n_kids = xids.size();
+        if (n_kids < 8) {
+            window_box.set_max_children_per_line(n_kids);
+        } else {
+            window_box.set_max_children_per_line(8);
+        }
+
         window_box.insert(child, -1);
+        queue_resize();
         window_box.show_all();
     }
 
