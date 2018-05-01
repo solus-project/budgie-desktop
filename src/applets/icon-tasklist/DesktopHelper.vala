@@ -14,14 +14,31 @@
  */
 public class DesktopHelper : GLib.Object
 {
-    public static GLib.Settings settings;
-    public static Wnck.Screen screen;
-    public static Gtk.Box icon_layout;
-    public static bool lock_icons = false;
-    public static Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
-    public static int panel_size = 40;
-    public static int icon_size = 32;
-    public static Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+    private GLib.Settings? settings = null;
+    private Wnck.Screen? screen = null;
+    private Gtk.Box? icon_layout = null;
+
+    /* Panel specifics */
+    public int panel_size = 40;
+    public int icon_size = 32;
+    public Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+    public Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
+
+    /* Preferences */
+    public bool lock_icons = false;
+
+    /**
+     * Handle initial bootstrap of the desktop helper
+     */
+    public DesktopHelper(GLib.Settings? settings, Gtk.Box? icon_layout)
+    {
+        /* Stash privates */
+        this.settings = settings;
+        this.icon_layout = icon_layout;
+
+        /* Stash lifetime reference to screen */
+        this.screen = Wnck.Screen.get_default();
+    }
 
     public const Gtk.TargetEntry[] targets = {
         { "application/x-icon-tasklist-launcher-id", 0, 0 },
@@ -29,7 +46,10 @@ public class DesktopHelper : GLib.Object
         { "application/x-desktop", 0, 0 }
     };
 
-    public static void update_pinned()
+    /**
+     * Using our icon_layout, update the per-instance "pinned-launchers" key
+     */
+    public void update_pinned()
     {
         string[] buttons = {};
         foreach (Gtk.Widget widget in icon_layout.get_children()) {
@@ -50,7 +70,10 @@ public class DesktopHelper : GLib.Object
         settings.set_strv("pinned-launchers", buttons);
     }
 
-    public static GLib.List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group)
+    /**
+     * Grab the list of windows stacked for the given class_group
+     */
+    public GLib.List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group)
     {
         GLib.List<unowned Wnck.Window> list = new GLib.List<unowned Wnck.Window>();
         screen.get_windows_stacked().foreach((window) => {
@@ -64,11 +87,17 @@ public class DesktopHelper : GLib.Object
         return list.copy();
     }
 
-    public static Wnck.Window get_active_window() {
+    /**
+     * Return the currently active window
+     */
+    public Wnck.Window get_active_window() {
         return screen.get_active_window();
     }
 
-    public static Wnck.Workspace get_active_workspace() {
+    /**
+     * Return the currently active workspace
+     */
+    public Wnck.Workspace get_active_workspace() {
         return screen.get_active_workspace();
     }
 }
