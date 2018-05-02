@@ -102,12 +102,12 @@ cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
 
 with_desktop_icons = get_option('with-desktop-icons')
 if with_desktop_icons ==  'nautilus'
-    warning('You must have Nautilus 3.26 or older for desktop icons with Budgie')
+  #  warning('You must have Nautilus 3.26 or older for desktop icons with Budgie')
 endif
 
 with_stateless = get_option('with-stateless')
 if with_stateless == true
-    warning('Only use stateless option with a supported OS like Solus')
+  #  warning('Only use stateless option with a supported OS like Solus')
 endif
 
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
