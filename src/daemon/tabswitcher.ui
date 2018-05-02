@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <template class="BudgieTabSwitcherWindow" parent="GtkWindow">
@@ -7,6 +7,12 @@
     <property name="type">popup</property>
     <property name="resizable">False</property>
     <property name="type_hint">notification</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
@@ -24,9 +30,12 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="homogeneous">True</property>
                 <property name="column_spacing">6</property>
                 <property name="row_spacing">6</property>
-                <property name="max_children_per_line">8</property>
+                <property name="min_children_per_line">1</property>
+                <property name="max_children_per_line">1</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -45,7 +54,7 @@
           <object class="GtkLabel" id="window_title">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
+            <property name="halign">start</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
             <property name="margin_top">6</property>

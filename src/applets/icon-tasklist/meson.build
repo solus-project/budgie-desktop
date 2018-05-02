@@ -20,6 +20,7 @@ applet_icontasklist_resources = gnome.compile_resources(
 )
 
 applet_icontasklist_sources = [
+    'DesktopHelper.vala',
     'IconTasklistApplet.vala',
     'IconButton.vala',
     'Icon.vala',

@@ -68,7 +68,7 @@ public class AgentDialog : Gtk.Window
     }
 
     /* Manipulate Vala's pointer logic to prevent a copy */
-    public unowned GLib.Cancellable? cancellable { public set ; public get; }
+    public unowned GLib.Cancellable? cancellable { public set ; public unowned get; }
 
     public string cookie { public get; public set; }
 

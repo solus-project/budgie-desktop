@@ -14,6 +14,12 @@ const int INDICATOR_SIZE     = 2;
 const int INDICATOR_SPACING  = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
+/**
+ * The wrapper provides nice visual effects to house an IconButton, allowing
+ * us to slide the buttons into view when ready, and dispose of them as and
+ * when our slide-out animation has finished. Without the wrapper, we'd have
+ * a very ugly effect of icons just "popping" off.
+ */
 public class ButtonWrapper : Gtk.Revealer
 {
     public unowned IconButton? button;
@@ -61,6 +67,11 @@ public class ButtonWrapper : Gtk.Revealer
     }
 }
 
+/**
+ * IconButton provides the pretty IconTasklist button to house one or more
+ * windows in a group, as well as selection capabilities, interaction, animations
+ * and rendering of "dots" for the renderable windows.
+ */
 public class IconButton : Gtk.ToggleButton
 {
     private Wnck.Window? window = null;          // This will always be null if grouping is enabled
@@ -78,7 +89,14 @@ public class IconButton : Gtk.ToggleButton
     private Gtk.Menu? menu = null;
     public signal void became_empty();
 
-    construct {
+    /* Pointer to our DesktopHelper at the time of construction */
+    public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
+
+    /**
+     * We have race conditions in glib between the desired properties..
+     */
+    private void gobject_constructors_suck()
+    {
         icon = new Icon();
         icon.get_style_context().add_class("icon");
         this.add(icon);
@@ -88,7 +106,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.launch_context = this.get_display().get_app_launch_context();
         this.add_events(Gdk.EventMask.SCROLL_MASK);
-        this.set_draggable(!DesktopHelper.lock_icons);
+        this.set_draggable(!this.desktop_helper.lock_icons);
 
         drag_begin.connect((context) => {
             unowned Gdk.Pixbuf? pixbuf_icon = this.icon.pixbuf;
@@ -120,20 +138,25 @@ public class IconButton : Gtk.ToggleButton
         launch_context.launch_failed.connect(this.on_launch_failed);
     }
 
-    public IconButton(GLib.DesktopAppInfo info, bool pinned)
+    public IconButton(DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
     {
+        Object(desktop_helper: helper);
         this.app_info = info;
         this.pinned = pinned;
-
+        gobject_constructors_suck();
         update_icon();
     }
 
-    public IconButton.from_window(Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    public IconButton.from_window(DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
     {
+        Object(desktop_helper: helper);
+
         this.window = window;
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
+
+        gobject_constructors_suck();
 
         window.state_changed.connect_after(() => {
             if (window.needs_attention()) {
@@ -148,10 +171,14 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public IconButton.from_group(Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    public IconButton.from_group(DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
     {
+        Object(desktop_helper: helper);
+
         this.class_group = class_group;
         this.app_info = info;
+
+        gobject_constructors_suck();
 
         foreach (unowned Wnck.Window window in class_group.get_windows()) {
             window.state_changed.connect_after(() => {
@@ -254,11 +281,11 @@ public class IconButton : Gtk.ToggleButton
         }
 
         if (app_icon != null) {
-            icon.set_from_gicon(app_icon, DesktopHelper.icon_size);
+            icon.set_from_gicon(app_icon, this.desktop_helper.icon_size);
         } else if (pixbuf_icon != null) {
-            icon.set_from_pixbuf(pixbuf_icon, DesktopHelper.icon_size);
+            icon.set_from_pixbuf(pixbuf_icon, this.desktop_helper.icon_size);
         } else {
-            icon.set_from_icon_name("image-missing", DesktopHelper.icon_size);
+            icon.set_from_icon_name("image-missing", this.desktop_helper.icon_size);
         }
     }
 
@@ -280,7 +307,7 @@ public class IconButton : Gtk.ToggleButton
         if (this.window != null) {
             has_active = this.window.is_active();
         } else if (class_group != null) {
-            has_active = (class_group.get_windows().find(DesktopHelper.get_active_window()) != null);
+            has_active = (class_group.get_windows().find(this.desktop_helper.get_active_window()) != null);
         }
         this.set_active(has_active);
 
@@ -296,7 +323,7 @@ public class IconButton : Gtk.ToggleButton
             }
         }
 
-        this.set_draggable(!DesktopHelper.lock_icons);
+        this.set_draggable(!this.desktop_helper.lock_icons);
 
         update_context_menu();
         update_icon();
@@ -377,7 +404,7 @@ public class IconButton : Gtk.ToggleButton
         launch_context.set_screen(this.get_screen());
         launch_context.set_timestamp(time);
 
-        this.icon.animate_launch(DesktopHelper.panel_position);
+        this.icon.animate_launch(this.desktop_helper.panel_position);
         this.icon.waiting = true;
         this.icon.animate_wait();
 
@@ -403,7 +430,7 @@ public class IconButton : Gtk.ToggleButton
                 break;
             }
 
-            if (window == DesktopHelper.get_active_window()) {
+            if (window == this.desktop_helper.get_active_window()) {
                 found_active = true;
             }
         }
@@ -427,7 +454,7 @@ public class IconButton : Gtk.ToggleButton
                 break;
             }
 
-            if (window == DesktopHelper.get_active_window()) {
+            if (window == this.desktop_helper.get_active_window()) {
                 found_active = true;
             }
         }
@@ -448,7 +475,7 @@ public class IconButton : Gtk.ToggleButton
         this.needs_attention = needs_it;
         this.queue_draw();
         if (needs_it) {
-            this.icon.animate_attention(DesktopHelper.panel_position);
+            this.icon.animate_attention(this.desktop_helper.panel_position);
         }
     }
 
@@ -519,7 +546,7 @@ public class IconButton : Gtk.ToggleButton
             if (!window.is_skip_tasklist()) {
                 int indicator_x = 0;
                 int indicator_y = 0;
-                switch (DesktopHelper.panel_position) {
+                switch (this.desktop_helper.panel_position) {
                     case Budgie.PanelPosition.TOP:
                         indicator_x = x + (width / 2);
                         indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
@@ -612,7 +639,7 @@ public class IconButton : Gtk.ToggleButton
             if (!window.is_skip_tasklist()) {
                 int indicator_x = 0;
                 int indicator_y = 0;
-                switch (DesktopHelper.panel_position) {
+                switch (this.desktop_helper.panel_position) {
                     case Budgie.PanelPosition.TOP:
                         if (counter == 0) {
                             indicator_x = x;
@@ -654,7 +681,7 @@ public class IconButton : Gtk.ToggleButton
                 }
 
                 cr.set_line_width(6);
-                if (DesktopHelper.get_active_window() == window && count > 1) {
+                if (this.desktop_helper.get_active_window() == window && count > 1) {
                     Gdk.RGBA col2 = col;
                     if (!context.lookup_color("budgie_tasklist_indicator_color_active_window", out col2)) {
                         col2.parse("#6BBFFF");
@@ -665,7 +692,7 @@ public class IconButton : Gtk.ToggleButton
                 }
                 cr.move_to(indicator_x, indicator_y);
 
-                switch (DesktopHelper.panel_position) {
+                switch (this.desktop_helper.panel_position) {
                     case Budgie.PanelPosition.LEFT:
                     case Budgie.PanelPosition.RIGHT:
                         int to = 0;
@@ -725,8 +752,8 @@ public class IconButton : Gtk.ToggleButton
         int m, n;
         base.get_preferred_width(out m, out n);
 
-        int width = DesktopHelper.panel_size;
-        if (DesktopHelper.orientation == Gtk.Orientation.HORIZONTAL) {
+        int width = this.desktop_helper.panel_size;
+        if (this.desktop_helper.orientation == Gtk.Orientation.HORIZONTAL) {
             width += 6;
         }
         min = nat = definite_allocation.width = width;
@@ -738,7 +765,7 @@ public class IconButton : Gtk.ToggleButton
         int m, n;
         base.get_preferred_height(out m, out n);
 
-        min = nat = definite_allocation.height = DesktopHelper.panel_size;
+        min = nat = definite_allocation.height = this.desktop_helper.panel_size;
     }
 
     public override bool button_release_event(Gdk.EventButton event)
@@ -765,7 +792,7 @@ public class IconButton : Gtk.ToggleButton
                 bool one_active = false;
                 int num = 0;
 
-                GLib.List<unowned Wnck.Window> list = DesktopHelper.get_stacked_for_classgroup(this.class_group);
+                GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
 
                 foreach (Wnck.Window win in list) {
                     if (win.is_minimized()) {
@@ -852,7 +879,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.context_menu_has_items = false;
 
-        if (!DesktopHelper.lock_icons && this.app_info != null) {
+        if (!this.desktop_helper.lock_icons && this.app_info != null) {
             if (!this.pinned || !this.is_from_window) {
                 Gtk.CheckMenuItem pinned_item = new Gtk.CheckMenuItem.with_mnemonic("Pinned");
                 menu.append(pinned_item);
@@ -864,7 +891,7 @@ public class IconButton : Gtk.ToggleButton
                     this.pinned = pinned_item.get_active();
                     this.is_from_window = !this.pinned;
                     stdout.printf("pinned: %s\n", this.app_info.get_id());
-                    DesktopHelper.update_pinned();
+                    this.desktop_helper.update_pinned();
                     if (!has_valid_windows(null) && !this.pinned) {
                         became_empty();
                         return;
@@ -944,7 +971,7 @@ public class IconButton : Gtk.ToggleButton
                 }
                 Gtk.ImageMenuItem window_item = new Gtk.ImageMenuItem.with_label(title);
                 window_item.set_tooltip_text(window.get_name());
-                window_item.set_sensitive(window != DesktopHelper.get_active_window());
+                window_item.set_sensitive(window != this.desktop_helper.get_active_window());
                 window_item.always_show_image = true;
                 window_item.set_image(get_icon());
                 menu.append(window_item);

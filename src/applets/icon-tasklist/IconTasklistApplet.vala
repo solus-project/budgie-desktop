@@ -44,74 +44,9 @@ public class IconTasklistSettings : Gtk.Grid
 
 }
 
-/**
- * Trivial helper for IconTasklist - i.e. desktop lookups
- */
-public class DesktopHelper : GLib.Object
-{
-    public static GLib.Settings settings;
-    public static Wnck.Screen screen;
-    public static Gtk.Box icon_layout;
-    public static bool lock_icons = false;
-    public static Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
-    public static int panel_size = 40;
-    public static int icon_size = 32;
-    public static Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
-
-    public const Gtk.TargetEntry[] targets = {
-        { "application/x-icon-tasklist-launcher-id", 0, 0 },
-        { "text/uri-list", 0, 0 },
-        { "application/x-desktop", 0, 0 }
-    };
-
-    public static void update_pinned()
-    {
-        string[] buttons = {};
-        foreach (Gtk.Widget widget in icon_layout.get_children()) {
-            IconButton button = (widget as ButtonWrapper).button;
-            if (!button.is_pinned()) {
-                continue;
-            }
-            if (button.get_appinfo() == null) {
-                continue;
-            }
-            string id = button.get_appinfo().get_id();
-            if (id in buttons) {
-                continue;
-            }
-            buttons += id;
-        }
-
-        settings.set_strv("pinned-launchers", buttons);
-    }
-
-    public static GLib.List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group)
-    {
-        GLib.List<unowned Wnck.Window> list = new GLib.List<unowned Wnck.Window>();
-        screen.get_windows_stacked().foreach((window) => {
-            if (window.get_class_group() == class_group && !window.is_skip_tasklist()) {
-                if (window.get_workspace() == get_active_workspace()) {
-                    list.append(window);
-                }
-            }
-        });
-
-        return list.copy();
-    }
-
-    public static Wnck.Window get_active_window() {
-        return screen.get_active_window();
-    }
-
-    public static Wnck.Workspace get_active_workspace() {
-        return screen.get_active_workspace();
-    }
-}
-
 public class IconTasklistApplet : Budgie.Applet
 {
     private Wnck.Screen? wnck_screen = null;
-    private Budgie.AppSystem? app_system = null;
     private GLib.Settings? settings = null;
     private GLib.HashTable<string, IconButton> buttons;
     private GLib.HashTable<string, string> id_map;
@@ -119,6 +54,10 @@ public class IconTasklistApplet : Budgie.Applet
     private bool grouping = true;
     private bool restrict_to_workspace = false;
     private bool only_show_pinned = false;
+
+    /* Applet support */
+    private DesktopHelper? desktop_helper = null;
+    private Budgie.AppSystem? app_system = null;
 
     public string uuid { public set; public get; }
 
@@ -136,20 +75,23 @@ public class IconTasklistApplet : Budgie.Applet
 
         Wnck.set_client_type(Wnck.ClientType.PAGER);
 
-        wnck_screen = Wnck.Screen.get_default();
-        DesktopHelper.screen = wnck_screen;
-        app_system = new Budgie.AppSystem();
+        /* Get our settings working first */
+        settings_schema = "com.solus-project.icon-tasklist";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
+        settings = this.get_applet_settings(uuid);
+
+        /* Somewhere to store the window mappings */
         buttons = new GLib.HashTable<string, IconButton>(str_hash, str_equal);
         id_map = new GLib.HashTable<string, string>(str_hash, str_equal);
         main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        DesktopHelper.icon_layout = main_layout;
 
-        settings_schema = "com.solus-project.icon-tasklist";
-        settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
+        /* Initial bootstrap of helpers */
+        this.desktop_helper = new DesktopHelper(this.settings, this.main_layout);
+        wnck_screen = Wnck.Screen.get_default();
+        app_system = new Budgie.AppSystem();
 
-        settings = this.get_applet_settings(uuid);
+        /* Now hook up settings */
         settings.changed.connect(on_settings_changed);
-        DesktopHelper.settings = settings;
 
         this.add(main_layout);
 
@@ -194,7 +136,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (info == null) {
                 continue;
             }
-            IconButton button = new IconButton(info, true);
+            IconButton button = new IconButton(this.desktop_helper, info, true);
             button.update();
             ButtonWrapper wrapper = new ButtonWrapper(button);
             wrapper.orient = this.get_orientation();
@@ -252,7 +194,7 @@ public class IconTasklistApplet : Budgie.Applet
                 });
                 break;
             case "lock-icons":
-                DesktopHelper.lock_icons = settings.get_boolean(key);
+                this.desktop_helper.lock_icons = settings.get_boolean(key);
                 break;
             case "restrict-to-workspace":
                 this.restrict_to_workspace = settings.get_boolean(key);
@@ -308,7 +250,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (buttons.contains(app_id)) {
                 original_button = (buttons[app_id].get_parent() as ButtonWrapper);
             } else {
-                IconButton button = new IconButton(info, true);
+                IconButton button = new IconButton(this.desktop_helper, info, true);
                 button.update();
 
                 buttons.set(app_id, button);
@@ -386,7 +328,7 @@ public class IconTasklistApplet : Budgie.Applet
         original_button.set_transition_type(Gtk.RevealerTransitionType.NONE);
         original_button.set_reveal_child(true);
 
-        DesktopHelper.update_pinned();
+        this.desktop_helper.update_pinned();
 
         Gtk.drag_finish(context, true, true, time);
     }
@@ -426,7 +368,7 @@ public class IconTasklistApplet : Budgie.Applet
             return;
         }
 
-        IconButton button = new IconButton.from_group(class_group, app_info);
+        IconButton button = new IconButton.from_group(this.desktop_helper, class_group, app_info);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
@@ -500,7 +442,7 @@ public class IconTasklistApplet : Budgie.Applet
 
         bool pinned = (app_id in settings.get_strv("pinned-launchers"));
 
-        button = new IconButton.from_window(window, app_info, pinned);
+        button = new IconButton.from_window(this.desktop_helper, window, app_info, pinned);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
@@ -552,8 +494,8 @@ public class IconTasklistApplet : Budgie.Applet
     private void on_active_window_changed(Wnck.Window? previous_window)
     {
         foreach (IconButton button in buttons.get_values()) {
-            if (button.has_window(DesktopHelper.get_active_window())) {
-                button.last_active_window = DesktopHelper.get_active_window();
+            if (button.has_window(this.desktop_helper.get_active_window())) {
+                button.last_active_window = this.desktop_helper.get_active_window();
                 button.attention(false);
             }
             button.update();
@@ -563,7 +505,7 @@ public class IconTasklistApplet : Budgie.Applet
 
     void set_icons_size()
     {
-        Wnck.set_default_icon_size(DesktopHelper.icon_size);
+        Wnck.set_default_icon_size(this.desktop_helper.icon_size);
 
         Idle.add(()=> {
             buttons.foreach((id, button) => {
@@ -576,28 +518,37 @@ public class IconTasklistApplet : Budgie.Applet
         queue_draw();
     }
 
+    /**
+     * Our panel has moved somewhere, stash the positions
+     */
     public override void panel_position_changed(Budgie.PanelPosition position) {
-        DesktopHelper.panel_position = position;
-        DesktopHelper.orientation = this.get_orientation();
-        main_layout.set_orientation(DesktopHelper.orientation);
+        this.desktop_helper.panel_position = position;
+        this.desktop_helper.orientation = this.get_orientation();
+        main_layout.set_orientation(this.desktop_helper.orientation);
 
         set_icons_size();
     }
 
+    /**
+     * Our panel has changed size, record the new icon sizes
+     */
     public override void panel_size_changed(int panel, int icon, int small_icon)
     {
-        DesktopHelper.icon_size = small_icon;
+        this.desktop_helper.icon_size = small_icon;
 
-        DesktopHelper.panel_size = panel - 1;
+        this.desktop_helper.panel_size = panel - 1;
         if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-            DesktopHelper.panel_size = panel - 6;
+            this.desktop_helper.panel_size = panel - 6;
         }
 
         set_icons_size();
     }
 
+    /**
+     * Return our orientation in relation to the panel position
+     */
     private Gtk.Orientation get_orientation() {
-        switch (DesktopHelper.panel_position) {
+        switch (this.desktop_helper.panel_position) {
             case Budgie.PanelPosition.TOP:
             case Budgie.PanelPosition.BOTTOM:
                 return Gtk.Orientation.HORIZONTAL;
