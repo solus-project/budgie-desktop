@@ -149,9 +149,14 @@ public class MenuButton : Gtk.Button
 
     private int get_category_score(string term)
     {
-       term = term.down()
+       string newterm = term.down();
        string raw_cats = info.get_categories();
-       
+
+       if (raw_cats == null) {
+           return 0;
+       }
+
+
        if (raw_cats.strip().length == 0) {
            return 0;
        }
@@ -163,14 +168,14 @@ public class MenuButton : Gtk.Button
            string cat = each_cat.down().strip();
            string search = searchable_string(cat);
            
-           if (substring(search, term)) {
+           if (substring(search, newterm)) {
                sum_score += 50 - (cat.length - term.length);
            }
 
            if (cat.has_prefix("#categorysticky")) {
                string[] parts = cat.split(":");
                if (parts.length > 1){
-                   if (substring(parts[1], term)) {
+                   if (substring(parts[1], newterm)) {
                        sum_score  += 1000;
                        this.sticky = true;
                    }
