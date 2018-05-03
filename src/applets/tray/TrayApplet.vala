@@ -39,25 +39,18 @@ public class TrayApplet : Budgie.Applet
         box.vexpand = false;
         vexpand = false;
 
-        Idle.add(()=> {
-            map.connect_after(()=> {
-                maybe_integrate_tray();
-            });
-
-
-            show_all();
-            panel_size_changed.connect((p,i,s)=> {
-                this.icon_size = s;
-                if (tray != null) {
-                    tray.set_icon_size(icon_size);
-                    queue_resize();
-                    tray.queue_resize();
-                }
-            });
-
-            size_allocate.connect(on_size_allocate);
-            return false;
+        show_all();
+        maybe_integrate_tray();
+        panel_size_changed.connect((p,i,s)=> {
+            this.icon_size = s;
+            if (tray != null) {
+                tray.set_icon_size(icon_size);
+                queue_resize();
+                tray.queue_resize();
+            }
         });
+
+        size_allocate.connect(on_size_allocate);
     }
 
     public override void panel_position_changed(Budgie.PanelPosition position)
