@@ -711,6 +711,7 @@ public class BudgieWM : Meta.Plugin
         actor.restore_easing_state();
     }
 
+    /*
     public override void size_change(Meta.WindowActor actor, Meta.SizeChange which_change, Meta.Rectangle old_frame_rect, Meta.Rectangle old_buffer_rect)
     {
         if (!this.use_animations) {
@@ -863,7 +864,7 @@ public class BudgieWM : Meta.Plugin
         snapshot.content = canvas;
 
         return snapshot;
-    }
+    }*/
 
     void minimize_done(Clutter.Actor? actor)
     {
