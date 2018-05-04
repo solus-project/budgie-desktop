@@ -430,13 +430,17 @@ public class IconTasklistApplet : Budgie.Applet
         if (button != null && button.is_empty()) {
             if (!grouping) {
                 button.set_wnck_window(window);
+            } else {
+                button.set_class_group(window.get_class_group());
             }
             button.update();
             return;
         }
 
-
         if (grouping) {
+            if (button == null) {
+                on_class_group_opened(window.get_class_group());
+            }
             return;
         }
 

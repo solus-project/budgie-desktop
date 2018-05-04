@@ -890,7 +890,6 @@ public class IconButton : Gtk.ToggleButton
                 pinned_item.toggled.connect(() => {
                     this.pinned = pinned_item.get_active();
                     this.is_from_window = !this.pinned;
-                    stdout.printf("pinned: %s\n", this.app_info.get_id());
                     this.desktop_helper.update_pinned();
                     if (!has_valid_windows(null) && !this.pinned) {
                         became_empty();
