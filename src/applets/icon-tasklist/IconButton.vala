@@ -867,8 +867,29 @@ public class IconButton : Gtk.ToggleButton
     }
 
     public override bool button_press_event(Gdk.EventButton event) {
-        if (event.button == 3 && context_menu_has_items) {
-            this.menu.popup(null, null, null, event.button, event.time);
+
+        if (event.button == 3) {
+            if ((event.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK) {
+                Wnck.ActionMenu? action_menu = null;
+                if (this.window != null) {
+                    action_menu = new Wnck.ActionMenu(this.window);
+                } else if (this.class_group != null) {
+                    int count;
+                    this.has_valid_windows(out count);
+                    Wnck.Window active_window = this.desktop_helper.get_active_window();
+                    if (this.has_window(active_window)) {
+                        action_menu = new Wnck.ActionMenu(active_window);
+                    } else if (count == 1) {
+                        Wnck.Window window = this.class_group.get_windows().nth_data(0); 
+                        action_menu = new Wnck.ActionMenu(window);
+                    }
+                }
+                if (action_menu != null) {
+                    action_menu.popup(null, null, null, event.button, event.time);
+                }
+            } else if (context_menu_has_items) {
+                this.menu.popup(null, null, null, event.button, event.time);
+            }
         }
         return base.button_press_event(event);
     }
