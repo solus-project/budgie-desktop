@@ -610,6 +610,9 @@ public class PanelManager : DesktopManager
         raven = new Budgie.Raven(this);
         raven.request_settings_ui.connect(this.on_settings_requested);
 
+        /* Ensure we only have wnck initialised once otherwise everything goes cranky */
+        Wnck.set_client_type(Wnck.ClientType.PAGER);
+
         this.on_monitors_changed();
 
         /* Some applets might want raven */
