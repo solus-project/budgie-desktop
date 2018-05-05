@@ -394,9 +394,18 @@ public class Raven : Gtk.Window
         cr.paint();
         cr.restore();
 
+        var window = this.get_window();
+        if (window == null) {
+            return Gdk.EVENT_STOP;
+        }
+
         Gtk.Allocation alloc;
         get_allocation(out alloc);
-        var buffer = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
+        /* Create a compatible buffer for the current scaling factor */
+        var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
+                                                         alloc.width * this.scale_factor,
+                                                         alloc.height * this.scale_factor,
+                                                         this.scale_factor);
         var cr2 = new Cairo.Context(buffer);
 
         propagate_draw(get_child(), cr2);
