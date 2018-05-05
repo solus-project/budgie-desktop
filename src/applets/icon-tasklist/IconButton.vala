@@ -108,6 +108,7 @@ public class IconButton : Gtk.ToggleButton
         this.add_events(Gdk.EventMask.SCROLL_MASK);
         this.set_draggable(!this.desktop_helper.lock_icons);
 
+        /*
         drag_begin.connect((context) => {
             unowned Gdk.Pixbuf? pixbuf_icon = this.icon.pixbuf;
 
@@ -126,7 +127,7 @@ public class IconButton : Gtk.ToggleButton
                 id = this.window.get_name();
             }
             selection_data.set(selection_data.get_target(), 8, (uchar[])id.to_utf8());
-        });
+        });*/
 
         var st = get_style_context();
         st.remove_class(Gtk.STYLE_CLASS_BUTTON);
@@ -281,12 +282,13 @@ public class IconButton : Gtk.ToggleButton
         }
 
         if (app_icon != null) {
-            icon.set_from_gicon(app_icon, this.desktop_helper.icon_size);
+            icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
         } else if (pixbuf_icon != null) {
-            icon.set_from_pixbuf(pixbuf_icon, this.desktop_helper.icon_size);
+            icon.set_from_pixbuf(pixbuf_icon);
         } else {
-            icon.set_from_icon_name("image-missing", this.desktop_helper.icon_size);
+            icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
         }
+        icon.pixel_size = this.desktop_helper.icon_size;
     }
 
     public void update()
