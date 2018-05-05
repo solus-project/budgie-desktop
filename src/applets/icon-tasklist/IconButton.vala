@@ -109,12 +109,24 @@ public class IconButton : Gtk.ToggleButton
         this.set_draggable(!this.desktop_helper.lock_icons);
 
         drag_begin.connect((context) => {
-            unowned Gdk.Pixbuf? pixbuf_icon = this.icon.pixbuf;
-
-            if (pixbuf_icon != null) {
-                Gtk.drag_set_icon_pixbuf(context, pixbuf_icon, (pixbuf_icon.width / 2), (pixbuf_icon.height / 2));
-            } else {
-                Gtk.drag_set_icon_default(context);
+            switch (this.icon.get_storage_type()) {
+                case Gtk.ImageType.PIXBUF:
+                    Gtk.drag_set_icon_pixbuf(context, icon.get_pixbuf(), icon.pixel_size / 2, icon.pixel_size / 2);
+                    break;
+                case Gtk.ImageType.ICON_NAME:
+                    unowned string? icon_name = null;
+                    icon.get_icon_name(out icon_name, null);
+                    Gtk.drag_set_icon_name(context, icon_name, icon.pixel_size / 2, icon.pixel_size / 2);
+                    break;
+                case Gtk.ImageType.GICON:
+                    unowned GLib.Icon? gicon = null;
+                    icon.get_gicon(out gicon, null);
+                    Gtk.drag_set_icon_gicon(context, gicon, icon.pixel_size / 2, icon.pixel_size / 2);
+                    break;
+                default:
+                    /* No icon */
+                    Gtk.drag_set_icon_default(context);
+                    break;
             }
         });
 
@@ -281,12 +293,13 @@ public class IconButton : Gtk.ToggleButton
         }
 
         if (app_icon != null) {
-            icon.set_from_gicon(app_icon, this.desktop_helper.icon_size);
+            icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
         } else if (pixbuf_icon != null) {
-            icon.set_from_pixbuf(pixbuf_icon, this.desktop_helper.icon_size);
+            icon.set_from_pixbuf(pixbuf_icon);
         } else {
-            icon.set_from_icon_name("image-missing", this.desktop_helper.icon_size);
+            icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
         }
+        icon.pixel_size = this.desktop_helper.icon_size;
     }
 
     public void update()

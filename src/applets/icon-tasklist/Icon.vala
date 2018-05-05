@@ -11,10 +11,8 @@
 
 const int MAX_CYCLES = 12;
 
-public class Icon : Gtk.DrawingArea
+public class Icon : Gtk.Image
 {
-    public Gdk.Pixbuf? pixbuf = null;
-    private int size = 24;
     private int widget_width = 36;
     private int widget_height = 30;
     private Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
@@ -63,26 +61,6 @@ public class Icon : Gtk.DrawingArea
 
     public Icon() {}
 
-    public Icon.from_gicon(GLib.Icon icon, int pixel_size) {
-        set_from_gicon(icon, pixel_size);
-    }
-
-    public Icon.from_pixbuf(Gdk.Pixbuf pb, int pixel_size) {
-        set_from_pixbuf(pb, pixel_size);
-    }
-
-    public Icon.from_icon_name(string icon_name, int pixel_size) {
-        set_from_icon_name(icon_name, pixel_size);
-    }
-
-    public void set_widget_width(int width) {
-        this.widget_width = width;
-    }
-
-    public void set_widget_height(int height) {
-        this.widget_height = height;
-    }
-
     public override void size_allocate(Gtk.Allocation allocation) {
         this.queue_resize();
         Gtk.Allocation alloc;
@@ -102,58 +80,6 @@ public class Icon : Gtk.DrawingArea
         Gtk.Allocation alloc;
         this.get_parent().get_allocation(out alloc);
         min = nat = this.widget_height = alloc.height;
-    }
-
-    public void set_from_gicon(GLib.Icon icon, int pixel_size)
-    {
-        this.size = pixel_size;
-        Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
-        Gtk.IconInfo info = icon_theme.lookup_by_gicon(icon, this.size, Gtk.IconLookupFlags.FORCE_REGULAR);
-        try {
-            this.pixbuf = info.load_icon();
-        } catch (GLib.Error e) {
-            warning(e.message);
-        }
-        GLib.Idle.add(() => {
-            this.queue_resize();
-            this.queue_draw();
-            return false;
-        });
-    }
-
-    public void set_from_pixbuf(Gdk.Pixbuf pb, int pixel_size) {
-        this.size = pixel_size;
-        this.pixbuf = pb;
-        GLib.Idle.add(() => {
-            this.queue_resize();
-            this.queue_draw();
-            return false;
-        });
-    }
-
-    public void set_from_icon_name(string icon_name, int pixel_size)
-    {
-        this.size = pixel_size;
-        Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
-        try {
-            this.pixbuf = icon_theme.load_icon(icon_name, this.size, Gtk.IconLookupFlags.FORCE_REGULAR);
-        } catch (GLib.Error e) {
-            warning(e.message);
-        }
-        GLib.Idle.add(() => {
-            this.queue_resize();
-            this.queue_draw();
-            return false;
-        });
-    }
-
-    public void set_size(int pixel_size) {
-        this.size = pixel_size;
-        GLib.Idle.add(() => {
-            this.queue_resize();
-            this.queue_draw();
-            return false;
-        });
     }
 
     public void animate_attention(Budgie.PanelPosition? position)
@@ -270,9 +196,9 @@ public class Icon : Gtk.DrawingArea
         double old_value;
 
         if (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM) {
-            old_value = (double)((this.widget_height-this.size)/2);
+            old_value = (double)((this.widget_height-this.pixel_size)/2);
         } else {
-            old_value = (double)((this.widget_width-this.size)/2);
+            old_value = (double)((this.widget_width-this.pixel_size)/2);
         }
 
         BudgieTaskList.Animation launch_animation = new BudgieTaskList.Animation();
@@ -294,14 +220,27 @@ public class Icon : Gtk.DrawingArea
 
     public override bool draw(Cairo.Context cr)
     {
-        if (pixbuf == null) {
-            return false;
+        Gtk.Allocation alloc;
+        get_allocation(out alloc);
+
+        /* Have base implementation render first */
+        var window = this.get_window();
+        if (window == null) {
+            return Gdk.EVENT_STOP;
         }
+        /* Create a compatible buffer for the current scaling factor */
+        var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
+                                                         alloc.width * this.scale_factor,
+                                                         alloc.height * this.scale_factor,
+                                                         this.scale_factor);
+        var cr2 = new Cairo.Context(buffer);
+        base.draw(cr2);
 
-        int x = (this.widget_width / 2) - (this.size / 2);
-        int y = (this.widget_height / 2) - (this.size / 2);
+        /* Always start from 0 because the surface is correctly aligned */
+        int x = 0;
+        int y = 0;
 
-
+        /* Offset the drawing */
         if (this.panel_position == Budgie.PanelPosition.LEFT) {
             x += (int)bounce_amount;
             y += (int)attention_amount;
@@ -316,7 +255,8 @@ public class Icon : Gtk.DrawingArea
             x += (int)attention_amount;
         }
 
-        Gdk.cairo_set_source_pixbuf(cr, pixbuf, x, y);
+        /* Render with our own offsets now */
+        cr.set_source_surface(buffer, x, y);
         cr.paint();
 
         return true;
