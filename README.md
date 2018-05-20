@@ -7,7 +7,28 @@ The Budgie Desktop a modern desktop designed to keep out the way of the user. It
 
 ![logo](https://solus-project.com/imgs/budgie-small.png)
 
-IRC: #budgie-desktop-dev on irc.freenode.net
+IRC: `#budgie-desktop-dev` / `#Solus-Dev` on irc.freenode.net
+
+`budgie-desktop` is a [Solus project](https://solus-project.com/)
+
+![logo](https://build.solus-project.com/logo.png)
+
+Re-merge into the Solus Project
+===============================
+
+As of May 20th, 2018, the Budgie Desktop project has been merged back into the Solus Project umbrella, making it a distinct Solus project once more.
+Contributions from all distributions, projects and individuals are welcome provided they add value and are of sufficient quality. We're happy to discuss
+test pull requests, which should be appropriately labeled as being `Request For Comment` `[RFC]`.
+
+Please note that we will NOT accept pull requests to add Pythonic applets. Any applets should be written in either C or Vala.
+Pull requests modifying any C source code should ensure to stick with code compliance. Run `./update_format.sh` to ensure coding
+standards are respected. (Requires `clang-format` and `misspell`)
+
+This decision has been made after a long time having Budgie Desktop being a separate project, which to this date has only repeatedly harmed the Budgie Desktop
+project due to other projects specifically looking to add **vendor specific value-add** and ensuring it is never upstream within this project. As such the
+project is now officially back under the stewardship of Solus (original authors) and will be developed with our goals in mind, as it once was. It should also
+be observed that Budgie has been an incredibly quiet project for almost the entire duration of the project being split out from Solus. This will now be remedied
+as we merge back into Solus, and all previous decisions will now be re-evaluated (Qt? Wayland? gtk4? etc).
 
 Components
 ==========
@@ -97,10 +118,6 @@ of each source file.
 Authors
 =======
 
-Copyright © 2014-2017 Budgie Desktop Developers
-
-Budgie Desktop is primarily authored by the [Solus](https://solus-project.com) project which oversees
-the development and leadership of the Budgie Desktop to ensure the delivery of a distribution agnostic
-and open source Desktop Environment for everyone to enjoy and contribute to.
+Copyright © 2014-2018 Budgie Desktop Developers
 
 See our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!
