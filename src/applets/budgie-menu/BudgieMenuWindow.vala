@@ -69,6 +69,8 @@ public class MenuButton : Gtk.Button
     public DesktopAppInfo info { public get ; protected set ; }
     public GMenu.TreeDirectory parent_menu { public get ; protected set ; }
 
+    public bool sticky;
+
     public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory, int icon_size)
     {
         var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
@@ -98,6 +100,8 @@ public class MenuButton : Gtk.Button
         set_tooltip_text(parent.get_description());
 
         get_style_context().add_class("flat");
+
+        this.sticky = false;
     }
 
     private bool hide_toplevel()
@@ -138,8 +142,55 @@ public class MenuButton : Gtk.Button
     /* Determine our score in relation to a given search term
      * Totally stole this from Brisk (Which I wrote anyway so woo.)
      */
+
+    private bool substring(string super, string sub){
+        return (vala_has_no_strstr(super, sub) != null);
+    }
+
+    private int get_category_score(string term)
+    {
+       string newterm = term.down();
+       string raw_cats = info.get_categories();
+
+       if (raw_cats == null) {
+           return 0;
+       }
+
+
+       if (raw_cats.strip().length == 0) {
+           return 0;
+       }
+
+       string[] categories = raw_cats.split(";");
+
+       int sum_score = 0;
+       foreach (unowned string each_cat in categories) {
+           string cat = each_cat.down().strip();
+           string search = searchable_string(cat);
+           
+           if (substring(search, newterm)) {
+               sum_score += 50 - (cat.length - term.length);
+           }
+
+           if (cat.has_prefix("#categorysticky")) {
+               string[] parts = cat.split(":");
+               if (parts.length > 1){
+                   if (substring(parts[1], newterm)) {
+                       sum_score  += 1000;
+                       this.sticky = true;
+                   }
+               }
+           }
+
+       }
+
+       return sum_score;
+    }
+
     public int get_score(string term)
     {
+        this.sticky = false;
+
         int score = 0;
         string name = searchable_string(info.get_name());
         if (name == term) {
@@ -152,8 +203,15 @@ public class MenuButton : Gtk.Button
         if (found != null) {
             score += 20 + found.length;
         }
+
+        score += get_category_score(term);
         score += GLib.strcmp(name, term);
         return score;
+    }
+
+    public bool get_sticky()
+    {
+        return this.sticky;
     }
 }
 
@@ -544,7 +602,8 @@ public class BudgieMenuWindow : Budgie.Popover
             info.get_display_name(),
             info.get_description(),
             info.get_name(),
-            info.get_executable()
+            info.get_executable(),
+            (info as DesktopAppInfo).get_categories(),
         };
 
         if (array_contains(fields, term)) {
@@ -618,6 +677,7 @@ public class BudgieMenuWindow : Budgie.Popover
         if (term.length > 0) {
             int sc1 = child1.get_score(term);
             int sc2 = child2.get_score(term);
+
             /* Vala can't do this: return (sc1 > sc2) - (sc1 - sc2); */
             if (sc1 < sc2) {
                 return 1;
