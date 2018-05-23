@@ -200,8 +200,13 @@ public class BudgieMenuApplet : Budgie.Applet
             case "menu-icon":
                 string? icon = settings.get_string(key);
                 if ("/" in icon) {
-                    Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(icon);
-                    img.set_from_pixbuf(pixbuf.scale_simple(this.pixel_size, this.pixel_size, Gdk.InterpType.BILINEAR));
+                    try {
+                        Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(icon);
+                        img.set_from_pixbuf(pixbuf.scale_simple(this.pixel_size, this.pixel_size, Gdk.InterpType.BILINEAR));
+                    } catch (Error e) {
+                        warning("Failed to update Budgie Menu applet icon: %s", e.message);
+                        img.set_from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID); // Revert to view-grid-symbolic
+                    }
                 } else if (icon == "") {
                     should_show = false;
                 } else {
