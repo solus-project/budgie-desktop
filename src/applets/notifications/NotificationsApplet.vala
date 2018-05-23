@@ -23,6 +23,8 @@ public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 [DBus (name="org.budgie_desktop.Raven")]
 public interface RavenRemote : Object
 {
+    public signal void DoNotDisturbChanged(bool active);
+    public abstract async bool GetDoNotDisturbState() throws Error;
     public abstract async void ToggleNotificationsView() throws Error;
     public signal void NotificationsChanged();
     public abstract async uint GetNotificationCount() throws Error;
@@ -41,13 +43,20 @@ public class NotificationsApplet : Budgie.Applet
     {
         try {
             raven_proxy = Bus.get_proxy.end(res);
+            raven_proxy.DoNotDisturbChanged.connect(on_dnd_changed);
             raven_proxy.NotificationsChanged.connect(on_notifications_changed);
             raven_proxy.UnreadNotifications.connect(on_notifications_unread);
             raven_proxy.ReadNotifications.connect(on_notifications_read);
             raven_proxy.GetNotificationCount.begin(on_get_count);
+            raven_proxy.GetDoNotDisturbState.begin(on_get_dnd_state);
         } catch (Error e) {
             warning("Failed to gain Raven proxy: %s", e.message);
         }
+    }
+
+    void on_dnd_changed(bool active)
+    {
+        set_dnd_state(active);
     }
 
     void on_notifications_read()
@@ -80,6 +89,25 @@ public class NotificationsApplet : Budgie.Applet
         }
     }
 
+    void on_get_dnd_state(GLib.Object? o, AsyncResult? res)
+    {
+        bool active = true; // Default to true
+
+        try {
+            active = raven_proxy.GetDoNotDisturbState.end(res);
+        } catch (Error e) {
+            warning("Failed to get Do Not Disturb state: %s", e.message);
+            return;
+        }
+
+        set_dnd_state(active); // Set the DND state
+    }
+
+    void set_dnd_state(bool enabled)
+    {
+        this.icon.set_from_icon_name(((!enabled) ? "notification-alert-symbolic" : "notification-disabled-symbolic"), Gtk.IconSize.MENU); // Set applet icon based on the DND state
+    }
+
     void on_notifications_changed()
     {
         raven_proxy.GetNotificationCount.begin(on_get_count);
@@ -94,11 +122,13 @@ public class NotificationsApplet : Budgie.Applet
         if (button.button != 1) {
             return Gdk.EVENT_PROPAGATE;
         }
+
         try {
             raven_proxy.ToggleNotificationsView();
         } catch (Error e) {
             message("Failed to toggle Raven: %s", e.message);
         }
+
         return Gdk.EVENT_STOP;
     }
 

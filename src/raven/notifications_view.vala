@@ -513,11 +513,12 @@ public class NotificationsView : Gtk.Box
     private Settings settings = new GLib.Settings("com.solus-project.budgie-panel");
 
     private HeaderWidget? header = null;
-    private Gtk.ListBox? listbox;
+	private Gtk.ListBox? listbox;
+	private Gtk.Button clear_notifications_button;
     private Gtk.Button button_mute;
-    private bool mute_control = false;
-    private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("mail-send-receive-symbolic", Gtk.IconSize.MENU);
-    private Gtk.Image image_notifications_disabled = new Gtk.Image.from_icon_name("image-red-eye-symbolic", Gtk.IconSize.MENU);
+    private bool dnd_enabled = false;
+    private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
+    private Gtk.Image image_notifications_disabled = new Gtk.Image.from_icon_name("notification-disabled-symbolic", Gtk.IconSize.MENU);
 
     private GLib.Queue<NotificationWindow?> stack = null;
 
@@ -588,10 +589,11 @@ public class NotificationsView : Gtk.Box
             text = _("1 unread notification");
         } else {
             text = _("No unread notifications");
-        }    
+        }
 
         Raven.get_instance().set_notification_count(len);
         header.text = text;
+        clear_notifications_button.set_visible((len >= 1)); // Only show clear notifications button if we actually have notifications
     }
 
     public uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
@@ -609,10 +611,10 @@ public class NotificationsView : Gtk.Box
 
         int32 expire = expire_timeout;
 
-        if (mute_control) {
+        if (dnd_enabled) {
             /* Don't show the notification */
             expire = 0;
-        /* Prevent pure derpery. */
+            /* Prevent pure derpery. */
         } else if (expire_timeout < 4000 || expire_timeout > 20000) {
             expire = 4000;
         }
@@ -706,13 +708,9 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void do_not_disturb_toggle()
     {
-        if (mute_control) {
-            button_mute.set_image(image_notifications_enabled);
-            mute_control = false;
-        } else {
-            button_mute.set_image(image_notifications_disabled);
-            mute_control = true;
-        }
+        dnd_enabled = !dnd_enabled; // Invert value, so if DND was enabled, set to disabled, otherwise set to enabled
+        button_mute.set_image(!dnd_enabled ? image_notifications_enabled : image_notifications_disabled);
+        Raven.get_instance().set_dnd_state(dnd_enabled);
     }
 
 
@@ -721,25 +719,23 @@ public class NotificationsView : Gtk.Box
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
-        var img = new Gtk.Image.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
-        img.margin_top = 4;
-
-        var btn = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
-        btn.relief = Gtk.ReliefStyle.NONE;
+        clear_notifications_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
+        clear_notifications_button.relief = Gtk.ReliefStyle.NONE;
+        clear_notifications_button.no_show_all = true;
         
         button_mute = new Gtk.Button();
         button_mute.set_image(image_notifications_enabled);
         button_mute.relief = Gtk.ReliefStyle.NONE;
         
-        var controlButtons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        controlButtons.pack_start(btn, false, false, 0);
-        controlButtons.pack_start(button_mute, false, false, 0);
+        var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        control_buttons.pack_start(clear_notifications_button, false, false, 0);
+        control_buttons.pack_start(button_mute, false, false, 0);
 
-        header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, controlButtons);
+        header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, control_buttons);
         header.margin_top = 6;
 
+        clear_notifications_button.clicked.connect(this.clear_all);
         button_mute.clicked.connect(this.do_not_disturb_toggle);
-        btn.clicked.connect(this.clear_all);
 
         pack_start(header, false, false, 0);
 
