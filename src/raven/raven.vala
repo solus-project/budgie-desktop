@@ -21,6 +21,9 @@ public class RavenIface
 
     private Raven? parent = null;
     [DBus (visible = false)]
+    private bool dnd_enabled = false;
+
+    [DBus (visible = false)]
     public uint notifications = 0;
 
     [DBus (visible = false)]
@@ -96,6 +99,7 @@ public class RavenIface
         }
     }
 
+    
     public signal void NotificationsChanged();
 
     public uint GetNotificationCount() {
@@ -108,6 +112,20 @@ public class RavenIface
     public string get_version()
     {
         return "1";
+    }
+
+    /**
+     * Do Not Disturb Functionality
+     */
+    public signal void DoNotDisturbChanged(bool active);
+
+    public bool GetDoNotDisturbState() {
+        return this.dnd_enabled;
+    }
+
+    public void SetDoNotDisturb(bool enable) {
+        this.dnd_enabled = enable;
+        this.DoNotDisturbChanged(this.dnd_enabled);
     }
 }
 
@@ -216,6 +234,11 @@ public class Raven : Gtk.Window
     public static unowned Raven? get_instance()
     {
         return Raven._instance;
+    }
+
+    public void set_dnd_state(bool active)
+    {
+        this.iface.SetDoNotDisturb(active); // Set the active state of our RavenIFace DND
     }
 
     public void set_notification_count(uint count)
