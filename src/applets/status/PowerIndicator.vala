@@ -17,7 +17,6 @@ public class BatteryIcon : Gtk.Box
 
     private Gtk.Image image;
 
-#if !HAVE_GTK_318
     private Gtk.Label percent_label;
 
     /**
@@ -34,14 +33,11 @@ public class BatteryIcon : Gtk.Box
         default = false;
     }
 
-#endif
-
     public BatteryIcon(Up.Device battery) {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
 
         this.get_style_context().add_class("battery-icon");
 
-#if !HAVE_GTK_318
         /* We'll optionally show percent labels */
         this.percent_label = new Gtk.Label("");
         this.percent_label.get_style_context().add_class("percent-label");
@@ -50,7 +46,6 @@ public class BatteryIcon : Gtk.Box
         this.percent_label.margin_end = 4;
         pack_start(this.percent_label, false, false, 0);
         this.percent_label.no_show_all = true;
-#endif
 
         this.image = new Gtk.Image();
         this.image.valign = Gtk.Align.CENTER;
@@ -114,14 +109,12 @@ public class BatteryIcon : Gtk.Box
                 tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
         }
 
-#if !HAVE_GTK_318
         // Set the percentage label text if it's changed
         string labe = "%d%%".printf((int)battery.percentage);
         string old = this.percent_label.get_label();
         if (old != labe) {
             this.percent_label.set_text(labe);
         }
-#endif
 
         // Set a handy tooltip until we gain a menu in StatusApplet
         set_tooltip_text(tip);
@@ -143,12 +136,9 @@ public class PowerIndicator : Gtk.Bin
 
     private HashTable<string,BatteryIcon?> devices;
 
-#if !HAVE_GTK_318
     public bool label_visible { set ; get ; default = false; }
     private Gtk.CheckButton check_percent;
     private Settings battery_settings;
-#endif
-
 
     public PowerIndicator()
     {
@@ -164,7 +154,6 @@ public class PowerIndicator : Gtk.Bin
         box.border_width = 6;
         popover.add(box);
 
-#if !HAVE_GTK_318
         /* Instaniate label_visible */
         battery_settings = new Settings("org.gnome.desktop.interface");
         battery_settings.bind("show-battery-percentage", this, "label-visible", SettingsBindFlags.GET);
@@ -178,7 +167,6 @@ public class PowerIndicator : Gtk.Bin
 
         var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         box.pack_start(sep, false, false, 1);
-#endif
 
         var button = new Gtk.Button.with_label(_("Power settings"));
         button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
@@ -209,7 +197,6 @@ public class PowerIndicator : Gtk.Bin
         }
     }
 
-#if !HAVE_GTK_318
     private void update_labels()
     {
         unowned BatteryIcon? icon = null;
@@ -220,7 +207,6 @@ public class PowerIndicator : Gtk.Bin
         /* Fix glitching with Arc theming + "theme-regions" */
         this.get_toplevel().queue_draw();
     }
-#endif
 
     private bool is_interesting(Up.Device device)
     {
@@ -262,9 +248,7 @@ public class PowerIndicator : Gtk.Bin
             return;
         }
         var icon = new BatteryIcon(device);
-#if !HAVE_GTK_318
         icon.label_visible = this.label_visible;
-#endif
         devices.insert(object_path, icon);
         widget.pack_start(icon);
         toggle_show();

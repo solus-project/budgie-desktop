@@ -79,11 +79,6 @@ if with_desktop_icons == 'nautilus'
     budgie_panel_vala_args += ['-D', 'HAVE_NAUTILUS']
 endif
 
-# For pointer methods
-if dep_gtk318.found()
-    budgie_panel_vala_args += ['-D', 'HAVE_GTK_318']
-endif
-
 budgie_panel_c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]

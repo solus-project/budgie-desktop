@@ -148,7 +148,7 @@ public class IBusManager : GLib.Object
         return this.engines.lookup(name);
     }
 
-    static const int ENGINE_SET_TIMEOUT = 4000;
+    const int ENGINE_SET_TIMEOUT = 4000;
 
     /**
      * Set the ibus engine to the specified engine name

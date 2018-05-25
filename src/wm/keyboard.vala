@@ -12,11 +12,11 @@
 
 namespace Budgie {
 
-public static const string DEFAULT_LOCALE = "en_US";
-public static const string DEFAULT_LAYOUT = "us";
-public static const string DEFAULT_VARIANT = "";
+public const string DEFAULT_LOCALE = "en_US";
+public const string DEFAULT_LAYOUT = "us";
+public const string DEFAULT_VARIANT = "";
 /* Default ibus engine to use */
-public static const string DEFAULT_ENGINE = "xkb:us::eng";
+public const string DEFAULT_ENGINE = "xkb:us::eng";
 
 errordomain InputMethodError {
     UNKNOWN_IME

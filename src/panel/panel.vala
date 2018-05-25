@@ -1375,14 +1375,8 @@ public class Panel : Budgie.Toplevel
         var display = this.get_display();
         unowned Gdk.Device? pointer = null;
 
-        /* 3.18 and older use old API*/
-#if HAVE_GTK_318
-        var man = this.get_display().get_device_manager();
-        pointer = man.get_client_pointer();
-#else
         var seat = display.get_default_seat();
         pointer = seat.get_pointer();
-#endif
         this.get_position(out x, out y);
         this.get_size(out w, out h);
         pointer.get_position(null, out cx, out cy);

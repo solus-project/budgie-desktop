@@ -95,7 +95,7 @@ public class TabSwitcherWindow : Gtk.Window
     /**
      * Track the primary monitor to show on
      */
-    private int primary_monitor;
+    private Gdk.Monitor primary_monitor;
 
     private HashTable<uint32, TabSwitcherWidget?> xids = null;
 
@@ -118,7 +118,7 @@ public class TabSwitcherWindow : Gtk.Window
 
         /* Get the window, which should be activated and activate that */
         TabSwitcherWidget? tab = current.get_child() as TabSwitcherWidget;
-        uint32 time = (uint32)Gdk.x11_get_server_time(Gdk.get_default_root_window());
+        uint32 time = (uint32)Gdk.X11.get_server_time(Gdk.get_default_root_window() as Gdk.X11.Window);
         tab.wnck_window.activate(time);
 
         /* Remove all items so if the widget gets shown again it starts from scratch */
@@ -179,7 +179,7 @@ public class TabSwitcherWindow : Gtk.Window
      */
     private void on_monitors_changed()
     {
-        primary_monitor = screen.get_primary_monitor();
+        primary_monitor = screen.get_display().get_primary_monitor();
         move_switcher();
     }
 
@@ -189,10 +189,7 @@ public class TabSwitcherWindow : Gtk.Window
     public void move_switcher()
     {
         /* Find the primary monitor bounds */
-        Gdk.Screen sc = get_screen();
-        Gdk.Rectangle bounds;
-
-        sc.get_monitor_geometry(primary_monitor, out bounds);
+        Gdk.Rectangle bounds = primary_monitor.get_geometry();
         Gtk.Allocation alloc;
 
         get_child().get_allocation(out alloc);
@@ -328,7 +325,7 @@ public class TabSwitcher : Object
     {
         mod_timeout = 0;
         Gdk.ModifierType modifier;
-        Gdk.Display.get_default().get_device_manager().get_client_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
+        Gdk.Display.get_default().get_default_seat().get_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
         if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0 && (modifier & Gdk.ModifierType.MOD4_MASK) == 0) {
             switcher_window.hide();
             return false;

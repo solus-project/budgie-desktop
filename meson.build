@@ -32,8 +32,8 @@ am_cflags = [
 add_global_arguments(am_cflags, language: 'c')
 meson.add_install_script('meson_post_install.sh')
 
-# Budgie needs a minimum 3.18 GNOME stack
-gnome_minimum_version = '>= 3.18.0'
+# Budgie needs a minimum 3.22 GNOME stack
+gnome_minimum_version = '>= 3.22.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: gnome_minimum_version)
 dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
@@ -41,9 +41,7 @@ dep_giounix = dependency('gio-unix-2.0', version: '>= 2.46.0')
 dep_peas = dependency('libpeas-1.0', version: '>= 1.8.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: gnome_minimum_version)
 dep_libuuid = dependency('uuid')
-
-# gtk 3.18 needed for old APIs
-dep_gtk318 = dependency('gtk+-3.0', version: '< 3.19', required: false)
+dep_vala = dependency('vapigen', version: '>= 0.40.0')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')

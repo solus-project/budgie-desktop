@@ -12,13 +12,13 @@
 namespace Budgie {
 
  
-public static const string BACKGROUND_SCHEMA      = "org.gnome.desktop.background";
-public static const string PICTURE_URI_KEY        = "picture-uri";
-public static const string PRIMARY_COLOR_KEY      = "primary-color";
-public static const string SECONDARY_COLOR_KEY    = "secondary-color";
-public static const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
-public static const string BACKGROUND_STYLE_KEY   = "picture-options";
-public static const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
+public const string BACKGROUND_SCHEMA      = "org.gnome.desktop.background";
+public const string PICTURE_URI_KEY        = "picture-uri";
+public const string PRIMARY_COLOR_KEY      = "primary-color";
+public const string SECONDARY_COLOR_KEY    = "secondary-color";
+public const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
+public const string BACKGROUND_STYLE_KEY   = "picture-options";
+public const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
 
 public class BudgieBackground : Meta.BackgroundGroup
 {
@@ -33,7 +33,7 @@ public class BudgieBackground : Meta.BackgroundGroup
     private Clutter.Actor? old_bg = null;
     Meta.BackgroundImageCache? cache = null;
 
-    static const int BACKGROUND_TIMEOUT = 850;
+    const int BACKGROUND_TIMEOUT = 850;
 
 
     /* Ensure we're efficient with changed queries and dont update the WP

@@ -157,7 +157,7 @@ public class BudgieWM : Meta.Plugin
     Clutter.Actor? screen_group;
     ulong current_window_resize;
 
-    static construct
+    construct
     {
         info = Meta.PluginInfo() {
             name = "Budgie WM",
@@ -394,7 +394,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     delegate unowned string GlQueryFunc(uint id);
-    static const uint GL_VENDOR = 0x1F00;
+    const uint GL_VENDOR = 0x1F00;
 
     private bool is_nvidia()
     {
@@ -568,14 +568,14 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    static const int MAP_TIMEOUT  = 100;
-    static const int MENU_MAP_TIMEOUT = 120;
-    static const float MAP_SCALE  = 0.94f;
-    static const float MENU_MAP_SCALE_X = 0.98f;
-    static const float MENU_MAP_SCALE_Y = 0.95f;
-    static const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
-    static const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
-    static const int FADE_TIMEOUT = 145;
+    const int MAP_TIMEOUT  = 100;
+    const int MENU_MAP_TIMEOUT = 120;
+    const float MAP_SCALE  = 0.94f;
+    const float MENU_MAP_SCALE_X = 0.98f;
+    const float MENU_MAP_SCALE_Y = 0.95f;
+    const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
+    const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
+    const int FADE_TIMEOUT = 145;
 
     void finalize_animations(Meta.WindowActor? actor)
     {
@@ -671,7 +671,6 @@ public class BudgieWM : Meta.Plugin
                 actor.set_easing_duration(MENU_MAP_TIMEOUT);
 
                 actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U);
-                break;
                 break;
             case Meta.WindowType.NOTIFICATION:
                 if (window.get_wm_class() == "raven") {
@@ -872,7 +871,7 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
-    static const int MINIMIZE_TIMEOUT = 195;
+    const int MINIMIZE_TIMEOUT = 195;
 
     public override void minimize(Meta.WindowActor actor)
     {
@@ -927,7 +926,7 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
-    static const int UNMINIMIZE_TIMEOUT = 170;
+    const int UNMINIMIZE_TIMEOUT = 170;
 
     /**
      * Handle unminimize animation
@@ -973,8 +972,8 @@ public class BudgieWM : Meta.Plugin
         finalize_animations(actor as Meta.WindowActor);
     }
 
-    static const int DESTROY_TIMEOUT  = 120;
-    static const double DESTROY_SCALE = 0.88;
+    const int DESTROY_TIMEOUT  = 120;
+    const double DESTROY_SCALE = 0.88;
 
     public override void destroy(Meta.WindowActor actor)
     {
@@ -1141,7 +1140,7 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    public static const uint32 MAX_TAB_ELAPSE = 2000;
+    public const uint32 MAX_TAB_ELAPSE = 2000;
 
     public void switch_windows_backward(Meta.Display display, Meta.Screen screen,
                      Meta.Window? window, Clutter.KeyEvent? event,
@@ -1286,7 +1285,7 @@ public class BudgieWM : Meta.Plugin
     }
 
 
-    public static const int SWITCH_TIMEOUT = 250;
+    public const int SWITCH_TIMEOUT = 250;
     public override void switch_workspace(int from, int to, Meta.MotionDirection direction)
     {
         // Stop the Switcher if it was showing
