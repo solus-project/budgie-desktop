@@ -506,11 +506,15 @@ public const int NOTIFICATION_SIZE = 400;
 public class NotificationsView : Gtk.Box
 {
 
+    private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
+    private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications.application";
+    private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications/application";
+
     string[] caps = {
         "body", "body-markup", "actions", "action-icons"
     };
 
-    private Settings settings = new GLib.Settings("com.solus-project.budgie-panel");
+    private Settings settings = new GLib.Settings(BUDGIE_PANEL_SCHEMA);
 
     private HeaderWidget? header = null;
 	private Gtk.ListBox? listbox;
@@ -602,6 +606,29 @@ public class NotificationsView : Gtk.Box
     {
         ++notif_id;
 
+        /**
+         * Do notification key checking
+         */
+        Settings app_notification_settings = null;
+        string settings_app_name = app_name;
+        bool should_show = true; // Default to showing notification
+
+        if ("desktop-entry" in hints) {
+            settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down();
+        }
+
+        if (settings_app_name != "") { // If there is a settings app name
+            try {
+                app_notification_settings = new Settings.with_path(NOTIFICATION_SCHEMA, "%s/%s/".printf(NOTIFICATION_PREFIX, settings_app_name));
+
+                if (app_notification_settings != null) { // If settings exist
+                    should_show = app_notification_settings.get_boolean("enable"); // Will only be false if set
+                }
+            } catch (Error e) {
+                warning("Failed to get application settings for this app. %s", e.message);
+            }
+        }
+
         unowned NotificationWindow? pack = null;
         bool configure = false;
 
@@ -611,8 +638,7 @@ public class NotificationsView : Gtk.Box
 
         int32 expire = expire_timeout;
 
-        if (dnd_enabled) {
-            /* Don't show the notification */
+        if (dnd_enabled || !should_show) { // If DND is enabled or we shouldn't show notification
             expire = 0;
             /* Prevent pure derpery. */
         } else if (expire_timeout < 4000 || expire_timeout > 20000) {
