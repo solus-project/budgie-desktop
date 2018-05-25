@@ -59,11 +59,10 @@ public abstract class Toplevel : Gtk.Window
 public static void set_struts(Gtk.Window? window, PanelPosition position, long panel_size)
 {
     Gdk.Atom atom;
-    Gdk.Rectangle primary_monitor_rect;
     long struts[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     var screen = window.screen;
-    var mon = screen.get_primary_monitor();
-    screen.get_monitor_geometry(mon, out primary_monitor_rect);
+    Gdk.Monitor mon = screen.get_display().get_primary_monitor();
+    Gdk.Rectangle primary_monitor_rect = mon.get_geometry();
     /*
     strut-left strut-right strut-top strut-bottom
     strut-left-start-y   strut-left-end-y
