@@ -75,7 +75,7 @@ public class OSD : Gtk.Window
     /**
      * Track the primary monitor to show on
      */
-    private int primary_monitor;
+    private Gdk.Monitor primary_monitor;
 
     /**
      * Current text to display. NULL hides the widget.
@@ -188,7 +188,7 @@ public class OSD : Gtk.Window
      */
     private void on_monitors_changed()
     {
-        primary_monitor = screen.get_primary_monitor();
+        primary_monitor = screen.get_display().get_primary_monitor();
         move_osd();
     }
 
@@ -198,10 +198,7 @@ public class OSD : Gtk.Window
     public void move_osd()
     {
         /* Find the primary monitor bounds */
-        Gdk.Screen sc = get_screen();
-        Gdk.Rectangle bounds;
-
-        sc.get_monitor_geometry(primary_monitor, out bounds);
+        Gdk.Rectangle bounds = primary_monitor.get_geometry();
         Gtk.Allocation alloc;
 
         get_child().get_allocation(out alloc);

@@ -267,8 +267,8 @@ public class Raven : Gtk.Window
         if (!has_toplevel_focus) {
             /* X11 specific. */
             Gdk.Display? display = screen.get_display();
-            if (display is Gdk.X11Display) {
-                window.focus(Gdk.X11Display.get_user_time(display));
+            if (display is Gdk.X11.Display) {
+                window.focus((display as Gdk.X11.Display).get_user_time());
             } else {
                 window.focus(Gtk.get_current_event_time());
             }

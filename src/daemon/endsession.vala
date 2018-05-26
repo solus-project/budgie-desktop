@@ -135,7 +135,6 @@ public class EndSessionDialog : Gtk.Window
         Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", flags,
             on_bus_acquired, ()=> {} , Budgie.DaemonNameLost);
         set_keep_above(true);
-        set_has_resize_grip(false);
         set_resizable(false);
 
         realize.connect(on_realized);
@@ -217,7 +216,12 @@ public class EndSessionDialog : Gtk.Window
         unowned Gdk.Window? win = get_window();
         if (win != null) {
             Gdk.Display? display = screen.get_display();
-            win.focus(Gdk.X11Display.get_user_time(display));
+
+            if (display is Gdk.X11.Display) {
+                win.focus((display as Gdk.X11.Display).get_user_time());
+            } else {
+                win.focus(Gtk.get_current_event_time());
+            }
         }
     }
 
