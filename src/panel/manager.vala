@@ -1,14 +1,14 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2017 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
- 
+
 using LibUUID;
 
 namespace Budgie
@@ -1304,6 +1304,10 @@ public class PanelManager : DesktopManager
         load_panel(uuid, false);
 
         set_panels();
+
+        string path = this.create_panel_path(uuid);
+        var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
+        transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
         show_panel(uuid, position, transparency);
 
         if (new_defaults == null || name == null) {
