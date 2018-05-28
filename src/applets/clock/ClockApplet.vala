@@ -117,7 +117,6 @@ public class ClockApplet : Budgie.Applet
         layout.border_width = 0;
 
         seconds_label = new Gtk.Label("");
-        seconds_label.get_style_context().add_class("dim-label");
         layout.pack_start(seconds_label, false, false, 0);
         seconds_label.no_show_all = true;
         seconds_label.hide();
@@ -330,7 +329,7 @@ public class ClockApplet : Budgie.Applet
         if (this.orient == Gtk.Orientation.HORIZONTAL) {
             ftime = "";
         } else {
-            ftime = "<big>%S</big>";
+            ftime = "<small>%S</small>";
         }
 
         // Prevent unnecessary redraws
