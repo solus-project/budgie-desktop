@@ -157,6 +157,19 @@ public class NotificationWindow : Gtk.Window
             owner.ActionInvoked(this.id, "default");
             return Gdk.EVENT_STOP;
         });
+
+        /**
+         * Handlers for mouse in / out
+         */
+        enter_notify_event.connect(() => {
+            stop_decay(); // Stop decay of notification
+            return Gdk.EVENT_STOP;
+        });
+
+        leave_notify_event.connect(() => {
+            begin_decay(); // Begin decay of notification
+            return Gdk.EVENT_STOP;
+        });
     }
 
     void action_handler(Gtk.Button? button)
