@@ -71,6 +71,7 @@ public interface RavenRemote : Object
     public abstract bool GetExpanded() throws Error;
     public abstract async void Toggle() throws Error;
     public abstract async void ToggleNotificationsView() throws Error;
+    public abstract async void ClearNotifications() throws Error;
     public abstract async void ToggleAppletView() throws Error;
     public abstract async void Dismiss() throws Error;
 }
@@ -286,6 +287,22 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
+    /* Binding for clear-notifications activated */
+    void on_raven_notification_clear(Meta.Display display, Meta.Screen screen,
+                                      Meta.Window? window, Clutter.KeyEvent? event,
+                                      Meta.KeyBinding binding)
+    {
+        if (raven_proxy == null) {
+            warning("Raven does not appear to be running!");
+            return;
+        }
+        try {
+            raven_proxy.ClearNotifications.begin();
+        } catch (Error e) {
+            warning("Unable to ClearNotifications() in Raven: %s", e.message);
+        }
+    }
+
     /* Binding for toggle-raven activated */
     void on_raven_main_toggle(Meta.Display display, Meta.Screen screen,
                               Meta.Window? window, Clutter.KeyEvent? event,
@@ -298,7 +315,7 @@ public class BudgieWM : Meta.Plugin
         try {
             raven_proxy.ToggleAppletView.begin();
         } catch (Error e) {
-            warning("Unable to ToggleAppletView() Raven: %s", e.message);
+            warning("Unable to ToggleAppletView() in Raven: %s", e.message);
         }
     }
 
@@ -314,7 +331,7 @@ public class BudgieWM : Meta.Plugin
         try {
             raven_proxy.ToggleNotificationsView.begin();
         } catch (Error e) {
-            warning("Unable to ToggleNotificationsView() Raven: %s", e.message);
+            warning("Unable to ToggleNotificationsView() in Raven: %s", e.message);
         }
     }
 
@@ -433,6 +450,7 @@ public class BudgieWM : Meta.Plugin
         this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
 
         /* Custom keybindings */
+        display.add_keybinding("clear-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_clear);
         display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
         display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
         display.overlay_key.connect(on_overlay_key);

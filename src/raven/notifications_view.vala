@@ -13,6 +13,11 @@
 namespace Budgie
 {
 
+[DBus (name="org.budgie_desktop.Raven")]
+public interface RavenRemote : Object
+{
+    public signal void ClearAllNotifications();
+}
 
 /** Spam apps */
 public const string ROOT_KEY_SPAM_APPS = "spam-apps";
@@ -505,7 +510,6 @@ public const int NOTIFICATION_SIZE = 400;
 [DBus (name = "org.freedesktop.Notifications")]
 public class NotificationsView : Gtk.Box
 {
-
     private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
     private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications.application";
     private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications/application";
@@ -513,6 +517,19 @@ public class NotificationsView : Gtk.Box
     string[] caps = {
         "body", "body-markup", "actions", "action-icons"
     };
+
+    RavenRemote? raven_proxy = null;
+
+    /* Hold onto our Raven proxy ref */
+    void on_raven_get(GLib.Object? o, GLib.AsyncResult? res)
+    {
+        try {
+            raven_proxy = Bus.get_proxy.end(res);
+            raven_proxy.ClearAllNotifications.connect(on_clear_all);
+        } catch (Error e) {
+            warning("Failed to gain Raven proxy: %s", e.message);
+        }
+    }
 
     private Settings settings = new GLib.Settings(BUDGIE_PANEL_SCHEMA);
 
@@ -724,9 +741,13 @@ public class NotificationsView : Gtk.Box
     void clear_all()
     {
         listbox.foreach((c)=> listbox.remove(c));
-
         update_child_count();
         Raven.get_instance().ReadNotifications();
+    }
+
+    void on_clear_all() {
+        listbox.foreach((c)=> listbox.remove(c));
+        update_child_count();
     }
 
     [DBus (visible = false)]
@@ -780,8 +801,10 @@ public class NotificationsView : Gtk.Box
         show_all();
         update_child_count();
 
+        Bus.get_proxy.begin<RavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
         serve_dbus();
     }
+
 
     [DBus (visible = false)]
     void on_bus_acquired(DBusConnection conn)
