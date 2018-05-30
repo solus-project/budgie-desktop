@@ -31,6 +31,12 @@
       <description>The binding to use to toggle Raven applets view</description>
     </key>
 
+    <key type="as" name="clear-notifications">
+      <default><![CDATA[['<Super>C']]]></default>
+      <summary>The binding to clear Raven notifications</summary>
+      <description>The binding to clear Raven notifications</description>
+    </key>
+
     <key type="as" name="toggle-notifications">
       <default><![CDATA[['<Super>N']]]></default>
       <summary>The binding to use to toggle Raven notifications</summary>

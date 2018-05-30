@@ -41,6 +41,12 @@ public class RavenIface
         }
     }
 
+    public void ClearNotifications() {
+        notifications = 0; // Set our notifications to zero
+        this.ReadNotifications(); // Call our ReadNotifications signal
+        this.ClearAllNotifications(); // Call our ClearAllNotifications signal
+    }
+
     public signal void ExpansionChanged(bool expanded);
     public signal void AnchorChanged(bool anchored);
 
@@ -106,6 +112,7 @@ public class RavenIface
         return this.notifications;
     }
 
+    public signal void ClearAllNotifications();
     public signal void UnreadNotifications();
     public signal void ReadNotifications();
 
