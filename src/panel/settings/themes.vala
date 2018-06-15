@@ -126,6 +126,7 @@ public class ThemeScanner : GLib.Object
         try {
             foreach (string suffix in suffixes) {
                 var full_path = "%s%s%s".printf(base_dir, Path.DIR_SEPARATOR_S, suffix);
+                
                 if (!FileUtils.test(full_path, FileTest.IS_DIR)) {
                     continue;
                 }
@@ -158,7 +159,8 @@ public class ThemeScanner : GLib.Object
     private async void scan_one(string path_type, string full_path, string display_name)
     {
         bool gtk_theme = false;
-        if (path_type == "themes") {
+        
+        if (path_type == "themes" || path_type == ".themes") {
             gtk_theme = true;
         }
 
