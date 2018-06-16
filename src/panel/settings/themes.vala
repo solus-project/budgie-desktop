@@ -158,7 +158,7 @@ public class ThemeScanner : GLib.Object
     private async void scan_one(string path_type, string full_path, string display_name)
     {
         bool gtk_theme = false;
-        if (path_type == "themes") {
+        if (path_type == "themes" || path_type == ".themes") {
             gtk_theme = true;
         }
 
