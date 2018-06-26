@@ -5,15 +5,15 @@
 # Translators:
 # dikel <dikelito@tutamail.com>, 2016
 # Hristo Hristov <hristov1990@gmail.com>, 2016
-# solusitor <toxicbrownies@gmail.com>, 2017
+# solusitor, 2017-2018
 # Иван Пенев (Адмирал АнимЕ), 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2017-10-19 17:16+0000\n"
-"Last-Translator: solusitor <toxicbrownies@gmail.com>\n"
+"PO-Revision-Date: 2018-04-25 20:28+0000\n"
+"Last-Translator: solusitor\n"
 "Language-Team: Bulgarian (Bulgaria) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/bg_BG/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -269,7 +269,7 @@ msgstr "Избор на икона от файл"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
-msgstr ""
+msgstr "Изображения"
 
 #: src/applets/budgie-menu/IconChooser.vala:43
 msgid "Any file"
@@ -285,7 +285,7 @@ msgstr "Отказ"
 
 #: src/applets/budgie-menu/IconChooser.vala:56
 msgid "Set icon"
-msgstr ""
+msgstr "Задаване на икона"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
@@ -468,7 +468,7 @@ msgstr "Няма описание"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
-msgstr ""
+msgstr "текущи"
 
 #: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
@@ -486,7 +486,7 @@ msgstr "Команда"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr ""
+msgstr "Запис с това име вече съществува"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
@@ -542,13 +542,13 @@ msgstr "Модалните диалози ще са прикачени към г
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr ""
+msgstr "Автоматично мозаично подреждане"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr ""
+msgstr "Прозорците се подреждат автоматично, когато са завлачени в горната част на екрана или в ъглите"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
@@ -594,7 +594,7 @@ msgstr "Равноширок"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
-msgstr ""
+msgstr "Задайте шрифт с фиксирана ширина, използван от главно текстови приложения"
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
@@ -800,15 +800,15 @@ msgstr "Икони на работния плот"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr "Изберете дали има лончъри и икони на работния плот"
+msgstr "Позволява лончъри и икони на работния плот"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
-msgstr ""
+msgstr "Начална директория"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr ""
+msgstr "Добавя пряк път към началната директория на работния плот"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
@@ -816,7 +816,7 @@ msgstr "Мрежови сървъри"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr ""
+msgstr "Добавя пряк път към локалните мрежови сървъри на работния плот"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
@@ -824,7 +824,7 @@ msgstr "Кошче"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
-msgstr "Добавя пряк път към Кошчето към работния плот"
+msgstr "Добавя пряк път към Кошчето на работния плот"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
@@ -832,7 +832,7 @@ msgstr "Монтирани дискове"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr "Монтирани дискове ще се показват на работния плот"
+msgstr "Монтирани дискове се показват на работния плот"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -885,7 +885,7 @@ msgstr "Ръчно"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr ""
+msgstr "Настройки на дисплей"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1012,4 +1012,4 @@ msgstr "Budgie Настройки на работния плот"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
-msgstr ""
+msgstr "Промяна на външен вид и поведение на работния плот"

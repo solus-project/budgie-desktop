@@ -3,281 +3,275 @@
 # This file is distributed under the same license as the budgie-desktop package.
 # 
 # Translators:
-# Blendcore <hackis.bell@gmail.com>, 2016
-# Lukáš Cezner <coalzombik@gmail.com>, 2017
-# Blendcore <hackis.bell@gmail.com>, 2015
-# Martin Orszulik <orszulik.m@outlook.com>, 2016
-# Michal Vlasák, 2015
-# Michal Vlasák <lahcim8@seznam.cz>, 2015-2016
-# Ondřej Pucholt <o.pucholt@windowslive.com>, 2017-2018
-# Pavel Konvička <pavel.konvicka@gmail.com>, 2017
+# Hồng Sơn <hongson199x@gmail.com>, 2017
+# Horazone Detex <thmmt2017d@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-20 12:33+0100\n"
-"PO-Revision-Date: 2018-05-14 05:13+0000\n"
-"Last-Translator: Ondřej Pucholt <o.pucholt@windowslive.com>\n"
-"Language-Team: Czech (http://www.transifex.com/budgie-desktop/budgie-desktop/language/cs/)\n"
+"PO-Revision-Date: 2018-06-21 11:24+0000\n"
+"Last-Translator: Horazone Detex <thmmt2017d@gmail.com>\n"
+"Language-Team: Vietnamese (Viet Nam) (http://www.transifex.com/budgie-desktop/budgie-desktop/language/vi_VN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+"Language: vi_VN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/raven/notifications_view.vala:79
 msgid "Nothing to see here"
-msgstr "Nic tady není"
+msgstr "Không có gì để hiển thị"
 
 #: src/raven/notifications_view.vala:582
 #: src/applets/notifications/NotificationsApplet.vala:75
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u nepřečtených oznámení"
+msgstr "%u thông báo chưa đọc"
 
 #: src/raven/notifications_view.vala:584
 #: src/applets/notifications/NotificationsApplet.vala:77
 msgid "1 unread notification"
-msgstr "1 nepřečtené oznámení"
+msgstr "1 thông báo chưa đọc"
 
 #: src/raven/notifications_view.vala:586
 #: src/applets/notifications/NotificationsApplet.vala:79
 msgid "No unread notifications"
-msgstr "Žádná nepřečtená oznámení"
+msgstr "Không có thông báo chưa đọc"
 
 #: src/raven/notifications_view.vala:710
 msgid "No new notifications"
-msgstr "Žádná nová oznámení"
+msgstr "Không có thông báo mới"
 
 #: src/raven/sound.vala:78
 msgid "Output"
-msgstr "Výstup"
+msgstr "Âm phát ra"
 
 #: src/raven/sound.vala:95
 msgid "Input"
-msgstr "Vstup"
+msgstr "Âm thu vào"
 
 #: src/raven/main_view.vala:55 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
-msgstr "Applety"
+msgstr "Tiện ích"
 
 #: src/raven/main_view.vala:58
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
-msgstr "Oznámení"
+msgstr "Thông báo"
 
 #: src/daemon/endsession.vala:172
 msgid "Log out"
-msgstr "Odhlásit se"
+msgstr "Đăng xuất"
 
 #: src/daemon/endsession.vala:176
 msgid "Restart device"
-msgstr "Restartovat"
+msgstr "Khởi động lại thiết bị"
 
 #: src/daemon/endsession.vala:188 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Vypnout"
+msgstr "Tắt nguồn"
 
 #: src/daemon/menus.vala:52
 msgid "Change background"
-msgstr "Změnit pozadí"
+msgstr "Thay ảnh nền"
 
 #: src/daemon/menus.vala:61 src/panel/settings/settings_panel.vala:97
 msgid "Settings"
-msgstr "Nastavení"
+msgstr "Cài đặt"
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:33
 msgid "Toggle the desktop"
-msgstr "Zobrazit plochu"
+msgstr "Hiện màn hình chính"
 
 #: src/applets/icon-tasklist/Buttons.vala:113
 msgid "Pin to panel"
-msgstr "Připnout k panelu"
+msgstr "Ghim vào thanh công cụ"
 
 #: src/applets/icon-tasklist/Buttons.vala:114
 #: src/applets/icon-tasklist/Buttons.vala:483
 msgid "Unpin from panel"
-msgstr "Odepnout z panelu"
+msgstr "Gỡ bỏ ghim vào thanh công cụ"
 
 #: src/applets/places-indicator/PlaceItem.vala:36
 #: src/applets/places-indicator/MountItem.vala:65
 #, c-format
 msgid "Open \"%s\""
-msgstr "Otevřít \"%s\""
+msgstr "Mở %s"
 
 #: src/applets/places-indicator/MountItem.vala:25
 #: src/applets/places-indicator/VolumeItem.vala:27
 msgid "Removable devices"
-msgstr "Odnímatelná zařízení"
+msgstr "Thiết bị gắn ngoài"
 
 #: src/applets/places-indicator/MountItem.vala:27
 #: src/applets/places-indicator/VolumeItem.vala:29
 msgid "Local volumes"
-msgstr "Místní oddíly"
+msgstr "Lưu trữ cục bộ"
 
 #: src/applets/places-indicator/MountItem.vala:31
 #: src/applets/places-indicator/VolumeItem.vala:33
 msgid "Network folders"
-msgstr "Síťové složky"
+msgstr "Thư mục trong mạng"
 
 #: src/applets/places-indicator/MountItem.vala:34
 #: src/applets/places-indicator/VolumeItem.vala:36
 msgid "Other"
-msgstr "Ostatní"
+msgstr "Khác"
 
 #: src/applets/places-indicator/MountItem.vala:60
 #: src/applets/places-indicator/VolumeItem.vala:57
 msgid "Eject"
-msgstr "Odebrat"
+msgstr "Đẩy ra"
 
 #: src/applets/places-indicator/MountItem.vala:62
 msgid "Unmount"
-msgstr "Odpojit"
+msgstr "Bỏ gắn"
 
 #: src/applets/places-indicator/MountItem.vala:78
 #: src/applets/places-indicator/VolumeItem.vala:87
 msgid "You can now safely remove"
-msgstr "Můžete nyní bezpečně odebrat"
+msgstr "Bạn có thể tháo thiết bị an toàn"
 
 #: src/applets/places-indicator/MountItem.vala:79
 msgid "Unknown Device"
-msgstr "Neznámé zařízení"
+msgstr "Thiết bị Không rõ"
 
 #: src/applets/places-indicator/MountItem.vala:88
 msgid "Error while ejecting device"
-msgstr "Chyba při vysouvání zařízení"
+msgstr "Gặp lỗi khi đẩy thiết bị"
 
 #: src/applets/places-indicator/MountItem.vala:105
 msgid "Error while unmounting volume"
-msgstr "Chyba při odpojení svazku"
+msgstr "Gặp lỗi khi unmount volume"
 
 #: src/applets/places-indicator/PlacesIndicator.vala:85
 #: src/applets/places-indicator/PlacesSection.vala:24
 #: src/applets/places-indicator/PlacesSection.vala:46
 #: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Places"
-msgstr "Místa"
+msgstr "Khu vực"
 
 #: src/applets/places-indicator/VolumeItem.vala:43
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Připojit a otevřít \"%s\""
+msgstr "Gắn và mở %s"
 
 #: src/applets/places-indicator/VolumeItem.vala:76
 #: src/applets/places-indicator/VolumeItem.vala:121
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Zadejte šifrovací frázi pro odemčení tohoto svazku"
+msgstr "Nhập mật mã bảo mật để mở khóa volume này"
 
 #: src/applets/places-indicator/VolumeItem.vala:119
 msgid "The password you entered is incorrect"
-msgstr "Zadané heslo je nesprávné"
+msgstr "Mật khẩu bạn đã nhập là không chính xác"
 
 #: src/applets/places-indicator/VolumeItem.vala:123
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Při pokusu o připojení tohoto svazku došlo k neznámé chybě"
+msgstr "Gặp một lỗi không rõ khi cố gắng mount volume này"
 
 #: src/applets/places-indicator/MountHelper.vala:39
 msgid "Volume is in use by other processes"
-msgstr "Zařízení používá jiný proces"
+msgstr "Volume đang bị sử dụng bởi các tiến trình khác"
 
 #: src/applets/places-indicator/MountHelper.vala:45
 msgid "Operation aborted"
-msgstr "Operace přerušena"
+msgstr "Tiến trình bị hủy"
 
 #: src/applets/places-indicator/MountHelper.vala:57
 msgid "Type your password"
-msgstr "Zadejte své heslo"
+msgstr "Nhập mật khẩu của bạn"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:181
 msgid "Nothing to display right now"
-msgstr "Není tu nic k zobrazení"
+msgstr "Không có gì để hiện thị lúc này"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
 msgid "Mount some drives"
-msgstr "Připojte disky"
+msgstr "Gắn một số thiết bị"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:185
 msgid "Enable more sections"
-msgstr "Povolit více sekcí"
+msgstr "Bật thêm các mục"
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:95
 msgid "User"
-msgstr "Uživatel"
+msgstr "Người dùng"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: src/applets/user-indicator/UserIndicatorWindow.vala:101
 msgid "Lock"
-msgstr "Uzamknout"
+msgstr "Khóa"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:102
 msgid "Suspend"
-msgstr "Režim spánku"
+msgstr "Tạm dừng"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "Hibernate"
-msgstr "Režim hibernace"
+msgstr "Ngủ"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:104
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "Restartovat"
+msgstr "Khởi động lại"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:105
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Vypnout"
+msgstr "Tắt nguồn"
 
 #. IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"),
 #. "network-transmit-receive-symbolic", false);
 #: src/applets/user-indicator/UserIndicatorWindow.vala:179
 #: src/daemon/endsession.ui.h:4
 msgid "Logout"
-msgstr "Odhlásit se"
+msgstr "Đăng xuất"
 
 #: src/applets/clock/ClockApplet.vala:148
 msgid "Time and date settings"
-msgstr "Nastavení data a času"
+msgstr "Cài đặt ngày và giờ"
 
 #: src/applets/clock/ClockApplet.vala:149
 msgid "Calendar"
-msgstr "Kalendář"
+msgstr "Lịch"
 
 #. pack page2
 #: src/applets/clock/ClockApplet.vala:156
 #: src/applets/clock/ClockApplet.vala:187
 msgid "Preferences"
-msgstr "Předvolby"
+msgstr "Tùy chỉnh"
 
 #: src/applets/clock/ClockApplet.vala:166
 msgid "Show date"
-msgstr "Zobrazit datum"
+msgstr "Hiện ngày"
 
 #: src/applets/clock/ClockApplet.vala:171
 msgid "Show seconds"
-msgstr "Zobrazit sekundy"
+msgstr "Hiện giây"
 
 #: src/applets/clock/ClockApplet.vala:177
 msgid "Use 24 hour time"
-msgstr "Použít 24hodinový formát"
+msgstr "Sử dụng kiểu giờ 24"
 
 #. Special case, "All"
 #: src/applets/budgie-menu/BudgieMenuWindow.vala:43
 msgid "All"
-msgstr "Vše"
+msgstr "Tất cả"
 
 #: src/applets/budgie-menu/IconChooser.vala:27
 msgid "Set menu icon from file"
-msgstr "Nastavit ikonu ze souboru"
+msgstr "Đặt biểu tượng menu từ file"
 
 #: src/applets/budgie-menu/IconChooser.vala:37
 msgid "Image files"
-msgstr "Obrázkové soubory"
+msgstr "Tập tin hình ảnh"
 
 #: src/applets/budgie-menu/IconChooser.vala:43
 msgid "Any file"
-msgstr "Všechny soubory"
+msgstr "Mọi tệp"
 
 #: src/applets/budgie-menu/IconChooser.vala:55
 #: src/panel/settings/settings_applet_chooser.vala:84
@@ -285,564 +279,561 @@ msgstr "Všechny soubory"
 #: src/panel/settings/settings_autostart.vala:365 src/daemon/endsession.ui.h:3
 #: src/polkit/dialog.ui.h:4
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "Hủy"
 
 #: src/applets/budgie-menu/IconChooser.vala:56
 msgid "Set icon"
-msgstr "Nastavit ikonu"
+msgstr "Đặt biểu tượng"
 
 #: src/applets/status/PowerIndicator.vala:97
 msgid "Battery fully charged."
-msgstr "Baterie je plně nabita."
+msgstr "Pin được sạc đầy"
 
 #: src/applets/status/PowerIndicator.vala:100
 msgid "Unknown"
-msgstr "Neznámý"
+msgstr "Không rõ"
 
 #. Set inner charging duration to hours:minutes
 #: src/applets/status/PowerIndicator.vala:109
 msgid "Battery charging"
-msgstr "Nabíjení baterie"
+msgstr "Pin đang sạc"
 
 #: src/applets/status/PowerIndicator.vala:114
 msgid "Battery remaining"
-msgstr "Baterie zbývá"
+msgstr "Pin còn lại"
 
 #: src/applets/status/PowerIndicator.vala:174
 msgid "Show battery percentage"
-msgstr "Zobrazení baterie v procentech"
+msgstr "Hiện phần trăm pin"
 
 #: src/applets/status/PowerIndicator.vala:183
 msgid "Power settings"
-msgstr "Nastavení spotřeby"
+msgstr "Thiết lập năng lượng"
 
 #: src/applets/status/SoundIndicator.vala:120
 msgid "Sound settings"
-msgstr "Nastavení zvuku"
+msgstr "Cài đặt âm thanh"
 
 #: src/applets/status/BluetoothIndicator.vala:105
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth je vypnuto"
+msgstr "Bluetooth đã tắt"
 
 #: src/applets/status/BluetoothIndicator.vala:109
 msgid "Bluetooth is active"
-msgstr "Bluetooth je zapnuto"
+msgstr "Bluetooth đã bật"
 
 #: src/applets/status/BluetoothIndicator.vala:114
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Připojen k %d zařízení"
-msgstr[1] "Připojen ke %d zařízením"
-msgstr[2] "Připojen ke %d zařízení(m)"
-msgstr[3] "Připojen ke %d zařízení(m)"
+msgstr[0] "Đã kết nối với %d thiết bị"
 
 #. Settings button
 #: src/applets/status/BluetoothIndicator.vala:179
 msgid "Bluetooth Settings"
-msgstr "Nastavení Bluetooth"
+msgstr "Cài đặt Bluetooth"
 
 #. Send files button
 #: src/applets/status/BluetoothIndicator.vala:186
 msgid "Send Files"
-msgstr "Poslat soubory"
+msgstr "Gửi tệp tin"
 
 #. Airplane mode
 #: src/applets/status/BluetoothIndicator.vala:196
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth režim letadlo"
+msgstr "Kích hoạt chế độ máy bay cho Bluetooth"
 
 #: src/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr "Přejmenovat"
+msgstr "Đổi tên"
 
 #: src/applets/workspaces/WorkspaceItem.vala:79
 msgid "Remove"
-msgstr "Odstranit"
+msgstr "Xóa"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:62
 msgid "Caps lock is active"
-msgstr "Caps Lock je aktivní"
+msgstr "Phím bật chữ hoa đang hoạt động"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:65
 msgid "Caps lock is not active"
-msgstr "Caps Lock není aktivní"
+msgstr "Phím bật chữ hoa đang tắt"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:75
 msgid "Num lock is active"
-msgstr "Num Lock je aktivní"
+msgstr "Bàn phím số đang bật"
 
 #: src/applets/lock-keys/LockKeysApplet.vala:78
 msgid "Num lock is not active"
-msgstr "Num Lock není aktivní"
+msgstr "Bàn phím số đang tắt"
 
 #: src/polkit/polkitdialog.vala:131
 msgid "Authentication failed"
-msgstr "Ověření selhalo"
+msgstr "Xác nhận thất bại"
 
 #: src/polkit/polkitdialog.vala:230
 msgid "Group:"
-msgstr "Skupina:"
+msgstr "Nhóm:"
 
 #: src/panel/settings/settings_main.vala:41
 msgid "Appearance"
-msgstr "Vzhled"
+msgstr "Hiển thị"
 
 #: src/panel/settings/settings_main.vala:42
 msgid "Panels"
-msgstr "Panely"
+msgstr "Thanh công cụ"
 
 #: src/panel/settings/settings_main.vala:43
 msgid "Session"
-msgstr "Sezení"
+msgstr "Phiên"
 
 #. Have to override wmclass for pinning support
 #: src/panel/settings/settings_main.vala:51
 msgid "Budgie Settings"
-msgstr "Nastavení Budgie"
+msgstr "Cài đặt Budgie"
 
 #: src/panel/settings/settings_main.vala:83
 msgid "Create new panel"
-msgstr "Vytvořit nový panel"
+msgstr "Tạo thanh công cụ mới"
 
 #: src/panel/settings/settings_style.vala:34
 msgid "Style"
-msgstr "Styl"
+msgstr "Kiểu cách"
 
 #: src/panel/settings/settings_style.vala:44
 msgid "Widgets"
-msgstr "Widgety"
+msgstr "Tiện ích"
 
 #: src/panel/settings/settings_style.vala:45
 msgid "Set the appearance of window decorations and controls"
-msgstr "Nastavit vzhled dekorací oken a ovládacích prvků"
+msgstr "Thiết đặt sự xuất hiện của các trang trí cửa sổ và các mục điều khiển"
 
 #: src/panel/settings/settings_style.vala:49
 msgid "Icons"
-msgstr "Ikony"
+msgstr "Biểu tượng"
 
 #: src/panel/settings/settings_style.vala:50
 msgid "Set the globally used icon theme"
-msgstr "Nastavit globálně používaný motiv ikon"
+msgstr "Đặt chủ đề biểu tượng mặc định"
 
 #: src/panel/settings/settings_style.vala:54
 msgid "Cursors"
-msgstr "Kurzory"
+msgstr "Con trỏ"
 
 #: src/panel/settings/settings_style.vala:55
 msgid "Set the globally used mouse cursor theme"
-msgstr "Nastavit globálně používaný vzhled kurzoru myši"
+msgstr "Đặt chủ đề con trỏ mặc định"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Dark theme"
-msgstr "Tmavý motiv"
+msgstr "Chủ đề tối"
 
 #: src/panel/settings/settings_style.vala:67
 msgid "Built-in theme"
-msgstr "Vestavěný motiv"
+msgstr "Dùng chủ đề tích hợp sẵn"
 
 #: src/panel/settings/settings_style.vala:68
 msgid ""
 "When enabled, the desktop component style will be overriden with the built-"
 "in one"
-msgstr "Přepsat styl komponent desktopového prostředí vestavěným stylem"
+msgstr "Khi được kích hoạt, kiểu cách thành phần màn hình chính sẽ bị ghi đè bởi thành phần cài đặt sẵn"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Animations"
-msgstr "Animace"
+msgstr "Hiệu ứng"
 
 #: src/panel/settings/settings_style.vala:73
 msgid "Control whether windows and controls use animations"
-msgstr "Nastavit, zdali mají okna a ovládací prvky používat animace"
+msgstr "Điều khiển cửa sổ và mục điều khiển có sử dụng hiệu ứng hay không"
 
 #: src/panel/settings/settings_applet_chooser.vala:79
 msgid "Choose an applet"
-msgstr "Vybrat applet"
+msgstr "Chọn một tiện ích"
 
 #: src/panel/settings/settings_applet_chooser.vala:85
 #: src/panel/settings/settings_panel_applets.vala:245
 msgid "Add applet"
-msgstr "Přidat applet"
+msgstr "Thêm tiện ích"
 
 #: src/panel/settings/settings_autostart.vala:140
 msgid "Untitled"
-msgstr "Nepojmenovaný"
+msgstr "Không tiêu đề"
 
 #: src/panel/settings/settings_autostart.vala:147
 msgid "No description"
-msgstr "Žádný popis"
+msgstr "Không mô tả"
 
 #: src/panel/settings/settings_autostart.vala:170
 msgid "running"
-msgstr "běží"
+msgstr "đang chạy"
 
 #: src/panel/settings/settings_autostart.vala:193
 msgid "Applications"
-msgstr "Aplikace"
+msgstr "Ứng dụng"
 
 #: src/panel/settings/settings_autostart.vala:203
 #: src/panel/settings/settings_autostart.vala:366
 msgid "Add"
-msgstr "Přidat"
+msgstr "Thêm"
 
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_autostart.vala:393
 msgid "Command"
-msgstr "Příkaz"
+msgstr "Lệnh"
 
 #: src/panel/settings/settings_autostart.vala:376
 msgid "An entry with that title already exists"
-msgstr "Položka s tímto názvem již existuje"
+msgstr "Một chỉ mục với tiêu đề như vậy đã tồn tại"
 
 #: src/panel/settings/settings_autostart.vala:379
 msgid "Title"
-msgstr "Název"
+msgstr "Tiêu đề"
 
 #: src/panel/settings/settings_autostart.vala:383
 #: src/panel/settings/settings_autostart.vala:397
 msgid "Required"
-msgstr "Povinný"
+msgstr "Yêu cầu"
 
 #: src/panel/settings/settings_autostart.vala:386
 msgid "Description"
-msgstr "Popis"
+msgstr "Mô tả"
 
 #: src/panel/settings/settings_autostart.vala:390
 msgid "Optional"
-msgstr "Volitelný"
+msgstr "Tùy chọn"
 
 #: src/panel/settings/settings_autostart.vala:454
 msgid "Autostart"
-msgstr "Spustit při startu"
+msgstr "Tự động chay"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
-msgstr "Okna"
+msgstr "Các cửa sổ"
 
 #: src/panel/settings/settings_wm.vala:38
 msgid "Button layout"
-msgstr "Rozložení tlačítek"
+msgstr "Bố cục các phím"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars"
-msgstr "Změnit rozložení tlačítek v záhlaví aplikací"
+msgstr "Thay đổi bố cục nút bấm trong thanh tiêu đề ứng dụng"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Right (standard)"
-msgstr "Vpravo (výchozí)"
+msgstr "Phải (mặc định)"
 
 #: src/panel/settings/settings_wm.vala:47
 #: src/panel/settings/settings_panel.vala:180
 msgid "Left"
-msgstr "Vlevo"
+msgstr "Trái"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Attach modal dialogs to windows"
-msgstr "Připojovat modální dialogy k oknům"
+msgstr "Kèm các hội thoại mẫu vào cửa sổ"
 
 #: src/panel/settings/settings_wm.vala:60
 msgid ""
 "Modal dialogs will become attached to the parent window and move together "
 "when dragged"
-msgstr "Modální dialogová okna budou spojena s nadřazeným oknem a při přetažení myší se budou hýbat společně"
+msgstr "Các hội thoại mẫu sẽ được kèm vào cửa sổ mẹ và cùng di chuyển khi được kéo đi"
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Automatic tiling"
-msgstr "Automatické zarovnání oken"
+msgstr "Tự động bung"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners"
-msgstr "Okna přetažená na roh nebo horní okraj obrazovky se automaticky rozmístí jako dlaždice"
+msgstr "Các cửa sổ sẽ được bung tự động khi bị kéo về phía đầu màn hình hoặc các góc"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Disable unredirection of windows"
-msgstr "Povolit přesměrování oken"
+msgstr "Vô hiệu hóa unredirection của các cửa sổ"
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
-msgstr "Tato možnost je pro pokročilé uživatele. Využijte ji, pokud máte při použití dedikované grafické karty problémy s výkonem nebo grafikou."
+msgstr "Tùy chọn này là cho người dùng có kinh nghiệm. Dùng cái này nếu bạn đang có vấn đề về hiệu suất hoặc đồ họa với GPU dành riêng "
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
-msgstr "Písmo"
+msgstr "Phông chữ"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Window Titles"
-msgstr "Titulek okna"
+msgstr "Tiêu đề cửa sổ"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications"
-msgstr "Nastavit písmo používané v záhlaví aplikací"
+msgstr "Thiết đặt phông chữ được sử dụng trên thanh thiêu đề của các ứng dụng"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
-msgstr "Dokumenty"
+msgstr "Dữ liệu"
 
 #: src/panel/settings/settings_fonts.vala:51
 msgid "Set the display font used by for documents"
-msgstr "Nastavit typ písma používaný pro dokumenty"
+msgstr "Thiết đặt phông hiển thị cho tài liệu"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
-msgstr "Prostředí"
+msgstr "Giao diện"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls"
-msgstr "Nastavit primární písmo používané v ovládacích prvcích aplikace"
+msgstr "Thiết đặt phông chính được sử dụng bởi điều khiển ứng dụng"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
-msgstr "Monospace"
+msgstr "Kiểu chữ mono"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications"
-msgstr "Nastavit písmo s pevnou šířkou používané v aplikacích pracujích s textem"
+msgstr "Thiết đặt phông chữ có chiều ngang cố định được sử dụng bởi các ứng dụng chuyên về văn bản"
 
 #: src/panel/settings/settings_panel_dialogs.vala:29
 msgid "Confirm panel removal"
-msgstr "Potvrdit odstranění panelu"
+msgstr "Xác nhận gỡ bỏ bảng"
 
 #: src/panel/settings/settings_panel_dialogs.vala:36
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Opravdu chcete odstranit tento panel? Tuto akci nelze vrátit zpět."
+msgstr "Bạn có thực sự muốn gỡ bỏ bảng này không? Hành động này không thể được hoàn tác."
 
 #: src/panel/settings/settings_panel_dialogs.vala:51
 #: src/panel/settings/settings_panel_dialogs.vala:114
 msgid "Don't ask me again"
-msgstr "Znovu se neptat"
+msgstr "Đừng hỏi tôi lại"
 
 #: src/panel/settings/settings_panel_dialogs.vala:60
 msgid "Remove panel"
-msgstr "Odstranit panel"
+msgstr "Gỡ bỏ bảng"
 
 #: src/panel/settings/settings_panel_dialogs.vala:61
 msgid "Keep panel"
-msgstr "Uchovat panel"
+msgstr "Giữ lại bảng"
 
 #: src/panel/settings/settings_panel_dialogs.vala:92
 msgid "Confirm applet removal"
-msgstr "Potvrdit odstranění appletu"
+msgstr "Xác nhận xóa bỏ tiện ích"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Opravdu chcete odstranit tento applet? Tuto akci nelze vrátit zpět."
+msgstr "Bạn có thực sự muốn xóa tiện ích này? Hành động này không thể được hoàn tác."
 
 #: src/panel/settings/settings_panel_dialogs.vala:123
 msgid "Remove applet"
-msgstr "Odstranit applet"
+msgstr "Xóa bỏ tiện ích"
 
 #: src/panel/settings/settings_panel_dialogs.vala:124
 msgid "Keep applet"
-msgstr "Uchovat applet"
+msgstr "Giữ lại tiện ích"
 
 #: src/panel/settings/settings_panel.vala:80
 msgid "Remove this panel from the screen"
-msgstr "Odstranit tento panel z obrazovky"
+msgstr "Xóa bảng này khỏi màn hình"
 
 #: src/panel/settings/settings_panel.vala:120
 msgid "Top Dock"
-msgstr "Horní dok"
+msgstr "Dock Trên"
 
 #: src/panel/settings/settings_panel.vala:122
 msgid "Right Dock"
-msgstr "Pravý dok"
+msgstr "Dock Phải"
 
 #: src/panel/settings/settings_panel.vala:124
 msgid "Left Dock"
-msgstr "Levý dok"
+msgstr "Dock Trái"
 
 #: src/panel/settings/settings_panel.vala:126
 msgid "Bottom Dock"
-msgstr "Spodní dok"
+msgstr "Dock Dưới"
 
 #: src/panel/settings/settings_panel.vala:131
 msgid "Top Panel"
-msgstr "Horní panel"
+msgstr "Thanh công cụ trên"
 
 #: src/panel/settings/settings_panel.vala:133
 msgid "Right Panel"
-msgstr "Pravý panel"
+msgstr "Thanh công cụ phải"
 
 #: src/panel/settings/settings_panel.vala:135
 msgid "Left Panel"
-msgstr "Levý panel"
+msgstr "Thanh công cụ trái"
 
 #: src/panel/settings/settings_panel.vala:137
 msgid "Bottom Panel"
-msgstr "Dolní panel"
+msgstr "Thanh công cụ dưới"
 
 #: src/panel/settings/settings_panel.vala:176
 msgid "Top"
-msgstr "Nahoře"
+msgstr "Phía trên"
 
 #: src/panel/settings/settings_panel.vala:178
 msgid "Right"
-msgstr "Vpravo"
+msgstr "Phải"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Bottom"
-msgstr "Dole"
+msgstr "Phía dưới"
 
 #: src/panel/settings/settings_panel.vala:193
 msgid "Always"
-msgstr "Vždy"
+msgstr "Luôn luôn"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr "Dynamicky"
+msgstr "Cơ chế"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "None"
-msgstr "Nikdy"
+msgstr "Không có"
 
 #: src/panel/settings/settings_panel.vala:209
 msgid "Automatic"
-msgstr "Automaticky"
+msgstr "Tự động"
 
 #: src/panel/settings/settings_panel.vala:211
 msgid "Intelligent"
-msgstr "Inteligentně"
+msgstr "Thông minh"
 
 #: src/panel/settings/settings_panel.vala:214
 msgid "Never"
-msgstr "Nikdy"
+msgstr "Không bao giờ"
 
 #: src/panel/settings/settings_panel.vala:230
 msgid "Position"
-msgstr "Pozice"
+msgstr "Vị trí"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Nastavit, ke které straně obrazovky bude panel přiléhat"
+msgstr "Đặt cạnh màn hình mà bảng này sẽ ở đó"
 
 #: src/panel/settings/settings_panel.vala:239
 msgid "Size"
-msgstr "Velikost"
+msgstr "Kích thước"
 
 #: src/panel/settings/settings_panel.vala:240
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Nastavit velikost (šířku nebo výšku, podle orientace) tohoto panelu"
+msgstr "Thiết đặt kích cỡ (chiều dài rộng, phương hướng) của bảng này"
 
 #: src/panel/settings/settings_panel.vala:247
 msgid "Automatically hide"
-msgstr "Automaticky skrývat"
+msgstr "Tự động ẩn"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Panel se automaticky skryje, aby na obrazovce bylo více místa"
+msgstr "Khi được đặt, bảng này sẽ được ẩn khỏi tầm nhìn để hiển thị màn hình tối đa"
 
 #: src/panel/settings/settings_panel.vala:255
 msgid "Transparency"
-msgstr "Průhlednost"
+msgstr "Trong suốt"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Control when this panel should have a solid background"
-msgstr "Nastavit, jestli tento panel má mít průhledné pozadí"
+msgstr "Điều khiển khi nào bảng này nên có một nền không trong suốt"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Shadow"
-msgstr "Stín"
+msgstr "Đổ bóng"
 
 #: src/panel/settings/settings_panel.vala:262
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Přidá dekorativní stín ideální pro neprůhledné panely"
+msgstr "Thêm một bóng mờ trang trí, phù hợp cho bảng đục"
 
 #: src/panel/settings/settings_panel.vala:268
 msgid "Stylize regions"
-msgstr "Stylizovat oblasti"
+msgstr "Tô kiểu các vùng"
 
 #: src/panel/settings/settings_panel.vala:269
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr "Odlišit tři hlavní sekce panelu, aby každá mohla používat jiný motiv"
+msgstr "Thêm một hint vào bảng để mỗi ba phần chính của bảng được tô chủ đề khác nhau."
 
 #: src/panel/settings/settings_panel.vala:276
 msgid "Dock mode"
-msgstr "Režim doku"
+msgstr "Chế độ Dock"
 
 #: src/panel/settings/settings_panel.vala:277
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr "V režimu doku zabírá panel méně místa, takže uvolní cenný prostor na obrazovce"
+msgstr "Khi trong chế độ dock, bảng sẽ sử dụng diện tích tối thiểu, giải phóng chỗ để hiển thị tài nguyên màn hình"
 
 #: src/panel/settings/settings_panel_applets.vala:22
 msgid "Configure applet"
-msgstr "Nastavit applet"
+msgstr "Chỉnh tiện ích"
 
 #: src/panel/settings/settings_panel_applets.vala:246
 msgid "Choose a new applet to add to this panel"
-msgstr "Přidat nový applet do tohoto panelu"
+msgstr "Chọn một tiện ích mới thêm vào bảng này"
 
 #: src/panel/settings/settings_panel_applets.vala:260
 msgid "No settings available"
-msgstr "Žádné dostupné nastavení"
+msgstr "Không có cài đặt nào"
 
 #: src/panel/settings/settings_panel_applets.vala:415
 msgid "Start"
-msgstr "Začátek"
+msgstr "Bắt đầu"
 
 #: src/panel/settings/settings_panel_applets.vala:418
 msgid "Center"
-msgstr "Střed"
+msgstr "Trung tâm"
 
 #: src/panel/settings/settings_panel_applets.vala:421
 msgid "End"
-msgstr "Konec"
+msgstr "Cuối cùng"
 
 #: src/panel/settings/settings_desktop.vala:33
 msgid "Desktop"
-msgstr "Plocha"
+msgstr "Màn hình nền"
 
 #: src/panel/settings/settings_desktop.vala:43
 msgid "Desktop Icons"
-msgstr "Ikony na ploše"
+msgstr "Biểu tượng màn hình chính"
 
 #: src/panel/settings/settings_desktop.vala:44
 msgid "Control whether to allow launchers and icons on the desktop"
-msgstr "Povolit spouštěče a ikony na ploše"
+msgstr "Điều khiển có cho phép biểu tượng hoặc trình chạy ở trên màn hình chính hay không"
 
 #: src/panel/settings/settings_desktop.vala:49
 msgid "Home directory"
-msgstr "Domovská složka"
+msgstr "Thư mục nhà"
 
 #: src/panel/settings/settings_desktop.vala:50
 msgid "Add a shortcut to your home directory on the desktop"
-msgstr "Přidat záložku Domovské složky na plochu"
+msgstr "Thêm một liên kết đến thư mục nhà của bạn trên màn hình chính"
 
 #: src/panel/settings/settings_desktop.vala:55
 msgid "Network servers"
-msgstr "Síťové servery"
+msgstr "Máy chủ mạng"
 
 #: src/panel/settings/settings_desktop.vala:56
 msgid "Add a shortcut to your local network servers on the desktop"
-msgstr "Přidat záložku Servery místní sítě na plochu"
+msgstr "Thêm một liên kết đến máy chủ mạng cục bộ của bạn trên màn hình chính"
 
 #: src/panel/settings/settings_desktop.vala:61
 msgid "Trash"
-msgstr "Koš"
+msgstr "Thùng rác"
 
 #: src/panel/settings/settings_desktop.vala:62
 msgid "Add a shortcut to the Trash directory on the desktop"
-msgstr "Přidat záložku Koše na plochu"
+msgstr "Thêm một liên kết đến thư mục Thùng rác của bạn trên màn hình chính"
 
 #: src/panel/settings/settings_desktop.vala:67
 msgid "Mounted volumes"
-msgstr "Připojené svazky"
+msgstr "Gắn volume"
 
 #: src/panel/settings/settings_desktop.vala:68
 msgid "Mounted volumes & drives will appear on the desktop"
-msgstr "Zobrazovat připojené svazky a disky na ploše"
+msgstr "Volume và ổ đĩa đã gắn sẽ hiện trên màn hình chính"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Jste si jisti, že chcete ukončit relaci?"
+msgstr "Bạn có chắc muốn kết thúc phiên làm việc không?"
 
 #: src/daemon/tabswitcher.ui.h:1
 msgid " - "
@@ -850,172 +841,172 @@ msgstr "-"
 
 #: src/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Zobrazit štítek"
+msgstr "Hiện nhãn"
 
 #: src/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Zobrazit místa"
+msgstr "Hiện vị trí"
 
 #: src/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "Zobrazit síťové složky"
+msgstr "Hiện các thư mục trong mạng"
 
 #: src/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
-msgstr "Zobrazit odnímatelná zařízení"
+msgstr "Hiện các thiết bị gắn ngoài"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "Vždy zobrazit místa"
+msgstr "Luôn mở rộng các vị trí"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
 msgid "Night Light"
-msgstr "Noční světlo"
+msgstr "Đèn Đêm"
 
 #: src/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr "Teplota"
+msgstr "Nhiệt độ"
 
 #: src/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "Rozvrh"
+msgstr "Lịch biểu"
 
 #: src/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "Od soumraku do rozbřesku"
+msgstr "Hoàng hôn đến Bình minh"
 
 #: src/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "Manuální"
+msgstr "Thông thường"
 
 #: src/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "Zobrazit nastavení"
+msgstr "Cài đặt Hiển thị"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "Zobrazit štítek menu"
+msgstr "Hiện Nhãn Menu"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
-msgstr "Kompaktní režim"
+msgstr "Chế độ Tối giản"
 
 #: src/applets/budgie-menu/settings.ui.h:3
 msgid "Show Headers"
-msgstr "Zobrazit hlavičky"
+msgstr "Hiện Các đầu mục"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
-msgstr "Štítek menu"
+msgstr "Nhãn Menu"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
-msgstr "Při přejetí myší zobrazit nabídku"
+msgstr "Rê chuột sẽ hiển thị"
 
 #: src/applets/budgie-menu/settings.ui.h:6
 msgid "Menu Icon"
-msgstr "Ikona menu"
+msgstr "Biểu tượng Menu"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Velikost mezery"
+msgstr "Kích thước khoảng trắng"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Požadováno ověření"
+msgstr "Yêu cầu Xác nhận"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr "Heslo:"
+msgstr "Mật khẩu:"
 
 #: src/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr "Je nutné ověření"
+msgstr "Xác nhận là cần thiết"
 
 #: src/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr "Ověřit"
+msgstr "Xác nhận"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Prostředí Budgie"
+msgstr "Giao diện Budgie"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Tato sekce vás přihlásí do desktopového prostředí Budgie"
+msgstr "Phiên làm việc hiện tại trên giao diện Budgie"
 
 #: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"
-msgstr "Indikátor rozložení klávesnice"
+msgstr "Hiển thị kiểu bàn phím"
 
 #: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "Tlačítko zobrazení plochy"
+msgstr "Hiện phím màn hình chính"
 
 #: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "Ovládání postranního panelu Raven"
+msgstr "Thiết đặt Thanh lề Raven"
 
 #: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "Icon Task List"
-msgstr "Ikonový seznam procesů"
+msgstr "Biểu tượng cho danh sách tiến trình"
 
 #: src/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"
-msgstr "Uživatelský indikátor"
+msgstr "Hiển thị người dùng"
 
 #: src/applets/clock/ClockApplet.plugin.in.h:1
 msgid "Clock"
-msgstr "Hodiny"
+msgstr "Đồng hồ"
 
 #: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
-msgstr "Menu Budgie"
+msgstr "Bảng chọn Budgie"
 
 #: src/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "Systémová lišta"
+msgstr "Khay công cụ hệ thống"
 
 #: src/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
-msgstr "Oddělovač"
+msgstr "Chia tách"
 
 #: src/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
-msgstr "Indikátor stavu"
+msgstr "Hiển thị trạng thái"
 
 #: src/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "Mezerník"
+msgstr "Khoảng trống"
 
 #: src/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "Task List"
-msgstr "Seznam procesů"
+msgstr "Danh sách tiến trình"
 
 #: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "Přepínač pracovních ploch"
+msgstr "Chuyển không gian làm việc"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Indikátor kláves Lock"
+msgstr "Hiển thị phím khóa"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Budgie Panel"
+msgstr "Bảng Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr "Spouští ostatní aplikace a poskytuje různé nástroje pro správu oken, zobrazení času atd."
+msgstr "Chạy các chương trình khác và cho nhiều công cụ để quản lí cửa sổ, hiển thị thời gian, vv. "
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr "Nastavení plochy Budgie"
+msgstr "Cài đặt Desktop Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behaviour"
-msgstr "Změnit vzhled a chování plochy"
+msgstr "Thay đổi diện mạo và hành vi màn hình chính "
