@@ -480,7 +480,7 @@ public class AutostartPage : Budgie.SettingsPage {
         Gtk.Overlay overlay = new Gtk.Overlay();
         frame_box.pack_start(overlay, false, false, 0);
 
-        Gtk.Label add_label = new Gtk.Label("Autostart apps");
+        Gtk.Label add_label = new Gtk.Label(_("Autostart apps"));
         overlay.add(add_label);
         add_label.margin = 15;
         add_label.get_style_context().add_class("dim-label");
