@@ -894,7 +894,7 @@ public class IconButton : Gtk.ToggleButton
 
         if (!this.desktop_helper.lock_icons && this.app_info != null) {
             if (!this.pinned || !this.is_from_window) {
-                Gtk.CheckMenuItem pinned_item = new Gtk.CheckMenuItem.with_mnemonic("Pinned");
+                Gtk.CheckMenuItem pinned_item = new Gtk.CheckMenuItem.with_mnemonic(_("Pinned"));
                 menu.append(pinned_item);
                 pinned_item.show();
                 this.context_menu_has_items = true;
@@ -915,7 +915,7 @@ public class IconButton : Gtk.ToggleButton
         int num_windows;
 
         if (has_valid_windows(out num_windows)) {
-            Gtk.MenuItem close_item = new Gtk.MenuItem.with_label((num_windows > 1) ? "Close all" : "Close");
+            Gtk.MenuItem close_item = new Gtk.MenuItem.with_label((num_windows > 1) ? _("Close all") : _("Close"));
             menu.append(close_item);
             close_item.show();
             context_menu_has_items = true;
