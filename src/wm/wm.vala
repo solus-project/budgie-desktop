@@ -1150,6 +1150,7 @@ public class BudgieWM : Meta.Plugin
 
 
     /* EVEN MORE LEVELS OF DERP. */
+    Clutter.Actor? top_group = null;
     Clutter.Actor? out_group = null;
     Clutter.Actor? in_group = null;
     public override void kill_switch_workspace()
@@ -1181,8 +1182,12 @@ public class BudgieWM : Meta.Plugin
 
         SignalHandler.disconnect_by_func(out_group, (void*)switch_workspace_done, this);
 
+        top_group.remove_all_transitions();
         out_group.remove_all_transitions();
         in_group.remove_all_transitions();
+
+        top_group.destroy();
+        top_group = null;
         out_group.destroy();
         out_group = null;
         in_group.destroy();
@@ -1215,6 +1220,7 @@ public class BudgieWM : Meta.Plugin
             return;
         }
 
+        top_group = new Clutter.Actor();
         out_group = new Clutter.Actor();
         in_group = new Clutter.Actor();
 
@@ -1223,35 +1229,45 @@ public class BudgieWM : Meta.Plugin
 
         stage.add_child(in_group);
         stage.add_child(out_group);
+        stage.add_child(top_group);
+
         stage.set_child_above_sibling(in_group, null);
+        stage.set_child_above_sibling(top_group, in_group);
 
         screen.get_size(out screen_width, out screen_height);
 
         /* TODO: Windows should slide "under" the panel/dock
          * Move "in-between" workspaces, e.g. 1->3 shows 2 */
 
-
         foreach (var actor in Meta.Compositor.get_window_actors(screen)) {
+            unowned Clutter.Actor? group = null;
+
             var window = actor.get_meta_window();
+            var above = window.is_above();
+            var sticky = window.is_on_all_workspaces();
+            var showing = window.showing_on_its_workspace();
+            var workspace = window.get_workspace().index();
 
-            if (!window.showing_on_its_workspace() || window.is_on_all_workspaces()) {
+            if (sticky && above) {
+                group = top_group;
+            } else if (sticky || !showing) {
                 continue;
-            }
-
-            var space = window.get_workspace();
-            var win_space = space.index();
-
-            if (win_space == to || win_space == from) {
-                var orig_parent = actor.get_parent();
-                unowned Clutter.Actor? new_parent = win_space == to ? in_group : out_group;
-                actor.set_data("orig-parent", orig_parent);
-
-                actor.ref();
-                orig_parent.remove_child(actor);
-                new_parent.add_child(actor);
-                actor.unref();
+            } else if (workspace == to) {
+                group = in_group;
+            } else if (workspace == from) {
+                group = out_group;
             } else {
                 actor.hide();
+            }
+
+            if (group != null) {
+                var parent = actor.get_parent();
+                actor.set_data("orig-parent", parent);
+
+                actor.ref();
+                parent.remove_child(actor);
+                group.add_child(actor);
+                actor.unref();
             }
         }
 
