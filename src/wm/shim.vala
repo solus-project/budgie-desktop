@@ -190,12 +190,12 @@ public class ShellShim : GLib.Object
         osd_proxy = null;
     }
 
-    private void on_accelerator_activated(uint action, uint device_id)
+    private void on_accelerator_activated(uint action, uint device_id, uint timestamp)
     {
         HashTable<string,Variant> params = new HashTable<string,Variant>(str_hash, str_equal);
 
         params.insert("device-id", device_id);
-        params.insert("timestamp", new Variant.uint32(0));
+        params.insert("timestamp", timestamp);
         params.insert("action-mode", new Variant.uint32(0));
 
         this.accelerator_activated(action, params);
