@@ -63,8 +63,6 @@ public class Applet : Budgie.Applet
             return Gdk.EVENT_STOP;
         });
 
-        win.show_all();
-        popover.show_all();
         this.show_all();
     }
 
