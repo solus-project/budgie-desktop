@@ -16,7 +16,7 @@ public class Plugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
     {
-        return new CaffeineApplet(uuid);
+        return new Applet(uuid);
     }
 }
 
@@ -29,7 +29,7 @@ public class Applet : Budgie.Applet
 
     public string uuid { public set; public get; }
 
-    public CaffeineApplet(string uuid)
+    public Applet(string uuid)
     {
         Object(uuid: uuid);
 
@@ -75,7 +75,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(SpacerPlugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(Caffeine.Plugin));
 }
 
 /*
