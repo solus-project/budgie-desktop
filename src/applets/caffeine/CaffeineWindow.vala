@@ -5,10 +5,10 @@ namespace Caffeine
 public class Window : Gtk.Grid
 {
     [GtkChild]
-    Gtk.Switch? mode;
+    private Gtk.Switch? mode;
 
     [GtkChild]
-    Gtk.SpinButton? timer;
+    private Gtk.SpinButton? timer;
 
     public Window ()
     {
