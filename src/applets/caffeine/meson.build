@@ -2,7 +2,7 @@
 
 applet_caffeine_dir = applets_dir + '.caffeine'
 
-custom_target('plugin-file-spacer',
+custom_target('plugin-file-caffeine',
     input : 'CaffeineApplet.plugin.in',
     output : 'CaffeineApplet.plugin',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
