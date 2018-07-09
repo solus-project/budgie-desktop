@@ -7,7 +7,7 @@ custom_target('plugin-file-spacer',
     output : 'CaffeineApplet.plugin',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
-    install_dir : applet_spacer_dir)
+    install_dir : applet_caffeine_dir)
 
 gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
 
@@ -21,6 +21,7 @@ applet_caffeine_resources = gnome.compile_resources(
 
 applet_caffeine_sources = [
     'CaffeineApplet.vala',
+    'CaffeineWindow.vala'
     applet_caffeine_resources,
 ]
 
