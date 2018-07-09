@@ -48,6 +48,22 @@ public class Applet : Budgie.Applet
         var win = new Window ();
         popover.add(win);
 
+        // On click icon
+        event_box.button_press_event.connect((e)=> {
+            if (e.button == 1) {
+                if (popover.get_visible()) {
+                    popover.hide();
+                } else {
+                    this.manager.show_popover(event_box);
+                }
+            } else {
+                return Gdk.EVENT_PROPAGATE;
+            }
+
+            return Gdk.EVENT_STOP;
+        });
+
+        win.show_all();
         popover.show_all();
         this.show_all();
     }
