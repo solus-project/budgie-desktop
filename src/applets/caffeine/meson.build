@@ -21,7 +21,7 @@ applet_caffeine_resources = gnome.compile_resources(
 
 applet_caffeine_sources = [
     'CaffeineApplet.vala',
-    'CaffeineWindow.vala'
+    'CaffeineWindow.vala',
     applet_caffeine_resources,
 ]
 
