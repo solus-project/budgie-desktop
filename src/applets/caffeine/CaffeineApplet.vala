@@ -33,10 +33,10 @@ public class Applet : Budgie.Applet
     {
         Object(uuid: uuid);
 
-        // settings_schema = "com.solus-project.caffeine";
-        // settings_prefix = "/com/solus-project/budgie-panel/instance/caffeine";
-        //
-        // settings = this.get_applet_settings(uuid);
+        settings_schema = "com.solus-project.caffeine";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/caffeine";
+
+        settings = this.get_applet_settings(uuid);
 
         event_box = new Gtk.EventBox();
         var icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
@@ -72,15 +72,15 @@ public class Applet : Budgie.Applet
         this.manager = manager;
     }
 
-    // public override bool supports_settings()
-    // {
-    //     return true;
-    // }
-    //
-    // public override Gtk.Widget? get_settings_ui()
-    // {
-    //     return new Settings(this.get_applet_settings(uuid));
-    // }
+    public override bool supports_settings()
+    {
+        return true;
+    }
+
+    public override Gtk.Widget? get_settings_ui()
+    {
+        return new Settings(this.get_applet_settings(uuid));
+    }
 }
 } // end Namespace
 
