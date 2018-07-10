@@ -12,7 +12,7 @@ public class CaffeineSettings : Gtk.Grid
     [GtkChild]
     private Gtk.SpinButton? brightness_level;
 
-    public Settings(Settings? settings)
+    public CaffeineSettings(Settings? settings)
     {
         Object();
         this.settings = settings;

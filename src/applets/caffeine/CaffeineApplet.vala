@@ -78,7 +78,6 @@ public class CaffeineApplet : Budgie.Applet
         return new CaffeineSettings(this.get_applet_settings(uuid));
     }
 }
-} // end Namespace
 
 [ModuleInit]
 public void peas_register_types(TypeModule module)
