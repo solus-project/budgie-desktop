@@ -16,14 +16,13 @@ public class CaffeineSettings : Gtk.Grid
     {
         Object();
         this.settings = settings;
-        settings.bind("size", spinbutton_size, "value", SettingsBindFlags.DEFAULT);
 
         // Bind settings to widget value
-        setting.bind("enable-notification", notify_switch, "active",
+        settings.bind("enable-notification", notify_switch, "active",
             SettingsBindFlags.DEFAULT);
-        setting.bind("maximize-brightness", brightness_switch, "active",
+        settings.bind("maximize-brightness", brightness_switch, "active",
             SettingsBindFlags.DEFAULT);
-        setting.bind("screen-brightness", brightness_level, "value",
+        settings.bind("screen-brightness", brightness_level, "value",
             SettingsBindFlags.DEFAULT);
     }
 }
