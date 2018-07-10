@@ -1,7 +1,5 @@
-namespace Caffeine
-{
 [GtkTemplate (ui = "/com/solus-project/caffeine/settings.ui")]
-public class Settings : Gtk.Grid
+public class CaffeineSettings : Gtk.Grid
 {
     Settings? settings = null;
 
@@ -29,7 +27,6 @@ public class Settings : Gtk.Grid
             SettingsBindFlags.DEFAULT);
     }
 }
-} //End namespace
 
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html

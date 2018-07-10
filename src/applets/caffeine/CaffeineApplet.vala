@@ -8,19 +8,15 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-
-namespace Caffeine
-{
-
-public class Plugin : Budgie.Plugin, Peas.ExtensionBase
+public class CaffeinePlugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
     {
-        return new Applet(uuid);
+        return new CaffeineApplet(uuid);
     }
 }
 
-public class Applet : Budgie.Applet
+public class CaffeineApplet : Budgie.Applet
 {
     private Gtk.EventBox event_box;
     private Budgie.Popover? popover = null;
@@ -29,7 +25,7 @@ public class Applet : Budgie.Applet
 
     public string uuid { public set; public get; }
 
-    public Applet(string uuid)
+    public CaffeineApplet(string uuid)
     {
         Object(uuid: uuid);
 
@@ -45,7 +41,7 @@ public class Applet : Budgie.Applet
 
         popover = new Budgie.Popover(event_box);
         popover.get_style_context().add_class("caffeine-popover");
-        var win = new Window ();
+        var win = new CaffeineWindow ();
         popover.add(win);
 
         // On click icon
@@ -79,7 +75,7 @@ public class Applet : Budgie.Applet
 
     public override Gtk.Widget? get_settings_ui()
     {
-        return new Settings(this.get_applet_settings(uuid));
+        return new CaffeineSettings(this.get_applet_settings(uuid));
     }
 }
 } // end Namespace
@@ -89,7 +85,7 @@ public void peas_register_types(TypeModule module)
 {
     // boilerplate - all modules need this
     var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(Caffeine.Plugin));
+    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(CaffeinePlugin));
 }
 
 /*

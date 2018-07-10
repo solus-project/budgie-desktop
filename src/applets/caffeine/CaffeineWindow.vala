@@ -1,8 +1,5 @@
-namespace Caffeine
-{
-
 [GtkTemplate (ui = "/com/solus-project/caffeine/window.ui")]
-public class Window : Gtk.Grid
+public class CaffeineWindow : Gtk.Grid
 {
     [GtkChild]
     private Gtk.Switch? mode;
@@ -10,13 +7,11 @@ public class Window : Gtk.Grid
     [GtkChild]
     private Gtk.SpinButton? timer;
 
-    public Window ()
+    public CaffeineWindow ()
     {
         Object();
     }
 }
-
-} // End namespace
 
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
