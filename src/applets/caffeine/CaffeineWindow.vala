@@ -18,7 +18,7 @@ public class CaffeineWindow : Gtk.Grid
     uint32? default_idle_delay;
     bool? default_idle_dim;
     string? default_sleep_inactive_ac_type;
-    string? default_sleep_inactive_battery_type
+    string? default_sleep_inactive_battery_type;
 
     public CaffeineWindow (Gtk.EventBox? event_box)
     {
