@@ -13,7 +13,12 @@ public class CaffeineWindow : Gtk.Grid
     Gtk.EventBox? event_box;
     Settings? power_settings;
     Settings? session_settings;
-    Variant? defaults;
+
+    // Default configuration value
+    uint32? default_idle_delay;
+    bool? default_idle_dim;
+    string? default_sleep_inactive_ac_type;
+    string? default_sleep_inactive_battery_type
 
     public CaffeineWindow (Gtk.EventBox? event_box)
     {
@@ -30,20 +35,14 @@ public class CaffeineWindow : Gtk.Grid
 
     private void fetch_default ()
     {
-        var builder = new VariantBuilder (new VariantType ("a{sv}"));
-        builder.add ("{sv}", "idle-delay", new Variant.uint32(
-            session_settings.get_uint ("idle-delay")));
-        builder.add ("{sv}", "idle-dim", new Variant.boolean(
-            power_settings.get_boolean ("idle-dim")));
-        builder.add ("{sv}", "sleep-inactive-ac-type", new Variant.string(
-            power_settings.get_string ("sleep-inactive-ac-type")));
-        builder.add ("{sv}", "sleep-inactive-battery-type", new Variant.string(
-            power_settings.get_string ("sleep-inactive-battery-type")));
-
-        defaults = builder.end ();
+        // Fetch default configuration
+        default_idle_delay = session_settings.get_uint ("idle-delay");
+        default_idle_dim = power_settings.get_boolean ("idle-dim");
+        default_sleep_inactive_ac_type = power_settings.get_string ("sleep-inactive-ac-type");
+        default_sleep_inactive_battery_type = power_settings.get_string ("sleep-inactive-battery-type");
     }
 
-    private void on_mode_active (Object? obj)
+    private void on_mode_active (Object? obj, ParamSpec? params)
     {
         var icon = event_box.get_child ();
         event_box.remove (icon);
@@ -72,14 +71,10 @@ public class CaffeineWindow : Gtk.Grid
         else
         {
             timer.sensitive = true;
-            session_settings.set_uint ("idle-delay",
-                defaults.lookup_value ("idle-delay", new VariantType ("u")));
-            power_settings.set_boolean ("idle-dim",
-                defaults.lookup_value ("idle-dim", new VariantType ("b")));
-            power_settings.set_string ("sleep-inactive-ac-type",
-                defaults.lookup_value ("sleep-inactive-ac-type", new VariantType ("s")));
-            power_settings.set_string ("sleep-inactive-battery-type",
-                defaults.lookup_value ("sleep-inactive-battery-type", new VariantType ("s")));
+            session_settings.set_uint ("idle-delay", default_idle_delay);
+            power_settings.set_boolean ("idle-dim", default_idle_dim);
+            power_settings.set_string ("sleep-inactive-ac-type", default_sleep_inactive_ac_type);
+            power_settings.set_string ("sleep-inactive-battery-type", default_sleep_inactive_battery_type);
 
             icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
             event_box.add (icon);
