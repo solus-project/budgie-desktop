@@ -31,14 +31,14 @@ public class CaffeineWindow : Gtk.Grid
     private void fetch_default ()
     {
         var builder = new VariantBuilder (new VariantType ("a{sv}"));
-        builder.add ("{sv}", "idle-delay", new Variant.uint32,
-            session_settings.get_uint ("idle-delay"));
-        builder.add ("{sv}", "idle-dim", new Variant.boolean,
-            power_settings.get_boolean ("idle-dim"));
-        builder.add ("{sv}", "sleep-inactive-ac-type", new Variant.string,
-            power_settings.get_string ("sleep-inactive-ac-type"));
-        builder.add ("{sv}", "sleep-inactive-battery-type", new Variant.string,
-            power_settings.get_string ("sleep-inactive-battery-type"));
+        builder.add ("{sv}", "idle-delay", new Variant.uint32(
+            session_settings.get_uint ("idle-delay")));
+        builder.add ("{sv}", "idle-dim", new Variant.boolean(
+            power_settings.get_boolean ("idle-dim")));
+        builder.add ("{sv}", "sleep-inactive-ac-type", new Variant.string(
+            power_settings.get_string ("sleep-inactive-ac-type")));
+        builder.add ("{sv}", "sleep-inactive-battery-type", new Variant.string(
+            power_settings.get_string ("sleep-inactive-battery-type")));
 
         defaults = builder.end ();
     }
@@ -51,15 +51,16 @@ public class CaffeineWindow : Gtk.Grid
         var time = timer.get_value_as_int();
         if (mode.get_active ())
         {
-            # Fetch power settings default value
+            // Fetch power settings default value
             fetch_default ();
+
             timer.sensitive = false;
-            session_settings.set_uint ("idle-delay", 0)
-            power_settings.set_boolean ("idle-dim", false)
+            session_settings.set_uint ("idle-delay", 0);
+            power_settings.set_boolean ("idle-dim", false);
             power_settings.set_string ("sleep-inactive-ac-type", "nothing");
             power_settings.set_string ("sleep-inactive-battery-type", "nothing");
 
-            icon = new Gtk.Image.from_icon_name("caffeine-cup-full", Gtk.IconSize.MENU);
+            icon = Gtk.Image.from_icon_name("caffeine-cup-full", Gtk.IconSize.MENU);
             event_box.add (icon);
 
             // Add timeout callback if timer's spinbox is not 0
@@ -72,19 +73,19 @@ public class CaffeineWindow : Gtk.Grid
         {
             timer.sensitive = true;
             session_settings.set_uint ("idle-delay",
-                defaults.lookup_value ("idle-delay", new VariantType ("u")));
+                defaults.lookup_value ("idle-delay", VariantType ("u")));
             power_settings.set_boolean ("idle-dim",
-                defaults.lookup_value ("idle-dim", new VariantType ("b")))
+                defaults.lookup_value ("idle-dim", VariantType ("b")));
             power_settings.set_string ("sleep-inactive-ac-type",
-                defaults.lookup_value ("sleep-inactive-ac-type", new VariantType ("s")));
+                defaults.lookup_value ("sleep-inactive-ac-type", VariantType ("s")));
             power_settings.set_string ("sleep-inactive-battery-type",
-                defaults.lookup_value ("sleep-inactive-battery-type", new VariantType ("s")));
+                defaults.lookup_value ("sleep-inactive-battery-type", VariantType ("s")));
 
-            icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
+            icon = Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
             event_box.add (icon);
         }
 
-        self.box.show_all()
+        event_box.show_all();
     }
 
     private bool on_timer_out ()
@@ -92,7 +93,7 @@ public class CaffeineWindow : Gtk.Grid
         //Reset Caffeine mode and timer value
         mode.active = false;
         timer.value = 0;
-        return False
+        return false;
     }
 }
 
