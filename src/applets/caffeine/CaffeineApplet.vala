@@ -41,7 +41,7 @@ public class CaffeineApplet : Budgie.Applet
 
         popover = new Budgie.Popover(event_box);
         popover.get_style_context().add_class("caffeine-popover");
-        var win = new CaffeineWindow ();
+        var win = new CaffeineWindow (event_box);
         popover.add(win);
 
         // On click icon

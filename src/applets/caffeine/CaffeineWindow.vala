@@ -43,7 +43,7 @@ public class CaffeineWindow : Gtk.Grid
         defaults = builder.end ();
     }
 
-    private void on_mode_active (Gtk.Switch? mode)
+    private void on_mode_active (Object? obj)
     {
         var icon = event_box.get_child ();
         event_box.remove (icon);
@@ -60,7 +60,7 @@ public class CaffeineWindow : Gtk.Grid
             power_settings.set_string ("sleep-inactive-ac-type", "nothing");
             power_settings.set_string ("sleep-inactive-battery-type", "nothing");
 
-            icon = Gtk.Image.from_icon_name("caffeine-cup-full", Gtk.IconSize.MENU);
+            icon = new Gtk.Image.from_icon_name("caffeine-cup-full", Gtk.IconSize.MENU);
             event_box.add (icon);
 
             // Add timeout callback if timer's spinbox is not 0
@@ -73,15 +73,15 @@ public class CaffeineWindow : Gtk.Grid
         {
             timer.sensitive = true;
             session_settings.set_uint ("idle-delay",
-                defaults.lookup_value ("idle-delay", VariantType ("u")));
+                defaults.lookup_value ("idle-delay", new VariantType ("u")));
             power_settings.set_boolean ("idle-dim",
-                defaults.lookup_value ("idle-dim", VariantType ("b")));
+                defaults.lookup_value ("idle-dim", new VariantType ("b")));
             power_settings.set_string ("sleep-inactive-ac-type",
-                defaults.lookup_value ("sleep-inactive-ac-type", VariantType ("s")));
+                defaults.lookup_value ("sleep-inactive-ac-type", new VariantType ("s")));
             power_settings.set_string ("sleep-inactive-battery-type",
-                defaults.lookup_value ("sleep-inactive-battery-type", VariantType ("s")));
+                defaults.lookup_value ("sleep-inactive-battery-type", new VariantType ("s")));
 
-            icon = Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
+            icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
             event_box.add (icon);
         }
 
