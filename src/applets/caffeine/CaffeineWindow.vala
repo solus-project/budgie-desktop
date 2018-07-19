@@ -13,6 +13,7 @@ public class CaffeineWindow : Gtk.Grid
     Gtk.EventBox? event_box;
     Settings? power_settings;
     Settings? session_settings;
+    Settings? settings;
 
     // Default configuration value
     uint32? default_idle_delay;
@@ -20,10 +21,11 @@ public class CaffeineWindow : Gtk.Grid
     string? default_sleep_inactive_ac_type;
     string? default_sleep_inactive_battery_type;
 
-    public CaffeineWindow (Gtk.EventBox? event_box)
+    public CaffeineWindow (Gtk.EventBox? event_box, Settings? settings)
     {
         Object();
         this.event_box = event_box;
+        this.settings = settings;
 
         // Get settings
         power_settings = new Settings (POWER_SCHEME);
