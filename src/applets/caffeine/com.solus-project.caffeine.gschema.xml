@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="com.solus-project.caffeine">
+    <key type="b" name="enable-notification">
+			<default>false</default>
+			<summary>Show notification</summary>
+			<description>Simply show the notification on changing mode</description>
+		</key>
+		<key type="b" name="toggle-brightness">
+			<default>true</default>
+			<summary>Toggle screen brightness on activation</summary>
+			<description>Control whether the screen brightness is changes when Caffeine mode activated</description>
+		</key>
+		<key type="i" name="screen-brightness">
+			<default>95</default>
+			<summary>Screen brightness percentage</summary>
+			<description>Determine the value of screen brightness when Caffeine mode activated</description>
+		</key>
+  </schema>
+</schemalist>

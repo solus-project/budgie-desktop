@@ -5,6 +5,7 @@ applets_dir = join_paths(plugin_libdir, applet_namespace)
 
 subdir('budgie-menu')
 subdir('clock')
+subdir('caffeine')
 subdir('icon-tasklist')
 subdir('keyboard-layout')
 subdir('lock-keys')
