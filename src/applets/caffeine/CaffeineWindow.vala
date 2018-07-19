@@ -44,12 +44,36 @@ public class CaffeineWindow : Gtk.Grid
         default_sleep_inactive_battery_type = power_settings.get_string ("sleep-inactive-battery-type");
     }
 
+    private void send_notification (bool activate, int time)
+    {
+        var cmd = new StringBuilder ();
+        cmd.append ("notify-send ");
+
+        if (activate) {
+            cmd.append ("\"" + _("Turn on Caffeine Boost") + "\" ");
+            if (time > 0) {
+                var duration = ngettext ("a minute", "%d minutes", time).printf (time);
+                cmd.append ("\""+ _("Will turn off in ") + duration + "\" ");
+            }
+            cmd.append ("--icon=caffeine-cup-full");
+        } else {
+            cmd.append ("\"" + _("Turn off Caffeine Boost") + "\" ");
+            cmd.append ("--icon=caffeine-cup-empty");
+        }
+
+        try {
+            Process.spawn_command_line_async (cmd.str);
+    	} catch (SpawnError e) {
+    		print ("Error: %s\n", e.message);
+    	}
+    }
+
     private void on_mode_active (Object? obj, ParamSpec? params)
     {
         var icon = event_box.get_child ();
         event_box.remove (icon);
 
-        var time = timer.get_value_as_int();
+        var time = timer.get_value_as_int ();
         if (mode.get_active ())
         {
             // Fetch power settings default value
@@ -80,6 +104,10 @@ public class CaffeineWindow : Gtk.Grid
 
             icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
             event_box.add (icon);
+        }
+
+        if (settings.get_boolean ("enable-notification")) {
+            send_notification(mode.get_active (), time);
         }
 
         event_box.show_all();
