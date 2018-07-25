@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ public class HeaderExpander : Gtk.Button
 {
     private Gtk.Image? image;
 
-    private bool _expanded = true;
+    private bool _expanded = false;
     private unowned HeaderWidget? owner = null;
 
     public bool expanded {
@@ -34,6 +34,7 @@ public class HeaderExpander : Gtk.Button
         public get {
             return this._expanded;
         }
+        default = false;
     }
 
     public HeaderExpander(HeaderWidget? owner)
@@ -53,7 +54,7 @@ public class HeaderExpander : Gtk.Button
     public override void clicked()
     {
         this.expanded = !this.expanded;
-        this.owner.expanded = expanded;
+        this.owner.expanded = this.expanded;
     }
 }
 
@@ -66,7 +67,7 @@ public class HeaderWidget : Gtk.Box
     private Gtk.Label? label = null;
     private Gtk.Button? close_button = null;
     private Gtk.Box? header_box = null;
-    private HeaderExpander? expander_btn = null;
+    public HeaderExpander? expander_btn = null;
 
     /** Display text */
     public string? text {
@@ -121,7 +122,7 @@ public class HeaderWidget : Gtk.Box
     /**
      * Manage the expanded state of this expanding header widget
      */
-    public bool expanded { public get; public set ; default = true; }
+    public bool expanded { public get; public set ; }
 
     /**
      * Emitted when this widget has been closed
@@ -185,6 +186,7 @@ public class HeaderWidget : Gtk.Box
     {
         if (expander_btn != null) {
             expander_btn.expanded = value;
+            expanded = value;
         }
     }
 }
@@ -206,7 +208,6 @@ public class RavenExpander : Gtk.Box
         public get {
             return content.get_reveal_child();
         }
-        default = true;
     }
 
     private bool track_animations = false;
@@ -226,7 +227,6 @@ public class RavenExpander : Gtk.Box
             this.get_toplevel().queue_draw();
             this.track_animations = false;
         });
-        expanded = true;
 
         content.notify["reveal-child"].connect(()=> {
             this.track_animations = true;

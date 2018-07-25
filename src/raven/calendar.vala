@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ public class CalendarWidget : Gtk.Box
         var time = new DateTime.now_local();
         header = new Budgie.HeaderWidget(time.format(date_format), "x-office-calendar-symbolic", false);
         var expander = new Budgie.RavenExpander(header);
+        expander.expanded = true;
+
         this.pack_start(expander, false, false, 0);
 
         cal = new Gtk.Calendar();
