@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie 10)
  * 
  * This program is free software; you can redistribute it and/or modify

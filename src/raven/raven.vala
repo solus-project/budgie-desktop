@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,12 @@ public class RavenIface
     }
 
     public bool is_expanded {
-        public set {
-            parent.set_expanded(value);
-        }
         public get {
             return parent.get_expanded();
+        }
+
+        public set {
+            parent.set_expanded(value);
         }
     }
 

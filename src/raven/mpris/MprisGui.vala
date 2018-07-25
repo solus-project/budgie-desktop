@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,6 +202,17 @@ public class ClientWidget : Gtk.Box
         });
 
         player_box.get_style_context().add_class("raven-background");
+
+        /**
+         * Custom Player Styling
+         * We do this against the parent box itself so styling includes the header
+         */
+        if ((client.player.desktop_entry != null) && (client.player.desktop_entry != "")) { // If a desktop entry is set
+            get_style_context().add_class(client.player.desktop_entry); // Add our desktop entry, such as "spotify" to player_box
+        } else { // If no desktop entry is set, use identity
+            get_style_context().add_class(client.player.identity.down()); // Lowercase identity
+        }
+
         player_revealer.add(player_box);
         pack_start(player_revealer);
     }

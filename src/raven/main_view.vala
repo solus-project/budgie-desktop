@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,8 @@ public class MainView : Gtk.Box
     /* This is completely temporary. Shush */
     private MprisWidget? mpris = null;
     private CalendarWidget? cal = null;
-    private SoundWidget? sound = null;
+    private Budgie.SoundWidget? audio_input_widget = null;
+    private Budgie.SoundWidget? audio_output_widget = null;
 
     private Gtk.Stack? main_stack = null;
     private Gtk.StackSwitcher? switcher = null;
@@ -66,8 +67,11 @@ public class MainView : Gtk.Box
         cal = new CalendarWidget();
         box.pack_start(cal, false, false, 0);
 
-        sound = new SoundWidget();
-        box.pack_start(sound, false, false, 0);
+        audio_output_widget = new Budgie.SoundWidget("output");
+        box.pack_start(audio_output_widget, false, false, 0);
+
+        audio_input_widget = new Budgie.SoundWidget("input");
+        box.pack_start(audio_input_widget, false, false, 0);
 
         mpris = new MprisWidget();
         box.pack_start(mpris, false, false, 0);
@@ -77,7 +81,6 @@ public class MainView : Gtk.Box
         main_stack.set_visible_child_name("applets");
 
         main_stack.notify["visible-child-name"].connect(on_name_change);
-
     }
 
     void on_name_change()

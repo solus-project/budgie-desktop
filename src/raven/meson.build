@@ -12,6 +12,7 @@ libraven_resources = gnome.compile_resources(
 )
 
 libraven_sources = [
+    'app_sound_control.vala',
     'calendar.vala',
     'headerwidget.vala',
     'main_view.vala',
@@ -22,6 +23,7 @@ libraven_sources = [
     'mpris/MprisClient.vala',
     'mpris/MprisGui.vala',
     'mpris/MprisWidget.vala',
+    'start_listening.vala',
     libraven_resources,
 ]
 
