@@ -20,6 +20,7 @@ app_icons = [
     join_paths('.', 'icons', 'apps', 'notifications-applet-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'separator-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'task-list-symbolic.svg'),
+    join_paths('.', 'icons', 'apps', 'quicknote-applet-symbolic.svg'),
 ]
 
 status_icons = [

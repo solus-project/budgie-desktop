@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+    <schema path="/com/solus-project/quicknote/"
+            id="com.solus-project.quicknote">
+        <key type="i" name="width">
+            <summary>Window width</summary>
+            <description>Popup window width</description>
+            <default>350</default>
+	    <range min="250" max="750"/>
+        </key>
+        <key type="i" name="height">
+            <summary>Window height</summary>
+            <description>Popup window height</description>
+            <default>240</default>
+	    <range min="150" max="450"/>
+        </key>
+        <key type="s" name="custompath">
+            <summary>data file</summary>
+            <description>The customized path where the QuickNote datafile is stored</description>
+            <default>""</default>
+        </key>
+    </schema>
+</schemalist>
+
+
