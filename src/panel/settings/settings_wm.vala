@@ -18,9 +18,10 @@ public class WindowsPage : Budgie.SettingsPage {
 
     private GLib.Settings budgie_wm_settings;
     private Gtk.ComboBox combo_layouts;
-    private Gtk.Switch switch_unredirect;
     private Gtk.Switch switch_dialogs;
+    private Gtk.Switch switch_focus;
     private Gtk.Switch switch_tiling;
+    private Gtk.Switch switch_unredirect;
 
     public WindowsPage()
     {
@@ -53,6 +54,11 @@ public class WindowsPage : Budgie.SettingsPage {
         combo_layouts.add_attribute(render, "text", 1);
         combo_layouts.set_id_column(0);
 
+        switch_focus = new Gtk.Switch();
+        grid.add_row(new SettingsRow(switch_focus,
+            _("Enable window focus change on mouse enter and leave"),
+            _("Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window.")));
+
         /* Dialogs attach modally */
         switch_dialogs = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_dialogs,
@@ -76,6 +82,7 @@ public class WindowsPage : Budgie.SettingsPage {
         budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
+        budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
     }
     

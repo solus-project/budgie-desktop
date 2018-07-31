@@ -38,8 +38,6 @@ namespace Budgie {
                 Gvc.push_volume(stream); // Immediately push this update volume
             }
 
-            stdout.printf("Added %s with max volume: %u\n", app_name, max_vol);
-
             var max_vol_step = max_vol / 20;
 
             /**

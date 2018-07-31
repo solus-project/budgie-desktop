@@ -25,6 +25,7 @@ public enum ButtonPosition {
  */
 public class SettingsManager
 {
+    private GLib.Settings? gnomedesktop = null;
     private GLib.Settings? wm_settings = null;
     private GLib.Settings? xoverrides = null;
 
@@ -55,6 +56,7 @@ public class SettingsManager
     public SettingsManager()
     {
         /* Settings we need to write to */
+        gnomedesktop = new GLib.Settings("org.gnome.desktop.wm.preferences");
         xoverrides = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
 
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
@@ -64,12 +66,18 @@ public class SettingsManager
 
     private void on_wm_settings_changed(string key)
     {
-        if (key != "button-style") {
-            return;
+        switch (key) {
+            case "button-style":
+                ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
+                this.set_button_style(style);
+                break;
+            case "focus-mode":
+                bool mode = wm_settings.get_boolean(key);
+                this.set_focus_mode(mode);
+                break;
+            default:
+                break;
         }
-
-        ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
-        this.set_button_style(style);
     }
 
     /**
@@ -93,6 +101,19 @@ public class SettingsManager
         }
         this.xoverrides.set_value("overrides", xset);
         this.wm_settings.set_string("button-layout", wm_set);
+    }
+
+    /**
+     * set_focus_mode will set the window focus mode
+     */
+    void set_focus_mode(bool enable) {
+        string gfocus_mode = "click";
+
+        if (enable) {
+            gfocus_mode = "mouse";
+        }
+
+        this.gnomedesktop.set_value("focus-mode", gfocus_mode);
     }
 
 } /* End class SettingsManager (BudgieSettingsManager) */

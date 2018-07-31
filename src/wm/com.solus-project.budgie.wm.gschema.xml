@@ -19,6 +19,12 @@
       <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
     </key>
 
+    <key type="b" name="focus-mode">
+      <default>false</default>
+      <summary>Window focus mode to indicate how windows are activated</summary>
+      <description>This key overrides the key in org.gnome.desktop.wm.preferences when running Budgie.</description>
+    </key>
+
     <key type="b" name="force-unredirect">
       <default>false</default>
       <summary>Forcibly disable screen unredirection</summary>
