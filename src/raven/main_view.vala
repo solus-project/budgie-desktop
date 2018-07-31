@@ -20,6 +20,7 @@ public class MainView : Gtk.Box
     private CalendarWidget? cal = null;
     private Budgie.SoundWidget? audio_input_widget = null;
     private Budgie.SoundWidget? audio_output_widget = null;
+    private Settings? raven_settings = null;
 
     private Gtk.Stack? main_stack = null;
     private Gtk.StackSwitcher? switcher = null;
@@ -32,6 +33,8 @@ public class MainView : Gtk.Box
     public MainView()
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+        raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
+        raven_settings.changed.connect(this.on_raven_settings_changed);
 
         var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         header.get_style_context().add_class("raven-header");
@@ -79,7 +82,6 @@ public class MainView : Gtk.Box
         show_all();
 
         main_stack.set_visible_child_name("applets");
-
         main_stack.notify["visible-child-name"].connect(on_name_change);
     }
 
@@ -87,6 +89,49 @@ public class MainView : Gtk.Box
     {
         if (main_stack.get_visible_child_name() == "notifications") {
             Raven.get_instance().ReadNotifications();
+        }
+    }
+
+    /**
+     * on_raven_settings_changed will handle when the settings for Raven widgets have changed
+     */
+    void on_raven_settings_changed(string key) {
+        bool show_widget = raven_settings.get_boolean(key);
+
+        /**
+         * You're probably wondering why I'm not just setting a visible value here, and that's typically a good idea.
+         * However, it causes weird focus and rendering issues even when has_visible_focus is set to false. I don't get it either, so we're doing this.
+         */
+        if (show_widget) { // Show the widget
+            switch (key) {
+                case "show-calendar-widget":
+                    cal.show_all();
+                    break;
+                case "show-sound-output-widget":
+                    audio_output_widget.show_all();
+                    break;
+                case "show-mic-input-widget":
+                    audio_input_widget.show_all();
+                    break;
+                case "show-mpris-widget":
+                    mpris.show_all();
+                    break;
+            }
+        } else { // Hide the widget
+            switch (key) {
+                case "show-calendar-widget":
+                    cal.hide();
+                    break;
+                case "show-sound-output-widget":
+                    audio_output_widget.hide();
+                    break;
+                case "show-mic-input-widget":
+                    audio_input_widget.hide();
+                    break;
+                case "show-mpris-widget":
+                    mpris.hide();
+                    break;
+            }
         }
     }
 

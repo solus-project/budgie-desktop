@@ -70,3 +70,9 @@ link_libraven = declare_dependency(
     link_with: libraven,
     include_directories: include_directories('.'),
 )
+
+# gschemas
+install_data(
+    'com.solus-project.budgie.raven.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
+)

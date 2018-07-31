@@ -473,7 +473,7 @@ public class Raven : Gtk.Window
         nscale = old_op;
 
         if (exp) {
-            show_all();
+            show();
         }
 
         this.expanded = exp;

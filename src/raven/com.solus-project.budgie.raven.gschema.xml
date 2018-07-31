@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie-desktop">
+
+  <schema path="/com/solus-project/budgie-raven/" id="com.solus-project.budgie-raven">
+    <key type="b" name="show-calendar-widget">
+      <default>true</default>
+      <summary>Show the Calendar widget in Raven</summary>
+      <description>Show the Calendar widget in Raven.</description>
+    </key>
+
+    <key type="b" name="show-sound-output-widget">
+      <default>true</default>
+      <summary>Show the Sound Output devices widget in Raven</summary>
+      <description>Show the Sound Output devices widget in Raven.</description>
+    </key>
+
+    <key type="b" name="show-mic-input-widget">
+      <default>true</default>
+      <summary>Show the Sound Input devices widget in Raven</summary>
+      <description>Show the Sound Input devices widget in Raven.</description>
+    </key>
+
+    <key type="b" name="show-mpris-widget">
+      <default>true</default>
+      <summary>Show the MPRIS widget in Raven</summary>
+      <description>Show the MPRIS widget in Raven.</description>
+    </key>
+  </schema>
+
+</schemalist>
