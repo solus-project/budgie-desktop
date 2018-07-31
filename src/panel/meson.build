@@ -31,6 +31,7 @@ panel_sources = [
     'settings/settings_panel_applets.vala',
     'settings/settings_panel_dialogs.vala',
     'settings/settings_panel.vala',
+    'settings/settings_raven.vala',
     'settings/settings_style.vala',
     'settings/settings_wm.vala',
     'settings/themes.vala',

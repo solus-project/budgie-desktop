@@ -113,6 +113,7 @@ public class SettingsWindow : Gtk.Window {
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
         this.add_page(new Budgie.AutostartPage());
+        this.add_page(new Budgie.RavenPage());
     }
 
     /**

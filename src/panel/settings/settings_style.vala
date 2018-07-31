@@ -15,8 +15,6 @@ namespace Budgie {
  * StylePage simply provides a bunch of theme controls
  */
 public class StylePage : Budgie.SettingsPage {
-
-
     private Gtk.ComboBox? combobox_gtk;
     private Gtk.ComboBox? combobox_icon;
     private Gtk.ComboBox? combobox_cursor;
