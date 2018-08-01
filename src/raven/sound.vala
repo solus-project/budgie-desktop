@@ -194,7 +194,7 @@ namespace Budgie {
         }
 
         /**
-         * on_device_changed will handle when a Gvc.MixerUIDevice has been added
+         * on_device_changed will handle when a Gvc.MixerUIDevice has been changed
          */
         private void on_device_changed(uint id) {
             Gvc.MixerStream stream = (widget_type == "input") ? mixer.get_default_source() : mixer.get_default_sink(); // Set default_stream to the respective source or sink
