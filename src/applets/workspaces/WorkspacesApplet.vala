@@ -114,6 +114,7 @@ public class WorkspacesApplet : Budgie.Applet
 
         add_button_revealer = new Gtk.Revealer();
         add_button_revealer.set_transition_duration(200);
+        add_button_revealer.set_transition_type(hide_transition);
         add_button_revealer.set_reveal_child(false);
 
         Gtk.Button add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
