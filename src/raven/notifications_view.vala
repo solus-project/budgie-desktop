@@ -120,6 +120,8 @@ public class NotificationClone : Gtk.Grid
         }
 
         label_title.set_markup(safe_markup_string(target.title));
+        label_title.ellipsize = Pango.EllipsizeMode.END;
+
         label_body.set_markup(safe_markup_string(target.body));
 
         var date = new DateTime.from_unix_local(target.timestamp);
@@ -421,6 +423,8 @@ public class NotificationWindow : Gtk.Window
             label_title.set_markup(safe_markup_string(summary));
             this.title = summary;
         }
+
+        label_title.ellipsize = Pango.EllipsizeMode.END;
     
         label_body.set_markup(safe_markup_string(body));
         this.body = body;
