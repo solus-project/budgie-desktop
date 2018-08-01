@@ -20,11 +20,14 @@ app_icons = [
     join_paths('.', 'icons', 'apps', 'notifications-applet-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'separator-symbolic.svg'),
     join_paths('.', 'icons', 'apps', 'task-list-symbolic.svg'),
+    join_paths('.', 'icons', 'apps', 'my-caffeine-on-symbolic.svg'),
 ]
 
 status_icons = [
     join_paths('.', 'icons', 'status', 'num-lock-symbolic.svg'),
     join_paths('.', 'icons', 'status', 'caps-lock-symbolic.svg'),
+    join_paths('.', 'icons', 'status', 'caffeine-cup-full.svg'),
+    join_paths('.', 'icons', 'status', 'caffeine-cup-empty.svg'),
 ]
 
 

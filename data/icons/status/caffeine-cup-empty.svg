@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="48px"
+   height="48px"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="SVGRoot">
+  <defs
+     id="defs4504">
+    <marker
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="DiamondLstart"
+       style="overflow:visible">
+      <path
+         id="path5191"
+         d="M 0,-7.0710768 L -7.0710894,0 L 0,7.0710589 L 7.0710462,0 L 0,-7.0710768 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.8) translate(7,0)" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path5103"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata4507">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="rect5075"
+     d="m 16.123139,19.658203 c -7.8359288,0.47168 -9.4802572,1.517578 -9.4802572,1.517578 v 20.800781 c 0,2.542753 2.8798209,4.587891 4.9505602,4.587891 0,0 1.254002,0.0019 1.64874,0.894531 h 22.767805 c 0.457314,-0.89266 1.646572,-0.894531 1.646572,-0.894531 2.741708,0 4.950559,-2.045138 4.950559,-4.587891 V 21.175781 c 0,0 -2.003855,-1.210257 -11.604095,-1.611328 l -1.633556,-0.06641 c -1.848594,-0.04765 -3.551492,-0.0691 -5.100247,-0.06641 l -1.585829,0.02344 c -1.868677,0.01959 -3.532,0.06193 -4.998287,0.128906 z m 8.352172,0.169922 c 1.762443,0.008 3.575706,0.03134 5.102418,0.08008 l 1.635725,0.0625 c 6.622854,0.293109 10.961497,0.994959 10.974971,1.775389 0.002,1.060294 -7.867897,1.91994 -17.576441,1.919922 -9.708545,1.8e-5 -17.5784122,-0.859628 -17.5764417,-1.919922 0.010837,-0.706961 3.5789707,-1.356049 9.2871817,-1.689453 l 1.564134,-0.08008 c 1.592545,-0.07274 3.274528,-0.11947 4.991779,-0.138671 l 1.596674,-0.0098 z"
+     style="fill:#d3dae3;fill-opacity:1;stroke:none;stroke-width:2.54185963;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+</svg>
