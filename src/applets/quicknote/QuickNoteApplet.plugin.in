@@ -1,0 +1,8 @@
+[Plugin]
+Module=quicknoteapplet.so
+Name=QuickNote
+_Description=Quick & Easy Notes
+Authors=Jacob Vlijm, Budgie Desktop Developers
+Copyright=© 2017-2018 Ubuntu Budgie Developers, 2018 Budgie Desktop Developers
+Website= https://budgie-desktop.org
+Icon=quicknote-applet-symbolic
