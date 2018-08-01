@@ -2,6 +2,12 @@
 <schemalist gettext-domain="budgie-desktop">
 
   <schema path="/com/solus-project/budgie-raven/" id="com.solus-project.budgie-raven">
+    <key type="b" name="allow-volume-overdrive">
+      <default>false</default>
+      <summary>Allow raising volume above 100%</summary>
+      <description>This setting overrides the one provided by org.gnome.desktop.sound.</description>
+    </key>
+
     <key type="b" name="show-calendar-widget">
       <default>true</default>
       <summary>Show the Calendar widget in Raven</summary>

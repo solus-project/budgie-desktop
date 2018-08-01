@@ -15,6 +15,7 @@ namespace Budgie {
  * RavenPage shows options for configuring Raven
  */
 public class RavenPage : Budgie.SettingsPage {
+    private Gtk.Switch? allow_volume_overdrive;
     private Gtk.Switch? show_calendar_widget;
     private Gtk.Switch? show_sound_output_widget;
     private Gtk.Switch? show_mic_input_widget;
@@ -32,6 +33,12 @@ public class RavenPage : Budgie.SettingsPage {
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
         var grid = new SettingsGrid();
         this.add(grid);
+
+        allow_volume_overdrive = new Gtk.Switch();
+        grid.add_row(new SettingsRow(allow_volume_overdrive,
+            _("Allow raising volume above 100%"),
+            _("Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%.")
+        ));
 
         show_calendar_widget = new Gtk.Switch();
         grid.add_row(new SettingsRow(show_calendar_widget,
@@ -58,6 +65,7 @@ public class RavenPage : Budgie.SettingsPage {
         ));
 
         raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
+        raven_settings.bind("allow-volume-overdrive", allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-sound-output-widget", show_sound_output_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-mic-input-widget", show_mic_input_widget, "active", SettingsBindFlags.DEFAULT);

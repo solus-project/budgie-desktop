@@ -25,7 +25,9 @@ public enum ButtonPosition {
  */
 public class SettingsManager
 {
-    private GLib.Settings? gnomedesktop = null;
+    private GLib.Settings? gnome_sound_settings = null;
+    private GLib.Settings? gnome_wm_settings = null;
+    private GLib.Settings? raven_settings = null;
     private GLib.Settings? wm_settings = null;
     private GLib.Settings? xoverrides = null;
 
@@ -56,12 +58,24 @@ public class SettingsManager
     public SettingsManager()
     {
         /* Settings we need to write to */
-        gnomedesktop = new GLib.Settings("org.gnome.desktop.wm.preferences");
+        gnome_sound_settings = new GLib.Settings("org.gnome.desktop.sound");
+        gnome_wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
+        raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
         xoverrides = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
 
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+        raven_settings.changed.connect(this.on_raven_settings_changed);
         wm_settings.changed.connect(this.on_wm_settings_changed);
         this.on_wm_settings_changed("button-style");
+    }
+
+    private void on_raven_settings_changed(string key) {
+        if (key != "allow-volume-overdrive") {
+            return;
+        }
+
+        bool allow_volume_overdrive = raven_settings.get_boolean(key); // Get our overdrive value
+        gnome_sound_settings.set_boolean("allow-volume-above-100-percent", allow_volume_overdrive); // Set it to allow-volume-above-100-percent
     }
 
     private void on_wm_settings_changed(string key)
@@ -113,7 +127,7 @@ public class SettingsManager
             gfocus_mode = "mouse";
         }
 
-        this.gnomedesktop.set_value("focus-mode", gfocus_mode);
+        this.gnome_wm_settings.set_value("focus-mode", gfocus_mode);
     }
 
 } /* End class SettingsManager (BudgieSettingsManager) */
