@@ -37,10 +37,19 @@ endif
 
 # now try libmutter-2 ...
 if not dep_mutter.found()
-    dep_mutter = dependency('libmutter-2', version: gnome_minimum_version)
+    dep_mutter = dependency('libmutter-2', version: gnome_minimum_version, required: false)
     if dep_mutter.found()
         message('Using new libmutter-2 ABI from GNOME 3.28')
         vapi_mutter = 'libmutter-2'
+    endif
+endif
+
+# now try libmutter-3 ...
+if not dep_mutter.found()
+    dep_mutter = dependency('libmutter-3', version: gnome_minimum_version)
+    if dep_mutter.found()
+        message('Using new libmutter-3 ABI from GNOME 3.30')
+        vapi_mutter = 'libmutter-3'
     endif
 endif
 
