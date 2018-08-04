@@ -92,37 +92,40 @@ public class NotificationPlaceholder : Gtk.Box
     }
 }
 
-
-[GtkTemplate (ui = "/com/solus-project/budgie/raven/notification_clone.ui")]
-public class NotificationClone : Gtk.Grid
-{
-
-    [GtkChild]
-    private Gtk.Image? image_icon = null;
-
-    [GtkChild]
+public class NotificationClone : Gtk.Box {
+    public uint? id = null;
+    private Gtk.Box? header = null;
+    private Gtk.EventBox? exit_box = null;
+    private Gtk.Image? exit_icon = null;
     private Gtk.Label? label_title = null;
-
-    [GtkChild]
     private Gtk.Label? label_body = null;
-
-    [GtkChild]
     private Gtk.Label? label_timestamp = null;
+    public signal void closed_individually();
 
-    public NotificationClone(NotificationWindow? target)
-    {
-        if (target.pixbuf != null) {
-            Gdk.Pixbuf scaled_pixbuf = target.pixbuf.scale_simple(32, 32, Gdk.InterpType.NEAREST);
-            this.image_icon.set_from_pixbuf(scaled_pixbuf);
-        } else {
-            this.image_icon.set_from_icon_name(target.icon_name, Gtk.IconSize.INVALID);
-            this.image_icon.pixel_size = 32;
-        }
+    public NotificationClone(NotificationWindow? target) {
+        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
+        id = target.id;
+        expand = false;
+        margin_bottom = 5;
+        header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
 
+        exit_box = new Gtk.EventBox();
+        exit_icon = new Gtk.Image.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
+        exit_box.add(exit_icon);
+
+        label_title = new Gtk.Label("");
         label_title.set_markup(safe_markup_string(target.title));
         label_title.ellipsize = Pango.EllipsizeMode.END;
+        label_title.halign = Gtk.Align.START;
+        label_title.justify = Gtk.Justification.LEFT;
 
-        label_body.set_markup(safe_markup_string(target.body));
+        if (target.body != "") { // If there is body content
+            label_body = new Gtk.Label("");
+            label_body.halign = Gtk.Align.START;
+            label_body.set_markup(safe_markup_string(target.body));
+            label_body.wrap = true;
+            label_body.wrap_mode = Pango.WrapMode.CHAR;
+        }
 
         var date = new DateTime.from_unix_local(target.timestamp);
 
@@ -130,7 +133,40 @@ public class NotificationClone : Gtk.Grid
         string clock_format = gnome_settings.get_string("clock-format");
         clock_format = (clock_format == "12h") ? date.format("%l:%M %p") : date.format("%H:%M");
 
-        label_timestamp.set_text(clock_format);
+        label_timestamp = new Gtk.Label(clock_format);
+        label_timestamp.get_style_context().add_class("dim-label"); // Dim the label
+        label_timestamp.halign = Gtk.Align.START;
+        label_timestamp.justify = Gtk.Justification.LEFT;
+
+        /**
+         * Start propagating our Notification box
+         */
+        header.pack_start(label_title, false, false, 0); // Expand the label
+        header.pack_end(exit_box, false, false, 0);
+
+        pack_start(header); // Add our header
+        pack_end(label_timestamp);
+
+        if (label_body != null) {
+            pack_end(label_body);
+        }
+
+        exit_box.button_release_event.connect((e) => {
+            if (e.button != 1) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+
+            Dismiss();
+
+            return Gdk.EVENT_STOP;
+        });
+    }
+
+    /**
+     * Dismiss this notification
+     */
+    public void Dismiss() {
+        closed_individually(); // Trigger our signal so Raven NotificationsView knows
     }
 }
 
@@ -140,8 +176,7 @@ public class NotificationWindow : Gtk.Window
 
     public NotificationsView? owner { public set ; public get; }
 
-    public NotificationWindow(NotificationsView? owner)
-    {
+    public NotificationWindow(NotificationsView? owner)  {
         Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION, owner: owner);
         resizable = false;
         skip_pager_hint = true;
@@ -193,7 +228,7 @@ public class NotificationWindow : Gtk.Window
     public uint32 id;
 
     [GtkChild]
-    private Gtk.Image? image_icon = null;
+    public Gtk.Image? image_icon = null;
 
     [GtkChild]
     private Gtk.Label? label_title = null;
@@ -550,13 +585,14 @@ public class NotificationsView : Gtk.Box
 
     private Settings settings = new GLib.Settings(BUDGIE_PANEL_SCHEMA);
 
-    private HeaderWidget? header = null;
-	private Gtk.ListBox? listbox;
-	private Gtk.Button clear_notifications_button;
     private Gtk.Button button_mute;
-    private bool dnd_enabled = false;
-    private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
+	private Gtk.Button clear_notifications_button;
+	private Gtk.ListBox? listbox;
     private Gtk.Image image_notifications_disabled = new Gtk.Image.from_icon_name("notification-disabled-symbolic", Gtk.IconSize.MENU);
+    private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
+    private HashTable<string,NotificationGroup>? notifications_list = null;
+    private HeaderWidget? header = null;
+    private bool dnd_enabled = false;
 
     private GLib.Queue<NotificationWindow?> stack = null;
 
@@ -587,15 +623,61 @@ public class NotificationsView : Gtk.Box
         string[] spam_categories = settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
         if (reason == NotificationCloseReason.EXPIRED) {
             if (!(widget.category != null && widget.category in spam_categories) && !(widget.app_name != null && widget.app_name in spam_apps) && !widget.did_interact) {
+                string app_name = widget.app_name;
+
+                string app_icon = ((app_name != "") && (app_name != null)) ? app_name : "applications-internet"; // Default app_icon to being the name of the app, or fallback
+
+                if ((widget.image_icon != null) && (widget.image_icon.icon_name != null)) { // If we have an image set
+                    app_icon = widget.image_icon.icon_name; // Use the icon specified in the image
+                }
+
+                app_icon = app_icon.down();
+
+                if (app_icon == "image-invalid") {
+                    app_icon = "applications-internet";
+                }
+
+                try {
+                    DesktopAppInfo app_info = new DesktopAppInfo(app_name + ".desktop");
+
+                    if (app_info != null) {
+                        app_name = app_info.get_string("Name");
+                    }
+                } catch (Error e) {
+                    stdout.printf("Failed to get desktop info for: %s", app_name);
+                }
+
+                var notifications_group = notifications_list.lookup(app_name);
+
+                if (notifications_group == null) { // If our notification group does not exist
+                    notifications_group = new NotificationGroup(app_icon, app_name);
+                    listbox.add(notifications_group); // Add our Notification Group
+
+                    notifications_group.show_all();
+
+                    notifications_group.dismissed_group.connect((app_name) => { // When we dismiss the group
+                        listbox.remove(notifications_group.get_parent()); // Remove this from the listbox
+                        notifications_list.steal(app_name); // Remove notifications group from list
+                        update_child_count();
+                        Raven.get_instance().ReadNotifications(); // Update our counter
+                    });
+
+                    notifications_group.dismissed_notification.connect((id) => {
+                        update_child_count();
+                        Raven.get_instance().ReadNotifications(); // Update our counter
+                    });
+
+                    notifications_list.insert(app_name, notifications_group);
+                }
+
                 var clone = new NotificationClone(widget);
+                notifications_group.add_notification(clone.id, clone);
                 clone.show_all();
-                this.listbox.add(clone);
-                clone.show_all();
-                Raven.get_instance().UnreadNotifications();
             }
         }
 
         update_child_count();
+        Raven.get_instance().UnreadNotifications();
         this.remove_notification(widget.id);
     }
 
@@ -618,7 +700,13 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void update_child_count()
     {
-        uint len = listbox.get_children().length();
+        int len = 0;
+
+        if (notifications_list.length != 0) {
+            notifications_list.foreach((app_name, notification_group) => { // For each notifications list
+                len += notification_group.count; // Add this notification group count
+            });
+        }
 
         string? text = null;
         if (len > 1) {
@@ -757,13 +845,16 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void clear_all()
     {
-        listbox.foreach((c)=> listbox.remove(c));
+        notifications_list.foreach((app_name, notification_group) => {
+            notification_group.dismiss_all();
+        });
+
         update_child_count();
         Raven.get_instance().ReadNotifications();
     }
 
     void on_clear_all() {
-        listbox.foreach((c)=> listbox.remove(c));
+        clear_all();
         update_child_count();
     }
 
@@ -790,8 +881,8 @@ public class NotificationsView : Gtk.Box
         button_mute.relief = Gtk.ReliefStyle.NONE;
         
         var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        control_buttons.pack_start(clear_notifications_button, false, false, 0);
         control_buttons.pack_start(button_mute, false, false, 0);
+        control_buttons.pack_start(clear_notifications_button, false, false, 0);
 
         header = new HeaderWidget(_("No new notifications"), "notification-alert-symbolic", false, null, control_buttons);
         header.margin_top = 6;
@@ -801,6 +892,7 @@ public class NotificationsView : Gtk.Box
 
         pack_start(header, false, false, 0);
 
+        notifications_list = new HashTable<string,NotificationGroup>(str_hash, str_equal);
         notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
         stack = new GLib.Queue<NotificationWindow?>();
 
