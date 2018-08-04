@@ -20,6 +20,8 @@ public class SoundIndicator : Gtk.Bin
     /** Our mixer */
     public Gvc.MixerControl mixer { protected set ; public get ; }
 
+    public uint32 unmuted_volume_val = 0;
+
     /** Default stream */
     private Gvc.MixerStream? stream;
 
@@ -61,8 +63,32 @@ public class SoundIndicator : Gtk.Bin
 
         /* Catch scroll wheel events */
         ebox.add_events(Gdk.EventMask.SCROLL_MASK);
+        ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
         ebox.scroll_event.connect(on_scroll_event);
+        ebox.button_release_event.connect(on_button_release_event);
         show_all();
+    }
+
+    private bool on_button_release_event(Gdk.EventButton e) {
+        if (e.button == Gdk.BUTTON_MIDDLE) { // Middle click
+            /**
+             * You're probably wonder "hey, why aren't you using set_is_muted and get_is_muted"?
+             * Great question. It doesn't work for toggling these values. Simple.
+             */
+            bool is_muted = stream.get_volume() == 0;
+
+            if (is_muted) { // If we're muted
+                stream.set_volume(unmuted_volume_val); // Used our old value
+            } else {
+                stream.set_volume(0); // Set to 0
+            }
+
+            Gvc.push_volume(stream);
+        } else {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        return Gdk.EVENT_STOP;
     }
 
     /**
@@ -136,7 +162,7 @@ public class SoundIndicator : Gtk.Bin
         if (stream != null) {
             SignalHandler.disconnect(stream, notify_id);
         }
-        
+
         stream = mixer.get_default_sink();
         notify_id = stream.notify.connect(on_notify);
         update_volume();
@@ -265,6 +291,10 @@ public class SoundIndicator : Gtk.Bin
 
         show_all();
         queue_draw();
+
+        if (stream.get_volume() != 0) { // If we haven't muted
+            unmuted_volume_val = stream.get_volume(); // Get our new volume
+        }
     }
 
     /**
