@@ -34,6 +34,80 @@ public class BluetoothIndicator : Gtk.Bin
     ulong radio_id;
     Gtk.Button send_to;
 
+    public BluetoothIndicator()
+    {
+        image = new Gtk.Image.from_icon_name("bluetooth-active-symbolic", Gtk.IconSize.MENU);
+
+        ebox = new Gtk.EventBox();
+        add(ebox);
+
+        ebox.add(image);
+
+        ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
+        ebox.button_release_event.connect(on_button_release_event);
+
+        // Create our popover
+        popover = new Budgie.Popover(ebox);
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
+        box.border_width = 6;
+        popover.add(box);
+
+        // Settings button
+        var button = new Gtk.Button.with_label(_("Bluetooth Settings"));
+        button.get_child().set_halign(Gtk.Align.START);
+        button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        button.clicked.connect(on_settings_activate);
+        box.pack_start(button, false, false, 0);
+
+        // Send files button
+        send_to = new Gtk.Button.with_label(_("Send Files"));
+        send_to.get_child().set_halign(Gtk.Align.START);
+        send_to.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+        send_to.clicked.connect(on_send_file);
+        box.pack_start(send_to, false, false, 0);
+
+        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+        box.pack_start(sep, false, false, 1);
+
+        // Airplane mode
+        radio_airplane = new Gtk.CheckButton.with_label(_("Bluetooth Airplane Mode"));
+        radio_airplane.get_child().set_property("margin", 4);
+        radio_id = radio_airplane.notify["active"].connect_after(on_set_airplane);
+        box.pack_start(radio_airplane, false, false, 0);
+
+        // Ensure all content is shown
+        box.show_all();
+
+        client = new Bluetooth.Client();
+        model = client.get_model();
+        model.row_changed.connect(() => { resync(); });
+        model.row_deleted.connect(() => { resync(); });
+        model.row_inserted.connect(() => { resync(); });
+
+        this.resync();
+
+        this.setup_dbus.begin(()=> {
+            if (this.killer == null) {
+                return;
+            }
+            this.sync_rfkill();
+        });
+
+        show_all();
+    }
+
+    private bool on_button_release_event(Gdk.EventButton e) {
+        if (e.button == Gdk.BUTTON_MIDDLE) { // Middle click
+            if (killer != null) {
+                killer.BluetoothAirplaneMode = !killer.BluetoothAirplaneMode; // Invert our current bluetooth airplane mode
+            }
+        } else {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        return Gdk.EVENT_STOP;
+    }
+
     async void setup_dbus()
     {
         try {
@@ -158,65 +232,6 @@ public class BluetoothIndicator : Gtk.Bin
         } catch (Error e) {
             message("Unable to create bluetooth-sendto AppInfo: %s", e.message);
         }
-    }
-
-    public BluetoothIndicator()
-    {
-        image = new Gtk.Image.from_icon_name("bluetooth-active-symbolic", Gtk.IconSize.MENU);
-
-        ebox = new Gtk.EventBox();
-        add(ebox);
-
-        ebox.add(image);
-
-        // Create our popover
-        popover = new Budgie.Popover(ebox);
-        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
-        box.border_width = 6;
-        popover.add(box);
-
-        // Settings button
-        var button = new Gtk.Button.with_label(_("Bluetooth Settings"));
-        button.get_child().set_halign(Gtk.Align.START);
-        button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-        button.clicked.connect(on_settings_activate);
-        box.pack_start(button, false, false, 0);
-
-        // Send files button
-        send_to = new Gtk.Button.with_label(_("Send Files"));
-        send_to.get_child().set_halign(Gtk.Align.START);
-        send_to.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-        send_to.clicked.connect(on_send_file);
-        box.pack_start(send_to, false, false, 0);
-
-        var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-        box.pack_start(sep, false, false, 1);
-
-        // Airplane mode
-        radio_airplane = new Gtk.CheckButton.with_label(_("Bluetooth Airplane Mode"));
-        radio_airplane.get_child().set_property("margin", 4);
-        radio_id = radio_airplane.notify["active"].connect_after(on_set_airplane);
-        box.pack_start(radio_airplane, false, false, 0);
-
-        // Ensure all content is shown
-        box.show_all();
-
-        client = new Bluetooth.Client();
-        model = client.get_model();
-        model.row_changed.connect(() => { resync(); });
-        model.row_deleted.connect(() => { resync(); });
-        model.row_inserted.connect(() => { resync(); });
-
-        this.resync();
-
-        this.setup_dbus.begin(()=> {
-            if (this.killer == null) {
-                return;
-            }
-            this.sync_rfkill();
-        });
-
-        show_all();
     }
 
     /* We set */
