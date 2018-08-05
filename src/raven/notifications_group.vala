@@ -22,7 +22,7 @@ namespace Budgie {
         private Gtk.Image? app_image = null;
         private Gtk.Label? app_label = null;
         private string? app_name;
-        private Gtk.EventBox? close_button = null;
+        private Gtk.Button? dismiss_button = null;
 
         /**
          * Signals
@@ -32,7 +32,12 @@ namespace Budgie {
 
         public NotificationGroup(string c_app_icon, string c_app_name) {
             Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
-            margin = 5;
+
+            // Intentially omit _end because it messes with alignment of dismiss buttons
+            margin_start = 5;
+            margin_top = 5;
+            margin_bottom = 5;
+
             app_name = c_app_name;
 
             notifications = new HashTable<uint, NotificationClone>(direct_hash, direct_equal);
@@ -53,23 +58,16 @@ namespace Budgie {
             app_label.justify = Gtk.Justification.LEFT;
             app_label.use_markup = true;
 
-            close_button = new Gtk.EventBox();
-            close_button.halign = Gtk.Align.END;
-            var exit_icon = new Gtk.Image.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
-            close_button.add(exit_icon);
-            close_button.button_release_event.connect((e) => {
-                if (e.button != 1) {
-                    return Gdk.EVENT_PROPAGATE;
-                }
-    
-                dismiss_all();
-    
-                return Gdk.EVENT_STOP;
-            });
+            dismiss_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
+            dismiss_button.get_style_context().add_class("flat");
+            dismiss_button.get_style_context().add_class("image-button");
+            dismiss_button.halign = Gtk.Align.END;
+
+            dismiss_button.clicked.connect(dismiss_all);
 
             header.pack_start(app_image, false, false, 0);
             header.pack_start(app_label, false, false, 0);
-            header.pack_end(close_button, false, false, 0);
+            header.pack_end(dismiss_button, false, false, 0);
 
             pack_start(header);
             pack_start(list);
