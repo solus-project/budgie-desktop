@@ -317,6 +317,14 @@ namespace Meta {
 		public void set_pointer_visible (bool visible);
 		public signal void cursor_changed ();
 	}
+	[CCode (cheader_filename = "meta/meta-x11-display.h", type_id = "meta_x11display_get_type ()")]
+	public class X11Display : GLib.Object {
+		[CCode (has_construct_function = false)]
+		protected X11Display ();
+		public int get_screen_number ();
+		public X.Window get_xroot ();
+		public void set_cm_selection ();
+	}
 	[CCode (cheader_filename = "meta/display.h", type_id = "meta_display_get_type ()")]
 	public class Display : GLib.Object {
 		[CCode (has_construct_function = false)]
@@ -356,6 +364,10 @@ namespace Meta {
 		public void unmanage_screen (Meta.Screen screen, uint32 timestamp);
 		public bool xserver_time_is_before (uint32 time1, uint32 time2);
 		public bool xwindow_is_a_no_focus_window (X.Window xwindow);
+		public void focus_default_window (uint32 timestamp);
+		public int get_primary_monitor ();
+		public void get_size (out int width, out int height);
+		public void set_cursor (Meta.Cursor cursor);
 		public signal void accelerator_activated (uint object, uint p0, uint p1);
 		public signal void grab_op_begin (Meta.Screen object, Meta.Window p0, Meta.GrabOp p1);
 		public signal void grab_op_end (Meta.Screen object, Meta.Window p0, Meta.GrabOp p1);
@@ -367,6 +379,13 @@ namespace Meta {
 		public signal void window_created (Meta.Window object);
 		public signal void window_demands_attention (Meta.Window object);
 		public signal void window_marked_urgent (Meta.Window object);
+		public signal void in_fullscreen_changed ();
+		public signal void monitors_changed ();
+		public signal void restacked ();
+		public signal void startup_sequence_changed (void* object);
+		public signal void window_entered_monitor (int object, Meta.Window p0);
+		public signal void window_left_monitor (int object, Meta.Window p0);
+		public signal void workareas_changed ();
 	}
 	[CCode (cheader_filename = "meta/common.h")]
 	[Compact]
@@ -464,40 +483,19 @@ namespace Meta {
 		[NoWrapper]
 		public virtual bool xevent_filter (X.Event event);
 	}
-	[CCode (cheader_filename = "meta/screen.h", type_id = "meta_screen_get_type ()")]
-	public class Screen : GLib.Object {
+	[CCode (cheader_filename = "meta/meta-workspace-manager.h", type_id = "meta_workspace_manager_get_type ()")]
+	public class WorkspaceManager : GLib.Object {
 		[CCode (has_construct_function = false)]
-		protected Screen ();
+		protected WorkspaceManager ();
 		public unowned Meta.Workspace? append_new_workspace (bool activate, uint32 timestamp);
-		public void focus_default_window (uint32 timestamp);
 		public unowned Meta.Workspace get_active_workspace ();
 		public int get_active_workspace_index ();
-		public int get_current_monitor ();
-		public int get_current_monitor_for_pos (int x, int y);
-		public unowned Meta.Display get_display ();
-		public Meta.Rectangle get_monitor_geometry (int monitor);
-		public bool get_monitor_in_fullscreen (int monitor);
-		public int get_monitor_index_for_rect (Meta.Rectangle rect);
-		public int get_monitor_neighbor_index (int which_monitor, Meta.ScreenDirection dir);
-		public int get_n_monitors ();
 		public int get_n_workspaces ();
-		public int get_primary_monitor ();
-		public int get_screen_number ();
-		public void get_size (out int width, out int height);
 		public unowned Meta.Workspace? get_workspace_by_index (int index);
 		public unowned GLib.List<Meta.Workspace> get_workspaces ();
-		public X.Window get_xroot ();
-		public void override_workspace_layout (Meta.ScreenCorner starting_corner, bool vertical_layout, int n_rows, int n_columns);
+		public void override_workspace_layout (Meta.DisplayCorner starting_corner, bool vertical_layout, int n_rows, int n_columns);
 		public void remove_workspace (Meta.Workspace workspace, uint32 timestamp);
-		public void set_cm_selection ();
-		public void set_cursor (Meta.Cursor cursor);
 		public int n_workspaces { get; }
-		public signal void in_fullscreen_changed ();
-		public signal void monitors_changed ();
-		public signal void restacked ();
-		public signal void startup_sequence_changed (void* object);
-		public signal void window_entered_monitor (int object, Meta.Window p0);
-		public signal void window_left_monitor (int object, Meta.Window p0);
 		public signal void workareas_changed ();
 		public signal void workspace_added (int object);
 		public signal void workspace_removed (int object);
@@ -571,6 +569,14 @@ namespace Meta {
 		public Meta.Rectangle get_buffer_rect ();
 		public unowned string get_client_machine ();
 		public unowned GLib.Object get_compositor_private ();
+		public int get_current_monitor ();
+		public int get_current_monitor_for_pos (int x, int y);
+		public unowned Meta.Display get_display ();
+		public Meta.Rectangle get_monitor_geometry (int monitor);
+		public bool get_monitor_in_fullscreen (int monitor);
+		public int get_monitor_index_for_rect (Meta.Rectangle rect);
+		public int get_monitor_neighbor_index (int which_monitor, Meta.ScreenDirection dir);
+		public int get_n_monitors ();
 		public unowned string get_description ();
 		public unowned Meta.Display get_display ();
 		public unowned Meta.Frame get_frame ();
@@ -732,7 +738,7 @@ namespace Meta {
 		public void activate (uint32 timestamp);
 		public void activate_with_focus (Meta.Window focus_this, uint32 timestamp);
 		public unowned Meta.Workspace get_neighbor (Meta.MotionDirection direction);
-		public unowned Meta.Screen get_screen ();
+		public unowned Meta.Display get_display ();
 		public Meta.Rectangle get_work_area_all_monitors ();
 		public Meta.Rectangle get_work_area_for_monitor (int which_monitor);
 		public int index ();
@@ -1157,15 +1163,15 @@ namespace Meta {
 		[CCode (cheader_filename = "meta/main.h")]
 		public static unowned string to_string (Meta.Preference pref);
 	}
-	[CCode (cheader_filename = "meta/screen.h", cprefix = "META_SCREEN_", type_id = "meta_screen_corner_get_type ()")]
-	public enum ScreenCorner {
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_DISPLAY_", type_id = "meta_display_corner_get_type ()")]
+	public enum DisplayCorner {
 		TOPLEFT,
 		TOPRIGHT,
 		BOTTOMLEFT,
 		BOTTOMRIGHT
 	}
-	[CCode (cheader_filename = "meta/meta-enum-types.h", cprefix = "META_SCREEN_", type_id = "meta_screen_direction_get_type ()")]
-	public enum ScreenDirection {
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_DISPLAY_", type_id = "meta_display_direction_get_type ()")]
+	public enum DisplayDirection {
 		UP,
 		DOWN,
 		LEFT,
