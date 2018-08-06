@@ -34,8 +34,6 @@ namespace Budgie {
 
             if (max_vol < primary_stream_vol) {
                 max_vol = primary_stream_vol;
-                stream.set_volume(primary_stream_vol);
-                Gvc.push_volume(stream); // Immediately push this update volume
             }
 
             var max_vol_step = max_vol / 20;
