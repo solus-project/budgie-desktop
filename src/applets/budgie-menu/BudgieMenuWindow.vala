@@ -364,7 +364,7 @@ public class BudgieMenuWindow : Budgie.Popover
         right_layout.pack_start(content_scroll, true, true, 0);
 
         // placeholder in case of no results
-        var placeholder = new Gtk.Label("<big>Sorry, no items found</big>");
+        var placeholder = new Gtk.Label("<big>" + _("Sorry, no items found") + "</big>"));
         placeholder.use_markup = true;
         placeholder.get_style_context().add_class("dim-label");
         placeholder.show();
