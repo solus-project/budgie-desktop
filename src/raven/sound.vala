@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -70,7 +70,7 @@ namespace Budgie {
             /**
              * Type-Specific Logic and Construction
              */
-            if (widget_type == "input") { // Input
+            if (widget_type == "input") { // Input 
                 mixer.default_source_changed.connect(on_device_changed);
                 mixer.input_added.connect(on_device_added);
                 mixer.input_removed.connect(on_device_removed);
@@ -383,6 +383,7 @@ namespace Budgie {
             int slider_start = 0;
             int slider_end = 0;
             volume_slider.get_slider_range(out slider_start, out slider_end);
+            volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, null);
 
             if (allow_higher_than_max && (slider_end != vol_max_above)) { // If we're allowing higher than max and currently slider is not a max of 150
                 volume_slider.set_increments(step_size, step_size);
@@ -392,6 +393,7 @@ namespace Budgie {
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max);
                 volume_slider.set_value(current_volume);
+                volume_slider.clear_marks();
             }
         }
 
