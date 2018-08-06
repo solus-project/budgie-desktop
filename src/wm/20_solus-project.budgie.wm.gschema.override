@@ -1,0 +1,4 @@
+[org.gnome.mutter:Budgie]
+edge-tiling = true
+attach-modal-dialogs = true
+button-layout = 'appmenu:minimize,maximize,close'

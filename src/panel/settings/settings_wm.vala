@@ -16,6 +16,7 @@ namespace Budgie {
  */
 public class WindowsPage : Budgie.SettingsPage {
 
+    private GLib.Settings gnome_wm_settings;
     private GLib.Settings budgie_wm_settings;
     private Gtk.ComboBox combo_layouts;
     private Gtk.Switch switch_dialogs;
@@ -78,10 +79,11 @@ public class WindowsPage : Budgie.SettingsPage {
               "Use this if you are having graphical or performance issues with dedicated GPUs")));
 
         /* Hook up settings */
+        gnome_wm_settings = new GLib.Settings("org.gnome.mutter");
         budgie_wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
-        budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
+        gnome_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
-        budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
+        gnome_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
     }
