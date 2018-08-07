@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -127,6 +127,12 @@ namespace Budgie {
                 widget_area_switch = new Gtk.StackSwitcher();
                 widget_area_switch.set_stack(widget_area);
                 widget_area_switch.set_homogeneous(true);
+
+                // Add marks when sound slider can go beyond 100%
+                if (settings.get_boolean(MAX_KEY)) {
+                    var vol_max = mixer.get_vol_max_norm();
+                    volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
+                }
 
                 header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, volume_slider);
                 main_layout.pack_start(widget_area, false, false, 0);
@@ -388,10 +394,12 @@ namespace Budgie {
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max_above);
                 volume_slider.set_value(current_volume);
+                volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
             } else if (!allow_higher_than_max && (slider_end != vol_max)) { // If we're not allowing higher than max and slider is at max
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max);
                 volume_slider.set_value(current_volume);
+                volume_slider.clear_marks();
             }
         }
 
