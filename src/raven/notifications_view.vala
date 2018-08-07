@@ -513,6 +513,7 @@ public class NotificationsView : Gtk.Box
     private Gtk.Image image_notifications_disabled = new Gtk.Image.from_icon_name("notification-disabled-symbolic", Gtk.IconSize.MENU);
     private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
     private HashTable<string,NotificationGroup>? notifications_list = null;
+    private bool performing_clear_all = false;
     private HeaderWidget? header = null;
     private bool dnd_enabled = false;
 
@@ -579,8 +580,16 @@ public class NotificationsView : Gtk.Box
 
                     notifications_group.dismissed_group.connect((app_name) => { // When we dismiss the group
                         listbox.remove(notifications_group.get_parent()); // Remove this from the listbox
-                        notifications_list.steal(app_name); // Remove notifications group from list
-                        update_child_count();
+
+                        /**
+                         * If we're not performing a clear all, steal this entry from notifications list and update our child count
+                         * Performing a steal seems to affect a .foreach call, so best to avoid this.
+                         */
+                        if (!performing_clear_all) {
+                            notifications_list.steal(app_name); // Remove notifications group from list
+                            update_child_count();
+                        }
+
                         Raven.get_instance().ReadNotifications(); // Update our counter
                     });
 
@@ -767,10 +776,15 @@ public class NotificationsView : Gtk.Box
     [DBus (visible = false)]
     void clear_all()
     {
+        performing_clear_all = true;
+
         notifications_list.foreach((app_name, notification_group) => {
             notification_group.dismiss_all();
         });
 
+        notifications_list.steal_all(); // Ensure we're resetting notifications_list
+
+        performing_clear_all = false;
         update_child_count();
         Raven.get_instance().ReadNotifications();
     }
