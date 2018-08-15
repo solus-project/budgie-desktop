@@ -114,7 +114,6 @@ public class SettingsManager
             break;
         }
         this.xoverrides.set_value("overrides", xset);
-        this.wm_settings.set_string("button-layout", wm_set);
     }
 
     /**

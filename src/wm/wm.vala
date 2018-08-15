@@ -155,7 +155,7 @@ public class BudgieWM : Meta.Plugin
     private bool force_unredirect = false;
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
-    Clutter.Actor? screen_group;
+    Clutter.Actor? display_group;
     ulong current_window_resize;
 
     construct
@@ -288,7 +288,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for clear-notifications activated */
-    void on_raven_notification_clear(Meta.Display display, Meta.Screen screen,
+    void on_raven_notification_clear(Meta.Display display,
                                       Meta.Window? window, Clutter.KeyEvent? event,
                                       Meta.KeyBinding binding)
     {
@@ -304,7 +304,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for toggle-raven activated */
-    void on_raven_main_toggle(Meta.Display display, Meta.Screen screen,
+    void on_raven_main_toggle(Meta.Display display,
                               Meta.Window? window, Clutter.KeyEvent? event,
                               Meta.KeyBinding binding)
     {
@@ -320,7 +320,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for toggle-notifications activated */
-    void on_raven_notification_toggle(Meta.Display display, Meta.Screen screen,
+    void on_raven_notification_toggle(Meta.Display display,
                                       Meta.Window? window, Clutter.KeyEvent? event,
                                       Meta.KeyBinding binding)
     {
@@ -369,14 +369,14 @@ public class BudgieWM : Meta.Plugin
     }
 
 
-    void launch_menu(Meta.Display display, Meta.Screen screen,
+    void launch_menu(Meta.Display display,
                      Meta.Window? window, Clutter.KeyEvent? event,
                      Meta.KeyBinding binding)
     {
         on_overlay_key();
     }
 
-    void launch_rundialog(Meta.Display display, Meta.Screen screen,
+    void launch_rundialog(Meta.Display display,
                             Meta.Window? window, Clutter.KeyEvent? event,
                             Meta.KeyBinding binding)
     {
@@ -430,17 +430,11 @@ public class BudgieWM : Meta.Plugin
 
     public override void start()
     {
-        var screen = this.get_screen();
-        screen_group = Meta.Compositor.get_window_group_for_screen(screen);
-        var stage = Meta.Compositor.get_stage_for_screen(screen);
-
-        var display = screen.get_display();
+        var display = this.get_display();
+        display_group = Meta.Compositor.get_window_group_for_display(display);
+        var stage = Meta.Compositor.get_stage_for_display(display);
 
         state_map = new HashTable<Meta.WindowActor?,AnimationState?>(GLib.direct_hash, GLib.direct_equal);
-
-        Meta.Prefs.override_preference_schema(MUTTER_EDGE_TILING, WM_SCHEMA);
-        Meta.Prefs.override_preference_schema(MUTTER_MODAL_ATTACH, WM_SCHEMA);
-        Meta.Prefs.override_preference_schema(MUTTER_BUTTON_LAYOUT, WM_SCHEMA);
 
         iface_settings = new Settings("org.gnome.desktop.interface");
         iface_settings.bind("enable-animations", this, "use-animations", SettingsBindFlags.DEFAULT);
@@ -491,14 +485,15 @@ public class BudgieWM : Meta.Plugin
 
         background_group = new Meta.BackgroundGroup();
         background_group.set_reactive(true);
-        screen_group.insert_child_below(background_group, null);
+        display_group.insert_child_below(background_group, null);
         background_group.button_release_event.connect(on_background_click);
 
-        screen.monitors_changed.connect(on_monitors_changed);
-        on_monitors_changed(screen);
+	var monitor_manager = Meta.MonitorManager.get();
+        monitor_manager.monitors_changed.connect(on_monitors_changed);
+        on_monitors_changed();
 
         background_group.show();
-        screen_group.show();
+        display_group.show();
         stage.show();
 
         keyboard = new KeyboardManager(this);
@@ -538,11 +533,11 @@ public class BudgieWM : Meta.Plugin
             return;
         }
 
-        var screen = this.get_screen();
+        var display = this.get_display();
         if (enab) {
-            Meta.Util.enable_unredirect_for_screen(screen);
+            Meta.Compositor.enable_unredirect_for_display(display);
         } else {
-            Meta.Util.disable_unredirect_for_screen(screen);
+            Meta.Compositor.disable_unredirect_for_display(display);
         }
         this.force_unredirect = enab;
     }
@@ -576,12 +571,13 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
-    void on_monitors_changed(Meta.Screen? screen)
+    void on_monitors_changed()
     {
+	var display = get_display();
         background_group.destroy_all_children();
 
-        for (int i = 0; i < screen.get_n_monitors(); i++) {
-            var actor = new BudgieBackground(screen, i);
+        for (int i = 0; i < display.get_n_monitors(); i++) {
+            var actor = new BudgieBackground(display, i);
             background_group.add_child(actor);
         }
     }
@@ -646,7 +642,7 @@ public class BudgieWM : Meta.Plugin
      */
     public void store_focused()
     {
-        var workspace = get_screen().get_active_workspace();
+        var workspace = get_display().get_workspace_manager().get_active_workspace();
         foreach (var window in workspace.list_windows()) {
             if (window.has_focus()) {
                 focused_window = window;
@@ -663,7 +659,7 @@ public class BudgieWM : Meta.Plugin
         if (focused_window == null) {
             return;
         }
-        focused_window.focus(get_screen().get_display().get_current_time());
+        focused_window.focus(get_display().get_current_time());
         focused_window = null;
     }
 
@@ -814,7 +810,7 @@ public class BudgieWM : Meta.Plugin
         Meta.Rectangle target_rect = actor.get_meta_window().get_frame_rect();
         Meta.Rectangle source_rect = info.old_rect;
 
-        screen_group.add(actor_clone);
+        display_group.add(actor_clone);
 
         actor.set_size(target_rect.width, target_rect.height);
         actor_clone.set_size(source_rect.width, source_rect.height);
@@ -1045,14 +1041,14 @@ public class BudgieWM : Meta.Plugin
     /* Ported from old budgie-wm, in turn ported from Mutter's default plugin */
     public override void show_tile_preview(Meta.Window window, Meta.Rectangle tile_rect, int tile_monitor_num)
     {
-        var screen = this.get_screen();
+        var display = this.get_display();
 
         if (this.tile_preview == null) {
             this.tile_preview = new ScreenTilePreview();
             this.tile_preview.transitions_completed.connect(tile_preview_transition_complete);
 
-            var screen_group = Meta.Compositor.get_window_group_for_screen(screen);
-            screen_group.add_child(this.tile_preview);
+            var display_group = Meta.Compositor.get_window_group_for_display(display);
+            display_group.add_child(this.tile_preview);
 
             default_tile_opacity = this.tile_preview.get_opacity();
         }
@@ -1160,13 +1156,13 @@ public class BudgieWM : Meta.Plugin
 
     public const uint32 MAX_TAB_ELAPSE = 2000;
 
-    public void switch_windows_backward(Meta.Display display, Meta.Screen screen,
+    public void switch_windows_backward(Meta.Display display,
                      Meta.Window? window, Clutter.KeyEvent? event,
                      Meta.KeyBinding binding)
     {
         uint32 cur_time = display.get_current_time();
 
-        var workspace = screen.get_active_workspace();
+        var workspace = display.get_workspace_manager().get_active_workspace();
 
         string? data = null;
         if ((data = workspace.get_data("__flagged")) == null) {
@@ -1193,13 +1189,13 @@ public class BudgieWM : Meta.Plugin
         switch_switcher(true); /* true as in "yes, backward" */
     }
 
-    public void switch_windows(Meta.Display display, Meta.Screen screen,
+    public void switch_windows(Meta.Display display,
                      Meta.Window? window, Clutter.KeyEvent? event,
                      Meta.KeyBinding binding)
     {
         uint32 cur_time = display.get_current_time();
 
-        var workspace = screen.get_active_workspace();
+        var workspace = display.get_workspace_manager().get_active_workspace();
 
         string? data = null;
         if ((data = workspace.get_data("__flagged")) == null) {
@@ -1272,9 +1268,9 @@ public class BudgieWM : Meta.Plugin
 
     void switch_workspace_done()
     {
-        var screen = this.get_screen();
+        var display = this.get_display();
 
-        foreach (var actor in Meta.Compositor.get_window_actors(screen)) {
+        foreach (var actor in Meta.Compositor.get_window_actors(display)) {
             actor.show();
 
             Clutter.Actor? orig_parent = actor.get_data("orig-parent");
@@ -1320,21 +1316,21 @@ public class BudgieWM : Meta.Plugin
         out_group = new Clutter.Actor();
         in_group = new Clutter.Actor();
 
-        var screen = this.get_screen();
-        var stage = Meta.Compositor.get_stage_for_screen(screen);
+        var display = this.get_display();
+        var stage = Meta.Compositor.get_stage_for_display(display);
 
         stage.add_child(in_group);
         stage.add_child(out_group);
         stage.set_child_above_sibling(in_group, null);
 
-        screen.get_size(out screen_width, out screen_height);
+        display.get_size(out screen_width, out screen_height);
 
         /* TODO: Windows should slide "under" the panel/dock
          * Move "in-between" workspaces, e.g. 1->3 shows 2 */
 
 
-        foreach (var actor in Meta.Compositor.get_window_actors(screen)) {
-            var window = actor.get_meta_window();
+        foreach (var actor in Meta.Compositor.get_window_actors(display)) {
+            var window = (actor as Meta.WindowActor).get_meta_window();
 
             if (!window.showing_on_its_workspace() || window.is_on_all_workspaces()) {
                 continue;
@@ -1444,18 +1440,18 @@ public class BudgieWMDBUS : GLib.Object
 
     public void RemoveWorkspaceByIndex(int index, uint32 time)
     {
-        unowned Meta.Screen screen = this.wm.get_screen();
-        unowned Meta.Workspace? workspace = screen.get_workspace_by_index(index);
+        unowned Meta.WorkspaceManager wsm = this.wm.get_display().get_workspace_manager();
+        unowned Meta.Workspace? workspace = wsm.get_workspace_by_index(index);
         if (workspace == null) {
             return;
         }
-        screen.remove_workspace(workspace, time);
+        wsm.remove_workspace(workspace, time);
     }
 
     public int AppendNewWorkspace(uint32 time)
     {
-        unowned Meta.Screen screen = this.wm.get_screen();
-        unowned Meta.Workspace? space = screen.append_new_workspace(false, time);
+        unowned Meta.WorkspaceManager wsm = this.wm.get_display().get_workspace_manager();
+        unowned Meta.Workspace? space = wsm.append_new_workspace(false, time);
         return space.index();
     }
 

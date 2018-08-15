@@ -150,7 +150,7 @@ public class ShellShim : GLib.Object
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
         watches = new HashTable<string,uint>(str_hash, str_equal);
 
-        display = wm.get_screen().get_display();
+        display = wm.get_display();
         display.accelerator_activated.connect(on_accelerator_activated);
 
         handler = new SessionHandler();
