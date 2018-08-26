@@ -218,7 +218,7 @@ namespace Meta {
 		[CCode (has_construct_function = false, type = "ClutterActor*")]
 		public BackgroundGroup ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_background_image_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-background-image.h", type_id = "meta_background_image_get_type ()")]
 	public class BackgroundImage : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected BackgroundImage ();
@@ -235,7 +235,7 @@ namespace Meta {
 		public Meta.BackgroundImage load (GLib.File file);
 		public void purge (GLib.File file);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_barrier_get_type ()")]
+	[CCode (cheader_filename = "meta/barrier.h", type_id = "meta_barrier_get_type ()")]
 	public class Barrier : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Barrier ();
@@ -257,7 +257,7 @@ namespace Meta {
 		public signal void hit (Meta.BarrierEvent event);
 		public signal void left (Meta.BarrierEvent event);
 	}
-	[CCode (cheader_filename = "meta/main.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_barrier_event_get_type ()")]
+	[CCode (cheader_filename = "meta/barrier.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_barrier_event_get_type ()")]
 	[Compact]
 	public class BarrierEvent {
 		public int dt;
@@ -270,7 +270,7 @@ namespace Meta {
 		public double x;
 		public double y;
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_cursor_tracker_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-cursor-tracker.h", type_id = "meta_cursor_tracker_get_type ()")]
 	public class CursorTracker : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected CursorTracker ();
@@ -281,7 +281,7 @@ namespace Meta {
 		public void set_pointer_visible (bool visible);
 		public signal void cursor_changed ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_dbus_display_config_skeleton_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-monitor-manager.h", type_id = "meta_dbus_display_config_skeleton_get_type ()")]
 	public class DBusDisplayConfigSkeleton : GLib.DBusInterfaceSkeleton, GLib.DBusInterface {
 		[CCode (has_construct_function = false)]
 		protected DBusDisplayConfigSkeleton ();
@@ -355,7 +355,7 @@ namespace Meta {
 		public signal void x11_display_closing ();
 		public signal void x11_display_opened ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_dnd_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-dnd.h", type_id = "meta_dnd_get_type ()")]
 	public class Dnd : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Dnd ();
@@ -363,11 +363,11 @@ namespace Meta {
 		public signal void dnd_leave ();
 		public signal void dnd_position_change (int object, int p0);
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/common.h", has_type_id = false)]
 	[Compact]
 	public class Frame {
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_idle_monitor_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-idle-monitor.h", type_id = "meta_idle_monitor_get_type ()")]
 	public class IdleMonitor : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected IdleMonitor ();
@@ -380,7 +380,7 @@ namespace Meta {
 		[NoAccessorMethod]
 		public int device_id { get; construct; }
 	}
-	[CCode (cheader_filename = "meta/main.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_key_binding_get_type ()")]
+	[CCode (cheader_filename = "meta/keybindings.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_key_binding_get_type ()")]
 	[Compact]
 	public class KeyBinding {
 		public uint get_mask ();
@@ -461,26 +461,26 @@ namespace Meta {
 		[NoWrapper]
 		public virtual bool xevent_filter (X.Event event);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_remote_access_controller_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-remote-access-controller.h", type_id = "meta_remote_access_controller_get_type ()")]
 	public class RemoteAccessController : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected RemoteAccessController ();
 		public signal void new_handle (Meta.RemoteAccessHandle object);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_remote_access_handle_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-remote-access-controller.h", type_id = "meta_remote_access_handle_get_type ()")]
 	public class RemoteAccessHandle : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected RemoteAccessHandle ();
 		public virtual void stop ();
 		public signal void stopped ();
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/meta-settings.h", has_type_id = false)]
 	[Compact]
 	public class Settings {
 		public int get_font_dpi ();
 		public int get_ui_scaling_factor ();
 	}
-	[CCode (cheader_filename = "meta/main.h", ref_function = "meta_shadow_ref", type_id = "meta_shadow_get_type ()", unref_function = "meta_shadow_unref")]
+	[CCode (cheader_filename = "meta/meta-shadow-factory.h", ref_function = "meta_shadow_ref", type_id = "meta_shadow_get_type ()", unref_function = "meta_shadow_unref")]
 	[Compact]
 	public class Shadow {
 		public void get_bounds (int window_x, int window_y, int window_width, int window_height, Cairo.RectangleInt bounds);
@@ -488,7 +488,7 @@ namespace Meta {
 		public Meta.Shadow @ref ();
 		public void unref ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_shadow_factory_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-shadow-factory.h", type_id = "meta_shadow_factory_get_type ()")]
 	public class ShadowFactory : GLib.Object {
 		[CCode (has_construct_function = false)]
 		public ShadowFactory ();
@@ -498,7 +498,7 @@ namespace Meta {
 		public void set_params (string class_name, bool focused, Meta.ShadowParams @params);
 		public signal void changed ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_shaped_texture_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-shaped-texture.h", type_id = "meta_shaped_texture_get_type ()")]
 	public class ShapedTexture : Clutter.Actor, Atk.Implementor, Clutter.Animatable, Clutter.Container, Clutter.Scriptable {
 		[CCode (has_construct_function = false)]
 		protected ShapedTexture ();
@@ -510,18 +510,18 @@ namespace Meta {
 		public bool update_area (int x, int y, int width, int height);
 		public signal void size_changed ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_stage_get_type ()")]
+	[CCode (cheader_filename = "meta/compositor-mutter.h", type_id = "meta_stage_get_type ()")]
 	public class Stage : Clutter.Stage, Atk.Implementor, Clutter.Animatable, Clutter.Container, Clutter.Scriptable {
 		[CCode (has_construct_function = false)]
 		protected Stage ();
 		public static bool is_focused (Meta.Display display);
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/theme.h", has_type_id = false)]
 	[Compact]
 	public class Theme {
 		public void free ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_window_get_type ()")]
+	[CCode (cheader_filename = "meta/window.h", type_id = "meta_window_get_type ()")]
 	public abstract class Window : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Window ();
@@ -674,7 +674,7 @@ namespace Meta {
 		public signal void unmanaged ();
 		public signal void workspace_changed ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_window_actor_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-window-actor.h", type_id = "meta_window_actor_get_type ()")]
 	public class WindowActor : Clutter.Actor, Atk.Implementor, Clutter.Animatable, Clutter.Container, Clutter.Scriptable {
 		[CCode (has_construct_function = false)]
 		protected WindowActor ();
@@ -691,12 +691,12 @@ namespace Meta {
 		public signal void effects_completed ();
 		public signal void first_frame ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_window_group_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-window-group.h", type_id = "meta_window_group_get_type ()")]
 	public class WindowGroup : Clutter.Actor, Atk.Implementor, Clutter.Animatable, Clutter.Container, Clutter.Scriptable {
 		[CCode (has_construct_function = false)]
 		protected WindowGroup ();
 	}
-	[CCode (cheader_filename = "meta/main.h", ref_function = "meta_window_shape_ref", type_id = "meta_window_shape_get_type ()", unref_function = "meta_window_shape_unref")]
+	[CCode (cheader_filename = "meta/meta-window-shape.h", ref_function = "meta_window_shape_ref", type_id = "meta_window_shape_get_type ()", unref_function = "meta_window_shape_unref")]
 	[Compact]
 	public class WindowShape {
 		[CCode (has_construct_function = false)]
@@ -746,7 +746,7 @@ namespace Meta {
 		public signal void workspace_removed (int object);
 		public signal void workspace_switched (int object, int p0, Meta.MotionDirection p1);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_x11_display_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-x11-display.h", type_id = "meta_x11_display_get_type ()")]
 	public class X11Display : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected X11Display ();
@@ -759,7 +759,7 @@ namespace Meta {
 		public void set_input_focus_window (Meta.Window window, bool focus_frame, uint32 timestamp);
 		public bool xwindow_is_a_no_focus_window (X.Window xwindow);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_cname = "MetaCloseDialogInterface", type_id = "meta_close_dialog_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-close-dialog.h", type_cname = "MetaCloseDialogInterface", type_id = "meta_close_dialog_get_type ()")]
 	public interface CloseDialog : GLib.Object {
 		public abstract void focus ();
 		public abstract void hide ();
@@ -770,7 +770,7 @@ namespace Meta {
 		[HasEmitter]
 		public signal void response (Meta.CloseDialogResponse response);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_cname = "MetaInhibitShortcutsDialogInterface", type_id = "meta_inhibit_shortcuts_dialog_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-inhibit-shortcuts-dialog.h", type_cname = "MetaInhibitShortcutsDialogInterface", type_id = "meta_inhibit_shortcuts_dialog_get_type ()")]
 	public interface InhibitShortcutsDialog : GLib.Object {
 		public abstract void hide ();
 		public abstract void show ();
@@ -779,7 +779,7 @@ namespace Meta {
 		[HasEmitter]
 		public signal void response (Meta.InhibitShortcutsDialogResponse response);
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/common.h", has_type_id = false)]
 	public struct ButtonLayout {
 		[CCode (array_length = false)]
 		public weak Meta.ButtonFunction left_buttons[5];
@@ -790,13 +790,13 @@ namespace Meta {
 		[CCode (array_length = false)]
 		public weak bool right_buttons_has_spacer[5];
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/boxes.h", has_type_id = false)]
 	public struct Edge {
 		public Meta.Rectangle rect;
 		public Meta.Side side_type;
 		public Meta.EdgeType edge_type;
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/common.h", has_type_id = false)]
 	public struct FrameBorders {
 		public Gtk.Border visible;
 		public Gtk.Border invisible;
@@ -811,14 +811,14 @@ namespace Meta {
 		public weak string license;
 		public weak string description;
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/meta-plugin.h", has_type_id = false)]
 	public struct PluginVersion {
 		public uint version_major;
 		public uint version_minor;
 		public uint version_micro;
 		public uint version_api;
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_rectangle_get_type ()")]
+	[CCode (cheader_filename = "meta/boxes.h", type_id = "meta_rectangle_get_type ()")]
 	public struct Rectangle {
 		public int x;
 		public int y;
@@ -836,7 +836,7 @@ namespace Meta {
 		public Meta.Rectangle union (Meta.Rectangle rect2);
 		public bool vert_overlap (Meta.Rectangle rect2);
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/meta-shadow-factory.h", has_type_id = false)]
 	public struct ShadowParams {
 		public int radius;
 		public int top_fade;
@@ -844,12 +844,12 @@ namespace Meta {
 		public int y_offset;
 		public uint8 opacity;
 	}
-	[CCode (cheader_filename = "meta/main.h", has_type_id = false)]
+	[CCode (cheader_filename = "meta/boxes.h", has_type_id = false)]
 	public struct Strut {
 		public Meta.Rectangle rect;
 		public Meta.Side side;
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_BARRIER_DIRECTION_", type_id = "meta_barrier_direction_get_type ()")]
+	[CCode (cheader_filename = "meta/barrier.h", cprefix = "META_BARRIER_DIRECTION_", type_id = "meta_barrier_direction_get_type ()")]
 	[Flags]
 	public enum BarrierDirection {
 		POSITIVE_X,
@@ -857,7 +857,7 @@ namespace Meta {
 		NEGATIVE_X,
 		NEGATIVE_Y
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_BUTTON_FUNCTION_", type_id = "meta_button_function_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_BUTTON_FUNCTION_", type_id = "meta_button_function_get_type ()")]
 	public enum ButtonFunction {
 		MENU,
 		MINIMIZE,
@@ -866,12 +866,12 @@ namespace Meta {
 		APPMENU,
 		LAST
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_CLOSE_DIALOG_RESPONSE_", type_id = "meta_close_dialog_response_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-close-dialog.h", cprefix = "META_CLOSE_DIALOG_RESPONSE_", type_id = "meta_close_dialog_response_get_type ()")]
 	public enum CloseDialogResponse {
 		WAIT,
 		FORCE_CLOSE
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_COMP_EFFECT_", type_id = "meta_comp_effect_get_type ()")]
+	[CCode (cheader_filename = "meta/compositor.h", cprefix = "META_COMP_EFFECT_", type_id = "meta_comp_effect_get_type ()")]
 	public enum CompEffect {
 		CREATE,
 		UNMINIMIZE,
@@ -879,7 +879,7 @@ namespace Meta {
 		MINIMIZE,
 		NONE
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_CURSOR_", type_id = "meta_cursor_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_CURSOR_", type_id = "meta_cursor_get_type ()")]
 	public enum Cursor {
 		NONE,
 		DEFAULT,
@@ -902,7 +902,7 @@ namespace Meta {
 		IBEAM,
 		LAST
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DEBUG_", type_id = "meta_debug_topic_get_type ()")]
+	[CCode (cheader_filename = "meta/util.h", cprefix = "META_DEBUG_", type_id = "meta_debug_topic_get_type ()")]
 	[Flags]
 	public enum DebugTopic {
 		VERBOSE,
@@ -930,7 +930,7 @@ namespace Meta {
 		EDGE_RESISTANCE,
 		DBUS
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DIRECTION_", type_id = "meta_direction_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_DIRECTION_", type_id = "meta_direction_get_type ()")]
 	[Flags]
 	public enum Direction {
 		LEFT,
@@ -942,21 +942,21 @@ namespace Meta {
 		HORIZONTAL,
 		VERTICAL
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DISPLAY_", type_id = "meta_display_corner_get_type ()")]
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_DISPLAY_", type_id = "meta_display_corner_get_type ()")]
 	public enum DisplayCorner {
 		TOPLEFT,
 		TOPRIGHT,
 		BOTTOMLEFT,
 		BOTTOMRIGHT
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DISPLAY_", type_id = "meta_display_direction_get_type ()")]
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_DISPLAY_", type_id = "meta_display_direction_get_type ()")]
 	public enum DisplayDirection {
 		UP,
 		DOWN,
 		LEFT,
 		RIGHT
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_EDGE_", type_id = "meta_edge_type_get_type ()")]
+	[CCode (cheader_filename = "meta/boxes.h", cprefix = "META_EDGE_", type_id = "meta_edge_type_get_type ()")]
 	public enum EdgeType {
 		WINDOW,
 		MONITOR,
@@ -967,7 +967,7 @@ namespace Meta {
 		SUCCESS,
 		ERROR
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_FRAME_", type_id = "meta_frame_flags_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_FRAME_", type_id = "meta_frame_flags_get_type ()")]
 	[Flags]
 	public enum FrameFlags {
 		ALLOWS_DELETE,
@@ -989,7 +989,7 @@ namespace Meta {
 		TILED_LEFT,
 		TILED_RIGHT
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_FRAME_TYPE_", type_id = "meta_frame_type_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_FRAME_TYPE_", type_id = "meta_frame_type_get_type ()")]
 	public enum FrameType {
 		NORMAL,
 		DIALOG,
@@ -1001,7 +1001,7 @@ namespace Meta {
 		LAST;
 		public unowned string to_string ();
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_GRAB_OP_", type_id = "meta_grab_op_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_GRAB_OP_", type_id = "meta_grab_op_get_type ()")]
 	public enum GrabOp {
 		NONE,
 		WINDOW_BASE,
@@ -1028,12 +1028,12 @@ namespace Meta {
 		KEYBOARD_RESIZING_SE,
 		KEYBOARD_RESIZING_W
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_INHIBIT_SHORTCUTS_DIALOG_RESPONSE_", type_id = "meta_inhibit_shortcuts_dialog_response_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-inhibit-shortcuts-dialog.h", cprefix = "META_INHIBIT_SHORTCUTS_DIALOG_RESPONSE_", type_id = "meta_inhibit_shortcuts_dialog_response_get_type ()")]
 	public enum InhibitShortcutsDialogResponse {
 		ALLOW,
 		DENY
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_KEYBINDING_ACTION_", type_id = "meta_key_binding_action_get_type ()")]
+	[CCode (cheader_filename = "meta/prefs.h", cprefix = "META_KEYBINDING_ACTION_", type_id = "meta_key_binding_action_get_type ()")]
 	public enum KeyBindingAction {
 		NONE,
 		WORKSPACE_1,
@@ -1128,7 +1128,7 @@ namespace Meta {
 		ROTATE_MONITOR,
 		LAST
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_KEY_BINDING_", type_id = "meta_key_binding_flags_get_type ()")]
+	[CCode (cheader_filename = "meta/prefs.h", cprefix = "META_KEY_BINDING_", type_id = "meta_key_binding_flags_get_type ()")]
 	[Flags]
 	public enum KeyBindingFlags {
 		NONE,
@@ -1137,7 +1137,7 @@ namespace Meta {
 		IS_REVERSED,
 		NON_MASKABLE
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_LATER_", type_id = "meta_later_type_get_type ()")]
+	[CCode (cheader_filename = "meta/util.h", cprefix = "META_LATER_", type_id = "meta_later_type_get_type ()")]
 	public enum LaterType {
 		RESIZE,
 		CALC_SHOWING,
@@ -1146,25 +1146,25 @@ namespace Meta {
 		BEFORE_REDRAW,
 		IDLE
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_LOCALE_DIRECTION_", type_id = "meta_locale_direction_get_type ()")]
+	[CCode (cheader_filename = "meta/util.h", cprefix = "META_LOCALE_DIRECTION_", type_id = "meta_locale_direction_get_type ()")]
 	public enum LocaleDirection {
 		LTR,
 		RTL
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_MAXIMIZE_", type_id = "meta_maximize_flags_get_type ()")]
+	[CCode (cheader_filename = "meta/window.h", cprefix = "META_MAXIMIZE_", type_id = "meta_maximize_flags_get_type ()")]
 	[Flags]
 	public enum MaximizeFlags {
 		HORIZONTAL,
 		VERTICAL,
 		BOTH
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_MODAL_", type_id = "meta_modal_options_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-plugin.h", cprefix = "META_MODAL_", type_id = "meta_modal_options_get_type ()")]
 	[Flags]
 	public enum ModalOptions {
 		POINTER_ALREADY_GRABBED,
 		KEYBOARD_ALREADY_GRABBED
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_MONITOR_SWITCH_CONFIG_", type_id = "meta_monitor_switch_config_type_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-monitor-manager.h", cprefix = "META_MONITOR_SWITCH_CONFIG_", type_id = "meta_monitor_switch_config_type_get_type ()")]
 	public enum MonitorSwitchConfigType {
 		ALL_MIRROR,
 		ALL_LINEAR,
@@ -1172,7 +1172,7 @@ namespace Meta {
 		BUILTIN,
 		UNKNOWN
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_MOTION_", type_id = "meta_motion_direction_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_MOTION_", type_id = "meta_motion_direction_get_type ()")]
 	public enum MotionDirection {
 		UP,
 		DOWN,
@@ -1183,13 +1183,13 @@ namespace Meta {
 		DOWN_LEFT,
 		DOWN_RIGHT
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_PAD_ACTION_", type_id = "meta_pad_action_type_get_type ()")]
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_PAD_ACTION_", type_id = "meta_pad_action_type_get_type ()")]
 	public enum PadActionType {
 		BUTTON,
 		RING,
 		STRIP
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_PREF_", type_id = "meta_preference_get_type ()")]
+	[CCode (cheader_filename = "meta/prefs.h", cprefix = "META_PREF_", type_id = "meta_preference_get_type ()")]
 	public enum Preference {
 		MOUSE_BUTTON_MODS,
 		FOCUS_MODE,
@@ -1226,27 +1226,27 @@ namespace Meta {
 		DRAG_THRESHOLD;
 		public unowned string to_string ();
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_SHADOW_MODE_", type_id = "meta_shadow_mode_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-window-actor.h", cprefix = "META_SHADOW_MODE_", type_id = "meta_shadow_mode_get_type ()")]
 	public enum ShadowMode {
 		AUTO,
 		FORCED_OFF,
 		FORCED_ON
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_SIDE_", type_id = "meta_side_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_SIDE_", type_id = "meta_side_get_type ()")]
 	public enum Side {
 		LEFT,
 		RIGHT,
 		TOP,
 		BOTTOM
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_SIZE_CHANGE_", type_id = "meta_size_change_get_type ()")]
+	[CCode (cheader_filename = "meta/compositor.h", cprefix = "META_SIZE_CHANGE_", type_id = "meta_size_change_get_type ()")]
 	public enum SizeChange {
 		MAXIMIZE,
 		UNMAXIMIZE,
 		FULLSCREEN,
 		UNFULLSCREEN
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_LAYER_", type_id = "meta_stack_layer_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_LAYER_", type_id = "meta_stack_layer_get_type ()")]
 	public enum StackLayer {
 		DESKTOP,
 		BOTTOM,
@@ -1256,19 +1256,19 @@ namespace Meta {
 		OVERRIDE_REDIRECT,
 		LAST
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_TAB_LIST_", type_id = "meta_tab_list_get_type ()")]
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_TAB_LIST_", type_id = "meta_tab_list_get_type ()")]
 	public enum TabList {
 		NORMAL,
 		DOCKS,
 		GROUP,
 		NORMAL_ALL
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_TAB_SHOW_", type_id = "meta_tab_show_type_get_type ()")]
+	[CCode (cheader_filename = "meta/display.h", cprefix = "META_TAB_SHOW_", type_id = "meta_tab_show_type_get_type ()")]
 	public enum TabShowType {
 		ICON,
 		INSTANTLY
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_VIRTUAL_", type_id = "meta_virtual_modifier_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_VIRTUAL_", type_id = "meta_virtual_modifier_get_type ()")]
 	[Flags]
 	public enum VirtualModifier {
 		SHIFT_MASK,
@@ -1282,17 +1282,17 @@ namespace Meta {
 		MOD4_MASK,
 		MOD5_MASK
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_WINDOW_CLIENT_TYPE_", type_id = "meta_window_client_type_get_type ()")]
+	[CCode (cheader_filename = "meta/window.h", cprefix = "META_WINDOW_CLIENT_TYPE_", type_id = "meta_window_client_type_get_type ()")]
 	public enum WindowClientType {
 		WAYLAND,
 		X11
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_WINDOW_MENU_", type_id = "meta_window_menu_type_get_type ()")]
+	[CCode (cheader_filename = "meta/common.h", cprefix = "META_WINDOW_MENU_", type_id = "meta_window_menu_type_get_type ()")]
 	public enum WindowMenuType {
 		WM,
 		APP
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_WINDOW_", type_id = "meta_window_type_get_type ()")]
+	[CCode (cheader_filename = "meta/window.h", cprefix = "META_WINDOW_", type_id = "meta_window_type_get_type ()")]
 	public enum WindowType {
 		NORMAL,
 		DESKTOP,
@@ -1311,45 +1311,45 @@ namespace Meta {
 		DND,
 		OVERRIDE_OTHER
 	}
-	[CCode (cheader_filename = "meta/main.h", instance_pos = 2.9)]
+	[CCode (cheader_filename = "meta/meta-idle-monitor.h", instance_pos = 2.9)]
 	public delegate void IdleMonitorWatchFunc (Meta.IdleMonitor monitor, uint watch_id);
-	[CCode (cheader_filename = "meta/main.h", instance_pos = 4.9)]
+	[CCode (cheader_filename = "meta/prefs.h", instance_pos = 4.9)]
 	public delegate void KeyHandlerFunc (Meta.Display display, Meta.Window window, [CCode (type = "ClutterKeyEvent*")] Clutter.KeyEvent? event, Meta.KeyBinding binding);
-	[CCode (cheader_filename = "meta/main.h", instance_pos = 1.9)]
+	[CCode (cheader_filename = "meta/prefs.h", instance_pos = 1.9)]
 	public delegate void PrefsChangedFunc (Meta.Preference pref);
-	[CCode (cheader_filename = "meta/main.h", instance_pos = 1.9)]
+	[CCode (cheader_filename = "meta/window.h", instance_pos = 1.9)]
 	public delegate bool WindowForeachFunc (Meta.Window window);
-	[CCode (cheader_filename = "meta/main.h", cname = "META_CURRENT_TIME")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_CURRENT_TIME")]
 	public const int CURRENT_TIME;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_DEFAULT_ICON_NAME")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_DEFAULT_ICON_NAME")]
 	public const string DEFAULT_ICON_NAME;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_ICON_HEIGHT")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_ICON_HEIGHT")]
 	public const int ICON_HEIGHT;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_ICON_WIDTH")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_ICON_WIDTH")]
 	public const int ICON_WIDTH;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_MAJOR_VERSION")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_MAJOR_VERSION")]
 	public const int MAJOR_VERSION;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_MICRO_VERSION")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_MICRO_VERSION")]
 	public const int MICRO_VERSION;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_MINI_ICON_HEIGHT")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_MINI_ICON_HEIGHT")]
 	public const int MINI_ICON_HEIGHT;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_MINI_ICON_WIDTH")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_MINI_ICON_WIDTH")]
 	public const int MINI_ICON_WIDTH;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_MINOR_VERSION")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_MINOR_VERSION")]
 	public const int MINOR_VERSION;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_PLUGIN_API_VERSION")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_PLUGIN_API_VERSION")]
 	public const int PLUGIN_API_VERSION;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_PRIORITY_BEFORE_REDRAW")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_PRIORITY_BEFORE_REDRAW")]
 	public const int PRIORITY_BEFORE_REDRAW;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_PRIORITY_PREFS_NOTIFY")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_PRIORITY_PREFS_NOTIFY")]
 	public const int PRIORITY_PREFS_NOTIFY;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_PRIORITY_REDRAW")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_PRIORITY_REDRAW")]
 	public const int PRIORITY_REDRAW;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_PRIORITY_RESIZE")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_PRIORITY_RESIZE")]
 	public const int PRIORITY_RESIZE;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_VIRTUAL_CORE_KEYBOARD_ID")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_VIRTUAL_CORE_KEYBOARD_ID")]
 	public const int VIRTUAL_CORE_KEYBOARD_ID;
-	[CCode (cheader_filename = "meta/main.h", cname = "META_VIRTUAL_CORE_POINTER_ID")]
+	[CCode (cheader_filename = "meta/common.h", cname = "META_VIRTUAL_CORE_POINTER_ID")]
 	public const int VIRTUAL_CORE_POINTER_ID;
 	[CCode (cheader_filename = "meta/main.h")]
 	public static bool activate_session ();
@@ -1375,6 +1375,6 @@ namespace Meta {
 	public static void set_gnome_wm_keybindings (string wm_keybindings);
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void set_wm_name (string wm_name);
-	[CCode (cheader_filename = "meta/main.h")]
+	[CCode (cheader_filename = "meta/meta-x11-display.h")]
 	public static bool x11_init_gdk_display () throws GLib.Error;
 }
