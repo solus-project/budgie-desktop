@@ -34,7 +34,7 @@ public class HeaderExpander : Gtk.Button
         public get {
             return this._expanded;
         }
-        default = false;
+        //default = false;
     }
 
     public HeaderExpander(HeaderWidget? owner)

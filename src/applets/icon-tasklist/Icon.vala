@@ -20,8 +20,8 @@ public class Icon : Gtk.Image
     private int wait_cycle_counter = 0;
     private int attention_cycle_counter = 0;
 
-    private double bounce_amount = 0;
-    private double attention_amount = 0;
+    private double bounce_amount = 0.0;
+    private double attention_amount = 0.0;
 
     public double bounce {
         public set {
@@ -31,7 +31,7 @@ public class Icon : Gtk.Image
         public get {
             return bounce_amount;
         }
-        default = 0.0;
+        //default = 0.0;
     }
 
     public double attention {
@@ -42,7 +42,7 @@ public class Icon : Gtk.Image
         public get {
             return attention_amount;
         }
-        default = 0.0;
+        //default = 0.0;
     }
 
     public double icon_opacity {
@@ -56,7 +56,7 @@ public class Icon : Gtk.Image
         public get {
             return opacity;
         }
-        default = 1.0;
+        //default = 1.0;
     }
 
     public Icon() {}
