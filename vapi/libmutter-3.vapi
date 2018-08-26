@@ -708,7 +708,7 @@ namespace Meta {
 		public Cairo.Region to_region (int center_width, int center_height);
 		public void unref ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_workspace_get_type ()")]
+	[CCode (cheader_filename = "meta/workspace.h", type_id = "meta_workspace_get_type ()")]
 	public class Workspace : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Workspace ();
@@ -728,7 +728,7 @@ namespace Meta {
 		public signal void window_added (Meta.Window object);
 		public signal void window_removed (Meta.Window object);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_workspace_manager_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-workspace-manager.h", type_id = "meta_workspace_manager_get_type ()")]
 	public class WorkspaceManager : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected WorkspaceManager ();
