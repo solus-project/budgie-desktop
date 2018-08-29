@@ -421,7 +421,7 @@ namespace Budgie {
             var vol = primary_stream.get_volume();
             var vol_max = mixer.get_vol_max_norm();
 
-            if (settings.get_boolean(MAX_KEY)) { // Allowing max
+            if (settings != null && settings.get_boolean(MAX_KEY)) { // Allowing max
                 vol_max = mixer.get_vol_max_amplified();
             }
 
