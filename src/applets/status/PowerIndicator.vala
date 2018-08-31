@@ -30,7 +30,6 @@ public class BatteryIcon : Gtk.Box
         public get {
             return this.percent_label.visible;
         }
-        default = false;
     }
 
     public BatteryIcon(Up.Device battery) {
