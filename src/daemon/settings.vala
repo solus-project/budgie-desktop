@@ -26,9 +26,9 @@ public enum ButtonPosition {
 public class SettingsManager
 {
     private GLib.Settings? gnome_sound_settings = null;
-    private GLib.Settings? gnome_wm_settings = null;
     private GLib.Settings? raven_settings = null;
     private GLib.Settings? wm_settings = null;
+    private GLib.Settings? gnome_wm_pref_settings = null;
     private GLib.Settings? xoverrides = null;
 
     /**
@@ -59,8 +59,8 @@ public class SettingsManager
     {
         /* Settings we need to write to */
         gnome_sound_settings = new GLib.Settings("org.gnome.desktop.sound");
-        gnome_wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
         raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
+        gnome_wm_pref_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
         xoverrides = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
 
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
@@ -114,6 +114,7 @@ public class SettingsManager
             break;
         }
         this.xoverrides.set_value("overrides", xset);
+        this.gnome_wm_pref_settings.set_value("button-layout", wm_set);
     }
 
     /**
@@ -126,7 +127,7 @@ public class SettingsManager
             gfocus_mode = "mouse";
         }
 
-        this.gnome_wm_settings.set_value("focus-mode", gfocus_mode);
+        this.gnome_wm_pref_settings.set_value("focus-mode", gfocus_mode);
     }
 
 } /* End class SettingsManager (BudgieSettingsManager) */
