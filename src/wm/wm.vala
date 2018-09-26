@@ -643,6 +643,9 @@ public class BudgieWM : Meta.Plugin
     public void store_focused()
     {
         var workspace = get_display().get_workspace_manager().get_active_workspace();
+        if (workspace == null) {
+            return;
+        }
         foreach (var window in workspace.list_windows()) {
             if (window.has_focus()) {
                 focused_window = window;
@@ -1163,6 +1166,9 @@ public class BudgieWM : Meta.Plugin
         uint32 cur_time = display.get_current_time();
 
         var workspace = display.get_workspace_manager().get_active_workspace();
+        if (workspace == null) {
+            return;
+        }
 
         string? data = null;
         if ((data = workspace.get_data("__flagged")) == null) {
@@ -1196,6 +1202,9 @@ public class BudgieWM : Meta.Plugin
         uint32 cur_time = display.get_current_time();
 
         var workspace = display.get_workspace_manager().get_active_workspace();
+        if (workspace == null) {
+            return;
+        }
 
         string? data = null;
         if ((data = workspace.get_data("__flagged")) == null) {

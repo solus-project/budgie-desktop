@@ -52,7 +52,8 @@ public class WindowIcon : Gtk.Button
         if (event.button != 1) {
             return false;
         }
-        if (WorkspacesApplet.wnck_screen.get_active_workspace() == window.get_workspace()) {
+        var workspace = WorkspacesApplet.wnck_screen.get_active_workspace();
+        if (workspace != null && workspace == window.get_workspace()) {
             window.activate(event.time);
             return false;
         }

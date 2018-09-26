@@ -283,7 +283,8 @@ public class WorkspaceItem : Gtk.EventBox
     public override bool button_release_event(Gdk.EventButton event)
     {
         if (event.button == 1) {
-            if (WorkspacesApplet.wnck_screen.get_active_workspace() == workspace) {
+            var _workspace = WorkspacesApplet.wnck_screen.get_active_workspace();
+            if (_workspace != null && _workspace == workspace) {
                 return Gdk.EVENT_STOP;
             }
             workspace.activate(event.time);
