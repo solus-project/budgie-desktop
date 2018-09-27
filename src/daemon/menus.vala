@@ -54,6 +54,11 @@ public class MenuManager
         item.show();
         desktop_menu.append(item);
 
+        item = new Gtk.MenuItem.with_label(_("Displays"));
+        item.activate.connect(display_activate);
+        item.show();
+        desktop_menu.append(item);
+
         var sep = new Gtk.SeparatorMenuItem();
         sep.show();
         desktop_menu.append(sep);
@@ -88,6 +93,14 @@ public class MenuManager
     private void background_activate()
     {
         launch_desktop_name("gnome-background-panel.desktop");
+    }
+
+    /**
+     * Launch display settings (gnome control center: Display)
+     */
+    private void display_activate()
+    {
+        launch_desktop_name("gnome-display-panel.desktop");
     }
 
     /**
