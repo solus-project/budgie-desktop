@@ -43,6 +43,24 @@
       <description>The binding to clear Raven notifications</description>
     </key>
 
+    <key type="as" name="take-full-screenshot">
+      <default><![CDATA[['Print']]]></default>
+      <summary>Take screenshot of all displays</summary>
+      <description>Take screenshot of all displays</description>
+    </key>
+
+    <key type="as" name="take-region-screenshot">
+      <default><![CDATA[['<Ctrl>Print']]]></default>
+      <summary>Take screenshot of selectable region</summary>
+      <description>Take screenshot of selectable region</description>
+    </key>
+
+    <key type="as" name="take-window-screenshot">
+      <default><![CDATA[['<Alt>Print']]]></default>
+      <summary>Take screenshot of current window</summary>
+      <description>Take screenshot of current window</description>
+    </key>
+
     <key type="as" name="toggle-notifications">
       <default><![CDATA[['<Super>N']]]></default>
       <summary>The binding to use to toggle Raven notifications</summary>

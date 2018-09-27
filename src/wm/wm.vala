@@ -287,6 +287,33 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
+    /* Binding for take-full-screenshot */
+    void on_take_full_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
+    /* Binding for take-region-screenshot */
+    void on_take_region_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot -a");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
+    /* Binding for take-window-screenshot */
+    void on_take_window_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot -w -b");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
     /* Binding for clear-notifications activated */
     void on_raven_notification_clear(Meta.Display display, Meta.Screen screen,
                                       Meta.Window? window, Clutter.KeyEvent? event,
@@ -451,6 +478,9 @@ public class BudgieWM : Meta.Plugin
 
         /* Custom keybindings */
         display.add_keybinding("clear-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_clear);
+        display.add_keybinding("take-full-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_full_screenshot);
+        display.add_keybinding("take-region-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_region_screenshot);
+        display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
         display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
         display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
         display.overlay_key.connect(on_overlay_key);
