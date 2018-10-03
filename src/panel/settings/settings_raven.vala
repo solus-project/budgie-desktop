@@ -20,6 +20,7 @@ public class RavenPage : Budgie.SettingsPage {
     private Gtk.Switch? show_sound_output_widget;
     private Gtk.Switch? show_mic_input_widget;
     private Gtk.Switch? show_mpris_widget;
+    private Gtk.Switch? show_powerstrip;
     private GLib.Settings raven_settings;
 
     public RavenPage() {
@@ -64,12 +65,19 @@ public class RavenPage : Budgie.SettingsPage {
             _("Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section.")
         ));
 
+        show_powerstrip = new Gtk.Switch();
+        grid.add_row(new SettingsRow(show_powerstrip,
+            _("Show Power Strip"),
+            _("Shows or hides the Power Strip in the bottom of Raven.")
+        ));
+
         raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
         raven_settings.bind("allow-volume-overdrive", allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-sound-output-widget", show_sound_output_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-mic-input-widget", show_mic_input_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-mpris-widget", show_mpris_widget, "active", SettingsBindFlags.DEFAULT);
+        raven_settings.bind("show-power-strip", show_powerstrip, "active", SettingsBindFlags.DEFAULT);
     }
 }
 

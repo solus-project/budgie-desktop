@@ -31,6 +31,12 @@
       <summary>Show the MPRIS widget in Raven</summary>
       <description>Show the MPRIS widget in Raven.</description>
     </key>
+
+    <key type="b" name="show-power-strip">
+      <default>true</default>
+      <summary>Show the Power Strip in Raven</summary>
+      <description>Show the Power Strip in Raven.</description>
+    </key>
   </schema>
 
 </schemalist>

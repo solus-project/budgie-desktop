@@ -604,11 +604,12 @@ public class NotificationsView : Gtk.Box
                 var clone = new NotificationClone(widget);
                 notifications_group.add_notification(clone.id, clone);
                 clone.show_all();
+
+                update_child_count();
+                Raven.get_instance().UnreadNotifications();
             }
         }
 
-        update_child_count();
-        Raven.get_instance().UnreadNotifications();
         this.remove_notification(widget.id);
     }
 
