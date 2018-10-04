@@ -316,7 +316,6 @@ public class Raven : Gtk.Window
         layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
 
-
         enter_notify_event.connect((e)=> {
             steal_focus();
             return Gdk.EVENT_PROPAGATE;
@@ -355,6 +354,12 @@ public class Raven : Gtk.Window
         this.get_child().show_all();
 
         this.screen_edge = Gtk.PositionType.LEFT;
+
+        bool show_strip = settings.get_boolean("show-power-strip");
+
+        if (!show_strip) { // If we shouldn't be showing the strip
+            strip.hide(); // Immediately hide
+        }
     }
 
     /**
