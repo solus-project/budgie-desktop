@@ -498,6 +498,8 @@ public class BudgieWM : Meta.Plugin
 
         keyboard = new KeyboardManager(this);
         keyboard.hook_extra();
+
+        display.get_workspace_manager().override_workspace_layout(Meta.DisplayCorner.TOPLEFT, false, 1, -1);
     }
 
     /**
