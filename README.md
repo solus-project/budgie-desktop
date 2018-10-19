@@ -5,13 +5,13 @@ The Budgie Desktop a modern desktop designed to keep out the way of the user. It
 
 ![main_desktop](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainDesktop.png)
 
-![logo](https://solus-project.com/imgs/budgie-small.png)
+![logo](https://getsol.us/imgs/budgie-small.png)
 
 IRC: `#budgie-desktop-dev` / `#Solus-Dev` on irc.freenode.net
 
-`budgie-desktop` is a [Solus project](https://solus-project.com/)
+`budgie-desktop` is a [Solus project](https://getsol.us/)
 
-![logo](https://build.solus-project.com/logo.png)
+![logo](https://getsol.us/logo.png)
 
 Re-merge into the Solus Project
 ===============================
