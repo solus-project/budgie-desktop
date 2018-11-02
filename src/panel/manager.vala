@@ -256,7 +256,9 @@ public class PanelManager : DesktopManager
         // Handle transparency
         check_windows();
 
-        check_window_intersections(wnck_screen.get_active_window());
+        if (wnck_screen.get_active_window() != null){
+            check_window_intersections(wnck_screen.get_active_window());
+        }
     }
 
     /*

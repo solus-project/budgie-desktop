@@ -1464,7 +1464,7 @@ public class Panel : Budgie.Toplevel
                 break;
             case PanelPosition.RIGHT:
                 region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-                    x = (get_allocated_width() * this.scale_factor) - (2 * this.scale_factor),
+                    x = (get_allocated_width() * this.scale_factor) - (1 * this.scale_factor),
                     y = 0,
                     width = 1 * this.scale_factor,
                     height = get_allocated_height() * this.scale_factor
