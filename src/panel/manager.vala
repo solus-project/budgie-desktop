@@ -256,9 +256,7 @@ public class PanelManager : DesktopManager
         // Handle transparency
         check_windows();
 
-        if (wnck_screen.get_active_window() != null){
-            check_window_intersections(wnck_screen.get_active_window());
-        }
+        check_window_intersections(wnck_screen.get_active_window());
     }
 
     /*
@@ -316,7 +314,7 @@ public class PanelManager : DesktopManager
         Gdk.Rectangle win = Gdk.Rectangle();
         Gdk.Rectangle pan = Gdk.Rectangle();
 
-        if (window == null) {
+        if (window == null && this.window_list.length() == 0) {
             return false;
         }
 
