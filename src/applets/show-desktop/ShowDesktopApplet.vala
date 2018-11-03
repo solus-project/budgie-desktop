@@ -22,6 +22,7 @@ public class ShowDesktopApplet : Budgie.Applet
     protected Gtk.ToggleButton widget;
     protected Gtk.Image img;
     private Wnck.Screen wscreen;
+    private List<unowned Wnck.Window> window_list;
 
     public ShowDesktopApplet()
     {
@@ -33,14 +34,40 @@ public class ShowDesktopApplet : Budgie.Applet
         widget.set_tooltip_text(_("Toggle the desktop"));
 
         wscreen = Wnck.Screen.get_default();
-
-        wscreen.showing_desktop_changed.connect(()=> {
-            bool showing = wscreen.get_showing_desktop();
-            widget.set_active(showing);
+        wscreen.get_windows().foreach((window) => {
+            if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                return;
+            }
+            window.state_changed.connect(() => {
+                if (!window.is_minimized()) {
+                    window_list = new List<unowned Wnck.Window>();
+                    widget.set_active(false);
+                }
+            });
         });
 
-        widget.clicked.connect(()=> {
-            wscreen.toggle_showing_desktop(widget.get_active());
+        window_list = new List<unowned Wnck.Window>();
+
+        widget.toggled.connect(() => {
+            if (widget.get_active()) {
+                wscreen.get_windows_stacked().foreach((window) => {
+                    if (window.is_skip_pager() || window.is_skip_tasklist()) {
+                        return;
+                    }
+                    if (!window.is_minimized()) {
+                        window_list.append(window);
+                        window.minimize();
+                    }
+                });
+            } else {
+                window_list.foreach((window) => {
+                    if (window.is_minimized()) {
+                        var utc_now = new DateTime.now_utc();
+                        var now = (uint32) utc_now.to_unix();
+                        window.unminimize(now);
+                    }
+                });
+            }
         });
 
         add(widget);
