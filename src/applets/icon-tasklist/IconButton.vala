@@ -15,59 +15,6 @@ const int INDICATOR_SPACING  = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
 /**
- * The wrapper provides nice visual effects to house an IconButton, allowing
- * us to slide the buttons into view when ready, and dispose of them as and
- * when our slide-out animation has finished. Without the wrapper, we'd have
- * a very ugly effect of icons just "popping" off.
- */
-public class ButtonWrapper : Gtk.Revealer
-{
-    public unowned IconButton? button;
-
-    public Gtk.Orientation orient {
-        set {
-            if (value == Gtk.Orientation.VERTICAL) {
-                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-            } else {
-                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT);
-            }
-        }
-        get {
-            if (this.get_transition_type() == Gtk.RevealerTransitionType.SLIDE_DOWN) {
-                return Gtk.Orientation.VERTICAL;
-            }
-            return Gtk.Orientation.HORIZONTAL;
-        }
-    }
-
-    public ButtonWrapper(IconButton? button)
-    {
-        this.button = button;
-        this.add(button);
-        this.set_reveal_child(false);
-        this.show_all();
-    }
-
-    public void gracefully_die()
-    {
-        if (!get_settings().gtk_enable_animations) {
-            this.destroy();
-            return;
-        }
-
-        if (this.orient == Gtk.Orientation.HORIZONTAL) {
-            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
-        } else {
-            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
-        }
-        this.notify["child-revealed"].connect_after(()=> {
-            this.destroy();
-        });
-        this.set_reveal_child(false);
-    }
-}
-
-/**
  * IconButton provides the pretty IconTasklist button to house one or more
  * windows in a group, as well as selection capabilities, interaction, animations
  * and rendering of "dots" for the renderable windows.
@@ -91,6 +38,63 @@ public class IconButton : Gtk.ToggleButton
 
     /* Pointer to our DesktopHelper at the time of construction */
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
+
+    public IconButton(DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
+    {
+        Object(desktop_helper: helper);
+        this.app_info = info;
+        this.pinned = pinned;
+        gobject_constructors_suck();
+        update_icon();
+    }
+
+    public IconButton.from_window(DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    {
+        Object(desktop_helper: helper);
+
+        this.window = window;
+        this.app_info = info;
+        this.is_from_window = true;
+        this.pinned = pinned;
+
+        gobject_constructors_suck();
+
+        window.state_changed.connect_after(() => {
+            if (window.needs_attention()) {
+                attention();
+            }
+        });
+
+        update_icon();
+
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
+    }
+
+    public IconButton.from_group(DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    {
+        Object(desktop_helper: helper);
+
+        this.class_group = class_group;
+        this.app_info = info;
+
+        gobject_constructors_suck();
+
+        foreach (unowned Wnck.Window window in class_group.get_windows()) {
+            window.state_changed.connect_after(() => {
+                if (window.needs_attention()) {
+                    attention();
+                }
+            });
+        }
+
+        update_icon();
+
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
+    }
 
     /**
      * We have race conditions in glib between the desired properties..
@@ -150,69 +154,16 @@ public class IconButton : Gtk.ToggleButton
         launch_context.launch_failed.connect(this.on_launch_failed);
     }
 
-    public IconButton(DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
-    {
-        Object(desktop_helper: helper);
-        this.app_info = info;
-        this.pinned = pinned;
-        gobject_constructors_suck();
-        update_icon();
-    }
-
-    public IconButton.from_window(DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
-    {
-        Object(desktop_helper: helper);
-
-        this.window = window;
-        this.app_info = info;
-        this.is_from_window = true;
-        this.pinned = pinned;
-
-        gobject_constructors_suck();
-
-        window.state_changed.connect_after(() => {
-            if (window.needs_attention()) {
-                attention();
-            }
-        });
-
-        update_icon();
-
-        if (has_valid_windows(null)) {
-            this.get_style_context().add_class("running");
-        }
-    }
-
-    public IconButton.from_group(DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
-    {
-        Object(desktop_helper: helper);
-
-        this.class_group = class_group;
-        this.app_info = info;
-
-        gobject_constructors_suck();
-
-        foreach (unowned Wnck.Window window in class_group.get_windows()) {
-            window.state_changed.connect_after(() => {
-                if (window.needs_attention()) {
-                    attention();
-                }
-            });
-        }   
-
-        update_icon();
-
-        if (has_valid_windows(null)) {
-            this.get_style_context().add_class("running");
-        }
-    }
-
     public void set_class_group(Wnck.ClassGroup? class_group) {
         this.class_group = class_group;
 
         if (class_group == null) {
             return;
         }
+
+        class_group.icon_changed.connect_after(() => {
+            update_icon(); // Update icon based on class group
+        });
 
         foreach (unowned Wnck.Window window in class_group.get_windows()) {
             window.state_changed.connect_after(() => {
@@ -229,6 +180,10 @@ public class IconButton : Gtk.ToggleButton
         if (window == null) {
             return;
         }
+
+        window.icon_changed.connect_after(() => {
+            update_icon(); // Update the icon
+        });
 
         window.state_changed.connect_after(() => {
             if (window.needs_attention()) {

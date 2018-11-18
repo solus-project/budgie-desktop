@@ -19,7 +19,7 @@ namespace Budgie {
         private const string MAX_KEY = "allow-volume-above-100-percent";
         private ulong scale_id = 0;
         private Gvc.MixerControl mixer = null;
-        private HashTable<uint,Budgie.AppSoundControl?> apps;
+        private HashTable<uint,Gtk.ListBoxRow?> apps;
         private HashTable<string,string?> derpers;
         private HashTable<uint,Gtk.RadioButton?> devices;
         private ulong primary_notify_id = 0;
@@ -32,7 +32,7 @@ namespace Budgie {
          */
         private Budgie.HeaderWidget? header = null;
         private Gtk.Box? apps_area = null;
-        private Gtk.Box? apps_listbox = null;
+        private Gtk.ListBox? apps_listbox = null;
         private Gtk.Revealer? apps_list_revealer = null;
         private Gtk.Box? devices_area = null;
         private StartListening? listening_box = null;
@@ -84,7 +84,7 @@ namespace Budgie {
                 devices_area.margin_bottom = 10;
             } else { // Output
                 settings = new Settings("org.gnome.desktop.sound");
-                apps = new HashTable<uint,Budgie.AppSoundControl?>(direct_hash,direct_equal);
+                apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
 
                 mixer.default_sink_changed.connect(on_device_changed);
                 mixer.output_added.connect(on_device_added);
@@ -99,7 +99,14 @@ namespace Budgie {
                  * Proceed to add those items to our main_layout
                  */
                 apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-                apps_listbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
+                apps_listbox = new Gtk.ListBox();
+                apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
+
+                apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
+                    var app_1 = ((AppSoundControl) row1.get_child()).app_name;
+                    var app_2 = ((AppSoundControl) row2.get_child()).app_name;
+                    return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
+                });
 
                 apps_list_revealer = new Gtk.Revealer();
                 apps_list_revealer.set_transition_duration(250);
@@ -252,6 +259,23 @@ namespace Budgie {
         }
 
         /**
+         * get_control_for_app will get the respective inner AppSoundControl of a ListBoxRow associated with the id
+         */
+        private Budgie.AppSoundControl get_control_for_app(uint id) {
+            Budgie.AppSoundControl? control = null;
+
+            if (apps.contains(id)) { // Has id
+                Gtk.ListBoxRow row = apps.get(id); // Get the ListBoxRow
+
+                if (row != null) { // Row is valid
+                    control = (Budgie.AppSoundControl) row.get_child();
+                }
+            }
+
+            return control;
+        }
+
+        /**
          * on_device_selected will handle when a checkbox related to an input or output device is selected
          */
         private void on_device_selected(Gtk.ToggleButton? btn) {
@@ -292,7 +316,7 @@ namespace Budgie {
 
             if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
                 if (apps.contains(id)) { // If our apps contains this stream
-                    Budgie.AppSoundControl? control = apps.lookup(id);
+                    Budgie.AppSoundControl? control = get_control_for_app(id);
 
                     if (control != null) {
                         if (stream.is_running()) { // If running
@@ -348,11 +372,24 @@ namespace Budgie {
                     icon = derpers.get(name); // Use its designated icon instead
                 }
 
-                Budgie.AppSoundControl control = new Budgie.AppSoundControl(mixer, primary_stream, stream, icon); // Pass our Mixer, Stream, and correct Icon
+                if (name == "WEBRTC VoiceEngine") { // Discord reports as WEBRTC VoiceEngine
+                    icon = "discord";
+                    name = "Discord";
+                }
+
+                /*
+                unowned Gvc.MixerStream devstream_associated_with_app = mixer.get_stream_from_device(device);
+                Budgie.AppSoundControl control = new Budgie.AppSoundControl(mixer, devstream_associated_with_app, stream, icon, name); // Pass our Mixer, Stream, correct Icon and Name
+                 */
+
+                Budgie.AppSoundControl control = new Budgie.AppSoundControl(mixer, primary_stream, stream, icon, name); // Pass our Mixer, Stream, correct Icon and Name
 
                 if (control != null) {
-                    apps_listbox.pack_end(control); // Add our control
-                    apps.insert(id, control); // Add to apps
+                    var list_row = new Gtk.ListBoxRow();
+                    list_row.add(control); // Add our control
+
+                    apps_listbox.insert(list_row, -1); // Add our control
+                    apps.insert(id, list_row); // Add to apps
                     apps_listbox.show_all();
                     toggle_start_listening();
                 }
@@ -364,10 +401,14 @@ namespace Budgie {
          */
         private void on_stream_removed(uint id) {
             if (apps.contains(id)) { // If this stream exists in apps
-                Budgie.AppSoundControl control = apps.lookup(id);
+                Gtk.ListBoxRow row = apps.get(id);
 
-                if (control != null) { // If this control exists
-                    control.destroy(); // Remove the control
+                if (row != null) { // If this row exists
+                    try {
+                        apps_listbox.remove(row); // Remove row from listbox
+                    } catch (GLib.Error e) {
+                        warning("Issue during row destroy: %s", e.message);
+                    }
                 }
 
                 apps.steal(id); // Remove the apps

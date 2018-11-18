@@ -25,17 +25,17 @@ namespace Budgie {
         private Gtk.Image? audio_not_muted = null;
         private Gtk.Image? audio_muted = null;
 
-        private string? app_name = "";
+        public string? app_name = "";
         private ulong scale_id;
 
-        public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon) {
+        public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon, string c_name) {
             Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 10);
             valign = Gtk.Align.START;
 
             mixer = c_mixer;
             primary_stream = c_primary;
             stream = c_stream;
-            app_name = stream.get_name();
+            app_name = c_name;
 
             var max_vol = stream.get_volume();
             var stream_volume = max_vol; // Create a non-manipulated copy
