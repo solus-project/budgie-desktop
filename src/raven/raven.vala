@@ -355,11 +355,7 @@ public class Raven : Gtk.Window
 
         this.screen_edge = Gtk.PositionType.LEFT;
 
-        bool show_strip = settings.get_boolean("show-power-strip");
-
-        if (!show_strip) { // If we shouldn't be showing the strip
-            strip.hide(); // Immediately hide
-        }
+        on_raven_settings_changed("show-power-strip");
     }
 
     /**
@@ -367,12 +363,16 @@ public class Raven : Gtk.Window
      */
     private void on_raven_settings_changed(string key) {
         if (key == "show-power-strip") {
-            bool show_strip = settings.get_boolean(key);
+            try {
+                bool show_strip = settings.get_boolean(key);
 
-            if (show_strip) { // If we should show the strip
-                strip.show_all();
-            } else { // If we should hide the strip
-                strip.hide();
+                if (show_strip) { // If we should show the strip
+                    strip.show_all();
+                } else { // If we should hide the strip
+                    strip.hide();
+                }
+            } catch (GLib.Error e) {
+                strip.show_all(); // Default to showing
             }
         }
     }
