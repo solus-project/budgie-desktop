@@ -31,6 +31,9 @@ public class IconTasklistSettings : Gtk.Grid
     [GtkChild]
     private Gtk.Switch? switch_only_pinned;
 
+    [GtkChild]
+    private Gtk.Switch? show_all_on_click;
+
     private GLib.Settings? settings;
 
     public IconTasklistSettings(GLib.Settings? settings)
@@ -40,6 +43,7 @@ public class IconTasklistSettings : Gtk.Grid
         settings.bind("restrict-to-workspace", switch_restrict, "active", SettingsBindFlags.DEFAULT);
         settings.bind("lock-icons", switch_lock_icons, "active", SettingsBindFlags.DEFAULT);
         settings.bind("only-pinned", switch_only_pinned, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("show-all-windows-on-click", show_all_on_click, "active", SettingsBindFlags.DEFAULT);
     }
 
 }
@@ -136,7 +140,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (info == null) {
                 continue;
             }
-            IconButton button = new IconButton(this.desktop_helper, info, true);
+            IconButton button = new IconButton(this.settings, this.desktop_helper, info, true);
             button.update();
             ButtonWrapper wrapper = new ButtonWrapper(button);
             wrapper.orient = this.get_orientation();
@@ -252,7 +256,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (buttons.contains(app_id)) {
                 original_button = (buttons[app_id].get_parent() as ButtonWrapper);
             } else {
-                IconButton button = new IconButton(this.desktop_helper, info, true);
+                IconButton button = new IconButton(this.settings, this.desktop_helper, info, true);
                 button.update();
 
                 buttons.set(app_id, button);
@@ -365,7 +369,7 @@ public class IconTasklistApplet : Budgie.Applet
             return;
         }
 
-        IconButton button = new IconButton.from_group(this.desktop_helper, first_app.group_object, app_info);
+        IconButton button = new IconButton.from_group(this.settings,this.desktop_helper, first_app.group_object, app_info);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
@@ -438,7 +442,7 @@ public class IconTasklistApplet : Budgie.Applet
 
         bool pinned = (app.group in settings.get_strv("pinned-launchers"));
 
-        button = new IconButton.from_window(this.desktop_helper, app.window, app.app, pinned);
+        button = new IconButton.from_window(this.settings, this.desktop_helper, app.window, app.app, pinned);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 

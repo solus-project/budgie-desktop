@@ -21,6 +21,7 @@ const int INACTIVE_INDICATOR_SPACING = 2;
  */
 public class IconButton : Gtk.ToggleButton
 {
+    private GLib.Settings? settings = null;
     private Wnck.Window? window = null;          // This will always be null if grouping is enabled
     private Wnck.ClassGroup? class_group = null; // This will always be null if grouping is disabled
     private GLib.DesktopAppInfo? app_info = null;
@@ -39,19 +40,21 @@ public class IconButton : Gtk.ToggleButton
     /* Pointer to our DesktopHelper at the time of construction */
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
 
-    public IconButton(DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
+    public IconButton(GLib.Settings? c_settings, DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
     {
         Object(desktop_helper: helper);
+        this.settings = c_settings;
         this.app_info = info;
         this.pinned = pinned;
         gobject_constructors_suck();
         update_icon();
     }
 
-    public IconButton.from_window(DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    public IconButton.from_window(GLib.Settings? c_settings, DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
     {
         Object(desktop_helper: helper);
 
+        this.settings = c_settings;
         this.window = window;
         this.app_info = info;
         this.is_from_window = true;
@@ -72,10 +75,11 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public IconButton.from_group(DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    public IconButton.from_group(GLib.Settings? c_settings, DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
     {
         Object(desktop_helper: helper);
 
+        this.settings = c_settings;
         this.class_group = class_group;
         this.app_info = info;
 
@@ -772,20 +776,25 @@ public class IconButton : Gtk.ToggleButton
                     num++;
                 }
                 if (num > 0) { // we have windows on this workspace
-                    /*
-                     * Operations are restricted to the current workspace
-                     * because that makes the most sense.
-                     *   If there is one active window:
-                     *     minimize all windows
-                     *   else:  
-                     *     activate previously active window
-                     */
+                    bool show_all_windows_on_click = false;
+
+                    if (this.settings != null) { // Settings defined
+                        try {
+                            show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
+                        } catch (GLib.Error e) {
+                            warning("Failed to get setting for Show All Windows On Click: %s", e.message);
+                        }
+                    }
 
                     list.foreach((w) => {
                         if (one_active) {
                             w.minimize();
                         } else {
-                            last_active_window.activate(event.time);
+                            if (show_all_windows_on_click) { // Show all windows
+                                w.activate(event.time);
+                            } else { // Only show last active window
+                                last_active_window.activate(event.time);
+                            }
                         }
                     });
                 } else {

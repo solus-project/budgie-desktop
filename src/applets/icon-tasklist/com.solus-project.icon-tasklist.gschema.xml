@@ -30,5 +30,11 @@
       <summary>Pinned launchers</summary>
       <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
     </key>
+
+    <key type="b" name="show-all-windows-on-click">
+      <default>false</default>
+      <summary>Show All Windows On Click</summary>
+      <description>Show all windows when clicking their respective IconButton in the IconTasklist.</description>
+    </key>
   </schema>
 </schemalist>
