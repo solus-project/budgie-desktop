@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -137,6 +137,10 @@ public class MainView : Gtk.Box
 
     public void set_clean()
     {
+        on_raven_settings_changed("show-calendar-widget");
+        on_raven_settings_changed("show-sound-output-widget");
+        on_raven_settings_changed("show-mic-input-widget");
+        on_raven_settings_changed("show-mpris-widget");
         main_stack.set_visible_child_name("applets");
     }
 }
