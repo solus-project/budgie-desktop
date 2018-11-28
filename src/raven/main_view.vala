@@ -67,7 +67,7 @@ public class MainView : Gtk.Box
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         scroll.add(box);
 
-        cal = new CalendarWidget();
+        cal = new CalendarWidget(raven_settings);
         box.pack_start(cal, false, false, 0);
 
         audio_output_widget = new Budgie.SoundWidget("output");

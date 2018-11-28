@@ -9,17 +9,18 @@
  * (at your option) any later version.
  */
 
-public class CalendarWidget : Gtk.Box
-{
-
-    private Gtk.Calendar? cal = null;
+public class CalendarWidget : Gtk.Box {
     private Budgie.HeaderWidget? header = null;
+    private const string ENABLE_WEEK_NUM = "enable-week-numbers";
+    private Gtk.Calendar? cal = null;
+    private unowned Settings settings = null;
 
     private const string date_format = "%e %b %Y";
 
-    public CalendarWidget()
-    {
+    public CalendarWidget(GLib.Settings c_settings) {
         Object(orientation: Gtk.Orientation.VERTICAL);
+        this.settings = c_settings;
+
         var time = new DateTime.now_local();
         header = new Budgie.HeaderWidget(time.format(date_format), "x-office-calendar-symbolic", false);
         var expander = new Budgie.RavenExpander(header);
@@ -35,13 +36,40 @@ public class CalendarWidget : Gtk.Box
         expander.add(ebox);
 
         Timeout.add_seconds_full(GLib.Priority.LOW, 30, this.update_date);
+
         cal.month_changed.connect(()=> {
             update_date();
         });
+
+        this.settings.changed.connect((key) => {
+            if (key == this.ENABLE_WEEK_NUM) {
+                set_week_number();
+            } else {
+                return;
+            }
+        });
+
+        set_week_number();
     }
 
-    private bool update_date()
-    {
+    /**
+     * set_week_number will set the display of the week number
+     */
+    private void set_week_number() {
+        bool show = false;
+
+        if (this.settings != null) {
+            try {
+                show = this.settings.get_boolean(this.ENABLE_WEEK_NUM);
+            } catch (GLib.Error e) {
+                warning("Failed to get value for %s: ", this.ENABLE_WEEK_NUM);
+            }
+        }
+
+        this.cal.show_week_numbers = show;
+    }
+
+    private bool update_date() {
         var time = new DateTime.now_local();
         var strf = time.format(date_format);
         header.text = strf;

@@ -8,6 +8,12 @@
       <description>This setting overrides the one provided by org.gnome.desktop.sound.</description>
     </key>
 
+    <key type="b" name="enable-week-numbers">
+      <default>false</default>
+      <summary>Enables displaying of week numbers in Calendar</summary>
+      <description>This setting enables the display of week numbers in the Calendar widget.</description>
+    </key>
+
     <key type="b" name="show-calendar-widget">
       <default>true</default>
       <summary>Show the Calendar widget in Raven</summary>
