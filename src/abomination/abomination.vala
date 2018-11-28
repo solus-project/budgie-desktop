@@ -75,6 +75,10 @@ namespace Budgie {
                 return;
             }
 
+            if (app.group == null) { // We should safely fall back to the app name, but have this type check just in case.
+                return;
+            }
+
             Array<AbominationRunningApp> group_apps = this.running_apps.get(app.group);
             bool no_group_yet = false;
 
@@ -144,7 +148,9 @@ namespace Budgie {
 
             // #region Because LibreOffice hates me
 
-            if (old_group_name.has_prefix("libreoffice-") && !group_name.has_prefix("libreoffice-")) {
+            if ((old_group_name.has_prefix("libreoffice-") && !group_name.has_prefix("libreoffice-")) || // libreoffice- change
+                (old_group_name.has_prefix("chrome-") && !group_name.has_prefix("chrome-")) // chrome- change
+            ) {
                 return;
             }
 
@@ -197,10 +203,9 @@ namespace Budgie {
 
         public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window) {
             this.window = window;
-            this.group = window.get_class_group_name().down();
+            this.id = this.window.get_xid();
+            this.name = this.window.get_name();
             this.group_object = window.get_class_group();
-            this.id = window.get_xid();
-            this.name = window.get_name();
             this.appsys = app_system;
 
             update_group();
@@ -213,6 +218,10 @@ namespace Budgie {
                 update_icon();
 
                 if (this.group != old_group) { // Actually changed
+                    if (this.group.has_prefix("chrome-")) {
+                        return;
+                    }
+
                     class_changed(old_group, this.group_object); // Signal that the class changed
                 }
             });
@@ -245,7 +254,15 @@ namespace Budgie {
             if (this.app != null) { // Successfully got desktop app info
                 this.group = this.app.get_id();
             } else { // Failed to get desktop app info
-                this.group = window.get_class_group_name().down();
+                if (this.group_object != null) {
+                    this.group = this.group_object.get_name();
+
+                    if (this.group != null) { // Safely got name
+                        this.group = this.group.down();
+                    }
+                } else {
+                    this.group = this.name; // Fallback to using name
+                }
             }
         }
 
