@@ -47,7 +47,7 @@ public static string safe_markup_string(string inp)
     }
 
     /* is it already escaped? */
-    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2)) {
+    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2) || ("&nbsp;" in inp2)) {
         return inp2;
     }
 
