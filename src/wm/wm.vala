@@ -1336,6 +1336,15 @@ public class BudgieWM : Meta.Plugin
     public const int SWITCH_TIMEOUT = 250;
     public override void switch_workspace(int from, int to, Meta.MotionDirection direction)
     {
+        if (raven_proxy != null) { // Raven proxy is defined
+            try {
+                raven_proxy.Dismiss.begin(); // Dismiss
+                Timeout.add(200, () => {return false;}); // Delay until animation is complete. Looks janky otherwise
+            } catch (Error e) {
+                warning("Failed to dismiss Raven: %s", e.message);
+            }
+        }
+
         // Stop the Switcher if it was showing
         this.stop_switch_windows();
 

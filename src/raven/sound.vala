@@ -377,11 +377,6 @@ namespace Budgie {
                     name = "Discord";
                 }
 
-                /*
-                unowned Gvc.MixerStream devstream_associated_with_app = mixer.get_stream_from_device(device);
-                Budgie.AppSoundControl control = new Budgie.AppSoundControl(mixer, devstream_associated_with_app, stream, icon, name); // Pass our Mixer, Stream, correct Icon and Name
-                 */
-
                 Budgie.AppSoundControl control = new Budgie.AppSoundControl(mixer, primary_stream, stream, icon, name); // Pass our Mixer, Stream, correct Icon and Name
 
                 if (control != null) {
@@ -462,7 +457,7 @@ namespace Budgie {
             var vol = primary_stream.get_volume();
             var vol_max = mixer.get_vol_max_norm();
 
-            if (settings.get_boolean(MAX_KEY)) { // Allowing max
+            if ((widget_type == "output") && settings.get_boolean(MAX_KEY)) { // Allowing max
                 vol_max = mixer.get_vol_max_amplified();
             }
 

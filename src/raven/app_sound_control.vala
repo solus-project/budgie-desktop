@@ -32,6 +32,14 @@ namespace Budgie {
             Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 10);
             valign = Gtk.Align.START;
 
+            if (c_mixer == null) {
+                return;
+            }
+
+            if (c_primary == null) {
+                return;
+            }
+
             mixer = c_mixer;
             primary_stream = c_primary;
             stream = c_stream;
