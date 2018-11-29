@@ -11,7 +11,7 @@ IRC: `#budgie-desktop-dev` / `#Solus-Dev` on irc.freenode.net
 
 `budgie-desktop` is a [Solus project](https://getsol.us/)
 
-![logo](https://getsol.us/imgs/logo.jpg)
+![logo](https://build.solus-project.com/logo.png)
 
 Re-merge into the Solus Project
 ===============================
