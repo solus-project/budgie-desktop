@@ -19,6 +19,12 @@
       <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
     </key>
 
+    <key type="b" name="disable-night-light-on-fullscreen">
+      <default>false</default>
+      <summary>Disable Night Light mode when windows are fullscreen</summary>
+      <description>Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen.</description>
+    </key>
+
     <key type="b" name="focus-mode">
       <default>false</default>
       <summary>Window focus mode to indicate how windows are activated</summary>

@@ -11,10 +11,15 @@
 
 namespace Budgie {
     /**
-     * Abomination is our early app system replacement thing
+     * Abomination is our application state tracking manager
      */
     public class Abomination : GLib.Object {
         private Budgie.AppSystem? app_system = null;
+        private GLib.Settings? color_settings = null;
+        private GLib.Settings? wm_settings = null;
+        private bool original_night_light_setting = false;
+        private bool should_disable_on_fullscreen = false;
+        public HashTable<string?, Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their name and respective Wnck.Window
         public HashTable<string?, Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
         public HashTable<ulong?, AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
         private Wnck.Screen screen = null;
@@ -29,9 +34,31 @@ namespace Budgie {
 
         public Abomination() {
             app_system = new Budgie.AppSystem();
+            color_settings = new GLib.Settings("org.gnome.settings-daemon.plugins.color");
+            wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+
+            fullscreen_windows = new HashTable<string?, Wnck.Window?>(str_hash, str_equal);
             running_apps = new HashTable<string?, Array<AbominationRunningApp>?>(str_hash, str_equal);
             running_apps_id = new HashTable<ulong?, AbominationRunningApp?>(int_hash, int_equal);
             screen = Wnck.Screen.get_default();
+
+            if (color_settings != null) { // gsd colors plugin schema defined
+                update_night_light_value();
+
+                color_settings.changed["night-light-enabled"].connect(() => {
+                    if (fullscreen_windows.size() == 0) { // If we have no currently fullscreen windows
+                        update_night_light_value(); // Update. We do this to ignore false positives.
+                    }
+                });
+            }
+
+            if (wm_settings != null) {
+                update_should_disable_value();
+
+                wm_settings.changed["disable-night-light-on-fullscreen"].connect(() => {
+                    update_should_disable_value();
+                });
+            }
 
             screen.class_group_closed.connect((group) => { // On group closed
                 string group_name = group.get_name().down(); // Get our group name
@@ -48,13 +75,8 @@ namespace Budgie {
                 }
             });
 
-            screen.window_opened.connect((window) => { // On window opened
-                add_app(window); // Add the window / app
-            });
-
-            screen.window_closed.connect((window) => { // On window closed
-                remove_app(window); // Remove the window / app
-            });
+            screen.window_opened.connect(this.add_app);
+            screen.window_closed.connect(this.remove_app);
 
             screen.get_windows().foreach((window) => { // Init all our current running windows
                 add_app(window);
@@ -98,6 +120,18 @@ namespace Budgie {
 
             app.class_changed.connect((old_class_name, new_class) => {
                 rename_group(old_class_name, new_class); // Rename the class
+            });
+
+            app.window.state_changed.connect((changed, new_state) => {
+                bool now_fullscreen = window.is_fullscreen();
+
+                if (now_fullscreen) {
+                    fullscreen_windows.insert(window.get_name(), window); // Add to fullscreen_windows
+                    toggle_night_light(false); // Toggle the night light off if possible
+                } else {
+                    fullscreen_windows.steal(window.get_name()); // Remove from fullscreen_windows
+                    toggle_night_light(true); // Toggle the night light back on if possible
+                }
             });
         }
 
@@ -179,6 +213,42 @@ namespace Budgie {
                         add_app(window); // Add the app (including group)
                     });
                 }
+            }
+        }
+
+        /**
+         * toggle_night_light will toggle the state of the night light depending on requested state
+         * If we're disabling, we'll check if there is any items in fullscreen_windows first
+         */
+        private void toggle_night_light(bool on_state) {
+            if (should_disable_on_fullscreen) {
+                if (on_state) { // Attempting to toggle on
+                    if (fullscreen_windows.size() == 0) { // If we should be turning it on in the first place and there are no fullscreen windows
+                        color_settings.set_boolean("night-light-enabled", original_night_light_setting); // Revert to original state
+                    }
+                } else { // Attempting to toggle off
+                    if (fullscreen_windows.size() > 0) { // Fullscreen windows
+                        color_settings.set_boolean("night-light-enabled", false);
+                    }
+                }
+            }
+        }
+
+        /**
+         * update_should_disable_value will update our value determininngn if we should disable night light on fullscreen
+         */
+        private void update_should_disable_value() {
+            if (wm_settings != null) {
+                should_disable_on_fullscreen = wm_settings.get_boolean("disable-night-light-on-fullscreen");
+            }
+        }
+
+        /**
+         * update_night_light_value will update our copy / original night light enabled value
+         */
+        private void update_night_light_value() {
+            if (color_settings != null) {
+                original_night_light_setting = color_settings.get_boolean("night-light-enabled");
             }
         }
     }

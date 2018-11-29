@@ -17,6 +17,7 @@ namespace Budgie {
 public class WindowsPage : Budgie.SettingsPage {
 
     private GLib.Settings budgie_wm_settings;
+    private Gtk.Switch disable_night_light;
     private Gtk.ComboBox combo_layouts;
     private Gtk.Switch switch_dialogs;
     private Gtk.Switch switch_focus;
@@ -70,6 +71,12 @@ public class WindowsPage : Budgie.SettingsPage {
             _("Automatic tiling"),
             _("Windows will automatically tile when dragged into the top of the screen or the far corners")));
 
+        disable_night_light = new Gtk.Switch();
+        grid.add_row(new SettingsRow(disable_night_light,
+            _("Disable Night Light mode when windows are fullscreen"),
+            _("Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen.")
+        ));
+
         /* Unredirect.. */
         switch_unredirect = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_unredirect,
@@ -80,6 +87,7 @@ public class WindowsPage : Budgie.SettingsPage {
         /* Hook up settings */
         budgie_wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
         budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
+        budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
