@@ -41,14 +41,18 @@ public static string safe_markup_string(string inp)
     /* Explicit copy */
     string inp2 = "" + inp;
 
+    /* 
+     * is it already escaped?
+     * 
+     * &#39; is the ASCII code for a single quote
+     */
+    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2) || ("&nbsp;" in inp2) || ("&#39;" in inp2) || ("&apos;" in inp2) || ("&quot;" in inp2)) {
+        return inp2;
+    }
+
     /* is it markup? */
     if (!(("<" in inp2) && (">" in inp2))) {
         return Markup.escape_text(inp2);
-    }
-
-    /* is it already escaped? */
-    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2) || ("&nbsp;" in inp2)) {
-        return inp2;
     }
 
     /* Ensure it's now sane */
