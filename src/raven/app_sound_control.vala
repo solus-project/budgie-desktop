@@ -63,19 +63,15 @@ namespace Budgie {
              */
             bool successfully_retrieved_name = false;
 
-            try {
-                DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
+            DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
 
-                if (info != null) {
-                    string desktop_app_name = info.get_string("Name");
+            if (info != null) { // Successfully got app info
+                string desktop_app_name = info.get_string("Name");
 
-                    if ((desktop_app_name != "") && (desktop_app_name != null)) { // If we got the desktop app name
-                        app_name = desktop_app_name;
-                        successfully_retrieved_name = true;
-                    }
+                if ((desktop_app_name != "") && (desktop_app_name != null)) { // If we got the desktop app name
+                    app_name = desktop_app_name;
+                    successfully_retrieved_name = true;
                 }
-            } catch (Error e) {
-                warning("Failed to get app info for this app: %s", e.message);
             }
 
             if (!successfully_retrieved_name) { // If we failed to get info from a desktop file
@@ -100,7 +96,7 @@ namespace Budgie {
             app_label.ellipsize = Pango.EllipsizeMode.END;
             app_label.halign = Gtk.Align.START; // Align to edge (left for LTR; right for RTL)
             app_label.justify = Gtk.Justification.LEFT;
-            app_label.margin_left = 10;
+            app_label.margin_start = 10;
 
             app_mute_button = new Gtk.Button();
 
@@ -135,13 +131,9 @@ namespace Budgie {
              */
             string stream_name = stream.get_name();
 
-            try { // First let's try to get a reasonable app icon instead of whatever is provided by Gvc
-                Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
-                string usable_icon_name = current_theme.has_icon(stream_name) ? stream_name : c_icon; // If our app has an icon, use it, otherwise use the stream icon name
-                app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
-            } catch (Error e) { // If we failed to create a Gtk.Image with the app name
-                warning("Failed to get an icon for this app. %s", e.message);
-            }
+            Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
+            string usable_icon_name = current_theme.has_icon(stream_name) ? stream_name : c_icon; // If our app has an icon, use it, otherwise use the stream icon name
+            app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
 
             if (app_image != null) {
                 app_image.margin_end = 10;

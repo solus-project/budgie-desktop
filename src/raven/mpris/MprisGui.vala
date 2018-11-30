@@ -71,12 +71,14 @@ public class ClientWidget : Gtk.Box
         /* Set up our header widget */
         header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
         header.closed.connect(()=> {
-            try {
-                if (client.player.can_quit) {
-                    client.player.quit.begin();
-                }
-            } catch (Error e) {
-                warning("Error closing %s: %s", client.player.identity, e.message);
+            if (client.player.can_quit) {
+                client.player.quit.begin((obj, res) => {
+                    try {
+                        client.player.quit.end(res);
+                    } catch (IOError e) {
+                        warning("Error closing %s: %s", client.player.identity, e.message);
+                    }
+                });
             }
         });
 

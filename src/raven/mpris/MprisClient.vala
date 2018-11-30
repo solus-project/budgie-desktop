@@ -49,8 +49,8 @@ public interface DbusPropIface : Object
 [DBus (name="org.mpris.MediaPlayer2")]
 public interface MprisIface : Object
 {
-    public abstract async void raise() throws IOError;
-    public abstract async void quit() throws IOError;
+    public abstract async void raise() throws DBusError, IOError;
+    public abstract async void quit() throws DBusError, IOError;
 
     public abstract bool can_quit { get; set; }
     public abstract bool fullscreen { get; } /* Optional */
@@ -73,15 +73,15 @@ public interface MprisIface : Object
 [DBus (name="org.mpris.MediaPlayer2.Player")]
 public interface PlayerIface : MprisIface
 {
-    public abstract async void next() throws IOError;
-    public abstract async void previous() throws IOError;
-    public abstract async void pause() throws IOError;
-    public abstract async void play_pause() throws IOError;
-    public abstract async void stop() throws IOError;
-    public abstract async void play() throws IOError;
+    public abstract async void next() throws DBusError, IOError;
+    public abstract async void previous() throws DBusError, IOError;
+    public abstract async void pause() throws DBusError, IOError;
+    public abstract async void play_pause() throws DBusError, IOError;
+    public abstract async void stop() throws DBusError, IOError;
+    public abstract async void play() throws DBusError, IOError;
     /* Eh we don't use everything in this iface :p */
-    public abstract async void seek(int64 offset) throws IOError;
-    public abstract async void open_uri(string uri) throws IOError;
+    public abstract async void seek(int64 offset) throws DBusError, IOError;
+    public abstract async void open_uri(string uri) throws DBusError, IOError;
 
     public abstract string playback_status { owned get; }
     public abstract string loop_status { owned get; set; } /* Optional */

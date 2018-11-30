@@ -67,7 +67,7 @@ public class SettingsGrid : Gtk.Grid {
         row.widget.valign = Gtk.Align.CENTER;
         row.widget.vexpand = false;
 
-        row.widget.margin_left = small_mode ? 8 : 28;
+        row.widget.margin_start = small_mode ? 8 : 28;
         row.widget.margin_top = 12;
 
         ++current_row;

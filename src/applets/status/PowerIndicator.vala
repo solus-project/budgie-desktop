@@ -63,7 +63,12 @@ public class BatteryIcon : Gtk.Box
             return;
         }
         this.changing = true;
-        this.battery.refresh_sync(null);
+        try {
+            this.battery.refresh_sync(null);
+        } catch (Error e) {
+            warning("Failed to refresh battery: %s", e.message);
+        }
+
         this.update_ui(this.battery);
         this.changing = false;
     }
