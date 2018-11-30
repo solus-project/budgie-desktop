@@ -32,7 +32,6 @@ public class RavenPage : Budgie.SettingsPage {
             icon_name: "preferences-calendar-and-tasks" // Subject to change
         );
 
-        var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
         var grid = new SettingsGrid();
         this.add(grid);
 

@@ -805,10 +805,13 @@ public class Panel : Budgie.Toplevel
                 break;
         }
         /* Don't needlessly reparent */
-        if (new_parent == info.applet.get_parent()) {
-            return;
+        var current_parent = info.applet.get_parent();
+        if (new_parent != current_parent) {
+            current_parent.remove(info.applet);
+            new_parent.add(info.applet);
+            info.applet.queue_resize();
+            new_parent.queue_draw();
         }
-        info.applet.reparent(new_parent);
     }
 
     void applet_reposition(Budgie.AppletInfo? info)
