@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-        <!-- 3.18 assets //-->
-        <gresource prefix="/com/solus-project/budgie/theme">
-                <file>theme_3.18.css</file>
-                <file>theme_hc_3.18.css</file>
-        </gresource>
-
         <!-- 3.20 assets //-->
         <gresource prefix="/com/solus-project/budgie/theme">
                 <file>theme_3.20.css</file>

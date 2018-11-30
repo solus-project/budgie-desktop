@@ -105,7 +105,7 @@ pkgconfig.generate(
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
-        'gtk+-3.0 >= 3.18.0',
+        'gtk+-3.0 >= 3.22.0',
         'libpeas-1.0 >= 1.8.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',

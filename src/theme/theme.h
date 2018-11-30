@@ -17,7 +17,7 @@
  *
  * This performs a runtime check to determine the currently used version
  * of GTK+ to ensure that the appropriate theme-set is used. Currently
- * we support 3.18 and 3.20
+ * we support 3.22
  *
  * @return a Newly allocated string
  */

@@ -17,10 +17,7 @@ gchar *budgie_form_theme_path(const gchar *suffix)
 {
         guint minor_version = gtk_get_minor_version();
 
-        /* Prioritize 3.18 */
         switch (minor_version) {
-        case 18:
-                return g_strdup_printf("%s/%s_3.18.css", THEME_PREFIX, suffix);
         case 20:
         default:
                 return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
