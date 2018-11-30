@@ -25,6 +25,17 @@ public const string ROOT_KEY_SPAM_APPS = "spam-apps";
 /** Spam categories */
 public const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
 
+/** Character escape strings */
+public const string[] ESCAPE_STRINGS = {
+    "&lt;", // less-than sign
+    "&gt;", // greater-than sign
+    "&amp;", // ampersand (&)
+    "&nbsp;", // non-breaking space
+    "&#39;", // ASCII single quote
+    "&apos;", // apostrophy
+    "&quot;" // double quote
+};
+
 public enum NotificationCloseReason {
     EXPIRED = 1,    /** The notification expired. */
     DISMISSED = 2,  /** The notification was dismissed by the user. */
@@ -43,11 +54,11 @@ public static string safe_markup_string(string inp)
 
     /* 
      * is it already escaped?
-     * 
-     * &#39; is the ASCII code for a single quote
      */
-    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2) || ("&nbsp;" in inp2) || ("&#39;" in inp2) || ("&apos;" in inp2) || ("&quot;" in inp2)) {
-        return inp2;
+    foreach (string str in ESCAPE_STRINGS) {
+        if (inp2.contains(str)) { // Already escaped
+            return inp2;
+        }
     }
 
     /* is it markup? */
