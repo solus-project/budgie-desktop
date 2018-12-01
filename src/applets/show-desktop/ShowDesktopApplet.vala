@@ -22,7 +22,7 @@ public class ShowDesktopApplet : Budgie.Applet
     protected Gtk.ToggleButton widget;
     protected Gtk.Image img;
     private Wnck.Screen wscreen;
-    private List<unowned Wnck.Window> window_list;
+    private List<ulong> window_list;
 
     public ShowDesktopApplet()
     {
@@ -40,13 +40,13 @@ public class ShowDesktopApplet : Budgie.Applet
             }
             window.state_changed.connect(() => {
                 if (!window.is_minimized()) {
-                    window_list = new List<unowned Wnck.Window>();
+                    window_list = new List<ulong>();
                     widget.set_active(false);
                 }
             });
         });
 
-        window_list = new List<unowned Wnck.Window>();
+        window_list = new List<ulong>();
 
         widget.toggled.connect(() => {
             if (widget.get_active()) {
@@ -55,13 +55,15 @@ public class ShowDesktopApplet : Budgie.Applet
                         return;
                     }
                     if (!window.is_minimized()) {
-                        window_list.append(window);
+                        window_list.append(window.get_xid());
                         window.minimize();
                     }
                 });
             } else {
-                window_list.foreach((window) => {
-                    if (window.is_minimized()) {
+                window_list.foreach((xid) => {
+                    var window = Wnck.Window.@get(xid);
+
+                    if (window != null && window.is_minimized()) {
                         var utc_now = new DateTime.now_utc();
                         var now = (uint32) utc_now.to_unix();
                         window.unminimize(now);
