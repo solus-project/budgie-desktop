@@ -33,47 +33,54 @@ public class ShowDesktopApplet : Budgie.Applet
         widget.add(img);
         widget.set_tooltip_text(_("Toggle the desktop"));
 
-        wscreen = Wnck.Screen.get_default();
-        wscreen.get_windows().foreach((window) => {
-            if (window.is_skip_pager() || window.is_skip_tasklist()) {
-                return;
-            }
-            window.state_changed.connect(() => {
-                if (!window.is_minimized()) {
-                    window_list = new List<ulong>();
-                    widget.set_active(false);
-                }
-            });
-        });
-
         window_list = new List<ulong>();
+        wscreen = Wnck.Screen.get_default();
+
+        wscreen.window_opened.connect(() => {
+            window_list = new List<ulong>();
+            widget.set_active(false);
+        });
 
         widget.toggled.connect(() => {
             if (widget.get_active()) {
-                wscreen.get_windows_stacked().foreach((window) => {
-                    if (window.is_skip_pager() || window.is_skip_tasklist()) {
-                        return;
-                    }
-                    if (!window.is_minimized()) {
-                        window_list.append(window.get_xid());
-                        window.minimize();
-                    }
-                });
+                wscreen.get_windows_stacked().foreach(record_windows_state);
             } else {
-                window_list.foreach((xid) => {
-                    var window = Wnck.Window.@get(xid);
-
-                    if (window != null && window.is_minimized()) {
-                        var utc_now = new DateTime.now_utc();
-                        var now = (uint32) utc_now.to_unix();
-                        window.unminimize(now);
-                    }
-                });
+                window_list.foreach(unminimize_windows);
             }
         });
 
         add(widget);
         show_all();
+    }
+
+    private void record_windows_state(Wnck.Window window)
+    {
+        if (window.is_skip_pager() || window.is_skip_tasklist()) {
+            return;
+        }
+
+        window.state_changed.connect(() => {
+            if (!window.is_minimized()) {
+                window_list = new List<ulong>();
+                widget.set_active(false);
+            }
+        });
+
+        if (!window.is_minimized()) {
+            window_list.append(window.get_xid());
+            window.minimize();
+        }
+    }
+
+    private void unminimize_windows(ulong xid)
+    {
+        var window = Wnck.Window.@get(xid);
+
+        if (window != null && window.is_minimized()) {
+            var utc_now = new DateTime.now_utc();
+            var now = (uint32) utc_now.to_unix();
+            window.unminimize(now);
+        }
     }
 }
 
