@@ -18,6 +18,7 @@ public class StylePage : Budgie.SettingsPage {
     private Gtk.ComboBox? combobox_gtk;
     private Gtk.ComboBox? combobox_icon;
     private Gtk.ComboBox? combobox_cursor;
+    private Gtk.ComboBox? combobox_notification_position;
     private Gtk.Switch? switch_dark;
     private Gtk.Switch? switch_builtin;
     private Gtk.Switch? switch_animations;
@@ -52,10 +53,16 @@ public class StylePage : Budgie.SettingsPage {
             _("Cursors"),
             _("Set the globally used mouse cursor theme")));
 
+        combobox_notification_position = new Gtk.ComboBox();
+        grid.add_row(new SettingsRow(combobox_notification_position,
+            _("Notification Position"),
+            _("Set the location for notification popups")));
+
         /* Stick the combos in a size group */
         group.add_widget(combobox_gtk);
         group.add_widget(combobox_icon);
         group.add_widget(combobox_cursor);
+        group.add_widget(combobox_notification_position);
 
         switch_dark = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_dark, _("Dark theme")));
@@ -70,6 +77,22 @@ public class StylePage : Budgie.SettingsPage {
             _("Animations"),
             _("Control whether windows and controls use animations")));
 
+        /* Add options for notification position */
+        var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.NotificationPosition));
+        Gtk.TreeIter iter;
+        const Budgie.NotificationPosition[] positions = {
+            Budgie.NotificationPosition.TOP_LEFT,
+            Budgie.NotificationPosition.TOP_RIGHT,
+            Budgie.NotificationPosition.BOTTOM_LEFT,
+            Budgie.NotificationPosition.BOTTOM_RIGHT
+        };
+        foreach (var pos in positions) {
+            model.append(out iter);
+            model.set(iter, 0, pos.to_string(), 1, notification_position_to_display(pos), 2, pos, -1);
+        }
+        combobox_notification_position.set_model(model);
+        combobox_notification_position.set_id_column(0);
+
         /* Sort out renderers for all of our dropdowns */
         var render = new Gtk.CellRendererText();
         combobox_gtk.pack_start(render, true);
@@ -78,12 +101,15 @@ public class StylePage : Budgie.SettingsPage {
         combobox_icon.add_attribute(render, "text", 0);
         combobox_cursor.pack_start(render, true);
         combobox_cursor.add_attribute(render, "text", 0);
+        combobox_notification_position.pack_start(render, true);
+        combobox_notification_position.add_attribute(render, "text", 1);
 
         /* Hook up settings */
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
         budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
         budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
         budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+        budgie_settings.bind("notification-position", combobox_notification_position, "active-id", SettingsBindFlags.DEFAULT);
         ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
         this.theme_scanner = new ThemeScanner();
 
@@ -157,6 +183,25 @@ public class StylePage : Budgie.SettingsPage {
             }
             queue_resize();
         });
+    }
+
+    /**
+     * Get a user-friendly name for each position.
+     */
+    public string notification_position_to_display(Budgie.NotificationPosition position)
+    {
+        switch (position) {
+            case NotificationPosition.TOP_LEFT:
+                return _("Top Left");
+            case NotificationPosition.TOP_RIGHT:
+                return _("Top Right");
+            case NotificationPosition.BOTTOM_LEFT:
+                return _("Bottom Left");
+            case NotificationPosition.BOTTOM_RIGHT:
+                return _("Bottom Right");
+            default:
+                return _("None");
+        }
     }
 
 } /* End class */

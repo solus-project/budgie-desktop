@@ -43,6 +43,13 @@ public enum NotificationCloseReason {
     UNDEFINED = 4   /** Undefined/reserved reasons. */
 }
 
+public enum NotificationPosition {
+    TOP_LEFT = 1,
+    TOP_RIGHT = 2,
+    BOTTOM_LEFT = 3,
+    BOTTOM_RIGHT = 4
+}
+
 /**
  * We only want to make the input safe, we still need actual markup
  * support, so markup_escape won't be useful here.
@@ -747,8 +754,8 @@ public class NotificationsView : Gtk.Box
 
     private void configure_window(NotificationWindow? window)
     {
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
 
         unowned NotificationWindow? tail = stack.peek_head();
         var screen = Gdk.Screen.get_default();
@@ -756,22 +763,85 @@ public class NotificationsView : Gtk.Box
         Gdk.Monitor mon = screen.get_display().get_primary_monitor();
         Gdk.Rectangle rect = mon.get_geometry();
 
-        if (tail != null) {
-            int nx;
-            int ny;
-            tail.get_position(out nx, out ny);
-            x = nx;
-            y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
-        } else {
-            x = (rect.x+rect.width) - NOTIFICATION_SIZE;
-            x -= BUFFER_ZONE; /* Don't touch lip of next desktop */
-            y = (rect.y) + INITIAL_BUFFER_ZONE;
-        }
+        /* Set the x, y position of the notification */
+        calculate_position(window, tail, rect, out x, out y);
 
         stack.push_head(window);
         window.move(x, y);
         window.show_all();
         window.begin_decay();
+    }
+
+    /**
+     * Calculate the (x, y) position of a notification popup based on the setting for where on
+     * the screen notifications should appear.
+     */
+    private void calculate_position(NotificationWindow window, NotificationWindow? tail, Gdk.Rectangle rect, out int x, out int y)
+    {
+        var pos = (NotificationPosition) settings.get_enum("notification-position");
+
+        switch (pos) {
+            case NotificationPosition.TOP_LEFT:
+                if (tail != null) { // If a notification is already being displayed
+                    int nx;
+                    int ny;
+                    tail.get_position(out nx, out ny);
+                    x = nx;
+                    y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+                } else { // This is the first nofication on the screen
+                    x = rect.x + BUFFER_ZONE;
+                    y = rect.y + INITIAL_BUFFER_ZONE;
+                }
+                break;
+            case NotificationPosition.TOP_RIGHT:
+                if (tail != null) { // If a notification is already being displayed
+                    int nx;
+                    int ny;
+                    tail.get_position(out nx, out ny);
+                    x = nx;
+                    y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+                } else { // This is the first nofication on the screen
+                    x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+                    x -= BUFFER_ZONE; // Don't touch edge of the screen
+                    y = rect.y + INITIAL_BUFFER_ZONE;
+                }
+                break;
+            case NotificationPosition.BOTTOM_LEFT:
+                if (tail != null) { // If a notification is already being displayed
+                    int nx;
+                    int ny;
+                    tail.get_position(out nx, out ny);
+                    x = nx;
+                    y = ny - tail.get_child().get_allocated_height() - BUFFER_ZONE;
+                } else { // This is the first nofication on the screen
+                    x = rect.x + BUFFER_ZONE;
+                    
+                    int height;
+                    window.get_size(null, out height); // Get the estimated height of the notification
+                    y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+                }
+                break;
+            case NotificationPosition.BOTTOM_RIGHT:
+                if (tail != null) { // If a notification is already being displayed
+                    int nx;
+                    int ny;
+                    tail.get_position(out nx, out ny);
+                    x = nx;
+                    y = ny - tail.get_child().get_allocated_height() - BUFFER_ZONE;
+                } else { // This is the first nofication on the screen
+                    x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+                    x -= BUFFER_ZONE; // Don't touch edge of the screen
+
+                    int height;
+                    window.get_size(null, out height); // Get the estimated height of the notification
+                    y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+                }
+                break;
+            default:
+                x = 0;
+                y = 0;
+                break;
+        }
     }
 
 

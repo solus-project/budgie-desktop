@@ -22,6 +22,12 @@
       <value nick="automatic" value="2" />
       <value nick="intelligent" value="4" />
   </enum>
+  <enum id="com.solus-project.budgie-panel.NotificationPosition">
+      <value nick="BUDGIE_NOTIFICATION_POSITION_TOP_LEFT" value="1" />
+      <value nick="BUDGIE_NOTIFICATION_POSITION_TOP_RIGHT" value="2" />
+      <value nick="BUDGIE_NOTIFICATION_POSITION_BOTTOM_LEFT" value="3" />
+      <value nick="BUDGIE_NOTIFICATION_POSITION_BOTTOM_RIGHT" value="4" />
+  </enum>
 
   <schema id="com.solus-project.budgie-panel.panel">
     <key enum="com.solus-project.budgie-panel.Position" name="location">
@@ -129,6 +135,11 @@
       <default>true</default>
       <summary>Enable the built-in theming</summary>
       <description>Enable the built-in theming, or disable to let themes override it.</description>
+    </key>
+    <key enum="com.solus-project.budgie-panel.NotificationPosition" name="notification-position">
+      <default>'BUDGIE_NOTIFICATION_POSITION_TOP_RIGHT'</default>
+      <summary>Set the location of notifications</summary>
+      <description>Set the location on the screen where notification popups will appear.</description>
     </key>
     <key type="i" name="migration-level">
       <default>0</default>
