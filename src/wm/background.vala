@@ -19,6 +19,7 @@ public const string SECONDARY_COLOR_KEY    = "secondary-color";
 public const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
 public const string BACKGROUND_STYLE_KEY   = "picture-options";
 public const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
+public const string ACCOUNTS_SCHEMA        = "org.freedesktop.Accounts";
 
 public class BudgieBackground : Meta.BackgroundGroup
 {
@@ -145,62 +146,52 @@ public class BudgieBackground : Meta.BackgroundGroup
      * to update the greeter background if the display
      * manager supports the dbus call.
      */
-    void set_accountsservice_user_bg(string background)
-    {
+    void set_accountsservice_user_bg(string background) {
         DBusConnection bus;
-        Variant variant;
+        Variant        variant;
 
-        try
-        {
+        try {
             bus = Bus.get_sync(BusType.SYSTEM);
-        }
-        catch (IOError e)
-        {
+        } catch (IOError e) {
             warning("Failed to get system bus: %s", e.message);
             return;
         }
 
-        try
-        {
+        try {
             variant = bus.call_sync(
-                "org.freedesktop.Accounts",
+                ACCOUNTS_SCHEMA,
                 "/org/freedesktop/Accounts",
-                "org.freedesktop.Accounts",
+                ACCOUNTS_SCHEMA,
                 "FindUserByName",
                 new Variant("(s)", Environment.get_user_name()),
                 new VariantType("(o)"),
                 DBusCallFlags.NONE,
                 -1,
                 null
-            );
-        }
-        catch (Error e)
-        {
+                );
+        } catch (Error e) {
             warning("Could not contact accounts service to look up '%s': %s", Environment.get_user_name(), e.message);
             return;
         }
 
         string object_path = variant.get_child_value(0).get_string();
 
-        try
-        {
+        try {
             bus.call_sync(
-                "org.freedesktop.Accounts",
+                ACCOUNTS_SCHEMA,
                 object_path,
                 "org.freedesktop.DBus.Properties",
                 "Set",
                 new Variant("(ssv)",
-                            "org.freedesktop.DisplayManager.AccountsService",
-                            "BackgroundFile",
-                            new Variant.string( background )),
+                "org.freedesktop.DisplayManager.AccountsService",
+                "BackgroundFile",
+                new Variant.string(background)),
                 new VariantType("()"),
                 DBusCallFlags.NONE,
                 -1,
                 null
             );
-        }
-        catch (Error e)
-        {
+        } catch (Error e) {
             warning("Failed to set the background '%s': %s", background, e.message);
         }
     }
