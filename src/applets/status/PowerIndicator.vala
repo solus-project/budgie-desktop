@@ -30,7 +30,9 @@ public class BatteryIcon : Gtk.Box
         public get {
             return this.percent_label.visible;
         }
+#if !VALA_0_42
         default = false;
+#endif
     }
 
     public BatteryIcon(Up.Device battery) {
@@ -141,7 +143,7 @@ public class PowerIndicator : Gtk.Bin
 
     private HashTable<string,BatteryIcon?> devices;
 
-    public bool label_visible { set ; get ; default = false; }
+    public bool label_visible { set; get; default = false; }
     private Gtk.CheckButton check_percent;
     private Settings battery_settings;
 

@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,7 +19,7 @@ namespace Budgie
  */
 public class MainPanel : Gtk.Box
 {
- 
+
     public MainPanel()
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL);
@@ -120,7 +120,9 @@ public class Panel : Budgie.Toplevel
         public get {
             return render_scale;
         }
+#if !VALA_0_42
         default = 0.0;
+#endif
     }
 
     public bool activate_action(int remote_action)

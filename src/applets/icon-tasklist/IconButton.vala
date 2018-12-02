@@ -388,7 +388,7 @@ public class IconButton : Gtk.ToggleButton
     }
 
     private Wnck.Window get_next_window()
-    {        
+    {
         if (class_group == null) {
             return this.window;
         }
@@ -669,7 +669,7 @@ public class IconButton : Gtk.ToggleButton
                     case Budgie.PanelPosition.RIGHT:
                         int to = 0;
                         if (counter == count-1) {
-                            to = y + height; 
+                            to = y + height;
                         } else {
                             to = previous_y+(height/count);
                         }
@@ -678,7 +678,7 @@ public class IconButton : Gtk.ToggleButton
                     default:
                         int to = 0;
                         if (counter == count-1) {
-                            to = x + width; 
+                            to = x + width;
                         } else {
                             to = previous_x+(width/count);
                         }

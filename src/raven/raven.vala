@@ -106,7 +106,7 @@ public class RavenIface
         }
     }
 
-    
+
     public signal void NotificationsChanged();
 
     public uint GetNotificationCount() {
@@ -170,7 +170,9 @@ public class Raven : Gtk.Window
         public get {
             return this._screen_edge;
         }
+#if !VALA_0_42
         default = Gtk.PositionType.RIGHT;
+#endif
     }
 
     int our_width = 0;
