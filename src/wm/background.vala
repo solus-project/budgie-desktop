@@ -158,17 +158,8 @@ public class BudgieBackground : Meta.BackgroundGroup
         }
 
         try {
-            variant = bus.call_sync(
-                ACCOUNTS_SCHEMA,
-                "/org/freedesktop/Accounts",
-                ACCOUNTS_SCHEMA,
-                "FindUserByName",
-                new Variant("(s)", Environment.get_user_name()),
-                new VariantType("(o)"),
-                DBusCallFlags.NONE,
-                -1,
-                null
-                );
+            variant = bus.call_sync(ACCOUNTS_SCHEMA, "/org/freedesktop/Accounts", ACCOUNTS_SCHEMA, "FindUserByName",
+                new Variant("(s)", Environment.get_user_name()), new VariantType("(o)"), DBusCallFlags.NONE, -1, null);
         } catch (Error e) {
             warning("Could not contact accounts service to look up '%s': %s", Environment.get_user_name(), e.message);
             return;
@@ -177,20 +168,10 @@ public class BudgieBackground : Meta.BackgroundGroup
         string object_path = variant.get_child_value(0).get_string();
 
         try {
-            bus.call_sync(
-                ACCOUNTS_SCHEMA,
-                object_path,
-                "org.freedesktop.DBus.Properties",
-                "Set",
-                new Variant("(ssv)",
-                "org.freedesktop.DisplayManager.AccountsService",
-                "BackgroundFile",
-                new Variant.string(background)),
-                new VariantType("()"),
-                DBusCallFlags.NONE,
-                -1,
-                null
-            );
+            bus.call_sync(ACCOUNTS_SCHEMA, object_path, "org.freedesktop.DBus.Properties", "Set",
+                new Variant("(ssv)", "org.freedesktop.DisplayManager.AccountsService", "BackgroundFile",
+                    new Variant.string(background)
+                ), new VariantType("()"), DBusCallFlags.NONE, -1, null);
         } catch (Error e) {
             warning("Failed to set the background '%s': %s", background, e.message);
         }
