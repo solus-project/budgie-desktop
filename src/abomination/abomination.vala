@@ -61,17 +61,21 @@ namespace Budgie {
             }
 
             screen.class_group_closed.connect((group) => { // On group closed
-                string group_name = group.get_name().down(); // Get our group name
+                string group_name = group.get_name(); // Get the class name
 
-                Array<AbominationRunningApp> group_apps = running_apps.get(group_name); // Get the apps associated with the group name
+                if (group_name != null) {
+                    group_name = group_name.down();
 
-                if ((group_apps != null) && (group_apps.length > 0)) { // If there are apps (and this exists)
-                    for (int i = 0; i < group_apps.length; i++)  {
-                        AbominationRunningApp app =  group_apps.index(i);
-                        running_apps_id.steal(app.id); // Remove from running_apps_id
+                    Array<AbominationRunningApp> group_apps = running_apps.get(group_name); // Get the apps associated with the group name
+
+                    if ((group_apps != null) && (group_apps.length > 0)) { // If there are apps (and this exists)
+                        for (int i = 0; i < group_apps.length; i++)  {
+                            AbominationRunningApp app =  group_apps.index(i);
+                            running_apps_id.steal(app.id); // Remove from running_apps_id
+                        }
+
+                        running_apps.steal(group_name); // Remove group from running_apps
                     }
-
-                    running_apps.steal(group_name); // Remove group from running_apps
                 }
             });
 

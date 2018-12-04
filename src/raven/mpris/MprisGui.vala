@@ -74,8 +74,12 @@ public class ClientWidget : Gtk.Box
             if (client.player.can_quit) {
                 client.player.quit.begin((obj, res) => {
                     try {
-                        client.player.quit.end(res);
-                    } catch (IOError e) {
+                        try {
+                            client.player.quit.end(res);
+                        } catch (IOError e) {
+                            warning("Error closing %s: %s", client.player.identity, e.message);
+                        }
+                    } catch (DBusError e) {
                         warning("Error closing %s: %s", client.player.identity, e.message);
                     }
                 });

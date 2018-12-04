@@ -204,12 +204,15 @@ namespace Budgie {
             muted = !muted; // Invert muted state
 
             SignalHandler.block(volume_slider, scale_id);
-            var local_vol = (muted) ? 0 : volume;
 
-            if (stream.set_volume(local_vol)) {
-                Gvc.push_volume(stream);
-                set_mute_ui(); // Update our image
+            if (muted) {
+                stream.set_volume(0);
+            } else {
+                stream.set_volume(volume);
             }
+
+            Gvc.push_volume(stream);
+            set_mute_ui(); // Update our image
 
             SignalHandler.unblock(volume_slider, scale_id);
         }

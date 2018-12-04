@@ -204,6 +204,7 @@ namespace Budgie {
             }
 
             devices.insert(id, check);
+            devices_area.queue_draw();
         }
 
         /**
@@ -241,6 +242,7 @@ namespace Budgie {
 
             this.primary_stream = stream;
             update_volume();
+            devices_area.queue_draw();
         }
 
         /**
@@ -256,6 +258,7 @@ namespace Budgie {
 
             devices.steal(id);
             btn.destroy();
+            devices_area.queue_draw();
         }
 
         /**

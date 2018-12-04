@@ -24,6 +24,7 @@ applet_icontasklist_sources = [
     'DesktopHelper.vala',
     'IconTasklistApplet.vala',
     'IconButton.vala',
+    'IconPopover.vala',
     'Icon.vala',
     'animation.vala',
     applet_icontasklist_resources

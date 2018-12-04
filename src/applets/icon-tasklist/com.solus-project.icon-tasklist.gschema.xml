@@ -15,8 +15,8 @@
 
     <key type="b" name="only-pinned">
       <default>false</default>
-      <summary>Only show pinned applications</summary>
-      <description>Only show pinned applications</description>
+      <summary>Only show favorited applications</summary>
+      <description>Only show favorited applications</description>
     </key>
 
     <key type="b" name="lock-icons">
@@ -27,7 +27,7 @@
 
     <key type="as" name="pinned-launchers">
       <default>[]</default>
-      <summary>Pinned launchers</summary>
+      <summary>Favorited (Pinned) launchers</summary>
       <description>Launchers that appear permanently on the panel, regardless of whether they are running or not.</description>
     </key>
 

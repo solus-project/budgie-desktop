@@ -9,9 +9,11 @@
  * (at your option) any later version.
  */
 
+
+const string ENABLE_WEEK_NUM = "enable-week-numbers";
+
 public class CalendarWidget : Gtk.Box {
     private Budgie.HeaderWidget? header = null;
-    private const string ENABLE_WEEK_NUM = "enable-week-numbers";
     private Gtk.Calendar? cal = null;
     private unowned Settings settings = null;
 
@@ -42,7 +44,7 @@ public class CalendarWidget : Gtk.Box {
         });
 
         this.settings.changed.connect((key) => {
-            if (key == this.ENABLE_WEEK_NUM) {
+            if (key == ENABLE_WEEK_NUM) {
                 set_week_number();
             } else {
                 return;
@@ -60,9 +62,9 @@ public class CalendarWidget : Gtk.Box {
 
         if (this.settings != null) {
             try {
-                show = this.settings.get_boolean(this.ENABLE_WEEK_NUM);
+                show = this.settings.get_boolean(ENABLE_WEEK_NUM);
             } catch (GLib.Error e) {
-                warning("Failed to get value for %s: ", this.ENABLE_WEEK_NUM);
+                warning("Failed to get value for %s: ", ENABLE_WEEK_NUM);
             }
         }
 
