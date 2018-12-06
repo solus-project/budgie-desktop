@@ -76,10 +76,9 @@ public class ShowDesktopApplet : Budgie.Applet
     {
         var window = Wnck.Window.@get(xid);
 
-        if (window != null && window.is_minimized()) {
-            var utc_now = new DateTime.now_utc();
-            var now = (uint32) utc_now.to_unix();
-            window.unminimize(now);
+        if (window != null && window.is_minimized())
+        {
+            window.unminimize(Gtk.get_current_event_time());
         }
     }
 }
