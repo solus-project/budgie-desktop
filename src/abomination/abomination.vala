@@ -91,6 +91,10 @@ namespace Budgie {
          * add_app will add a running application based on the provided window
          */
         public void add_app(Wnck.Window window) {
+            if (window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                return;
+            }
+
             if (window.is_skip_tasklist()) {
                 return;
             }

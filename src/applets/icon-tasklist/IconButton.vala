@@ -204,6 +204,10 @@ public class IconButton : Gtk.ToggleButton
                 return;
             }
 
+            if (new_window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                return;
+            }
+
             Wnck.ClassGroup window_class_group = new_window.get_class_group();
 
             if ((this.class_group != null) && (window_class_group != null)) {
@@ -253,6 +257,10 @@ public class IconButton : Gtk.ToggleButton
         this.class_group = window.get_class_group();
 
         if (window == null) {
+            return;
+        }
+
+        if (window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
             return;
         }
 
@@ -367,9 +375,11 @@ public class IconButton : Gtk.ToggleButton
 
         bool has_valid = false;
         class_group.get_windows().foreach((window) => {
-            if (!window.is_skip_tasklist()) {
-                has_valid = true;
-                n++;
+            if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                if (!window.is_skip_tasklist()) {
+                    has_valid = true;
+                    n++;
+                }
             }
         });
 
@@ -776,20 +786,22 @@ public class IconButton : Gtk.ToggleButton
     public void setup_popover_with_class() {
         foreach (unowned Wnck.Window window in this.class_group.get_windows()) {
             if (window != null) {
-                ulong xid = window.get_xid();
-                string name = window.get_name();
+                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Not application in desktop mode, like Nautilus desktop icons
+                    ulong xid = window.get_xid();
+                    string name = window.get_name();
 
-                popover.add_window(xid, name);
-                window.name_changed.connect_after(() => {
-                    ulong win_xid = window.get_xid();
-                    popover.rename_window(win_xid);
-                });
+                    popover.add_window(xid, name);
+                    window.name_changed.connect_after(() => {
+                        ulong win_xid = window.get_xid();
+                        popover.rename_window(win_xid);
+                    });
 
-                window.state_changed.connect_after(() => {
-                    if (window.needs_attention()) {
-                        attention();
-                    }
-                });
+                    window.state_changed.connect_after(() => {
+                        if (window.needs_attention()) {
+                            attention();
+                        }
+                    });
+                }
             }
         }
     }
