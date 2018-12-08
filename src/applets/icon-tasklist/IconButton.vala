@@ -57,7 +57,6 @@ public class IconButton : Gtk.ToggleButton
         Object(desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
-        this.set_wnck_window(window);
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
@@ -77,6 +76,7 @@ public class IconButton : Gtk.ToggleButton
         }
 
         create_popover(); // Create our popover
+        this.set_wnck_window(window);
     }
 
     public IconButton.from_group(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
@@ -169,6 +169,7 @@ public class IconButton : Gtk.ToggleButton
         });
 
         this.popover.closed_all.connect(() => { // If we closed all windows
+            this.popover.hide(); // Hide
             became_empty(); // Call our became empty function
         });
 
@@ -254,7 +255,6 @@ public class IconButton : Gtk.ToggleButton
 
     public void set_wnck_window(Wnck.Window? window) {
         this.window = window;
-        this.class_group = window.get_class_group();
 
         if (window == null) {
             return;
@@ -278,7 +278,6 @@ public class IconButton : Gtk.ToggleButton
             }
         });
 
-        warning("Happening here?");
         popover.add_window(window.get_xid(), window.get_name());
     }
 
