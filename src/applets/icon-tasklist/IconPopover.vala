@@ -291,16 +291,22 @@ namespace Budgie {
                 this.actions_list.hide();
             }
 
+            if (has_windows) { // Has windows
+                this.windows_list.show_all(); // Show the list
+            } else { // Does not have windows
+                this.windows_list.hide(); // Hide the list
+            }
+
             if (has_actions && has_windows) { // Both actions and windows
                 this.windows_sep.show(); // Show separator
             } else {
                 this.windows_sep.hide(); // Hide separator
             }
 
-            if (has_windows) { // Has windows
-                this.windows_list.show_all(); // Show the list
-            } else { // Does not have windows
-                this.windows_list.hide(); // Hide the list
+            if (!has_actions && !has_windows) { // Does not have actions or windows, so "empty"
+                this.get_style_context().add_class("only-actions");
+            } else { // Has either actions or windows
+                this.get_style_context().remove_class("only-actions");
             }
 
             this.close_all_button.sensitive = (window_id_to_name.length != 0);
