@@ -101,6 +101,7 @@ namespace Budgie {
                 apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
                 apps_listbox = new Gtk.ListBox();
                 apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
+                apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
 
                 apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
                     var app_1 = ((AppSoundControl) row1.get_child()).app_name;
