@@ -14,11 +14,12 @@ namespace Budgie {
         /**
          * Data / Logic
          */
-        private ulong current_window_id = 0;
-        private HashTable<ulong?,string?> window_id_to_name;
-        private HashTable<ulong?,Budgie.IconPopoverItem?> window_id_to_controls;
-        private List<Budgie.IconPopoverItem> workspace_items;
-        private unowned string[] actions = null;
+        private ulong current_window_id = 0; // Current window selected in the popover
+        private HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
+        private HashTable<ulong?,Budgie.IconPopoverItem?> window_id_to_controls; // List of IDs to Controls
+        private List<Budgie.IconPopoverItem> workspace_items; // Our referenced list of workspaces
+        private unowned string[] actions = null; // List of supported desktop actions
+        private string preferred_action = ""; // Any preferred action from Desktop Actions like "new-window"
         private bool pinned = false;
         private int workspace_count = 0;
         private int workspaces_added_to_list = 0;
@@ -127,7 +128,12 @@ namespace Budgie {
                         string assigned_action = action_item.actionable_label.get_data("action");
                         this.perform_action(assigned_action);
                     });
+
                     this.actions_list.pack_end(action_item, true, false, 0);
+
+                    if (action == "new-window") { // Generally supported new-window action
+                        preferred_action = action;
+                    }
                 }
             }
 
@@ -137,7 +143,11 @@ namespace Budgie {
             });
 
             launch_new_instance_button.clicked.connect(() => { // When we click to launch a new instance
-                launch_new_instance();
+                if (preferred_action != "") { // If we have a preferred action set
+                    perform_action(preferred_action);
+                } else { // Default to our launch_new_instance signal
+                    launch_new_instance();
+                }
             });
 
             close_all_button.clicked.connect(this.close_all_windows); // Close all windows
