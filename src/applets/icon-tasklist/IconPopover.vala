@@ -54,7 +54,7 @@ namespace Budgie {
         public signal void move_window_to_workspace(ulong xid, int workspace_num);
         public signal void perform_action(string action);
 
-        public IconPopover(Gtk.Widget relative_parent, DesktopAppInfo app_info, int current_workspace_count) {
+        public IconPopover(Gtk.Widget relative_parent, DesktopAppInfo? app_info, int current_workspace_count) {
             Object(relative_to: relative_parent);
             workspace_count = current_workspace_count;
             width_request = 200;
@@ -90,10 +90,6 @@ namespace Budgie {
             this.close_all_button.set_tooltip_text(_("Close All Windows"));
             this.close_all_button.sensitive = false;
 
-            this.quick_actions.attach(this.pin_button, 0, 0, 1, 1);
-            this.quick_actions.attach(this.launch_new_instance_button, 1, 0, 1, 1);
-            this.quick_actions.attach(this.close_all_button, 2, 0, 1, 1);
-
             this.primary_view.pack_start(actions_list);
             this.primary_view.pack_start(windows_sep);
             this.primary_view.pack_start(windows_list);
@@ -116,25 +112,34 @@ namespace Budgie {
 
             set_workspace_count(this.workspace_count);
 
-            this.actions = app_info.list_actions();
+            if (app_info != null) {
+                this.quick_actions.attach(this.pin_button, 0, 0, 1, 1);
+                this.quick_actions.attach(this.launch_new_instance_button, 1, 0, 1, 1);
+                this.quick_actions.attach(this.close_all_button, 2, 0, 1, 1);
 
-            if (this.actions.length != 0) {
-                foreach (string action in this.actions) {
-                    string action_name = app_info.get_action_name(action); // Get the name for this action
-                    Budgie.IconPopoverItem action_item = new Budgie.IconPopoverItem(action_name);
-                    action_item.actionable_label.set_data("action", action);
+                this.actions = app_info.list_actions();
 
-                    action_item.actionable_label.clicked.connect(() => {
-                        string assigned_action = action_item.actionable_label.get_data("action");
-                        this.perform_action(assigned_action);
-                    });
+                if (this.actions.length != 0) {
+                    foreach (string action in this.actions) {
+                        string action_name = app_info.get_action_name(action); // Get the name for this action
+                        Budgie.IconPopoverItem action_item = new Budgie.IconPopoverItem(action_name);
+                        action_item.actionable_label.set_data("action", action);
 
-                    this.actions_list.pack_end(action_item, true, false, 0);
+                        action_item.actionable_label.clicked.connect(() => {
+                            string assigned_action = action_item.actionable_label.get_data("action");
+                            this.perform_action(assigned_action);
+                        });
 
-                    if (action == "new-window") { // Generally supported new-window action
-                        preferred_action = action;
+                        this.actions_list.pack_end(action_item, true, false, 0);
+
+                        if (action == "new-window") { // Generally supported new-window action
+                            preferred_action = action;
+                        }
                     }
                 }
+            } else { // App info isn't defined
+                // Intentionally skip pin and launch new instance since that requires the app info
+                this.quick_actions.attach(this.close_all_button, 0, 0, 3, 1);
             }
 
             pin_button.clicked.connect(() => { // When we click the pin button
