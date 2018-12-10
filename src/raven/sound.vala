@@ -376,7 +376,10 @@ namespace Budgie {
                     icon = derpers.get(name); // Use its designated icon instead
                 }
 
-                if (name == "WEBRTC VoiceEngine") { // Discord reports as WEBRTC VoiceEngine
+                if (name == "AudioIPC Server") { // Firefox reports as AudioIPC Server
+                    icon = "firefox";
+                    name = "Firefox";
+                } else if (name == "WEBRTC VoiceEngine") { // Discord reports as WEBRTC VoiceEngine
                     icon = "discord";
                     name = "Discord";
                 }
