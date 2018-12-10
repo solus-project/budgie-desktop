@@ -378,7 +378,8 @@ public class IconTasklistApplet : Budgie.Applet
 
         main_layout.add(wrapper);
         this.show_all();
-        (wrapper as Gtk.Revealer).set_reveal_child(true);
+        (wrapper as Gtk.Revealer).set_reveal_child(false); // Default to not showing
+        this.update_buttons(); // Ensure we update the buttons at launch, determines immediately whether to show
     }
 
     private void on_class_group_closed(string class_name)
@@ -456,7 +457,8 @@ public class IconTasklistApplet : Budgie.Applet
 
         main_layout.add(wrapper);
         this.show_all();
-        wrapper.set_reveal_child(true);
+        wrapper.set_reveal_child(false);
+        this.update_buttons(); // Ensure we update the buttons at launch, determines immediately whether to show
     }
 
     private void on_window_closed(Wnck.Window window)
