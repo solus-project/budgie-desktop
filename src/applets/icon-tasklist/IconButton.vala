@@ -176,6 +176,10 @@ public class IconButton : Gtk.ToggleButton
         this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
             this.pinned = new_pinned_state;
             this.desktop_helper.update_pinned(); // Update via desktop helper
+
+            if (!has_valid_windows(null)) { // Does not have any windows open
+                became_empty(); // Trigger our became_empty event
+            }
         });
 
         this.popover.move_window_to_workspace.connect((xid, wid) => { // On a request to move a window to a workspace

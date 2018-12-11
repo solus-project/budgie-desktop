@@ -148,6 +148,10 @@ public class IconTasklistApplet : Budgie.Applet
 
             buttons.insert(launcher, button);
 
+            button.became_empty.connect(() => {
+                wrapper.gracefully_die();
+            });
+
             main_layout.add(wrapper);
             this.show_all();
             wrapper.set_reveal_child(true);
