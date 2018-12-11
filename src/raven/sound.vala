@@ -21,7 +21,7 @@ namespace Budgie {
         private Gvc.MixerControl mixer = null;
         private HashTable<uint,Gtk.ListBoxRow?> apps;
         private HashTable<string,string?> derpers;
-        private HashTable<uint,Gtk.RadioButton?> devices;
+        private HashTable<uint,Gtk.ListBoxRow?> devices;
         private ulong primary_notify_id = 0;
         private Gvc.MixerStream? primary_stream = null;
         private Settings settings = null;
@@ -34,11 +34,10 @@ namespace Budgie {
         private Gtk.Box? apps_area = null;
         private Gtk.ListBox? apps_listbox = null;
         private Gtk.Revealer? apps_list_revealer = null;
-        private Gtk.Box? devices_area = null;
+        private Gtk.ListBox? devices_list = null;
         private StartListening? listening_box = null;
         private Gtk.Revealer? listening_box_revealer = null;
         private Gtk.Box? main_layout = null;
-        private Gtk.RadioButton? device_leader = null;
         private Gtk.Stack? widget_area = null;
         private Gtk.StackSwitcher? widget_area_switch = null;
         private Gtk.Scale? volume_slider = null;
@@ -56,12 +55,15 @@ namespace Budgie {
             derpers = new HashTable<string,string?>(str_hash, str_equal); // Create our GVC Stream app derpers
             derpers.insert("Vivaldi", "vivaldi"); // Vivaldi
             derpers.insert("Vivaldi Snapshot", "vivaldi-snapshot"); // Vivaldi Snapshot
-            devices = new HashTable<uint,Gtk.RadioButton?>(direct_hash,direct_equal);
+            devices = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
 
             /**
              * Shared Construction
              */
-            devices_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
+            devices_list = new Gtk.ListBox();
+            devices_list.selection_mode = Gtk.SelectionMode.SINGLE;
+            devices_list.row_selected.connect(on_device_selected);
+
             main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             volume_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
             volume_slider.set_draw_value(false);
@@ -79,9 +81,9 @@ namespace Budgie {
                  * Create our containers
                  */
                 header = new Budgie.HeaderWidget("", "microphone-sensitivity-muted-symbolic", false, volume_slider);
-                main_layout.pack_start(devices_area, false, false, 0); // Add devices directly to layout
-                devices_area.margin_top = 10;
-                devices_area.margin_bottom = 10;
+                main_layout.pack_start(devices_list, false, false, 0); // Add devices directly to layout
+                devices_list.margin_top = 10;
+                devices_list.margin_bottom = 10;
             } else { // Output
                 settings = new Settings("org.gnome.desktop.sound");
                 apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
@@ -130,7 +132,7 @@ namespace Budgie {
                 widget_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
 
                 widget_area.add_titled(apps_area, "apps", _("Apps"));
-                widget_area.add_titled(devices_area, "devices", _("Devices"));
+                widget_area.add_titled(devices_list, "devices", _("Devices"));
 
                 widget_area_switch = new Gtk.StackSwitcher();
                 widget_area_switch.set_stack(widget_area);
@@ -192,20 +194,28 @@ namespace Budgie {
             }
 
             var card = device.card as Gvc.MixerCard;
-            var check = new Gtk.RadioButton.with_label_from_widget(this.device_leader, "%s - %s".printf(device.description, card.name));
-            (check.get_child() as Gtk.Label).set_ellipsize(Pango.EllipsizeMode.END);
-            (check.get_child() as Gtk.Label).max_width_chars = 30;
-            check.set_data("device_id", id);
-            check.toggled.connect(on_device_selected);
-            devices_area.pack_start(check, false, false, 0);
-            check.show_all();
 
-            if (this.device_leader == null) {
-                this.device_leader = check;
+            if ((this.widget_type == "output") && ("Digital Output" in device.description)) {
+                return; // Digital Output switching is really jank with Gvc. Don't support it.
             }
 
-            devices.insert(id, check);
-            devices_area.queue_draw();
+            var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            var label = new Gtk.Label("%s - %s".printf(device.description, card.name));
+            label.justify = Gtk.Justification.LEFT;
+            label.max_width_chars = 30;
+            label.set_ellipsize(Pango.EllipsizeMode.END);
+            box.pack_start(label, false, true, 0);
+
+            Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
+            list_item.height_request = 32;
+            list_item.add(box);
+
+            list_item.set_data("device_id", id);
+            devices_list.insert(list_item, -1); // Append item
+
+            devices.insert(id, list_item);
+            list_item.show_all();
+            devices_list.queue_draw();
         }
 
         /**
@@ -218,16 +228,11 @@ namespace Budgie {
                 return;
             }
 
-            {
-                var device = mixer.lookup_device_from_stream(stream);
-                var did = device.get_id();
-                var check = devices.lookup(did);
+            var device = mixer.lookup_device_from_stream(stream);
+            Gtk.ListBoxRow list_item = devices.lookup(device.get_id());
 
-                if (check != null) {
-                    SignalHandler.block_by_func((void*)check, (void*)on_device_selected, this);
-                    check.active = true;
-                    SignalHandler.unblock_by_func((void*)check, (void*)on_device_selected, this);
-                }
+            if (list_item != null) {
+                devices_list.select_row(list_item);
             }
 
             if (this.primary_stream != null) {
@@ -243,23 +248,22 @@ namespace Budgie {
 
             this.primary_stream = stream;
             update_volume();
-            devices_area.queue_draw();
+            devices_list.queue_draw();
         }
 
         /**
          * on_device_removed will handle when a Gvc.MixerUIDevice has been removed
          */
         private void on_device_removed(uint id) {
-            Gtk.RadioButton? btn = devices.lookup(id);
+            Gtk.ListBoxRow? list_item = devices.lookup(id);
 
-            if (btn == null) {
-                warning("Removing id we don\'t know about: %u", id);
+            if (list_item == null) {
                 return;
             }
 
             devices.steal(id);
-            btn.destroy();
-            devices_area.queue_draw();
+            list_item.destroy();
+            devices_list.queue_draw();
         }
 
         /**
@@ -282,12 +286,9 @@ namespace Budgie {
         /**
          * on_device_selected will handle when a checkbox related to an input or output device is selected
          */
-        private void on_device_selected(Gtk.ToggleButton? btn) {
-            if (!btn.get_active()) {
-                return;
-            }
-
-            uint id = btn.get_data("device_id");
+        private void on_device_selected(Gtk.ListBoxRow? list_item) {
+            SignalHandler.block_by_func((void*)devices_list, (void*)on_device_selected, this);
+            uint id = list_item.get_data("device_id");
             var device = (widget_type == "input") ? mixer.lookup_input_id(id) : mixer.lookup_output_id(id);
 
             if (device != null) {
@@ -297,6 +298,7 @@ namespace Budgie {
                     mixer.change_output(device);
                 }
             }
+            SignalHandler.unblock_by_func((void*)devices_list, (void*)on_device_selected, this);
         }
 
         /**
