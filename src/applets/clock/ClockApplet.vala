@@ -137,7 +137,10 @@ public class ClockApplet : Budgie.Applet
 
         // Create a submenu system
         popover = new Budgie.Popover(widget);
+
         var stack = new Gtk.Stack();
+        stack.get_style_context().add_class("clock-applet-stack");
+
         popover.add(stack);
         stack.set_homogeneous(true);
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);

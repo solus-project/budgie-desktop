@@ -71,6 +71,8 @@ namespace Budgie {
              * Views
              */
             this.stack = new Gtk.Stack();
+            this.stack.get_style_context().add_class("icon-popover-stack");
+
             this.primary_view = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             this.actions_view = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             this.actions_list = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
