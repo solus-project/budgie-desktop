@@ -61,6 +61,8 @@ namespace Budgie {
              * Shared Construction
              */
             devices_list = new Gtk.ListBox();
+            devices_list.get_style_context().add_class("devices-list");
+            devices_list.get_style_context().add_class("sound-devices");
             devices_list.selection_mode = Gtk.SelectionMode.SINGLE;
             devices_list.row_selected.connect(on_device_selected);
 
@@ -102,6 +104,7 @@ namespace Budgie {
                  */
                 apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
                 apps_listbox = new Gtk.ListBox();
+                apps_listbox.get_style_context().add_class("apps-list");
                 apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
                 apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
 
