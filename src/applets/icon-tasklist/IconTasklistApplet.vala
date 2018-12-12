@@ -150,6 +150,7 @@ public class IconTasklistApplet : Budgie.Applet
 
             button.became_empty.connect(() => {
                 if (!button.pinned) {
+                    buttons.remove(launcher);
                     wrapper.gracefully_die();
                 }
             });
@@ -390,7 +391,6 @@ public class IconTasklistApplet : Budgie.Applet
 
     private void on_class_group_closed(string class_name)
     {
-
         if (!grouping) {
             return;
         }
