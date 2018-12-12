@@ -149,7 +149,9 @@ public class IconTasklistApplet : Budgie.Applet
             buttons.insert(launcher, button);
 
             button.became_empty.connect(() => {
-                wrapper.gracefully_die();
+                if (!button.pinned) {
+                    wrapper.gracefully_die();
+                }
             });
 
             main_layout.add(wrapper);

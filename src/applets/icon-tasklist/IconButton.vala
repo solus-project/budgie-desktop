@@ -29,7 +29,7 @@ public class IconButton : Gtk.ToggleButton
     private GLib.DesktopAppInfo? app_info = null;
     public Icon icon;
     private Gtk.Allocation definite_allocation;
-    private bool pinned = false;
+    public bool pinned = false;
     private bool is_from_window = false;
     private Gdk.AppLaunchContext launch_context;
     private int64 last_scroll_time = 0;
@@ -177,7 +177,7 @@ public class IconButton : Gtk.ToggleButton
             this.pinned = new_pinned_state;
             this.desktop_helper.update_pinned(); // Update via desktop helper
 
-            if (!has_valid_windows(null)) { // Does not have any windows open
+            if (!has_valid_windows(null) && !this.pinned) { // Does not have any windows open and no longer pinned
                 became_empty(); // Trigger our became_empty event
             }
         });
