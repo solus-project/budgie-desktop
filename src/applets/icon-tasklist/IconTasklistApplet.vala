@@ -271,8 +271,10 @@ public class IconTasklistApplet : Budgie.Applet
                 original_button = new ButtonWrapper(button);
                 original_button.orient = this.get_orientation();
                 button.became_empty.connect(() => {
-                    buttons.remove(app_id);
-                    original_button.gracefully_die();
+                    if (!button.pinned) {
+                        buttons.remove(app_id);
+                        original_button.gracefully_die();
+                    }
                 });
                 main_layout.pack_start(original_button, false, false, 0);
             }
@@ -381,6 +383,17 @@ public class IconTasklistApplet : Budgie.Applet
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
+        button.became_empty.connect(() => {
+            if (!button.pinned) {
+                if (wrapper != null) {
+                    wrapper.gracefully_die();
+                }
+
+                id_map.remove(group_name);
+                buttons.remove(app_id);
+            }
+        });
+
         buttons.insert(app_id, button);
 
         main_layout.add(wrapper);
@@ -457,8 +470,10 @@ public class IconTasklistApplet : Budgie.Applet
         buttons.insert("%s|%lu".printf(app.group, app.id), button);
 
         button.became_empty.connect(() => {
-            buttons.remove("%s|%lu".printf(app.group, app.id));
-            wrapper.gracefully_die();
+            if (!button.pinned) {
+                buttons.remove("%s|%lu".printf(app.group, app.id));
+                wrapper.gracefully_die();
+            }
         });
 
         main_layout.add(wrapper);

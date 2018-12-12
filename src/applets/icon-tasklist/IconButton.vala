@@ -177,7 +177,7 @@ public class IconButton : Gtk.ToggleButton
             this.pinned = new_pinned_state;
             this.desktop_helper.update_pinned(); // Update via desktop helper
 
-            if (!has_valid_windows(null) && !this.pinned) { // Does not have any windows open and no longer pinned
+            if (!has_valid_windows(null)) { // Does not have any windows open and no longer pinned
                 became_empty(); // Trigger our became_empty event
             }
         });
@@ -377,14 +377,18 @@ public class IconButton : Gtk.ToggleButton
         }
 
         bool has_valid = false;
-        class_group.get_windows().foreach((window) => {
-            if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
-                if (!window.is_skip_tasklist()) {
-                    has_valid = true;
-                    n++;
+        unowned List<Wnck.Window> windows = class_group.get_windows();
+
+        if (windows.length() != 0) {
+            windows.foreach((window) => {
+                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                    if (!window.is_skip_tasklist()) {
+                        has_valid = true;
+                        n++;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         num_windows = n;
         return has_valid;
