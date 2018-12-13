@@ -47,9 +47,13 @@ public class IconButton : Gtk.ToggleButton
         this.app_info = info;
         this.pinned = pinned;
         gobject_constructors_suck();
+        create_popover(); // Create our popover
+
         update_icon();
 
-        create_popover(); // Create our popover
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
     }
 
     public IconButton.from_window(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
@@ -177,7 +181,7 @@ public class IconButton : Gtk.ToggleButton
             this.pinned = new_pinned_state;
             this.desktop_helper.update_pinned(); // Update via desktop helper
 
-            if (!has_valid_windows(null)) { // Does not have any windows open and no longer pinned
+            if (!has_valid_windows(null) || is_from_window) { // Does not have any windows open (or this is only a single window)
                 became_empty(); // Trigger our became_empty event
             }
         });

@@ -226,8 +226,6 @@ namespace Budgie {
                 window_id_to_name.foreach((xid, name) => {
                     close_window(xid); // Close this window
                 });
-
-                closed_all(); // Send out our signal
             }
         }
 
@@ -276,6 +274,10 @@ namespace Budgie {
                 window_id_to_name.remove(xid);
                 window_id_to_controls.remove(xid);
                 this.render(); // Re-render
+
+                if (window_id_to_name.length == 0) {
+                    closed_all();
+                }
             }
 
             this.close_all_button.sensitive = (window_id_to_name.length != 0);

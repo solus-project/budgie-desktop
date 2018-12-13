@@ -461,19 +461,15 @@ public class IconTasklistApplet : Budgie.Applet
             return;
         }
 
-        bool pinned = (app.group in settings.get_strv("pinned-launchers"));
-
-        button = new IconButton.from_window(this.settings, this.desktop_helper, this.manager, app.window, app.app, pinned);
+        button = new IconButton.from_window(this.settings, this.desktop_helper, this.manager, app.window, app.app, false);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
         buttons.insert("%s|%lu".printf(app.group, app.id), button);
 
         button.became_empty.connect(() => {
-            if (!button.pinned) {
-                buttons.remove("%s|%lu".printf(app.group, app.id));
-                wrapper.gracefully_die();
-            }
+            buttons.remove("%s|%lu".printf(app.group, app.id));
+            wrapper.gracefully_die();
         });
 
         main_layout.add(wrapper);
