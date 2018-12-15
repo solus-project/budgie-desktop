@@ -290,7 +290,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for take-full-screenshot */
-    void on_take_full_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+    void on_take_full_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
             Process.spawn_command_line_async ("gnome-screenshot");
         } catch (SpawnError e) {
@@ -299,7 +299,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for take-region-screenshot */
-    void on_take_region_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+    void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
             Process.spawn_command_line_async ("gnome-screenshot -a");
         } catch (SpawnError e) {
@@ -308,7 +308,7 @@ public class BudgieWM : Meta.Plugin
     }
 
     /* Binding for take-window-screenshot */
-    void on_take_window_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+    void on_take_window_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
             Process.spawn_command_line_async ("gnome-screenshot -w -b");
         } catch (SpawnError e) {
