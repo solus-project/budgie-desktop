@@ -180,6 +180,8 @@ public class Raven : Gtk.Window
 
     private Budgie.ShadowBlock? shadow;
     private RavenIface? iface = null;
+    private Settings? settings = null;
+
     bool expanded = false;
 
     Gdk.Rectangle old_rect;
@@ -290,6 +292,9 @@ public class Raven : Gtk.Window
 
         set_wmclass("raven", "raven");
 
+        settings = new GLib.Settings("com.solus-project.budgie-raven");
+        settings.changed.connect(this.on_raven_settings_changed);
+
         Raven._instance = this;
 
         var vis = screen.get_rgba_visual();
@@ -310,7 +315,6 @@ public class Raven : Gtk.Window
         /* Set up our main layout */
         layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         add(layout);
-
 
         enter_notify_event.connect((e)=> {
             steal_focus();
@@ -350,6 +354,27 @@ public class Raven : Gtk.Window
         this.get_child().show_all();
 
         this.screen_edge = Gtk.PositionType.LEFT;
+
+        on_raven_settings_changed("show-power-strip");
+    }
+
+    /**
+     * on_raven_settings_changed will handle when the settings for Raven have changed
+     */
+    private void on_raven_settings_changed(string key) {
+        if (key == "show-power-strip") {
+            try {
+                bool show_strip = settings.get_boolean(key);
+
+                if (show_strip) { // If we should show the strip
+                    strip.show_all();
+                } else { // If we should hide the strip
+                    strip.hide();
+                }
+            } catch (GLib.Error e) {
+                strip.show_all(); // Default to showing
+            }
+        }
     }
 
     public override void size_allocate(Gtk.Allocation rect)

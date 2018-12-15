@@ -40,7 +40,9 @@ public class Applet : Budgie.Applet
         settings = this.get_applet_settings(uuid);
 
         event_box = new Gtk.EventBox();
-        var icon = new Gtk.Image.from_icon_name("caffeine-cup-empty", Gtk.IconSize.MENU);
+        var icon = new Gtk.Image.from_icon_name(
+            AppletWindow.get_icon_name ("caffeine-cup-empty"),
+            Gtk.IconSize.MENU);
         event_box.add(icon);
         this.add(event_box);
 

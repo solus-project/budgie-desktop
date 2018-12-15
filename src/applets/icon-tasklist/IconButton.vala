@@ -15,82 +15,92 @@ const int INDICATOR_SPACING  = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
 /**
- * The wrapper provides nice visual effects to house an IconButton, allowing
- * us to slide the buttons into view when ready, and dispose of them as and
- * when our slide-out animation has finished. Without the wrapper, we'd have
- * a very ugly effect of icons just "popping" off.
- */
-public class ButtonWrapper : Gtk.Revealer
-{
-    public unowned IconButton? button;
-
-    public Gtk.Orientation orient {
-        set {
-            if (value == Gtk.Orientation.VERTICAL) {
-                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-            } else {
-                this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT);
-            }
-        }
-        get {
-            if (this.get_transition_type() == Gtk.RevealerTransitionType.SLIDE_DOWN) {
-                return Gtk.Orientation.VERTICAL;
-            }
-            return Gtk.Orientation.HORIZONTAL;
-        }
-    }
-
-    public ButtonWrapper(IconButton? button)
-    {
-        this.button = button;
-        this.add(button);
-        this.set_reveal_child(false);
-        this.show_all();
-    }
-
-    public void gracefully_die()
-    {
-        if (!get_settings().gtk_enable_animations) {
-            this.destroy();
-            return;
-        }
-
-        if (this.orient == Gtk.Orientation.HORIZONTAL) {
-            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
-        } else {
-            this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
-        }
-        this.notify["child-revealed"].connect_after(()=> {
-            this.destroy();
-        });
-        this.set_reveal_child(false);
-    }
-}
-
-/**
  * IconButton provides the pretty IconTasklist button to house one or more
  * windows in a group, as well as selection capabilities, interaction, animations
  * and rendering of "dots" for the renderable windows.
  */
 public class IconButton : Gtk.ToggleButton
 {
+    private Budgie.IconPopover? popover = null;
+    private Wnck.Screen? screen = null;
+    private GLib.Settings? settings = null;
     private Wnck.Window? window = null;          // This will always be null if grouping is enabled
     private Wnck.ClassGroup? class_group = null; // This will always be null if grouping is disabled
     private GLib.DesktopAppInfo? app_info = null;
     public Icon icon;
     private Gtk.Allocation definite_allocation;
-    private bool pinned = false;
+    public bool pinned = false;
     private bool is_from_window = false;
     private Gdk.AppLaunchContext launch_context;
     private int64 last_scroll_time = 0;
     public Wnck.Window? last_active_window = null;
     private bool needs_attention = false;
-    private bool context_menu_has_items = false;
-    private Gtk.Menu? menu = null;
     public signal void became_empty();
 
-    /* Pointer to our DesktopHelper at the time of construction */
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
+    public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
+
+    public IconButton(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
+    {
+        Object(desktop_helper: helper, popover_manager: manager);
+        this.settings = c_settings;
+        this.app_info = info;
+        this.pinned = pinned;
+        gobject_constructors_suck();
+        create_popover(); // Create our popover
+
+        update_icon();
+
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
+    }
+
+    public IconButton.from_window(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    {
+        Object(desktop_helper: helper, popover_manager: manager);
+
+        this.settings = c_settings;
+        this.app_info = info;
+        this.is_from_window = true;
+        this.pinned = pinned;
+
+        gobject_constructors_suck();
+
+        window.state_changed.connect_after(() => {
+            if (window.needs_attention()) {
+                attention();
+            }
+        });
+
+        update_icon();
+
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
+
+        create_popover(); // Create our popover
+        this.set_wnck_window(window);
+    }
+
+    public IconButton.from_group(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    {
+        Object(desktop_helper: helper, popover_manager: manager);
+
+        this.settings = c_settings;
+        this.class_group = class_group;
+        this.app_info = info;
+
+        gobject_constructors_suck();
+        create_popover(); // Create our popover
+        setup_popover_with_class(); // Set up our Popover with info from the Wnck.ClassGroup
+
+        update_icon();
+
+        if (has_valid_windows(null)) {
+            this.get_style_context().add_class("running");
+        }
+    }
 
     /**
      * We have race conditions in glib between the desired properties..
@@ -150,61 +160,91 @@ public class IconButton : Gtk.ToggleButton
         launch_context.launch_failed.connect(this.on_launch_failed);
     }
 
-    public IconButton(DesktopHelper? helper, GLib.DesktopAppInfo info, bool pinned)
-    {
-        Object(desktop_helper: helper);
-        this.app_info = info;
-        this.pinned = pinned;
-        gobject_constructors_suck();
-        update_icon();
-    }
+    /**
+     * create_popover will create our popover
+     */
+    public void create_popover() {
+        this.screen = Wnck.Screen.get_default(); // Get the default screen
+        this.popover = new Budgie.IconPopover(this, this.app_info, screen.get_workspace_count());
+        this.popover.set_pinned_state(this.pinned); // Set our pinned state
 
-    public IconButton.from_window(DesktopHelper? helper, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
-    {
-        Object(desktop_helper: helper);
+        this.popover.launch_new_instance.connect(() => { // If we're going to launch a new instance
+            launch_app(Gtk.get_current_event_time());
+        });
 
-        this.window = window;
-        this.app_info = info;
-        this.is_from_window = true;
-        this.pinned = pinned;
+        this.popover.closed_all.connect(() => { // If we closed all windows
+            this.popover.hide(); // Hide
+            became_empty(); // Call our became empty function
+        });
 
-        gobject_constructors_suck();
+        this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
+            this.pinned = new_pinned_state;
+            this.desktop_helper.update_pinned(); // Update via desktop helper
 
-        window.state_changed.connect_after(() => {
-            if (window.needs_attention()) {
-                attention();
+            if (!has_valid_windows(null) || is_from_window) { // Does not have any windows open (or this is only a single window)
+                became_empty(); // Trigger our became_empty event
             }
         });
 
-        update_icon();
+        this.popover.move_window_to_workspace.connect((xid, wid) => { // On a request to move a window to a workspace
+            Wnck.Window requested_window = Wnck.Window.@get(xid);
+            Wnck.Workspace workspace = this.screen.get_workspace(wid - 1);
 
-        if (has_valid_windows(null)) {
-            this.get_style_context().add_class("running");
-        }
-    }
+            if ((requested_window != null) && (workspace != null)) {
+                requested_window.move_to_workspace(workspace);
+            }
+        });
 
-    public IconButton.from_group(DesktopHelper? helper, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
-    {
-        Object(desktop_helper: helper);
+        this.popover.perform_action.connect((action) => {
+            if (this.app_info != null) {
+                launch_context.set_screen(get_screen());
+                launch_context.set_timestamp(Gdk.CURRENT_TIME);
+                this.app_info.launch_action(action, launch_context);
+                popover.render(); // Re-render
+            }
+        });
 
-        this.class_group = class_group;
-        this.app_info = info;
+        /**
+         * Wnck bits that are relevant to the popover
+         */
 
-        gobject_constructors_suck();
+        this.screen.window_opened.connect((new_window) => { // When a window is opened
+            if (new_window == null) {
+                return;
+            }
 
-        foreach (unowned Wnck.Window window in class_group.get_windows()) {
-            window.state_changed.connect_after(() => {
-                if (window.needs_attention()) {
-                    attention();
+            if (new_window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                return;
+            }
+
+            Wnck.ClassGroup window_class_group = new_window.get_class_group();
+
+            if ((this.class_group != null) && (window_class_group != null)) {
+                if (this.class_group.get_id() == window_class_group.get_id()) { // Ids match
+                    ulong xid = new_window.get_xid();
+                    string name = new_window.get_name() ?? "Loading...";
+
+                    this.popover.add_window(xid, name); // Add the window
+                    new_window.name_changed.connect(() => { // When this window is renamed
+                        this.popover.rename_window(xid); // Rename its entry in the popover
+                    });
                 }
-            });
-        }   
+            }
+        });
 
-        update_icon();
+        this.screen.window_closed.connect((old_window) => { // When a window is close
+            this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
+        });
 
-        if (has_valid_windows(null)) {
-            this.get_style_context().add_class("running");
-        }
+        this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
+            this.popover.set_workspace_count(screen.get_workspace_count());
+        });
+
+        this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
+            this.popover.set_workspace_count(screen.get_workspace_count());
+        });
+
+        this.popover_manager.register_popover(this, popover); // Register
     }
 
     public void set_class_group(Wnck.ClassGroup? class_group) {
@@ -214,13 +254,11 @@ public class IconButton : Gtk.ToggleButton
             return;
         }
 
-        foreach (unowned Wnck.Window window in class_group.get_windows()) {
-            window.state_changed.connect_after(() => {
-                if (window.needs_attention()) {
-                    attention();
-                }
-            });
-        }
+        class_group.icon_changed.connect_after(() => {
+            update_icon(); // Update icon based on class group
+        });
+
+        setup_popover_with_class();
     }
 
     public void set_wnck_window(Wnck.Window? window) {
@@ -230,11 +268,25 @@ public class IconButton : Gtk.ToggleButton
             return;
         }
 
+        if (window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+            return;
+        }
+
+        window.icon_changed.connect_after(() => {
+            update_icon(); // Update the icon
+        });
+
+        window.name_changed.connect_after(() => { // On window rename
+            popover.rename_window(this.window.get_xid());
+        });
+
         window.state_changed.connect_after(() => {
             if (window.needs_attention()) {
                 attention();
             }
         });
+
+        popover.add_window(window.get_xid(), window.get_name());
     }
 
     public void set_draggable(bool draggable)
@@ -244,31 +296,6 @@ public class IconButton : Gtk.ToggleButton
         } else {
             Gtk.drag_source_unset(this);
         }
-    }
-
-    private Gtk.Image get_icon()
-    {
-        unowned GLib.Icon? app_icon = null;
-        if (this.app_info != null) {
-            app_icon = this.app_info.get_icon();
-            if (app_icon != null) {
-                return new Gtk.Image.from_gicon(app_icon, Gtk.IconSize.MENU);
-            }
-        }
-
-        unowned Gdk.Pixbuf? pixbuf_icon = null;
-        if (this.window != null) {
-            pixbuf_icon = this.window.get_icon();
-        }
-        if (this.class_group != null) {
-            pixbuf_icon = this.class_group.get_icon();
-        }
-
-        if (pixbuf_icon != null) {
-            return new Gtk.Image.from_pixbuf(pixbuf_icon);
-        }
-
-        return new Gtk.Image.from_icon_name("image-missing", Gtk.IconSize.MENU);
     }
 
     public void update_icon()
@@ -338,7 +365,6 @@ public class IconButton : Gtk.ToggleButton
 
         this.set_draggable(!this.desktop_helper.lock_icons);
 
-        update_context_menu();
         update_icon();
         this.queue_resize();
         this.queue_draw();
@@ -355,12 +381,18 @@ public class IconButton : Gtk.ToggleButton
         }
 
         bool has_valid = false;
-        class_group.get_windows().foreach((window) => {
-            if (!window.is_skip_tasklist()) {
-                has_valid = true;
-                n++;
-            }
-        });
+        unowned List<Wnck.Window> windows = class_group.get_windows();
+
+        if (windows.length() != 0) {
+            windows.foreach((window) => {
+                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+                    if (!window.is_skip_tasklist()) {
+                        has_valid = true;
+                        n++;
+                    }
+                }
+            });
+        }
 
         num_windows = n;
         return has_valid;
@@ -759,6 +791,32 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
+    /**
+     * setup_popover_with_class will set up our popover with windows from the class
+     */
+    public void setup_popover_with_class() {
+        foreach (unowned Wnck.Window window in this.class_group.get_windows()) {
+            if (window != null) {
+                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Not application in desktop mode, like Nautilus desktop icons
+                    ulong xid = window.get_xid();
+                    string name = window.get_name();
+
+                    popover.add_window(xid, name);
+                    window.name_changed.connect_after(() => {
+                        ulong win_xid = window.get_xid();
+                        popover.rename_window(win_xid);
+                    });
+
+                    window.state_changed.connect_after(() => {
+                        if (window.needs_attention()) {
+                            attention();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     public override void get_preferred_width(out int min, out int nat)
     {
         /* Stop GTK from bitching */
@@ -787,11 +845,11 @@ public class IconButton : Gtk.ToggleButton
             last_active_window = class_group.get_windows().nth_data(0);
         }
 
-
-        if (event.button == 2) {
-            launch_app(event.time);
+        if (event.button == 3) { // Right click
+            this.popover.render();
+            this.popover_manager.show_popover(this); // Show the popover
             return Gdk.EVENT_STOP;
-        } else if (event.button == 1) {
+        } else if (event.button == 1) { // Left click
             if (this.window != null) {
                 if (this.window.is_active()) {
                     this.window.minimize();
@@ -817,20 +875,25 @@ public class IconButton : Gtk.ToggleButton
                     num++;
                 }
                 if (num > 0) { // we have windows on this workspace
-                    /*
-                     * Operations are restricted to the current workspace
-                     * because that makes the most sense.
-                     *   If there is one active window:
-                     *     minimize all windows
-                     *   else:  
-                     *     activate previously active window
-                     */
+                    bool show_all_windows_on_click = false;
+
+                    if (this.settings != null) { // Settings defined
+                        try {
+                            show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
+                        } catch (GLib.Error e) {
+                            warning("Failed to get setting for Show All Windows On Click: %s", e.message);
+                        }
+                    }
 
                     list.foreach((w) => {
                         if (one_active) {
                             w.minimize();
                         } else {
-                            last_active_window.activate(event.time);
+                            if (show_all_windows_on_click) { // Show all windows
+                                w.activate(event.time);
+                            } else { // Only show last active window
+                                last_active_window.activate(event.time);
+                            }
                         }
                     });
                 } else {
@@ -877,124 +940,6 @@ public class IconButton : Gtk.ToggleButton
         }
 
         return Gdk.EVENT_STOP;
-    }
-
-    public override bool button_press_event(Gdk.EventButton event) {
-        if (event.button == 3 && context_menu_has_items) {
-            this.menu.popup(null, null, null, event.button, event.time);
-        }
-        return base.button_press_event(event);
-    }
-
-    private void update_context_menu()
-    {
-        this.menu = new Gtk.Menu();
-
-        this.context_menu_has_items = false;
-
-        if (!this.desktop_helper.lock_icons && this.app_info != null) {
-            if (!this.pinned || !this.is_from_window) {
-                Gtk.CheckMenuItem pinned_item = new Gtk.CheckMenuItem.with_mnemonic(_("Pinned"));
-                menu.append(pinned_item);
-                pinned_item.show();
-                this.context_menu_has_items = true;
-                pinned_item.set_active(pinned);
-
-                pinned_item.toggled.connect(() => {
-                    this.pinned = pinned_item.get_active();
-                    this.is_from_window = !this.pinned;
-                    this.desktop_helper.update_pinned();
-                    if (!has_valid_windows(null) && !this.pinned) {
-                        became_empty();
-                        return;
-                    }
-                });
-            }
-        }
-
-        int num_windows;
-
-        if (has_valid_windows(out num_windows)) {
-            Gtk.MenuItem close_item = new Gtk.MenuItem.with_label((num_windows > 1) ? _("Close all") : _("Close"));
-            menu.append(close_item);
-            close_item.show();
-            context_menu_has_items = true;
-
-            close_item.activate.connect(() => {
-                if (window != null) {
-                    var timestamp = Gtk.get_current_event_time();
-                    window.close(timestamp);
-                    return;
-                }
-
-                if (class_group == null) {
-                    return;
-                }
-
-                class_group.get_windows().foreach((window) => {
-                    var timestamp = Gtk.get_current_event_time();
-                    window.close(timestamp);
-                });
-            });
-        }
-
-        if (app_info != null) {
-            // Desktop app actions =)
-            unowned string[] actions = app_info.list_actions();
-            if (actions.length != 0) {
-                Gtk.SeparatorMenuItem sep = new Gtk.SeparatorMenuItem();
-                menu.append(sep);
-                sep.show();
-                foreach (var action in actions) {
-                    var display_name = app_info.get_action_name(action);
-                    var item = new Gtk.MenuItem.with_label(display_name);
-                    item.set_data("__aname", action);
-                    item.activate.connect(() => {
-                        string? act = item.get_data("__aname");
-                        if (act == null) {
-                            return;
-                        }
-                        // Never know.
-                        if (app_info == null) {
-                            return;
-                        }
-                        launch_context.set_screen(get_screen());
-                        launch_context.set_timestamp(Gdk.CURRENT_TIME);
-                        app_info.launch_action(act, launch_context);
-                    });
-                    item.show_all();
-                    context_menu_has_items = true;
-                    menu.append(item);
-                }
-            }
-        }
-
-        if (has_valid_windows(out num_windows) && num_windows > 1) {
-            Gtk.SeparatorMenuItem sep = new Gtk.SeparatorMenuItem();
-            menu.append(sep);
-            sep.show();
-            foreach (Wnck.Window window in class_group.get_windows()) {
-                if (window.is_skip_tasklist()) {
-                    continue;
-                }
-                string title = window.get_name();
-                if (title.length > 35) {
-                    title = title[0:35] + "…";
-                }
-                Gtk.ImageMenuItem window_item = new Gtk.ImageMenuItem.with_label(title);
-                window_item.set_tooltip_text(window.get_name());
-                window_item.set_sensitive(window != this.desktop_helper.get_active_window());
-                window_item.always_show_image = true;
-                window_item.set_image(get_icon());
-                menu.append(window_item);
-                window_item.show();
-                context_menu_has_items = true;
-
-                window_item.activate.connect(() => {
-                    window.activate(Gtk.get_current_event_time());
-                });
-            }
-        }
     }
 
     public GLib.DesktopAppInfo? get_appinfo() {

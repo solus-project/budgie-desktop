@@ -25,17 +25,25 @@ namespace Budgie {
         private Gtk.Image? audio_not_muted = null;
         private Gtk.Image? audio_muted = null;
 
-        private string? app_name = "";
+        public string? app_name = "";
         private ulong scale_id;
 
-        public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon) {
+        public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon, string c_name) {
             Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 10);
             valign = Gtk.Align.START;
+
+            if (c_mixer == null) {
+                return;
+            }
+
+            if (c_primary == null) {
+                return;
+            }
 
             mixer = c_mixer;
             primary_stream = c_primary;
             stream = c_stream;
-            app_name = stream.get_name();
+            app_name = c_name;
 
             var max_vol = stream.get_volume();
             var stream_volume = max_vol; // Create a non-manipulated copy
@@ -55,19 +63,15 @@ namespace Budgie {
              */
             bool successfully_retrieved_name = false;
 
-            try {
-                DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
+            DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
 
-                if (info != null) {
-                    string desktop_app_name = info.get_string("Name");
+            if (info != null) { // Successfully got app info
+                string desktop_app_name = info.get_string("Name");
 
-                    if ((desktop_app_name != "") && (desktop_app_name != null)) { // If we got the desktop app name
-                        app_name = desktop_app_name;
-                        successfully_retrieved_name = true;
-                    }
+                if ((desktop_app_name != "") && (desktop_app_name != null)) { // If we got the desktop app name
+                    app_name = desktop_app_name;
+                    successfully_retrieved_name = true;
                 }
-            } catch (Error e) {
-                warning("Failed to get app info for this app: %s", e.message);
             }
 
             if (!successfully_retrieved_name) { // If we failed to get info from a desktop file
@@ -92,7 +96,7 @@ namespace Budgie {
             app_label.ellipsize = Pango.EllipsizeMode.END;
             app_label.halign = Gtk.Align.START; // Align to edge (left for LTR; right for RTL)
             app_label.justify = Gtk.Justification.LEFT;
-            app_label.margin_left = 10;
+            app_label.margin_start = 10;
 
             app_mute_button = new Gtk.Button();
 
@@ -127,13 +131,9 @@ namespace Budgie {
              */
             string stream_name = stream.get_name();
 
-            try { // First let's try to get a reasonable app icon instead of whatever is provided by Gvc
-                Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
-                string usable_icon_name = current_theme.has_icon(stream_name) ? stream_name : c_icon; // If our app has an icon, use it, otherwise use the stream icon name
-                app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
-            } catch (Error e) { // If we failed to create a Gtk.Image with the app name
-                warning("Failed to get an icon for this app. %s", e.message);
-            }
+            Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
+            string usable_icon_name = current_theme.has_icon(stream_name) ? stream_name : c_icon; // If our app has an icon, use it, otherwise use the stream icon name
+            app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
 
             if (app_image != null) {
                 app_image.margin_end = 10;
@@ -204,12 +204,15 @@ namespace Budgie {
             muted = !muted; // Invert muted state
 
             SignalHandler.block(volume_slider, scale_id);
-            var local_vol = (muted) ? 0 : volume;
 
-            if (stream.set_volume(local_vol)) {
-                Gvc.push_volume(stream);
-                set_mute_ui(); // Update our image
+            if (muted) {
+                stream.set_volume(0);
+            } else {
+                stream.set_volume(volume);
             }
+
+            Gvc.push_volume(stream);
+            set_mute_ui(); // Update our image
 
             SignalHandler.unblock(volume_slider, scale_id);
         }

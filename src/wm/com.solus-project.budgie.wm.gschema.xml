@@ -7,6 +7,30 @@
   </enum>
 
   <schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
+    <key type="b" name="edge-tiling">
+      <default>true</default>
+      <summary>Enable edge tiling when dropping windows on screen edges</summary>
+      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+    </key>
+
+    <key type="b" name="attach-modal-dialogs">
+      <default>true</default>
+      <summary>Attach modal dialog to the parent window</summary>
+      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+    </key>
+
+    <key type="b" name="disable-night-light-on-fullscreen">
+      <default>false</default>
+      <summary>Disable Night Light mode when windows are fullscreen</summary>
+      <description>Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen.</description>
+    </key>
+
+    <key type="b" name="experimental-enable-run-dialog-as-menu">
+      <default>false</default>
+      <summary>Enables the Budgie Run Dialog to be launched with the normal overlay key</summary>
+      <description>Enables the Budgie Run Dialog to be launched with the normal overlay key.</description>
+    </key>
+
     <key type="b" name="focus-mode">
       <default>false</default>
       <summary>Window focus mode to indicate how windows are activated</summary>
@@ -29,6 +53,24 @@
       <default><![CDATA[['<Super>C']]]></default>
       <summary>The binding to clear Raven notifications</summary>
       <description>The binding to clear Raven notifications</description>
+    </key>
+
+    <key type="as" name="take-full-screenshot">
+      <default><![CDATA[['Print']]]></default>
+      <summary>Take screenshot of all displays</summary>
+      <description>Take screenshot of all displays</description>
+    </key>
+
+    <key type="as" name="take-region-screenshot">
+      <default><![CDATA[['<Ctrl>Print']]]></default>
+      <summary>Take screenshot of selectable region</summary>
+      <description>Take screenshot of selectable region</description>
+    </key>
+
+    <key type="as" name="take-window-screenshot">
+      <default><![CDATA[['<Alt>Print']]]></default>
+      <summary>Take screenshot of current window</summary>
+      <description>Take screenshot of current window</description>
     </key>
 
     <key type="as" name="toggle-notifications">

@@ -20,9 +20,11 @@ applet_icontasklist_resources = gnome.compile_resources(
 )
 
 applet_icontasklist_sources = [
+    'ButtonWrapper.vala',
     'DesktopHelper.vala',
     'IconTasklistApplet.vala',
     'IconButton.vala',
+    'IconPopover.vala',
     'Icon.vala',
     'animation.vala',
     applet_icontasklist_resources
@@ -34,8 +36,9 @@ applet_icontasklist_deps = [
     dep_peas,
     dep_wnck,
     dep_gdkx11,
-    link_libplugin,
+    link_libabomination,
     link_libappsys,
+    link_libplugin,
     meson.get_compiler('c').find_library('m', required: false)
 ]
 
@@ -50,6 +53,7 @@ shared_library(
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'libwnck-3.0',
         '--vapidir', dir_libappsys,
+        '--vapidir', dir_libabomination,
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

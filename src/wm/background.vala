@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -11,7 +11,7 @@
 
 namespace Budgie {
 
- 
+
 public const string BACKGROUND_SCHEMA      = "org.gnome.desktop.background";
 public const string PICTURE_URI_KEY        = "picture-uri";
 public const string PRIMARY_COLOR_KEY      = "primary-color";
@@ -19,6 +19,7 @@ public const string SECONDARY_COLOR_KEY    = "secondary-color";
 public const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
 public const string BACKGROUND_STYLE_KEY   = "picture-options";
 public const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
+public const string ACCOUNTS_SCHEMA        = "org.freedesktop.Accounts";
 
 public class BudgieBackground : Meta.BackgroundGroup
 {
@@ -124,7 +125,7 @@ public class BudgieBackground : Meta.BackgroundGroup
         yield;
         return;
     }
-        
+
     /**
      * Remove the old wallpaper during the new wallpaper update
      */
@@ -137,6 +138,42 @@ public class BudgieBackground : Meta.BackgroundGroup
             old_bg.set_easing_duration(BACKGROUND_TIMEOUT);
             old_bg.set("opacity", 0);
             old_bg.restore_easing_state();
+        }
+    }
+
+    /**
+     * call accountsservice dbus with the background file name
+     * to update the greeter background if the display
+     * manager supports the dbus call.
+     */
+    void set_accountsservice_user_bg(string background) {
+        DBusConnection bus;
+        Variant        variant;
+
+        try {
+            bus = Bus.get_sync(BusType.SYSTEM);
+        } catch (IOError e) {
+            warning("Failed to get system bus: %s", e.message);
+            return;
+        }
+
+        try {
+            variant = bus.call_sync(ACCOUNTS_SCHEMA, "/org/freedesktop/Accounts", ACCOUNTS_SCHEMA, "FindUserByName",
+                new Variant("(s)", Environment.get_user_name()), new VariantType("(o)"), DBusCallFlags.NONE, -1, null);
+        } catch (Error e) {
+            warning("Could not contact accounts service to look up '%s': %s", Environment.get_user_name(), e.message);
+            return;
+        }
+
+        string object_path = variant.get_child_value(0).get_string();
+
+        try {
+            bus.call_sync(ACCOUNTS_SCHEMA, object_path, "org.freedesktop.DBus.Properties", "Set",
+                new Variant("(ssv)", "org.freedesktop.DisplayManager.AccountsService", "BackgroundFile",
+                    new Variant.string(background)
+                ), new VariantType("()"), DBusCallFlags.NONE, -1, null);
+        } catch (Error e) {
+            warning("Failed to set the background '%s': %s", background, e.message);
         }
     }
 
@@ -205,6 +242,7 @@ public class BudgieBackground : Meta.BackgroundGroup
             load_uri.begin("file://" + bg_filename, ()=> {
                 background.set_file(bg_file, gnome_bg.get_placement());
                 on_update();
+                set_accountsservice_user_bg(bg_filename);
             });
         }
     }

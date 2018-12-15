@@ -22,6 +22,7 @@ public class ShowDesktopApplet : Budgie.Applet
     protected Gtk.ToggleButton widget;
     protected Gtk.Image img;
     private Wnck.Screen wscreen;
+    private List<ulong> window_list;
 
     public ShowDesktopApplet()
     {
@@ -32,19 +33,54 @@ public class ShowDesktopApplet : Budgie.Applet
         widget.add(img);
         widget.set_tooltip_text(_("Toggle the desktop"));
 
+        window_list = new List<ulong>();
         wscreen = Wnck.Screen.get_default();
 
-        wscreen.showing_desktop_changed.connect(()=> {
-            bool showing = wscreen.get_showing_desktop();
-            widget.set_active(showing);
+        wscreen.window_opened.connect(() => {
+            window_list = new List<ulong>();
+            widget.set_active(false);
         });
 
-        widget.clicked.connect(()=> {
-            wscreen.toggle_showing_desktop(widget.get_active());
+        widget.toggled.connect(() => {
+            if (widget.get_active()) {
+                wscreen.get_windows_stacked().foreach(record_windows_state);
+            } else {
+                window_list.foreach(unminimize_windows);
+            }
         });
 
         add(widget);
         show_all();
+    }
+
+    private void record_windows_state(Wnck.Window window)
+    {
+        if (window.is_skip_pager() || window.is_skip_tasklist()) {
+            return;
+        }
+
+        window.state_changed.connect(() => {
+            if (!window.is_minimized()) {
+                window_list = new List<ulong>();
+                widget.set_active(false);
+            }
+        });
+
+        if (!window.is_minimized()) {
+            window_list.append(window.get_xid());
+            window.minimize();
+        }
+    }
+
+    private void unminimize_windows(ulong xid)
+    {
+        var window = Wnck.Window.@get(xid);
+
+        if (window != null && window.is_minimized()) {
+            var utc_now = new DateTime.now_utc();
+            var now = (uint32) utc_now.to_unix();
+            window.unminimize(now);
+        }
     }
 }
 

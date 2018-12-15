@@ -32,7 +32,7 @@ public class RemovePanelDialog : Gtk.Dialog {
         unowned Gtk.Box? content = this.get_content_area() as Gtk.Box;
 
         var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        var confirm_image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.DIALOG);
+        confirm_image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.DIALOG);
         confirm_label = new Gtk.Label(_("Do you really want to remove this panel? This action cannot be undone."));
         confirm_label.set_line_wrap_mode(Pango.WrapMode.WORD);
         confirm_label.set_line_wrap(true);
@@ -95,7 +95,7 @@ public class RemoveAppletDialog : Gtk.Dialog {
         unowned Gtk.Box? content = this.get_content_area() as Gtk.Box;
 
         var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        var confirm_image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.DIALOG);
+        confirm_image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.DIALOG);
         confirm_label = new Gtk.Label(_("Do you really want to remove this applet? This action cannot be undone."));
         confirm_label.set_line_wrap_mode(Pango.WrapMode.WORD);
         confirm_label.set_line_wrap(true);

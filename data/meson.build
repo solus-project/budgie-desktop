@@ -2,6 +2,7 @@
 
 actions_icons = [
     join_paths('.', 'icons', 'actions', 'notification-alert-symbolic.svg'),
+    join_paths('.', 'icons', 'actions', 'notification-disabled-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'pane-hide-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'pane-show-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'system-log-out-symbolic.svg'),
@@ -26,8 +27,8 @@ app_icons = [
 status_icons = [
     join_paths('.', 'icons', 'status', 'num-lock-symbolic.svg'),
     join_paths('.', 'icons', 'status', 'caps-lock-symbolic.svg'),
-    join_paths('.', 'icons', 'status', 'caffeine-cup-full.svg'),
-    join_paths('.', 'icons', 'status', 'caffeine-cup-empty.svg'),
+    join_paths('.', 'icons', 'status', 'budgie-caffeine-cup-full.svg'),
+    join_paths('.', 'icons', 'status', 'budgie-caffeine-cup-empty.svg'),
 ]
 
 

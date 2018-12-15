@@ -15,6 +15,7 @@ namespace Budgie {
 public const string MUTTER_EDGE_TILING   = "edge-tiling";
 public const string MUTTER_MODAL_ATTACH  = "attach-modal-dialogs";
 public const string MUTTER_BUTTON_LAYOUT = "button-layout";
+public const string EXPERIMENTAL_DIALOG = "experimental-enable-run-dialog-as-menu";
 public const string WM_FORCE_UNREDIRECT  = "force-unredirect";
 public const string WM_SCHEMA            = "com.solus-project.budgie-wm";
 
@@ -157,6 +158,7 @@ public class BudgieWM : Meta.Plugin
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
     Clutter.Actor? display_group;
     ulong current_window_resize;
+    bool enabled_experimental_run_diag_as_menu = false;
 
     construct
     {
@@ -287,6 +289,33 @@ public class BudgieWM : Meta.Plugin
         }
     }
 
+    /* Binding for take-full-screenshot */
+    void on_take_full_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
+    /* Binding for take-region-screenshot */
+    void on_take_region_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot -a");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
+    /* Binding for take-window-screenshot */
+    void on_take_window_screenshot(Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+        try {
+            Process.spawn_command_line_async ("gnome-screenshot -w -b");
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+    }
+
     /* Binding for clear-notifications activated */
     void on_raven_notification_clear(Meta.Display display,
                                       Meta.Window? window, Clutter.KeyEvent? event,
@@ -358,14 +387,22 @@ public class BudgieWM : Meta.Plugin
         if (panel_proxy == null) {
             return;
         }
-        Idle.add(()=> {
+        if (enabled_experimental_run_diag_as_menu) { // Use Budgie Run Dialog
             try {
-                panel_proxy.ActivateAction.begin((int) PanelAction.MENU);
+                Process.spawn_command_line_async("budgie-run-dialog");
             } catch (Error e) {
-                message("Unable to ActivateAction for menu: %s", e.message);
+                message("Failed to launch Budgie Run Dialog: %s", e.message);
             }
-            return false;
-        });
+        } else {
+            Idle.add(()=> {
+                try {
+                    panel_proxy.ActivateAction.begin((int) PanelAction.MENU);
+                } catch (Error e) {
+                    message("Unable to ActivateAction for menu: %s", e.message);
+                }
+                return false;
+            });
+        }
     }
 
 
@@ -441,10 +478,14 @@ public class BudgieWM : Meta.Plugin
 
         settings = new Settings(WM_SCHEMA);
         this.settings.changed.connect(this.on_wm_schema_changed);
+        this.on_wm_schema_changed(EXPERIMENTAL_DIALOG);
         this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
 
         /* Custom keybindings */
         display.add_keybinding("clear-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_clear);
+        display.add_keybinding("take-full-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_full_screenshot);
+        display.add_keybinding("take-region-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_region_screenshot);
+        display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
         display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
         display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
         display.overlay_key.connect(on_overlay_key);
@@ -527,21 +568,23 @@ public class BudgieWM : Meta.Plugin
 
     private void on_wm_schema_changed(string key)
     {
-        if (key != WM_FORCE_UNREDIRECT) {
-            return;
-        }
-        bool enab = this.settings.get_boolean(key);
-        if (enab == this.force_unredirect) {
-            return;
-        }
+        if (key == EXPERIMENTAL_DIALOG) { // Key changed was the experimental enable
+            enabled_experimental_run_diag_as_menu = this.settings.get_boolean(key);
+        } else if (key == WM_FORCE_UNREDIRECT) {
+            bool enab = this.settings.get_boolean(key);
 
-        var display = this.get_display();
-        if (enab) {
-            Meta.Compositor.enable_unredirect_for_display(display);
-        } else {
-            Meta.Compositor.disable_unredirect_for_display(display);
+            if (enab == this.force_unredirect) {
+                return;
+            }
+
+            var display = this.get_display();
+            if (enab) {
+                Meta.Compositor.enable_unredirect_for_display(display);
+            } else {
+                Meta.Compositor.disable_unredirect_for_display(display);
+            }
+            this.force_unredirect = enab;
         }
-        this.force_unredirect = enab;
     }
 
     public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y)
@@ -1313,6 +1356,15 @@ public class BudgieWM : Meta.Plugin
     public const int SWITCH_TIMEOUT = 250;
     public override void switch_workspace(int from, int to, Meta.MotionDirection direction)
     {
+        if (raven_proxy != null) { // Raven proxy is defined
+            try {
+                raven_proxy.Dismiss.begin(); // Dismiss
+                Timeout.add(200, () => {return false;}); // Delay until animation is complete. Looks janky otherwise
+            } catch (Error e) {
+                warning("Failed to dismiss Raven: %s", e.message);
+            }
+        }
+
         // Stop the Switcher if it was showing
         this.stop_switch_windows();
 

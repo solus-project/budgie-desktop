@@ -48,9 +48,9 @@ public class SettingsWindow : Gtk.Window {
         add(layout);
 
         /* Have to override wmclass for pinning support */
+        set_icon_name("preferences-desktop");
         set_title(_("Budgie Desktop Settings"));
         set_wmclass("budgie-desktop-settings", "budgie-desktop-settings");
-        set_icon_name("preferences-desktop");
 
         /* Fit even on a spud resolution */
         set_default_size(750, 550);

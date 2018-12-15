@@ -48,6 +48,7 @@ public class DesktopHelper : GLib.Object
 
     /**
      * Using our icon_layout, update the per-instance "pinned-launchers" key
+     * Keeping with pinned internally for compatibility.
      */
     public void update_pinned()
     {
@@ -67,7 +68,7 @@ public class DesktopHelper : GLib.Object
             buttons += id;
         }
 
-        settings.set_strv("pinned-launchers", buttons);
+        settings.set_strv("pinned-launchers", buttons); // Keeping with pinned- internally for compatibility.
     }
 
     /**

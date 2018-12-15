@@ -44,18 +44,6 @@ class ThemeInfo : GLib.Object {
         unowned List<string>? g = paths.find_custom(path, GLib.strcmp);
         return g != null;
     }
-
-    /**
-     * Try to remove a path, and return true when we've been emptied
-     */
-    public bool remove_path(string path) {
-        unowned List<string>? g = paths.find_custom(path, GLib.strcmp);
-        if (g == null) {
-            return false;
-        }
-        paths.remove_link(g);
-        return g.length() == 0;
-    }
 }
 
 public class ThemeScanner : GLib.Object

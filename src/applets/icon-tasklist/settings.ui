@@ -8,11 +8,35 @@
     <property name="row_spacing">10</property>
     <property name="column_spacing">6</property>
     <child>
+      <object class="GtkLabel" id="label5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Show all windows on click</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="show_all_on_click">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="hexpand">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkLabel" id="label4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Only show pinned</property>
+        <property name="label" translatable="yes">Only show favorited</property>
       </object>
       <packing>
         <property name="left_attach">0</property>

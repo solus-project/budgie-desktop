@@ -25,6 +25,17 @@ public const string ROOT_KEY_SPAM_APPS = "spam-apps";
 /** Spam categories */
 public const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
 
+/** Character escape strings */
+public const string[] ESCAPE_STRINGS = {
+    "&lt;", // less-than sign
+    "&gt;", // greater-than sign
+    "&amp;", // ampersand (&)
+    "&nbsp;", // non-breaking space
+    "&#39;", // ASCII single quote
+    "&apos;", // apostrophy
+    "&quot;" // double quote
+};
+
 public enum NotificationCloseReason {
     EXPIRED = 1,    /** The notification expired. */
     DISMISSED = 2,  /** The notification was dismissed by the user. */
@@ -41,14 +52,18 @@ public static string safe_markup_string(string inp)
     /* Explicit copy */
     string inp2 = "" + inp;
 
+    /* 
+     * is it already escaped?
+     */
+    foreach (string str in ESCAPE_STRINGS) {
+        if (inp2.contains(str)) { // Already escaped
+            return inp2;
+        }
+    }
+
     /* is it markup? */
     if (!(("<" in inp2) && (">" in inp2))) {
         return Markup.escape_text(inp2);
-    }
-
-    /* is it already escaped? */
-    if (("&lt;" in inp2) || ("&gt;" in inp2) || ("&amp;" in inp2)) {
-        return inp2;
     }
 
     /* Ensure it's now sane */
@@ -604,11 +619,12 @@ public class NotificationsView : Gtk.Box
                 var clone = new NotificationClone(widget);
                 notifications_group.add_notification(clone.id, clone);
                 clone.show_all();
+
+                update_child_count();
+                Raven.get_instance().UnreadNotifications();
             }
         }
 
-        update_child_count();
-        Raven.get_instance().UnreadNotifications();
         this.remove_notification(widget.id);
     }
 

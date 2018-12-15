@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2017 Budgie Desktop Developers
+ * Copyright © 2015-2018 Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,10 +17,7 @@ gchar *budgie_form_theme_path(const gchar *suffix)
 {
         guint minor_version = gtk_get_minor_version();
 
-        /* Prioritize 3.18 */
         switch (minor_version) {
-        case 18:
-                return g_strdup_printf("%s/%s_3.18.css", THEME_PREFIX, suffix);
         case 20:
         default:
                 return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);

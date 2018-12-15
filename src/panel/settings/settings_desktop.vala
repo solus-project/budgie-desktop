@@ -84,8 +84,8 @@ public class DesktopPage : Budgie.SettingsPage {
 
     void update_switches()
     {
-        bool b = bg_settings.get_boolean("show-desktop-icons");
 #if 0
+        bool b = bg_settings.get_boolean("show-desktop-icons");
         switch_home.sensitive = b;
         switch_network.sensitive = b;
         switch_trash.sensitive = b;

@@ -22,7 +22,7 @@ public interface ScreenSaver : Object
 [DBus (name="org.gnome.SessionManager")]
 public interface SessionManager : Object
 {
-    public abstract async void Logout(uint mode) throws IOError;
+    public abstract async void Logout(uint mode) throws DBusError, IOError;
 }
 
 

@@ -1,5 +1,6 @@
 const string POWER_SCHEME = "org.gnome.settings-daemon.plugins.power";
 const string SESSION_SCHEME = "org.gnome.desktop.session";
+const string INTERFACE_SCHEME = "org.gnome.desktop.interface";
 
 namespace Caffeine
 {
@@ -23,6 +24,7 @@ public class AppletWindow : Gtk.Grid
     private Settings? power_settings;
     private Settings? session_settings;
     private Settings? settings;
+    private Settings? interface_settings;
     private PowerScreen? props;
 
     // Default configuration variables
@@ -41,6 +43,7 @@ public class AppletWindow : Gtk.Grid
         // Get settings
         power_settings = new Settings (POWER_SCHEME);
         session_settings = new Settings (SESSION_SCHEME);
+        interface_settings = new Settings (INTERFACE_SCHEME);
         try {
             props = Bus.get_proxy_sync (BusType.SESSION,
                                         "org.gnome.SettingsDaemon.Power",
@@ -51,6 +54,23 @@ public class AppletWindow : Gtk.Grid
         fetch_default ();
 
         mode.notify["active"].connect (on_mode_active);
+
+        interface_settings.changed["icon-theme"].connect_after(on_interface_changed);
+    }
+
+    public static string get_icon_name (string find)
+    {
+        // find the caffeine icon name
+        // if the theme does not have the icon then fallback
+        // to the budgie equivalent that is installed in hicolor
+        // as budgie-caffeine-cup-full/empty
+        var icon_theme = Gtk.IconTheme.get_default ();
+        icon_theme.rescan_if_needed();
+        if (icon_theme.has_icon (find)) {
+            return find;
+        }
+
+        return "budgie-" + find;
     }
 
     public void toggle_applet ()
@@ -93,10 +113,10 @@ public class AppletWindow : Gtk.Grid
                 var duration = ngettext ("a minute", "%d minutes", time).printf (time);
                 cmd.append ("\"%s %s\" ".printf (_("Will turn off in"), duration));
             }
-            cmd.append ("--icon=caffeine-cup-full");
+            cmd.append ("--icon=" + get_icon_name ("caffeine-cup-full"));
         } else {
             cmd.append ("\"%s\" ".printf (_("Turn off Caffeine Boost")));
-            cmd.append ("--icon=caffeine-cup-empty");
+            cmd.append ("--icon=" + get_icon_name ("caffeine-cup-empty"));
         }
 
         try {
@@ -104,6 +124,25 @@ public class AppletWindow : Gtk.Grid
         } catch (SpawnError e) {
             print ("Error: %s\n", e.message);
         }
+    }
+
+    private void on_interface_changed(string key)
+    {
+        // called when interface schema icon-theme key is changed
+        // Use a short delay to ensure GTK has had time to update
+        // the icon-theme details for the screen
+        Timeout.add(200, ()=> {
+            // switch the caffeine icon if the theme has one defined
+            // or use the budgie fallback icon
+            var icon = event_box.get_child ();
+            event_box.remove (icon);
+            var state = mode.active ? "full" : "empty";
+            string icon_name = get_icon_name ("caffeine-cup-" + state);
+            icon = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.MENU);
+            event_box.add (icon);
+            event_box.show_all();
+            return false;
+        });
     }
 
     private void on_mode_active (Object? obj, ParamSpec? params)
@@ -147,7 +186,8 @@ public class AppletWindow : Gtk.Grid
         timer.sensitive = !timer.sensitive;
 
         var state = mode.active ? "full" : "empty";
-        icon = new Gtk.Image.from_icon_name("caffeine-cup-" + state, Gtk.IconSize.MENU);
+        string icon_name = get_icon_name ("caffeine-cup-" + state);
+        icon = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.MENU);
         event_box.add (icon);
 
         event_box.show_all();
