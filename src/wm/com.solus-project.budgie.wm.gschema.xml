@@ -7,17 +7,6 @@
   </enum>
 
   <schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
-    <key type="b" name="edge-tiling">
-      <default>true</default>
-      <summary>Enable edge tiling when dropping windows on screen edges</summary>
-      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
-    </key>
-
-    <key type="b" name="attach-modal-dialogs">
-      <default>true</default>
-      <summary>Attach modal dialog to the parent window</summary>
-      <description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
-    </key>
 
     <key type="b" name="disable-night-light-on-fullscreen">
       <default>false</default>
@@ -29,12 +18,6 @@
       <default>false</default>
       <summary>Enables the Budgie Run Dialog to be launched with the normal overlay key</summary>
       <description>Enables the Budgie Run Dialog to be launched with the normal overlay key.</description>
-    </key>
-
-    <key type="b" name="focus-mode">
-      <default>false</default>
-      <summary>Window focus mode to indicate how windows are activated</summary>
-      <description>This key overrides the key in org.gnome.desktop.wm.preferences when running Budgie.</description>
     </key>
 
     <key type="b" name="force-unredirect">

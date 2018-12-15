@@ -88,11 +88,11 @@ public class WindowsPage : Budgie.SettingsPage {
         /* Hook up settings */
         gnome_wm_settings = new GLib.Settings("org.gnome.mutter");
         budgie_wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
-        budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
+        gnome_wm_settings.bind("attach-modal-dialogs", switch_dialogs,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
         gnome_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
-        budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
+        gnome_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
     }
 
