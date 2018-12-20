@@ -418,6 +418,7 @@ public class BudgieMenuWindow : Budgie.Popover
                 categories_scroll.set_visible(vis);
                 compact_mode = vis;
                 content.invalidate_headers();
+                content.invalidate_filter();
                 content.invalidate_sort();
                 break;
             case "menu-headers":
@@ -429,6 +430,7 @@ public class BudgieMenuWindow : Budgie.Popover
                     content.set_header_func(null);
                 }
                 content.invalidate_headers();
+                content.invalidate_filter();
                 content.invalidate_sort();
                 break;
             case "menu-categories-hover":
@@ -575,7 +577,6 @@ public class BudgieMenuWindow : Budgie.Popover
     protected bool do_filter_list(Gtk.ListBoxRow row)
     {
         MenuButton child = row.get_child() as MenuButton;
-        bool super_compact = this.compact_mode && (!this.headers_visible);
 
         string term = search_term.strip();
         if (term.length > 0) {
@@ -594,11 +595,11 @@ public class BudgieMenuWindow : Budgie.Popover
 
         // No more filtering, show all
         if (group == null) {
-            // Don't dupe when in "super compact" mode
-            if (super_compact && this.is_item_dupe(child)) {
-                return false;
+            if (this.headers_visible) { // If we are going to be showing headers
+                return true;
+            } else { // Not showing headers
+                return !this.is_item_dupe(child);
             }
-            return true;
         }
 
         // If the GMenu.TreeDirectory isn't the same as the current filter, hide it
