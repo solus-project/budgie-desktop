@@ -81,8 +81,8 @@ public class MainView : Gtk.Box
 
         show_all();
 
-        main_stack.set_visible_child_name("applets");
         main_stack.notify["visible-child-name"].connect(on_name_change);
+        set_clean();
     }
 
     void on_name_change()
