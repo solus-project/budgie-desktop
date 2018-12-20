@@ -580,6 +580,10 @@ public class NotificationsView : Gtk.Box
 
                     if (app_info != null) {
                         app_name = app_info.get_string("Name");
+
+                        if (app_info.has_key("Icon")) {
+                            app_icon = app_info.get_string("Icon");
+                        }
                     }
                 } catch (Error e) {
                     stdout.printf("Failed to get desktop info for: %s", app_name);
