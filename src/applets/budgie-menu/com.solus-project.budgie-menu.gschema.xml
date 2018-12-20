@@ -33,7 +33,7 @@
     </key>
 
     <key type="b" name="menu-headers">
-      <default>true</default>
+      <default>false</default>
       <summary>Whether to show menu headers</summary>
       <description>Enable menu category headers</description>
     </key>
