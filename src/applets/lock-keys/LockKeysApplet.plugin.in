@@ -3,6 +3,6 @@ Module=lockkeysapplet.so
 Name=Lock Keys Indicator
 _Description=Lock Keys Indicator
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2017 Budgie Desktop Developers
+Copyright=Copyright © 2015-2018 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=num-lock-symbolic

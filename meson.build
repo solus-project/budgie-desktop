@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.4',
+    version: '10.5',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -61,9 +61,9 @@ cdata = configuration_data()
 package_version = meson.project_version()
 
 if git.found()
-    git_version = run_command('git', ['describe'])
+    git_version = run_command('git', ['rev-parse', 'HEAD'])
     if git_version.returncode() == 0
-        package_version = git_version.stdout().strip()
+        package_version += ' (git-'+git_version.stdout().strip()+')'
     endif
 endif
 
