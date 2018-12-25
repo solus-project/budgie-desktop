@@ -305,7 +305,7 @@ public class PanelManager : DesktopManager
     /**
      * Determine if the given panel and window intersect in geometry.
      * The panel is buffered by a predetermined pad amount which allows
-     * for intelligent hiding behaviour, i.e. when the window gets close to
+     * for intelligent hiding behavior, i.e. when the window gets close to
      * the panel, it should start the hide.
      */
     private bool window_intersects_panel(Budgie.Toplevel? panel, Wnck.Window? window)
@@ -333,7 +333,7 @@ public class PanelManager : DesktopManager
         panel.get_position(out pan.x, out pan.y);
         panel.get_size(out pan.width, out pan.height);
 
-        // Pad our values to get some "near" behaviour
+        // Pad our values to get some "near" behavior
         pan.x -= pad_amount;
         pan.width += 2 * pad_amount;
 

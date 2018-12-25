@@ -46,7 +46,7 @@ public class MainPanel : Gtk.Box
 
 /**
  * This is used to track panel animations, i.e. within the toplevel
- * itself to provide dock like behaviour
+ * itself to provide dock like behavior
  */
 public enum PanelAnimation {
 
@@ -201,7 +201,7 @@ public class Panel : Budgie.Toplevel
 
     public void set_transparent(bool transparent) {
         (layout as MainPanel).set_transparent(transparent);
-        this.update_dock_behaviour();
+        this.update_dock_behavior();
     }
 
     /**
@@ -213,7 +213,7 @@ public class Panel : Budgie.Toplevel
         if (this.autohide == AutohidePolicy.NONE) {
             return;
         }
-        this.update_dock_behaviour();
+        this.update_dock_behavior();
     }
 
     public override GLib.List<AppletInfo?> get_applets()
@@ -301,10 +301,10 @@ public class Panel : Budgie.Toplevel
             this.scale = get_scale_factor();
             this.placement();
         });
-        // Handle intelligent dock behaviour
+        // Handle intelligent dock behavior
         notify["intersected"].connect(()=> {
             if (this.autohide != AutohidePolicy.NONE) {
-                this.update_dock_behaviour();
+                this.update_dock_behavior();
             }
         });
 
@@ -925,7 +925,7 @@ public class Panel : Budgie.Toplevel
             this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
             this.autohide = policy;
             this.apply_strut_policy();
-            this.update_dock_behaviour();
+            this.update_dock_behavior();
         }
     }
 
@@ -1394,7 +1394,7 @@ public class Panel : Budgie.Toplevel
     /**
      * Handle dock like functionality
      */
-    bool update_dock_behaviour()
+    bool update_dock_behavior()
     {
         update_dock_id = 0;
 
@@ -1545,7 +1545,7 @@ public class Panel : Budgie.Toplevel
         if (update_dock_id > 0) {
             Source.remove(update_dock_id);
         }
-        update_dock_id = Timeout.add(175, this.update_dock_behaviour);
+        update_dock_id = Timeout.add(175, this.update_dock_behavior);
         return Gdk.EVENT_STOP;
     }
 

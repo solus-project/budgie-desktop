@@ -27,7 +27,7 @@ errordomain InputMethodError {
 
 /**
  * Reflects the ibus-manager in budgie-wm, with very limited functionality,
- * simply to enable us to mimick the behaviour over there.
+ * simply to enable us to mimick the behavior over there.
  */
 class AppletIBusManager : GLib.Object
 {

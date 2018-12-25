@@ -232,7 +232,7 @@ static void budgie_popover_class_init(BudgiePopoverClass *klazz)
         /**
          * BudgiePopover:position-policy:
          *
-         * Control the behaviour used to place the popover on screen.
+         * Control the behavior used to place the popover on screen.
          */
         obj_properties[PROP_POLICY] = g_param_spec_enum("position-policy",
                                                         "Positioning policy",
