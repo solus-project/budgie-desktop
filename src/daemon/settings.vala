@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright (C) 2017 Budgie Desktop Developers
+ * Copyright (C) 2017-2018 Budgie Desktop Developers
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,17 +64,13 @@ public class SettingsManager
         xoverrides = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
 
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
-        raven_settings.changed.connect(this.on_raven_settings_changed);
+        raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
         wm_settings.changed.connect(this.on_wm_settings_changed);
         this.on_wm_settings_changed("button-style");
     }
 
-    private void on_raven_settings_changed(string key) {
-        if (key != "allow-volume-overdrive") {
-            return;
-        }
-
-        bool allow_volume_overdrive = raven_settings.get_boolean(key); // Get our overdrive value
+    private void on_raven_sound_overdrive_change() {
+        bool allow_volume_overdrive = raven_settings.get_boolean("allow-volume-overdrive"); // Get our overdrive value
         gnome_sound_settings.set_boolean("allow-volume-above-100-percent", allow_volume_overdrive); // Set it to allow-volume-above-100-percent
     }
 

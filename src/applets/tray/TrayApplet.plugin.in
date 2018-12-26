@@ -3,6 +3,6 @@ Module=trayapplet.so
 Name=System Tray
 _Description=System Tray
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2017 Budgie Desktop Developers
+Copyright=Copyright © 2015-2018 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=system-tray-symbolic

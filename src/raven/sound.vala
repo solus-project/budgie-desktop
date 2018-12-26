@@ -174,6 +174,7 @@ namespace Budgie {
             show_all();
 
             if (widget_type == "output") {
+                on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
                 toggle_start_listening();
             }
         }
