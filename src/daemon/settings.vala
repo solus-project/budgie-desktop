@@ -82,7 +82,7 @@ public class SettingsManager
                 this.set_button_style(style);
                 break;
             case "focus-mode":
-                bool mode = gnome_wm_pref_settings.get_boolean(key);
+                bool mode = wm_settings.get_boolean(key);
                 this.set_focus_mode(mode);
                 break;
             default:

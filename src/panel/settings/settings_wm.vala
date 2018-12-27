@@ -92,7 +92,7 @@ public class WindowsPage : Budgie.SettingsPage {
         budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("button-style", combo_layouts,  "active-id", SettingsBindFlags.DEFAULT);
         gnome_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
-        gnome_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
+        budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
     }
 
