@@ -337,6 +337,10 @@ public class Raven : Gtk.Window
         main_view = new Budgie.MainView();
         main_box.pack_start(main_view, true, true, 0);
 
+        main_view.requested_draw.connect(() => {
+            queue_draw();
+        });
+
         strip = new PowerStrip(this);
         main_box.pack_end(strip, false, false, 0);
 
