@@ -48,7 +48,9 @@ namespace Budgie {
         /**
          * Signals
          */
+        public signal void added_window();
         public signal void closed_all();
+        public signal void closed_window();
         public signal void changed_pin_state(bool new_state);
         public signal void launch_new_instance();
         public signal void move_window_to_workspace(ulong xid, int workspace_num);
@@ -204,6 +206,8 @@ namespace Budgie {
 
                 this.windows_list.pack_end(item, true, false, 0);
                 this.render();
+
+                added_window();
             }
         }
 
@@ -274,6 +278,8 @@ namespace Budgie {
                 window_id_to_name.remove(xid);
                 window_id_to_controls.remove(xid);
                 this.render(); // Re-render
+
+                closed_window();
 
                 if (window_id_to_name.length == 0) {
                     closed_all();
