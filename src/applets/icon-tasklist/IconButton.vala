@@ -21,6 +21,7 @@ const int INACTIVE_INDICATOR_SPACING = 2;
  */
 public class IconButton : Gtk.ToggleButton
 {
+    private Budgie.AbominationRunningApp? first_app = null;
     private Budgie.IconPopover? popover = null;
     private Wnck.Screen? screen = null;
     private GLib.Settings? settings = null;
@@ -37,12 +38,13 @@ public class IconButton : Gtk.ToggleButton
     private bool needs_attention = false;
     public signal void became_empty();
 
+    public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
     public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
 
-    public IconButton(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
+    public IconButton(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
         this.settings = c_settings;
         this.app_info = info;
         this.pinned = pinned;
@@ -56,14 +58,15 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public IconButton.from_window(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
+        this.first_app = new Budgie.AbominationRunningApp(app_system, window);
 
         gobject_constructors_suck();
 
@@ -83,9 +86,9 @@ public class IconButton : Gtk.ToggleButton
         this.set_wnck_window(window);
     }
 
-    public IconButton.from_group(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    public IconButton.from_group(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
         this.class_group = class_group;
@@ -99,6 +102,7 @@ public class IconButton : Gtk.ToggleButton
 
         if (has_valid_windows(null)) {
             this.get_style_context().add_class("running");
+            set_app_for_class_group();
         }
     }
 
@@ -213,14 +217,34 @@ public class IconButton : Gtk.ToggleButton
                 return;
             }
 
-            if (new_window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+            Wnck.WindowType win_type = new_window.get_window_type(); // Get the window type
+
+            if (
+                (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+                (win_type == Wnck.Window.DIALOG) || // Dialogs
+                (win_type == Wnck.Window.SPLASHSCREEN) // Splash screens
+            ) {
                 return;
             }
 
             Wnck.ClassGroup window_class_group = new_window.get_class_group();
 
             if ((this.class_group != null) && (window_class_group != null)) {
-                if (this.class_group.get_id() == window_class_group.get_id()) { // Ids match
+                bool should_add_window = false;
+                bool ids_match = this.class_group.get_id() == window_class_group.get_id();
+                bool is_matching_lo = false; // is_matching_lo is for matching LibreOffice windows / apps
+
+                if ((this.first_app != null) && (this.first_app.group.has_prefix("libreoffice"))) { // If we have an app defined already for this class group and is libreoffice
+                    Budgie.AbominationRunningApp app = new Budgie.AbominationRunningApp(app_system, new_window); // Create an abomination app
+
+                    if (app.group.has_prefix("libreoffice")) { // If this is libreoffice
+                        is_matching_lo = (this.first_app.group == app.group);
+                    }
+                }
+
+                should_add_window = (ids_match || is_matching_lo);
+
+                if (should_add_window) {
                     ulong xid = new_window.get_xid();
                     string name = new_window.get_name() ?? "Loading...";
 
@@ -258,6 +282,7 @@ public class IconButton : Gtk.ToggleButton
             update_icon(); // Update icon based on class group
         });
 
+        set_app_for_class_group();
         setup_popover_with_class();
     }
 
@@ -787,6 +812,23 @@ public class IconButton : Gtk.ToggleButton
         } else if (class_group != null) {
             foreach (Wnck.Window win in class_group.get_windows()) {
                 win.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
+            }
+        }
+    }
+
+    /**
+     * set_app_for_class_group will set our AbominationApp for the first window in a given class group, if there is any
+     */
+    public void set_app_for_class_group() {
+        if (this.first_app == null) { // Not already set
+            unowned List<Wnck.Window> class_windows = this.class_group.get_windows();
+
+            if (class_windows.length() != 0) { // Have windows in class group
+                Wnck.Window first_window = class_windows.nth_data(0);
+
+                if (first_window != null) {
+                    this.first_app = new Budgie.AbominationRunningApp(app_system, first_window);
+                }
             }
         }
     }

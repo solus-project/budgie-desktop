@@ -141,7 +141,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (info == null) {
                 continue;
             }
-            IconButton button = new IconButton(this.settings, this.desktop_helper, this.manager, info, true);
+            IconButton button = new IconButton(this.app_system, this.settings, this.desktop_helper, this.manager, info, true);
             button.update();
             ButtonWrapper wrapper = new ButtonWrapper(button);
             wrapper.orient = this.get_orientation();
@@ -264,7 +264,7 @@ public class IconTasklistApplet : Budgie.Applet
             if (buttons.contains(app_id)) {
                 original_button = (buttons[app_id].get_parent() as ButtonWrapper);
             } else {
-                IconButton button = new IconButton(this.settings, this.desktop_helper, this.manager, info, true);
+                IconButton button = new IconButton(this.app_system, this.settings, this.desktop_helper, this.manager, info, true);
                 button.update();
 
                 buttons.set(app_id, button);
@@ -379,7 +379,7 @@ public class IconTasklistApplet : Budgie.Applet
             return;
         }
 
-        IconButton button = new IconButton.from_group(this.settings,this.desktop_helper, this.manager, first_app.group_object, app_info);
+        IconButton button = new IconButton.from_group(this.app_system, this.settings,this.desktop_helper, this.manager, first_app.group_object, app_info);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
@@ -461,7 +461,7 @@ public class IconTasklistApplet : Budgie.Applet
             return;
         }
 
-        button = new IconButton.from_window(this.settings, this.desktop_helper, this.manager, app.window, app.app, false);
+        button = new IconButton.from_window(this.app_system, this.settings, this.desktop_helper, this.manager, app.window, app.app, false);
         ButtonWrapper wrapper = new ButtonWrapper(button);
         wrapper.orient = this.get_orientation();
 
