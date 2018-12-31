@@ -15,6 +15,7 @@ namespace Budgie {
          * Data / Logic
          */
         private ulong current_window_id = 0; // Current window selected in the popover
+        private int longest_label_length = 20; // longest_label_length is the longest length / max width chars we should allow for labels
         private HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
         private HashTable<ulong?,Budgie.IconPopoverItem?> window_id_to_controls; // List of IDs to Controls
         private List<Budgie.IconPopoverItem> workspace_items; // Our referenced list of workspaces
@@ -48,7 +49,9 @@ namespace Budgie {
         /**
          * Signals
          */
+        public signal void added_window();
         public signal void closed_all();
+        public signal void closed_window();
         public signal void changed_pin_state(bool new_state);
         public signal void launch_new_instance();
         public signal void move_window_to_workspace(ulong xid, int workspace_num);
@@ -122,9 +125,18 @@ namespace Budgie {
                 this.actions = app_info.list_actions();
 
                 if (this.actions.length != 0) {
-                    foreach (string action in this.actions) {
+                    foreach (string action in this.actions) { // First we're going to want to figure out the longest actionable string name length
                         string action_name = app_info.get_action_name(action); // Get the name for this action
-                        Budgie.IconPopoverItem action_item = new Budgie.IconPopoverItem(action_name);
+
+                        if (action_name.length > longest_label_length) { // If the length of this action name is longer than current longest
+                            longest_label_length = action_name.length; // Update
+                        }
+                    }
+
+                    foreach (string action in this.actions) { // Now actually create the items
+                        string action_name = app_info.get_action_name(action); // Get the name for this action
+
+                        Budgie.IconPopoverItem action_item = new Budgie.IconPopoverItem(action_name, longest_label_length);
                         action_item.actionable_label.set_data("action", action);
 
                         action_item.actionable_label.clicked.connect(() => {
@@ -182,7 +194,7 @@ namespace Budgie {
                     return;
                 }
 
-                Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(name, xid);
+                Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(name, xid, longest_label_length);
 
                 item.actionable_label.clicked.connect(() => { // When we click on the window
                     this.toggle_window(item.xid); // Toggle the window state
@@ -204,6 +216,8 @@ namespace Budgie {
 
                 this.windows_list.pack_end(item, true, false, 0);
                 this.render();
+
+                added_window();
             }
         }
 
@@ -274,6 +288,8 @@ namespace Budgie {
                 window_id_to_name.remove(xid);
                 window_id_to_controls.remove(xid);
                 this.render(); // Re-render
+
+                closed_window();
 
                 if (window_id_to_name.length == 0) {
                     closed_all();
@@ -474,7 +490,7 @@ namespace Budgie {
 
         public ulong xid;
 
-        public IconPopoverItem(string label_content) {
+        public IconPopoverItem(string label_content, int label_length = 20) {
             Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
             height_request = 32;
             margin = 0;
@@ -485,7 +501,7 @@ namespace Budgie {
             actionable_label_content.ellipsize = Pango.EllipsizeMode.END;
             actionable_label_content.halign = Gtk.Align.START;
             actionable_label_content.justify = Gtk.Justification.LEFT;
-            actionable_label_content.max_width_chars = 20;
+            actionable_label_content.max_width_chars = label_length;
 
             actionable_label_container.pack_start(actionable_label_content, false, true, 0);
 
@@ -494,7 +510,7 @@ namespace Budgie {
             pack_start(actionable_label, true, true, 0);
         }
 
-        public IconPopoverItem.with_xid(string label_content, ulong xid) {
+        public IconPopoverItem.with_xid(string label_content, ulong xid, int label_length = 20) {
             Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
             height_request = 32;
             margin = 0;
@@ -505,7 +521,7 @@ namespace Budgie {
             actionable_label_content.ellipsize = Pango.EllipsizeMode.END;
             actionable_label_content.halign = Gtk.Align.START;
             actionable_label_content.justify = Gtk.Justification.LEFT;
-            actionable_label_content.max_width_chars = 20;
+            actionable_label_content.max_width_chars = label_length;
 
             actionable_label_container.pack_start(actionable_label_content, true, true, 0);
             actionable_label.add(actionable_label_container);

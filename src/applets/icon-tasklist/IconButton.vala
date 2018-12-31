@@ -21,12 +21,14 @@ const int INACTIVE_INDICATOR_SPACING = 2;
  */
 public class IconButton : Gtk.ToggleButton
 {
+    private Budgie.AbominationRunningApp? first_app = null;
     private Budgie.IconPopover? popover = null;
     private Wnck.Screen? screen = null;
     private GLib.Settings? settings = null;
     private Wnck.Window? window = null;          // This will always be null if grouping is enabled
     private Wnck.ClassGroup? class_group = null; // This will always be null if grouping is disabled
     private GLib.DesktopAppInfo? app_info = null;
+    private int window_count = 0;
     public Icon icon;
     private Gtk.Allocation definite_allocation;
     public bool pinned = false;
@@ -37,12 +39,13 @@ public class IconButton : Gtk.ToggleButton
     private bool needs_attention = false;
     public signal void became_empty();
 
+    public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
     public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
 
-    public IconButton(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
+    public IconButton(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
         this.settings = c_settings;
         this.app_info = info;
         this.pinned = pinned;
@@ -56,14 +59,15 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public IconButton.from_window(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
+    public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
+        this.first_app = new Budgie.AbominationRunningApp(app_system, window);
 
         gobject_constructors_suck();
 
@@ -83,9 +87,9 @@ public class IconButton : Gtk.ToggleButton
         this.set_wnck_window(window);
     }
 
-    public IconButton.from_group(GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
+    public IconButton.from_group(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
     {
-        Object(desktop_helper: helper, popover_manager: manager);
+        Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
         this.class_group = class_group;
@@ -99,6 +103,7 @@ public class IconButton : Gtk.ToggleButton
 
         if (has_valid_windows(null)) {
             this.get_style_context().add_class("running");
+            set_app_for_class_group();
         }
     }
 
@@ -172,9 +177,18 @@ public class IconButton : Gtk.ToggleButton
             launch_app(Gtk.get_current_event_time());
         });
 
+        this.popover.added_window.connect(() => { // If we added a window
+            window_count++;
+        });
+
         this.popover.closed_all.connect(() => { // If we closed all windows
+            window_count = 0;
             this.popover.hide(); // Hide
             became_empty(); // Call our became empty function
+        });
+
+        this.popover.closed_window.connect(() => { // If we closed a window related to this popover
+            window_count--;
         });
 
         this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
@@ -213,14 +227,14 @@ public class IconButton : Gtk.ToggleButton
                 return;
             }
 
-            if (new_window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+            if (is_disallowed_window_type(new_window)) {
                 return;
             }
 
             Wnck.ClassGroup window_class_group = new_window.get_class_group();
 
             if ((this.class_group != null) && (window_class_group != null)) {
-                if (this.class_group.get_id() == window_class_group.get_id()) { // Ids match
+                if (should_add_window(new_window)) {
                     ulong xid = new_window.get_xid();
                     string name = new_window.get_name() ?? "Loading...";
 
@@ -247,6 +261,23 @@ public class IconButton : Gtk.ToggleButton
         this.popover_manager.register_popover(this, popover); // Register
     }
 
+    /**
+     * is_disallowed_window_type will check if this specified window is a disallowed type
+     */
+    private bool is_disallowed_window_type(Wnck.Window new_window) {
+        Wnck.WindowType win_type = new_window.get_window_type(); // Get the window type
+
+        if (
+            (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+            (win_type == Wnck.Window.DIALOG) || // Dialogs
+            (win_type == Wnck.Window.SPLASHSCREEN) // Splash screens
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void set_class_group(Wnck.ClassGroup? class_group) {
         this.class_group = class_group;
 
@@ -258,6 +289,7 @@ public class IconButton : Gtk.ToggleButton
             update_icon(); // Update icon based on class group
         });
 
+        set_app_for_class_group();
         setup_popover_with_class();
     }
 
@@ -268,7 +300,7 @@ public class IconButton : Gtk.ToggleButton
             return;
         }
 
-        if (window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+        if (is_disallowed_window_type(window)) {
             return;
         }
 
@@ -296,6 +328,35 @@ public class IconButton : Gtk.ToggleButton
         } else {
             Gtk.drag_source_unset(this);
         }
+    }
+
+    /**
+     * should_add_window will return whether or not we should add this window to our popover
+     */
+    private bool should_add_window(Wnck.Window new_window) {
+        bool add = false;
+        bool should_try_name_match = false;
+        bool is_matching_class_name = false; // is_matching_class_name is for matching derpy window class names
+
+        if (this.first_app != null) { // If we have an app defined
+            Budgie.AbominationRunningApp app = new Budgie.AbominationRunningApp(app_system, new_window); // Create an abomination app
+            if (this.first_app.group.has_prefix("chrome-") || this.first_app.group.has_prefix("google-chrome")) { // Is a Chrome or Chrome app
+                should_try_name_match = true;
+                is_matching_class_name = (this.first_app.group == app.group);
+            } else if (this.first_app.group.has_prefix("libreoffice")) { // Is a LibreOffice window
+                should_try_name_match = true;
+                is_matching_class_name = (this.first_app.group == app.group);
+            }
+        }
+
+        if (should_try_name_match) { // If we were doing class name check
+            add = is_matching_class_name; // should_add_window based on if class name matches
+        } else { // If we weren't doing class name check
+            Wnck.ClassGroup window_class_group = new_window.get_class_group();
+            add = this.class_group.get_id() == window_class_group.get_id(); // Perform ID check
+        }
+
+        return add;
     }
 
     public void update_icon()
@@ -370,32 +431,9 @@ public class IconButton : Gtk.ToggleButton
         this.queue_draw();
     }
 
-    private bool has_valid_windows(out int num_windows)
-    {
-        int n;
-        num_windows = n = 0;
-
-        if (class_group == null) {
-            num_windows = 1;
-            return (this.window != null);
-        }
-
-        bool has_valid = false;
-        unowned List<Wnck.Window> windows = class_group.get_windows();
-
-        if (windows.length() != 0) {
-            windows.foreach((window) => {
-                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
-                    if (!window.is_skip_tasklist()) {
-                        has_valid = true;
-                        n++;
-                    }
-                }
-            });
-        }
-
-        num_windows = n;
-        return has_valid;
+    private bool has_valid_windows(out int num_windows) {
+        num_windows = this.window_count;
+        return (this.window_count != 0);
     }
 
     public bool has_window(Wnck.Window? window)
@@ -792,26 +830,49 @@ public class IconButton : Gtk.ToggleButton
     }
 
     /**
+     * set_app_for_class_group will set our AbominationApp for the first window in a given class group, if there is any
+     */
+    public void set_app_for_class_group() {
+        if (this.first_app == null) { // Not already set
+            unowned List<Wnck.Window> class_windows = this.class_group.get_windows();
+
+            if (class_windows.length() != 0) { // Have windows in class group
+                Wnck.Window first_window = class_windows.nth_data(0);
+
+                if (first_window != null) {
+                    this.first_app = new Budgie.AbominationRunningApp(app_system, first_window);
+                }
+            }
+        }
+    }
+
+    /**
      * setup_popover_with_class will set up our popover with windows from the class
      */
     public void setup_popover_with_class() {
+        if (this.first_app == null) {
+            set_app_for_class_group();
+        }
+
         foreach (unowned Wnck.Window window in this.class_group.get_windows()) {
             if (window != null) {
-                if (window.get_window_type() != Wnck.WindowType.DESKTOP) { // Not application in desktop mode, like Nautilus desktop icons
-                    ulong xid = window.get_xid();
-                    string name = window.get_name();
+                if (!is_disallowed_window_type(window)) { // Not a disallowed window type
+                    if (should_add_window(window)) { // Should add this window
+                        ulong xid = window.get_xid();
+                        string name = window.get_name();
 
-                    popover.add_window(xid, name);
-                    window.name_changed.connect_after(() => {
-                        ulong win_xid = window.get_xid();
-                        popover.rename_window(win_xid);
-                    });
+                        popover.add_window(xid, name);
+                        window.name_changed.connect_after(() => {
+                            ulong win_xid = window.get_xid();
+                            popover.rename_window(win_xid);
+                        });
 
-                    window.state_changed.connect_after(() => {
-                        if (window.needs_attention()) {
-                            attention();
-                        }
-                    });
+                        window.state_changed.connect_after(() => {
+                            if (window.needs_attention()) {
+                                attention();
+                            }
+                        });
+                    }
                 }
             }
         }

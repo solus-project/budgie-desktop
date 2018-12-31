@@ -11,7 +11,7 @@
 
 namespace Budgie {
 
-    public class SoundWidget : Gtk.Box {
+    public class SoundWidget : RavenWidget {
 
         /**
          * Logic and Mixer variables
@@ -26,6 +26,11 @@ namespace Budgie {
         private Gvc.MixerStream? primary_stream = null;
         private Settings settings = null;
         private string widget_type = "";
+
+        /**
+         * Signals
+         */
+        public signal void devices_state_changed(); // devices_state_changed is triggered when the amount of devices has changed
 
         /**
          * Widgets
@@ -52,6 +57,14 @@ namespace Budgie {
              */
             mixer = new Gvc.MixerControl("Budgie Volume Control");
 
+            mixer.card_added.connect((id) => { // When we add a card
+                devices_state_changed();
+            });
+
+            mixer.card_removed.connect((id) => { // When we remove a card
+                devices_state_changed();
+            });
+
             derpers = new HashTable<string,string?>(str_hash, str_equal); // Create our GVC Stream app derpers
             derpers.insert("Vivaldi", "vivaldi"); // Vivaldi
             derpers.insert("Vivaldi Snapshot", "vivaldi-snapshot"); // Vivaldi Snapshot
@@ -76,6 +89,7 @@ namespace Budgie {
              */
             if (widget_type == "input") { // Input
                 mixer.default_source_changed.connect(on_device_changed);
+                mixer.state_changed.connect(on_state_changed);
                 mixer.input_added.connect(on_device_added);
                 mixer.input_removed.connect(on_device_removed);
 
@@ -180,6 +194,13 @@ namespace Budgie {
         }
 
         /**
+         * has_devices will check if we have devices associated with this type
+         */
+        public bool has_devices() {
+            return (devices.size() != 0) && (mixer.get_cards().length() != 0);
+        }
+
+        /**
          * on_device_added will handle when an input or output device has been added
          */
         private void on_device_added(uint id) {
@@ -220,6 +241,8 @@ namespace Budgie {
             devices.insert(id, list_item);
             list_item.show_all();
             devices_list.queue_draw();
+
+            devices_state_changed();
         }
 
         /**
@@ -227,6 +250,10 @@ namespace Budgie {
          */
         private void on_device_changed(uint id) {
             Gvc.MixerStream stream = (widget_type == "input") ? mixer.get_default_source() : mixer.get_default_sink(); // Set default_stream to the respective source or sink
+
+            if (stream == null) { // Our default stream is null
+                return;
+            }
 
             if (stream == this.primary_stream) { // Didn't really change
                 return;
@@ -253,6 +280,7 @@ namespace Budgie {
             this.primary_stream = stream;
             update_volume();
             devices_list.queue_draw();
+            devices_state_changed();
         }
 
         /**
@@ -268,6 +296,7 @@ namespace Budgie {
             devices.steal(id);
             list_item.destroy();
             devices_list.queue_draw();
+            devices_state_changed();
         }
 
         /**
@@ -322,24 +351,28 @@ namespace Budgie {
          * on_state_changed will handle when the state of our Mixer or its streams have changed
          */
         private void on_state_changed(uint id) {
-            var stream = mixer.lookup_stream_id(id);
+            if (widget_type == "output") {
+                var stream = mixer.lookup_stream_id(id);
 
-            if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
-                if (apps.contains(id)) { // If our apps contains this stream
-                    Budgie.AppSoundControl? control = get_control_for_app(id);
+                if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
+                    if (apps.contains(id)) { // If our apps contains this stream
+                        Budgie.AppSoundControl? control = get_control_for_app(id);
 
-                    if (control != null) {
-                        if (stream.is_running()) { // If running
-                            control.refresh(); // Update our control
-                        } else { // If not running
-                            control.destroy();
-                            apps.steal(id);
+                        if (control != null) {
+                            if (stream.is_running()) { // If running
+                                control.refresh(); // Update our control
+                            } else { // If not running
+                                control.destroy();
+                                apps.steal(id);
+                            }
                         }
-                    }
 
-                    toggle_start_listening();
+                        toggle_start_listening();
+                    }
                 }
             }
+
+            devices_state_changed();
         }
 
         /**

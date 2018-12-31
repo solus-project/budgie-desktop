@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class MprisWidget : Gtk.Box
+public class MprisWidget : RavenWidget
 {
     DBusImpl impl;
 

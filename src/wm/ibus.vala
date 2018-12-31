@@ -23,7 +23,7 @@ public class IBusManager : GLib.Object
     private IBus.Bus? bus = null;
     private bool ibus_available = true;
 
-    private HashTable<string,weak IBus.EngineDesc> engines = null;
+    private HashTable<string,unowned IBus.EngineDesc> engines = null;
 
     public unowned Budgie.KeyboardManager? kbm { construct set ; public get; }
 
@@ -54,7 +54,7 @@ public class IBusManager : GLib.Object
             return;
         }
 
-        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
+        this.engines = new HashTable<string,unowned IBus.EngineDesc>(str_hash, str_equal);
 
         /* Get the bus */
         bus = new IBus.Bus();
@@ -92,7 +92,7 @@ public class IBusManager : GLib.Object
      */
     private void reset_ibus()
     {
-        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
+        this.engines = new HashTable<string,unowned IBus.EngineDesc>(str_hash, str_equal);
     }
 
     private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
@@ -140,7 +140,7 @@ public class IBusManager : GLib.Object
      * Attempt to grab the ibus engine for the given name if it
      * exists, or returns null
      */
-    public weak IBus.EngineDesc? get_engine(string name)
+    public unowned IBus.EngineDesc? get_engine(string name)
     {
         if (this.engines == null) {
             return null;
