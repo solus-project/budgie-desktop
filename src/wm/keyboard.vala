@@ -171,8 +171,13 @@ public class KeyboardManager : GLib.Object
                 if (spl.length > 1) {
                     variant = spl[1];
                 }
-                source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
-                sources.append_val(source);
+
+                try {
+                    source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
+                    sources.append_val(source);
+                } catch (Error e) {
+                    warning("Failed to create InputSource: %s", e.message);
+                }
             } else {
                 try {
                     source = new InputSource(this.ibus_manager, type, (uint)i, null, null, false);
@@ -252,9 +257,17 @@ public class KeyboardManager : GLib.Object
         }
 
         if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-            fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, true);
+            try {
+                fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, true);
+            } catch (Error e) {
+                warning("Failed to create InputSource: %s", e.message);
+            }
         } else {
-            fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
+            try {
+                fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, true);
+            } catch (Error e) {
+                warning("Failed to create InputSource: %s", e.message);
+            }
         }
     }
 

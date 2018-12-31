@@ -11,7 +11,7 @@
 
 namespace Budgie {
 
-[CompactClass]
+[Compact]
 public class CommandInfo
 {
     public string title;

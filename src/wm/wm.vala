@@ -111,20 +111,22 @@ public interface Switcher: GLib.Object
     public abstract async void StopSwitcher() throws Error;
 }
 
-[CompactClass]
-class MinimizeData {
+public class MinimizeData {
     public double scale_x;
     public double scale_y;
     public double place_x;
     public double place_y;
     public double old_x;
     public double old_y;
-}
 
-[CompactClass]
-class AnimationInfo {
-    public Clutter.Actor? actor_clone;
-    public Meta.Rectangle old_rect;
+    public MinimizeData(double sx, double sy, double px, double py, double ox, double oy) {
+        scale_x = sx;
+        scale_y = sy;
+        place_x = px;
+        place_y = py;
+        old_x = ox;
+        old_y = oy;
+    }
 }
 
 public class BudgieWM : Meta.Plugin
@@ -157,7 +159,6 @@ public class BudgieWM : Meta.Plugin
 
     HashTable<Meta.WindowActor?,AnimationState?> state_map;
     Clutter.Actor? screen_group;
-    ulong current_window_resize;
     bool enabled_experimental_run_diag_as_menu = false;
 
     construct
@@ -808,13 +809,14 @@ public class BudgieWM : Meta.Plugin
         actor.transitions_completed.connect(minimize_done);
 
         /* Save the minimize state for later restoration */
-        MinimizeData d = new MinimizeData();
-        d.scale_x = (double)(icon.width / actor.width);
-        d.scale_y = (double)(icon.height / actor.height);
-        d.place_x = (double)icon.x;
-        d.place_y = (double)icon.y;
-        d.old_x = actor.x;
-        d.old_y = actor.y;
+        var scale_x = (double)(icon.width / actor.width);
+        var scale_y = (double)(icon.height / actor.height);
+        var place_x = (double)icon.x;
+        var place_y = (double)icon.y;
+        var old_x = actor.x;
+        var old_y = actor.y;
+
+        MinimizeData d = new MinimizeData(scale_x, scale_y, place_x, place_y, old_x, old_y);
 
         actor.set_data("_minimize_data", d);
         actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
@@ -1119,7 +1121,7 @@ public class BudgieWM : Meta.Plugin
         /* Pass each window over to tabswitcher */
         foreach (var child in cur_tabs) {
             uint32 xid = (uint32)child.get_xwindow();
-            switcher_proxy.PassItem(xid, child.get_user_time());
+            switcher_proxy.PassItem.begin(xid, child.get_user_time());
         }
         /* Either choose previous or choose next window */
         if (backward) {
@@ -1139,12 +1141,11 @@ public class BudgieWM : Meta.Plugin
             return;
         }
         uint32 curr_xid = (uint32)win.get_xwindow();
-        switcher_proxy.ShowSwitcher(curr_xid);
+        switcher_proxy.ShowSwitcher.begin(curr_xid);
     }
 
-    public void stop_switch_windows()
-    {
-        switcher_proxy.StopSwitcher();
+    public void stop_switch_windows() {
+        switcher_proxy.StopSwitcher.begin();
     }
 
 
