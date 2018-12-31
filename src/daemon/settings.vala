@@ -109,8 +109,10 @@ public class SettingsManager
             wm_set = "appmenu:minimize,maximize,close";
             break;
         }
+
         this.xoverrides.set_value("overrides", xset);
         this.wm_settings.set_string("button-layout", wm_set);
+        this.gnome_wm_settings.set_string("button-layout", wm_set);
     }
 
     /**
