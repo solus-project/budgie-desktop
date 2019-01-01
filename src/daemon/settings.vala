@@ -25,6 +25,7 @@ public enum ButtonPosition {
  */
 public class SettingsManager
 {
+    private GLib.Settings? mutter_settings = null;
     private GLib.Settings? gnome_sound_settings = null;
     private GLib.Settings? gnome_wm_settings = null;
     private GLib.Settings? raven_settings = null;
@@ -58,15 +59,25 @@ public class SettingsManager
     public SettingsManager()
     {
         /* Settings we need to write to */
+        mutter_settings = new GLib.Settings("org.gnome.mutter");
         gnome_sound_settings = new GLib.Settings("org.gnome.desktop.sound");
         gnome_wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
         raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
         xoverrides = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
-
         wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+
+        enforce_mutter_settings(); // Call enforce mutter settings so we ensure we transition our Mutter settings over to BudgieWM
         raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
         wm_settings.changed.connect(this.on_wm_settings_changed);
         this.on_wm_settings_changed("button-style");
+    }
+
+    /**
+     * enforce_mutter_settings will apply Mutter schema changes to BudgieWM for supported keys
+     */
+    private void enforce_mutter_settings() {
+        bool center_windows = mutter_settings.get_boolean("center-new-windows");
+        wm_settings.set_boolean("center-windows", center_windows);
     }
 
     private void on_raven_sound_overdrive_change() {
@@ -80,6 +91,10 @@ public class SettingsManager
             case "button-style":
                 ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
                 this.set_button_style(style);
+                break;
+            case "center-windows":
+                bool center = wm_settings.get_boolean(key);
+                mutter_settings.set_boolean("center-new-windows", center);
                 break;
             case "focus-mode":
                 bool mode = wm_settings.get_boolean(key);

@@ -29,9 +29,7 @@ public class SettingsWindow : Gtk.Window {
 
     public SettingsWindow(Budgie.DesktopManager? manager)
     {
-        Object(type: Gtk.WindowType.TOPLEVEL,
-               window_position: Gtk.WindowPosition.CENTER,
-               manager: manager);
+        Object(type: Gtk.WindowType.TOPLEVEL, manager: manager);
 
         header = new Gtk.HeaderBar();
         header.set_show_close_button(true);
