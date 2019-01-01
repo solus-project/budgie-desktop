@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2018 Budgie Desktop Developers
+ * Copyright © 2015-2019 Budgie Desktop Developers
  * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
  * 
  * This program is free software; you can redistribute it and/or modify

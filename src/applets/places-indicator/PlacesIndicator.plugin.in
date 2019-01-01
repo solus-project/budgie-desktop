@@ -3,6 +3,6 @@ Module=libplacesindicator.so
 Name=Places
 _Description=Places
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2016-2018 Budgie Desktop Developers
+Copyright=Copyright © 2016-2019 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=folder-symbolic

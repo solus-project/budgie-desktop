@@ -118,6 +118,6 @@ of each source file.
 Authors
 =======
 
-Copyright © 2014-2018 Budgie Desktop Developers
+Copyright © 2014-2019 Budgie Desktop Developers
 
 See our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!
