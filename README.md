@@ -1,5 +1,4 @@
 # budgie-desktop
-==============
 
 The Budgie Desktop is a feature-rich, modern desktop designed to keep out the way of the user.
 
