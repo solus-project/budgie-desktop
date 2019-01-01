@@ -254,6 +254,10 @@ public class IconTasklistApplet : Budgie.Applet
         var app_id = (string)selection_data.get_data();
         ButtonWrapper? original_button = null;
 
+        if (app_id.has_prefix("x-nautilus-desktop")) { // Someone is trying to drag a desktop icon to an application tasklist for some reason
+            return;
+        }
+
         if (app_id.has_prefix("file://")) {
             app_id = app_id.split("://")[1];
             GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id.strip());
