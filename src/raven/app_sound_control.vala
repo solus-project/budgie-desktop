@@ -62,7 +62,12 @@ namespace Budgie {
              * Firstly, check if the app name has a related desktop app info, and if so use the desktop name for the application.
              * Otherwise, use a titlized form of the app name if it'd match up with the description. Otherwise use app name.
              */
-            bool successfully_retrieved_name = false;
+
+            string alsa_beg = "ALSA plug-in [";
+            if (app_name.has_prefix(alsa_beg)) {
+                app_name = app_name.replace(alsa_beg, ""); // Remove the ALSA prefix
+                app_name = app_name.substring(0, (app_name.length - 1)); // Replace the prefix
+            }
 
             DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
 
@@ -71,17 +76,22 @@ namespace Budgie {
 
                 if ((desktop_app_name != "") && (desktop_app_name != null)) { // If we got the desktop app name
                     app_name = desktop_app_name;
-                    successfully_retrieved_name = true;
                 }
             }
 
-            if (!successfully_retrieved_name) { // If we failed to get info from a desktop file
-                string titled_app_name = app_name.substring(0,1).ascii_up() + app_name.substring(1);
-                string description = stream.get_description();
+            string stream_name = stream.get_name();
 
-                if (titled_app_name == description) {
-                    app_name = description;
-                }
+            Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
+            string usable_icon_name = c_icon;
+
+            if (current_theme.has_icon(app_name)) { // Has icon based on app name
+                usable_icon_name = app_name;
+            } else if (current_theme.has_icon(stream_name)) { // Has icon based on stream name
+                usable_icon_name = stream_name; // Set to icon name
+            }
+
+            if (usable_icon_name != "applications-multimedia") { // Successfully got an icon from a valid app
+                app_name = app_name.substring(0,1).ascii_up() + app_name.substring(1); // Titalize the app name. Not doing this for non-compliant icons means apps like mocp don't get wrongly titalized.
             }
 
             /**
@@ -127,13 +137,6 @@ namespace Budgie {
             app_info.pack_start(app_info_header, true, false, 0);
             app_info.pack_end(volume_slider, true, false, 0);
 
-            /**
-             * Icon logic
-             */
-            string stream_name = stream.get_name();
-
-            Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
-            string usable_icon_name = current_theme.has_icon(stream_name) ? stream_name : c_icon; // If our app has an icon, use it, otherwise use the stream icon name
             app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
 
             if (app_image != null) {
