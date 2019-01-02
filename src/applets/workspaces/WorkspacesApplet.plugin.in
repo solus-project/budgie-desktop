@@ -3,6 +3,6 @@ Module=workspacesapplet.so
 Name=Workspace Switcher
 _Description=Workspace Switcher
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2017-2018 Budgie Desktop Developers
+Copyright=Copyright © 2017-2019 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=workspace-switcher-symbolic

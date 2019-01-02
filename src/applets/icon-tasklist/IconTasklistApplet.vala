@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2018 Budgie Desktop Developers
+ * Copyright © 2015-2019 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,6 +257,10 @@ public class IconTasklistApplet : Budgie.Applet
         // id of app that is currently being dragged
         var app_id = (string)selection_data.get_data();
         ButtonWrapper? original_button = null;
+
+        if (app_id.has_prefix("x-nautilus-desktop")) { // Someone is trying to drag a desktop icon to an application tasklist for some reason
+            return;
+        }
 
         if (app_id.has_prefix("file://")) {
             app_id = app_id.split("://")[1];

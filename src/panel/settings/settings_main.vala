@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  * 
- * Copyright © 2015-2018 Budgie Desktop Developers
+ * Copyright © 2015-2019 Budgie Desktop Developers
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,7 @@ public class SettingsWindow : Gtk.Window {
 
     public SettingsWindow(Budgie.DesktopManager? manager)
     {
-        Object(type: Gtk.WindowType.TOPLEVEL,
-               window_position: Gtk.WindowPosition.CENTER,
-               manager: manager);
+        Object(type: Gtk.WindowType.TOPLEVEL, manager: manager);
 
         header = new Gtk.HeaderBar();
         header.set_show_close_button(true);

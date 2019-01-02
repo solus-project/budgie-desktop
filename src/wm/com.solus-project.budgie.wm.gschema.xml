@@ -8,6 +8,12 @@
 
   <schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
 
+    <key type="b" name="center-windows">
+      <default>false</default>
+      <summary>Enabling automatic centering of windows on current screen.</summary>
+      <description>Enabling automatic centering of a window on launch on the current screen.</description>
+    </key>
+
     <key type="b" name="disable-night-light-on-fullscreen">
       <default>false</default>
       <summary>Disable Night Light mode when windows are fullscreen</summary>
