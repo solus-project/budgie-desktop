@@ -29,6 +29,7 @@ daemon_sources = [
 daemon_deps = [
     dep_gtk3,
     dep_gdkx11,
+    dep_notify,
     dep_wnck,
     link_libappsys,
     link_libconfig,

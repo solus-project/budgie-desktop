@@ -45,6 +45,7 @@ dep_vala = dependency('vapigen', version: '>= 0.40.0')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
+dep_notify = dependency('libnotify', version: '>= 0.7')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
 

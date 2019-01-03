@@ -5,6 +5,7 @@ namespace Caffeine
 public class AppletSettings : Gtk.Grid
 {
     private Settings? settings = null;
+    private Settings? wm_settings = null;
 
     [GtkChild]
     private Gtk.Switch? notify_switch;
@@ -19,14 +20,12 @@ public class AppletSettings : Gtk.Grid
     {
         Object();
         this.settings = settings;
+        this.wm_settings = new Settings("com.solus-project.budgie-wm");
 
         // Bind settings to widget value
-        settings.bind("enable-notification", notify_switch, "active",
-            SettingsBindFlags.DEFAULT);
-        settings.bind("toggle-brightness", brightness_switch, "active",
-            SettingsBindFlags.DEFAULT);
-        settings.bind("screen-brightness", brightness_level, "value",
-            SettingsBindFlags.DEFAULT);
+        wm_settings.bind("caffeine-mode-notification", notify_switch, "active", SettingsBindFlags.DEFAULT);
+        wm_settings.bind("caffeine-mode-toggle-brightness", brightness_switch, "active", SettingsBindFlags.DEFAULT);
+        wm_settings.bind("caffeine-mode-screen-brightness", brightness_level, "value", SettingsBindFlags.DEFAULT);
     }
 }
 } //End namespace
