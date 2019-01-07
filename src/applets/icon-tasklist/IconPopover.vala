@@ -16,7 +16,7 @@ namespace Budgie {
          */
         private ulong current_window_id = 0; // Current window selected in the popover
         private int longest_label_length = 20; // longest_label_length is the longest length / max width chars we should allow for labels
-        private HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
+        public HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
         private HashTable<ulong?,Budgie.IconPopoverItem?> window_id_to_controls; // List of IDs to Controls
         private List<Budgie.IconPopoverItem> workspace_items; // Our referenced list of workspaces
         private unowned string[] actions = null; // List of supported desktop actions
