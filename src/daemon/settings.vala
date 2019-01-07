@@ -63,6 +63,7 @@ public class SettingsManager {
     private string? caffeine_full_cup = "";
     private string? caffeine_empty_cup = "";
     private Notify.Notification? caffeine_notification = null;
+    private bool temporary_notification_disabled = false;
 
     public SettingsManager() {
         Notify.init("com.solus-project.budgie-daemon"); // Attempt initialization of Notify
@@ -159,11 +160,19 @@ public class SettingsManager {
     }
 
     /**
-     * on_automatic_disable is triggered when our timeout is called
+     * do_disable is triggered when our timeout is called
      */
-    private bool on_automatic_disable() {
+    private bool do_disable() {
         wm_settings.set_boolean("caffeine-mode", false);
         return false;
+    }
+
+    /**
+     * do_disable_quietly will quietly disable Caffeine Mode
+     */
+    public void do_disable_quietly() {
+        temporary_notification_disabled = true;
+        wm_settings.set_boolean("caffeine-mode", false);
     }
 
     private void on_raven_sound_overdrive_change() {
@@ -248,7 +257,7 @@ public class SettingsManager {
             change_brightness((enabled) ? set_brightness : default_brightness);
         }
 
-        if (wm_settings.get_boolean("caffeine-mode-notification") && !disable_notification && Notify.is_initted()) { // Should show a notification
+        if (wm_settings.get_boolean("caffeine-mode-notification") && !disable_notification && !temporary_notification_disabled && Notify.is_initted()) { // Should show a notification
             string title = (enabled) ? _("Turned on Caffeine Boost") : _("Turned off Caffeine Boost");
             string body = "";
             string icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
@@ -259,7 +268,7 @@ public class SettingsManager {
                 var duration = ngettext ("a minute", "%d minutes", time).printf (time);
                 body = "%s %s".printf(_("Will turn off in"), duration);
 
-                Timeout.add_seconds(time * 60, this.on_automatic_disable, Priority.HIGH);
+                Timeout.add_seconds(time * 60, this.do_disable, Priority.HIGH);
             }
 
             if (this.caffeine_notification == null) { // Caffeine Notification not yet created
@@ -280,6 +289,13 @@ public class SettingsManager {
             } catch (Error e) {
                 warning("Failed to send our Caffeine notification: %s", e.message);
             }
+        }
+
+        if (temporary_notification_disabled) { // If we've temporarily disabled the Notification (such as for not providing a notification during End Session DIalog opening)
+            Timeout.add_seconds(60, () => { // Wait about a minute
+                temporary_notification_disabled = false; // Turn back off
+                return false;
+            }, Priority.HIGH);
         }
     }
 
