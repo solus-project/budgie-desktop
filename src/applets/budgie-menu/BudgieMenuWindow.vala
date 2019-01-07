@@ -291,6 +291,8 @@ public class BudgieMenuWindow : Budgie.Popover
                     }
                 }
             }
+
+            attempted_other_search = true;
         }
 
         var it = root.iter();
@@ -299,8 +301,9 @@ public class BudgieMenuWindow : Budgie.Popover
         while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
             if (type == GMenu.TreeItemType.DIRECTORY) {
                 var dir = it.get_directory();
+                bool is_sundry = dir.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory");
 
-                if (!dir.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory") && (other_tree != null)) { // Create a button if not Sundry
+                if (!is_sundry || (is_sundry && (other_tree == null))) { // Create a button if not Sundry or is Sundry and Other tree is null
                     var btn = new CategoryButton(dir);
                     btn.join_group(all_categories);
                     btn.enter_notify_event.connect(this.on_mouse_enter);
