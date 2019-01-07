@@ -70,11 +70,10 @@ public class SettingsManager {
         set_supported_caffeine_icons(); // Set supported Caffeine icons will determine whether or not to use an IconTheme or Budgie caffeine icons
 
         /* Settings we need to write to */
-        SettingsBackend temporary_store = SettingsBackend.memory_settings_backend_new(); // Only save these values to memory (do not be persistent)
         mutter_settings = new Settings("org.gnome.mutter");
         gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
-        gnome_power_settings = new Settings.with_backend("org.gnome.settings-daemon.plugins.power", temporary_store);
-        gnome_session_settings = new Settings.with_backend("org.gnome.desktop.session", temporary_store);
+        gnome_power_settings = new Settings("org.gnome.settings-daemon.plugins.power");
+        gnome_session_settings = new Settings("org.gnome.desktop.session");
         gnome_sound_settings = new Settings("org.gnome.desktop.sound");
         gnome_wm_settings = new Settings("org.gnome.desktop.wm.preferences");
         raven_settings = new Settings("com.solus-project.budgie-raven");
