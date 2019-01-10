@@ -371,7 +371,10 @@ public class NotificationWindow : Gtk.Window
                             did = "%s.desktop".printf(did);
                         }
                         var app_info = new DesktopAppInfo(did);
-                        image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+
+                        if (app_info.has_key("Icon")) {
+                            image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+                        }
                     } catch (Error e) {
                         image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
                         this.icon_name = "mail-unread-symbolic";
@@ -687,7 +690,7 @@ public class NotificationsView : Gtk.Box
         bool should_show = true; // Default to showing notification
 
         if ("desktop-entry" in hints) {
-            settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down();
+            settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
         }
 
         if (settings_app_name != "") { // If there is a settings app name

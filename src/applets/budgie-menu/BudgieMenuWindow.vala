@@ -163,6 +163,8 @@ public class BudgieMenuWindow : Budgie.Popover
     protected Gtk.Box categories;
     protected Gtk.ListBox content;
     private GMenu.Tree tree;
+    private GMenu.TreeDirectory other_tree;
+    private bool attempted_other_search = false;
     protected Gtk.ScrolledWindow categories_scroll;
     protected Gtk.ScrolledWindow content_scroll;
     protected CategoryButton all_categories;
@@ -274,21 +276,44 @@ public class BudgieMenuWindow : Budgie.Popover
             root = tree_root;
         }
 
+        // This is almost certainly the least optimal way of doing this. However, couldn't get the TreeDirectory lookup for Other to work.
+        if ((other_tree == null) && !attempted_other_search) {
+            var it = root.iter();
+            GMenu.TreeItemType? type;
+
+            while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
+                if (type == GMenu.TreeItemType.DIRECTORY) {
+                    var dir = it.get_directory();
+
+                    if (dir.get_desktop_file_path().has_suffix("X-GNOME-Other.directory")) {
+                        other_tree = dir;
+                        break;
+                    }
+                }
+            }
+
+            attempted_other_search = true;
+        }
+
         var it = root.iter();
         GMenu.TreeItemType? type;
 
         while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
             if (type == GMenu.TreeItemType.DIRECTORY) {
                 var dir = it.get_directory();
-                var btn = new CategoryButton(dir);
-                btn.join_group(all_categories);
-                btn.enter_notify_event.connect(this.on_mouse_enter);
-                categories.pack_start(btn, false, false, 0);
+                bool is_sundry = dir.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory");
 
-                // Ensures we find the correct button
-                btn.toggled.connect(()=>{
-                    update_category(btn);
-                });
+                if (!is_sundry || (is_sundry && (other_tree == null))) { // Create a button if not Sundry or is Sundry and Other tree is null
+                    var btn = new CategoryButton(dir);
+                    btn.join_group(all_categories);
+                    btn.enter_notify_event.connect(this.on_mouse_enter);
+                    categories.pack_start(btn, false, false, 0);
+
+                    // Ensures we find the correct button
+                    btn.toggled.connect(()=>{
+                        update_category(btn);
+                    });
+                }
 
                 load_menus(dir);
             } else if (type == GMenu.TreeItemType.ENTRY) {
@@ -297,7 +322,16 @@ public class BudgieMenuWindow : Budgie.Popover
                 if (tree_root == null) {
                     warning("%s has no parent directory, not adding to menu\n", appinfo.get_display_name());
                 } else {
-                    var btn = new MenuButton(appinfo, tree_root, icon_size);
+                    var use_root = root;
+
+                    if (root.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory")) { // If we're iterating over desktop entries in Sundry
+                        if (other_tree != null)  {
+                            use_root = other_tree;
+                        }
+                    }
+
+                    var btn = new MenuButton(appinfo, use_root, icon_size);
+
                     btn.clicked.connect(()=> {
                         hide();
                         launch_app(btn.info);

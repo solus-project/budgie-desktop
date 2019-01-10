@@ -42,10 +42,10 @@ namespace Budgie {
 /**
  * Main entry for the daemon
  */
-public static int main(string[] args)
-{
+public static int main(string[] args) {
     Gtk.init(ref args);
     OptionContext ctx;
+
     Budgie.ServiceManager? manager = null;
     Budgie.EndSessionDialog? end_dialog = null;
     Budgie.SettingsManager? settings = null;
@@ -68,7 +68,7 @@ public static int main(string[] args)
         return 0;
     }
 
-    /* Initialise wnck properly post gtk-start */
+    /* Initialise wnck after gtk-start */
     Idle.add(()=> {
         screen = Wnck.Screen.get_default();
         if (screen != null) {
@@ -81,12 +81,15 @@ public static int main(string[] args)
     end_dialog = new Budgie.EndSessionDialog(replace);
     settings = new Budgie.SettingsManager();
 
+    end_dialog.Opened.connect(settings.do_disable_quietly); // When we've opened the EndSession dialog, disable Caffeine Mode
+
     /* Enter main loop */
     Gtk.main();
 
     /* Deref - clean */
     manager = null;
     end_dialog = null;
+    settings = null;
 
     Wnck.shutdown();
 

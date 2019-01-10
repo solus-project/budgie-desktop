@@ -498,53 +498,6 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    private Wnck.Window get_next_window()
-    {        
-        if (class_group == null) {
-            return this.window;
-        }
-
-        Wnck.Window target_window = class_group.get_windows().nth_data(0);
-
-        bool found_active = false;
-        foreach (Wnck.Window window in class_group.get_windows()) {
-            if (found_active && !window.is_skip_tasklist()) {
-                target_window = window;
-                break;
-            }
-
-            if (window == this.desktop_helper.get_active_window()) {
-                found_active = true;
-            }
-        }
-
-        return target_window;
-    }
-
-    private Wnck.Window get_previous_window() {
-        if (class_group == null) {
-            return this.window;
-        }
-
-        GLib.List<unowned Wnck.Window> list = class_group.get_windows().copy();
-        list.reverse();
-        Wnck.Window target_window = list.first().data;
-
-        bool found_active = false;
-        foreach (Wnck.Window window in list) {
-            if (found_active && !window.is_skip_tasklist()) {
-                target_window = window;
-                break;
-            }
-
-            if (window == this.desktop_helper.get_active_window()) {
-                found_active = true;
-            }
-        }
-
-        return target_window;
-    }
-
     public bool is_empty() {
         return (this.window == null && class_group == null);
     }
@@ -989,10 +942,45 @@ public class IconButton : Gtk.ToggleButton
 
         Wnck.Window? target_window = null;
 
-        if (event.direction == Gdk.ScrollDirection.DOWN) {
-            target_window = this.get_next_window();
-        } else if (event.direction == Gdk.ScrollDirection.UP) {
-            target_window = this.get_previous_window();
+        var current_window = this.desktop_helper.get_active_window();
+        bool go_next = (event.direction == Gdk.ScrollDirection.UP);
+
+        var ids = popover.window_id_to_name.get_keys();
+        var ids_length = ids.length();
+
+        if ((ids_length > 1) && (current_window != null)) { // Has more than one item and current window is valid
+            if (!go_next) { // Go to previous window
+                ids.reverse(); // Reverse our list before doing operations
+            }
+
+            var win_id = current_window.get_xid();
+
+            var current_window_position = 0;
+
+            for (var current_id_index = 0; current_id_index < ids.length(); current_id_index++) {
+                var id = ids.nth_data(current_id_index);
+
+                if (win_id == id) { // Matching id
+                    current_window_position = current_id_index;
+                    break;
+                }
+            }
+
+            var incr_index = (current_window_position + 1); // Set our incremented index
+
+            if (incr_index == ids_length) { // If we're on last item
+                incr_index = 0; // Reset back to 0
+            }
+
+            var new_window_id = ids.nth_data(incr_index); // Get our next window id
+
+            if (new_window_id != null) {
+                Wnck.Window window = Wnck.Window.@get(new_window_id); // Get the window
+
+                if (window != null) {
+                    target_window = window;
+                }
+            }
         }
 
         if (target_window != null) {

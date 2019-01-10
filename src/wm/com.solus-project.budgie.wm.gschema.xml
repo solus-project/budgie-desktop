@@ -10,8 +10,38 @@
 
     <key type="b" name="center-windows">
       <default>false</default>
-      <summary>Enabling automatic centering of windows on current screen.</summary>
-      <description>Enabling automatic centering of a window on launch on the current screen.</description>
+      <summary>Enable automatic centering of windows on current screen.</summary>
+      <description>Enable automatic centering of a window on launch on the current screen.</description>
+    </key>
+
+    <key type="b" name="caffeine-mode">
+      <default>false</default>
+      <summary>Enable Caffeine mode for disabling lock and suspend.</summary>
+      <description>Enable Caffeine mode for disabling lock and suspend.</description>
+    </key>
+
+    <key type="b" name="caffeine-mode-notification">
+      <default>false</default>
+      <summary>Enable displaying a notification when Caffeine Mode is toggled.</summary>
+      <description>Enable displaying a notification when Caffeine Mode is toggled.</description>
+    </key>
+
+		<key type="i" name="caffeine-mode-screen-brightness">
+			<default>95</default>
+			<summary>Screen brightness when Caffeine Mode is activated.</summary>
+			<description>Screen brightness when Caffeine Mode is activated.</description>
+		</key>
+
+    <key type="i" name="caffeine-mode-timer">
+      <default>0</default>
+      <summary>Amount of minutes to keep Caffeine Mode on.</summary>
+      <description>Amount of minutes to keep Caffeine Mode on when active.</description>
+    </key>
+
+    <key type="b" name="caffeine-mode-toggle-brightness">
+      <default>false</default>
+      <summary>Toggle screen brightness on activation of Caffeine Mode.</summary>
+      <description>Control whether the screen brightness changes when Caffeine Mode is activated.</description>
     </key>
 
     <key type="b" name="disable-night-light-on-fullscreen">

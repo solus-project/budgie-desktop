@@ -47,8 +47,3 @@ shared_library(
     install: true,
     install_dir: applet_caffeine_dir,
 )
-
-install_data(
-    'com.solus-project.caffeine.gschema.xml',
-    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
-)

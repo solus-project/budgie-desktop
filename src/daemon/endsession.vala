@@ -37,6 +37,7 @@ public class EndSessionDialog : Gtk.Window
     public signal void ConfirmedShutdown();
     public signal void Canceled();
     public signal void Closed();
+    public signal void Opened();
 
     [GtkChild]
     private Gtk.Button? button_cancel;
@@ -152,6 +153,7 @@ public class EndSessionDialog : Gtk.Window
 
     public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters)
     {
+        Opened(); // Indicate that we've opened the EndSession dialog
         /* Right now we ignore type, time and inhibitors. Shush */
         unowned Gtk.Widget? main_show = null;
 

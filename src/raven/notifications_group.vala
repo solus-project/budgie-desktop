@@ -40,6 +40,10 @@ namespace Budgie {
 
             app_name = c_app_name;
 
+            if (("budgie" in c_app_name) && ("caffeine" in c_app_icon)) { // Caffeine Notification
+                app_name = _("Caffeine Mode");
+            }
+
             notifications = new HashTable<uint, NotificationClone>(direct_hash, direct_equal);
             list = new Gtk.ListBox();
 

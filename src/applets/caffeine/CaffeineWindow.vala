@@ -1,204 +1,81 @@
-const string POWER_SCHEME = "org.gnome.settings-daemon.plugins.power";
-const string SESSION_SCHEME = "org.gnome.desktop.session";
-const string INTERFACE_SCHEME = "org.gnome.desktop.interface";
+namespace Caffeine {
 
-namespace Caffeine
-{
+public class CaffeineWindow : Budgie.Popover {
+    private Gtk.Switch? mode = null;
+    private Gtk.SpinButton? timer = null;
+    private ulong mode_id;
+    private ulong timer_id;
 
-[DBus (name = "org.gnome.SettingsDaemon.Power.Screen")]
-interface PowerScreen : Object
-{
-    public abstract int32 brightness {owned get; set;}
-}
+    /**
+     * Unowned variables
+     */
+    private unowned Settings? settings;
 
-[GtkTemplate (ui = "/com/solus-project/caffeine/window.ui")]
-public class AppletWindow : Gtk.Grid
-{
-    [GtkChild]
-    private Gtk.Switch? mode;
+    public CaffeineWindow(Gtk.Widget? c_parent, Settings? c_settings) {
+        Object(relative_to: c_parent);
+        settings = c_settings;
+        get_style_context().add_class("caffeine-popover");
 
-    [GtkChild]
-    private Gtk.SpinButton? timer;
+        var container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-    private Gtk.EventBox? event_box;
-    private Settings? power_settings;
-    private Settings? session_settings;
-    private Settings? settings;
-    private Settings? interface_settings;
-    private PowerScreen? props;
+        Gtk.Grid grid = new Gtk.Grid(); // Construct our new grid
+        grid.set_row_spacing(6);
+        grid.set_column_spacing(12);
 
-    // Default configuration variables
-    private uint32? default_idle_delay;
-    private bool? default_idle_dim;
-    private string? default_sleep_inactive_ac_type;
-    private string? default_sleep_inactive_battery_type;
-    private int32? default_brightness;
+        Gtk.Label caffeine_mode_label = new Gtk.Label(_("Caffeine Mode"));
+        Gtk.Label timer_label = new Gtk.Label(_("Timer (minutes)"));
+        mode = new Gtk.Switch();
+        var adjustment = new Gtk.Adjustment(0, 0, 1440, 1, 10, 0);
+        timer = new Gtk.SpinButton(adjustment, 0, 0);
+        grid.attach(caffeine_mode_label, 0, 0);
+        grid.attach(timer_label, 0, 1);
+        grid.attach(mode, 1, 0);
+        grid.attach(timer, 1, 1);
 
-    public AppletWindow (Gtk.EventBox? event_box, Settings? settings)
-    {
-        Object();
-        this.event_box = event_box;
-        this.settings = settings;
+        container.add(grid);
+        add(container);
 
-        // Get settings
-        power_settings = new Settings (POWER_SCHEME);
-        session_settings = new Settings (SESSION_SCHEME);
-        interface_settings = new Settings (INTERFACE_SCHEME);
-        try {
-            props = Bus.get_proxy_sync (BusType.SESSION,
-                                        "org.gnome.SettingsDaemon.Power",
-                                        "/org/gnome/SettingsDaemon/Power");
-        } catch (IOError e) {
-            print ("Error: %s\n", e.message);
-        }
-        fetch_default ();
+        update_ux_state(); // Set our initial toggle value
 
-        mode.notify["active"].connect (on_mode_active);
+        settings.changed["caffeine-mode"].connect(() => { // On Caffeine Mode schema change
+            update_ux_state(); // Update our toggle
+        });
 
-        interface_settings.changed["icon-theme"].connect_after(on_interface_changed);
+        settings.changed["caffeine-mode-timer"].connect(() => { // On Caffeine Mode Timer value change
+            SignalHandler.block(timer, timer_id);
+            update_ux_state();
+            SignalHandler.unblock(timer, timer_id);
+        });
+
+        mode_id = mode.notify["active"].connect (() => { // On active change
+            SignalHandler.block(mode, mode_id); // Block to prevent update on set_caffeine_mode schema change
+            timer.sensitive = mode.active; // Set timer sensitivity
+            settings.set_boolean("caffeine-mode", mode.active); // Update our caffeine-mode WM setting
+            SignalHandler.unblock(mode, mode_id);
+        });
+
+        timer_id = timer.value_changed.connect(update_timer_value);
     }
 
-    public static string get_icon_name (string find)
-    {
-        // find the caffeine icon name
-        // if the theme does not have the icon then fallback
-        // to the budgie equivalent that is installed in hicolor
-        // as budgie-caffeine-cup-full/empty
-        var icon_theme = Gtk.IconTheme.get_default ();
-        icon_theme.rescan_if_needed();
-        if (icon_theme.has_icon (find)) {
-            return find;
-        }
-
-        return "budgie-" + find;
+    /**
+     * update_ux_state will set our switch active state to the current Caffeine Mode value and toggle timer
+     */
+    public void update_ux_state() {
+        mode.active = settings.get_boolean("caffeine-mode"); // Set our Caffeine Mode active state
+        timer.sensitive = mode.active; // Set timer sensitivity
+        timer.value = settings.get_int("caffeine-mode-timer");
     }
 
-    public void toggle_applet ()
-    {
+    public void toggle_applet() {
         mode.active = !mode.active;
     }
 
-    private void fetch_default ()
-    {
-        // Fetch default configuration
-        default_idle_delay = session_settings.get_uint ("idle-delay");
-        default_idle_dim = power_settings.get_boolean ("idle-dim");
-        default_sleep_inactive_ac_type = power_settings.get_string ("sleep-inactive-ac-type");
-        default_sleep_inactive_battery_type = power_settings.get_string ("sleep-inactive-battery-type");
-        try {
-            default_brightness = props.brightness;
-        } catch {
-            print ("Error: Can't get default brightness value");
-        }
-    }
-
-    private void change_brightness (int32 value)
-    {
-        try {
-            props.brightness = value;
-        } catch {
-            print ("Error: Can't change the brightness");
-        }
-    }
-
-    private void send_notification (bool activate, int time)
-    {
-        var cmd = new StringBuilder ();
-        cmd.append ("notify-send ");
-
-        if (activate) {
-            cmd.append ("\"%s\" ".printf (_("Turn on Caffeine Boost")));
-
-            if (time > 0) {
-                var duration = ngettext ("a minute", "%d minutes", time).printf (time);
-                cmd.append ("\"%s %s\" ".printf (_("Will turn off in"), duration));
-            }
-            cmd.append ("--icon=" + get_icon_name ("caffeine-cup-full"));
-        } else {
-            cmd.append ("\"%s\" ".printf (_("Turn off Caffeine Boost")));
-            cmd.append ("--icon=" + get_icon_name ("caffeine-cup-empty"));
-        }
-
-        try {
-            Process.spawn_command_line_async (cmd.str);
-        } catch (SpawnError e) {
-            print ("Error: %s\n", e.message);
-        }
-    }
-
-    private void on_interface_changed(string key)
-    {
-        // called when interface schema icon-theme key is changed
-        // Use a short delay to ensure GTK has had time to update
-        // the icon-theme details for the screen
-        Timeout.add(200, ()=> {
-            // switch the caffeine icon if the theme has one defined
-            // or use the budgie fallback icon
-            var icon = event_box.get_child ();
-            event_box.remove (icon);
-            var state = mode.active ? "full" : "empty";
-            string icon_name = get_icon_name ("caffeine-cup-" + state);
-            icon = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.MENU);
-            event_box.add (icon);
-            event_box.show_all();
-            return false;
-        });
-    }
-
-    private void on_mode_active (Object? obj, ParamSpec? params)
-    {
-        var icon = event_box.get_child ();
-        event_box.remove (icon);
-
+    /**
+     * update_timer_value will update our settings timer value based on our SpinButton change
+     */
+    public void update_timer_value() {
         var time = timer.get_value_as_int();
-        if (mode.active) {
-            // Fetch power settings default value
-            fetch_default ();
-
-            session_settings.set_uint ("idle-delay", 0);
-            power_settings.set_boolean ("idle-dim", false);
-            power_settings.set_string ("sleep-inactive-ac-type", "nothing");
-            power_settings.set_string ("sleep-inactive-battery-type", "nothing");
-
-            // Add timeout callback if timer's spinbox is not 0
-            if (time > 0) {
-                Timeout.add_seconds(time * 60, on_timer_out, Priority.DEFAULT);
-            }
-        } else {
-            session_settings.set_uint ("idle-delay", default_idle_delay);
-            power_settings.set_boolean ("idle-dim", default_idle_dim);
-            power_settings.set_string ("sleep-inactive-ac-type", default_sleep_inactive_ac_type);
-            power_settings.set_string ("sleep-inactive-battery-type", default_sleep_inactive_battery_type);
-        }
-
-        if (settings.get_boolean ("enable-notification")) {
-            send_notification (mode.active, time);
-        }
-
-        if (settings.get_boolean ("toggle-brightness")) {
-            if (mode.active) {
-                change_brightness (settings.get_int ("screen-brightness"));
-            } else {
-                change_brightness (default_brightness);
-            }
-        }
-
-        timer.sensitive = !timer.sensitive;
-
-        var state = mode.active ? "full" : "empty";
-        string icon_name = get_icon_name ("caffeine-cup-" + state);
-        icon = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.MENU);
-        event_box.add (icon);
-
-        event_box.show_all();
-    }
-
-    private bool on_timer_out ()
-    {
-        //Reset Caffeine mode and timer value
-        mode.active = false;
-        timer.value = 0;
-        return false;
+        settings.set_int("caffeine-mode-timer", time); // Update our caffeine-mode-timer value
     }
 }
 
