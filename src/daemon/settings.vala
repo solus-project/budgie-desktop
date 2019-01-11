@@ -110,9 +110,23 @@ public class SettingsManager {
     }
 
     /**
+     * get_caffeine_mode will get the current Caffeine Mode status
+     */
+    private bool get_caffeine_mode() {
+        return wm_settings.get_boolean("caffeine-mode");
+    }
+
+    /**
      * fetch_defaults will fetch the default values for various idle, sleep, and brightness settings
      */
     private void fetch_defaults() {
+        if (get_caffeine_mode()) { // If Caffeine Mode was somehow left on during startup, we can't trust what we'll get for keys
+            gnome_session_settings.reset("idle-delay");
+            gnome_power_settings.reset("idle-dim");
+            gnome_power_settings.reset("sleep-inactive-ac-type");
+            gnome_power_settings.reset("sleep-inactive-battery-type");
+        }
+
         default_idle_delay = gnome_session_settings.get_uint ("idle-delay");
         default_idle_dim = gnome_power_settings.get_boolean ("idle-dim");
         default_sleep_inactive_ac_type = gnome_power_settings.get_string ("sleep-inactive-ac-type");
@@ -164,6 +178,7 @@ public class SettingsManager {
      */
     private bool do_disable() {
         wm_settings.set_boolean("caffeine-mode", false);
+        reset_values(); // Immediately reset values
         return false;
     }
 
@@ -173,6 +188,7 @@ public class SettingsManager {
     public void do_disable_quietly() {
         temporary_notification_disabled = true;
         wm_settings.set_boolean("caffeine-mode", false);
+        reset_values(); // Immediately reset values
     }
 
     private void on_raven_sound_overdrive_change() {
