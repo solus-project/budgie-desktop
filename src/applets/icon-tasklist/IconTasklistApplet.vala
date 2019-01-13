@@ -556,9 +556,10 @@ public class IconTasklistApplet : Budgie.Applet
     {
         this.desktop_helper.icon_size = small_icon;
 
-        this.desktop_helper.panel_size = panel - 1;
         if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-            this.desktop_helper.panel_size = panel - 6;
+            this.desktop_helper.panel_size = panel - 5;
+        } else {
+            this.desktop_helper.panel_size = panel;
         }
 
         set_icons_size();
