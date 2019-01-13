@@ -871,7 +871,6 @@ public class IconButton : Gtk.ToggleButton
                     this.window.unminimize(event.time);
                     this.window.activate(event.time);
                 }
-                return Gdk.EVENT_STOP;
             } else if (class_group != null) {
                 bool all_unminimized = true;
                 bool one_active = false;
