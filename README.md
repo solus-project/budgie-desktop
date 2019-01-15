@@ -8,11 +8,19 @@ The Budgie Desktop is a feature-rich, modern desktop designed to keep out the wa
 
 IRC: `#budgie-desktop-dev` / `#Solus-Dev` on irc.freenode.net
 
+![Translation Status](https://translate.getsol.us/widgets/budgie-desktop/-/main/svg-badge.svg)
+
+[Translate into your language!](https://translate.getsol.us)
+
 `budgie-desktop` is a [Solus project](https://getsol.us/)
 
 ![logo](https://build.solus-project.com/logo.png)
 
 ## Project Updates
+
+### Announcement for Budgie 11
+
+In our [2019: To Venture Ahead](https://getsol.us/2019/01/14/2019-to-venture-ahead/) blog post, we formally announced the return of Budgie development in April, with planned alpha and beta builds later in the year.
 
 ### Move to GTK4
 
