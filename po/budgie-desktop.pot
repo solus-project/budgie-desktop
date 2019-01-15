@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-14 09:48+0200\n"
+"POT-Creation-Date: 2019-01-15 13:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/daemon/endsession.vala:169
+#: src/daemon/endsession.vala:171
 msgid "Log out"
 msgstr ""
 
-#: src/daemon/endsession.vala:173
+#: src/daemon/endsession.vala:175
 msgid "Restart device"
 msgstr ""
 
-#: src/daemon/endsession.vala:185 src/daemon/endsession.ui.h:1
+#: src/daemon/endsession.vala:187 src/daemon/endsession.ui.h:1
 msgid "Power Off"
 msgstr ""
 
@@ -42,11 +42,39 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/raven/main_view.vala:59 src/panel/settings/settings_panel.vala:96
+#. Should show a notification
+#: src/daemon/settings.vala:277
+msgid "Turned on Caffeine Boost"
+msgstr ""
+
+#: src/daemon/settings.vala:277
+msgid "Turned off Caffeine Boost"
+msgstr ""
+
+#. Get our timer number
+#. If Caffeine Mode is enabled and we'll turn it off in a certain amount of time
+#: src/daemon/settings.vala:284
+#, c-format
+msgid "a minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/daemon/settings.vala:285
+msgid "Will turn off in"
+msgstr ""
+
+#. Caffeine Notification
+#: src/raven/notifications_group.vala:44
+#: src/applets/caffeine/CaffeineWindow.vala:25
+msgid "Caffeine Mode"
+msgstr ""
+
+#: src/raven/main_view.vala:63 src/panel/settings/settings_panel.vala:96
 msgid "Applets"
 msgstr ""
 
-#: src/raven/main_view.vala:62
+#: src/raven/main_view.vala:66
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Notifications"
 msgstr ""
@@ -63,32 +91,32 @@ msgstr ""
 msgid "Nothing to see here"
 msgstr ""
 
-#: src/raven/notifications_view.vala:660
+#: src/raven/notifications_view.vala:667
 #: src/applets/notifications/NotificationsApplet.vala:109
 #, c-format
 msgid "%u unread notifications"
 msgstr ""
 
-#: src/raven/notifications_view.vala:662
+#: src/raven/notifications_view.vala:669
 #: src/applets/notifications/NotificationsApplet.vala:111
 msgid "1 unread notification"
 msgstr ""
 
-#: src/raven/notifications_view.vala:664
+#: src/raven/notifications_view.vala:671
 #: src/applets/notifications/NotificationsApplet.vala:113
 msgid "No unread notifications"
 msgstr ""
 
-#: src/raven/notifications_view.vala:839
+#: src/raven/notifications_view.vala:846
 msgid "No new notifications"
 msgstr ""
 
 #. 125ms
-#: src/raven/sound.vala:137
+#: src/raven/sound.vala:151
 msgid "Apps"
 msgstr ""
 
-#: src/raven/sound.vala:138
+#: src/raven/sound.vala:152
 msgid "Devices"
 msgstr ""
 
@@ -151,53 +179,53 @@ msgstr[1] ""
 msgid "Sound settings"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:89
+#: src/applets/icon-tasklist/IconPopover.vala:92
 msgid "Launch New Instance"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:92
+#: src/applets/icon-tasklist/IconPopover.vala:95
 msgid "Close All Windows"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:100
+#: src/applets/icon-tasklist/IconPopover.vala:103
 msgid "Always On Top"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:102
-#: src/applets/icon-tasklist/IconPopover.vala:457
+#: src/applets/icon-tasklist/IconPopover.vala:105
+#: src/applets/icon-tasklist/IconPopover.vala:473
 msgid "Maximize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:103
+#: src/applets/icon-tasklist/IconPopover.vala:106
 msgid "Minimize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:345
+#: src/applets/icon-tasklist/IconPopover.vala:361
 msgid "Unfavorite"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:345
+#: src/applets/icon-tasklist/IconPopover.vala:361
 msgid "Favorite"
 msgstr ""
 
 #. If our current amount of workspaces is different than how many we have added
 #. We have items to add
 #. For workspaces we need to add
-#: src/applets/icon-tasklist/IconPopover.vala:357
+#: src/applets/icon-tasklist/IconPopover.vala:373
 #, c-format
 msgid "Move To Workspace %i"
 msgstr ""
 
 #. Update our always on top button
-#: src/applets/icon-tasklist/IconPopover.vala:457
+#: src/applets/icon-tasklist/IconPopover.vala:473
 msgid "Unmaximize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:516
+#: src/applets/icon-tasklist/IconPopover.vala:532
 msgid "Close Window"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:518
+#: src/applets/icon-tasklist/IconPopover.vala:534
 msgid "Show Window Controls"
 msgstr ""
 
@@ -231,7 +259,7 @@ msgid "All"
 msgstr ""
 
 #. placeholder in case of no results
-#: src/applets/budgie-menu/BudgieMenuWindow.vala:367
+#: src/applets/budgie-menu/BudgieMenuWindow.vala:401
 msgid "Sorry, no items found"
 msgstr ""
 
@@ -289,23 +317,8 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/applets/caffeine/CaffeineWindow.vala:110
-msgid "Turn on Caffeine Boost"
-msgstr ""
-
-#: src/applets/caffeine/CaffeineWindow.vala:113
-#, c-format
-msgid "a minute"
-msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/applets/caffeine/CaffeineWindow.vala:114
-msgid "Will turn off in"
-msgstr ""
-
-#: src/applets/caffeine/CaffeineWindow.vala:118
-msgid "Turn off Caffeine Boost"
+#: src/applets/caffeine/CaffeineWindow.vala:26
+msgid "Timer (minutes)"
 msgstr ""
 
 #. User Menu Creation
@@ -452,24 +465,24 @@ msgstr ""
 msgid "Group:"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:41
+#: src/panel/settings/settings_main.vala:39
 msgid "Appearance"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:42
+#: src/panel/settings/settings_main.vala:40
 msgid "Panels"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:43
+#: src/panel/settings/settings_main.vala:41
 msgid "Session"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:52
+#: src/panel/settings/settings_main.vala:50
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:83
+#: src/panel/settings/settings_main.vala:81
 msgid "Create new panel"
 msgstr ""
 
@@ -518,7 +531,7 @@ msgid "Right"
 msgstr ""
 
 #: src/panel/settings/settings_panel.vala:180
-#: src/panel/settings/settings_wm.vala:49
+#: src/panel/settings/settings_wm.vala:88
 msgid "Left"
 msgstr ""
 
@@ -889,70 +902,78 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:31
+#: src/panel/settings/settings_wm.vala:32
 msgid "Windows"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:40
-msgid "Button layout"
-msgstr ""
-
 #: src/panel/settings/settings_wm.vala:41
-msgid "Change the layout of buttons in application titlebars"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:47
-msgid "Right (standard)"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:60
-msgid "Enable window focus change on mouse enter and leave"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:61
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:66
 msgid "Attach modal dialogs to windows"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:67
+#: src/panel/settings/settings_wm.vala:42
 msgid ""
 "Modal dialogs will become attached to the parent window and move together "
 "when dragged"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:71
-msgid "Automatic tiling"
+#: src/panel/settings/settings_wm.vala:47
+msgid "Button layout"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:72
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners"
+#: src/panel/settings/settings_wm.vala:48
+msgid "Change the layout of buttons in application titlebars"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:76
+#: src/panel/settings/settings_wm.vala:53
+msgid "Center new windows on screen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:54
+msgid "Center newly launched windows on the current screen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:59
 msgid "Disable Night Light mode when windows are fullscreen"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:77
+#: src/panel/settings/settings_wm.vala:60
 msgid ""
 "Disables Night Light mode when a window is fullscreen. Re-enables when "
 "leaving fullscreen."
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:83
+#: src/panel/settings/settings_wm.vala:65
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:66
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:71
+msgid "Enable window focus change on mouse enter and leave"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:72
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:78
 msgid "Disable unredirection of windows"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:84
+#: src/panel/settings/settings_wm.vala:79
 msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:86
+msgid "Right (standard)"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:33
@@ -1005,10 +1026,6 @@ msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr ""
-
-#: src/daemon/tabswitcher.ui.h:1
-msgid " - "
 msgstr ""
 
 #: src/applets/icon-tasklist/settings.ui.h:1
@@ -1098,14 +1115,6 @@ msgstr ""
 
 #: src/applets/workspaces/settings.ui.h:4
 msgid "Always show"
-msgstr ""
-
-#: src/applets/caffeine/window.ui.h:1
-msgid "Caffeine Mode"
-msgstr ""
-
-#: src/applets/caffeine/window.ui.h:2
-msgid "Timer (minutes)"
 msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:1
@@ -1226,7 +1235,7 @@ msgid "User Indicator"
 msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
-msgid "Change desktop appearance and behaviour"
+msgid "Change desktop appearance and behavior"
 msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:1
