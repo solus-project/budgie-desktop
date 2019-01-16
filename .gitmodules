@@ -1,3 +1,6 @@
 [submodule "gvc"]
 	path = subprojects/gvc
 	url = https://gitlab.gnome.org/GNOME/libgnome-volume-control.git
+[submodule "translations"]
+	path = subprojects/translations
+	url = https://github.com/getsolus/budgie-translations.git

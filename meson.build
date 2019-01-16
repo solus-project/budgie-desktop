@@ -131,14 +131,13 @@ with_polkit = get_option('with-polkit')
 gvc = subproject('gvc',
     default_options: [
     'c_std=c89',
-    'package-name=@0@'.format(meson.project_name()),
     'static=false',
     'pkglibdir=@0@'.format(rpath_libdir),
   ],
 )
 
 # Prep translations prior to build
-subdir('po')
+translations = subproject('translations')
 
 # Now build Budgie proper
 subdir('src')
