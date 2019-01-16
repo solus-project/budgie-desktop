@@ -41,7 +41,7 @@ public class DesktopPage : Budgie.SettingsPage {
         switch_icons = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_icons,
             _("Desktop Icons"),
-            _("Control whether to allow launchers and icons on the desktop")));
+            _("Control whether to allow launchers and icons on the desktop.")));
 
         /* Hook up settings */
         bg_settings = new GLib.Settings("org.gnome.desktop.background");
@@ -52,25 +52,25 @@ public class DesktopPage : Budgie.SettingsPage {
         switch_home = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_home,
             _("Home directory"),
-            _("Add a shortcut to your home directory on the desktop")));
+            _("Add a shortcut to your home directory on the desktop.")));
 
         /* Show network */
         switch_network = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_network,
             _("Network servers"),
-            _("Add a shortcut to your local network servers on the desktop")));
+            _("Add a shortcut to your local network servers on the desktop.")));
 
         /* Show trash */
         switch_trash = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_trash,
             _("Trash"),
-            _("Add a shortcut to the Trash directory on the desktop")));
+            _("Add a shortcut to the Trash directory on the desktop.")));
 
         /* Show volumes */
         switch_mounts = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_mounts,
             _("Mounted volumes"),
-            _("Mounted volumes & drives will appear on the desktop")));
+            _("Mounted volumes & drives will appear on the desktop.")));
 
 
         nautilus_settings = new GLib.Settings("org.gnome.nautilus.desktop");

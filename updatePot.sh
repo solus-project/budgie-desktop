@@ -35,4 +35,4 @@ for file in `find src -name "*.in"`; do
     fi
 done
 
-mv budgie-desktop.po ../budgie-translations/po/budgie-desktop.pot
+mv budgie-desktop.po ../budgie-translations/budgie-desktop.pot
