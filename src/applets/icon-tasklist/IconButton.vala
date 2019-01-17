@@ -980,14 +980,24 @@ public class IconButton : Gtk.ToggleButton
                     target_window = window;
                 }
             }
-        } else if (ids_length == 1 && go_next) { // Only has one window and scrolling up
+
+            if (target_window != null) {
+                target_window.activate(event.time);
+                last_scroll_time = GLib.get_monotonic_time();
+            }
+        } else if (ids_length == 1) { // Only has one window and scrolling up
             var id = ids.nth_data(0);  // Get id at 0
             target_window = Wnck.Window.@get(id);
-        }
 
-        if (target_window != null) {
-            target_window.activate(event.time);
-            last_scroll_time = GLib.get_monotonic_time();
+            if (target_window != null) {
+                if (go_next) { // Activate / ensure is in focus
+                    target_window.activate(event.time);
+                } else { // Effectively minimize
+                    target_window.minimize();
+                }
+
+                last_scroll_time = GLib.get_monotonic_time();
+            }
         }
 
         return Gdk.EVENT_STOP;
