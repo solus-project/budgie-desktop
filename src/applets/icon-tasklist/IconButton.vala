@@ -980,6 +980,9 @@ public class IconButton : Gtk.ToggleButton
                     target_window = window;
                 }
             }
+        } else if (ids_length == 1 && go_next) { // Only has one window and scrolling up
+            var id = ids.nth_data(0);  // Get id at 0
+            target_window = Wnck.Window.@get(id);
         }
 
         if (target_window != null) {
