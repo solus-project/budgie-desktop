@@ -14,6 +14,7 @@ namespace Budgie {
         /**
          * Data / Logic
          */
+        private bool is_budgie_desktop_settings = false; // We need a special case handler for Budgie Desktop Settings since it is part of budgie-panel
         private ulong current_window_id = 0; // Current window selected in the popover
         private int longest_label_length = 20; // longest_label_length is the longest length / max width chars we should allow for labels
         public HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
@@ -118,6 +119,8 @@ namespace Budgie {
             set_workspace_count(this.workspace_count);
 
             if (app_info != null) {
+                is_budgie_desktop_settings = app_info.get_startup_wm_class() == "budgie-desktop-settings";
+
                 this.quick_actions.attach(this.pin_button, 0, 0, 1, 1);
                 this.quick_actions.attach(this.launch_new_instance_button, 1, 0, 1, 1);
                 this.quick_actions.attach(this.close_all_button, 2, 0, 1, 1);
@@ -214,6 +217,10 @@ namespace Budgie {
                 window_id_to_name.insert(xid, name);
                 window_id_to_controls.insert(xid, item);
 
+                if (is_budgie_desktop_settings) { // Now have an instance of Budgie Desktop Settings
+                    this.launch_new_instance_button.sensitive = false;
+                }
+
                 this.windows_list.pack_end(item, true, false, 0);
                 this.render();
 
@@ -293,6 +300,10 @@ namespace Budgie {
 
                 if (window_id_to_name.length == 0) {
                     closed_all();
+
+                    if (is_budgie_desktop_settings) { // Now have an instance of Budgie Desktop Settings
+                        this.launch_new_instance_button.sensitive = true; // Set to be sensitive again
+                    }
                 }
             }
 
