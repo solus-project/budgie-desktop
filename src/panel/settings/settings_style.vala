@@ -193,14 +193,13 @@ public class StylePage : Budgie.SettingsPage {
         switch (position) {
             case NotificationPosition.TOP_LEFT:
                 return _("Top Left");
-            case NotificationPosition.TOP_RIGHT:
-                return _("Top Right");
             case NotificationPosition.BOTTOM_LEFT:
                 return _("Bottom Left");
             case NotificationPosition.BOTTOM_RIGHT:
                 return _("Bottom Right");
+            case NotificationPosition.TOP_RIGHT:
             default:
-                return _("None");
+                return _("Top Right");
         }
     }
 
