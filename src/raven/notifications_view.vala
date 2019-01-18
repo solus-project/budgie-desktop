@@ -793,19 +793,6 @@ public class NotificationsView : Gtk.Box
                     y = rect.y + INITIAL_BUFFER_ZONE;
                 }
                 break;
-            case NotificationPosition.TOP_RIGHT:
-                if (tail != null) { // If a notification is already being displayed
-                    int nx;
-                    int ny;
-                    tail.get_position(out nx, out ny);
-                    x = nx;
-                    y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
-                } else { // This is the first nofication on the screen
-                    x = (rect.x + rect.width) - NOTIFICATION_SIZE;
-                    x -= BUFFER_ZONE; // Don't touch edge of the screen
-                    y = rect.y + INITIAL_BUFFER_ZONE;
-                }
-                break;
             case NotificationPosition.BOTTOM_LEFT:
                 if (tail != null) { // If a notification is already being displayed
                     int nx;
@@ -837,9 +824,19 @@ public class NotificationsView : Gtk.Box
                     y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
                 }
                 break;
+            case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
             default:
-                x = 0;
-                y = 0;
+                if (tail != null) { // If a notification is already being displayed
+                    int nx;
+                    int ny;
+                    tail.get_position(out nx, out ny);
+                    x = nx;
+                    y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+                } else { // This is the first nofication on the screen
+                    x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+                    x -= BUFFER_ZONE; // Don't touch edge of the screen
+                    y = rect.y + INITIAL_BUFFER_ZONE;
+                }
                 break;
         }
     }
