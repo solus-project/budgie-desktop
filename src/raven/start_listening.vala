@@ -17,7 +17,7 @@ namespace Budgie {
 
         public StartListening() {
             Object(orientation: Gtk.Orientation.VERTICAL, margin: 10);
-            var label = new Gtk.Label("<big>%s</big>".printf(_("No apps are currently playing audio.")));
+            var label = new Gtk.Label("<i>%s</i>".printf(_("No apps are currently playing audio.")));
             label.halign = Gtk.Align.CENTER;
             label.use_markup = true;
             label.valign = Gtk.Align.CENTER;
