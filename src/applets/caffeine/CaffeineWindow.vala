@@ -49,7 +49,7 @@ public class CaffeineWindow : Budgie.Popover {
 
         mode_id = mode.notify["active"].connect (() => { // On active change
             SignalHandler.block(mode, mode_id); // Block to prevent update on set_caffeine_mode schema change
-            timer.sensitive = mode.active; // Set timer sensitivity
+            timer.sensitive = !mode.active; // Set timer sensitivity
             settings.set_boolean("caffeine-mode", mode.active); // Update our caffeine-mode WM setting
             SignalHandler.unblock(mode, mode_id);
         });
@@ -62,7 +62,7 @@ public class CaffeineWindow : Budgie.Popover {
      */
     public void update_ux_state() {
         mode.active = settings.get_boolean("caffeine-mode"); // Set our Caffeine Mode active state
-        timer.sensitive = mode.active; // Set timer sensitivity
+        timer.sensitive = !mode.active; // Set timer sensitivity
         timer.value = settings.get_int("caffeine-mode-timer");
     }
 

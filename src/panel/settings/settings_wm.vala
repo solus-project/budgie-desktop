@@ -40,19 +40,19 @@ public class WindowsPage : Budgie.SettingsPage {
         switch_dialogs = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_dialogs,
             _("Attach modal dialogs to windows"),
-            _("Modal dialogs will become attached to the parent window and move together when dragged")
+            _("Modal dialogs will become attached to the parent window and move together when dragged.")
         ));
 
         combo_layouts = new Gtk.ComboBox();
         grid.add_row(new SettingsRow(combo_layouts,
             _("Button layout"),
-            _("Change the layout of buttons in application titlebars")
+            _("Change the layout of buttons in application titlebars.")
         ));
 
         center_windows = new Gtk.Switch();
         grid.add_row(new SettingsRow(center_windows,
             _("Center new windows on screen"),
-            _("Center newly launched windows on the current screen")
+            _("Center newly launched windows on the current screen.")
         ));
 
         disable_night_light = new Gtk.Switch();
@@ -64,7 +64,7 @@ public class WindowsPage : Budgie.SettingsPage {
         switch_tiling = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_tiling,
             _("Automatic tiling"),
-            _("Windows will automatically tile when dragged into the top of the screen or the far corners")
+            _("Windows will automatically tile when dragged into the top of the screen or the far corners.")
         ));
 
         switch_focus = new Gtk.Switch();
@@ -77,7 +77,7 @@ public class WindowsPage : Budgie.SettingsPage {
         switch_unredirect = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_unredirect,
             _("Disable unredirection of windows"),
-            _("This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs")
+            _("This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs.")
         ));
 
         /* Button layout  */

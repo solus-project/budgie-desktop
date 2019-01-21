@@ -871,7 +871,6 @@ public class IconButton : Gtk.ToggleButton
                     this.window.unminimize(event.time);
                     this.window.activate(event.time);
                 }
-                return Gdk.EVENT_STOP;
             } else if (class_group != null) {
                 bool all_unminimized = true;
                 bool one_active = false;
@@ -943,30 +942,34 @@ public class IconButton : Gtk.ToggleButton
         Wnck.Window? target_window = null;
 
         var current_window = this.desktop_helper.get_active_window();
+        bool have_current_window = (current_window != null);
+
         bool go_next = (event.direction == Gdk.ScrollDirection.UP);
 
         var ids = popover.window_id_to_name.get_keys();
         var ids_length = ids.length();
 
-        if ((ids_length > 1) && (current_window != null)) { // Has more than one item and current window is valid
+        if (ids_length > 1) { // Has more than one item and current window is valid
             if (!go_next) { // Go to previous window
                 ids.reverse(); // Reverse our list before doing operations
             }
 
-            var win_id = current_window.get_xid();
+            var win_id = (have_current_window) ? current_window.get_xid() : 0;
 
             var current_window_position = 0;
 
-            for (var current_id_index = 0; current_id_index < ids.length(); current_id_index++) {
-                var id = ids.nth_data(current_id_index);
+            if (have_current_window) {
+                for (var current_id_index = 0; current_id_index < ids.length(); current_id_index++) {
+                    var id = ids.nth_data(current_id_index);
 
-                if (win_id == id) { // Matching id
-                    current_window_position = current_id_index;
-                    break;
+                    if (win_id == id) { // Matching id
+                        current_window_position = current_id_index;
+                        break;
+                    }
                 }
             }
 
-            var incr_index = (current_window_position + 1); // Set our incremented index
+            var incr_index = (have_current_window) ? (current_window_position + 1) : 0; // Set our incremented index
 
             if (incr_index == ids_length) { // If we're on last item
                 incr_index = 0; // Reset back to 0
@@ -981,11 +984,33 @@ public class IconButton : Gtk.ToggleButton
                     target_window = window;
                 }
             }
-        }
 
-        if (target_window != null) {
-            target_window.activate(event.time);
-            last_scroll_time = GLib.get_monotonic_time();
+            if (target_window != null) {
+                target_window.activate(event.time);
+
+                if (target_window.is_minimized()) { // If the window is minimized
+                    target_window.unminimize(event.time);
+                }
+
+                last_scroll_time = GLib.get_monotonic_time();
+            }
+        } else if (ids_length == 1) { // Only has one window and scrolling up
+            var id = ids.nth_data(0);  // Get id at 0
+            target_window = Wnck.Window.@get(id);
+
+            if (target_window != null) {
+                if (go_next) { // Activate / ensure is in focus
+                    target_window.activate(event.time);
+
+                    if (target_window.is_minimized()) { // If the window is minimized
+                        target_window.unminimize(event.time);
+                    }
+                } else { // Effectively minimize
+                    target_window.minimize();
+                }
+
+                last_scroll_time = GLib.get_monotonic_time();
+            }
         }
 
         return Gdk.EVENT_STOP;

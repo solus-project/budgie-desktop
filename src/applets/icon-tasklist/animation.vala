@@ -102,7 +102,7 @@ public class Animation : Object {
     public void start(AnimCompletionFunc? compl)
     {
         if (!no_reset) {
-            start_time = get_monotonic_time();
+            start_time = widget.get_frame_clock().get_frame_time();
         }
         this.compl = compl;
         can_anim = true;

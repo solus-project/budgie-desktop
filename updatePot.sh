@@ -2,7 +2,7 @@
 
 function do_gettext()
 {
-    xgettext --package-name=budgie-desktop --package-version=10.4 $* --default-domain=budgie-desktop --join-existing --from-code=UTF-8
+    xgettext --package-name=budgie-desktop --package-version=10.5 $* --default-domain=budgie-desktop --join-existing --from-code=UTF-8 --no-wrap
 }
 
 function do_intltool()
@@ -35,4 +35,4 @@ for file in `find src -name "*.in"`; do
     fi
 done
 
-mv budgie-desktop.po po/budgie-desktop.pot
+mv budgie-desktop.po ../budgie-translations/budgie-desktop.pot

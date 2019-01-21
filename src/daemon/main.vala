@@ -82,6 +82,7 @@ public static int main(string[] args) {
     settings = new Budgie.SettingsManager();
 
     end_dialog.Opened.connect(settings.do_disable_quietly); // When we've opened the EndSession dialog, disable Caffeine Mode
+    end_dialog.Closed.connect(settings.do_disable_quietly); // When we've closed the EndSession dialog as well, ensure Caffeine mode is disabled
 
     /* Enter main loop */
     Gtk.main();
