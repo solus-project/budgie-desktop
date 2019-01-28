@@ -54,8 +54,8 @@ public class SettingsManager {
     private int32? default_brightness = 30;
     private uint32? default_idle_delay;
     private bool? default_idle_dim;
-    private string? default_sleep_inactive_ac_type;
-    private string? default_sleep_inactive_battery_type;
+    private int? default_sleep_inactive_ac_timeout;
+    private int? default_sleep_inactive_battery_timeout;
 
     /**
      * Other
@@ -89,9 +89,12 @@ public class SettingsManager {
 
         fetch_defaults();
 
-        wm_settings.set_boolean("caffeine-mode", false); // Ensure Caffeine Mode is disabled by default
         enforce_mutter_settings(); // Call enforce mutter settings so we ensure we transition our Mutter settings over to BudgieWM
         raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
+
+        gnome_power_settings.changed["sleep-inactive-ac-timeout"].connect(this.get_power_defaults);
+        gnome_power_settings.changed["sleep-inactive-battery-timeout"].connect(this.get_power_defaults);
+
         wm_settings.changed.connect(this.on_wm_settings_changed);
         this.on_wm_settings_changed("button-style");
     }
@@ -110,11 +113,36 @@ public class SettingsManager {
     }
 
     /**
-     * get_caffeine_mode will get the current Caffeine Mode status
+     * do_disable is triggered when our timeout is called
      */
-    private bool get_caffeine_mode() {
-        return wm_settings.get_boolean("caffeine-mode");
+    private bool do_disable() {
+        if (get_caffeine_mode()) { // Is still disabled by the time our timer gets triggered
+            wm_settings.set_boolean("caffeine-mode", false);
+            wm_settings.sync();
+            reset_values(); // Immediately reset values
+        }
+
+        return false;
     }
+
+    /**
+     * do_disable_quietly will quietly disable Caffeine Mode
+     */
+    public void do_disable_quietly() {
+        temporary_notification_disabled = true;
+        wm_settings.set_boolean("caffeine-mode", false);
+        wm_settings.sync();
+        reset_values(); // Immediately reset values
+    }
+
+    /**
+     * enforce_mutter_settings will apply Mutter schema changes to BudgieWM for supported keys
+     */
+    private void enforce_mutter_settings() {
+        bool center_windows = mutter_settings.get_boolean("center-new-windows");
+        wm_settings.set_boolean("center-windows", center_windows);
+    }
+
 
     /**
      * fetch_defaults will fetch the default values for various idle, sleep, and brightness settings
@@ -123,14 +151,19 @@ public class SettingsManager {
         if (get_caffeine_mode()) { // If Caffeine Mode was somehow left on during startup, we can't trust what we'll get for keys
             gnome_session_settings.reset("idle-delay");
             gnome_power_settings.reset("idle-dim");
-            gnome_power_settings.reset("sleep-inactive-ac-type");
-            gnome_power_settings.reset("sleep-inactive-battery-type");
+            gnome_power_settings.reset("sleep-inactive-ac-timeout");
+            gnome_power_settings.reset("sleep-inactive-battery-timeout");
+            gnome_session_settings.sync(); // Ensure write operations are complete for session
+            gnome_power_settings.sync(); // Ensure write operations are complete for power
+
+            temporary_notification_disabled = true;
+            wm_settings.set_boolean("caffeine-mode", false); // Ensure Caffeine Mode is disabled by default
+            wm_settings.sync();
         }
 
         default_idle_delay = gnome_session_settings.get_uint ("idle-delay");
         default_idle_dim = gnome_power_settings.get_boolean ("idle-dim");
-        default_sleep_inactive_ac_type = gnome_power_settings.get_string ("sleep-inactive-ac-type");
-        default_sleep_inactive_battery_type = gnome_power_settings.get_string ("sleep-inactive-battery-type");
+        get_power_defaults(); // Get our sleep ac and battery timeout defaults
 
         if (gnome_power_props != null) {
             try {
@@ -142,11 +175,27 @@ public class SettingsManager {
     }
 
     /**
-     * enforce_mutter_settings will apply Mutter schema changes to BudgieWM for supported keys
+     * get_caffeine_mode will get the current Caffeine Mode status
      */
-    private void enforce_mutter_settings() {
-        bool center_windows = mutter_settings.get_boolean("center-new-windows");
-        wm_settings.set_boolean("center-windows", center_windows);
+    private bool get_caffeine_mode() {
+        return wm_settings.get_boolean("caffeine-mode");
+    }
+
+    /**
+     * get_power_defaults will get our ac and battery timeouts
+     * This is called on ac and battery timeout changes in addition to being explicitly called during fetch_defaults. This is useful for when we've modified the settings via GNOME Control Center.
+     */
+    private void get_power_defaults() {
+        int current_ac_timeout = gnome_power_settings.get_int("sleep-inactive-ac-timeout");
+        int current_battery_timeout = gnome_power_settings.get_int("sleep-inactive-battery-timeout");
+
+        if (current_ac_timeout != 0) { // Is a non-Caffeine value
+            default_sleep_inactive_ac_timeout = current_ac_timeout;
+        }
+
+        if (current_battery_timeout != 0) { // Is a non-Caffeine value
+            default_sleep_inactive_battery_timeout = current_battery_timeout;
+        }
     }
 
     /**
@@ -171,24 +220,6 @@ public class SettingsManager {
             builder.add("{sv}", k, v);
         }
         return builder.end();
-    }
-
-    /**
-     * do_disable is triggered when our timeout is called
-     */
-    private bool do_disable() {
-        wm_settings.set_boolean("caffeine-mode", false);
-        reset_values(); // Immediately reset values
-        return false;
-    }
-
-    /**
-     * do_disable_quietly will quietly disable Caffeine Mode
-     */
-    public void do_disable_quietly() {
-        temporary_notification_disabled = true;
-        wm_settings.set_boolean("caffeine-mode", false);
-        reset_values(); // Immediately reset values
     }
 
     private void on_raven_sound_overdrive_change() {
@@ -226,8 +257,10 @@ public class SettingsManager {
     private void reset_values() {
         gnome_session_settings.set_uint("idle-delay", default_idle_delay);
         gnome_power_settings.set_boolean("idle-dim", default_idle_dim);
-        gnome_power_settings.set_string("sleep-inactive-ac-type", default_sleep_inactive_ac_type);
-        gnome_power_settings.set_string("sleep-inactive-battery-type", default_sleep_inactive_battery_type);
+        gnome_power_settings.set_int("sleep-inactive-ac-timeout", default_sleep_inactive_ac_timeout);
+        gnome_power_settings.set_int("sleep-inactive-battery-timeout", default_sleep_inactive_battery_timeout);
+        gnome_session_settings.sync(); // Ensure write operations are complete for session
+        gnome_power_settings.sync(); // Ensure write operations are complete for power
     }
 
     /**
@@ -261,8 +294,8 @@ public class SettingsManager {
     private void set_caffeine_mode(bool enabled, bool disable_notification = false) {
         if (enabled) { // Enable Caffeine Mode
             gnome_power_settings.set_boolean("idle-dim", false);
-            gnome_power_settings.set_string("sleep-inactive-ac-type", "nothing");
-            gnome_power_settings.set_string("sleep-inactive-battery-type", "nothing");
+            gnome_power_settings.set_int("sleep-inactive-ac-timeout", 0);
+            gnome_power_settings.set_int("sleep-inactive-battery-timeout", 0);
             gnome_session_settings.set_uint("idle-delay", 0);
         } else { // Disable Caffeine Mode
             reset_values(); // Reset the values
