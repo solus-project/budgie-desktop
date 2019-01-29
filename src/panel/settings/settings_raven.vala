@@ -27,7 +27,7 @@ public class RavenPage : Budgie.SettingsPage {
     public RavenPage() {
         Object(group: SETTINGS_GROUP_APPEARANCE,
             content_id: "raven",
-            title: _("Raven"),
+            title: "Raven",
             display_weight: 3,
             icon_name: "preferences-calendar-and-tasks" // Subject to change
         );
