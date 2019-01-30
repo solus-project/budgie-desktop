@@ -92,11 +92,21 @@ public class SettingsManager {
         enforce_mutter_settings(); // Call enforce mutter settings so we ensure we transition our Mutter settings over to BudgieWM
         raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
 
-        gnome_power_settings.changed["sleep-inactive-ac-timeout"].connect(this.get_power_defaults);
-        gnome_power_settings.changed["sleep-inactive-battery-timeout"].connect(this.get_power_defaults);
+        gnome_session_settings.changed["idle-delay"].connect(this.update_idle_delay);
+        gnome_power_settings.changed["idle-dim"].connect(this.update_idle_dim);
+        gnome_power_settings.changed["sleep-inactive-ac-timeout"].connect(this.update_ac_timeout);
+        gnome_power_settings.changed["sleep-inactive-battery-timeout"].connect(this.update_battery_timeout);
 
         wm_settings.changed.connect(this.on_wm_settings_changed);
         this.on_wm_settings_changed("button-style");
+    }
+
+    /**
+     * caffeine_settings_sync will call to sync / ensure write operations for session and power, which are relevant to Caffeine Mode
+     */
+    private void caffeine_settings_sync() {
+        gnome_session_settings.sync(); // Ensure write operations are complete for session
+        gnome_power_settings.sync(); // Ensure write operations are complete for power
     }
 
     /**
@@ -153,16 +163,13 @@ public class SettingsManager {
             gnome_power_settings.reset("idle-dim");
             gnome_power_settings.reset("sleep-inactive-ac-timeout");
             gnome_power_settings.reset("sleep-inactive-battery-timeout");
-            gnome_session_settings.sync(); // Ensure write operations are complete for session
-            gnome_power_settings.sync(); // Ensure write operations are complete for power
+            caffeine_settings_sync();
 
             temporary_notification_disabled = true;
             wm_settings.set_boolean("caffeine-mode", false); // Ensure Caffeine Mode is disabled by default
             wm_settings.sync();
         }
 
-        default_idle_delay = gnome_session_settings.get_uint ("idle-delay");
-        default_idle_dim = gnome_power_settings.get_boolean ("idle-dim");
         get_power_defaults(); // Get our sleep ac and battery timeout defaults
 
         if (gnome_power_props != null) {
@@ -182,20 +189,13 @@ public class SettingsManager {
     }
 
     /**
-     * get_power_defaults will get our ac and battery timeouts
-     * This is called on ac and battery timeout changes in addition to being explicitly called during fetch_defaults. This is useful for when we've modified the settings via GNOME Control Center.
+     * get_power_defaults will call all of our update defaults functions
      */
     private void get_power_defaults() {
-        int current_ac_timeout = gnome_power_settings.get_int("sleep-inactive-ac-timeout");
-        int current_battery_timeout = gnome_power_settings.get_int("sleep-inactive-battery-timeout");
-
-        if (current_ac_timeout != 0) { // Is a non-Caffeine value
-            default_sleep_inactive_ac_timeout = current_ac_timeout;
-        }
-
-        if (current_battery_timeout != 0) { // Is a non-Caffeine value
-            default_sleep_inactive_battery_timeout = current_battery_timeout;
-        }
+        update_ac_timeout();
+        update_battery_timeout();
+        update_idle_delay();
+        update_idle_dim();
     }
 
     /**
@@ -259,8 +259,7 @@ public class SettingsManager {
         gnome_power_settings.set_boolean("idle-dim", default_idle_dim);
         gnome_power_settings.set_int("sleep-inactive-ac-timeout", default_sleep_inactive_ac_timeout);
         gnome_power_settings.set_int("sleep-inactive-battery-timeout", default_sleep_inactive_battery_timeout);
-        gnome_session_settings.sync(); // Ensure write operations are complete for session
-        gnome_power_settings.sync(); // Ensure write operations are complete for power
+        caffeine_settings_sync();
     }
 
     /**
@@ -297,6 +296,7 @@ public class SettingsManager {
             gnome_power_settings.set_int("sleep-inactive-ac-timeout", 0);
             gnome_power_settings.set_int("sleep-inactive-battery-timeout", 0);
             gnome_session_settings.set_uint("idle-delay", 0);
+            caffeine_settings_sync();
         } else { // Disable Caffeine Mode
             reset_values(); // Reset the values
         }
@@ -373,6 +373,47 @@ public class SettingsManager {
         caffeine_empty_cup = current_theme.has_icon(empty) ? empty : "budgie-" + empty;
     }
 
+    /**
+     * update_ac_timeout will update our default sleep inactive ac timeout value, if it is a non-Caffeine mode value
+     */
+    private void update_ac_timeout() {
+        int current_ac_timeout = gnome_power_settings.get_int("sleep-inactive-ac-timeout");
+
+        if (current_ac_timeout != 0) { // Is a non-Caffeine value
+            default_sleep_inactive_ac_timeout = current_ac_timeout;
+        }
+    }
+
+    /**
+     * update_battery_timeout will update our default sleep inactive battery timeout, if it is a non-Caffeine mode value
+     */
+    private void update_battery_timeout() {
+        int current_battery_timeout = gnome_power_settings.get_int("sleep-inactive-battery-timeout");
+
+        if (current_battery_timeout != 0) { // Is a non-Caffeine value
+            default_sleep_inactive_battery_timeout = current_battery_timeout;
+        }
+    }
+
+    /**
+     * update_idle_delay will update our default idle delay, if it is a non-Caffeine mode value
+     */
+    private void update_idle_delay() {
+        uint current_idle_delay = gnome_session_settings.get_uint("idle-delay");
+
+        if (current_idle_delay != 0) { // Is a non-Caffeine value
+            default_idle_delay = current_idle_delay;
+        }
+    }
+
+    /**
+     * update_idle_dim will update our default idle dim, if we are not in Caffeine Mode
+     */
+    private void update_idle_dim() {
+        if (!get_caffeine_mode()) { // If Caffeine Mode is off
+            default_idle_dim = gnome_power_settings.get_boolean("idle-dim");
+        }
+    }
 } /* End class SettingsManager (BudgieSettingsManager) */
 
 } /* End namespace Budgie */
