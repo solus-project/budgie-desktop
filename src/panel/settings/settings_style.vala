@@ -24,15 +24,19 @@ public class StylePage : Budgie.SettingsPage {
     private Gtk.Switch? switch_animations;
     private GLib.Settings ui_settings;
     private GLib.Settings budgie_settings;
+    private SettingsRow? builtin_row;
     private ThemeScanner? theme_scanner;
 
-    public StylePage()
-    {
+    public StylePage() {
         Object(group: SETTINGS_GROUP_APPEARANCE,
-               content_id: "style",
-               title: _("Style"),
-               display_weight: 0,
-               icon_name: "preferences-desktop-theme");
+            content_id: "style",
+            title: _("Style"),
+            display_weight: 0,
+            icon_name: "preferences-desktop-theme"
+        );
+
+        budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
+        ui_settings = new GLib.Settings("org.gnome.desktop.interface");
 
         var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
         var grid = new SettingsGrid();
@@ -67,10 +71,16 @@ public class StylePage : Budgie.SettingsPage {
         switch_dark = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_dark, _("Dark theme")));
 
-        switch_builtin = new Gtk.Switch();
-        grid.add_row(new SettingsRow(switch_builtin,
+        bool show_builtin = budgie_settings.get_boolean("show-builtin-theme-option");
+
+        if (show_builtin) {
+            switch_builtin = new Gtk.Switch();
+            builtin_row = new SettingsRow(switch_builtin,
             _("Built-in theme"),
-            _("When enabled, the built-in theme will override the desktop component styling")));
+            _("When enabled, the built-in theme will override the desktop component styling"));
+
+            grid.add_row(builtin_row);
+        }
 
         switch_animations = new Gtk.Switch();
         grid.add_row(new SettingsRow(switch_animations,
@@ -79,6 +89,7 @@ public class StylePage : Budgie.SettingsPage {
 
         /* Add options for notification position */
         var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.NotificationPosition));
+
         Gtk.TreeIter iter;
         const Budgie.NotificationPosition[] positions = {
             Budgie.NotificationPosition.TOP_LEFT,
@@ -86,10 +97,12 @@ public class StylePage : Budgie.SettingsPage {
             Budgie.NotificationPosition.BOTTOM_LEFT,
             Budgie.NotificationPosition.BOTTOM_RIGHT
         };
+
         foreach (var pos in positions) {
             model.append(out iter);
             model.set(iter, 0, pos.to_string(), 1, notification_position_to_display(pos), 2, pos, -1);
         }
+
         combobox_notification_position.set_model(model);
         combobox_notification_position.set_id_column(0);
 
@@ -105,10 +118,12 @@ public class StylePage : Budgie.SettingsPage {
         combobox_notification_position.add_attribute(render, "text", 1);
 
         /* Hook up settings */
-        ui_settings = new GLib.Settings("org.gnome.desktop.interface");
-        budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
         budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
-        budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+
+        if (show_builtin) {
+            budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
+        }
+
         budgie_settings.bind("notification-position", combobox_notification_position, "active-id", SettingsBindFlags.DEFAULT);
         ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
         this.theme_scanner = new ThemeScanner();
@@ -119,8 +134,7 @@ public class StylePage : Budgie.SettingsPage {
         });
     }
 
-    public void load_themes()
-    {
+    public void load_themes() {
         /* Scan the themes */
         this.theme_scanner.scan_themes.begin(()=> {
             /* Gtk themes */

@@ -17,6 +17,8 @@ namespace Budgie {
          * Logic and Mixer variables
          */
         private const string MAX_KEY = "allow-volume-above-100-percent";
+        private Settings? budgie_settings;
+        private Settings? gnome_desktop_settings;
         private ulong scale_id = 0;
         private Gvc.MixerControl mixer = null;
         private HashTable<uint,Gtk.ListBoxRow?> apps;
@@ -103,6 +105,8 @@ namespace Budgie {
             } else { // Output
                 settings = new Settings("org.gnome.desktop.sound");
                 apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
+                budgie_settings = new Settings("com.solus-project.budgie-panel");
+                gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
 
                 mixer.default_sink_changed.connect(on_device_changed);
                 mixer.output_added.connect(on_device_added);
@@ -111,6 +115,9 @@ namespace Budgie {
                 mixer.stream_added.connect(on_stream_added);
                 mixer.stream_removed.connect(on_stream_removed);
                 settings.changed[MAX_KEY].connect(on_volume_safety_changed);
+
+                budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
+                gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
 
                 /**
                  * Create our designated areas, our stack, and switcher
@@ -476,13 +483,13 @@ namespace Budgie {
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max_above);
                 volume_slider.set_value(current_volume);
-                volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
             } else if (!allow_higher_than_max && (slider_end != vol_max)) { // If we're not allowing higher than max and slider is at max
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max);
                 volume_slider.set_value(current_volume);
-                volume_slider.clear_marks();
             }
+
+            this.update_input_draw_markers();
         }
 
         /**
@@ -493,6 +500,32 @@ namespace Budgie {
                 bool apps_exist = (apps.length != 0);
                 listening_box_revealer.set_reveal_child(!apps_exist); // Show if no apps, hide if apps
                 apps_list_revealer.set_reveal_child(apps_exist); // Show if apps, hide if no apps
+            }
+        }
+
+        /**
+         * update_input_draw_markers will update our draw markers
+         */
+        private void update_input_draw_markers() {
+            if (widget_type == "input") {
+                return;
+            }
+
+            bool builtin_enabled = budgie_settings.get_boolean("builtin-theme");
+            string current_theme = gnome_desktop_settings.get_string("gtk-theme");
+            bool supported_theme = (current_theme.index_of("Arc") == -1);
+
+            if (!builtin_enabled && supported_theme) { // If built-in theme is disabled
+                bool allow_higher_than_max = settings.get_boolean(MAX_KEY);
+
+                if (allow_higher_than_max) { // If overdrive is enabled and thus should show mark
+                    var vol_max = mixer.get_vol_max_norm();
+                    volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
+                } else { // If we should not show markets
+                    volume_slider.clear_marks();
+                }
+            } else {
+                volume_slider.clear_marks(); // Ensure we have no marks
             }
         }
 
