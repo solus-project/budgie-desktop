@@ -555,13 +555,7 @@ public class IconTasklistApplet : Budgie.Applet
     public override void panel_size_changed(int panel, int icon, int small_icon)
     {
         this.desktop_helper.icon_size = small_icon;
-
-        if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-            this.desktop_helper.panel_size = panel - 5;
-        } else {
-            this.desktop_helper.panel_size = panel;
-        }
-
+        this.desktop_helper.panel_size = panel;
         set_icons_size();
     }
 

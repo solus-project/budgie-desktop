@@ -161,6 +161,7 @@ public class IconButton : Gtk.ToggleButton
         st.add_class("launcher");
         this.relief = Gtk.ReliefStyle.NONE;
 
+        size_allocate.connect(this.on_size_allocate);
         launch_context.launched.connect(this.on_launched);
         launch_context.launch_failed.connect(this.on_launch_failed);
     }
@@ -759,9 +760,8 @@ public class IconButton : Gtk.ToggleButton
         return base.draw(cr);
     }
 
-    public override void size_allocate(Gtk.Allocation allocation) {
-        definite_allocation.x = allocation.x;
-        definite_allocation.y = allocation.y;
+    protected void on_size_allocate(Gtk.Allocation allocation) {
+        definite_allocation = allocation;
 
         base.size_allocate(definite_allocation);
 
@@ -833,24 +833,27 @@ public class IconButton : Gtk.ToggleButton
 
     public override void get_preferred_width(out int min, out int nat)
     {
-        /* Stop GTK from bitching */
-        int m, n;
-        base.get_preferred_width(out m, out n);
-
-        int width = this.desktop_helper.panel_size;
         if (this.desktop_helper.orientation == Gtk.Orientation.HORIZONTAL) {
-            width += 6;
+            min = nat = this.desktop_helper.panel_size;
+            return;
+        } else {
+            int m, n;
+            base.get_preferred_width(out m, out n);
+            min = m;
+            nat = n;
         }
-        min = nat = definite_allocation.width = width;
     }
 
     public override void get_preferred_height(out int min, out int nat)
     {
-        /* Stop GTK from bitching */
-        int m, n;
-        base.get_preferred_height(out m, out n);
-
-        min = nat = definite_allocation.height = this.desktop_helper.panel_size;
+        if (this.desktop_helper.orientation == Gtk.Orientation.VERTICAL) {
+            min = nat = this.desktop_helper.panel_size;
+        } else {
+            int m, n;
+            base.get_preferred_height(out m, out n);
+            min = m;
+            nat = n;
+        }
     }
 
     public override bool button_release_event(Gdk.EventButton event)
