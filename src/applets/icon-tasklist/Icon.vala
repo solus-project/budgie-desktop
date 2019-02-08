@@ -59,27 +59,13 @@ public class Icon : Gtk.Image
         default = 1.0;
     }
 
-    public Icon() {}
-
-    public override void size_allocate(Gtk.Allocation allocation) {
-        this.queue_resize();
-        Gtk.Allocation alloc;
-        this.get_parent().get_allocation(out alloc);
-        base.size_allocate(alloc);
+    public Icon() {
+        size_allocate.connect(this.on_size_allocate);
     }
 
-    public override void get_preferred_width(out int min, out int nat)
-    {
-        Gtk.Allocation alloc;
-        this.get_parent().get_allocation(out alloc);
-        min = nat = this.widget_width = alloc.width;
-    }
-
-    public override void get_preferred_height(out int min, out int nat)
-    {
-        Gtk.Allocation alloc;
-        this.get_parent().get_allocation(out alloc);
-        min = nat = this.widget_height = alloc.height;
+    protected void on_size_allocate(Gtk.Allocation allocation) {
+        this.widget_width = allocation.width;
+        this.widget_height = allocation.height;
     }
 
     public void animate_attention(Budgie.PanelPosition? position)
