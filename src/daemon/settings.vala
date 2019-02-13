@@ -314,9 +314,13 @@ public class SettingsManager {
             var time = wm_settings.get_int("caffeine-mode-timer"); // Get our timer number
 
             if (enabled && (time > 0)) { // If Caffeine Mode is enabled and we'll turn it off in a certain amount of time
-                var duration = ngettext("a minute", "%d minutes", time).printf(time);
-                body = "%s %s".printf(_("Will turn off in"), duration);
+                var duration = _("Will turn off in a minute");
 
+                if (time > 1) { // use plural
+                    duration = _("Will turn off in %d minutes").printf(time);
+                }
+
+                body = duration;
                 Timeout.add_seconds(time * 60, this.do_disable, Priority.HIGH);
             }
 
