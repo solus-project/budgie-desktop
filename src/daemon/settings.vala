@@ -52,10 +52,10 @@ public class SettingsManager {
      * Defaults for Caffeine Mode
      */
     private int32? default_brightness = 30;
-    private uint32? default_idle_delay;
-    private bool? default_idle_dim;
-    private int? default_sleep_inactive_ac_timeout;
-    private int? default_sleep_inactive_battery_timeout;
+    private uint32? default_idle_delay = 0;
+    private bool? default_idle_dim = false;
+    private int? default_sleep_inactive_ac_timeout = 0;
+    private int? default_sleep_inactive_battery_timeout = 0;
 
     /**
      * Other
@@ -105,6 +105,8 @@ public class SettingsManager {
      * caffeine_settings_sync will call to sync / ensure write operations for session and power, which are relevant to Caffeine Mode
      */
     private void caffeine_settings_sync() {
+        gnome_session_settings.apply();
+        gnome_power_settings.apply();
         gnome_session_settings.sync(); // Ensure write operations are complete for session
         gnome_power_settings.sync(); // Ensure write operations are complete for power
     }
@@ -298,7 +300,18 @@ public class SettingsManager {
             gnome_session_settings.set_uint("idle-delay", 0);
             caffeine_settings_sync();
         } else { // Disable Caffeine Mode
-            reset_values(); // Reset the values
+            if (gnome_session_settings.has_unapplied || gnome_power_settings.has_unapplied) { // There are unapplied settings
+                Timeout.add_seconds(1, () => { // Delay reset a moment
+                    if (!gnome_session_settings.has_unapplied && !gnome_power_settings.has_unapplied) { // No longer unapplied settings
+                        reset_values();
+                        return false;
+                    } else { // Still unapplied, try again in a moment
+                        return true;
+                    }
+                }, Priority.HIGH);
+            } else {
+                reset_values(); // Reset the values
+            }
         }
 
         if (wm_settings.get_boolean("caffeine-mode-toggle-brightness")) { // Should toggle brightness
