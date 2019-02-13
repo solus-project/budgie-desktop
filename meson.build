@@ -80,7 +80,7 @@ libdir = join_paths(prefix, get_option('libdir'))
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
-podir = join_paths(meson.source_root(), 'po')
+podir = join_paths(meson.source_root(), 'subprojects', 'translations')
 
 # Handle i18n on the .desktop file
 # Originally stolem from TingPing:
