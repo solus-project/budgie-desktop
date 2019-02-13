@@ -132,6 +132,7 @@ public class HeaderWidget : Gtk.Box
     public HeaderWidget(string? text, string? icon_name, bool can_close, Gtk.Widget? custom_widget = null, Gtk.Widget? end_widget = null)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
+        hexpand = false; // Do not horizontally expand
 
         get_style_context().add_class("raven-header");
 
