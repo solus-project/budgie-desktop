@@ -24,139 +24,6 @@ static string? searchable_string(string input)
     return mod.replace("\u00AD", "").ascii_down().strip();
 }
 
-/**
- * Factory widget to represent a category
- */
-public class CategoryButton : Gtk.RadioButton
-{
-
-    public new GMenu.TreeDirectory? group { public get ; protected set; }
-
-    public CategoryButton(GMenu.TreeDirectory? parent)
-    {
-        Gtk.Label lab;
-
-        if (parent != null) {
-            lab = new Gtk.Label(parent.get_name());
-        } else {
-            // Special case, "All"
-            lab = new Gtk.Label(_("All"));
-        }
-        lab.halign = Gtk.Align.START;
-        lab.valign = Gtk.Align.CENTER;
-        lab.margin_start = 10;
-        lab.margin_end = 15;
-
-        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        layout.pack_start(lab, true, true, 0);
-        add(layout);
-
-        get_style_context().add_class("flat");
-        get_style_context().add_class("category-button");
-        // Makes us look like a normal button :)
-        set_property("draw-indicator", false);
-        set_can_focus(false);
-        group = parent;
-    }
-}
-
-/**
- * Factory widget to represent a menu item
- */
-public class MenuButton : Gtk.Button
-{
-
-    public DesktopAppInfo info { public get ; protected set ; }
-    public GMenu.TreeDirectory parent_menu { public get ; protected set ; }
-
-    public MenuButton(DesktopAppInfo parent, GMenu.TreeDirectory directory, int icon_size)
-    {
-        var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
-        img.pixel_size = icon_size;
-        img.margin_end = 7;
-        var lab = new Gtk.Label(parent.get_display_name());
-        lab.halign = Gtk.Align.START;
-        lab.valign = Gtk.Align.CENTER;
-
-        const Gtk.TargetEntry[] drag_targets = {
-            {"text/uri-list", 0, 0 },
-            {"application/x-desktop", 0, 0 }
-        };
-
-        Gtk.drag_source_set(this, Gdk.ModifierType.BUTTON1_MASK, drag_targets, Gdk.DragAction.COPY);
-        base.drag_begin.connect(this.drag_begin);
-        base.drag_end.connect(this.drag_end);
-        base.drag_data_get.connect(this.drag_data_get);
-
-        var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        layout.pack_start(img, false, false, 0);
-        layout.pack_start(lab, true, true, 0);
-        add(layout);
-
-        this.info = parent;
-        this.parent_menu = directory;
-        set_tooltip_text(parent.get_description());
-
-        get_style_context().add_class("flat");
-    }
-
-    private bool hide_toplevel()
-    {
-        this.get_toplevel().hide();
-        return false;
-    }
-
-    private new void drag_begin(Gdk.DragContext context)
-    {
-        Gtk.drag_set_icon_gicon(context, this.info.get_icon(), 0, 0);
-    }
-
-    private new void drag_end(Gdk.DragContext context)
-    {
-        Idle.add(this.hide_toplevel);
-    }
-
-    private new void drag_data_get(Gdk.DragContext context, Gtk.SelectionData data, uint info, uint timestamp)
-    {
-        try {
-            string[] urls = { Filename.to_uri(this.info.get_filename()) };
-            data.set_uris(urls);
-        } catch (Error e) {
-            warning("Failed to set copy data: %s", e.message);
-        }
-    }
-
-    private string? vala_has_no_strstr(string a, string b)
-    {
-        int index = a.index_of(b);
-        if (index < 0) {
-            return null;
-        }
-        return a.substring(index);
-    }
-
-    /* Determine our score in relation to a given search term
-     * Totally stole this from Brisk (Which I wrote anyway so woo.)
-     */
-    public int get_score(string term)
-    {
-        int score = 0;
-        string name = searchable_string(info.get_name());
-        if (name == term) {
-            score += 100;
-        } else if (name.has_prefix(term)) {
-            score += 50;
-        }
-
-        var found = vala_has_no_strstr(name, term);
-        if (found != null) {
-            score += 20 + found.length;
-        }
-        score += GLib.strcmp(name, term);
-        return score;
-    }
-}
-
 public class BudgieMenuWindow : Budgie.Popover
 {
     protected Gtk.SearchEntry search_entry;
@@ -323,6 +190,7 @@ public class BudgieMenuWindow : Budgie.Popover
                     warning("%s has no parent directory, not adding to menu\n", appinfo.get_display_name());
                 } else {
                     var use_root = root;
+                    var app_id = appinfo.get_id();
 
                     if (root.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory")) { // If we're iterating over desktop entries in Sundry
                         if (other_tree != null)  {
@@ -330,15 +198,17 @@ public class BudgieMenuWindow : Budgie.Popover
                         }
                     }
 
-                    var btn = new MenuButton(appinfo, use_root, icon_size);
+                    if (!menu_buttons.contains(app_id)) { // If we haven't already added this button
+                        var btn = new MenuButton(appinfo, use_root, icon_size);
 
-                    btn.clicked.connect(()=> {
-                        hide();
-                        launch_app(btn.info);
-                    });
-                    menu_buttons.insert(appinfo.get_id(), btn);
-                    btn.show_all();
-                    content.add(btn);
+                        btn.clicked.connect(()=> {
+                            hide();
+                            launch_app(btn.info);
+                        });
+                        menu_buttons.insert(app_id, btn);
+                        btn.show_all();
+                        content.add(btn);
+                    }
                 }
             }
         }

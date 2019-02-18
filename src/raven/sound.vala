@@ -520,7 +520,7 @@ namespace Budgie {
 
                 if (allow_higher_than_max) { // If overdrive is enabled and thus should show mark
                     var vol_max = mixer.get_vol_max_norm();
-                    volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
+                    volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "");
                 } else { // If we should not show markets
                     volume_slider.clear_marks();
                 }

@@ -49,14 +49,35 @@ class ThemeInfo : GLib.Object {
 public class ThemeScanner : GLib.Object
 {
     string[]? xdg_paths = null;
+
+    string[] gtk_theme_blacklist = {
+        "Adwaita",
+        "Breeze",
+        "Clearlooks",
+        "Crux",
+        "Emacs",
+        "Industrial",
+        "Mist",
+        "Raleigh",
+        "Redmond",
+        "ThinIce"
+    };
+
+    string[] icon_theme_blacklist = {
+        "breeze",
+        "solus-sc"
+    };
+
     string[] normal_suffixes = {
         "themes",
         "icons"
     };
+
     string[] legacy_suffixes = {
         ".themes",
         ".icons"
     };
+
     string[]? gtk_theme_paths = null;
 
     private HashTable<string,ThemeInfo?> gtk_themes = null;
@@ -169,6 +190,14 @@ public class ThemeScanner : GLib.Object
      */
     private async bool maybe_add_gtk_theme(string path, string theme_name)
     {
+        for (int index = 0; index < gtk_theme_blacklist.length; index++) {
+            string blacklisted_item = gtk_theme_blacklist[index];
+
+            if ((blacklisted_item == theme_name) || (theme_name.index_of(blacklisted_item) != -1)) {
+                return false;
+            }
+        }
+
         unowned ThemeInfo? info = gtk_themes.lookup(theme_name);
         if (info == null) {
             ThemeInfo? ninfo = new ThemeInfo(ThemeType.GTK_THEME);
@@ -286,6 +315,14 @@ public class ThemeScanner : GLib.Object
      */
     private async bool maybe_add_icons(string path, string theme_name)
     {
+        for (int index = 0; index < icon_theme_blacklist.length; index++) {
+            string blacklisted_item = icon_theme_blacklist[index];
+
+            if ((blacklisted_item == theme_name) || (theme_name.index_of(blacklisted_item) != -1)) {
+                return false;
+            }
+        }
+
         unowned ThemeInfo? info = icon_themes.lookup(theme_name);
         if (info == null) {
             ThemeInfo? ninfo = new ThemeInfo(ThemeType.ICON_THEME);

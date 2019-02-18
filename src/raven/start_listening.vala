@@ -18,10 +18,16 @@ namespace Budgie {
         public StartListening() {
             Object(orientation: Gtk.Orientation.VERTICAL, margin: 10);
             var label = new Gtk.Label("<big>%s</big>".printf(_("No apps are currently playing audio.")));
+            label.justify = Gtk.Justification.CENTER;
             label.halign = Gtk.Align.CENTER;
+            label.max_width_chars = 36;
             label.use_markup = true;
             label.valign = Gtk.Align.CENTER;
+            label.wrap = true;
+            label.wrap_mode = Pango.WrapMode.WORD;
             start_listening = new Gtk.Button.with_label(_("Play some music"));
+            start_listening.hexpand = false;
+
             pack_start(label, true, true, 10);
             pack_start(start_listening, false, false, 0);
 
