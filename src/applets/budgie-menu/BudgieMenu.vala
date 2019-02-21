@@ -156,7 +156,7 @@ public class BudgieMenuApplet : Budgie.Applet
 
         /* Potentially reload icon on pixel size jumps */
         panel_size_changed.connect((p,i,s)=> {
-            if (this.pixel_size != p) {
+            if (this.pixel_size != i) {
                 this.pixel_size = (int)i;
                 this.on_settings_changed("menu-icon");
             }
