@@ -8,6 +8,10 @@ To refresh the Polkit vapi files:
 
 Then have fun un-mangling it to support vala async syntax
 
-For mutter, something like:
+For mutter (and shipped cogl and clutter), something like:
 
-vapigen --library libmutter-3 /usr/lib/x86_64-linux-gnu/mutter/Meta-3.gir --girdir /usr/lib/x86_64-linux-gnu/mutter/ -d . --pkg cairo --pkg gdk-3.0 --pkg gdk-pixbuf-2.0 --pkg gtk+-3.0 --pkg x11 --pkg json-glib-1.0 --girdir . --vapidir . --metadatadir . --girdir /usr/lib/x86_64-linux-gnu/mutter/
+vapigen --library mutter-clutter-4 mutter-clutter-4-custom.vala /usr/lib/x86_64-linux-gnu/mutter-4/Clutter-4.gir --girdir /usr/lib/x86_64-linux-gnu/mutter-4/ -d . --girdir . --vapidir . --metadatadir . --girdir /usr/lib/x86_64-linux-gnu/mutter-4/
+
+vapigen --library mutter-cogl-4 mutter-cogl-4-custom.vala /usr/lib/x86_64-linux-gnu/mutter-4/Cogl-4.gir --girdir /usr/lib/x86_64-linux-gnu/mutter-4/ -d . --girdir . --vapidir . --metadatadir . --girdir /usr/lib/x86_64-linux-gnu/mutter-4/
+
+vapigen --library libmutter-cogl-4 /usr/lib/x86_64-linux-gnu/mutter-4/Cogl-4.gir --girdir /usr/lib/x86_64-linux-gnu/mutter-4/ -d . --girdir . --vapidir . --metadatadir . --girdir /usr/lib/x86_64-linux-gnu/mutter-4/
