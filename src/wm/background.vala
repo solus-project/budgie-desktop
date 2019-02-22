@@ -21,9 +21,9 @@ public const string BACKGROUND_STYLE_KEY   = "picture-options";
 public const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
 public const string ACCOUNTS_SCHEMA        = "org.freedesktop.Accounts";
 
-public class BudgieBackground : Meta.BackgroundGroup
+public class BudgieBackground : Clutter.Actor
 {
-
+    private Meta.BackgroundGroup bg_group;
     public unowned Meta.Display? display { construct set ; public get; }
     public int index { construct set ; public get; }
 
@@ -57,6 +57,10 @@ public class BudgieBackground : Meta.BackgroundGroup
     {
         Object(display: display, index: index);
         Meta.Rectangle rect;
+
+        // FIXME: make bg_group matching size with BudgieBackground all the time
+        bg_group = new Meta.BackgroundGroup();
+        this.add_child(bg_group);
 
         cache = Meta.BackgroundImageCache.get_default();
 
