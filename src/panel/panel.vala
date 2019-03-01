@@ -120,7 +120,6 @@ public class Panel : Budgie.Toplevel
         public get {
             return render_scale;
         }
-        //default = 0.0;
     }
 
     public bool activate_action(int remote_action)
