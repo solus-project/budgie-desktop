@@ -33,6 +33,12 @@ budgie_wm_deps = [
     dep_ibus,
 ]
 
+budgie_wm_status_vala_args = []
+
+if dep_gsd.version().version_compare('>=3.31.91')
+    budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_332']
+endif
+
 budgie_wm_vala_args =  [
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'ibus-1.0',
@@ -42,6 +48,7 @@ budgie_wm_vala_args =  [
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
+        budgie_wm_status_vala_args,
 ]
 
 rpath = ''
