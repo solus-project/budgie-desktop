@@ -310,7 +310,7 @@ namespace Meta {
 		public GLib.List<weak Meta.Window> get_tab_list (Meta.TabList type, Meta.Workspace? workspace);
 		public unowned Meta.Window get_tab_next (Meta.TabList type, Meta.Workspace workspace, Meta.Window? window, bool backward);
 		public unowned Meta.WorkspaceManager get_workspace_manager ();
-		public uint grab_accelerator (string accelerator);
+		public uint grab_accelerator (string accelerator, Meta.KeyBindingFlags flags);
 		public bool is_pointer_emulating_sequence (Clutter.EventSequence? sequence);
 		public bool remove_keybinding (string name);
 		public void request_pad_osd (Clutter.InputDevice pad, bool edition_mode);
