@@ -270,8 +270,8 @@ public class IconButton : Gtk.ToggleButton
 
         if (
             (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
-            (win_type == Wnck.Window.DIALOG) || // Dialogs
-            (win_type == Wnck.Window.SPLASHSCREEN) // Splash screens
+            (win_type == Wnck.WindowType.DIALOG) || // Dialogs
+            (win_type == Wnck.WindowType.SPLASHSCREEN) // Splash screens
         ) {
             return true;
         } else {
