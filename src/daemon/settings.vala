@@ -395,7 +395,7 @@ public class SettingsManager {
     private void update_ac_timeout() {
         int current_ac_timeout = gnome_power_settings.get_int("sleep-inactive-ac-timeout");
 
-        if (current_ac_timeout != 0) { // Is a non-Caffeine value
+        if ((current_ac_timeout != 0) || ((current_ac_timeout == 0) && !get_caffeine_mode())) { // Is a non-Caffeine value or is already set to 0 when Caffeine Mode is off
             default_sleep_inactive_ac_timeout = current_ac_timeout;
         }
     }
@@ -406,7 +406,7 @@ public class SettingsManager {
     private void update_battery_timeout() {
         int current_battery_timeout = gnome_power_settings.get_int("sleep-inactive-battery-timeout");
 
-        if (current_battery_timeout != 0) { // Is a non-Caffeine value
+        if ((current_battery_timeout != 0) || ((current_battery_timeout == 0) && !get_caffeine_mode())) { // Is a non-Caffeine value or is already set to 0 when Caffeine Mode is off
             default_sleep_inactive_battery_timeout = current_battery_timeout;
         }
     }
@@ -417,7 +417,7 @@ public class SettingsManager {
     private void update_idle_delay() {
         uint current_idle_delay = gnome_session_settings.get_uint("idle-delay");
 
-        if (current_idle_delay != 0) { // Is a non-Caffeine value
+        if ((current_idle_delay != 0) || ((current_idle_delay == 0) && !get_caffeine_mode())) { // Is a non-Caffeine value or is already set to 0 when Caffeine Mode is off
             default_idle_delay = current_idle_delay;
         }
     }
