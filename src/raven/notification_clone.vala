@@ -41,7 +41,7 @@ public class NotificationClone : Gtk.Box {
             label_body.halign = Gtk.Align.START;
             label_body.set_markup(Budgie.safe_markup_string(target.body));
             label_body.wrap = true;
-            label_body.wrap_mode = Pango.WrapMode.CHAR;
+            label_body.wrap_mode = Pango.WrapMode.WORD;
         }
 
         var date = new DateTime.from_unix_local(target.timestamp);
