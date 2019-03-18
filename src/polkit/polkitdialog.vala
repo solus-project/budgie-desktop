@@ -34,6 +34,8 @@ public class AgentDialog : Gtk.Window
     [GtkChild]
     private Gtk.Label? label_error;
 
+    public bool is_cancelled;
+
     public PolkitAgent.Session? pk_session = null;
     private Polkit.Identity? pk_identity = null;
 
@@ -92,6 +94,8 @@ public class AgentDialog : Gtk.Window
         window_position = Gtk.WindowPosition.CENTER_ALWAYS;
 
         key_release_event.connect(on_key_release);
+
+        cancellable.cancelled.connect(on_agent_cancelled);
     }
 
     bool on_key_release(Gdk.EventKey key)
@@ -127,7 +131,7 @@ public class AgentDialog : Gtk.Window
     {
         /* Not authed */
         set_sensitive(true);
-        if (!authorized || cancellable.is_cancelled()) {
+        if (!authorized) {
             label_error.set_text(_("Authentication failed"));
             /* TODO: Cancel non existent spinner */
             var session = pk_session;
@@ -266,9 +270,7 @@ public class AgentDialog : Gtk.Window
         if (pk_session != null) {
             pk_session.cancel();
         }
-        if (!cancellable.is_cancelled()) {
-            cancellable.cancel();
-        }
+        is_cancelled = true;
         done();
     }
 
@@ -285,7 +287,7 @@ public class Agent : PolkitAgent.Listener
     private Budgie.ThemeManager theme_manager;
 
     public override async bool initiate_authentication(string action_id, string message, string icon_name,
-        Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable)
+        Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable) throws Polkit.Error
     {
 
         var dialog = new AgentDialog(action_id, message, "dialog-password-symbolic", cookie, cancellable);
@@ -304,6 +306,10 @@ public class Agent : PolkitAgent.Listener
         yield;
 
         dialog.destroy();
+
+        if (dialog.is_cancelled) {
+            throw new Polkit.Error.CANCELLED("Authentication dialog was dismissed by the user");
+        }
 
         return true;
     }
