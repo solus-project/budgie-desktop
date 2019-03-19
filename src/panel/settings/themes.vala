@@ -65,6 +65,8 @@ public class ThemeScanner : GLib.Object
 
     string[] icon_theme_blacklist = {
         "breeze",
+        "Papirus-Adapta",
+        "Papirus-Adapta-Nokto",
         "solus-sc"
     };
 
