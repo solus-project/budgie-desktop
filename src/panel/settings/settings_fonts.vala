@@ -21,10 +21,12 @@ public class FontPage : Budgie.SettingsPage {
     private Gtk.FontButton? fontbutton_interface;
     private Gtk.FontButton? fontbutton_monospace;
     private Gtk.SpinButton? spinbutton_scaling;
+    private Gtk.ComboBox combobox_hinting;
+    private Gtk.ComboBox combobox_antialias;
 
     private GLib.Settings ui_settings;
     private GLib.Settings wm_settings;
-
+    private GLib.Settings x_settings;
 
     public FontPage()
     {
@@ -73,14 +75,77 @@ public class FontPage : Budgie.SettingsPage {
             _("Set the text scaling factor.")));
         group.add_widget(spinbutton_scaling);
 
+        Gtk.TreeIter iter;
+
+        /* Hinting */
+        combobox_hinting = new Gtk.ComboBox();
+        var hinting_model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        string[] hinting_display = {
+            _("Full"),
+            _("Medium"),
+            _("Slight"),
+            _("None")
+        };
+        const string[] hinting_values = {
+            "full",
+            "medium",
+            "slight",
+            "none"
+        };
+        for (int i = 0; i < hinting_values.length; i++) {
+            hinting_model.append(out iter);
+            hinting_model.set(iter, 0, hinting_values[i], 1, hinting_display[i], -1);
+        }
+        combobox_hinting.set_model(hinting_model);
+        combobox_hinting.set_id_column(0);
+
+        grid.add_row(new SettingsRow(combobox_hinting,
+            _("Hinting"),
+            _("Set the type of hinting to use.")));
+        group.add_widget(combobox_hinting);
+
+        /* Antialiasing */
+        combobox_antialias = new Gtk.ComboBox();
+        var antialias_model = new Gtk.ListStore(2, typeof(string), typeof(string));
+        string[] antialias_display = {
+            _("Subpixel (for LCD screens)"),
+            _("Standard (grayscale)"),
+            _("None")
+        };
+        const string[] antialias_values = {
+            "rgba",
+            "grayscale",
+            "none"
+        };
+        for (int i = 0; i < antialias_values.length; i++) {
+            antialias_model.append(out iter);
+            antialias_model.set(iter, 0, antialias_values[i], 1, antialias_display[i], -1);
+        }
+        combobox_antialias.set_model(antialias_model);
+        combobox_antialias.set_id_column(0);
+
+        grid.add_row(new SettingsRow(combobox_antialias,
+            _("Antialiasing"),
+            _("Set the type of antialiasing to use.")));
+        group.add_widget(combobox_antialias);
+
+        var render = new Gtk.CellRendererText();
+        combobox_hinting.pack_start(render, true);
+        combobox_hinting.add_attribute(render, "text", 1);
+        combobox_antialias.pack_start(render, true);
+        combobox_antialias.add_attribute(render, "text", 1);
+
         /* Hook up settings */
         ui_settings = new GLib.Settings("org.gnome.desktop.interface");
         wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
+        x_settings = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
         ui_settings.bind("document-font-name", fontbutton_document, "font-name", SettingsBindFlags.DEFAULT);
         ui_settings.bind("font-name", fontbutton_interface, "font-name", SettingsBindFlags.DEFAULT);
         ui_settings.bind("monospace-font-name", fontbutton_monospace, "font-name", SettingsBindFlags.DEFAULT);
         wm_settings.bind("titlebar-font", fontbutton_title, "font-name", SettingsBindFlags.DEFAULT);
         ui_settings.bind("text-scaling-factor", spinbutton_scaling, "value", SettingsBindFlags.DEFAULT);
+        x_settings.bind("hinting", combobox_hinting, "active-id", SettingsBindFlags.DEFAULT);
+        x_settings.bind("antialiasing", combobox_antialias, "active-id", SettingsBindFlags.DEFAULT);
     }
 
 } /* End class */
