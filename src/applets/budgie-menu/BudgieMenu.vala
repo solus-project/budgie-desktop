@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -42,6 +42,9 @@ public class BudgieMenuSettings : Gtk.Grid
     [GtkChild]
     private Gtk.Button? button_icon_pick;
 
+    [GtkChild]
+    private Gtk.Switch? switch_show_category_icons;
+
     private Settings? settings;
 
     public BudgieMenuSettings(Settings? settings)
@@ -51,6 +54,7 @@ public class BudgieMenuSettings : Gtk.Grid
         settings.bind("menu-compact", switch_menu_compact, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-headers", switch_menu_headers, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-categories-hover", switch_menu_categories_hover, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("show-category-icons", switch_show_category_icons, "active", SettingsBindFlags.DEFAULT);
         settings.bind("menu-label", entry_label, "text", SettingsBindFlags.DEFAULT);
         settings.bind("menu-icon", entry_icon_pick, "text", SettingsBindFlags.DEFAULT);
 

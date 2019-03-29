@@ -43,6 +43,12 @@
       <summary>Activate menu categories by rolling over them</summary>
       <description>Activate menu categories by rolling over them</description>
     </key>
+
+    <key type="b" name="show-category-icons">
+      <default>false</default>
+      <summary>Whether menu categories should show an icon</summary>
+      <description>Whether menu categories should show an icon</description>
+    </key>
   </schema>
 
 </schemalist>

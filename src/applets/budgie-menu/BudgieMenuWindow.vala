@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -39,7 +39,7 @@ public class BudgieMenuWindow : Budgie.Popover
     /* Mapped id -> button */
     protected HashTable<string,MenuButton?> menu_buttons = null;
 
-    // The current group 
+    // The current group
     protected GMenu.TreeDirectory? group = null;
     protected bool compact_mode;
     protected bool headers_visible;
@@ -77,7 +77,7 @@ public class BudgieMenuWindow : Budgie.Popover
         }
         SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
         this.tree = null;
-        Idle.add(()=> { 
+        Idle.add(()=> {
             load_menus(null);
             content.invalidate_headers();
             content.invalidate_filter();
@@ -111,13 +111,13 @@ public class BudgieMenuWindow : Budgie.Popover
 
     /**
      * Load "menus" (.desktop's) recursively (ripped from our RunDialog)
-     * 
+     *
      * @param tree_root Initialised GMenu.TreeDirectory, or null
      */
     private void load_menus(GMenu.TreeDirectory? tree_root = null)
     {
         GMenu.TreeDirectory root;
-    
+
         // Load the tree for the first time
         if (tree == null) {
             tree = new GMenu.Tree(APPS_ID, GMenu.TreeFlags.SORT_DISPLAY_NAME);
@@ -280,6 +280,7 @@ public class BudgieMenuWindow : Budgie.Popover
         on_settings_changed("menu-compact");
         on_settings_changed("menu-headers");
         on_settings_changed("menu-categories-hover");
+        on_settings_changed("show-category-icons");
 
         // management of our listbox
         content.set_filter_func(do_filter_list);
@@ -340,6 +341,12 @@ public class BudgieMenuWindow : Budgie.Popover
             case "menu-categories-hover":
                 /* Category hover */
                 this.rollover_menus = settings.get_boolean(key);
+                break;
+            case "show-category-icons":
+                foreach (var child in categories.get_children()) {
+                    CategoryButton category = child as CategoryButton;
+                    category.icon.set_visible(settings.get_boolean(key));
+                }
                 break;
             default:
                 // not interested
@@ -411,7 +418,7 @@ public class BudgieMenuWindow : Budgie.Popover
             child = after.get_child() as MenuButton;
             next = child.parent_menu.get_name();
         }
-        
+
         // Only add one if we need one!
         if (before == null || after == null || prev != next) {
             var label = new Gtk.Label(Markup.printf_escaped("<big>%s</big>", prev));

@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,22 +17,28 @@ public class CategoryButton : Gtk.RadioButton
 
     public new GMenu.TreeDirectory? group { public get ; protected set; }
 
+    public Gtk.Image icon;
+
     public CategoryButton(GMenu.TreeDirectory? parent)
     {
         Gtk.Label lab;
 
         if (parent != null) {
             lab = new Gtk.Label(parent.get_name());
+            icon = new Gtk.Image.from_icon_name(parent.get_icon().to_string(), Gtk.IconSize.BUTTON);
         } else {
             // Special case, "All"
             lab = new Gtk.Label(_("All"));
+            icon = new Gtk.Image.from_icon_name("view-app-grid-symbolic", Gtk.IconSize.BUTTON);
         }
         lab.halign = Gtk.Align.START;
         lab.valign = Gtk.Align.CENTER;
         lab.margin_start = 10;
         lab.margin_end = 15;
+        icon.set_no_show_all(true);
 
         var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        layout.pack_start(icon, false, false, 0);
         layout.pack_start(lab, true, true, 0);
         add(layout);
 
