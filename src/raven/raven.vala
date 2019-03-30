@@ -170,7 +170,6 @@ public class Raven : Gtk.Window
         public get {
             return this._screen_edge;
         }
-        default = Gtk.PositionType.RIGHT;
     }
 
     int our_width = 0;

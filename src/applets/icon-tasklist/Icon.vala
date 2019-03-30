@@ -31,7 +31,6 @@ public class Icon : Gtk.Image
         public get {
             return bounce_amount;
         }
-        default = 0.0;
     }
 
     public double attention {
@@ -42,7 +41,6 @@ public class Icon : Gtk.Image
         public get {
             return attention_amount;
         }
-        default = 0.0;
     }
 
     public double icon_opacity {
@@ -56,10 +54,10 @@ public class Icon : Gtk.Image
         public get {
             return opacity;
         }
-        default = 1.0;
     }
 
     public Icon() {
+        opacity = 1.0;
         size_allocate.connect(this.on_size_allocate);
     }
 
