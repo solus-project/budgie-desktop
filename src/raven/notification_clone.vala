@@ -39,10 +39,12 @@ public class NotificationClone : Gtk.Box {
         if (target.body != "") { // If there is body content
             label_body = new Gtk.Label("");
             label_body.halign = Gtk.Align.START;
+            label_body.justify = Gtk.Justification.LEFT;
             label_body.set_markup(Budgie.safe_markup_string(target.body));
             label_body.width_chars = 30;
             label_body.wrap = true;
             label_body.wrap_mode = Pango.WrapMode.WORD_CHAR;
+            label_body.xalign = 0;
         }
 
         var date = new DateTime.from_unix_local(target.timestamp);
