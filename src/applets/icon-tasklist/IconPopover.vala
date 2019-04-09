@@ -75,7 +75,6 @@ namespace Budgie {
              * Views
              */
             this.stack = new Gtk.Stack();
-            this.stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
             this.stack.get_style_context().add_class("icon-popover-stack");
 
             this.primary_view = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -402,7 +401,7 @@ namespace Budgie {
 
                         for (int i = 0; i < workspaces_to_remove; i++) {
                             Budgie.IconPopoverItem child = workspace_items.nth_data(i);
-
+    
                             if (child != null) {
                                 this.actions_view.remove(child);
                                 workspace_items.remove(child);
