@@ -234,7 +234,7 @@ public class SettingsManager {
         switch (key) {
             case "attach-modal-dialogs": // Changed via Budgie Desktop Settings
                 bool attach = wm_settings.get_boolean(key); // Get our attach value
-                gnome_wm_settings.set_boolean("attach-modal-dialogs", attach); // Update GNOME WM settings
+                mutter_settings.set_boolean("attach-modal-dialogs", attach); // Update GNOME WM settings
                 break;
             case "button-style":
                 ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
@@ -250,7 +250,7 @@ public class SettingsManager {
                 break;
             case "edge-tiling": // Changed via Budgie Desktop Settings
                 bool edge_setting = wm_settings.get_boolean(key); // Get our edge tiling setting
-                gnome_wm_settings.set_boolean("edge-tiling", edge_setting); // // Update GNOME WM settings
+                mutter_settings.set_boolean("edge-tiling", edge_setting); // // Update GNOME WM settings
                 break;
             case "focus-mode":
                 bool mode = wm_settings.get_boolean(key);
