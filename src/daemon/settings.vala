@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2017-2018 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -285,8 +285,7 @@ public class SettingsManager {
         }
 
         this.xoverrides.set_value("overrides", xset);
-        this.wm_settings.set_string("button-layout", wm_set);
-        this.gnome_wm_settings.set_string("button-layout", wm_set);
+        this.gnome_wm_settings.set_value("button-layout", wm_set);
     }
 
     /**

@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -14,6 +14,9 @@ namespace Budgie {
 public struct GsdAccel {
     string accelerator;
     uint flags;
+#if HAVE_GSD_332
+    Meta.KeyBindingFlags grab_flags;
+#endif
 }
 
 [DBus (name = "org.gnome.SessionManager.EndSessionDialog")]
@@ -57,7 +60,7 @@ public class SessionHandler : GLib.Object
             proxy = null;
         }
     }
-    
+
     void has_dialog()
     {
         if (proxy != null) {
@@ -150,7 +153,7 @@ public class ShellShim : GLib.Object
         grabs = new HashTable<uint,string>(direct_hash, direct_equal);
         watches = new HashTable<string,uint>(str_hash, str_equal);
 
-        display = wm.get_screen().get_display();
+        display = wm.get_display();
         display.accelerator_activated.connect(on_accelerator_activated);
 
         handler = new SessionHandler();
@@ -223,9 +226,15 @@ public class ShellShim : GLib.Object
         }
     }
 
+#if HAVE_GSD_332
+    private uint _grab(string sender, string seq, uint flag, Meta.KeyBindingFlags grab_flags)
+    {
+        var ret = display.grab_accelerator(seq, grab_flags);
+#else
     private uint _grab(string sender, string seq, uint flag)
     {
         var ret = display.grab_accelerator(seq);
+#endif
 
         if (ret == Meta.KeyBindingAction.NONE) {
             return ret;
@@ -259,12 +268,27 @@ public class ShellShim : GLib.Object
             BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
             on_bus_acquired, null, null);
     }
-    
+
+#if HAVE_GSD_332
+    public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags)
+    {
+        return _grab(sender, accelerator, flags, grab_flags);
+    }
+
+    public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators)
+    {
+        uint[] t = { };
+        foreach (var a in accelerators) {
+            t += _grab(sender, a.accelerator, a.flags, a.grab_flags);
+        }
+        return t;
+    }
+#else
     public uint GrabAccelerator(BusName sender, string accelerator, uint flags)
     {
         return _grab(sender, accelerator, flags);
     }
-        
+
     public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators)
     {
         uint[] t = { };
@@ -273,7 +297,7 @@ public class ShellShim : GLib.Object
         }
         return t;
     }
-
+#endif
     public bool ungrab_accelerator(BusName sender, uint action)
     {
         if (display.ungrab_accelerator(action)) {
@@ -292,7 +316,7 @@ public class ShellShim : GLib.Object
             osd_proxy.ShowOSD.begin(params);
         }
     }
-        
+
     public signal void accelerator_activated(uint action, HashTable<string,Variant> parameters);
 } /* End ShellShim */
 

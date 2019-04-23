@@ -1,0 +1,7 @@
+[org.gnome.mutter]
+edge-tiling = true
+attach-modal-dialogs = true
+
+[org.gnome.desktop.wm.preferences]
+button-layout = 'appmenu:minimize,maximize,close'
+

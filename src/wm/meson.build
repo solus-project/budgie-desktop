@@ -15,8 +15,15 @@ budgie_wm_sources = [
     'wm.vala',
 ]
 
-vapi_mutter = 'libmutter-2'
-dep_mutter = dependency('libmutter-2', version: gnome_minimum_version)
+vapi_mutter = 'libmutter-3'
+dep_mutter = dependency('libmutter-3', version: gnome_minimum_version, required: false)
+if not dep_mutter.found()
+    dep_mutter = dependency('libmutter-4', version: gnome_minimum_version)
+    if dep_mutter.found()
+        message('Using new libmutter-4 ABI from GNOME 3.32')
+        vapi_mutter = 'libmutter-4'
+    endif
+endif
 
 budgie_wm_deps = [
     link_libconfig,
@@ -25,6 +32,12 @@ budgie_wm_deps = [
     dep_gsettings,
     dep_ibus,
 ]
+
+budgie_wm_status_vala_args = []
+
+if dep_gsd.version().version_compare('>=3.31.91')
+    budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_332']
+endif
 
 budgie_wm_vala_args =  [
         '--pkg', 'gio-unix-2.0',
@@ -35,6 +48,7 @@ budgie_wm_vala_args =  [
         '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
+        budgie_wm_status_vala_args,
 ]
 
 rpath = ''
@@ -58,6 +72,7 @@ executable(
 
 # gschemas
 install_data(
-    'com.solus-project.budgie.wm.gschema.xml',
+    files('com.solus-project.budgie.wm.gschema.xml',
+          '20_solus-project.budgie.wm.gschema.override'),
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )

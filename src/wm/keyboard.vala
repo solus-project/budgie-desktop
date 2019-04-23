@@ -103,9 +103,9 @@ public class KeyboardManager : GLib.Object
         on_settings_changed("sources");
     }
 
-	public delegate void KeyHandlerFunc (Meta.Display display, Meta.Screen screen, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
+	public delegate void KeyHandlerFunc (Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
 
-    void switch_input_source(Meta.Display display, Meta.Screen screen,
+    void switch_input_source(Meta.Display display,
                              Meta.Window? window, Clutter.KeyEvent? event,
                              Meta.KeyBinding binding)
     {
@@ -115,7 +115,7 @@ public class KeyboardManager : GLib.Object
         this.apply_ibus();
     }
 
-    void switch_input_source_backward(Meta.Display display, Meta.Screen screen,
+    void switch_input_source_backward(Meta.Display display,
                                       Meta.Window? window, Clutter.KeyEvent? event,
                                       Meta.KeyBinding binding)
     {
@@ -127,8 +127,7 @@ public class KeyboardManager : GLib.Object
 
     public void hook_extra()
     {
-        var screen = wm.get_screen();
-        var display = screen.get_display();
+        var display = wm.get_display();
 
         /* Hook into GNOME defaults */
         var schema = new Settings("org.gnome.desktop.wm.keybindings");
@@ -316,7 +315,7 @@ public class KeyboardManager : GLib.Object
         if (!is_keyboard_held) {
             return;
         }
-        wm.get_screen().get_display().ungrab_keyboard(wm.get_screen().get_display().get_current_time());
+        wm.get_display().ungrab_keyboard(wm.get_display().get_current_time());
         is_keyboard_held = false;
     }
 
@@ -328,7 +327,7 @@ public class KeyboardManager : GLib.Object
         if (is_keyboard_held) {
             return;
         }
-        wm.get_screen().get_display().freeze_keyboard(wm.get_screen().get_display().get_current_time());
+        wm.get_display().freeze_keyboard(wm.get_display().get_current_time());
         is_keyboard_held = true;
     }
 }

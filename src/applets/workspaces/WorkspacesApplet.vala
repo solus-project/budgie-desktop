@@ -270,7 +270,8 @@ public class WorkspacesApplet : Budgie.Applet
     private void workspace_added(Wnck.Workspace space)
     {
         WorkspaceItem item = new WorkspaceItem(space);
-        if (wnck_screen.get_active_workspace() == space) {
+        var _workspace = wnck_screen.get_active_workspace();
+        if (_workspace != null && _workspace == space) {
             item.get_style_context().add_class("current-workspace");
         }
         item.remove_workspace.connect(remove_workspace);
@@ -424,7 +425,8 @@ public class WorkspacesApplet : Budgie.Applet
 
         wm_proxy.RemoveWorkspaceByIndex(index, time);
 
-        if (wnck_screen.get_active_workspace() == workspace) {
+        var _workspace = wnck_screen.get_active_workspace();
+        if (_workspace != null && _workspace == workspace) {
             var previous = wnck_screen.get_workspace((index == 0) ? index : index - 1);
             previous.activate(time);
         }

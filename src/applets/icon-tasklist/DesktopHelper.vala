@@ -79,7 +79,11 @@ public class DesktopHelper : GLib.Object
         GLib.List<unowned Wnck.Window> list = new GLib.List<unowned Wnck.Window>();
         screen.get_windows_stacked().foreach((window) => {
             if (window.get_class_group() == class_group && !window.is_skip_tasklist()) {
-                if (window.get_workspace() == get_active_workspace()) {
+                var workspace = window.get_workspace();
+                if (workspace == null) {
+                    return;
+                }
+                if (workspace == get_active_workspace()) {
                     list.append(window);
                 }
             }

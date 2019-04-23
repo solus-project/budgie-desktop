@@ -48,6 +48,7 @@ dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
 dep_notify = dependency('libnotify', version: '>= 0.7')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
+dep_gsd = dependency('gnome-settings-daemon', version: '>=3.28.0')
 
 # wnck used all over the place..
 dep_wnck = dependency('libwnck-3.0', version: '>= 3.14.0')

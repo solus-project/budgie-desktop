@@ -228,7 +228,11 @@ public class IconTasklistApplet : Budgie.Applet
             bool visible = true;
 
             if (this.restrict_to_workspace) {
-                visible = button.has_window_on_workspace(this.wnck_screen.get_active_workspace());
+                var workspace = this.wnck_screen.get_active_workspace();
+                if (workspace == null) {
+                    return;
+                }
+                visible = button.has_window_on_workspace(workspace);
             }
 
             if (this.only_show_pinned) {

@@ -21,10 +21,10 @@ public const string BACKGROUND_STYLE_KEY   = "picture-options";
 public const string GNOME_COLOR_HACK       = "gnome-control-center/pixmaps/noise-texture-light.png";
 public const string ACCOUNTS_SCHEMA        = "org.freedesktop.Accounts";
 
-public class BudgieBackground : Meta.BackgroundGroup
+public class BudgieBackground : Clutter.Actor
 {
-
-    public unowned Meta.Screen? screen { construct set ; public get; }
+    private Meta.BackgroundGroup bg_group;
+    public unowned Meta.Display? display { construct set ; public get; }
     public int index { construct set ; public get; }
 
     private Settings? settings = null;
@@ -53,17 +53,21 @@ public class BudgieBackground : Meta.BackgroundGroup
         return false;
     }
 
-    public BudgieBackground(Meta.Screen? screen, int index)
+    public BudgieBackground(Meta.Display? display, int index)
     {
-        Object(screen: screen, index: index);
+        Object(display: display, index: index);
         Meta.Rectangle rect;
+
+        // FIXME: make bg_group matching size with BudgieBackground all the time
+        bg_group = new Meta.BackgroundGroup();
+        this.add_child(bg_group);
 
         cache = Meta.BackgroundImageCache.get_default();
 
         settings = new Settings("org.gnome.desktop.background");
         gnome_bg = new Gnome.BG();
 
-        rect = screen.get_monitor_geometry(this.index);
+        rect = display.get_monitor_geometry(this.index);
         this.set_position(rect.x, rect.y);
         this.set_size(rect.width, rect.height);
 
@@ -198,11 +202,11 @@ public class BudgieBackground : Meta.BackgroundGroup
         Clutter.Color? primary_color = Clutter.Color();
         Clutter.Color? secondary_color = Clutter.Color();
 
-        var actor = new Meta.BackgroundActor(screen, index);
-        var background = new Meta.Background(screen);
+        var actor = new Meta.BackgroundActor(display, index);
+        var background = new Meta.Background(display);
         actor.set_background(background);
 
-        rect = screen.get_monitor_geometry(index);
+        rect = display.get_monitor_geometry(index);
         actor.set_size(rect.width, rect.height);
         actor.set("opacity", 0);
         actor.show();
