@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2017-2018 Budgie Desktop Developers
+ * Copyright (C) 2017-2019 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -232,6 +232,10 @@ public class SettingsManager {
     private void on_wm_settings_changed(string key)
     {
         switch (key) {
+            case "attach-modal-dialogs": // Changed via Budgie Desktop Settings
+                bool attach = wm_settings.get_boolean(key); // Get our attach value
+                gnome_wm_settings.set_boolean("attach-modal-dialogs", attach); // Update GNOME WM settings
+                break;
             case "button-style":
                 ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
                 this.set_button_style(style);
@@ -243,6 +247,10 @@ public class SettingsManager {
             case "caffeine-mode":
                 bool enabled = wm_settings.get_boolean(key); // Get the caffeine mode enabled value
                 this.set_caffeine_mode(enabled);
+                break;
+            case "edge-tiling": // Changed via Budgie Desktop Settings
+                bool edge_setting = wm_settings.get_boolean(key); // Get our edge tiling setting
+                gnome_wm_settings.set_boolean("edge-tiling", edge_setting); // // Update GNOME WM settings
                 break;
             case "focus-mode":
                 bool mode = wm_settings.get_boolean(key);
@@ -267,8 +275,7 @@ public class SettingsManager {
     /**
      * Set the button layout to one of left or traditional
      */
-    void set_button_style(ButtonPosition style)
-    {
+    void set_button_style(ButtonPosition style) {
         Variant? xset = null;
         string? wm_set = null;
 
@@ -285,6 +292,7 @@ public class SettingsManager {
         }
 
         this.xoverrides.set_value("overrides", xset);
+        this.wm_settings.set_string("button-layout", wm_set);
         this.gnome_wm_settings.set_value("button-layout", wm_set);
     }
 
