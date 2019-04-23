@@ -377,12 +377,15 @@ public class SettingsManager {
      */
     void set_focus_mode(bool enable) {
         string gfocus_mode = "click";
+        int raise_delay = (enable) ? 0 : 250; // Set auto raise to be instant on mouse move, 250ms on click
 
         if (enable) {
             gfocus_mode = "mouse";
         }
 
         this.gnome_wm_settings.set_value("focus-mode", gfocus_mode);
+        this.gnome_wm_settings.set_boolean("auto-raise", enable); // Enable auto-raising on mouse move. This ensures windows are more reliably brought into focus
+        this.gnome_wm_settings.set_int("auto-raise-delay", raise_delay); // Set our auto-raise-delay to improve perceived performance on focus changes
     }
 
     /**
