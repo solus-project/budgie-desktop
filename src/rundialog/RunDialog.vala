@@ -74,7 +74,6 @@ public class RunDialog : Gtk.ApplicationWindow
     Gtk.Revealer bottom_revealer;
     Gtk.ListBox? app_box;
     Gtk.SearchEntry entry;
-    Budgie.ThemeManager theme_manager;
     Gdk.AppLaunchContext context;
     bool focus_quit = true;
     DBusImpl? impl = null;
@@ -105,9 +104,6 @@ public class RunDialog : Gtk.ApplicationWindow
         context = get_display().get_app_launch_context();
         context.launched.connect(on_launched);
         context.launch_failed.connect(on_launch_failed);
-
-        /* Handle all theme management */
-        this.theme_manager = new Budgie.ThemeManager();
 
         var header = new Gtk.EventBox();
         set_titlebar(header);
@@ -147,7 +143,7 @@ public class RunDialog : Gtk.ApplicationWindow
         /* Just so I can debug for now */
         bottom_revealer.set_reveal_child(false);
 
-        this.build_app_box();
+        Thread.create<void>(this.build_app_box, true);
 
         set_size_request(420, -1);
         set_default_size(420, -1);
