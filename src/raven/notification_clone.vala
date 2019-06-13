@@ -21,6 +21,8 @@ public class NotificationClone : Gtk.Box {
 
     public NotificationClone(Budgie.NotificationWindow? target) {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
+        get_style_context().add_class("notification-clone");
+
         id = target.id;
         expand = false;
         margin_bottom = 5;

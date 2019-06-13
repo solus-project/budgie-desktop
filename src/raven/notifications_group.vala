@@ -32,6 +32,7 @@ namespace Budgie {
 
         public NotificationGroup(string c_app_icon, string c_app_name) {
             Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
+            get_style_context().add_class("raven-notifications-group");
 
             // Intentially omit _end because it messes with alignment of dismiss buttons
             margin_start = 5;
@@ -51,6 +52,7 @@ namespace Budgie {
              * Header creation
              */
             header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
+            header.get_style_context().add_class("raven-notifications-group-header");
 
             app_image = new Gtk.Image.from_icon_name(c_app_icon, Gtk.IconSize.DND);
             app_image.halign = Gtk.Align.START;

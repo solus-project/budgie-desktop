@@ -897,14 +897,17 @@ public class NotificationsView : Gtk.Box
     public NotificationsView()
     {
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+        get_style_context().add_class("raven-notifications-view");
 
         clear_notifications_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
         clear_notifications_button.relief = Gtk.ReliefStyle.NONE;
         clear_notifications_button.no_show_all = true;
+        clear_notifications_button.get_style_context().add_class("clear-all-notifications");
         
         button_mute = new Gtk.Button();
         button_mute.set_image(image_notifications_enabled);
         button_mute.relief = Gtk.ReliefStyle.NONE;
+        button_mute.get_style_context().add_class("do-not-disturb");
         
         var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         control_buttons.pack_start(button_mute, false, false, 0);
