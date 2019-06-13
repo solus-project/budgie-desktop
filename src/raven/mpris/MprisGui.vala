@@ -115,6 +115,7 @@ public class ClientWidget : Gtk.Box
 
 
         var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        controls.get_style_context().add_class("raven-mpris-controls");
 
         row = create_row("Unknown Artist", "user-info-symbolic");
         artist_label = row.get_data("label_item");
