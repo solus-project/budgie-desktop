@@ -306,7 +306,7 @@ public class ClientWidget : Gtk.Box
             try {
                 var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
                 background.set_from_pixbuf(pbuf);
-                background.get_style_context().remove_class("no-album-art");
+                get_style_context().remove_class("no-album-art");
             } catch (Error e) {
                 update_art_fallback();
             }
@@ -320,7 +320,7 @@ public class ClientWidget : Gtk.Box
 
     void update_art_fallback()
     {
-        background.get_style_context().add_class("no-album-art");
+        get_style_context().add_class("no-album-art");
         background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
         background.pixel_size = this.our_width;
     }
@@ -338,7 +338,7 @@ public class ClientWidget : Gtk.Box
             Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
                 this.our_width, this.our_width, true, cancel);
             background.set_from_pixbuf(pbuf);
-            background.get_style_context().remove_class("no-album-art");
+            get_style_context().remove_class("no-album-art");
         } catch (Error e) {
             update_art_fallback();
         }
