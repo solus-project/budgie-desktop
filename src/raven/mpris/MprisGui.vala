@@ -219,6 +219,8 @@ public class ClientWidget : Gtk.Box
             get_style_context().add_class(client.player.identity.down()); // Lowercase identity
         }
 
+        get_style_context().add_class("mpris-widget");
+
         player_revealer.add(player_box);
         pack_start(player_revealer);
     }
