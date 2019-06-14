@@ -17,6 +17,7 @@ public class CaffeineWindow : Budgie.Popover {
         get_style_context().add_class("caffeine-popover");
 
         var container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        container.get_style_context().add_class("container");
 
         Gtk.Grid grid = new Gtk.Grid(); // Construct our new grid
         grid.set_row_spacing(6);

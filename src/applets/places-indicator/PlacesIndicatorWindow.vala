@@ -79,6 +79,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
         places_list = new GLib.GenericSet<string>(str_hash, str_equal);
 
         Gtk.Box main_content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        main_content.get_style_context().add_class("container");
         add(main_content);
 
         message_bar = new MessageRevealer();
