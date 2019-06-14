@@ -11,6 +11,9 @@
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
+        <style>
+          <class name="container" />
+        </style>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>

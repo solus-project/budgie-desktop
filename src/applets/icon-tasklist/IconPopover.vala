@@ -60,6 +60,7 @@ namespace Budgie {
 
         public IconPopover(Gtk.Widget relative_parent, DesktopAppInfo? app_info, int current_workspace_count) {
             Object(relative_to: relative_parent);
+            get_style_context().add_class("icon-popover");
             workspace_count = current_workspace_count;
             width_request = 200;
 
