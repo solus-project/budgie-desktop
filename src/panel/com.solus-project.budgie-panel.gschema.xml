@@ -33,6 +33,13 @@
       <value nick="BUDGIE_NOTIFICATION_POSITION_BOTTOM_RIGHT" value="4" />
   </enum>
 
+  <enum id="com.solus-project.budgie-panel.DesktopIconsHandler">
+      <value nick="NONE" value="1" />
+      <value nick="NAUTILUS" value="2" />
+      <value nick="NEMO" value="3" />
+      <value nick="DESKTOPFOLDER" value="4" />
+  </enum>
+
   <schema id="com.solus-project.budgie-panel.panel">
     <key enum="com.solus-project.budgie-panel.Position" name="location">
       <default>'none'</default>
@@ -157,6 +164,13 @@
       <default>'BUDGIE_NOTIFICATION_POSITION_TOP_RIGHT'</default>
       <summary>Set the location of notifications</summary>
       <description>Set the location on the screen where notification popups will appear.</description>
+    </key>
+
+    <key enum="com.solus-project.budgie-panel.DesktopIconsHandler" name="desktop-icons-handler">
+      <default>'NONE'</default>
+      <summary>Application that handles desktop-icons</summary>
+      <description>Define which application handles desktop-icons. Note.
+       NAUTILUS only applies to v3.26 and should not be used for later versions of nautilus.</description>
     </key>
 
     <key type="i" name="migration-level">

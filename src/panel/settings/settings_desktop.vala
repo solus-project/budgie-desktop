@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -11,20 +11,9 @@
 
 namespace Budgie {
 
-/**
- * DesktopPage allows users to change aspects of the fonts used
- */
-public class DesktopPage : Budgie.SettingsPage {
-
-    private GLib.Settings bg_settings;
-    private GLib.Settings nautilus_settings;
-
-    private Gtk.Switch switch_icons;
-    private Gtk.Switch switch_home;
-    private Gtk.Switch switch_network;
-    private Gtk.Switch switch_trash;
-    private Gtk.Switch switch_mounts;
-
+public class DesktopPage: Budgie.SettingsPage {
+    protected Gtk.Switch switch_icons;
+    protected SettingsGrid grid;
 
     public DesktopPage()
     {
@@ -34,7 +23,7 @@ public class DesktopPage : Budgie.SettingsPage {
                display_weight: 1,
                icon_name: "preferences-desktop-wallpaper");
 
-        var grid = new SettingsGrid();
+        grid = new SettingsGrid();
         this.add(grid);
 
         /* Allow icons */
@@ -42,9 +31,34 @@ public class DesktopPage : Budgie.SettingsPage {
         grid.add_row(new SettingsRow(switch_icons,
             _("Desktop Icons"),
             _("Control whether to allow launchers and icons on the desktop.")));
+    }
+}
 
-        /* Hook up settings */
+/**
+ * NautilusDesktopPage allows users to change aspects of the fonts used
+ * for the nautilus desktop
+ */
+public class NautilusDesktopPage : DesktopPage {
+
+    protected GLib.Settings bg_settings;
+    protected GLib.Settings desktop_settings;
+
+    private Gtk.Switch switch_home;
+    private Gtk.Switch switch_network;
+    private Gtk.Switch switch_trash;
+    private Gtk.Switch switch_mounts;
+
+    protected virtual void bind_settings() {
         bg_settings = new GLib.Settings("org.gnome.desktop.background");
+        desktop_settings = new GLib.Settings("org.gnome.nautilus.desktop");
+    }
+
+    public NautilusDesktopPage()
+    {
+        base();
+
+        bind_settings();
+        /* Hook up settings */
         bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
         bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
 
@@ -72,27 +86,49 @@ public class DesktopPage : Budgie.SettingsPage {
             _("Mounted volumes"),
             _("Mounted volumes & drives will appear on the desktop.")));
 
-
-        nautilus_settings = new GLib.Settings("org.gnome.nautilus.desktop");
-        nautilus_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
-        nautilus_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
-        nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
-        nautilus_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
+        desktop_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
+        desktop_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
+        desktop_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
+        desktop_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
 
         update_switches();
     }
 
     void update_switches()
     {
-#if 0
         bool b = bg_settings.get_boolean("show-desktop-icons");
         switch_home.sensitive = b;
         switch_network.sensitive = b;
         switch_trash.sensitive = b;
         switch_mounts.sensitive = b;
-#endif
     }
-    
+
+} /* End class */
+
+/**
+ * NemoDesktopPage allows users to change aspects of the fonts used
+ * for the nemo desktop
+ */
+public class NemoDesktopPage : NautilusDesktopPage {
+    protected override void bind_settings() {
+        bg_settings = new GLib.Settings("org.nemo.desktop");
+        desktop_settings = new GLib.Settings("org.nemo.desktop");
+    }
+} /* End class */
+
+/**
+ * DFDesktopPage allows users to change to switch desktop-icons
+ * on/off for DesktopFolder
+ */
+public class DFDesktopPage : DesktopPage {
+    public DFDesktopPage()
+    {
+        base();
+
+        /* Hook up settings */
+        var settings = new GLib.Settings("com.github.spheras.desktopfolder");
+        settings.bind("icons-on-desktop", switch_icons, "active", SettingsBindFlags.DEFAULT);
+    }
 } /* End class */
 
 } /* End namespace */

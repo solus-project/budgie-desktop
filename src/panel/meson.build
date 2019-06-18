@@ -35,13 +35,9 @@ panel_sources = [
     'settings/settings_style.vala',
     'settings/settings_wm.vala',
     'settings/themes.vala',
+    'settings/settings_desktop.vala',
     panel_resources,
 ]
-
-# Only build desktop icons pane for Nautilus right now
-if with_desktop_icons == 'nautilus'
-    panel_sources +=  'settings/settings_desktop.vala'
-endif
 
 panel_deps = [
     libplugin_vapi,
@@ -75,10 +71,6 @@ budgie_panel_vala_args = [
         '--target-glib=2.38',
         '--gresources=' + gresource,
 ]
-
-if with_desktop_icons == 'nautilus'
-    budgie_panel_vala_args += ['-D', 'HAVE_NAUTILUS']
-endif
 
 budgie_panel_c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'

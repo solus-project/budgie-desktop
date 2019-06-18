@@ -100,11 +100,6 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
 
-with_desktop_icons = get_option('with-desktop-icons')
-if with_desktop_icons ==  'nautilus'
-    warning('You must have Nautilus 3.26 or older for desktop icons with Budgie')
-endif
-
 with_stateless = get_option('with-stateless')
 if with_stateless == true
     warning('Only use stateless option with a supported OS like Solus')
@@ -168,7 +163,6 @@ report = [
     '    ==============',
     '',
     '    gtk-doc:                                @0@'.format(with_gtk_doc),
-    '    desktop icons:                          @0@'.format(with_desktop_icons),
     '    stateless:                              @0@'.format(with_stateless),
 ]
 

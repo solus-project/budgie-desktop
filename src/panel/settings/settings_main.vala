@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -101,11 +101,26 @@ public class SettingsWindow : Gtk.Window {
     {
         this.add_page(new Budgie.StylePage());
 
-#if HAVE_NAUTILUS
-        if (Environment.find_program_in_path("nautilus") != null) {
-            this.add_page(new Budgie.DesktopPage());
+        var panel_settings = new GLib.Settings("com.solus-project.budgie-panel");
+        var desktop_icons_source = panel_settings.get_string("desktop-icons-handler");
+
+        switch (desktop_icons_source) {
+            case "NAUTILUS":
+                if (Environment.find_program_in_path("nautilus") != null) {
+                    this.add_page(new Budgie.NautilusDesktopPage());
+                }
+                break;
+            case "NEMO":
+                if (Environment.find_program_in_path("nemo-desktop") != null) {
+                    this.add_page(new Budgie.NemoDesktopPage());
+                }
+                break;
+            case "DESKTOPFOLDER":
+                if (Environment.find_program_in_path("desktopfolder") != null) {
+                    this.add_page(new Budgie.DFDesktopPage());
+                }
+                break;
         }
-#endif
 
         this.add_page(new Budgie.FontPage());
         this.add_page(new Budgie.WindowsPage());
