@@ -127,7 +127,7 @@ public class DFDesktopPage : DesktopPage {
 
         /* Hook up settings */
         var settings = new GLib.Settings("com.github.spheras.desktopfolder");
-        settings.bind("icons-on-desktop", switch_icons, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("show-desktopfolder", switch_icons, "active", SettingsBindFlags.DEFAULT);
     }
 } /* End class */
 
