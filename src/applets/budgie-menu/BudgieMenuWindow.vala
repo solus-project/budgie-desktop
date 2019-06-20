@@ -536,12 +536,12 @@ public class BudgieMenuWindow : Budgie.Popover
         string parentA = searchable_string(child1.parent_menu.get_name());
         string parentB = searchable_string(child2.parent_menu.get_name());
         if (child1.parent_menu != child2.parent_menu && this.headers_visible) {
-            return GLib.strcmp(parentA, parentB);
+            return parentA.collate(parentB);
         }
 
         string nameA = searchable_string(child1.info.get_display_name());
         string nameB = searchable_string(child2.info.get_display_name());
-        return GLib.strcmp(nameA, nameB);
+        return nameA.collate(nameB);
     }
 
 
