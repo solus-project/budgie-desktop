@@ -193,7 +193,11 @@ public class ShellShim : GLib.Object
         osd_proxy = null;
     }
 
+#if HAVE_MUTTER_5
+    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint device_id)
+#else
     private void on_accelerator_activated(uint action, uint device_id)
+#endif
     {
         HashTable<string,Variant> params = new HashTable<string,Variant>(str_hash, str_equal);
 
