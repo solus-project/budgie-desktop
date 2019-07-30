@@ -20,7 +20,7 @@ public abstract class ListItem : Gtk.Box
     public signal void send_message(string message_content);
     public signal void close_popover();
 
-    public ListItem()
+    protected ListItem()
     {
         orientation = Gtk.Orientation.VERTICAL;
         spacing = 0;
