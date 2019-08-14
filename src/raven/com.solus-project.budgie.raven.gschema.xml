@@ -8,6 +8,12 @@
       <description>This setting overrides the one provided by org.gnome.desktop.sound.</description>
     </key>
 
+    <key type="b" name="show-unsupported-sound-outputs">
+      <default>false</default>
+      <summary>Show unsupported Sound Output Devices</summary>
+      <description>Shows or hides any unsupported Sound Output Devices in Raven's Devices section.</description>
+    </key>
+
     <key type="b" name="enable-week-numbers">
       <default>false</default>
       <summary>Enables displaying of week numbers in Calendar</summary>

@@ -16,6 +16,7 @@ namespace Budgie {
  */
 public class RavenPage : Budgie.SettingsPage {
     private Gtk.Switch? allow_volume_overdrive;
+    private Gtk.Switch? show_unsupported_sound_outputs;
     private Gtk.Switch? enable_week_numbers;
     private Gtk.Switch? show_calendar_widget;
     private Gtk.Switch? show_sound_output_widget;
@@ -58,6 +59,12 @@ public class RavenPage : Budgie.SettingsPage {
             _("Shows or hides the Sound Output Widget in Raven's Applets section.")
         ));
 
+        show_unsupported_sound_outputs = new Gtk.Switch();
+        grid.add_row(new SettingsRow(show_unsupported_sound_outputs,
+            _("Show unsupported Sound Output Devices"),
+            _("Shows or hides any unsupported Sound Output Devices in Raven's Devices section.")
+        ));
+
         show_mic_input_widget = new Gtk.Switch();
         grid.add_row(new SettingsRow(show_mic_input_widget,
             _("Show Microphone Input Widget"),
@@ -78,6 +85,7 @@ public class RavenPage : Budgie.SettingsPage {
 
         raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
         raven_settings.bind("allow-volume-overdrive", allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
+        raven_settings.bind("show-unsupported-sound-outputs", show_unsupported_sound_outputs, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("enable-week-numbers", enable_week_numbers, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);
         raven_settings.bind("show-sound-output-widget", show_sound_output_widget, "active", SettingsBindFlags.DEFAULT);

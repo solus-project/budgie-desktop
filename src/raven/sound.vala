@@ -17,8 +17,10 @@ namespace Budgie {
          * Logic and Mixer variables
          */
         private const string MAX_KEY = "allow-volume-above-100-percent";
+        private const string UNSUPPORTED_OUTPUTS_KEY = "show-unsupported-sound-outputs";
         private Settings? budgie_settings;
         private Settings? gnome_desktop_settings;
+        private Settings? raven_settings;
         private ulong scale_id = 0;
         private Gvc.MixerControl mixer = null;
         private HashTable<uint,Gtk.ListBoxRow?> apps;
@@ -104,6 +106,8 @@ namespace Budgie {
                 devices_list.margin_bottom = 10;
             } else { // Output
                 settings = new Settings("org.gnome.desktop.sound");
+                raven_settings = new Settings("com.solus-project.budgie-raven");
+
                 apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
                 budgie_settings = new Settings("com.solus-project.budgie-panel");
                 gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
@@ -115,6 +119,7 @@ namespace Budgie {
                 mixer.stream_added.connect(on_stream_added);
                 mixer.stream_removed.connect(on_stream_removed);
                 settings.changed[MAX_KEY].connect(on_volume_safety_changed);
+                raven_settings.changed[UNSUPPORTED_OUTPUTS_KEY].connect(on_show_unsupported_sound_outputs_change);
 
                 budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
                 gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
@@ -227,10 +232,10 @@ namespace Budgie {
 
             var card = device.card as Gvc.MixerCard;
 
-            if ((this.widget_type == "output") && ("Digital Output" in device.description)) {
-                return; // Digital Output switching is really jank with Gvc. Don't support it.
-            }
-
+            // Digital Output switching is really jank with Gvc. Don't support it by default.
+            bool is_unsupported_output = (this.widget_type == "output" && "Digital Output" in device.description);
+            bool show_unsupported_output = raven_settings.get_boolean(UNSUPPORTED_OUTPUTS_KEY);
+           
             var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             var label = new Gtk.Label("%s - %s".printf(device.description, card.name));
             label.justify = Gtk.Justification.LEFT;
@@ -243,11 +248,17 @@ namespace Budgie {
             list_item.add(box);
 
             list_item.set_data("device_id", id);
-            devices_list.insert(list_item, -1); // Append item
+            if (is_unsupported_output) {
+                list_item.set_data("is_unsupported_output", is_unsupported_output);
+            }
 
+            // Add if the device is supported, or if show unsupported option is selected in Raven settings.
+            if (!is_unsupported_output || show_unsupported_output) {
+                devices_list.insert(list_item, -1); // Append item
+                list_item.show_all();
+                devices_list.queue_draw();
+            }
             devices.insert(id, list_item);
-            list_item.show_all();
-            devices_list.queue_draw();
 
             devices_state_changed();
         }
@@ -490,6 +501,32 @@ namespace Budgie {
             }
 
             this.update_input_draw_markers();
+        }
+
+        /**
+         * on_show_unsupported_sound_outputs_change will listen to changes to the show unsupported outputs key
+         */
+        private void on_show_unsupported_sound_outputs_change() {
+            if (widget_type == "output") { // Output
+                bool show_unsupported = raven_settings.get_boolean(UNSUPPORTED_OUTPUTS_KEY); 
+
+                devices.foreach ((key, val) => {
+                    var list_item = devices[key];
+                    bool is_unsupported = list_item.get_data("is_unsupported_output");
+                    if (is_unsupported) {
+                        if (show_unsupported) {
+                            devices_list.insert(list_item, -1); // Append the item
+                            list_item.show_all();
+                            devices_list.queue_draw();
+                            devices_state_changed();
+                        } else {
+                            devices_list.remove(list_item); // Remove the item
+                            devices_list.queue_draw();
+                            devices_state_changed();
+                        }
+                    }
+                });
+            }
         }
 
         /**
