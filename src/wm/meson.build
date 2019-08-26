@@ -15,13 +15,22 @@ budgie_wm_sources = [
     'wm.vala',
 ]
 
+budgie_wm_status_vala_args = []
+
 vapi_mutter = 'libmutter-3'
 dep_mutter = dependency('libmutter-3', version: gnome_minimum_version, required: false)
 if not dep_mutter.found()
-    dep_mutter = dependency('libmutter-4', version: gnome_minimum_version)
+    dep_mutter = dependency('libmutter-4', version: gnome_minimum_version, required: false)
     if dep_mutter.found()
         message('Using new libmutter-4 ABI from GNOME 3.32')
         vapi_mutter = 'libmutter-4'
+    else
+        dep_mutter = dependency('libmutter-5', version: gnome_minimum_version)
+        if dep_mutter.found()
+            message('Using new libmutter-5 ABI from GNOME 3.34')
+            vapi_mutter = 'libmutter-5'
+            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
+        endif
     endif
 endif
 
@@ -32,8 +41,6 @@ budgie_wm_deps = [
     dep_gsettings,
     dep_ibus,
 ]
-
-budgie_wm_status_vala_args = []
 
 if dep_gsd.version().version_compare('>=3.31.91')
     budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_332']
