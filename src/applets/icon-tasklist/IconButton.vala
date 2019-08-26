@@ -43,8 +43,7 @@ public class IconButton : Gtk.ToggleButton
     public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
     public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
 
-    public IconButton(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned)
-    {
+    public IconButton(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned) {
         Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
         this.settings = c_settings;
         this.app_info = info;
@@ -59,8 +58,7 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false)
-    {
+    public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false) {
         Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
@@ -87,8 +85,7 @@ public class IconButton : Gtk.ToggleButton
         this.set_wnck_window(window);
     }
 
-    public IconButton.from_group(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info)
-    {
+    public IconButton.from_group(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info) {
         Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
         this.settings = c_settings;
@@ -110,11 +107,22 @@ public class IconButton : Gtk.ToggleButton
     /**
      * We have race conditions in glib between the desired properties..
      */
-    private void gobject_constructors_suck()
-    {
+    private void gobject_constructors_suck() {
         icon = new Icon();
         icon.get_style_context().add_class("icon");
         this.add(icon);
+
+        enter_notify_event.connect(() => {
+            this.set_tooltip(); // Update our tooltip
+            this.queue_draw(); // Redraw tooltip
+            return false;
+        });
+
+        leave_notify_event.connect(() => {
+            this.set_tooltip_text(""); // Clear it
+            this.has_tooltip = false;
+            return false;
+        });
 
         definite_allocation.width = 0;
         definite_allocation.height = 0;
@@ -322,8 +330,7 @@ public class IconButton : Gtk.ToggleButton
         popover.add_window(window.get_xid(), window.get_name());
     }
 
-    public void set_draggable(bool draggable)
-    {
+    public void set_draggable(bool draggable) {
         if (draggable) {
             Gtk.drag_source_set(this, Gdk.ModifierType.BUTTON1_MASK, DesktopHelper.targets, Gdk.DragAction.COPY);
         } else {
@@ -360,8 +367,7 @@ public class IconButton : Gtk.ToggleButton
         return add;
     }
 
-    public void update_icon()
-    {
+    public void update_icon() {
         if (has_valid_windows(null)) {
             this.icon.waiting = false;
         } else if (!this.pinned) {
@@ -388,11 +394,11 @@ public class IconButton : Gtk.ToggleButton
         } else {
             icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
         }
+
         icon.pixel_size = this.desktop_helper.icon_size;
     }
 
-    public void update()
-    {
+    public void update() {
         if (!has_valid_windows(null)) {
             this.get_style_context().remove_class("running");
             if (!this.pinned || this.is_from_window) {
@@ -413,17 +419,7 @@ public class IconButton : Gtk.ToggleButton
         }
         this.set_active(has_active);
 
-        if (has_valid_windows(null) && this.app_info != null) {
-            this.set_tooltip_text(this.app_info.get_display_name());
-        } else if (this.app_info != null) {
-            this.set_tooltip_text("Launch %s".printf(this.app_info.get_display_name()));
-        } else {
-            if (class_group != null) {
-                this.set_tooltip_text(this.class_group.get_name());
-            } else if (this.window != null) {
-                this.set_tooltip_text(this.window.get_name());
-            }
-        }
+        set_tooltip(); // Update our tooltip text
 
         this.set_draggable(!this.desktop_helper.lock_icons);
 
@@ -437,8 +433,7 @@ public class IconButton : Gtk.ToggleButton
         return (this.window_count != 0);
     }
 
-    public bool has_window(Wnck.Window? window)
-    {
+    public bool has_window(Wnck.Window? window) {
         if (window == null) {
             return false;
         }
@@ -460,8 +455,7 @@ public class IconButton : Gtk.ToggleButton
         return false;
     }
 
-    public bool has_window_on_workspace(Wnck.Workspace workspace)
-    {
+    public bool has_window_on_workspace(Wnck.Workspace workspace) {
         if (workspace == null) {
             return false;
         }
@@ -479,8 +473,7 @@ public class IconButton : Gtk.ToggleButton
         return false;
     }
 
-    private void launch_app(uint32 time)
-    {
+    private void launch_app(uint32 time) {
         if (app_info == null) {
             return;
         }
@@ -507,8 +500,7 @@ public class IconButton : Gtk.ToggleButton
         return pinned;
     }
 
-    public void attention(bool needs_it = true)
-    {
+    public void attention(bool needs_it = true) {
         this.needs_attention = needs_it;
         this.queue_draw();
         if (needs_it) {
@@ -517,10 +509,30 @@ public class IconButton : Gtk.ToggleButton
     }
 
     /**
+     * set_tooltip will set the tooltip text for this IconButton
+     */
+    public void set_tooltip() {
+        if (this.window_count != 0) { // If we have valid windows open
+            if (this.window_count == 1 && this.first_app != null) { // Only one window and a valid AbomationRunningApp for it
+                this.set_tooltip_text(this.first_app.name);
+            } else if (this.app_info != null) { // Has app info
+                this.set_tooltip_text(this.app_info.get_display_name());
+            } else if (this.window != null) {
+                this.set_tooltip_text(this.window.get_name());
+            }
+        } else { // If we have no windows open
+            if (this.app_info != null) {
+                this.set_tooltip_text("Launch %s".printf(this.app_info.get_display_name()));
+            } else if (this.class_group != null) { // Has class group
+                this.set_tooltip_text(this.class_group.get_name());
+            }
+        }
+    }
+
+    /**
      * Handle startup notification, set our own ID to the ID selected
      */
-    private void on_launched(GLib.AppInfo info, Variant v)
-    {
+    private void on_launched(GLib.AppInfo info, Variant v) {
         GLib.Variant? elem;
 
         var iter = v.iterator();
@@ -552,8 +564,7 @@ public class IconButton : Gtk.ToggleButton
         this.get_display().notify_startup_complete(id);
     }
 
-    public void draw_inactive(Cairo.Context cr, Gdk.RGBA col)
-    {
+    public void draw_inactive(Cairo.Context cr, Gdk.RGBA col) {
         int x = definite_allocation.x;
         int y = definite_allocation.y;
         int width = definite_allocation.width;
@@ -620,8 +631,7 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public override bool draw(Cairo.Context cr)
-    {
+    public override bool draw(Cairo.Context cr) {
         int x = definite_allocation.x;
         int y = definite_allocation.y;
         int width = definite_allocation.width;
@@ -831,8 +841,7 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public override void get_preferred_width(out int min, out int nat)
-    {
+    public override void get_preferred_width(out int min, out int nat) {
         if (this.desktop_helper.orientation == Gtk.Orientation.HORIZONTAL) {
             min = nat = this.desktop_helper.panel_size;
             return;
@@ -844,8 +853,7 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public override void get_preferred_height(out int min, out int nat)
-    {
+    public override void get_preferred_height(out int min, out int nat) {
         if (this.desktop_helper.orientation == Gtk.Orientation.VERTICAL) {
             min = nat = this.desktop_helper.panel_size;
         } else {
@@ -856,8 +864,7 @@ public class IconButton : Gtk.ToggleButton
         }
     }
 
-    public override bool button_release_event(Gdk.EventButton event)
-    {
+    public override bool button_release_event(Gdk.EventButton event) {
         if (class_group != null && (last_active_window == null || class_group.get_windows().find(last_active_window) == null)) {
             last_active_window = class_group.get_windows().nth_data(0);
         }
@@ -894,11 +901,7 @@ public class IconButton : Gtk.ToggleButton
                     bool show_all_windows_on_click = false;
 
                     if (this.settings != null) { // Settings defined
-                        try {
-                            show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
-                        } catch (GLib.Error e) {
-                            warning("Failed to get setting for Show All Windows On Click: %s", e.message);
-                        }
+                        show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
                     }
 
                     list.foreach((w) => {
