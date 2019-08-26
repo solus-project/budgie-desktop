@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -40,7 +40,7 @@ public class SpacerApplet : Budgie.Applet
     public string uuid { public set; public get; }
 
     private Settings? settings;
-
+    private Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
     public override bool supports_settings()
     {
@@ -75,24 +75,44 @@ public class SpacerApplet : Budgie.Applet
         queue_resize();
     }
 
+    /**
+     * Our panel has moved somewhere, stash the position
+     */
+    public override void panel_position_changed(Budgie.PanelPosition position) {
+        this.panel_position = position;
+        queue_resize();
+    }
+
     public override void get_preferred_width(out int min, out int nat)
     {
-        min = nat = space_size;
+        if (this.panel_position == Budgie.PanelPosition.TOP ||
+            this.panel_position == Budgie.PanelPosition.BOTTOM) {
+                min = nat = space_size;
+        }
     }
 
     public override void get_preferred_width_for_height(int h, out int min, out int nat)
     {
-        min = nat = space_size;
+        if (this.panel_position == Budgie.PanelPosition.TOP ||
+            this.panel_position == Budgie.PanelPosition.BOTTOM) {
+                min = nat = space_size;
+        }
     }
 
     public override void get_preferred_height(out int min, out int nat)
     {
-        min = nat = space_size;
+        if (this.panel_position == Budgie.PanelPosition.LEFT ||
+            this.panel_position == Budgie.PanelPosition.RIGHT) {
+                min = nat = space_size;
+        }
     }
 
     public override void get_preferred_height_for_width(int h, out int min, out int nat)
     {
-        min = nat = space_size;
+        if (this.panel_position == Budgie.PanelPosition.LEFT ||
+            this.panel_position == Budgie.PanelPosition.RIGHT) {
+                min = nat = space_size;
+        }
     }
 }
 
