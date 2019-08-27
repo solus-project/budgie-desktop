@@ -10,13 +10,11 @@ gnome_session_components = [
 
 gnome_session_324_components = [
     'org.gnome.SettingsDaemon.A11ySettings',
-    'org.gnome.SettingsDaemon.Clipboard',
     'org.gnome.SettingsDaemon.Color',
     'org.gnome.SettingsDaemon.Datetime',
     'org.gnome.SettingsDaemon.Housekeeping',
     'org.gnome.SettingsDaemon.Keyboard',
     'org.gnome.SettingsDaemon.MediaKeys',
-    'org.gnome.SettingsDaemon.Mouse',
     'org.gnome.SettingsDaemon.Power',
     'org.gnome.SettingsDaemon.PrintNotifications',
     'org.gnome.SettingsDaemon.Rfkill',
@@ -31,6 +29,12 @@ gnome_session_324_components = [
 gsd_324_key = [
     'org.gnome.SettingsDaemon.A11yKeyboard'
 ]
+
+gsd_324_mc = [
+    'org.gnome.SettingsDaemon.Clipboard',
+    'org.gnome.SettingsDaemon.Mouse'
+]
+
 
 gsd_324_max = [
     'org.gnome.SettingsDaemon.Orientation',
@@ -50,12 +54,14 @@ endif
 
 dep_gsd = dependency('gnome-settings-daemon', version: gnome_minimum_version)
 # Merge the list depending on the gnome-settings-daemon version.
-if dep_gsd.version().version_compare('>=3.27.90')
+if dep_gsd.version().version_compare('>=3.33.90')
     session_components = budgie_components + gnome_session_324_components
+elif dep_gsd.version().version_compare('>=3.27.90')
+    session_components = budgie_components + gnome_session_324_components + gsd_324_mc
 elif dep_gsd.version().version_compare('>=3.25.4')
-    session_components = budgie_components + gnome_session_324_components + gsd_324_key
+    session_components = budgie_components + gnome_session_324_components + gsd_324_mc + gsd_324_key
 elif dep_gsd.version().version_compare('>=3.23.3')
-    session_components = budgie_components + gnome_session_324_components + gsd_324_key + gsd_324_max
+    session_components = budgie_components + gnome_session_324_components + gsd_324_mc + gsd_324_key + gsd_324_max
 else
     session_components = gnome_session_components + budgie_components
 endif
