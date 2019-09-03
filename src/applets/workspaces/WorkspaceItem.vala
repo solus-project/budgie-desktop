@@ -76,11 +76,20 @@ public class WorkspaceItem : Gtk.EventBox
         rename_button.set_relief(Gtk.ReliefStyle.NONE);
         Gtk.Separator sep1 = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
         button_box.pack_start(sep1, true, false, 0);
-        Gtk.Button remove_button = new Gtk.Button.with_label(_("Remove"));
-        button_box.pack_start(remove_button, true, true, 0);
-        remove_button.get_child().halign = Gtk.Align.START;
-        remove_button.get_child().margin_start = 0;
-        remove_button.set_relief(Gtk.ReliefStyle.NONE);
+
+        if (workspace.get_number() != 1) { // If this isn't the first workspace, which we shouldn't allow removal of
+            Gtk.Button remove_button = new Gtk.Button.with_label(_("Remove"));
+            button_box.pack_start(remove_button, true, true, 0);
+            remove_button.get_child().halign = Gtk.Align.START;
+            remove_button.get_child().margin_start = 0;
+            remove_button.set_relief(Gtk.ReliefStyle.NONE);
+
+            remove_button.button_release_event.connect((event) => {
+                popover.hide();
+                remove_workspace(workspace.get_number(), event.time);
+                return false;
+            });
+        }
 
         Gtk.Box rename_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         popover_stack.add(rename_box);
@@ -115,12 +124,6 @@ public class WorkspaceItem : Gtk.EventBox
 
         this.drag_drop.connect(on_drag_drop);
         this.drag_data_received.connect(on_drag_data_received);
-
-        remove_button.button_release_event.connect((event) => {
-            popover.hide();
-            remove_workspace(workspace.get_number(), event.time);
-            return false;
-        });
 
         rename_button.clicked.connect(() => {
             popover_stack.set_visible_child(rename_box);

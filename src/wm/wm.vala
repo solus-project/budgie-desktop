@@ -145,6 +145,7 @@ public class BudgieWM : Meta.Plugin
     private KeyboardManager? keyboard = null;
 
     Settings? settings = null;
+    Settings? gnome_desktop_prefs = null;
     RavenRemote? raven_proxy = null;
     ShellShim? shim = null;
     BudgieWMDBUS? focus_interface = null;
@@ -478,9 +479,13 @@ public class BudgieWM : Meta.Plugin
         iface_settings.bind("enable-animations", this, "use-animations", SettingsBindFlags.DEFAULT);
 
         settings = new Settings(WM_SCHEMA);
+        gnome_desktop_prefs = new Settings("org.gnome.desktop.wm.preferences");
         this.settings.changed.connect(this.on_wm_schema_changed);
         this.on_wm_schema_changed(EXPERIMENTAL_DIALOG);
         this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
+
+        this.update_workspace_count(); // Update (create if necessary) our workspaces
+        gnome_desktop_prefs.changed["num-workspaces"].connect(this.update_workspace_count);
 
         /* Custom keybindings */
         display.add_keybinding("clear-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_clear);
@@ -530,7 +535,7 @@ public class BudgieWM : Meta.Plugin
         display_group.insert_child_below(background_group, null);
         background_group.button_release_event.connect(on_background_click);
 
-	var monitor_manager = Meta.MonitorManager.get();
+        var monitor_manager = Meta.MonitorManager.get();
         monitor_manager.monitors_changed.connect(on_monitors_changed);
         on_monitors_changed();
 
@@ -605,6 +610,31 @@ public class BudgieWM : Meta.Plugin
             }
             return false;
         });
+    }
+
+    /**
+     * update_workspace_count will update our workspace count trigger workspace creation / removal
+     */
+    public void update_workspace_count() {
+        unowned Meta.WorkspaceManager wsm = get_display().get_workspace_manager();
+        int current_workspace_count = wsm.get_n_workspaces();
+        int new_workspace_count = gnome_desktop_prefs.get_int("num-workspaces"); // Get the new amount of workspaces
+
+        if (new_workspace_count != current_workspace_count) { // If there is an actual difference
+            if (new_workspace_count > current_workspace_count) { // If we should be adding workspaces
+                while (wsm.get_n_workspaces() < new_workspace_count) {
+                    wsm.append_new_workspace(false, get_display().get_current_time());
+                }
+            } else { // Workspaces to remove
+                while (wsm.get_n_workspaces() > new_workspace_count) {
+                    var last_workspace = wsm.get_workspace_by_index(wsm.get_n_workspaces() - 1);
+
+                    if (last_workspace != null) {
+                        wsm.remove_workspace(last_workspace, get_display().get_current_time());
+                    }
+                }
+            }
+        }
     }
 
     /* Dismiss raven from view. Consider in future tracking the visible
