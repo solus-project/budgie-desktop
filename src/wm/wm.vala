@@ -620,6 +620,10 @@ public class BudgieWM : Meta.Plugin
         int current_workspace_count = wsm.get_n_workspaces();
         int new_workspace_count = gnome_desktop_prefs.get_int("num-workspaces"); // Get the new amount of workspaces
 
+        if (new_workspace_count > 8) { // If the total amount of workspaces is excessive
+            gnome_desktop_prefs.set_int("num-workspaces", 8); // Force to max of 8
+        }
+
         if (new_workspace_count != current_workspace_count) { // If there is an actual difference
             if (new_workspace_count > current_workspace_count) { // If we should be adding workspaces
                 while (wsm.get_n_workspaces() < new_workspace_count) {

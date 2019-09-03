@@ -24,9 +24,9 @@ public class FontPage : Budgie.SettingsPage {
     private Gtk.ComboBox combobox_hinting;
     private Gtk.ComboBox combobox_antialias;
 
-    private GLib.Settings ui_settings;
-    private GLib.Settings wm_settings;
-    private GLib.Settings x_settings;
+    private Settings ui_settings;
+    private Settings wm_settings;
+    private Settings x_settings;
 
     public FontPage()
     {
