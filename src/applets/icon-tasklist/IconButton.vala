@@ -60,12 +60,15 @@ public class IconButton : Gtk.ToggleButton
 
     public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false) {
         Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
-
         this.settings = c_settings;
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
         this.first_app = new Budgie.AbominationRunningApp(app_system, window);
+
+        this.first_app.name_changed.connect(() => { // When the name of the app has changed
+            set_tooltip(); // Update our tooltip
+        });
 
         gobject_constructors_suck();
 
@@ -257,6 +260,10 @@ public class IconButton : Gtk.ToggleButton
 
         this.screen.window_closed.connect((old_window) => { // When a window is close
             this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
+
+            if (this.first_app != null) { // If we have an AbominationRunningApp associated with this
+                this.first_app.invalidate_window(old_window); // See if we need to invalidate this window and update our new one (if any)
+            }
         });
 
         this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
@@ -804,6 +811,10 @@ public class IconButton : Gtk.ToggleButton
 
                 if (first_window != null) {
                     this.first_app = new Budgie.AbominationRunningApp(app_system, first_window);
+
+                    this.first_app.name_changed.connect(() => { // When the name of the app has changed
+                        set_tooltip(); // Update our tooltip
+                    });
                 }
             }
         }

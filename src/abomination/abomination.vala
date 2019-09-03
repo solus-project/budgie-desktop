@@ -280,20 +280,63 @@ namespace Budgie {
         public signal void name_changed(string name);
 
         public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window) {
-            this.window = window;
+            set_window(window);
             this.id = this.window.get_xid();
             this.name = this.window.get_name();
-            this.group_object = window.get_class_group();
+            this.group_object = this.window.get_class_group();
             this.appsys = app_system;
 
             update_group();
-            update_icon();
+        }
 
-            window.class_changed.connect(() => {
+        /**
+         * invalid_window will check if the provided window is our current window
+         * If the provided window is our current window, update to any new window in the class group, update our name, etc.
+         * 
+         */
+        public void invalidate_window(Wnck.Window window) {
+            if (window.get_xid() == this.window.get_xid()) { // The window provided matches ours
+                this.window = null; // Set to null
+
+                bool found_new_window = false;
+                unowned List<Wnck.Window> class_windows = this.group_object.get_windows();
+
+                if (class_windows.length() > 0) { // If we have windows
+                    class_windows.foreach((other_window) => {
+                        if (other_window.get_state() != Wnck.WindowState.SKIP_TASKLIST) { // If this window shouldn't be skipped
+                            this.window = other_window;
+                            found_new_window = true;
+                            return;
+                        }
+                    });
+                }
+
+                if (found_new_window && this.window != null) { // If we found a new window replacement
+                    set_window(this.window); // Set our bindings
+                } else if (!found_new_window && this.app != null) { // If we didn't find the new window but we at least have the DesktopAppInfo
+                    this.name = this.app.get_display_name(); // Just fallback to the DesktopAppInfo display name
+                }
+            }
+        }
+
+        /**
+         * set_window will handle setting our window and its bindings
+         */
+        private void set_window(Wnck.Window window) {
+            if (window == null) { // Window provided is null
+                return;
+            }
+
+            this.window = window;
+            update_icon();
+            update_name();
+
+            this.window.class_changed.connect(() => {
                 string old_group = this.group;
 
                 update_group();
                 update_icon();
+                update_name();
 
                 if (this.group != old_group) { // Actually changed
                     if (this.group.has_prefix("chrome-")) {
@@ -304,7 +347,7 @@ namespace Budgie {
                 }
             });
 
-            window.icon_changed.connect(() => {
+            this.window.icon_changed.connect(() => {
                 string old_icon = this.icon;
                 update_icon();
 
@@ -313,13 +356,12 @@ namespace Budgie {
                 }
             });
 
-            window.name_changed.connect(() => {
-                string old_name = this.name;
-                this.name = window.get_name();
+            this.window.name_changed.connect(() => {
+                update_name();
+            });
 
-                if (this.name != old_name) { // Actually changed
-                    name_changed(this.name);
-                }
+            this.window.state_changed.connect(() => {
+                update_name();
             });
         }
 
@@ -327,6 +369,10 @@ namespace Budgie {
          * update_group will update our group
          */
         private void update_group() {
+            if (this.window == null) { // Window no longer valid
+                return;
+            }
+
             this.app = this.appsys.query_window(this.window);
 
             if (this.app != null) { // Successfully got desktop app info
@@ -351,6 +397,21 @@ namespace Budgie {
             if (this.app != null) {
                 if (this.app.has_key("Icon")) { // Got app info
                     this.icon = this.app.get_string("Icon");
+                }
+            }
+        }
+
+        /**
+         * update_name will update the window name
+         */
+        private void update_name() {
+            string old_name = this.name;
+
+            if (this.window != null) {
+                this.name = this.window.get_name();
+
+                if (this.name != old_name) { // Actually changed
+                    name_changed(this.name);
                 }
             }
         }
