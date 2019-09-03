@@ -12,8 +12,8 @@
 namespace Budgie {
     public class AppSoundControl : Gtk.Box {
         private Gvc.MixerControl? mixer = null;
-        private Gvc.MixerStream? primary_stream = null;
-        private Gvc.MixerStream? stream = null;
+        public Gvc.MixerStream? primary_stream = null;
+        public Gvc.MixerStream? stream = null;
         private Gtk.Box? app_info_header = null;
         private Gtk.Image? app_image = null;
         private Gtk.Label? app_label = null;
@@ -46,16 +46,7 @@ namespace Budgie {
             stream = c_stream;
             app_name = c_name;
 
-            var max_vol = stream.get_volume();
-            var stream_volume = max_vol; // Create a non-manipulated copy
-            var primary_stream_vol = primary_stream.get_base_volume();
-
-            if (max_vol < primary_stream_vol) {
-                max_vol = primary_stream_vol;
-            }
-
-            var max_vol_step = max_vol / 20;
-            is_pre_muted = (stream_volume <= max_vol_step); // Set our default muted state
+            is_pre_muted = volume_at_mute_threshold();
 
             /**
              * App Desktop Logic
@@ -125,6 +116,10 @@ namespace Budgie {
             app_info_header.pack_start(app_label, false, true, 0);
             app_info_header.pack_end(app_mute_button, false, false, 0);
 
+            var max_vol = this.get_base_volume();
+            var stream_volume = stream.get_volume();
+            var max_vol_step = max_vol / 20; // Default to steps of 20
+
             volume_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, max_vol, max_vol_step);
             volume_slider.set_draw_value(false);
             volume_slider.set_increments(max_vol_step, max_vol_step);
@@ -145,6 +140,15 @@ namespace Budgie {
             }
 
             pack_end(app_info, true, true, 0);
+        }
+
+        /**
+         * get_base_volume will get the recommended base volume based on the stream and primary device stream
+         */
+        public uint32 get_base_volume() {
+            var base_vol = stream.get_volume();
+            var primary_stream_vol = primary_stream.get_base_volume();
+            return (base_vol < primary_stream_vol) ? primary_stream_vol : base_vol;
         }
 
         /**
@@ -183,6 +187,13 @@ namespace Budgie {
                 app_label.label = stream_name;
             }
 
+            refresh_volume(); // Refresh the volume
+        }
+
+        /**
+         * refresh_volume is our function for updating the volume slider and mute UI
+         */
+        public void refresh_volume() {
             var vol = stream.get_volume();
 
             if (volume_slider.get_value() != vol) { // If the volume has changed
@@ -190,7 +201,7 @@ namespace Budgie {
             }
 
             volume = vol;
-
+            is_pre_muted = volume_at_mute_threshold(); // Update our muted value
             set_mute_ui(); // Ensure we have an updated mute
         }
 
@@ -224,6 +235,15 @@ namespace Budgie {
             set_mute_ui(); // Update our image
 
             SignalHandler.unblock(volume_slider, scale_id);
+        }
+
+        /**
+         * volume_at_mute_threadshold will return if the stream volume is at a threshold that it should indicate it is muted
+         */
+        public bool volume_at_mute_threshold() {
+            var base_vol = this.get_base_volume();
+            var stream_volume = this.stream.get_volume();
+            return (stream_volume <= (base_vol / 20));
         }
     }
 }

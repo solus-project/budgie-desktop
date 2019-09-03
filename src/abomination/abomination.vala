@@ -281,9 +281,13 @@ namespace Budgie {
 
         public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window) {
             set_window(window);
-            this.id = this.window.get_xid();
-            this.name = this.window.get_name();
-            this.group_object = this.window.get_class_group();
+
+            if (this.window != null) {
+                this.id = this.window.get_xid();
+                this.name = this.window.get_name();
+                this.group_object = this.window.get_class_group();
+            }
+
             this.appsys = app_system;
 
             update_group();
@@ -295,6 +299,10 @@ namespace Budgie {
          * 
          */
         public void invalidate_window(Wnck.Window window) {
+            if (this.window == null || window == null) {
+                return;
+            }
+
             if (window.get_xid() == this.window.get_xid()) { // The window provided matches ours
                 this.window = null; // Set to null
 

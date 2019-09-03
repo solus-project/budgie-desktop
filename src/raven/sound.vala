@@ -440,6 +440,14 @@ namespace Budgie {
                     apps.insert(id, list_row); // Add to apps
                     apps_listbox.show_all();
                     toggle_start_listening();
+
+                    Gvc.ChannelMap channel_map = stream.get_channel_map(); // Get the channel map for this stream
+
+                    if (channel_map != null) { // Valid channel map
+                        channel_map.volume_changed.connect(() => { // On volume change on channel map
+                            control.refresh_volume(); // Refresh the volume
+                        });
+                    }
                 }
             }
         }
