@@ -81,6 +81,8 @@ public class TrayApplet : Budgie.Applet
             this.height = alloc.height;
             this.get_parent().queue_resize();
             this.get_toplevel().queue_resize();
+            this.get_parent().queue_draw();
+            this.get_toplevel().queue_draw();
         }
     }
 
