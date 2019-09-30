@@ -41,6 +41,14 @@ daemon_deps = [
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml')
 
+daemon_vala_args = []
+
+dep_gsd_doubles = dependency('gnome-settings-daemon', version: '>=3.33.90', required: false)
+if dep_gsd.found()
+    daemon_vala_args += ['-D', 'USE_GSD_DOUBLES']
+    message('Found GNOME Settings Daemon >= 3.33.90')
+endif
+
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
@@ -57,6 +65,7 @@ executable(
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
+        daemon_vala_args,
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',

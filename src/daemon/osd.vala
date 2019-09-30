@@ -70,7 +70,7 @@ public class OSD : Gtk.Window
      * Optional progressbar
      */
     [GtkChild]
-    private Gtk.ProgressBar progressbar;
+    public Gtk.ProgressBar progressbar;
 
     /**
      * Track the primary monitor to show on
@@ -124,29 +124,6 @@ public class OSD : Gtk.Window
     }
 
     /**
-     * Current value for the progressbar. Values less than 1 hide the bar
-     */
-    public int32 osd_progress {
-        public set {
-            int32 v = value;
-            if (v < 0) {
-                progressbar.set_visible(false);
-            } else {
-                double fraction = v.clamp(0, 100) / 100.0;
-                progressbar.set_fraction(fraction);
-                progressbar.set_visible(true);
-            }
-        }
-        public get {
-            if (!progressbar.get_visible()) {
-                return -1;
-            } else {
-                return (int32)(progressbar.get_fraction() * 100);
-            }
-        }
-    }
-
-    /**
      * Construct a new BudgieOSD widget
      */
     public OSD()
@@ -175,9 +152,9 @@ public class OSD : Gtk.Window
 
         osd_title = null;
         osd_icon = null;
-        osd_progress = -1;
 
         get_child().show_all();
+        set_visible(false);
 
         /* Get everything into position prior to the first showing */
         on_monitors_changed();
@@ -257,14 +234,13 @@ public class OSDManager
      * Show the OSD on screen with the given parameters:
      * icon: string Icon-name to use
      * label: string Text to display, if any
-     * level: int32 Progress-level to display in the OSD
+     * level: Progress-level to display in the OSD (double or int32 depending on gsd release)
      * monitor: int32 The monitor to display the OSD on (currently ignored)
      */
     public void ShowOSD(HashTable<string,Variant> params)
     {
         string? icon_name = null;
         string? label = null;
-        int32 level = -1;
 
         if (params.contains("icon")) {
             icon_name = params.lookup("icon").get_string();
@@ -272,13 +248,28 @@ public class OSDManager
         if (params.contains("label")) {
             label = params.lookup("label").get_string();
         }
+
+        double prog_value = -1;
+
         if (params.contains("level")) {
-            level = params.lookup("level").get_int32();
+#if USE_GSD_DOUBLES
+            prog_value = params.lookup("level").get_double();
+#else
+            int32 prog_int = params.lookup("level").get_int32();
+            prog_value = prog_int.clamp(0, 100) / 100.0;
+#endif
         }
+
         /* Update the OSD accordingly */
         osd_window.osd_title = label;
         osd_window.osd_icon = icon_name;
-        osd_window.osd_progress = level;
+
+        if (prog_value < 0) {
+            osd_window.progressbar.set_visible(false);
+        } else {
+            osd_window.progressbar.set_fraction(prog_value);
+            osd_window.progressbar.set_visible(true);
+        }
 
         this.reset_osd_expire(OSD_EXPIRE_TIME);
     }
