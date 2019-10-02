@@ -55,17 +55,16 @@ public class DesktopHelper : GLib.Object
         string[] buttons = {};
         foreach (Gtk.Widget widget in icon_layout.get_children()) {
             IconButton button = (widget as ButtonWrapper).button;
-            if (!button.is_pinned()) {
-                continue;
+
+            if (button.is_pinned()) {
+                if (button.get_appinfo() != null) {
+                    string id = button.get_appinfo().get_id();
+                    if (id in buttons) {
+                        continue;
+                    }
+                    buttons += id;
+                }
             }
-            if (button.get_appinfo() == null) {
-                continue;
-            }
-            string id = button.get_appinfo().get_id();
-            if (id in buttons) {
-                continue;
-            }
-            buttons += id;
         }
 
         settings.set_strv("pinned-launchers", buttons); // Keeping with pinned- internally for compatibility.

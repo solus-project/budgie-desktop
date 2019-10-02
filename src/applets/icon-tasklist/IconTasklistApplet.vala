@@ -264,11 +264,15 @@ public class IconTasklistApplet : Budgie.Applet
 
         if (app_id.has_prefix("file://")) {
             app_id = app_id.split("://")[1];
-            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id.strip());
+            app_id = app_id.strip();
+
+            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id);
             if (info == null) {
                 return;
             }
-            app_id = info.get_id();
+
+            app_id = info.get_filename();
+
             if (buttons.contains(app_id)) {
                 original_button = (buttons[app_id].get_parent() as ButtonWrapper);
             } else {
@@ -286,9 +290,18 @@ public class IconTasklistApplet : Budgie.Applet
                 });
                 main_layout.pack_start(original_button, false, false, 0);
             }
-        } else {
-            unowned IconButton? button = buttons.get(app_id) ?? buttons.get(id_map.get(app_id));
-            original_button = (button != null) ? button.get_parent() as ButtonWrapper : null;
+        } else { // Doesn't start with file://
+            unowned IconButton? button = null;
+
+            if (buttons.contains(app_id)) { // If buttons contains this app_id
+                button = buttons.get(app_id);
+            } else if (id_map.contains(app_id)) { // id_map contains the app
+                button = buttons.get(id_map.get(app_id));
+            }
+
+            if (button != null) {
+                original_button = button.get_parent() as ButtonWrapper;
+            }
         }
 
         if (original_button == null) {
@@ -378,6 +391,7 @@ public class IconTasklistApplet : Budgie.Applet
         GLib.DesktopAppInfo? app_info = first_app.app;
 
         string app_id = (app_info == null) ? "%s".printf(group_name) : app_info.get_id();
+        app_id = app_id.strip();
 
         id_map.insert(group_name, app_id);
 
@@ -476,8 +490,10 @@ public class IconTasklistApplet : Budgie.Applet
         buttons.insert("%s|%lu".printf(app.group, app.id), button);
 
         button.became_empty.connect(() => {
-            buttons.remove("%s|%lu".printf(app.group, app.id));
-            wrapper.gracefully_die();
+            if (!button.pinned) {
+                buttons.remove("%s|%lu".printf(app.group, app.id));
+                wrapper.gracefully_die();
+            }
         });
 
         main_layout.add(wrapper);
