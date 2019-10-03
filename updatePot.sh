@@ -2,7 +2,7 @@
 
 function do_gettext()
 {
-    xgettext --package-name=budgie-desktop --package-version=10.5 $* --default-domain=budgie-desktop --join-existing --from-code=UTF-8 --no-wrap
+    xgettext --package-name=budgie-desktop --package-version=10.5.1 $* --default-domain=budgie-desktop --join-existing --from-code=UTF-8 --no-wrap
 }
 
 function do_intltool()
