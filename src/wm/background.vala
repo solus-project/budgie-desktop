@@ -231,15 +231,14 @@ public class BudgieBackground : Clutter.Actor
             color_str = null;
         }
 
-        /* Set colour where appropriate, and for now dont parse .xml files */
-        if (this.is_color_wallpaper(bg_filename) || bg_filename.has_suffix(".xml")) {
-            background.changed.connect(on_update);
-            if (shading_direction == GDesktop.BackgroundShading.SOLID) {
-                background.set_color(primary_color);
-            } else {
-                background.set_gradient(shading_direction, primary_color, secondary_color);
-            }
+        /* Always set a background colour to support transparency in background images */
+        if (shading_direction == GDesktop.BackgroundShading.SOLID) {
+            background.set_color(primary_color);
         } else {
+            background.set_gradient(shading_direction, primary_color, secondary_color);
+        }
+        /* Set background image when appropriate, and for now dont parse .xml files */
+        if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
             var bg_file = File.new_for_uri("file://" + bg_filename);
             /* Once we know the image is in the image cache, set the background */
 
@@ -248,6 +247,9 @@ public class BudgieBackground : Clutter.Actor
                 on_update();
                 set_accountsservice_user_bg(bg_filename);
             });
+        /* In case we do not set a background image, we still want to be notified of changes */
+        } else {
+            background.changed.connect(on_update);
         }
     }
 } /* End BudgieBackground */
