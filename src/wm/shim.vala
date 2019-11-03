@@ -138,7 +138,7 @@ public interface BudgieOSD : GLib.Object
 public class ShellShim : GLib.Object
 {
 
-    HashTable<uint,string> grabs;
+    HashTable<string, uint?> grabs;
     HashTable<string,uint> watches;
     unowned Meta.Display? display;
 
@@ -150,7 +150,7 @@ public class ShellShim : GLib.Object
     [DBus (visible = false)]
     public ShellShim(Budgie.BudgieWM? wm)
     {
-        grabs = new HashTable<uint,string>(direct_hash, direct_equal);
+        grabs = new HashTable<string, uint?> (str_hash, str_equal);
         watches = new HashTable<string,uint>(str_hash, str_equal);
 
         display = wm.get_display();
@@ -193,6 +193,7 @@ public class ShellShim : GLib.Object
         osd_proxy = null;
     }
 
+/*
 #if HAVE_MUTTER_5
     private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint device_id)
 #else
@@ -207,8 +208,30 @@ public class ShellShim : GLib.Object
 
         this.accelerator_activated(action, params);
     }
+*/
 
-    void on_disappeared(DBusConnection conn, string name)
+#if HAVE_MUTTER_5
+    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint device_id)
+#else
+    private void on_accelerator_activated(uint action, uint device_id, timestamp)
+#endif
+    {
+        print("on accelerator activated");
+        foreach (string accelerator in grabs.get_keys ()) {
+            if (grabs[accelerator] == action) {
+                var params = new GLib.HashTable<string, Variant> (null, null);
+                params.set ("device-id", new Variant.uint32 (device_id));
+#if HAV_MUTTER_5
+                params.set ("timestamp", new Variant.uint32 (timestamp));
+#else
+                params.set ("timestamp", new Variant.uint32 (0));
+#endif
+                this.accelerator_activated (action, params);
+            }
+        }
+    }
+
+    /*void on_disappeared(DBusConnection conn, string name)
     {
         unowned string val;
         unowned uint key;
@@ -226,10 +249,55 @@ public class ShellShim : GLib.Object
                 continue;
             }
             display.ungrab_accelerator(key);
-            grabs.remove(key);
+            iter.remove();
         }
     }
+    */
 
+    public uint grab_accelerator (string accelerator, Meta.KeyBindingFlags flags) throws DBusError, IOError
+    {
+        print("grab accelertor");
+        uint? action = grabs[accelerator];
+
+        if (action == null) {
+            action = display.grab_accelerator (accelerator, flags);
+            if (action > 0) {
+                grabs[accelerator] = action;
+            }
+        }
+
+        return action;
+    }
+
+    public uint[] grab_accelerators (GsdAccel[] accelerators) throws DBusError, IOError
+    {
+        print("grab accelerators");
+        uint[] actions = {};
+
+        foreach (unowned GsdAccel? accelerator in accelerators) {
+            actions += grab_accelerator (accelerator.accelerator, accelerator.grab_flags);
+        }
+
+        return actions;
+    }
+
+    public bool ungrab_accelerator (uint action) throws DBusError, IOError
+    {
+        print("ungrab accelerator");
+        bool ret = false;
+
+        foreach (unowned string accelerator in grabs.get_keys ()) {
+            if (grabs[accelerator] == action) {
+                ret = display.ungrab_accelerator (action);
+                grabs.remove (accelerator);
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+/*
 #if HAVE_GSD_332
     private uint _grab(string sender, string seq, uint flag, Meta.KeyBindingFlags grab_flags)
     {
@@ -254,7 +322,7 @@ public class ShellShim : GLib.Object
 
         return ret;
     }
-
+*/
     void on_bus_acquired(DBusConnection conn)
     {
         try {
@@ -273,6 +341,22 @@ public class ShellShim : GLib.Object
             on_bus_acquired, null, null);
     }
 
+    public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags)
+    {
+        return grab_accelerator(accelerator, grab_flags);
+    }
+
+    public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators)
+    {
+        return grab_accelerators(accelerators);
+    }
+
+    public bool UngrabAccelerator(BusName sender, uint action)
+    {
+        return ungrab_accelerator (action);
+    }
+
+/*
 #if HAVE_GSD_332
     public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags)
     {
@@ -302,6 +386,7 @@ public class ShellShim : GLib.Object
         return t;
     }
 #endif
+
     public bool ungrab_accelerator(BusName sender, uint action)
     {
         if (display.ungrab_accelerator(action)) {
@@ -310,6 +395,7 @@ public class ShellShim : GLib.Object
         }
         return false;
     }
+    */
 
     /**
      * Show the OSD when requested.
