@@ -80,69 +80,35 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
     Gdk.Monitor mon = screen.get_display().get_primary_monitor();
     Gdk.Rectangle primary_monitor_rect = mon.get_geometry();
     int scale = window.get_scale_factor();
-    /*
-    strut-left strut-right strut-top strut-bottom
-    strut-left-start-y   strut-left-end-y
-    strut-right-start-y  strut-right-end-y
-    strut-top-start-x    strut-top-end-x
-    strut-bottom-start-x strut-bottom-end-x
-    */
 
     if (!window.get_realized()) {
         return;
     }
 
-    message("rect_x %d", primary_monitor_rect.x);
-    message("rect_y %d", primary_monitor_rect.y);
-    message("width %d", primary_monitor_rect.width);
-    message("height %d", primary_monitor_rect.height);
-    message("size %d", (int)panel_size);
-
-    //left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, ottom_start_x, bootom_end_x
-    //0     1       2    3       4             5           6              7            8            9         10             11              s
-
     // Struts dependent on position
-
-
     switch (position) {
         case PanelPosition.TOP:
             struts[Struts.TOP] = (panel_size + primary_monitor_rect.y) * scale;
             struts[Struts.TOP_START] = primary_monitor_rect.x * scale;
             struts[Struts.TOP_END] = (primary_monitor_rect.x + primary_monitor_rect.width) * scale - 1;
-
-            //  struts [Struts.TOP] = (monitor_geo.y + VisibleDockHeight) * window_scale_factor;
-			//	struts [Struts.TOP_START] = monitor_geo.x * window_scale_factor;
-			//	struts [Struts.TOP_END] = (monitor_geo.x + monitor_geo.width) * window_scale_factor - 1;
             break;
         case PanelPosition.LEFT:
             panel_size += 5;
             struts[Struts.LEFT] = (primary_monitor_rect.x + panel_size) * scale;
             struts[Struts.LEFT_START] = primary_monitor_rect.y * scale;
             struts[Struts.LEFT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
-
-            //struts [Struts.LEFT] = (monitor_geo.x + VisibleDockWidth) * window_scale_factor;
-            //struts [Struts.LEFT_START] = monitor_geo.y * window_scale_factor;
-            //struts [Struts.LEFT_END] = (monitor_geo.y + monitor_geo.height) * window_scale_factor - 1;
             break;
         case PanelPosition.RIGHT:
             panel_size += 5;
             struts[Struts.RIGHT] = (screen.get_width() + panel_size) - (primary_monitor_rect.x + primary_monitor_rect.width) * scale;
             struts[Struts.RIGHT_START] = primary_monitor_rect.y * scale;
             struts[Struts.RIGHT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
-            //struts [Struts.RIGHT] = (VisibleDockWidth + controller.window.get_screen ().get_width () - monitor_geo.x - monitor_geo.width) * window_scale_factor;
-            //struts [Struts.RIGHT_START] = monitor_geo.y * window_scale_factor;
-            //struts [Struts.RIGHT_END] = (monitor_geo.y + monitor_geo.height) * window_scale_factor - 1;
-
             break;
         case PanelPosition.BOTTOM:
         default:
             struts[Struts.BOTTOM] = (panel_size + screen.get_height() - primary_monitor_rect.y - primary_monitor_rect.height) * scale;
             struts[Struts.BOTTOM_START] = primary_monitor_rect.x * scale;
             struts[Struts.BOTTOM_END] = (primary_monitor_rect.x + primary_monitor_rect.width) * scale - 1;
-
-            //struts [Struts.BOTTOM] = (VisibleDockHeight + controller.window.get_screen ().get_height () - monitor_geo.y - monitor_geo.height) * window_scale_factor;
-            //struts [Struts.BOTTOM_START] = monitor_geo.x * window_scale_factor;
-            //struts [Struts.BOTTOM_END] = (monitor_geo.x + monitor_geo.width) * window_scale_factor - 1;
             break;
     }
 
