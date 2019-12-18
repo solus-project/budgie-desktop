@@ -1028,7 +1028,7 @@ public class Panel : Budgie.Toplevel
         if (this.autohide != AutohidePolicy.NONE) {
             Budgie.unset_struts(this);
         } else {
-            Budgie.set_struts(this, position, (intended_size - 5) * this.scale);
+            Budgie.set_struts(this, position, (intended_size - 5));
         }
     }
 
