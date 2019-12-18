@@ -903,7 +903,12 @@ static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *b
         gint root_y = (gint)button->y_root;
 
         /* Inside our window? Continue as normal. */
-        if ((root_x >= x && root_x <= x + w) && (root_y >= y && root_y <= y + h)) {
+        gint scale_factor = gtk_widget_get_scale_factor(widget);
+
+        if (((root_x*scale_factor) >= x &&
+             (root_x*scale_factor) <= x + (w*scale_factor)) &&
+            ((root_y*scale_factor) >= y &&
+             (root_y*scale_factor) <= y + (h*scale_factor))) {
                 return GDK_EVENT_PROPAGATE;
         }
 
