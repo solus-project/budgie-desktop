@@ -932,7 +932,7 @@ public class Panel : Budgie.Toplevel
      * Update the internal representation of the panel based on whether
      * we're in dock mode or not
      */
-    public void update_dock_mode()
+    void update_dock_mode()
     {
         (this.layout as MainPanel).set_dock_mode(this.dock_mode);
         this.placement();
