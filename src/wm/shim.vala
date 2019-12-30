@@ -192,7 +192,7 @@ public class ShellShim : GLib.Object
     }
 
 #if HAVE_MUTTER_5
-    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint device_id)
+    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint timestamp)
 #else
     private void on_accelerator_activated(uint action, uint device_id, timestamp)
 #endif
@@ -200,12 +200,14 @@ public class ShellShim : GLib.Object
         foreach (string accelerator in grabs.get_keys ()) {
             if (grabs[accelerator] == action) {
                 var params = new GLib.HashTable<string, Variant> (null, null);
-                params.set ("device-id", new Variant.uint32 (device_id));
-#if HAV_MUTTER_5
-                params.set ("timestamp", new Variant.uint32 (timestamp));
+#if HAVE_MUTTER_5
+                params.set ("device-id", new Variant.uint32 (dev.id));
+                params.set ("action-mode", new Variant.uint32 (action));
+                params.set ("device-mode", new Variant.string (dev.get_device_node()));
 #else
-                params.set ("timestamp", new Variant.uint32 (0));
+                params.set ("device-id", new Variant.uint32 (device_id));
 #endif
+                params.set ("timestamp", new Variant.uint32 (timestamp));
                 this.accelerator_activated (action, params);
             }
         }
@@ -283,6 +285,16 @@ public class ShellShim : GLib.Object
     {
         return ungrab_accelerator (action);
     }
+
+#if HAVE_MUTTER_5
+    public bool UngrabAccelerators(BusName sender, uint[] actions)
+    {
+        foreach (uint action in actions) {
+            ungrab_accelerator (action);
+        }
+        return true;
+    }
+#endif
 
     /**
      * Show the OSD when requested.
