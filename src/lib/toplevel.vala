@@ -12,6 +12,22 @@
 namespace Budgie
 {
 
+public enum Struts
+{
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    LEFT_START,
+    LEFT_END,
+    RIGHT_START,
+    RIGHT_END,
+    TOP_START,
+    TOP_END,
+    BOTTOM_START,
+    BOTTOM_END
+}
+
 public abstract class Toplevel : Gtk.Window
 {
 
@@ -63,13 +79,7 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
     var screen = window.screen;
     Gdk.Monitor mon = screen.get_display().get_primary_monitor();
     Gdk.Rectangle primary_monitor_rect = mon.get_geometry();
-    /*
-    strut-left strut-right strut-top strut-bottom
-    strut-left-start-y   strut-left-end-y
-    strut-right-start-y  strut-right-end-y
-    strut-top-start-x    strut-top-end-x
-    strut-bottom-start-x strut-bottom-end-x
-    */
+    int scale = window.get_scale_factor();
 
     if (!window.get_realized()) {
         return;
@@ -78,27 +88,27 @@ public static void set_struts(Gtk.Window? window, PanelPosition position, long p
     // Struts dependent on position
     switch (position) {
         case PanelPosition.TOP:
-            struts[2] = panel_size;
-            struts[8] = primary_monitor_rect.x;
-            struts[9] = (primary_monitor_rect.x + primary_monitor_rect.width) - 1;
+            struts[Struts.TOP] = (panel_size + primary_monitor_rect.y) * scale;
+            struts[Struts.TOP_START] = primary_monitor_rect.x * scale;
+            struts[Struts.TOP_END] = (primary_monitor_rect.x + primary_monitor_rect.width) * scale - 1;
             break;
         case PanelPosition.LEFT:
             panel_size += 5;
-            struts[0] = primary_monitor_rect.x + panel_size;
-            struts[4] = primary_monitor_rect.y;
-            struts[5] = primary_monitor_rect.y + (primary_monitor_rect.height - 1);
+            struts[Struts.LEFT] = (primary_monitor_rect.x + panel_size) * scale;
+            struts[Struts.LEFT_START] = primary_monitor_rect.y * scale;
+            struts[Struts.LEFT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
             break;
         case PanelPosition.RIGHT:
             panel_size += 5;
-            struts[1] = (screen.get_width() + panel_size) - (primary_monitor_rect.x + primary_monitor_rect.width);
-            struts[6] = primary_monitor_rect.y;
-            struts[7] = (primary_monitor_rect.y + primary_monitor_rect.height) - 1;
+            struts[Struts.RIGHT] = (screen.get_width() + panel_size) - (primary_monitor_rect.x + primary_monitor_rect.width) * scale;
+            struts[Struts.RIGHT_START] = primary_monitor_rect.y * scale;
+            struts[Struts.RIGHT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
             break;
         case PanelPosition.BOTTOM:
         default:
-            struts[3] = panel_size;
-            struts[10] = primary_monitor_rect.x;
-            struts[11] = (primary_monitor_rect.x + primary_monitor_rect.width) - 1;
+            struts[Struts.BOTTOM] = (panel_size + screen.get_height() - primary_monitor_rect.y - primary_monitor_rect.height) * scale;
+            struts[Struts.BOTTOM_START] = primary_monitor_rect.x * scale;
+            struts[Struts.BOTTOM_END] = (primary_monitor_rect.x + primary_monitor_rect.width) * scale - 1;
             break;
     }
 

@@ -40,7 +40,11 @@ public class TrayApplet : Budgie.Applet
         vexpand = false;
 
         show_all();
-        maybe_integrate_tray();
+        Timeout.add_seconds(1,()=> {
+            maybe_integrate_tray();
+            return false;
+        });
+
         panel_size_changed.connect((p,i,s)=> {
             this.icon_size = s;
             if (tray != null) {

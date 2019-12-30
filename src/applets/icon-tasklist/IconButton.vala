@@ -33,6 +33,7 @@ public class IconButton : Gtk.ToggleButton
     private Gtk.Allocation definite_allocation;
     public bool pinned = false;
     private bool is_from_window = false;
+    private bool originally_pinned = false;
     private Gdk.AppLaunchContext launch_context;
     private int64 last_scroll_time = 0;
     public Wnck.Window? last_active_window = null;
@@ -48,6 +49,7 @@ public class IconButton : Gtk.ToggleButton
         this.settings = c_settings;
         this.app_info = info;
         this.pinned = pinned;
+        this.originally_pinned = pinned;
         gobject_constructors_suck();
         create_popover(); // Create our popover
 
@@ -64,7 +66,12 @@ public class IconButton : Gtk.ToggleButton
         this.app_info = info;
         this.is_from_window = true;
         this.pinned = pinned;
+        this.originally_pinned = pinned;
         this.first_app = new Budgie.AbominationRunningApp(app_system, window);
+
+        if (this.first_app != null && this.first_app.app != null && this.app_info == null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
+            this.app_info = this.first_app.app;
+        }
 
         this.first_app.name_changed.connect(() => { // When the name of the app has changed
             set_tooltip(); // Update our tooltip
@@ -94,6 +101,8 @@ public class IconButton : Gtk.ToggleButton
         this.settings = c_settings;
         this.class_group = class_group;
         this.app_info = info;
+        this.pinned = false;
+        this.originally_pinned = false;
 
         gobject_constructors_suck();
         create_popover(); // Create our popover
@@ -157,12 +166,33 @@ public class IconButton : Gtk.ToggleButton
         });
 
         drag_data_get.connect((widget, context, selection_data, info, time)=> {
-            string id;
-            if (this.app_info != null) {
-                id = this.app_info.get_id();
-            } else {
-                id = this.window.get_name();
+            string id = "";
+            if (this.is_from_window) { // If this is from a window
+                if (this.pinned && this.originally_pinned) { // Has been pinned from the start
+                    if (this.app_info != null) {
+                        id = this.app_info.get_id();
+                    } else {
+                        id = this.window.get_name();
+                    }
+                } else { // If this hasn't been pinned from the start
+                    if (this.app_info != null && this.first_app != null) {
+                        id = "%s|%lu".printf(this.app_info.get_id(), this.first_app.id);
+                    } else if (this.app_info == null && this.first_app != null) {
+                        id = "%s|%lu".printf(this.first_app.group, this.first_app.id);
+                    }
+                }
+            } else { // If this is from a group
+                if (this.app_info != null) {
+                    id = this.app_info.get_id();
+                } else if (this.first_app != null) {
+                    id = this.first_app.group;
+                }
             }
+
+            if (id == "" && this.window != null) { // If id isn't set
+              id = this.window.get_name(); // Just use name
+            }
+
             selection_data.set(selection_data.get_target(), 8, (uchar[])id.to_utf8());
         });
 
@@ -207,8 +237,8 @@ public class IconButton : Gtk.ToggleButton
             this.pinned = new_pinned_state;
             this.desktop_helper.update_pinned(); // Update via desktop helper
 
-            if (!has_valid_windows(null) || is_from_window) { // Does not have any windows open (or this is only a single window)
-                became_empty(); // Trigger our became_empty event
+            if (!has_valid_windows(null)) { // Does not have any windows open and no longer pinned
+                became_empty(); // Trigger our became_empty event (for removal)
             }
         });
 
@@ -815,6 +845,10 @@ public class IconButton : Gtk.ToggleButton
                     this.first_app.name_changed.connect(() => { // When the name of the app has changed
                         set_tooltip(); // Update our tooltip
                     });
+
+                    if (this.app_info == null) { // If app_info hasn't been set yet
+                        this.app_info = this.first_app.app; // Set to our first_app's DesktopAppInfo
+                    }
                 }
             }
         }
