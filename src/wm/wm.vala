@@ -137,8 +137,13 @@ public class BudgieWM : Meta.Plugin
     public static string[]? old_args;
     public static bool wayland = false;
 
+#if HAVE_MUTTER_6
+    static Graphene.Point PV_CENTER;
+    static Graphene.Point PV_NORM;
+#else
     static Clutter.Point PV_CENTER;
     static Clutter.Point PV_NORM;
+#endif
 
     private Meta.BackgroundGroup? background_group;
 
@@ -171,10 +176,15 @@ public class BudgieWM : Meta.Plugin
             license = "GPL-2.0",
             description = "Budgie Window Manager"
         };
+#if HAVE_MUTTER_6
+        PV_CENTER = Graphene.Point();
+        PV_NORM = Graphene.Point();
+#else
         PV_CENTER = Clutter.Point.alloc();
+        PV_NORM = Clutter.Point.alloc();
+#endif
         PV_CENTER.x = 0.5f;
         PV_CENTER.y = 0.5f;
-        PV_NORM = Clutter.Point.alloc();
         PV_NORM.x = 0.0f;
         PV_NORM.y = 0.0f;
     }
@@ -1001,7 +1011,11 @@ public class BudgieWM : Meta.Plugin
         tile_preview.set("scale-x", NOTIFICATION_MAP_SCALE_X, "scale-y", NOTIFICATION_MAP_SCALE_Y,
             "pivot-point", PV_CENTER);
 
+#if HAVE_MUTTER_6
+        //tile_preview.lower(win_actor);
+#else
         tile_preview.lower(win_actor);
+#endif
         tile_preview.tile_rect = tile_rect;
 
         tile_preview.show();
