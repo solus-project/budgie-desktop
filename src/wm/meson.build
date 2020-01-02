@@ -26,17 +26,17 @@ if not dep_mutter.found()
         vapi_mutter = 'libmutter-4'
     else
         dep_mutter = dependency('libmutter-5', version: gnome_minimum_version, required: false)
+        budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
         if dep_mutter.found()
             message('Using new libmutter-5 ABI from GNOME 3.34')
             vapi_mutter = 'libmutter-5'
         else
             dep_mutter = dependency('libmutter-6', version: gnome_minimum_version)
-            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
+            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_6']
             if dep_mutter.found()
                 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
                 message('Using new libmutter-6 ABI from GNOME 3.36')
                 vapi_mutter = 'libmutter-6'
-                budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_6']
             endif
         endif
     endif
