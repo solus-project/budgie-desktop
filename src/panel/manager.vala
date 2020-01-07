@@ -1281,6 +1281,12 @@ public class PanelManager : DesktopManager
                         case "top":
                             position = PanelPosition.TOP;
                             break;
+                        case "left":
+                            position = PanelPosition.LEFT;
+                            break;
+                        case "right":
+                            position = PanelPosition.RIGHT;
+                            break;
                         default:
                             position = PanelPosition.BOTTOM;
                             break;
