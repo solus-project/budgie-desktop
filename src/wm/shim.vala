@@ -138,8 +138,7 @@ public interface BudgieOSD : GLib.Object
 public class ShellShim : GLib.Object
 {
 
-    HashTable<uint,string> grabs;
-    HashTable<string,uint> watches;
+    HashTable<string, uint?> grabs;
     unowned Meta.Display? display;
 
     private SessionHandler? handler = null;
@@ -150,8 +149,7 @@ public class ShellShim : GLib.Object
     [DBus (visible = false)]
     public ShellShim(Budgie.BudgieWM? wm)
     {
-        grabs = new HashTable<uint,string>(direct_hash, direct_equal);
-        watches = new HashTable<string,uint>(str_hash, str_equal);
+        grabs = new HashTable<string, uint?> (str_hash, str_equal);
 
         display = wm.get_display();
         display.accelerator_activated.connect(on_accelerator_activated);
@@ -194,62 +192,62 @@ public class ShellShim : GLib.Object
     }
 
 #if HAVE_MUTTER_5
-    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint device_id)
+    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint timestamp)
 #else
-    private void on_accelerator_activated(uint action, uint device_id)
+    private void on_accelerator_activated(uint action, uint device_id, timestamp)
 #endif
     {
-        HashTable<string,Variant> params = new HashTable<string,Variant>(str_hash, str_equal);
-
-        params.insert("device-id", device_id);
-        params.insert("timestamp", new Variant.uint32(0));
-        params.insert("action-mode", new Variant.uint32(0));
-
-        this.accelerator_activated(action, params);
-    }
-
-    void on_disappeared(DBusConnection conn, string name)
-    {
-        unowned string val;
-        unowned uint key;
-
-        if (!watches.contains(name)) {
-            return;
-        }
-
-        uint id = watches.lookup(name);
-        Bus.unwatch_name(id);
-
-        var iter = HashTableIter<uint,string>(grabs);
-        while (iter.next(out key, out val)) {
-            if (val != name) {
-                continue;
+        foreach (string accelerator in grabs.get_keys ()) {
+            if (grabs[accelerator] == action) {
+                var params = new GLib.HashTable<string, Variant> (null, null);
+#if HAVE_MUTTER_5
+                params.set ("device-id", new Variant.uint32 (dev.id));
+                params.set ("action-mode", new Variant.uint32 (action));
+                params.set ("device-mode", new Variant.string (dev.get_device_node()));
+#else
+                params.set ("device-id", new Variant.uint32 (device_id));
+#endif
+                params.set ("timestamp", new Variant.uint32 (timestamp));
+                this.accelerator_activated (action, params);
             }
-            display.ungrab_accelerator(key);
-            grabs.remove(key);
         }
     }
 
-#if HAVE_GSD_332
-    private uint _grab(string sender, string seq, uint flag, Meta.KeyBindingFlags grab_flags)
+    public uint grab_accelerator (string accelerator, Meta.KeyBindingFlags flags) throws DBusError, IOError
     {
-        var ret = display.grab_accelerator(seq, grab_flags);
-#else
-    private uint _grab(string sender, string seq, uint flag)
-    {
-        var ret = display.grab_accelerator(seq);
-#endif
+        uint? action = grabs[accelerator];
 
-        if (ret == Meta.KeyBindingAction.NONE) {
-            return ret;
+        if (action == null) {
+            action = display.grab_accelerator (accelerator, flags);
+            if (action > 0) {
+                grabs[accelerator] = action;
+            }
         }
 
-        grabs.insert(ret, sender);
+        return action;
+    }
 
-        if (!watches.contains(sender)) {
-            var id = Bus.watch_name(BusType.SESSION, sender, BusNameWatcherFlags.NONE,
-                null, on_disappeared);
-            watches.insert(sender, id);
+    public uint[] grab_accelerators (GsdAccel[] accelerators) throws DBusError, IOError
+    {
+        uint[] actions = {};
+
+        foreach (unowned GsdAccel? accelerator in accelerators) {
+            actions += grab_accelerator (accelerator.accelerator, accelerator.grab_flags);
+        }
+
+        return actions;
+    }
+
+    public bool ungrab_accelerator (uint action) throws DBusError, IOError
+    {
+        bool ret = false;
+        var keys = grabs.get_keys();
+        foreach (unowned string accelerator in keys) {
+            if (grabs[accelerator] == action) {
+                ret = display.ungrab_accelerator (action);
+                grabs.remove (accelerator);
+                break;
+            }
         }
 
         return ret;
@@ -273,43 +271,30 @@ public class ShellShim : GLib.Object
             on_bus_acquired, null, null);
     }
 
-#if HAVE_GSD_332
     public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags)
     {
-        return _grab(sender, accelerator, flags, grab_flags);
+        return grab_accelerator(accelerator, grab_flags);
     }
 
     public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators)
     {
-        uint[] t = { };
-        foreach (var a in accelerators) {
-            t += _grab(sender, a.accelerator, a.flags, a.grab_flags);
-        }
-        return t;
-    }
-#else
-    public uint GrabAccelerator(BusName sender, string accelerator, uint flags)
-    {
-        return _grab(sender, accelerator, flags);
+        return grab_accelerators(accelerators);
     }
 
-    public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators)
+    public bool UngrabAccelerator(BusName sender, uint action)
     {
-        uint[] t = { };
-        foreach (var a in accelerators) {
-            t += _grab(sender, a.accelerator, a.flags);
+        return ungrab_accelerator (action);
+    }
+
+#if HAVE_MUTTER_5
+    public bool UngrabAccelerators(BusName sender, uint[] actions)
+    {
+        foreach (uint action in actions) {
+            ungrab_accelerator (action);
         }
-        return t;
+        return true;
     }
 #endif
-    public bool ungrab_accelerator(BusName sender, uint action)
-    {
-        if (display.ungrab_accelerator(action)) {
-            grabs.remove(action);
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Show the OSD when requested.
