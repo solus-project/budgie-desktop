@@ -13,8 +13,6 @@ namespace Clutter {
     [NoWrapper]
     public virtual void ensure_context (Clutter.Stage stage);
     [NoWrapper]
-    public virtual unowned Clutter.DeviceManager get_device_manager ();
-    [NoWrapper]
     public virtual Clutter.FeatureFlags get_features ();
     [NoWrapper]
     public virtual void init_events ();

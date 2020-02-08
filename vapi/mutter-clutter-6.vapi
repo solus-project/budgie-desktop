@@ -5415,21 +5415,18 @@ namespace Clutter {
 		protected Backend ();
 		[NoWrapper]
 		public virtual void add_options (GLib.OptionGroup group);
-		public void bell_notify ();
 		[NoWrapper]
 		public virtual bool create_context () throws GLib.Error;
 		[NoWrapper]
 		public virtual unowned Clutter.StageWindow create_stage (Clutter.Stage wrapper) throws GLib.Error;
 		[NoWrapper]
 		public virtual void ensure_context (Clutter.Stage stage);
-		[NoWrapper]
-		public virtual unowned Clutter.DeviceManager get_device_manager ();
+		public unowned Clutter.Seat get_default_seat ();
 		[NoWrapper]
 		public virtual Clutter.FeatureFlags get_features ();
 		[Version (since = "0.8")]
 		public unowned Cairo.FontOptions get_font_options ();
 		public unowned Clutter.InputMethod get_input_method ();
-		public unowned Clutter.Keymap get_keymap ();
 		public double get_resolution ();
 		[NoWrapper]
 		public virtual void init_events ();
@@ -5759,54 +5756,6 @@ namespace Clutter {
 		public double get_factor ();
 		public void set_factor (double factor);
 		public double factor { get; set; }
-	}
-	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_device_manager_get_type ()")]
-	public abstract class DeviceManager : GLib.Object {
-		[CCode (has_construct_function = false)]
-		protected DeviceManager ();
-		[NoWrapper]
-		public virtual void add_device (Clutter.InputDevice device);
-		[NoWrapper]
-		public virtual void apply_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
-		[NoWrapper]
-		public virtual void compress_motion (Clutter.Event event, Clutter.Event to_discard);
-		[NoWrapper]
-		public virtual void copy_event_data (Clutter.Event src, Clutter.Event dest);
-		public virtual Clutter.VirtualInputDevice create_virtual_device (Clutter.InputDeviceType device_type);
-		[NoWrapper]
-		public virtual void free_event_data (Clutter.Event event);
-		[Version (since = "1.2")]
-		public virtual unowned Clutter.InputDevice get_core_device (Clutter.InputDeviceType device_type);
-		[Version (since = "1.2")]
-		public static unowned Clutter.DeviceManager get_default ();
-		[Version (since = "1.2")]
-		public virtual unowned Clutter.InputDevice get_device (int device_id);
-		public void get_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
-		public void get_pointer_a11y_settings (Clutter.PointerA11ySettings settings);
-		public virtual Clutter.VirtualDeviceType get_supported_virtual_device_types ();
-		[Version (since = "1.2")]
-		public GLib.SList<weak Clutter.InputDevice> list_devices ();
-		[Version (since = "1.2")]
-		public unowned GLib.SList<Clutter.InputDevice> peek_devices ();
-		[NoWrapper]
-		public virtual void remove_device (Clutter.InputDevice device);
-		[NoWrapper]
-		public virtual void select_stage_events (Clutter.Stage stage);
-		public void set_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
-		public void set_pointer_a11y_dwell_click_type (Clutter.PointerA11yDwellClickType click_type);
-		public void set_pointer_a11y_settings (Clutter.PointerA11ySettings settings);
-		[NoAccessorMethod]
-		public Clutter.Backend backend { owned get; construct; }
-		[Version (since = "1.2")]
-		public signal void device_added (Clutter.InputDevice device);
-		[Version (since = "1.2")]
-		public signal void device_removed (Clutter.InputDevice device);
-		public signal void kbd_a11y_flags_changed (uint settings_flags, uint changed_mask);
-		public signal void kbd_a11y_mods_state_changed (uint latched_mask, uint locked_mask);
-		public signal void ptr_a11y_dwell_click_type_changed (Clutter.PointerA11yDwellClickType click_type);
-		public signal void ptr_a11y_timeout_started (Clutter.InputDevice device, Clutter.PointerA11yTimeoutType timeout_type, uint delay);
-		public signal void ptr_a11y_timeout_stopped (Clutter.InputDevice device, Clutter.PointerA11yTimeoutType timeout_type, bool clicked);
-		public signal void tool_changed (Clutter.InputDevice object, Clutter.InputDeviceTool p0);
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_drag_action_get_type ()")]
 	[Version (since = "1.4")]
@@ -6172,7 +6121,7 @@ namespace Clutter {
 		public bool get_enabled ();
 		[Version (since = "1.10")]
 		public unowned Clutter.Actor get_grabbed_actor ();
-		public int get_group_n_modes (int group);
+		public virtual int get_group_n_modes (int group);
 		[Version (since = "1.6")]
 		public bool get_has_cursor ();
 		[Version (since = "1.6")]
@@ -6194,16 +6143,17 @@ namespace Clutter {
 		public unowned Clutter.Stage get_pointer_stage ();
 		[Version (since = "1.22")]
 		public unowned string get_product_id ();
+		public unowned Clutter.Seat get_seat ();
 		[Version (since = "1.6")]
 		public GLib.List<weak Clutter.InputDevice> get_slave_devices ();
 		[Version (since = "1.22")]
 		public unowned string get_vendor_id ();
 		[Version (since = "1.10")]
 		public void grab (Clutter.Actor actor);
-		public bool is_grouped (Clutter.InputDevice other_device);
-		public bool is_mode_switch_button (uint group, uint button);
+		public virtual bool is_grouped (Clutter.InputDevice other_device);
+		public virtual bool is_mode_switch_button (uint group, uint button);
 		[Version (since = "1.10")]
-		public bool keycode_to_evdev (uint hardware_keycode, uint evdev_keycode);
+		public virtual bool keycode_to_evdev (uint hardware_keycode, uint evdev_keycode);
 		[Version (since = "1.12")]
 		public unowned Clutter.Actor sequence_get_grabbed_actor (Clutter.EventSequence sequence);
 		[Version (since = "1.12")]
@@ -6219,12 +6169,11 @@ namespace Clutter {
 		public void ungrab ();
 		[Version (since = "1.2")]
 		public void update_from_event (Clutter.Event event, bool update_stage);
+		[NoWrapper]
+		public virtual void update_from_tool (Clutter.InputDeviceTool tool);
 		[NoAccessorMethod]
 		[Version (since = "1.6")]
 		public Clutter.Backend backend { owned get; construct; }
-		[NoAccessorMethod]
-		[Version (since = "1.6")]
-		public Clutter.DeviceManager device_manager { owned get; construct; }
 		public Clutter.InputMode device_mode { get; construct; }
 		public string device_node { get; construct; }
 		[Version (since = "1.2")]
@@ -6247,6 +6196,7 @@ namespace Clutter {
 		public string name { owned get; construct; }
 		[Version (since = "1.22")]
 		public string product_id { get; construct; }
+		public Clutter.Seat seat { get; construct; }
 		[Version (since = "1.22")]
 		public string vendor_id { get; construct; }
 	}
@@ -6396,6 +6346,7 @@ namespace Clutter {
 		[CCode (has_construct_function = false)]
 		protected Keymap ();
 		public virtual bool get_caps_lock_state ();
+		public virtual Pango.Direction get_direction ();
 		public virtual bool get_num_lock_state ();
 		public signal void state_changed ();
 	}
@@ -6759,6 +6710,42 @@ namespace Clutter {
 		public Clutter.EventType type;
 		public float x;
 		public float y;
+	}
+	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_seat_get_type ()")]
+	public abstract class Seat : GLib.Object {
+		[CCode (has_construct_function = false)]
+		protected Seat ();
+		[NoWrapper]
+		public virtual void apply_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
+		public virtual void bell_notify ();
+		public virtual void compress_motion (Clutter.Event event, Clutter.Event to_discard);
+		[NoWrapper]
+		public virtual void copy_event_data (Clutter.Event src, Clutter.Event dest);
+		public virtual Clutter.VirtualInputDevice create_virtual_device (Clutter.InputDeviceType device_type);
+		public void ensure_a11y_state ();
+		[NoWrapper]
+		public virtual void free_event_data (Clutter.Event event);
+		public void get_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
+		public virtual unowned Clutter.InputDevice get_keyboard ();
+		public virtual unowned Clutter.Keymap get_keymap ();
+		public virtual unowned Clutter.InputDevice get_pointer ();
+		public void get_pointer_a11y_settings (Clutter.PointerA11ySettings settings);
+		public virtual Clutter.VirtualDeviceType get_supported_virtual_device_types ();
+		public virtual GLib.List<weak Clutter.InputDevice> list_devices ();
+		public void set_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
+		public void set_pointer_a11y_dwell_click_type (Clutter.PointerA11yDwellClickType click_type);
+		public void set_pointer_a11y_settings (Clutter.PointerA11ySettings settings);
+		public virtual void warp_pointer (int x, int y);
+		[NoAccessorMethod]
+		public Clutter.Backend backend { owned get; construct; }
+		public signal void device_added (Clutter.InputDevice object);
+		public signal void device_removed (Clutter.InputDevice object);
+		public signal void kbd_a11y_flags_changed (uint settings_flags, uint changed_mask);
+		public signal void kbd_a11y_mods_state_changed (uint latched_mask, uint locked_mask);
+		public signal void ptr_a11y_dwell_click_type_changed (Clutter.PointerA11yDwellClickType click_type);
+		public signal void ptr_a11y_timeout_started (Clutter.InputDevice device, Clutter.PointerA11yTimeoutType timeout_type, uint delay);
+		public signal void ptr_a11y_timeout_stopped (Clutter.InputDevice device, Clutter.PointerA11yTimeoutType timeout_type, bool clicked);
+		public signal void tool_changed (Clutter.InputDevice object, Clutter.InputDeviceTool p0);
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_settings_get_type ()")]
 	[Version (since = "1.4")]
@@ -7433,7 +7420,6 @@ namespace Clutter {
 		[CCode (has_construct_function = false)]
 		protected VirtualInputDevice ();
 		public int get_device_type ();
-		public unowned Clutter.DeviceManager get_manager ();
 		public virtual void notify_absolute_motion (uint64 time_us, double x, double y);
 		public virtual void notify_button (uint64 time_us, uint32 button, Clutter.ButtonState button_state);
 		public virtual void notify_discrete_scroll (uint64 time_us, Clutter.ScrollDirection direction, Clutter.ScrollSource scroll_source);
@@ -7444,9 +7430,9 @@ namespace Clutter {
 		public virtual void notify_touch_down (uint64 time_us, int slot, double x, double y);
 		public virtual void notify_touch_motion (uint64 time_us, int slot, double x, double y);
 		public virtual void notify_touch_up (uint64 time_us, int slot);
-		[NoAccessorMethod]
-		public Clutter.DeviceManager device_manager { owned get; construct; }
 		public Clutter.InputDeviceType device_type { get; construct; }
+		[NoAccessorMethod]
+		public Clutter.Seat seat { owned get; construct; }
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_zoom_action_get_type ()")]
 	[Version (since = "1.12")]
@@ -8577,6 +8563,8 @@ namespace Clutter {
 	public delegate bool BindingActionFunc (GLib.Object gobject, string action_name, uint key_val, Clutter.ModifierType modifiers);
 	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 1.9)]
 	public delegate void Callback (Clutter.Actor actor);
+	[CCode (cheader_filename = "clutter/clutter.h", has_target = false)]
+	public delegate void EmitInputDeviceEvent (Clutter.Event event, Clutter.InputDevice device);
 	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 1.9)]
 	[Version (since = "1.18")]
 	public delegate bool EventFilterFunc (Clutter.Event event);

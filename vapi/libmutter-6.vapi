@@ -160,7 +160,7 @@ namespace Meta {
 		public void set_numlock (bool numlock_state);
 		public signal void keymap_changed ();
 		public signal void keymap_layout_group_changed (uint object);
-		public signal void last_device_changed (int object);
+		public signal void last_device_changed (Clutter.InputDevice object);
 		public signal void lid_is_closed_changed (bool object);
 	}
 	[CCode (cheader_filename = "meta/meta-background.h", type_id = "meta_background_get_type ()")]
@@ -368,11 +368,11 @@ namespace Meta {
 		public uint add_idle_watch (uint64 interval_msec, owned Meta.IdleMonitorWatchFunc? callback);
 		public uint add_user_active_watch (owned Meta.IdleMonitorWatchFunc? callback);
 		public static unowned Meta.IdleMonitor get_core ();
-		public static unowned Meta.IdleMonitor get_for_device (int device_id);
+		public static unowned Meta.IdleMonitor get_for_device (Clutter.InputDevice device);
 		public int64 get_idletime ();
 		public void remove_watch (uint id);
 		[NoAccessorMethod]
-		public int device_id { get; construct; }
+		public Clutter.InputDevice device { owned get; construct; }
 	}
 	[CCode (cheader_filename = "meta/main.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_key_binding_get_type ()")]
 	[Compact]

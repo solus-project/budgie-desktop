@@ -188,8 +188,6 @@ namespace Cogl {
 		[Version (since = "1.10")]
 		public unowned Cogl.Texture get_layer_texture (int layer_index);
 		[Version (since = "1.6")]
-		public Cogl.PipelineWrapMode get_layer_wrap_mode_p (int layer_index);
-		[Version (since = "1.6")]
 		public Cogl.PipelineWrapMode get_layer_wrap_mode_s (int layer_index);
 		[Version (since = "1.6")]
 		public Cogl.PipelineWrapMode get_layer_wrap_mode_t (int layer_index);
@@ -236,8 +234,6 @@ namespace Cogl {
 		public void set_layer_texture (int layer_index, Cogl.Texture texture);
 		[Version (since = "2.0")]
 		public void set_layer_wrap_mode (int layer_index, Cogl.PipelineWrapMode mode);
-		[Version (since = "2.0")]
-		public void set_layer_wrap_mode_p (int layer_index, Cogl.PipelineWrapMode mode);
 		[Version (since = "2.0")]
 		public void set_layer_wrap_mode_s (int layer_index, Cogl.PipelineWrapMode mode);
 		[Version (since = "2.0")]
