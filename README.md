@@ -44,7 +44,7 @@ Budgie Desktop consists of a number of components to provide a more complete des
 
 ### Budgie Menu
 
-The main Budgie menu provides a quick and easy to use menu, suitable for both mouse and keyboard driven users. Features type-as-you-search and category based filtering.
+The main Budgie menu provides a quick and easy to use menu, suitable for both mouse and keyboard driven users. Features search-as-you-type and category based filtering.
 
 ![main_menu](https://github.com/solus-project/budgie-desktop/raw/master/.github/screenshots/MainMenu.png)
 
