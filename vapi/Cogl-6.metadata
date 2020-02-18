@@ -1,0 +1,27 @@
+Cogl cheader_filename="cogl/cogl.h"
+
+Color struct
+  .new skip
+  .free skip
+
+create_program skip
+create_shader skip
+
+
+is_bitmap skip
+is_material skip
+is_offscreen skip
+is_program skip
+is_shader skip
+is_texture skip
+is_vertex_buffer skip
+
+Matrix struct
+  .get_array array=true array_length_idx=-1
+  .get_inverse.inverse out=true
+  .multiply skip
+  .init_from_array skip
+  .init_identity skip
+  .transform_point.* ref=true
+
+program_* skip
