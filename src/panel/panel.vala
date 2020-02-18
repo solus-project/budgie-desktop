@@ -39,7 +39,7 @@ public class MainPanel : Gtk.Box
         if (dock_mode) {
             get_style_context().add_class("dock-mode");
         } else {
-            get_style_context().add_class("dock-mode");
+            get_style_context().remove_class("dock-mode");
         }
     }
 }
