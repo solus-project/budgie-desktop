@@ -368,7 +368,6 @@ namespace Meta {
 		public uint add_idle_watch (uint64 interval_msec, owned Meta.IdleMonitorWatchFunc? callback);
 		public uint add_user_active_watch (owned Meta.IdleMonitorWatchFunc? callback);
 		public static unowned Meta.IdleMonitor get_core ();
-		public static unowned Meta.IdleMonitor get_for_device (Clutter.InputDevice device);
 		public int64 get_idletime ();
 		public void remove_watch (uint id);
 		[NoAccessorMethod]

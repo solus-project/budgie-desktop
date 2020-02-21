@@ -26,8 +26,8 @@ if not dep_mutter.found()
         vapi_mutter = 'libmutter-4'
     else
         dep_mutter = dependency('libmutter-5', version: gnome_minimum_version, required: false)
-        budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
         if dep_mutter.found()
+            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
             message('Using new libmutter-5 ABI from GNOME 3.34')
             vapi_mutter = 'libmutter-5'
         else

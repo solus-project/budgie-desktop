@@ -1046,16 +1046,7 @@ namespace Cogl {
 	public static void set_depth_test_enabled (bool setting);
 	[CCode (cheader_filename = "cogl/cogl.h")]
 	[Version (deprecated = true, deprecated_since = "1.16")]
-	public static void shader_compile (Cogl.Handle handle);
-	[CCode (cheader_filename = "cogl/cogl.h")]
-	[Version (deprecated = true, deprecated_since = "1.16")]
-	public static string shader_get_info_log (Cogl.Handle handle);
-	[CCode (cheader_filename = "cogl/cogl.h")]
-	[Version (deprecated = true, deprecated_since = "1.16")]
 	public static Cogl.ShaderType shader_get_type (Cogl.Handle handle);
-	[CCode (cheader_filename = "cogl/cogl.h")]
-	[Version (deprecated = true, deprecated_since = "1.16")]
-	public static bool shader_is_compiled (Cogl.Handle handle);
 	[CCode (cheader_filename = "cogl/cogl.h")]
 	[Version (deprecated = true, deprecated_since = "1.16")]
 	public static void shader_source (Cogl.Handle shader, string source);

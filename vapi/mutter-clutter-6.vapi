@@ -6731,6 +6731,7 @@ namespace Clutter {
 		public virtual unowned Clutter.InputDevice get_pointer ();
 		public void get_pointer_a11y_settings (Clutter.PointerA11ySettings settings);
 		public virtual Clutter.VirtualDeviceType get_supported_virtual_device_types ();
+		public bool get_touch_mode ();
 		public virtual GLib.List<weak Clutter.InputDevice> list_devices ();
 		public void set_kbd_a11y_settings (Clutter.KbdA11ySettings settings);
 		public void set_pointer_a11y_dwell_click_type (Clutter.PointerA11yDwellClickType click_type);
@@ -6738,6 +6739,7 @@ namespace Clutter {
 		public virtual void warp_pointer (int x, int y);
 		[NoAccessorMethod]
 		public Clutter.Backend backend { owned get; construct; }
+		public bool touch_mode { get; }
 		public signal void device_added (Clutter.InputDevice object);
 		public signal void device_removed (Clutter.InputDevice object);
 		public signal void kbd_a11y_flags_changed (uint settings_flags, uint changed_mask);
