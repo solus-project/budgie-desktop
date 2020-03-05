@@ -17,28 +17,18 @@ budgie_wm_sources = [
 
 budgie_wm_status_vala_args = []
 
-vapi_mutter = 'libmutter-3'
-dep_mutter = dependency('libmutter-3', version: gnome_minimum_version, required: false)
-if not dep_mutter.found()
-    dep_mutter = dependency('libmutter-4', version: gnome_minimum_version, required: false)
+dep_mutter = dependency('libmutter-5', version: gnome_minimum_version, required: false)
+if dep_mutter.found()
+    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
+    message('Using new libmutter-5 ABI from GNOME 3.34')
+    vapi_mutter = 'libmutter-5'
+else
+    dep_mutter = dependency('libmutter-6', version: gnome_minimum_version)
+    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_6']
     if dep_mutter.found()
-        message('Using new libmutter-4 ABI from GNOME 3.32')
-        vapi_mutter = 'libmutter-4'
-    else
-        dep_mutter = dependency('libmutter-5', version: gnome_minimum_version, required: false)
-        if dep_mutter.found()
-            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_5']
-            message('Using new libmutter-5 ABI from GNOME 3.34')
-            vapi_mutter = 'libmutter-5'
-        else
-            dep_mutter = dependency('libmutter-6', version: gnome_minimum_version)
-            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_6']
-            if dep_mutter.found()
-                dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-                message('Using new libmutter-6 ABI from GNOME 3.36')
-                vapi_mutter = 'libmutter-6'
-            endif
-        endif
+        dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
+        message('Using new libmutter-6 ABI from GNOME 3.36')
+        vapi_mutter = 'libmutter-6'
     endif
 endif
 
@@ -50,8 +40,8 @@ budgie_wm_deps = [
     dep_ibus,
 ]
 
-if dep_gsd.version().version_compare('>=3.31.91')
-    budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_332']
+if dep_gsd.version().version_compare('>=3.34.0')
+    budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_SUPPORTED']
 endif
 
 budgie_wm_vala_args =  [
@@ -68,7 +58,7 @@ budgie_wm_vala_args =  [
 
 rpath = ''
 
-if dep_mutter.version().version_compare('>=3.28.0')
+if dep_mutter.version().version_compare('>=3.34.0')
     rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
     budgie_wm_vala_args += ['--girdir', rpath]
 endif

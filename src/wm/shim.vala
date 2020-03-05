@@ -14,7 +14,7 @@ namespace Budgie {
 public struct GsdAccel {
     string accelerator;
     uint flags;
-#if HAVE_GSD_332
+#if HAVE_GSD_SUPPORTED
     Meta.KeyBindingFlags grab_flags;
 #endif
 }
@@ -191,22 +191,14 @@ public class ShellShim : GLib.Object
         osd_proxy = null;
     }
 
-#if HAVE_MUTTER_5 || HAVE_MUTTER_6
-    private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint timestamp)
-#else
-    private void on_accelerator_activated(uint action, uint device_id, timestamp)
-#endif
+private void on_accelerator_activated(uint action, Clutter.InputDevice dev, uint timestamp)
     {
         foreach (string accelerator in grabs.get_keys ()) {
             if (grabs[accelerator] == action) {
                 var params = new GLib.HashTable<string, Variant> (null, null);
-#if HAVE_MUTTER_5 || HAVE_MUTTER_6
                 params.set ("device-id", new Variant.uint32 (dev.id));
                 params.set ("action-mode", new Variant.uint32 (action));
                 params.set ("device-mode", new Variant.string (dev.get_device_node()));
-#else
-                params.set ("device-id", new Variant.uint32 (device_id));
-#endif
                 params.set ("timestamp", new Variant.uint32 (timestamp));
                 this.accelerator_activated (action, params);
             }
@@ -286,7 +278,6 @@ public class ShellShim : GLib.Object
         return ungrab_accelerator (action);
     }
 
-#if HAVE_MUTTER_5 || HAVE_MUTTER_6
     public bool UngrabAccelerators(BusName sender, uint[] actions)
     {
         foreach (uint action in actions) {
@@ -294,7 +285,6 @@ public class ShellShim : GLib.Object
         }
         return true;
     }
-#endif
 
     /**
      * Show the OSD when requested.
