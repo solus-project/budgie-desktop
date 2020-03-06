@@ -1406,11 +1406,16 @@ public class BudgieWMDBUS : GLib.Object
         wsm.remove_workspace(workspace, time);
     }
 
-    public int AppendNewWorkspace(uint32 time)
-    {
+    public int AppendNewWorkspace(uint32 time) {
         unowned Meta.WorkspaceManager wsm = this.wm.get_display().get_workspace_manager();
-        unowned Meta.Workspace? space = wsm.append_new_workspace(false, time);
-        return space.index();
+        int current_count = wsm.get_n_workspaces(); // Get the current count
+
+        if (current_count < 8) {
+            unowned Meta.Workspace? space = wsm.append_new_workspace(false, time);
+            return space.index();
+        }
+
+        return -1;
     }
 
 } /* End BudgieWMDBUS */

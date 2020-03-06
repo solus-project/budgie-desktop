@@ -135,8 +135,14 @@ public class WorkspacesApplet : Budgie.Applet
         add_button.drag_data_received.connect(on_add_button_drag_data_received);
 
         add_button.button_release_event.connect((event) => {
-            wm_proxy.AppendNewWorkspace(event.time);
-            set_current_workspace();
+            int new_index = wm_proxy.AppendNewWorkspace(event.time);
+
+            if (new_index != -1) {
+                set_current_workspace();
+            } else if (!below_max_workspace_count()) { // Last workspace
+                add_button_revealer.set_reveal_child(false); // Hide add button
+            }
+
             return false;
         });
 
@@ -157,8 +163,11 @@ public class WorkspacesApplet : Budgie.Applet
                 return false;
             }
 
-            add_button_revealer.set_transition_type(show_transition);
-            add_button_revealer.set_reveal_child(true);
+            if (below_max_workspace_count()) { // Is below max workspace count
+                add_button_revealer.set_transition_type(show_transition);
+                add_button_revealer.set_reveal_child(true);
+            }
+
             return false;
         });
 
@@ -205,7 +214,8 @@ public class WorkspacesApplet : Budgie.Applet
         }
 
         button_visibility = (AddButtonVisibility)settings.get_enum(key);
-        add_button_revealer.set_reveal_child(button_visibility == AddButtonVisibility.ALWAYS);
+
+        add_button_revealer.set_reveal_child(((button_visibility == AddButtonVisibility.ALWAYS) && below_max_workspace_count()));
     }
 
     private void populate_workspaces()
@@ -240,6 +250,10 @@ public class WorkspacesApplet : Budgie.Applet
                 "org.budgie_desktop.BudgieWM",
                 "/org/budgie_desktop/BudgieWM", 0, null, on_wm_get);
         }
+    }
+
+    private bool below_max_workspace_count() {
+        return (wnck_screen.get_workspace_count() < 8);
     }
 
     private void connect_signals()
@@ -282,6 +296,10 @@ public class WorkspacesApplet : Budgie.Applet
         revealer.show_all();
         workspaces_layout.pack_start(revealer, true, true, 0);
         revealer.set_reveal_child(true);
+
+        if (!below_max_workspace_count()) {
+            add_button_revealer.set_reveal_child(false);
+        }
     }
 
     private void workspace_removed(Wnck.Workspace space)
@@ -299,6 +317,8 @@ public class WorkspacesApplet : Budgie.Applet
                 break;
             }
         }
+
+        add_button_revealer.set_reveal_child(true);
     }
 
     private void window_opened(Wnck.Window window)
@@ -358,12 +378,15 @@ public class WorkspacesApplet : Budgie.Applet
             if (data != null) {
                 Wnck.Window window = Wnck.Window.@get(*data);
                 int index = wm_proxy.AppendNewWorkspace(time);
-                dynamically_created_workspaces.append(index);
-                GLib.Timeout.add(50, () => {
-                    window.move_to_workspace(wnck_screen.get_workspace(index));
-                    return false;
-                });
-                dnd_success = true;
+
+                if (index != -1) { // Successfully added workspace
+                    dynamically_created_workspaces.append(index);
+                    GLib.Timeout.add(50, () => {
+                        window.move_to_workspace(wnck_screen.get_workspace(index));
+                        return false;
+                    });
+                    dnd_success = true;
+                }
             }
         }
 
