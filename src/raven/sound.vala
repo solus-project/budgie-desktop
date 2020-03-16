@@ -16,9 +16,10 @@ namespace Budgie {
         /**
          * Logic and Mixer variables
          */
-        private const string MAX_KEY = "allow-volume-above-100-percent";
+        private const string MAX_KEY = "allow-volume-overdrive";
         private Settings? budgie_settings;
         private Settings? gnome_desktop_settings;
+        private Settings? raven_settings;
         private ulong scale_id = 0;
         private Gvc.MixerControl mixer = null;
         private HashTable<uint,Gtk.ListBoxRow?> apps;
@@ -106,6 +107,7 @@ namespace Budgie {
                 settings = new Settings("org.gnome.desktop.sound");
                 apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
                 budgie_settings = new Settings("com.solus-project.budgie-panel");
+                raven_settings = new Settings("com.solus-project.budgie-raven");
                 gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
 
                 mixer.default_sink_changed.connect(on_device_changed);
@@ -114,7 +116,7 @@ namespace Budgie {
                 mixer.state_changed.connect(on_state_changed);
                 mixer.stream_added.connect(on_stream_added);
                 mixer.stream_removed.connect(on_stream_removed);
-                settings.changed[MAX_KEY].connect(on_volume_safety_changed);
+                raven_settings.changed[MAX_KEY].connect(on_volume_safety_changed);
 
                 budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
                 gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
@@ -163,10 +165,7 @@ namespace Budgie {
                 widget_area_switch.set_homogeneous(true);
 
                 // Add marks when sound slider can go beyond 100%
-                if (settings.get_boolean(MAX_KEY)) {
-                    var vol_max = mixer.get_vol_max_norm();
-                    volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "100%");
-                }
+                this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
 
                 header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, volume_slider);
                 main_layout.pack_start(widget_area, false, false, 0);
@@ -477,21 +476,27 @@ namespace Budgie {
          * If the volume is allowed to go over 100%, we'll update the slider range. Otherwise, we'll change or keep it at 100%
          */
         private void on_volume_safety_changed() {
-            bool allow_higher_than_max = settings.get_boolean(MAX_KEY);
+            this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
+        }
+
+        /*
+        * set_slider_range_on_max will set the slider range based on whether or not we are allowing overdrive
+        */
+        private void set_slider_range_on_max(bool allow_overdrive) {
             var current_volume = volume_slider.get_value();
             var vol_max = mixer.get_vol_max_norm();
             var vol_max_above = mixer.get_vol_max_amplified();
-            var step_size = (allow_higher_than_max) ? vol_max_above / 20 : vol_max / 20;
+            var step_size = (allow_overdrive) ? vol_max_above / 20 : vol_max / 20;
 
             int slider_start = 0;
             int slider_end = 0;
             volume_slider.get_slider_range(out slider_start, out slider_end);
 
-            if (allow_higher_than_max && (slider_end != vol_max_above)) { // If we're allowing higher than max and currently slider is not a max of 150
+            if (allow_overdrive && (slider_end != vol_max_above)) { // If we're allowing higher than max and currently slider is not a max of 150
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max_above);
                 volume_slider.set_value(current_volume);
-            } else if (!allow_higher_than_max && (slider_end != vol_max)) { // If we're not allowing higher than max and slider is at max
+            } else if (!allow_overdrive && (slider_end != vol_max)) { // If we're not allowing higher than max and slider is at max
                 volume_slider.set_increments(step_size, step_size);
                 volume_slider.set_range(0, vol_max);
                 volume_slider.set_value(current_volume);
@@ -524,7 +529,7 @@ namespace Budgie {
             bool supported_theme = (current_theme.index_of("Arc") == -1);
 
             if (!builtin_enabled && supported_theme) { // If built-in theme is disabled
-                bool allow_higher_than_max = settings.get_boolean(MAX_KEY);
+                bool allow_higher_than_max = raven_settings.get_boolean(MAX_KEY);
 
                 if (allow_higher_than_max) { // If overdrive is enabled and thus should show mark
                     var vol_max = mixer.get_vol_max_norm();
@@ -544,7 +549,7 @@ namespace Budgie {
             var vol = primary_stream.get_volume();
             var vol_max = mixer.get_vol_max_norm();
 
-            if ((widget_type == "output") && settings.get_boolean(MAX_KEY)) { // Allowing max
+            if ((widget_type == "output") && raven_settings.get_boolean(MAX_KEY)) { // Allowing max
                 vol_max = mixer.get_vol_max_amplified();
             }
 
