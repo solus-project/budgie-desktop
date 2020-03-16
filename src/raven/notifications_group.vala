@@ -32,6 +32,9 @@ namespace Budgie {
 
         public NotificationGroup(string c_app_icon, string c_app_name) {
             Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
+            can_focus = false; // Disable focus to prevent scroll on click
+            focus_on_click = false;
+
             get_style_context().add_class("raven-notifications-group");
 
             // Intentially omit _end because it messes with alignment of dismiss buttons
@@ -47,6 +50,8 @@ namespace Budgie {
 
             notifications = new HashTable<uint, NotificationClone>(direct_hash, direct_equal);
             list = new Gtk.ListBox();
+            list.can_focus = false; // Disable focus to prevent scroll on click
+            list.focus_on_click = false;
 
             /**
              * Header creation

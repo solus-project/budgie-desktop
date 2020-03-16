@@ -26,9 +26,9 @@ public interface DBusImpl : Object
  */
 public class AppLauncherButton : Gtk.Box
 {
-    public AppInfo? app_info = null;
+    public DesktopAppInfo? app_info = null;
 
-    public AppLauncherButton(AppInfo? info)
+    public AppLauncherButton(DesktopAppInfo? info)
     {
         Object(orientation: Gtk.Orientation.HORIZONTAL);
         this.app_info = info;
@@ -277,8 +277,15 @@ public class RunDialog : Gtk.ApplicationWindow
         } else {
             exec = "";
         }
+        bool in_keywords = false;
+        string[] keywords = button.app_info.get_keywords(); // Get any potential keywords
+
+        if ((keywords != null) && (search_text in keywords)) {
+            in_keywords = true;
+        }
+
         return (search_text in app_name || search_text in desc ||
-                search_text in name || search_text in exec);
+                search_text in name || search_text in exec || in_keywords);
     }
 
     /**
@@ -297,7 +304,7 @@ public class RunDialog : Gtk.ApplicationWindow
         if (!app_info.should_show()) {
             return;
         }
-        var button = new AppLauncherButton(app_info);
+        var button = new AppLauncherButton(app_info as DesktopAppInfo);
         app_box.add(button);
         button.show_all();
     }
