@@ -330,9 +330,12 @@ public class ClientWidget : Gtk.Box
      */
     async void download_art(string uri)
     {
+        // Spotify broke album artwork for open.spotify.com around time of this commit
+        var proper_uri = uri.replace("https://open.spotify.com/image/", "https://i.scdn.co/image/");
+
         try {
             // open the stream
-            var art_file = GLib.File.new_for_uri(uri);
+            var art_file = GLib.File.new_for_uri(proper_uri);
             // download the art
             var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
             Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
