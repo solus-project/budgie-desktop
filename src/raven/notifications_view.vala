@@ -932,6 +932,7 @@ public class NotificationsView : Gtk.Box
         pack_start(scrolledwindow, true, true, 0);
 
         listbox = new Gtk.ListBox();
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE);
         var placeholder = new NotificationPlaceholder();
         listbox.set_placeholder(placeholder);
         scrolledwindow.add(listbox);
