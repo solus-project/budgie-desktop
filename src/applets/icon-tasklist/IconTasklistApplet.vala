@@ -34,6 +34,9 @@ public class IconTasklistSettings : Gtk.Grid
     [GtkChild]
     private Gtk.Switch? show_all_on_click;
 
+    [GtkChild]
+    private Gtk.Switch? switch_middle_click_create_new_instance;
+
     private GLib.Settings? settings;
 
     public IconTasklistSettings(GLib.Settings? settings)
@@ -44,6 +47,7 @@ public class IconTasklistSettings : Gtk.Grid
         settings.bind("lock-icons", switch_lock_icons, "active", SettingsBindFlags.DEFAULT);
         settings.bind("only-pinned", switch_only_pinned, "active", SettingsBindFlags.DEFAULT);
         settings.bind("show-all-windows-on-click", show_all_on_click, "active", SettingsBindFlags.DEFAULT);
+        settings.bind("middle-click-launch-new-instance", switch_middle_click_create_new_instance, "active", SettingsBindFlags.DEFAULT);
     }
 
 }

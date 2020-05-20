@@ -966,6 +966,35 @@ public class IconButton : Gtk.ToggleButton
             } else {
                 launch_app(event.time);
             }
+        } else if (event.button == 2) { // Middle click
+            GLib.List<unowned Wnck.Window> windows;
+            bool middle_click_create_new_instance = false;
+
+            if (this.settings != null) { // Settings defined
+                middle_click_create_new_instance = this.settings.get_boolean("middle-click-launch-new-instance");
+            }
+
+            if (middle_click_create_new_instance) {
+                if (class_group != null) {
+                    windows = class_group.get_windows().copy();
+                } else {
+                    windows = new GLib.List<unowned Wnck.Window>();
+                }
+    
+                if (windows.length() == 0) {
+                    launch_app(Gtk.get_current_event_time());
+                } else if (this.app_info != null) {
+                    string[] actions = app_info.list_actions();
+    
+                    if ("new-window" in actions) { // If we have a preferred action set
+                        launch_context.set_screen(get_screen());
+                        launch_context.set_timestamp(Gdk.CURRENT_TIME);
+                        this.app_info.launch_action("new-window", launch_context);
+                    } else {
+                        launch_app(Gtk.get_current_event_time());
+                    }
+                }
+            }
         }
 
         return base.button_release_event(event);

@@ -36,5 +36,11 @@
       <summary>Show All Windows On Click</summary>
       <description>Show all windows when clicking their respective IconButton in the IconTasklist.</description>
     </key>
+
+    <key type="b" name="middle-click-launch-new-instance">
+      <default>false</default>
+      <summary>Middle Click To Launch New Window</summary>
+      <description>Launch a new window when middle clicking an IconButton in the IconTasklist.</description>
+    </key>
   </schema>
 </schemalist>
