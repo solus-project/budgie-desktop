@@ -79,6 +79,12 @@
       <description>Disables the screen unredirection which may improve performance with certain drivers.</description>
     </key>
 
+    <key type="b" name="show-all-windows-tabswitcher">
+      <default>false</default>
+      <summary>Enable display of every open windows in the tab switcher</summary>
+      <description>Control whether every open windows or only the current workspace ones are displayed in the tab switcher.</description>
+    </key>
+
     <key type="as" name="toggle-raven">
       <default><![CDATA[['<Super>A']]]></default>
       <summary>The binding to use to toggle Raven applets view</summary>
