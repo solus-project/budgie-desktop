@@ -304,7 +304,9 @@ public class BudgieWM : Meta.Plugin
     /* Binding for take-full-screenshot */
     void on_take_full_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
-            Process.spawn_command_line_async ("gnome-screenshot");
+            string cmd=this.settings.get_string("full-screenshot-cmd");
+            if (cmd != "")
+                Process.spawn_command_line_async (cmd);
         } catch (SpawnError e) {
             print ("Error: %s\n", e.message);
         }
@@ -313,7 +315,9 @@ public class BudgieWM : Meta.Plugin
     /* Binding for take-region-screenshot */
     void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
-            Process.spawn_command_line_async ("gnome-screenshot -a");
+            string cmd=this.settings.get_string("take-region-screenshot-cmd");
+            if (cmd != "")
+                Process.spawn_command_line_async (cmd);
         } catch (SpawnError e) {
             print ("Error: %s\n", e.message);
         }
@@ -322,7 +326,9 @@ public class BudgieWM : Meta.Plugin
     /* Binding for take-window-screenshot */
     void on_take_window_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
         try {
-            Process.spawn_command_line_async ("gnome-screenshot -w -b");
+            string cmd=this.settings.get_string("take-window-screenshot-cmd");
+            if (cmd != "")
+                Process.spawn_command_line_async (cmd);
         } catch (SpawnError e) {
             print ("Error: %s\n", e.message);
         }
