@@ -91,8 +91,7 @@ public static int main(string[] args) {
     manager = null;
     end_dialog = null;
     settings = null;
-
-    Wnck.shutdown();
+    screen = null;
 
     return 0;
 }
