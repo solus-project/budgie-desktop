@@ -15,16 +15,22 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef __NA_TRAY_CHILD_H__
 #define __NA_TRAY_CHILD_H__
 
 #include <gtk/gtk.h>
+
+#include <gdk/gdkx.h>
 #include <gtk/gtkx.h>
 
-G_BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define NA_TYPE_TRAY_CHILD		(na_tray_child_get_type ())
 #define NA_TRAY_CHILD(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), NA_TYPE_TRAY_CHILD, NaTrayChild))
@@ -44,6 +50,8 @@ struct _NaTrayChild
   guint has_alpha : 1;
   guint composited : 1;
   guint parent_relative_bg : 1;
+
+  gchar *id;
 };
 
 struct _NaTrayChildClass
@@ -64,6 +72,8 @@ void            na_tray_child_get_wm_class   (NaTrayChild  *child,
 					      char        **res_name,
 					      char        **res_class);
 
-G_END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __NA_TRAY_CHILD_H__ */

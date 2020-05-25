@@ -2,6 +2,7 @@
  * Copyright (C) 2002 Red Hat, Inc.
  * Copyright (C) 2003-2006 Vincent Untz
  * Copyright (C) 2007 Christian Persch
+ * Copyright (C) 2017 Colomban Wendling <cwendling@hypra.fr>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -14,32 +15,38 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
  */
 
-#include "config.h"
-
-#include <gtk/gtk.h>
+#include <config.h>
 #include <string.h>
 
-#include "na-tray.h"
+#include <gtk/gtk.h>
+
 #include "na-tray-manager.h"
-#include "fixedtip.h"
 
-#define ICON_SPACING 3
-#define MIN_BOX_SIZE 3
+#include "na-tray.h"
 
-struct _NaTray
+typedef struct
 {
-  GtkBin          parent;
+  NaTrayManager *tray_manager;
+  GSList        *all_trays;
+  GHashTable    *icon_table;
+  GHashTable    *tip_table;
+} TraysScreen;
 
-  NaTrayManager  *tray_manager;
-  GHashTable     *icon_table;
-  GHashTable     *tip_table;
+struct _NaTrayPrivate
+{
+  GdkScreen   *screen;
+  TraysScreen *trays_screen;
 
-  GtkWidget      *box;
+  guint idle_redraw_id;
 
-  GtkOrientation  orientation;
+  GtkOrientation orientation;
+  gint           icon_padding;
+  gint           icon_size;
 };
 
 typedef struct
@@ -51,7 +58,7 @@ typedef struct
 
 typedef struct
 {
-  NaTray     *tray;      /* tray containing the tray icon */
+  NaTray *tray;      /* tray containing the tray icon */
   GtkWidget  *icon;      /* tray icon sending the message */
   GtkWidget  *fixedtip;
   guint       source_id;
@@ -63,494 +70,233 @@ enum
 {
   PROP_0,
   PROP_ORIENTATION,
+  PROP_ICON_PADDING,
+  PROP_ICON_SIZE,
+  PROP_SCREEN
 };
+
+static gboolean     initialized   = FALSE;
+static TraysScreen *trays_screens = NULL;
 
 static void icon_tip_show_next (IconTip *icontip);
 
-G_DEFINE_TYPE (NaTray, na_tray, GTK_TYPE_BIN)
+/* NaTray */
+static void na_host_init          (NaHostInterface *iface);
+static void na_tray_style_updated (NaHost          *host,
+                                   GtkStyleContext *context);
+static void na_tray_force_redraw  (NaHost          *host);
 
-const char *ordered_roles[] = {
-  "keyboard",
-  "volume",
-  "bluetooth",
-  "network",
-  "battery",
-  NULL
-};
+G_DEFINE_TYPE_WITH_CODE (NaTray, na_tray, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (NA_TYPE_HOST, na_host_init))
 
-const char *wmclass_roles[] = {
-  "Bluetooth-applet", "bluetooth",
-  "Gnome-volume-control-applet", "volume",
-  "Nm-applet", "network",
-  "Gnome-power-manager", "battery",
-  "keyboard", "keyboard",
-  NULL,
-};
-
-static const char *
-find_role (const char *wmclass)
+static void
+na_host_init (NaHostInterface *iface)
 {
-  int i;
-
-  for (i = 0; wmclass_roles[i]; i += 2)
-    {
-      if (strcmp (wmclass, wmclass_roles[i]) == 0)
-        return wmclass_roles[i + 1];
-    }
-
-  return NULL;
+  iface->force_redraw = na_tray_force_redraw;
+  iface->style_updated = na_tray_style_updated;
 }
 
-static int
-find_role_position (const char *role)
+static NaTray *
+get_tray (TraysScreen *trays_screen)
 {
-  int i;
+  if (trays_screen->all_trays == NULL)
+    return NULL;
 
-  for (i = 0; ordered_roles[i]; i++)
-    {
-      if (strcmp (role, ordered_roles[i]) == 0)
-        break;
-    }
-
-  return i + 1;
-}
-
-static int
-find_icon_position (NaTray    *tray,
-                    GtkWidget *icon)
-{
-  int            position;
-  char          *class_a;
-  const char    *role;
-  int            role_position;
-  GList         *l, *children;
-
-  /* We insert the icons with a known roles in a specific order (the one
-   * defined by ordered_roles), and all other icons at the beginning of the box
-   * (left in LTR). */
-
-  position = 0;
-
-  class_a = NULL;
-  na_tray_child_get_wm_class (NA_TRAY_CHILD (icon), NULL, &class_a);
-  if (!class_a)
-    return position;
-
-  role = find_role (class_a);
-  g_free (class_a);
-  if (!role)
-    return position;
-
-  role_position = find_role_position (role);
-  g_object_set_data (G_OBJECT (icon), "role-position", GINT_TO_POINTER (role_position));
-
-  children = gtk_container_get_children (GTK_CONTAINER (tray->box));
-  for (l = g_list_last (children); l; l = l->prev)
-    {
-      GtkWidget *child = l->data;
-      int        rp;
-
-      rp = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "role-position"));
-      if (rp == 0 || rp < role_position)
-        {
-          position = g_list_index (children, child) + 1;
-          break;
-        }
-    }
-  g_list_free (children);
-
-  /* should never happen, but it doesn't hurt to be on the safe side */
-  if (position < 0)
-    position = 0;
-
-  return position;
+  return trays_screen->all_trays->data;
 }
 
 static void
 tray_added (NaTrayManager *manager,
-            GtkWidget     *icon,
-            NaTray        *tray)
+            NaTrayChild   *icon,
+            TraysScreen   *trays_screen)
 {
-  int position;
+  NaTray *tray;
+  NaTrayPrivate *priv;
 
-  g_hash_table_insert (tray->icon_table, icon, tray);
+  tray = get_tray (trays_screen);
+  if (tray == NULL)
+    return;
 
-  position = find_icon_position (tray, icon);
-  gtk_box_pack_start (GTK_BOX (tray->box), icon, FALSE, FALSE, 0);
-  gtk_box_reorder_child (GTK_BOX (tray->box), icon, position);
+  priv = tray->priv;
 
-  gtk_widget_show (icon);
+  g_assert (priv->trays_screen == trays_screen);
+
+  g_hash_table_insert (trays_screen->icon_table, icon, tray);
+
+  na_host_emit_item_added (NA_HOST (tray), NA_ITEM (icon));
+
+  /*Does not seem to be needed anymore and can cause a render issue with hidpi*/
+  /*gtk_widget_show (GTK_WIDGET (icon));*/
 }
 
 static void
 tray_removed (NaTrayManager *manager,
-              GtkWidget     *icon,
-              NaTray        *tray)
-{
-  NaTray *icon_tray;
-
-  icon_tray = g_hash_table_lookup (tray->icon_table, icon);
-  if (icon_tray == NULL)
-    return;
-
-  g_assert (icon_tray == tray);
-
-  gtk_container_remove (GTK_CONTAINER (tray->box), icon);
-
-  g_hash_table_remove (tray->icon_table, icon);
-  g_hash_table_remove (tray->tip_table, icon);
-}
-
-static void
-icon_tip_buffer_free (gpointer data,
-                      gpointer userdata)
-{
-  IconTipBuffer *buffer;
-
-  buffer = data;
-
-  g_free (buffer->text);
-  buffer->text = NULL;
-
-  g_free (buffer);
-}
-
-static void
-icon_tip_free (gpointer data)
-{
-  IconTip *icontip;
-
-  if (data == NULL)
-    return;
-
-  icontip = data;
-
-  if (icontip->fixedtip != NULL)
-    gtk_widget_destroy (GTK_WIDGET (icontip->fixedtip));
-  icontip->fixedtip = NULL;
-
-  if (icontip->source_id != 0)
-    g_source_remove (icontip->source_id);
-  icontip->source_id = 0;
-
-  if (icontip->buffer != NULL)
-    {
-      g_slist_foreach (icontip->buffer, icon_tip_buffer_free, NULL);
-      g_slist_free (icontip->buffer);
-    }
-  icontip->buffer = NULL;
-
-  g_free (icontip);
-}
-
-static int
-icon_tip_buffer_compare (gconstpointer a,
-                         gconstpointer b)
-{
-  const IconTipBuffer *buffer_a = a;
-  const IconTipBuffer *buffer_b = b;
-
-  if (buffer_a == NULL || buffer_b == NULL)
-    return !(buffer_a == buffer_b);
-
-  return buffer_a->id - buffer_b->id;
-}
-
-static void
-icon_tip_show_next_clicked (GtkWidget *widget,
-                            gpointer   data)
-{
-  icon_tip_show_next ((IconTip *) data);
-}
-
-static gboolean
-icon_tip_show_next_timeout (gpointer data)
-{
-  IconTip *icontip = (IconTip *) data;
-
-  icon_tip_show_next (icontip);
-
-  return FALSE;
-}
-
-static void
-icon_tip_show_next (IconTip *icontip)
-{
-  IconTipBuffer *buffer;
-
-  if (icontip->buffer == NULL)
-    {
-      /* this will also destroy the tip window */
-      g_hash_table_remove (icontip->tray->tip_table,
-                           icontip->icon);
-      return;
-    }
-
-  if (icontip->source_id != 0)
-    g_source_remove (icontip->source_id);
-  icontip->source_id = 0;
-
-  buffer = icontip->buffer->data;
-  icontip->buffer = g_slist_remove (icontip->buffer, buffer);
-
-  if (icontip->fixedtip == NULL)
-    {
-      icontip->fixedtip = na_fixed_tip_new (icontip->icon,
-                                            na_tray_get_orientation (icontip->tray));
-
-      g_signal_connect (icontip->fixedtip, "clicked",
-                        G_CALLBACK (icon_tip_show_next_clicked), icontip);
-    }
-
-  na_fixed_tip_set_markup (icontip->fixedtip, buffer->text);
-
-  if (!gtk_widget_get_mapped (icontip->fixedtip))
-    gtk_widget_show (icontip->fixedtip);
-
-  icontip->id = buffer->id;
-
-  if (buffer->timeout > 0)
-    icontip->source_id = g_timeout_add_seconds (buffer->timeout,
-                                                icon_tip_show_next_timeout,
-                                                icontip);
-
-  icon_tip_buffer_free (buffer, NULL);
-}
-
-static void
-message_sent (NaTrayManager *manager,
-              GtkWidget     *icon,
-              const char    *text,
-              glong          id,
-              glong          timeout,
-              NaTray        *tray)
-{
-  IconTip       *icontip;
-  IconTipBuffer  find_buffer;
-  IconTipBuffer *buffer;
-  gboolean       show_now;
-
-  icontip = g_hash_table_lookup (tray->tip_table, icon);
-
-  find_buffer.id = id;
-  if (icontip &&
-      (icontip->id == id ||
-       g_slist_find_custom (icontip->buffer, &find_buffer,
-                            icon_tip_buffer_compare) != NULL))
-    /* we already have this message, so ignore it */
-    /* FIXME: in an ideal world, we'd remember all the past ids and ignore them
-     * too */
-    return;
-
-  show_now = FALSE;
-
-  if (icontip == NULL)
-    {
-      NaTray *icon_tray;
-
-      icon_tray = g_hash_table_lookup (tray->icon_table, icon);
-      if (icon_tray == NULL)
-        {
-          /* We don't know about the icon sending the message, so ignore it.
-           * But this should never happen since NaTrayManager shouldn't send
-           * us the message if there's no socket for it. */
-          g_critical ("Ignoring a message sent by a tray icon "
-                      "we don't know: \"%s\".\n", text);
-          return;
-        }
-
-      icontip = g_new0 (IconTip, 1);
-      icontip->tray = tray;
-      icontip->icon = icon;
-
-      g_hash_table_insert (tray->tip_table, icon, icontip);
-
-      show_now = TRUE;
-    }
-
-  buffer = g_new0 (IconTipBuffer, 1);
-
-  buffer->text    = g_strdup (text);
-  buffer->id      = id;
-  buffer->timeout = timeout;
-
-  icontip->buffer = g_slist_append (icontip->buffer, buffer);
-
-  if (show_now)
-    icon_tip_show_next (icontip);
-}
-
-static void
-message_cancelled (NaTrayManager *manager,
-                   GtkWidget     *icon,
-                   glong          id,
-                   NaTray        *tray)
-{
-  IconTip       *icontip;
-  IconTipBuffer  find_buffer;
-  GSList        *cancel_buffer_l;
-  IconTipBuffer *cancel_buffer;
-
-  icontip = g_hash_table_lookup (tray->tip_table, icon);
-  if (icontip == NULL)
-    return;
-
-  if (icontip->id == id)
-    {
-      icon_tip_show_next (icontip);
-      return;
-    }
-
-  find_buffer.id = id;
-  cancel_buffer_l = g_slist_find_custom (icontip->buffer, &find_buffer,
-                                         icon_tip_buffer_compare);
-  if (cancel_buffer_l == NULL)
-    return;
-
-  cancel_buffer = cancel_buffer_l->data;
-  icon_tip_buffer_free (cancel_buffer, NULL);
-
-  icontip->buffer = g_slist_remove_link (icontip->buffer, cancel_buffer_l);
-  g_slist_free_1 (cancel_buffer_l);
-}
-
-static void
-update_orientation_for_messages (gpointer key,
-                                 gpointer value,
-                                 gpointer data)
+              NaTrayChild   *icon,
+              TraysScreen   *trays_screen)
 {
   NaTray *tray;
-  IconTip    *icontip;
 
-  if (value == NULL)
+  tray = g_hash_table_lookup (trays_screen->icon_table, icon);
+  if (tray == NULL)
     return;
 
-  icontip = value;
-  tray    = data;
-  if (icontip->tray != tray)
-    return;
+  g_assert (tray->priv->trays_screen == trays_screen);
 
-  if (icontip->fixedtip)
-    na_fixed_tip_set_orientation (icontip->fixedtip, tray->orientation);
+  na_host_emit_item_removed (NA_HOST (tray), NA_ITEM (icon));
+
+  g_hash_table_remove (trays_screen->icon_table, icon);
+  /* this will also destroy the tip associated to this icon */
+  g_hash_table_remove (trays_screen->tip_table, icon);
 }
 
 static void
 update_size_and_orientation (NaTray *tray)
 {
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (tray->box), tray->orientation);
+  NaTrayPrivate *priv = tray->priv;
 
-  g_hash_table_foreach (tray->tip_table, update_orientation_for_messages, tray);
+  /* This only happens when setting the property during object construction */
+  if (!priv->trays_screen)
+    return;
 
-  na_tray_manager_set_orientation (tray->tray_manager, tray->orientation);
-
-  /* note, you want this larger if the frame has non-NONE relief by default. */
-  switch (tray->orientation)
-    {
-    case GTK_ORIENTATION_VERTICAL:
-      /* Give box a min size so the frame doesn't look dumb */
-      gtk_widget_set_size_request (tray->box, MIN_BOX_SIZE, -1);
-      break;
-    case GTK_ORIENTATION_HORIZONTAL:
-      gtk_widget_set_size_request (tray->box, -1, MIN_BOX_SIZE);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-}
-
-/* Children with alpha channels have been set to be composited by calling
- * gdk_window_set_composited(). We need to paint these children ourselves.
- */
-static void
-na_tray_draw_icon (GtkWidget *widget,
-		   gpointer   data)
-{
-  cairo_t *cr = (cairo_t *) data;
-
-  if (na_tray_child_has_alpha (NA_TRAY_CHILD (widget)))
-    {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (widget, &allocation);
-
-      cairo_save (cr);
-      gdk_cairo_set_source_window (cr,
-                                   gtk_widget_get_window (widget),
-				   allocation.x,
-				   allocation.y);
-      cairo_rectangle (cr, allocation.x, allocation.y, allocation.width, allocation.height);
-      cairo_clip (cr);
-      cairo_paint (cr);
-      cairo_restore (cr);
-    }
-}
-
-static gboolean
-na_tray_draw_box (GtkWidget *box,
-		  cairo_t   *cr)
-{
-  gtk_container_foreach (GTK_CONTAINER (box), na_tray_draw_icon, cr);
-  return TRUE;
+  if (get_tray (priv->trays_screen) == tray)
+    na_tray_manager_set_orientation (priv->trays_screen->tray_manager,
+                                     priv->orientation);
 }
 
 static void
 na_tray_init (NaTray *tray)
 {
-  tray->orientation = GTK_ORIENTATION_HORIZONTAL;
+  NaTrayPrivate *priv;
 
-  tray->box = gtk_box_new (tray->orientation, ICON_SPACING);
-  g_signal_connect (tray->box, "draw", G_CALLBACK (na_tray_draw_box), NULL);
-  gtk_container_add (GTK_CONTAINER (tray), tray->box);
-  gtk_widget_show (tray->box);
+  priv = tray->priv = G_TYPE_INSTANCE_GET_PRIVATE (tray, NA_TYPE_TRAY, NaTrayPrivate);
+
+  priv->screen = NULL;
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  priv->icon_padding = 0;
+  priv->icon_size = 0;
 }
 
-static void
-na_tray_constructed (GObject *object)
+static GObject *
+na_tray_constructor (GType type,
+                     guint n_construct_properties,
+                     GObjectConstructParam *construct_params)
 {
+  GObject *object;
   NaTray *tray;
-  GdkScreen *screen;
+  NaTrayPrivate *priv;
+  int screen_number;
 
-  G_OBJECT_CLASS (na_tray_parent_class)->constructed (object);
-
+  object = G_OBJECT_CLASS (na_tray_parent_class)->constructor (type,
+                                                               n_construct_properties,
+                                                               construct_params);
   tray = NA_TRAY (object);
-  screen = gdk_screen_get_default ();
+  priv = tray->priv;
 
-  tray->tray_manager = na_tray_manager_new ();
+  g_assert (priv->screen != NULL);
 
-  if (na_tray_manager_manage_screen (tray->tray_manager, screen))
+  if (!initialized)
     {
-      g_signal_connect (tray->tray_manager, "tray-icon-added",
-                        G_CALLBACK (tray_added), tray);
-      g_signal_connect (tray->tray_manager, "tray-icon-removed",
-                        G_CALLBACK (tray_removed), tray);
-      g_signal_connect (tray->tray_manager, "message-sent",
-                        G_CALLBACK (message_sent), tray);
-      g_signal_connect (tray->tray_manager, "message-cancelled",
-                        G_CALLBACK (message_cancelled), tray);
+      trays_screens = g_new0 (TraysScreen, 1);
+      initialized = TRUE;
+    }
 
-      tray->icon_table = g_hash_table_new (NULL, NULL);
-      tray->tip_table = g_hash_table_new_full (NULL, NULL, NULL, icon_tip_free);
-    }
-  else
+  screen_number = gdk_x11_screen_get_screen_number (priv->screen);
+
+  if (trays_screens [screen_number].tray_manager == NULL)
     {
-      g_printerr ("System tray didn't get the system tray manager selection\n");
-      g_clear_object (&tray->tray_manager);
+      NaTrayManager *tray_manager;
+
+      tray_manager = na_tray_manager_new ();
+
+      if (na_tray_manager_manage_screen (tray_manager, priv->screen))
+        {
+          trays_screens [screen_number].tray_manager = tray_manager;
+
+          g_signal_connect (tray_manager, "tray_icon_added",
+                            G_CALLBACK (tray_added),
+                            &trays_screens [screen_number]);
+          g_signal_connect (tray_manager, "tray_icon_removed",
+                            G_CALLBACK (tray_removed),
+                            &trays_screens [screen_number]);
+
+          trays_screens [screen_number].icon_table = g_hash_table_new (NULL,
+                                                                       NULL);
+        }
+      else
+        {
+          g_printerr ("System tray didn't get the system tray manager selection for screen %d\n",
+		      screen_number);
+          g_object_unref (tray_manager);
+        }
     }
+
+  priv->trays_screen = &trays_screens [screen_number];
+  trays_screens [screen_number].all_trays = g_slist_append (trays_screens [screen_number].all_trays,
+                                                            tray);
 
   update_size_and_orientation (tray);
+
+  return object;
 }
 
 static void
 na_tray_dispose (GObject *object)
 {
   NaTray *tray = NA_TRAY (object);
+  NaTrayPrivate *priv = tray->priv;
+  TraysScreen *trays_screen = priv->trays_screen;
 
-  g_clear_object (&tray->tray_manager);
-  g_clear_pointer (&tray->icon_table, g_hash_table_destroy);
-  g_clear_pointer (&tray->tip_table, g_hash_table_destroy);
+  if (trays_screen != NULL)
+    {
+      trays_screen->all_trays = g_slist_remove (trays_screen->all_trays, tray);
+
+      if (trays_screen->all_trays == NULL)
+        {
+          /* Make sure we drop the manager selection */
+          g_object_unref (trays_screen->tray_manager);
+          trays_screen->tray_manager = NULL;
+
+          g_hash_table_destroy (trays_screen->icon_table);
+          trays_screen->icon_table = NULL;
+
+          g_hash_table_destroy (trays_screen->tip_table);
+          trays_screen->tip_table = NULL;
+        }
+      else
+        {
+          NaTray *new_tray;
+
+          new_tray = get_tray (trays_screen);
+          if (new_tray != NULL)
+            na_tray_manager_set_orientation (trays_screen->tray_manager,
+                                             gtk_orientable_get_orientation (GTK_ORIENTABLE (new_tray)));
+        }
+    }
+
+  priv->trays_screen = NULL;
+
+  if (priv->idle_redraw_id != 0)
+    {
+      g_source_remove (priv->idle_redraw_id);
+      priv->idle_redraw_id = 0;
+    }
 
   G_OBJECT_CLASS (na_tray_parent_class)->dispose (object);
+}
+
+static void
+na_tray_set_orientation (NaTray         *tray,
+			 GtkOrientation  orientation)
+{
+  NaTrayPrivate *priv = tray->priv;
+
+  if (orientation == priv->orientation)
+    return;
+
+  priv->orientation = orientation;
+
+  update_size_and_orientation (tray);
 }
 
 static void
@@ -560,11 +306,21 @@ na_tray_set_property (GObject      *object,
 		      GParamSpec   *pspec)
 {
   NaTray *tray = NA_TRAY (object);
+  NaTrayPrivate *priv = tray->priv;
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
       na_tray_set_orientation (tray, g_value_get_enum (value));
+      break;
+    case PROP_ICON_PADDING:
+      na_tray_set_padding (tray, g_value_get_int (value));
+      break;
+    case PROP_ICON_SIZE:
+      na_tray_set_icon_size (tray, g_value_get_int (value));
+      break;
+    case PROP_SCREEN:
+      priv->screen = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -573,104 +329,155 @@ na_tray_set_property (GObject      *object,
 }
 
 static void
-na_tray_get_preferred_width (GtkWidget *widget,
-                             gint      *minimal_width,
-                             gint      *natural_width)
+na_tray_get_property (GObject    *object,
+		      guint       prop_id,
+		      GValue     *value,
+		      GParamSpec *pspec)
 {
-  gtk_widget_get_preferred_width (gtk_bin_get_child (GTK_BIN (widget)),
-                                  minimal_width,
-                                  natural_width);
-}
+  NaTray *tray = NA_TRAY (object);
+  NaTrayPrivate *priv = tray->priv;
 
-static void
-na_tray_get_preferred_height (GtkWidget *widget,
-                              gint      *minimal_height,
-                              gint      *natural_height)
-{
-  gtk_widget_get_preferred_height (gtk_bin_get_child (GTK_BIN (widget)),
-                                   minimal_height,
-                                   natural_height);
-}
-
-static void
-na_tray_size_allocate (GtkWidget        *widget,
-                       GtkAllocation    *allocation)
-{
-  gtk_widget_size_allocate (gtk_bin_get_child (GTK_BIN (widget)), allocation);
-  gtk_widget_set_allocation (widget, allocation);
+  switch (prop_id)
+    {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, tray->priv->orientation);
+      break;
+    case PROP_ICON_PADDING:
+      g_value_set_int (value, tray->priv->icon_padding);
+      break;
+    case PROP_ICON_SIZE:
+      g_value_set_int (value, tray->priv->icon_size);
+      break;
+    case PROP_SCREEN:
+      g_value_set_object (value, priv->screen);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
 na_tray_class_init (NaTrayClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructed = na_tray_constructed;
+  gobject_class->constructor = na_tray_constructor;
   gobject_class->set_property = na_tray_set_property;
+  gobject_class->get_property = na_tray_get_property;
   gobject_class->dispose = na_tray_dispose;
-  widget_class->get_preferred_width = na_tray_get_preferred_width;
-  widget_class->get_preferred_height = na_tray_get_preferred_height;
-  widget_class->size_allocate = na_tray_size_allocate;
+
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+
+  g_object_class_override_property (gobject_class, PROP_ICON_PADDING, "icon-padding");
+  g_object_class_override_property (gobject_class, PROP_ICON_SIZE, "icon-size");
 
   g_object_class_install_property
     (gobject_class,
-     PROP_ORIENTATION,
-     g_param_spec_enum ("orientation", "orientation", "orientation",
-		        GTK_TYPE_ORIENTATION,
-			GTK_ORIENTATION_HORIZONTAL,
-			G_PARAM_WRITABLE |
-			G_PARAM_STATIC_NAME |
-			G_PARAM_STATIC_NICK |
-			G_PARAM_STATIC_BLURB));
+     PROP_SCREEN,
+     g_param_spec_object ("screen", "screen", "screen",
+			  GDK_TYPE_SCREEN,
+			  G_PARAM_WRITABLE |
+			  G_PARAM_CONSTRUCT_ONLY |
+			  G_PARAM_STATIC_NAME |
+			  G_PARAM_STATIC_NICK |
+			  G_PARAM_STATIC_BLURB));
+
+  g_type_class_add_private (gobject_class, sizeof (NaTrayPrivate));
 }
 
-NaTray *
-na_tray_new_for_screen (GtkOrientation orientation)
+NaHost *
+na_tray_new_for_screen (GdkScreen      *screen,
+		        GtkOrientation  orientation)
 {
   return g_object_new (NA_TYPE_TRAY,
+		       "screen", screen,
 		       "orientation", orientation,
 		       NULL);
-}
-
-void
-na_tray_set_orientation (NaTray         *tray,
-			 GtkOrientation  orientation)
-{
-  if (orientation == tray->orientation)
-    return;
-
-  tray->orientation = orientation;
-
-  update_size_and_orientation (tray);
-}
-
-GtkOrientation
-na_tray_get_orientation (NaTray *tray)
-{
-  return tray->orientation;
 }
 
 void
 na_tray_set_padding (NaTray *tray,
                      gint    padding)
 {
-  na_tray_manager_set_padding (tray->tray_manager, padding);
+  NaTrayPrivate *priv = tray->priv;
+
+  priv->icon_padding = padding;
+  if (get_tray (priv->trays_screen) == tray)
+    na_tray_manager_set_padding (priv->trays_screen->tray_manager, padding);
 }
 
 void
 na_tray_set_icon_size (NaTray *tray,
                        gint    size)
 {
-  na_tray_manager_set_icon_size (tray->tray_manager, size);
+  NaTrayPrivate *priv = tray->priv;
+
+  priv->icon_size = size;
+  if (get_tray (priv->trays_screen) == tray)
+    na_tray_manager_set_icon_size (priv->trays_screen->tray_manager, size);
 }
 
-void
+static void
 na_tray_set_colors (NaTray   *tray,
                     GdkRGBA  *fg,
                     GdkRGBA  *error,
                     GdkRGBA  *warning,
                     GdkRGBA  *success)
 {
-  na_tray_manager_set_colors (tray->tray_manager, fg, error, warning, success);
+  NaTrayPrivate *priv = tray->priv;
+
+  if (get_tray (priv->trays_screen) == tray)
+    na_tray_manager_set_colors (priv->trays_screen->tray_manager, fg, error, warning, success);
+}
+
+static void
+na_tray_style_updated (NaHost          *host,
+                       GtkStyleContext *context)
+{
+  GdkRGBA fg;
+  GdkRGBA error;
+  GdkRGBA warning;
+  GdkRGBA success;
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
+
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &fg);
+
+  if (!gtk_style_context_lookup_color (context, "error_color", &error))
+    error = fg;
+  if (!gtk_style_context_lookup_color (context, "warning_color", &warning))
+    warning = fg;
+  if (!gtk_style_context_lookup_color (context, "success_color", &success))
+    success = fg;
+
+  gtk_style_context_restore (context);
+
+  na_tray_set_colors (NA_TRAY (host), &fg, &error, &warning, &success);
+}
+
+static gboolean
+idle_redraw_cb (NaTray *tray)
+{
+  NaTrayPrivate *priv = tray->priv;
+
+  g_hash_table_foreach (priv->trays_screen->icon_table,
+                        (GHFunc) na_tray_child_force_redraw, NULL);
+
+  priv->idle_redraw_id = 0;
+
+  return FALSE;
+}
+
+static void
+na_tray_force_redraw (NaHost *host)
+{
+  NaTray *tray = NA_TRAY (host);
+  NaTrayPrivate *priv = tray->priv;
+
+  /* Force the icons to redraw their backgrounds.
+   */
+  if (priv->idle_redraw_id == 0)
+    priv->idle_redraw_id = g_idle_add ((GSourceFunc) idle_redraw_cb, tray);
 }

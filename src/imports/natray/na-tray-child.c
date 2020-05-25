@@ -14,7 +14,9 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #include <config.h>
@@ -22,15 +24,33 @@
 
 #include "na-tray-child.h"
 
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
 
-G_DEFINE_TYPE (NaTrayChild, na_tray_child, GTK_TYPE_SOCKET)
+#include "na-item.h"
+
+enum
+{
+  PROP_0,
+  PROP_ORIENTATION
+};
+
+static void na_item_init (NaItemInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (NaTrayChild, na_tray_child, GTK_TYPE_SOCKET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (NA_TYPE_ITEM, na_item_init))
 
 static void
 na_tray_child_finalize (GObject *object)
 {
+  NaTrayChild *child = NA_TRAY_CHILD (object);
+
+  g_clear_pointer (&child->id, g_free);
+
   G_OBJECT_CLASS (na_tray_child_parent_class)->finalize (object);
 }
 
@@ -58,7 +78,7 @@ na_tray_child_realize (GtkWidget *widget)
 
       child->parent_relative_bg = FALSE;
     }
-  else if (visual == gdk_window_get_visual (gdk_window_get_parent (window)))
+  else if (visual == gdk_window_get_visual(gdk_window_get_parent(window)))
     {
       /* Otherwise, if the visual matches the visual of the parent window, we
        * can use a parent-relative background and fake transparency. */
@@ -76,13 +96,6 @@ na_tray_child_realize (GtkWidget *widget)
 
   gtk_widget_set_app_paintable (GTK_WIDGET (child),
                                 child->parent_relative_bg || child->has_alpha);
-
-  /* Double-buffering will interfere with the parent-relative-background fake
-   * transparency, since the double-buffer code doesn't know how to fill in the
-   * background of the double-buffer correctly.
-   */
-  gtk_widget_set_double_buffered (GTK_WIDGET (child),
-                                  child->parent_relative_bg);
 }
 
 static void
@@ -95,20 +108,26 @@ na_tray_child_style_set (GtkWidget *widget,
    */
 }
 
+#if !GTK_CHECK_VERSION (3, 23, 0)
 static void
 na_tray_child_get_preferred_width (GtkWidget *widget,
                                    gint      *minimal_width,
                                    gint      *natural_width)
 {
+  gint scale;
+  scale = gtk_widget_get_scale_factor (widget);
   GTK_WIDGET_CLASS (na_tray_child_parent_class)->get_preferred_width (widget,
                                                                       minimal_width,
                                                                       natural_width);
 
-  if (*minimal_width < 22)
-    *minimal_width = 22;
+  if (*minimal_width < 16)
+    *minimal_width = 16;
 
-  if (*natural_width < 22)
-    *natural_width = 22;
+  if (*natural_width < 16)
+    *natural_width = 16;
+
+  *minimal_width = *minimal_width / scale;
+  *natural_width = *natural_width / scale;
 }
 
 static void
@@ -116,69 +135,30 @@ na_tray_child_get_preferred_height (GtkWidget *widget,
                                     gint      *minimal_height,
                                     gint      *natural_height)
 {
+  gint scale;
+  scale = gtk_widget_get_scale_factor (widget);
   GTK_WIDGET_CLASS (na_tray_child_parent_class)->get_preferred_height (widget,
                                                                        minimal_height,
                                                                        natural_height);
 
-  if (*minimal_height < 22)
-    *minimal_height = 22;
+  if (*minimal_height < 16)
+    *minimal_height = 16;
 
-  if (*natural_height < 22)
-    *natural_height = 22;
+  if (*natural_height < 16)
+    *natural_height = 16;
+
+  *minimal_height = *minimal_height / scale;
+  *natural_height = *natural_height / scale;
 }
-
-static void
-na_tray_child_size_allocate (GtkWidget      *widget,
-                             GtkAllocation  *allocation)
-{
-  NaTrayChild *child = NA_TRAY_CHILD (widget);
-  GtkAllocation widget_allocation;
-  gboolean moved, resized;
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-
-  moved = (allocation->x != widget_allocation.x ||
-	   allocation->y != widget_allocation.y);
-  resized = (allocation->width != widget_allocation.width ||
-	     allocation->height != widget_allocation.height);
-
-  /* When we are allocating the widget while mapped we need special handling
-   * for both real and fake transparency.
-   *
-   * Real transparency: we need to invalidate and trigger a redraw of the old
-   *   and new areas. (GDK really should handle this for us, but doesn't as of
-   *   GTK+-2.14)
-   *
-   * Fake transparency: if the widget moved, we need to force the contents to
-   *   be redrawn with the new offset for the parent-relative background.
-   */
-  if ((moved || resized) && gtk_widget_get_mapped (widget))
-    {
-      if (na_tray_child_has_alpha (child))
-        gdk_window_invalidate_rect (gdk_window_get_parent (gtk_widget_get_window (widget)),
-                                    &widget_allocation, FALSE);
-    }
-
-  GTK_WIDGET_CLASS (na_tray_child_parent_class)->size_allocate (widget,
-                                                                allocation);
-
-  if ((moved || resized) && gtk_widget_get_mapped (widget))
-    {
-      if (na_tray_child_has_alpha (NA_TRAY_CHILD (widget)))
-        gdk_window_invalidate_rect (gdk_window_get_parent (gtk_widget_get_window (widget)),
-                                    &widget_allocation, FALSE);
-      else if (moved && child->parent_relative_bg)
-        na_tray_child_force_redraw (child);
-    }
-}
+#endif
 
 /* The plug window should completely occupy the area of the child, so we won't
- * get a draw event. But in case we do (the plug unmaps itself, say), this
- * draw handler draws with real or fake transparency.
+ * get an expose event. But in case we do (the plug unmaps itself, say), this
+ * expose handler draws with real or fake transparency.
  */
 static gboolean
 na_tray_child_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+                    cairo_t *cr)
 {
   NaTrayChild *child = NA_TRAY_CHILD (widget);
 
@@ -191,6 +171,7 @@ na_tray_child_draw (GtkWidget *widget,
     }
   else if (child->parent_relative_bg)
     {
+      /* Clear to parent-relative pixmap */
       GdkWindow *window;
       cairo_surface_t *target;
       GdkRectangle clip_rect;
@@ -218,9 +199,167 @@ na_tray_child_draw (GtkWidget *widget,
   return FALSE;
 }
 
+/* Children with alpha channels have been set to be composited by calling
+ * gdk_window_set_composited(). We need to paint these children ourselves.
+ *
+ * FIXME: is that still needed on GTK3?  Seems like it could be done in draw().
+ */
+static gboolean
+na_tray_child_draw_on_parent (NaItem    *item,
+                              GtkWidget *parent,
+                              cairo_t   *parent_cr)
+{
+  if (na_tray_child_has_alpha (NA_TRAY_CHILD (item)))
+    {
+      GtkWidget    *widget = GTK_WIDGET (item);
+      GtkAllocation parent_allocation = { 0 };
+      GtkAllocation allocation;
+
+      /* if the parent doesn't have a window, our allocation is not relative to
+       * the context coordinates but to the parent's allocation */
+      if (! gtk_widget_get_has_window (parent))
+	gtk_widget_get_allocation (parent, &parent_allocation);
+
+      gtk_widget_get_allocation (widget, &allocation);
+      allocation.x -= parent_allocation.x;
+      allocation.y -= parent_allocation.y;
+
+      cairo_save (parent_cr);
+      gdk_cairo_set_source_window (parent_cr,
+                                   gtk_widget_get_window (widget),
+                                   allocation.x,
+                                   allocation.y);
+      cairo_rectangle (parent_cr, allocation.x, allocation.y, allocation.width, allocation.height);
+      cairo_clip (parent_cr);
+      cairo_paint (parent_cr);
+      cairo_restore (parent_cr);
+    }
+
+  return TRUE;
+}
+
+static void
+na_tray_child_get_property (GObject    *object,
+                            guint       property_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
+{
+  switch (property_id)
+    {
+      case PROP_ORIENTATION:
+        /* whatever */
+        g_value_set_enum (value, GTK_ORIENTATION_HORIZONTAL);
+        break;
+
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
+na_tray_child_set_property (GObject      *object,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+  switch (property_id)
+    {
+      case PROP_ORIENTATION:
+	/* we so don't care */
+        break;
+
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+/* Hack to keep order of some known system-tray elements.  For a wm_class
+ * match, give it category @category and ID @id.
+ *
+ * TODO: improve this to play well if one of those elements were to start
+ *       using SNI instead */
+static const struct
+{
+  const gchar *const wm_class;
+  const gchar *const id;
+  NaItemCategory category;
+} wmclass_categories[] = {
+  /* order is LTR, so higher category and higher ASCII ordering on the right */
+  { "keyboard",                   "~01-keyboard",  NA_ITEM_CATEGORY_HARDWARE },
+  { "Mate-volume-control-applet", "~02-volume",    NA_ITEM_CATEGORY_HARDWARE },
+  { "Bluetooth-applet",           "~03-bluetooth", NA_ITEM_CATEGORY_HARDWARE },
+  { "Nm-applet",                  "~04-network",   NA_ITEM_CATEGORY_HARDWARE },
+  { "Mate-power-manager",         "~05-battery",   NA_ITEM_CATEGORY_HARDWARE },
+};
+
+static const gchar *
+na_tray_child_get_id (NaItem *item)
+{
+  NaTrayChild *child = NA_TRAY_CHILD (item);
+
+  if (! child->id)
+    {
+      char *res_name = NULL;
+      char *res_class = NULL;
+      guint i;
+
+      na_tray_child_get_wm_class (child, &res_name, &res_class);
+
+      for (i = 0; i < G_N_ELEMENTS (wmclass_categories) && ! child->id; i++)
+	{
+	  if (g_strcmp0 (res_class, wmclass_categories[i].wm_class) == 0)
+	    child->id = g_strdup (wmclass_categories[i].id);
+	}
+
+      if (! child->id)
+	child->id = res_name;
+      else
+	g_free (res_name);
+
+      g_free (res_class);
+    }
+
+  return child->id;
+}
+
+static NaItemCategory
+na_tray_child_get_category (NaItem *item)
+{
+  guint i;
+  NaItemCategory category = NA_ITEM_CATEGORY_APPLICATION_STATUS;
+  char *res_class = NULL;
+
+  na_tray_child_get_wm_class (NA_TRAY_CHILD (item), NULL, &res_class);
+
+  for (i = 0; i < G_N_ELEMENTS (wmclass_categories); i++)
+    {
+      if (g_strcmp0 (res_class, wmclass_categories[i].wm_class) == 0)
+	{
+	  category = wmclass_categories[i].category;
+	  break;
+	}
+    }
+
+  g_free (res_class);
+
+  return category;
+}
+
+static void
+na_item_init (NaItemInterface *iface)
+{
+  iface->get_id = na_tray_child_get_id;
+  iface->get_category = na_tray_child_get_category;
+
+  iface->draw_on_parent = na_tray_child_draw_on_parent;
+}
+
 static void
 na_tray_child_init (NaTrayChild *child)
 {
+  child->id = NULL;
 }
 
 static void
@@ -233,12 +372,19 @@ na_tray_child_class_init (NaTrayChildClass *klass)
   widget_class = (GtkWidgetClass *)klass;
 
   gobject_class->finalize = na_tray_child_finalize;
+  gobject_class->get_property = na_tray_child_get_property;
+  gobject_class->set_property = na_tray_child_set_property;
+
   widget_class->style_set = na_tray_child_style_set;
   widget_class->realize = na_tray_child_realize;
+#if !GTK_CHECK_VERSION (3, 23, 0)
   widget_class->get_preferred_width = na_tray_child_get_preferred_width;
   widget_class->get_preferred_height = na_tray_child_get_preferred_height;
-  widget_class->size_allocate = na_tray_child_size_allocate;
+#endif
   widget_class->draw = na_tray_child_draw;
+
+  /* we don't really care actually */
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 }
 
 GtkWidget *
@@ -247,6 +393,7 @@ na_tray_child_new (GdkScreen *screen,
 {
   XWindowAttributes window_attributes;
   Display *xdisplay;
+  GdkDisplay *display;
   NaTrayChild *child;
   GdkVisual *visual;
   gboolean visual_has_alpha;
@@ -262,10 +409,15 @@ na_tray_child_new (GdkScreen *screen,
    * the socket in the same visual.
    */
 
-  gdk_error_trap_push ();
+  display = gdk_screen_get_display (screen);
+  if (!GDK_IS_X11_DISPLAY (display)) {
+    g_warning ("na_tray only works on X11");
+    return NULL;
+  }
+  gdk_x11_display_error_trap_push (display);
   result = XGetWindowAttributes (xdisplay, icon_window,
                                  &window_attributes);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (!result) /* Window already gone */
     return NULL;
@@ -288,7 +440,8 @@ na_tray_child_new (GdkScreen *screen,
   depth = gdk_visual_get_depth (visual);
 
   visual_has_alpha = red_prec + blue_prec + green_prec < depth;
-  child->has_alpha = (visual_has_alpha && gdk_screen_is_composited (screen));
+  child->has_alpha = (visual_has_alpha &&
+                      gdk_display_supports_composite (gdk_screen_get_display (screen)));
 
   child->composited = child->has_alpha;
 
@@ -314,7 +467,7 @@ na_tray_child_get_title (NaTrayChild *child)
   utf8_string = gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING");
   atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_NAME");
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
                                child->icon_window,
@@ -324,7 +477,7 @@ na_tray_child_get_title (NaTrayChild *child)
                                &type, &format, &nitems,
                                &bytes_after, (guchar **)&val);
 
-  if (gdk_error_trap_pop () || result != Success)
+  if (gdk_x11_display_error_trap_pop (display) || result != Success)
     return NULL;
 
   if (type != utf8_string ||
@@ -403,42 +556,13 @@ na_tray_child_force_redraw (NaTrayChild *child)
 {
   GtkWidget *widget = GTK_WIDGET (child);
 
-  if (gtk_widget_get_mapped (widget) && child->parent_relative_bg)
+  if (gtk_widget_get_mapped (widget))
     {
-#if 1
-      /* Sending an ExposeEvent might cause redraw problems if the
-       * icon is expecting the server to clear-to-background before
-       * the redraw. It should be ok for GtkStatusIcon or EggTrayIcon.
-       */
-      Display *xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
-      XEvent xev;
-      GdkWindow *plug_window;
-      GtkAllocation allocation;
-
-      plug_window = gtk_socket_get_plug_window (GTK_SOCKET (child));
-      gtk_widget_get_allocation (widget, &allocation);
-
-      xev.xexpose.type = Expose;
-      xev.xexpose.window = GDK_WINDOW_XID (plug_window);
-      xev.xexpose.x = 0;
-      xev.xexpose.y = 0;
-      xev.xexpose.width = allocation.width;
-      xev.xexpose.height = allocation.height;
-      xev.xexpose.count = 0;
-
-      gdk_error_trap_push ();
-      XSendEvent (xdisplay,
-                  xev.xexpose.window,
-                  False, ExposureMask,
-                  &xev);
-      gdk_error_trap_pop_ignored ();
-#else
-      /* Hiding and showing is the safe way to do it, but can result in more
-       * flickering.
-       */
-      gdk_window_hide (widget->window);
-      gdk_window_show (widget->window);
-#endif
+    /* Hiding and showing is the safe way to do it, but can result in more
+     * flickering.
+     */
+    gtk_widget_hide(widget);
+    gtk_widget_show_all(widget);
     }
 }
 
@@ -468,14 +592,16 @@ _get_wmclass (Display *xdisplay,
               char   **res_class,
               char   **res_name)
 {
+  GdkDisplay *display;
   XClassHint ch;
 
   ch.res_name = NULL;
   ch.res_class = NULL;
 
-  gdk_error_trap_push ();
+  display = gdk_display_get_default ();
+  gdk_x11_display_error_trap_push (display);
   XGetClassHint (xdisplay, xwindow, &ch);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (res_class)
     *res_class = NULL;

@@ -48,7 +48,7 @@ public class NotificationsApplet : Budgie.Applet {
         widget.add(icon);
 
         icon.halign = Gtk.Align.CENTER;
-        icon.valign = Gtk.Align.CENTER;
+        icon.valign = Gtk.Align.FILL;
 
         Bus.get_proxy.begin<RavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 

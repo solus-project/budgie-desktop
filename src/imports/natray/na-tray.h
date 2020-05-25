@@ -14,7 +14,9 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  *
  * Used to be: eggtraytray.h
  */
@@ -25,24 +27,40 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include "na-host.h"
+
 G_BEGIN_DECLS
 
-#define NA_TYPE_TRAY na_tray_get_type ()
-G_DECLARE_FINAL_TYPE (NaTray, na_tray, NA, TRAY, GtkBin)
+#define NA_TYPE_TRAY			(na_tray_get_type ())
+#define NA_TRAY(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), NA_TYPE_TRAY, NaTray))
+#define NA_TRAY_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), NA_TYPE_TRAY, NaTrayClass))
+#define NA_IS_TRAY(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), NA_TYPE_TRAY))
+#define NA_IS_TRAY_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), NA_TYPE_TRAY))
+#define NA_TRAY_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), NA_TYPE_TRAY, NaTrayClass))
 
-NaTray         *na_tray_new_for_screen  (GtkOrientation orientation);
-void            na_tray_set_orientation	(NaTray        *tray,
+typedef struct _NaTray		NaTray;
+typedef struct _NaTrayPrivate	NaTrayPrivate;
+typedef struct _NaTrayClass	NaTrayClass;
+
+struct _NaTray
+{
+  GObject parent_instance;
+
+  NaTrayPrivate *priv;
+};
+
+struct _NaTrayClass
+{
+  GObjectClass parent_class;
+};
+
+GType           na_tray_get_type        (void);
+NaHost         *na_tray_new_for_screen  (GdkScreen     *screen,
 					 GtkOrientation orientation);
-GtkOrientation  na_tray_get_orientation (NaTray        *tray);
 void            na_tray_set_padding     (NaTray        *tray,
 					 gint           padding);
 void            na_tray_set_icon_size   (NaTray        *tray,
 					 gint           icon_size);
-void            na_tray_set_colors      (NaTray        *tray,
-					 GdkRGBA       *fg,
-					 GdkRGBA       *error,
-					 GdkRGBA       *warning,
-					 GdkRGBA       *success);
 
 G_END_DECLS
 

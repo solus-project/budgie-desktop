@@ -19,7 +19,7 @@ public class TrayPlugin : Budgie.Plugin, Peas.ExtensionBase
 
 public class TrayApplet : Budgie.Applet
 {
-    protected Na.Tray? tray = null;
+    protected Na.Grid? tray = null;
     /* Fix this. Please. */
     protected int icon_size = 22;
     Gtk.EventBox box;
@@ -34,21 +34,20 @@ public class TrayApplet : Budgie.Applet
         box = new Gtk.EventBox();
         add(box);
 
-        valign = Gtk.Align.CENTER;
+        valign = Gtk.Align.FILL;
         box.valign = Gtk.Align.CENTER;
         box.vexpand = false;
         vexpand = false;
+        box.hexpand = false;
+        hexpand = false;
 
         show_all();
-        Timeout.add_seconds(1,()=> {
-            maybe_integrate_tray();
-            return false;
-        });
+        maybe_integrate_tray();
 
         panel_size_changed.connect((p,i,s)=> {
             this.icon_size = s;
             if (tray != null) {
-                tray.set_icon_size(icon_size);
+                tray.set_min_icon_size(icon_size);
                 queue_resize();
                 tray.queue_resize();
             }
@@ -168,27 +167,16 @@ public class TrayApplet : Budgie.Applet
             break;
         }
 
-        tray = new Na.Tray.for_screen(this.orient);
+        tray = new Na.Grid(this.orient);
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
             add(label);
             label.show_all();
             return;
         }
-        tray.set_icon_size(icon_size);
+        tray.set_min_icon_size(icon_size);
         tray.set_size_request(-1, -1);
 
-        Gdk.RGBA fg = {};
-        Gdk.RGBA warning = {};
-        Gdk.RGBA error = {};
-        Gdk.RGBA success = {};
-
-        fg.parse("white");
-        warning.parse("red");
-        error.parse("orange");
-        success.parse("white");
-
-        tray.set_colors(fg, error, warning, success);
         box.add(tray);
         show_all();
 

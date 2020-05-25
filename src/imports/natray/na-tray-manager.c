@@ -13,7 +13,9 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  *
  * Used to be: eggtraymanager.c
  */
@@ -24,9 +26,12 @@
 
 #include "na-tray-manager.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
-#include <gtk/gtk.h>
+
+#include "na-marshal.h"
 
 /* Signals */
 enum
@@ -56,7 +61,7 @@ typedef struct
 #endif
 } PendingMessage;
 
-static guint manager_signals[LAST_SIGNAL];
+static guint manager_signals[LAST_SIGNAL] = { 0 };
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -142,7 +147,8 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (NaTrayManagerClass, tray_icon_added),
-		  NULL, NULL, NULL,
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_SOCKET);
 
@@ -151,7 +157,8 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (NaTrayManagerClass, tray_icon_removed),
-		  NULL, NULL, NULL,
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_SOCKET);
   manager_signals[MESSAGE_SENT] =
@@ -159,7 +166,8 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (NaTrayManagerClass, message_sent),
-		  NULL, NULL, NULL,
+		  NULL, NULL,
+		  g_cclosure_user_marshal_VOID__OBJECT_STRING_LONG_LONG,
 		  G_TYPE_NONE, 4,
 		  GTK_TYPE_SOCKET,
 		  G_TYPE_STRING,
@@ -170,7 +178,8 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (NaTrayManagerClass, message_cancelled),
-		  NULL, NULL, NULL,
+		  NULL, NULL,
+		  g_cclosure_user_marshal_VOID__OBJECT_LONG,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_SOCKET,
 		  G_TYPE_LONG);
@@ -179,16 +188,9 @@ na_tray_manager_class_init (NaTrayManagerClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (NaTrayManagerClass, lost_selection),
-		  NULL, NULL, NULL,
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-#if defined (GDK_WINDOWING_X11)
-  /* Nothing */
-#elif defined (GDK_WINDOWING_WIN32)
-  g_warning ("Port NaTrayManager to Win32");
-#else
-  g_warning ("Port NaTrayManager to this GTK+ backend");
-#endif
 }
 
 static void
@@ -325,11 +327,11 @@ pending_message_free (PendingMessage *message)
 }
 
 static void
-na_tray_manager_handle_message_data (NaTrayManager       *manager,
-				     XClientMessageEvent *xevent)
+na_tray_manager_handle_message_data (NaTrayManager *manager,
+                                     XClientMessageEvent *xevent)
 {
-  GList *p;
-  int    len;
+  GList               *p;
+  int                  len;
 
   /* Try to see if we can find the pending message in the list */
   for (p = manager->messages; p; p = p->next)
@@ -468,7 +470,8 @@ na_tray_manager_window_filter (GdkXEvent *xev,
 
   if (xevent->type == ClientMessage)
     {
-      /* _NET_SYSTEM_TRAY_OPCODE: SYSTEM_TRAY_REQUEST_DOCK */
+      /* We handle this client message here. See comment in
+       * na_tray_manager_handle_client_message_opcode() for details */
       if (xevent->xclient.message_type == manager->opcode_atom &&
           xevent->xclient.data.l[1]    == SYSTEM_TRAY_REQUEST_DOCK)
 	{
@@ -478,7 +481,7 @@ na_tray_manager_window_filter (GdkXEvent *xev,
 	}
       /* _NET_SYSTEM_TRAY_OPCODE: SYSTEM_TRAY_BEGIN_MESSAGE */
       else if (xevent->xclient.message_type == manager->opcode_atom &&
-               xevent->xclient.data.l[1]    == SYSTEM_TRAY_BEGIN_MESSAGE)
+               xevent->xclient.data.l[1] == SYSTEM_TRAY_BEGIN_MESSAGE)
         {
           na_tray_manager_handle_begin_message (manager,
                                                 (XClientMessageEvent *) event);
@@ -486,7 +489,7 @@ na_tray_manager_window_filter (GdkXEvent *xev,
         }
       /* _NET_SYSTEM_TRAY_OPCODE: SYSTEM_TRAY_CANCEL_MESSAGE */
       else if (xevent->xclient.message_type == manager->opcode_atom &&
-               xevent->xclient.data.l[1]    == SYSTEM_TRAY_CANCEL_MESSAGE)
+               xevent->xclient.data.l[1] == SYSTEM_TRAY_CANCEL_MESSAGE)
         {
           na_tray_manager_handle_cancel_message (manager,
                                                  (XClientMessageEvent *) event);
@@ -622,8 +625,10 @@ na_tray_manager_set_visual_property (NaTrayManager *manager)
 						       "_NET_SYSTEM_TRAY_VISUAL");
 
   if (gdk_screen_get_rgba_visual (manager->screen) != NULL &&
-      gdk_screen_is_composited (manager->screen))
-    xvisual = GDK_VISUAL_XVISUAL (gdk_screen_get_rgba_visual (manager->screen));
+      gdk_display_supports_composite (display))
+    {
+      xvisual = GDK_VISUAL_XVISUAL (gdk_screen_get_rgba_visual (manager->screen));
+    }
   else
     {
       /* We actually want the visual of the tray where the icons will
@@ -826,6 +831,7 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
 
       message_data_atom = gdk_atom_intern ("_NET_SYSTEM_TRAY_MESSAGE_DATA",
                                            FALSE);
+
       manager->message_data_atom = gdk_x11_atom_to_xatom_for_display (display,
                                                                       message_data_atom);
 
@@ -836,6 +842,7 @@ na_tray_manager_manage_screen_x11 (NaTrayManager *manager,
                         G_CALLBACK (na_tray_manager_selection_clear_event),
                         manager);
 #endif
+      /* This is for SYSTEM_TRAY_REQUEST_DOCK and SelectionClear */
       gdk_window_add_filter (window,
                              na_tray_manager_window_filter, manager);
       return TRUE;
