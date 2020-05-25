@@ -97,16 +97,34 @@
       <description>Take screenshot of all displays</description>
     </key>
 
+    <key type="s" name="full-screenshot-cmd">
+      <default>'gnome-screenshot'</default>
+      <summary>Take screenshot of all displays application</summary>
+      <description>Application that is run when taking a screenshot of all displays</description>
+    </key>
+
     <key type="as" name="take-region-screenshot">
       <default><![CDATA[['<Ctrl>Print']]]></default>
       <summary>Take screenshot of selectable region</summary>
       <description>Take screenshot of selectable region</description>
     </key>
 
+    <key type="s" name="take-region-screenshot-cmd">
+      <default>'gnome-screenshot -a'</default>
+      <summary>Take screenshot of selectable region application</summary>
+      <description>Application that is run when taking a screenshot of a selectable region</description>
+    </key>
+
     <key type="as" name="take-window-screenshot">
       <default><![CDATA[['<Alt>Print']]]></default>
       <summary>Take screenshot of current window</summary>
       <description>Take screenshot of current window</description>
+    </key>
+
+    <key type="s" name="take-window-screenshot-cmd">
+      <default>'gnome-screenshot -w -b'</default>
+      <summary>Take screenshot of current window application</summary>
+      <description>Application that is run when taking a screenshot of the current window</description>
     </key>
 
     <key type="as" name="toggle-notifications">
