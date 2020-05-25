@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -70,7 +70,7 @@ public class AgentDialog : Gtk.Window
     }
 
     /* Manipulate Vala's pointer logic to prevent a copy */
-    public unowned GLib.Cancellable? cancellable { public set ; public unowned get; }
+    public unowned GLib.Cancellable? cancellable { public set ; public get; }
 
     public string cookie { public get; public set; }
 
@@ -215,8 +215,6 @@ public class AgentDialog : Gtk.Window
     /* This bit is inspired by lxpolkit */
     public void set_from_idents(List<Polkit.Identity?> idents)
     {
-        Gtk.ListBoxRow? active_row = null;
-
         Gtk.ListStore? model = new Gtk.ListStore(2, typeof(string), typeof(Polkit.Identity));
         Gtk.TreeIter iter;
 
@@ -236,7 +234,6 @@ public class AgentDialog : Gtk.Window
                 name = ident.to_string();
             }
 
-            
             model.append(out iter);
             model.set(iter, 0, name, 1, ident);
             ++length;
@@ -285,6 +282,8 @@ public class Agent : PolkitAgent.Listener
 
     /* Theme management */
     private Budgie.ThemeManager theme_manager;
+
+    public signal void stopagent ();
 
     public override async bool initiate_authentication(string action_id, string message, string icon_name,
         Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable) throws Polkit.Error
@@ -349,9 +348,10 @@ public class Agent : PolkitAgent.Listener
     private void end_session(bool quit)
     {
         if (quit) {
-            Gtk.main_quit();
+            stopagent();
             return;
         }
+
         try {
             sclient.EndSessionResponse(true, "");
         } catch (Error e) {
@@ -373,6 +373,7 @@ public static int main(string[] args)
     Intl.textdomain(Budgie.GETTEXT_PACKAGE);
 
     Budgie.Agent? agent = new Budgie.Agent();
+
     Polkit.Subject? subject = null;
 
     int pid = Posix.getpid();
@@ -385,7 +386,12 @@ public static int main(string[] args)
     }
 
     try {
-        PolkitAgent.register_listener(agent, subject, null);
+        var agenthandle = agent.register(PolkitAgent.RegisterFlags.NONE, subject, null );
+        agent.stopagent.connect(() => {
+            PolkitAgent.Listener.unregister(agenthandle);
+            Gtk.main_quit();
+            return;
+        });
     } catch (Error e) {
         stderr.printf("Unable to register listener: %s", e.message);
         return 1;
