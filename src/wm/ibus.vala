@@ -23,7 +23,8 @@ public class IBusManager : GLib.Object
     private IBus.Bus? bus = null;
     private bool ibus_available = true;
 
-    private HashTable<string,unowned IBus.EngineDesc> engines = null;
+    private HashTable<string,weak IBus.EngineDesc> engines = null;
+    private List<IBus.EngineDesc>? enginelist = null;
 
     public unowned Budgie.KeyboardManager? kbm { construct set ; public get; }
 
@@ -54,7 +55,7 @@ public class IBusManager : GLib.Object
             return;
         }
 
-        this.engines = new HashTable<string,unowned IBus.EngineDesc>(str_hash, str_equal);
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 
         /* Get the bus */
         bus = new IBus.Bus();
@@ -92,16 +93,16 @@ public class IBusManager : GLib.Object
      */
     private void reset_ibus()
     {
-        this.engines = new HashTable<string,unowned IBus.EngineDesc>(str_hash, str_equal);
+        this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
     }
 
     private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res)
     {
         try {
-            var engines = this.bus.list_engines_async_finish(res);
+            this.enginelist = this.bus.list_engines_async_finish(res);
             this.reset_ibus();
             /* Store reference to the engines */
-            foreach (var engine in engines) {
+            foreach (var engine in this.enginelist) {
                 this.engines[engine.get_name()] = engine;
             }
         } catch (Error e) {
