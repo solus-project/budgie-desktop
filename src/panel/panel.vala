@@ -701,6 +701,10 @@ public class Panel : Budgie.Toplevel
 
     public override void remove_applet(Budgie.AppletInfo? info)
     {
+        if (info == null) {
+            return;
+        }
+
         int position = info.position;
         string alignment = info.alignment;
         string uuid = info.uuid;
