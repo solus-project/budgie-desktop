@@ -35,6 +35,7 @@ public class BudgieBackground : Clutter.Actor
     Meta.BackgroundImageCache? cache = null;
 
     const int BACKGROUND_TIMEOUT = 850;
+    private unowned BudgieWM? wm = null;
 
 
     /* Ensure we're efficient with changed queries and dont update the WP
@@ -53,9 +54,10 @@ public class BudgieBackground : Clutter.Actor
         return false;
     }
 
-    public BudgieBackground(Meta.Display? display, int index)
+    public BudgieBackground(Meta.Display? display, int index, BudgieWM wm)
     {
         Object(display: display, index: index);
+        this.wm = wm;
         Meta.Rectangle rect;
 
         // FIXME: make bg_group matching size with BudgieBackground all the time
@@ -139,7 +141,11 @@ public class BudgieBackground : Clutter.Actor
             old_bg.transitions_completed.connect(remove_old);
             old_bg.save_easing_state();
             old_bg.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
-            old_bg.set_easing_duration(BACKGROUND_TIMEOUT);
+            int timeout = 0;
+            if (wm.use_animations) {
+                timeout = BACKGROUND_TIMEOUT;
+            }
+            old_bg.set_easing_duration(timeout);
             old_bg.set("opacity", 0);
             old_bg.restore_easing_state();
         }
@@ -189,7 +195,11 @@ public class BudgieBackground : Clutter.Actor
         bg.save_easing_state();
         bg.transitions_completed.connect(begin_remove_old);
         bg.set_easing_mode(Clutter.AnimationMode.EASE_IN_EXPO);
-        bg.set_easing_duration(BACKGROUND_TIMEOUT);
+        int timeout = 0;
+        if (wm.use_animations) {
+            timeout = BACKGROUND_TIMEOUT;
+        }
+        bg.set_easing_duration(timeout);
         bg.set("opacity", 255);
         bg.restore_easing_state();
     }

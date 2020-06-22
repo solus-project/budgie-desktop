@@ -673,7 +673,7 @@ public class BudgieWM : Meta.Plugin
         background_group.destroy_all_children();
 
         for (int i = 0; i < display.get_n_monitors(); i++) {
-            var actor = new BudgieBackground(display, i);
+            var actor = new BudgieBackground(display, i, this);
             background_group.add_child(actor);
         }
     }
