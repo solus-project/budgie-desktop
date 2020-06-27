@@ -235,7 +235,7 @@ public class WorkspaceItem : Gtk.EventBox
             if (window_counter < max_items || num_windows == max_items) {
                 icon_grid.attach(icon, column_counter, row_counter);
                 icon.halign = Gtk.Align.CENTER;
-                icon.valign = Gtk.Align.CENTER;
+                icon.valign = Gtk.Align.FILL;
             } else if (window_counter == max_items) {
                 Gtk.EventBox ebox = new Gtk.EventBox();
                 ebox.add(more_label);
