@@ -9,195 +9,123 @@
  * (at your option) any later version.
  */
 
-public class TrayPlugin : Budgie.Plugin, Peas.ExtensionBase
-{
-    public Budgie.Applet get_panel_widget(string uuid)
-    {
-        return new TrayApplet();
+public class TrayPlugin : Budgie.Plugin, Peas.ExtensionBase {
+    public Budgie.Applet get_panel_widget(string uuid) {
+        return new TrayApplet(uuid);
     }
 }
 
-public class TrayApplet : Budgie.Applet
-{
-    protected Na.Tray? tray = null;
-    /* Fix this. Please. */
-    protected int icon_size = 22;
-    Gtk.EventBox box;
+[GtkTemplate (ui = "/com/solus-project/tray/settings.ui")]
+public class TraySettings : Gtk.Grid {
+    Settings? settings = null;
 
-    int width;
-    int height;
+    [GtkChild]
+    private Gtk.SpinButton? spinbutton_spacing;
 
-    Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
+    public TraySettings(Settings? settings) {
+        this.settings = settings;
+        settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
+    }
+}
 
-    public TrayApplet()
-    {
+public class TrayApplet : Budgie.Applet {
+    public string uuid { public set; public get; }
+    private Carbon.Tray tray;
+    private Gtk.EventBox box;
+    private Settings? settings;
+    private Gtk.Orientation orient;
+
+    public TrayApplet(string uuid) {
+        Object(uuid: uuid);
+
         box = new Gtk.EventBox();
         add(box);
 
-        valign = Gtk.Align.CENTER;
-        box.valign = Gtk.Align.CENTER;
-        box.vexpand = false;
+        hexpand = false;
         vexpand = false;
+        box.vexpand = false;
+        box.hexpand = false;
 
-        show_all();
-        Timeout.add_seconds(1,()=> {
-            maybe_integrate_tray();
-            return false;
-        });
+        settings_schema = "com.solus-project.tray";
+        settings_prefix = "/com/solus-project/budgie-panel/instance/tray";
 
-        panel_size_changed.connect((p,i,s)=> {
-            this.icon_size = s;
-            if (tray != null) {
-                tray.set_icon_size(icon_size);
-                queue_resize();
-                tray.queue_resize();
-            }
-        });
+        settings = get_applet_settings(uuid);
+        settings.changed.connect(on_settings_change);
 
-        size_allocate.connect(on_size_allocate);
+        maybe_integrate_tray();
     }
 
-    public override void panel_position_changed(Budgie.PanelPosition position)
-    {
+    public override bool supports_settings() {
+        return true;
+    }
+
+    public override Gtk.Widget? get_settings_ui() {
+        return new TraySettings(get_applet_settings(uuid));
+    }
+
+    void on_settings_change(string key) {
+        if (key != "spacing") {
+            return;
+        }
+        tray.set_spacing(settings.get_int(key));
+    }
+
+    public override void panel_position_changed(Budgie.PanelPosition position) {
         if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-            this.orient = Gtk.Orientation.VERTICAL;
+            orient = Gtk.Orientation.VERTICAL;
         } else {
-            this.orient = Gtk.Orientation.HORIZONTAL;
+            orient = Gtk.Orientation.HORIZONTAL;
         }
 
         if (tray == null) {
             return;
         }
 
-        this.box.remove(this.tray);
-        this.tray = null;
-        this.maybe_integrate_tray();
-        this.show_all();
+        tray.unregister();
+        tray.remove_from_container(box);
+        tray = null;
+        maybe_integrate_tray();
     }
 
-    void on_size_allocate(Gtk.Allocation alloc)
-    {
-        if (!get_realized() || get_parent() == null) {
-            return;
-        }
-        if (this.width != alloc.width || this.height != alloc.height) {
-            this.width = alloc.width;
-            this.height = alloc.height;
-            this.get_parent().queue_resize();
-            this.get_toplevel().queue_resize();
-            this.get_parent().queue_draw();
-            this.get_toplevel().queue_draw();
-        }
-    }
-
-
-    public override void get_preferred_height(out int m, out int n)
-    {
-        if (this.orient == Gtk.Orientation.HORIZONTAL) {
-            m = icon_size;
-            n = icon_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_height(out om, out on);
-        m = om;
-        n = on;
-    }
-
-    public override void get_preferred_height_for_width(int w, out int m, out int n)
-    {
-        if (this.orient == Gtk.Orientation.HORIZONTAL) {
-            m = icon_size;
-            n = icon_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_height_for_width(w, out om, out on);
-        m = om;
-        n = on;
-    }
-
-    public override void get_preferred_width(out int m, out int n)
-    {
-        if (this.orient == Gtk.Orientation.VERTICAL) {
-            m = icon_size;
-            n = icon_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_width(out om, out on);
-        m = om;
-        n = on;
-    }
-
-    public override void get_preferred_width_for_height(int h, out int m, out int n)
-    {
-        if (this.orient == Gtk.Orientation.VERTICAL) {
-            m = icon_size;
-            n = icon_size;
-            return;
-        }
-        int om, on;
-        base.get_preferred_width_for_height(h, out om, out on);
-        m = om;
-        n = on;
-    }
-
-    protected void maybe_integrate_tray()
-    {
+    protected void maybe_integrate_tray() {
         if (tray != null) {
             return;
         }
 
-        switch (this.orient) {
-        case Gtk.Orientation.HORIZONTAL:
-            valign = Gtk.Align.CENTER;
-            box.valign = Gtk.Align.CENTER;
-            box.halign = Gtk.Align.START;
-            halign = Gtk.Align.START;
-            box.vexpand = false;
-            vexpand = false;
-            break;
-        case Gtk.Orientation.VERTICAL:
-            valign = Gtk.Align.START;
-            box.valign = Gtk.Align.START;
-            box.halign = Gtk.Align.CENTER;
-            halign = Gtk.Align.CENTER;
-            box.vexpand = false;
-            vexpand = false;
-            break;
-        }
+        tray = new Carbon.Tray(orient, 24, settings.get_int("spacing"));
 
-        tray = new Na.Tray.for_screen(this.orient);
         if (tray == null) {
             var label = new Gtk.Label("Tray unavailable");
-            add(label);
+            box.add(label);
             label.show_all();
             return;
         }
-        tray.set_icon_size(icon_size);
-        tray.set_size_request(-1, -1);
 
-        Gdk.RGBA fg = {};
-        Gdk.RGBA warning = {};
-        Gdk.RGBA error = {};
-        Gdk.RGBA success = {};
+        switch (orient) {
+        case Gtk.Orientation.HORIZONTAL:
+            halign = Gtk.Align.START;
+            valign = Gtk.Align.FILL;
+            box.halign = Gtk.Align.START;
+            box.valign = Gtk.Align.FILL;
+            break;
+        case Gtk.Orientation.VERTICAL:
+            halign = Gtk.Align.FILL;
+            valign = Gtk.Align.START;
+            box.halign = Gtk.Align.FILL;
+            box.valign = Gtk.Align.START;
+            break;
+        }
 
-        fg.parse("white");
-        warning.parse("red");
-        error.parse("orange");
-        success.parse("white");
-
-        tray.set_colors(fg, error, warning, success);
-        box.add(tray);
+        tray.add_to_container(box);
         show_all();
+        tray.register((Gdk.X11.Screen) get_screen());
 
-        var win = this.get_toplevel();
+        var win = get_toplevel();
         if (win == null) {
             return;
         }
         win.queue_draw();
-        this.queue_resize();
+        queue_resize();
     }
 }
 
