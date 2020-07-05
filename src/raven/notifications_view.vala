@@ -351,6 +351,9 @@ public class NotificationWindow : Gtk.Window
         var datetime = new DateTime.now_local();
         this.timestamp = datetime.to_unix();
 
+        /* ignore bad app_icon name sent by chromium-based browsers */
+        if ("file:///" in app_icon) { app_icon =""; }
+
         bool is_img = yield this.set_image(app_icon);
         bool has_desktop = false;
 
