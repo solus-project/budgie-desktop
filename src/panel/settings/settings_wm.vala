@@ -24,6 +24,7 @@ public class WindowsPage : Budgie.SettingsPage {
     private Gtk.Switch switch_focus;
     private Gtk.Switch switch_tiling;
     private Gtk.Switch switch_unredirect;
+    private Gtk.Switch switch_all_windows_tabswitcher;
 
     public WindowsPage()
     {
@@ -79,6 +80,12 @@ public class WindowsPage : Budgie.SettingsPage {
             _("This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs.")
         ));
 
+        switch_all_windows_tabswitcher = new Gtk.Switch();
+        grid.add_row(new SettingsRow(switch_all_windows_tabswitcher,
+            _("Show all windows in tab switcher"),
+            _("All tabs will be displayed in tab switcher regardless of the workspace in use.")
+        ));
+
         /* Button layout  */
         var model = new Gtk.ListStore(2, typeof(string), typeof(string));
         Gtk.TreeIter iter;
@@ -103,6 +110,7 @@ public class WindowsPage : Budgie.SettingsPage {
         budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
         budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
+        budgie_wm_settings.bind("show-all-windows-tabswitcher", switch_all_windows_tabswitcher, "active", SettingsBindFlags.DEFAULT);
     }
 
 } /* End class */
