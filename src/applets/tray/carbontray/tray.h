@@ -1,5 +1,16 @@
-#ifndef __CARBONTRAY_TRAY_H__
-#define __CARBONTRAY_TRAY_H__
+/*
+ * This file is part of budgie-desktop
+ *
+ * Copyright © 2015-2020 Budgie Desktop Developers
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
+#ifndef __CARBON_TRAY_H__
+#define __CARBON_TRAY_H__
 
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
@@ -10,7 +21,7 @@
 typedef struct {
 	GObject parent_instance;
 
-	GtkBox *box;
+	GtkWidget *box;
 	int iconSize;
 
 	GHashTable *socketTable;
@@ -25,7 +36,7 @@ typedef struct {
 typedef struct {
 	GObjectClass parent_class;
 
-	void (*message_sent)(CarbonTray *manager, CarbonChild *child, char *message, long id, long timeout);
+	void (*message_sent)(CarbonTray *tray, CarbonChild *child, char *message, long id, long timeout);
 } CarbonTrayClass;
 
 typedef struct {

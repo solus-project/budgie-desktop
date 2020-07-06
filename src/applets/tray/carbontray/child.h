@@ -1,5 +1,16 @@
-#ifndef __CARBONTRAY_CHILD_H__
-#define __CARBONTRAY_CHILD_H__
+/*
+ * This file is part of budgie-desktop
+ *
+ * Copyright © 2015-2020 Budgie Desktop Developers
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
+#ifndef __CARBON_CHILD_H__
+#define __CARBON_CHILD_H__
 
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>

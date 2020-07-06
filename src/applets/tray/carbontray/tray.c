@@ -1,13 +1,21 @@
+/*
+ * This file is part of budgie-desktop
+ *
+ * Copyright © 2015-2020 Budgie Desktop Developers
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This file's contents largely use xfce4-panel as a reference, which is licensed under the terms of the GNU GPL v2.
+ * Additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop 
+ * and licensed under the terms of the GNU GPL v2.
+ */
+
 #include "tray.h"
 #include "child.h"
 #include "marshal.h"
-
-/*
-  this file's contents largely use xfce4-panel as a reference, which is licensed under the terms of the GNU GPL v2
-  
-  additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop 
-  and licensed under the terms of the GNU GPL v2
-*/
 
 
 
@@ -52,36 +60,35 @@ G_DEFINE_TYPE(CarbonTray, carbon_tray, G_TYPE_OBJECT)
 
 CarbonTray* carbon_tray_new(GtkOrientation orientation, int iconSize, int spacing) {
 	CarbonTray *self = g_object_new(CARBON_TYPE_TRAY, NULL);
-	self->box = GTK_BOX(gtk_box_new(orientation, spacing));
-	GtkWidget *boxWidget = GTK_WIDGET(self->box);
-
 	self->iconSize = iconSize;
 
+	self->box = gtk_box_new(orientation, spacing);
+
 	if (orientation == GTK_ORIENTATION_HORIZONTAL) {
-		gtk_widget_set_halign(boxWidget, GTK_ALIGN_START);
-		gtk_widget_set_valign(boxWidget, GTK_ALIGN_FILL);
+		gtk_widget_set_halign(self->box, GTK_ALIGN_START);
+		gtk_widget_set_valign(self->box, GTK_ALIGN_FILL);
 	} else {
-		gtk_widget_set_halign(boxWidget, GTK_ALIGN_FILL);
-		gtk_widget_set_valign(boxWidget, GTK_ALIGN_START);
+		gtk_widget_set_halign(self->box, GTK_ALIGN_FILL);
+		gtk_widget_set_valign(self->box, GTK_ALIGN_START);
 	}
 
-	gtk_widget_set_hexpand(boxWidget, FALSE);
-	gtk_widget_set_vexpand(boxWidget, FALSE);
-	gtk_widget_set_size_request(boxWidget, -1, -1);
+	gtk_widget_set_hexpand(self->box, FALSE);
+	gtk_widget_set_vexpand(self->box, FALSE);
+	gtk_widget_set_size_request(self->box, -1, -1);
 
 	return self;
 }
 
 void carbon_tray_add_to_container(CarbonTray *tray, GtkContainer *container) {
-	gtk_container_add(container, GTK_WIDGET(tray->box));
+	gtk_container_add(container, tray->box);
 }
 
 void carbon_tray_remove_from_container(CarbonTray *tray, GtkContainer *container) {
-	gtk_container_remove(container, GTK_WIDGET(tray->box));
+	gtk_container_remove(container, tray->box);
 }
 
 bool carbon_tray_register(CarbonTray *tray, GdkScreen *screen) {
-	g_signal_connect(tray->box, "draw", G_CALLBACK(carbon_tray_draw), NULL);
+	g_signal_connect(G_OBJECT(tray->box), "draw", G_CALLBACK(carbon_tray_draw), NULL);
 
 	GtkWidget *invisible = gtk_invisible_new_for_screen(screen);
 	gtk_widget_realize(invisible);
@@ -173,8 +180,8 @@ static void carbon_tray_class_init(CarbonTrayClass *klass) {
 	GObjectClass *gobjectClass = G_OBJECT_CLASS(klass);
 	gobjectClass->finalize = carbon_tray_finalize;
 
-	g_signal_new("message-sent", G_OBJECT_CLASS_TYPE (klass), G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (CarbonTrayClass, message_sent), NULL, NULL,
+	g_signal_new("message-sent", G_OBJECT_CLASS_TYPE(klass), G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET(CarbonTrayClass, message_sent), NULL, NULL,
 		  g_cclosure_user_marshal_VOID__OBJECT_STRING_LONG_LONG,
 		  G_TYPE_NONE, 4,
 		  GTK_TYPE_SOCKET,
@@ -240,7 +247,7 @@ static GdkFilterReturn window_filter(GdkXEvent *xev, GdkEvent *event, void *user
 }
 
 static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
-	Window window =(unsigned long) xevent->data.l[2];
+	Window window = (unsigned long) xevent->data.l[2];
 
 	/* check if we already have this window */
 	if (g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(window)) != NULL) {
@@ -248,11 +255,14 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 	}
 
 	/* create the socket */
-	GdkScreen *screen = gtk_widget_get_screen(tray->invisible);
-	CarbonChild *child = carbon_child_new(tray->iconSize, screen, window);
-	GtkWidget *socket = GTK_WIDGET(child);
-	if (socket == NULL)
+	CarbonChild *child = carbon_child_new(tray->iconSize, gtk_widget_get_screen(tray->invisible), window);
+
+	if (child == NULL) {
+		g_warning("Failed to resolve system tray icon.");
 		return;
+	}
+
+	GtkWidget *socket = GTK_WIDGET(child);
 
 	// networkmanager applet should be packed at the end
 	if (strcmp(child->wmclass, "Nm-applet") == 0) {
@@ -261,15 +271,15 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 		gtk_box_pack_start(GTK_BOX(tray->box), socket, FALSE, FALSE, 0);
 		gtk_box_reorder_child(GTK_BOX(tray->box), socket, 0);
 	}
-	
+
 	if (GTK_IS_WINDOW(gtk_widget_get_toplevel(socket))) {
 		g_signal_connect(G_OBJECT(socket), "plug-removed", G_CALLBACK(handle_undock_request), tray);
 		gtk_socket_add_id(GTK_SOCKET(socket), window);
 		g_hash_table_insert(tray->socketTable, GUINT_TO_POINTER(window), socket);
-		gtk_widget_show_all(GTK_WIDGET(socket));
+		gtk_widget_show_all(socket);
 	} else {
 		g_warning("No parent window set, destroying socket");
-		gtk_container_remove(GTK_CONTAINER(tray->box), GTK_WIDGET(socket));
+		gtk_container_remove(GTK_CONTAINER(tray->box), socket);
 		gtk_widget_destroy(socket);
 	}
 
