@@ -9,7 +9,6 @@ subdir('libsession')
 subdir('appsys')
 subdir('abomination')
 
-subdir('imports')
 subdir('theme')
 subdir('lib')
 subdir('raven')
