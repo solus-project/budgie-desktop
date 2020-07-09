@@ -159,7 +159,7 @@ void carbon_tray_unregister(CarbonTray *tray) {
 }
 
 void carbon_tray_set_spacing(CarbonTray *tray, int spacing) {
-	gtk_box_set_spacing(tray->box, spacing);
+	gtk_box_set_spacing(GTK_BOX(tray->box), spacing);
 }
 
 
@@ -207,7 +207,7 @@ static int carbon_tray_draw(GtkWidget *widget, cairo_t *cr) {
 	CarbonDrawData data;
 	data.box = widget;
 	data.cr = cr;
-	
+
 	gtk_container_foreach(GTK_CONTAINER(widget), draw_child, &data);
 
 	return TRUE;
@@ -247,9 +247,9 @@ static GdkFilterReturn window_filter(GdkXEvent *xev, GdkEvent *event, void *user
 }
 
 static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
-	Window window = (unsigned long) xevent->data.l[2];
+	Window window = (Window) xevent->data.l[2];
 
-	/* check if we already have this window */
+	/* check if we already have this window. if we do, we might as well re-dock it at the application's request */
 	if (g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(window)) != NULL) {
 		handle_undock_request(g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(window)), tray);
 	}
@@ -265,7 +265,7 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 	GtkWidget *socket = GTK_WIDGET(child);
 
 	// networkmanager applet should be packed at the end
-	if (strcmp(child->wmclass, "Nm-applet") == 0) {
+	if (child->wmclass != NULL && strcmp(child->wmclass, "Nm-applet") == 0) {
 		gtk_box_pack_end(GTK_BOX(tray->box), socket, FALSE, FALSE, 0);
 	} else {
 		gtk_box_pack_start(GTK_BOX(tray->box), socket, FALSE, FALSE, 0);
@@ -285,6 +285,7 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 
 	// if embedding failed, just destroy the socket
 	if (!gtk_socket_get_plug_window(GTK_SOCKET(socket))) {
+		g_warning("Embedding tray icon failed, undocking");
 		handle_undock_request(GTK_SOCKET(socket), tray);
 	}
 }
