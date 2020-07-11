@@ -28,12 +28,63 @@ public class TraySettings : Gtk.Grid {
     }
 }
 
+private class TrayErrorIcon {
+    public Budgie.PopoverManager manager;
+    public Budgie.Popover popover;
+    private Gtk.Label label;
+    private Gtk.EventBox parent;
+
+    public TrayErrorIcon(Gtk.EventBox parent, string text) {
+        this.parent = parent;
+
+        parent.add(new Gtk.Image.from_icon_name("gtk-dialog-error", Gtk.IconSize.LARGE_TOOLBAR));
+
+        popover = new Budgie.Popover(parent);
+        popover.border_width = 8;
+
+        label = new Gtk.Label(text);
+        label.show();
+        popover.add(label);
+        popover.hide();
+
+        parent.button_press_event.connect(on_button_press);
+    }
+
+    ~TrayErrorIcon() {
+        parent.button_press_event.disconnect(on_button_press);
+    }
+
+    public void register(Budgie.PopoverManager newManager) {
+        manager = newManager;
+        manager.register_popover(parent, popover);
+    }
+
+    private bool on_button_press(Gdk.EventButton event) {
+        if (event.button != 1) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+        if (popover.get_visible()) {
+            popover.hide();
+        } else {
+            manager.show_popover(parent);
+        }
+        return Gdk.EVENT_STOP;
+    }
+}
+
 public class TrayApplet : Budgie.Applet {
     public string uuid { public set; public get; }
     private Carbon.Tray tray;
     private Gtk.EventBox box;
     private Settings? settings;
     private Gtk.Orientation orient;
+    private Gdk.X11.Screen screen;
+
+    // this property prevents the registration of more than one carbontray instance
+    private static string activeUuid = null;
+
+    // for invalid trays
+    private TrayErrorIcon errorIcon = null;
 
     public TrayApplet(string uuid) {
         Object(uuid: uuid);
@@ -41,18 +92,43 @@ public class TrayApplet : Budgie.Applet {
         box = new Gtk.EventBox();
         add(box);
 
-        hexpand = false;
-        vexpand = false;
-        box.vexpand = false;
-        box.hexpand = false;
-
         settings_schema = "com.solus-project.tray";
         settings_prefix = "/com/solus-project/budgie-panel/instance/tray";
 
         settings = get_applet_settings(uuid);
-        settings.changed.connect(on_settings_change);
+        settings.changed.connect((key) => {
+            if (key != "spacing" || uuid != activeUuid) {
+                return;
+            }
+    
+            tray.set_spacing(settings.get_int(key));
+        });
 
-        maybe_integrate_tray();
+        screen = (Gdk.X11.Screen) get_screen();
+
+        if (activeUuid == null) {
+            maybe_integrate_tray();
+        } else {
+            // there's already an active tray, create an informative icon with a popover
+            errorIcon = new TrayErrorIcon(box, _("Only one instance of the System Tray can be active at a time."));
+            show_all();
+        }
+    }
+
+    ~TrayApplet() {
+        if (tray != null) {
+            tray.unregister();
+            tray.remove_from_container(box);
+            tray = null;
+        }
+
+        if (activeUuid == uuid) {
+            activeUuid = null;
+        }
+    }
+
+    public override void update_popovers(Budgie.PopoverManager? manager) {
+        if (errorIcon != null) errorIcon.register(manager);
     }
 
     public override bool supports_settings() {
@@ -63,13 +139,6 @@ public class TrayApplet : Budgie.Applet {
         return new TraySettings(get_applet_settings(uuid));
     }
 
-    void on_settings_change(string key) {
-        if (key != "spacing") {
-            return;
-        }
-        tray.set_spacing(settings.get_int(key));
-    }
-
     public override void panel_position_changed(Budgie.PanelPosition position) {
         if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
             orient = Gtk.Orientation.VERTICAL;
@@ -77,29 +146,33 @@ public class TrayApplet : Budgie.Applet {
             orient = Gtk.Orientation.HORIZONTAL;
         }
 
-        if (tray == null) {
-            return;
+        if (tray != null) reintegrate_tray();
+    }
+
+    private void reintegrate_tray() {
+        if (tray != null) {
+            tray.unregister();
+            tray.remove_from_container(box);
+            tray = null;
         }
 
-        tray.unregister();
-        tray.remove_from_container(box);
-        tray = null;
         maybe_integrate_tray();
     }
 
     protected void maybe_integrate_tray() {
-        if (tray != null) {
-            return;
-        }
-
         tray = new Carbon.Tray(orient, 24, settings.get_int("spacing"));
 
         if (tray == null) {
-            var label = new Gtk.Label("Tray unavailable");
-            box.add(label);
-            label.show_all();
+            screen.monitors_changed.disconnect(reintegrate_tray);
+            parent_set.disconnect(reintegrate_tray);
+            activeUuid = null;
+
+            errorIcon = new TrayErrorIcon(box, _("The System Tray failed to initialize."));
+            show_all();
             return;
         }
+        
+        activeUuid = uuid;
 
         switch (orient) {
         case Gtk.Orientation.HORIZONTAL:
@@ -118,14 +191,11 @@ public class TrayApplet : Budgie.Applet {
 
         tray.add_to_container(box);
         show_all();
-        tray.register((Gdk.X11.Screen) get_screen());
 
-        var win = get_toplevel();
-        if (win == null) {
-            return;
-        }
-        win.queue_draw();
-        queue_resize();
+        tray.register(screen);
+
+        screen.monitors_changed.connect(reintegrate_tray);
+        parent_set.connect(reintegrate_tray);
     }
 }
 
