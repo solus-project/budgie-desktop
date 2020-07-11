@@ -34,6 +34,14 @@ public class TrayApplet : Budgie.Applet {
     private Gtk.EventBox box;
     private Settings? settings;
     private Gtk.Orientation orient;
+    private Gdk.X11.Screen screen;
+
+    // this property prevents the registration of more than one carbontray instance
+    private static string activeUuid = null;
+
+    // for invalid trays
+    private Budgie.PopoverManager? manager = null;
+    private Budgie.Popover? popover = null;
 
     public TrayApplet(string uuid) {
         Object(uuid: uuid);
@@ -52,7 +60,61 @@ public class TrayApplet : Budgie.Applet {
         settings = get_applet_settings(uuid);
         settings.changed.connect(on_settings_change);
 
-        maybe_integrate_tray();
+        if (activeUuid == null) {
+            activeUuid = uuid;
+            screen = (Gdk.X11.Screen) get_screen();
+
+            screen.monitors_changed.connect(() => {
+                reintegrate_tray();
+            });
+
+            parent_set.connect((old_parent) => {
+                reintegrate_tray();
+            });
+
+            maybe_integrate_tray();
+        } else {
+            // there's already an active tray, create an informative icon with a popover
+
+            Gtk.Image icon = new Gtk.Image.from_icon_name("gtk-dialog-error", Gtk.IconSize.LARGE_TOOLBAR);
+            box.add(icon);
+
+            popover = new Budgie.Popover(box);
+            popover.border_width = 8;
+            popover.add(new Gtk.Label(_("Only one instance of the System Tray can be active at a time.")));
+
+            box.button_press_event.connect((event)=> {
+                if (event.button != 1) {
+                    return Gdk.EVENT_PROPAGATE;
+                }
+                if (popover.get_visible()) {
+                    popover.hide();
+                } else {
+                    manager.show_popover(box);
+                }
+                return Gdk.EVENT_STOP;
+            });
+            
+            popover.show_all();
+            show_all();
+        }
+    }
+
+    ~TrayApplet() {
+        if (tray != null) {
+            tray.unregister();
+            tray.remove_from_container(box);
+            tray = null;
+        }
+
+        if (activeUuid == uuid) {
+            activeUuid = null;
+        }
+    }
+
+    public override void update_popovers(Budgie.PopoverManager? manager) {
+        this.manager = manager;
+        manager.register_popover(box, popover);
     }
 
     public override bool supports_settings() {
@@ -64,9 +126,10 @@ public class TrayApplet : Budgie.Applet {
     }
 
     void on_settings_change(string key) {
-        if (key != "spacing") {
+        if (key != "spacing" || tray == null) {
             return;
         }
+
         tray.set_spacing(settings.get_int(key));
     }
 
@@ -81,6 +144,10 @@ public class TrayApplet : Budgie.Applet {
             return;
         }
 
+        reintegrate_tray();
+    }
+
+    private void reintegrate_tray() {
         tray.unregister();
         tray.remove_from_container(box);
         tray = null;
@@ -118,7 +185,7 @@ public class TrayApplet : Budgie.Applet {
 
         tray.add_to_container(box);
         show_all();
-        tray.register((Gdk.X11.Screen) get_screen());
+        tray.register(screen);
 
         var win = get_toplevel();
         if (win == null) {

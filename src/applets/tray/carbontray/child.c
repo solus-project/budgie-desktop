@@ -150,18 +150,14 @@ static void carbon_child_realize(GtkWidget *widget) {
 
 static void carbon_child_get_preferred_width(GtkWidget *base, int *minimum_width, int *natural_width) {
 	CarbonChild *self = CARBON_CHILD(base);
-    int scale = gtk_widget_get_scale_factor(base);
-
-    *minimum_width = self->preferredWidth / scale;
-    *natural_width = self->preferredWidth / scale;
+    *minimum_width = self->preferredWidth;
+    *natural_width = self->preferredWidth;
 }
 
 static void carbon_child_get_preferred_height(GtkWidget *base, int *minimum_height, int *natural_height) {
 	CarbonChild *self = CARBON_CHILD(base);
-    int scale = gtk_widget_get_scale_factor(base);
-
-    *minimum_height = self->preferredHeight / scale;
-    *natural_height = self->preferredHeight / scale;
+    *minimum_height = self->preferredHeight;
+    *natural_height = self->preferredHeight;
 }
 
 static void carbon_child_class_init(CarbonChildClass *klass) {
