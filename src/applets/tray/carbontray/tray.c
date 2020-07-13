@@ -33,6 +33,7 @@ static unsigned int message_sent_signal;
 
 static void carbon_tray_init(CarbonTray*);
 static void carbon_tray_class_init(CarbonTrayClass*);
+static void carbon_tray_dispose(GObject*);
 static void carbon_tray_finalize(GObject*);
 static int carbon_tray_draw(GtkWidget*, cairo_t*);
 
@@ -143,6 +144,10 @@ bool carbon_tray_register(CarbonTray *tray, GdkScreen *screen) {
 }
 
 void carbon_tray_unregister(CarbonTray *tray) {
+	if (GTK_IS_WIDGET(tray->invisible) == FALSE) {
+		return;
+	}
+
 	GtkWidget *invisible = tray->invisible;
 	GdkDisplay *display = gtk_widget_get_display(invisible);
 	GdkWindow *owner = gdk_selection_owner_get_for_display(display, tray->selectionAtom);
@@ -178,6 +183,7 @@ static void carbon_tray_init(CarbonTray* self) {
 
 static void carbon_tray_class_init(CarbonTrayClass *klass) {
 	GObjectClass *gobjectClass = G_OBJECT_CLASS(klass);
+	gobjectClass->dispose = carbon_tray_dispose;
 	gobjectClass->finalize = carbon_tray_finalize;
 
 	g_signal_new("message-sent", G_OBJECT_CLASS_TYPE(klass), G_SIGNAL_RUN_LAST,
@@ -188,6 +194,10 @@ static void carbon_tray_class_init(CarbonTrayClass *klass) {
 		  G_TYPE_STRING,
 		  G_TYPE_LONG,
 		  G_TYPE_LONG);
+}
+
+static void carbon_tray_dispose(GObject *object) {
+	carbon_tray_unregister(CARBON_TRAY(object));
 }
 
 static void carbon_tray_finalize(GObject *object) {
@@ -217,11 +227,15 @@ static GdkFilterReturn window_filter(GdkXEvent *xev, GdkEvent *event, void *user
 	// event goes unused
 	(void) event;
 
-	XEvent *xevent =(XEvent*) xev;
-	CarbonTray *tray =(CarbonTray*) userData;
+	XEvent *xevent = (XEvent*) xev;
+	CarbonTray *tray = (CarbonTray*) userData;
+
+	if (GTK_IS_WIDGET(tray->invisible) == FALSE) {
+		return GDK_FILTER_CONTINUE;
+	}
 
 	if (xevent->type == ClientMessage) {
-		XClientMessageEvent *xclient =(XClientMessageEvent*) xevent;
+		XClientMessageEvent *xclient = (XClientMessageEvent*) xevent;
 
 		if (xclient->message_type == tray->opcodeAtom) {
 			switch(xclient->data.l[1]) {
@@ -256,9 +270,7 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 
 	/* create the socket */
 	CarbonChild *child = carbon_child_new(tray->iconSize, gtk_widget_get_screen(tray->invisible), window);
-
 	if (child == NULL) {
-		g_warning("Failed to resolve system tray icon.");
 		return;
 	}
 
