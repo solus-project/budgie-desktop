@@ -39,7 +39,7 @@ private class TrayErrorIcon {
         parent.add(new Gtk.Image.from_icon_name("gtk-dialog-error", Gtk.IconSize.LARGE_TOOLBAR));
 
         popover = new Budgie.Popover(parent);
-        popover.border_width = 8;
+        popover.get_style_context().add_class("system-tray-popover");
 
         Gtk.Label label = new Gtk.Label(text);
         label.show();
@@ -86,6 +86,8 @@ public class TrayApplet : Budgie.Applet {
     public TrayApplet(string uuid) {
         Object(uuid: uuid);
 
+        get_style_context().add_class("system-tray-applet");
+
         box = new Gtk.EventBox();
         add(box);
 
@@ -93,10 +95,8 @@ public class TrayApplet : Budgie.Applet {
         settings_prefix = "/com/solus-project/budgie-panel/instance/tray";
 
         settings = get_applet_settings(uuid);
-        settings.changed.connect((key) => {
-            if (key == "spacing" && tray != null) {
-                tray.set_spacing(settings.get_int(key));
-            }
+        settings.changed["spacing"].connect((key) => {
+            if (tray != null) tray.set_spacing(settings.get_int("spacing"));
         });
 
         if (activeUuid == null) {
