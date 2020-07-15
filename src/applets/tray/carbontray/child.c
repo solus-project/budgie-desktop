@@ -54,7 +54,7 @@ CarbonChild* carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 	int error = gdk_x11_display_error_trap_pop(display);
 
 	if (result == 0) {
-		g_warning("Failed to get icon window attributes");
+		g_info("Failed to populate icon window attributes for tray icon");
 		return NULL;
 	}
 
