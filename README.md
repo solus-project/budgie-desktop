@@ -1,4 +1,10 @@
-# budgie-desktop
+# Budgie Desktop
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/solus-project/budgie-desktop)
+[![Translate into your language!](https://img.shields.io/badge/help%20translate-Weblate-4AB)](https://translate.getsol.us/engage/budgie-desktop/)
+[![Translation status](http://translate.getsol.us/widgets/budgie-desktop/-/svg-badge.svg)](https://translate.getsol.us/engage/budgie-desktop/)
+![#budgie-desktop-dev on Freenode](https://img.shields.io/badge/freenode-%23budgie--desktop--dev-4AF)
+![#solus-dev on Freenode](https://img.shields.io/badge/freenode-%23solus--dev-28C)
 
 The Budgie Desktop is a feature-rich, modern desktop designed to keep out the way of the user.
 
@@ -6,15 +12,9 @@ The Budgie Desktop is a feature-rich, modern desktop designed to keep out the wa
 
 ![logo](https://getsol.us/imgs/budgie-small.png)
 
-IRC: `#budgie-desktop-dev` / `#Solus-Dev` on irc.freenode.net
-
-![Translation Status](https://translate.getsol.us/widgets/budgie-desktop/-/main/svg-badge.svg)
-
-[Translate into your language!](https://translate.getsol.us)
-
 `budgie-desktop` is a [Solus project](https://getsol.us/)
 
-![logo](https://build.solus-project.com/logo.png)
+![logo](https://build.getsol.us/logo.png)
 
 ## Project Updates
 
