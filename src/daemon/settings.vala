@@ -326,14 +326,26 @@ public class SettingsManager {
             change_brightness((enabled) ? set_brightness : default_brightness);
         }
 
+		var time = wm_settings.get_int("caffeine-mode-timer"); // Get our timer number
+		if (enabled && (time > 0)) { // If Caffeine Mode is enabled and we'll turn it off in a certain amount of time
+			Timeout.add_seconds(time * 60, this.do_disable, Priority.HIGH);
+			Timeout.add_seconds(60, () => {
+				var countdown = wm_settings.get_int("caffeine-mode-timer");
+				if (countdown != 0) {
+					countdown -= 1;
+					wm_settings.set_int("caffeine-mode-timer", countdown);
+				}
+
+				return (countdown != 0);
+			});
+		}
+
         if (wm_settings.get_boolean("caffeine-mode-notification") && !disable_notification && !temporary_notification_disabled && Notify.is_initted()) { // Should show a notification
             string title = (enabled) ? _("Turned on Caffeine Boost") : _("Turned off Caffeine Boost");
             string body = "";
             string icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
 
-            var time = wm_settings.get_int("caffeine-mode-timer"); // Get our timer number
-
-            if (enabled && (time > 0)) { // If Caffeine Mode is enabled and we'll turn it off in a certain amount of time
+            if (enabled && (time > 0)) {
                 var duration = _("Will turn off in a minute");
 
                 if (time > 1) { // use plural
@@ -341,7 +353,6 @@ public class SettingsManager {
                 }
 
                 body = duration;
-                Timeout.add_seconds(time * 60, this.do_disable, Priority.HIGH);
             }
 
             if (this.caffeine_notification == null) { // Caffeine Notification not yet created

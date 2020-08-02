@@ -23,11 +23,20 @@ public class CaffeineWindow : Budgie.Popover {
         grid.set_row_spacing(6);
         grid.set_column_spacing(12);
 
+        // Prepare label widget
         Gtk.Label caffeine_mode_label = new Gtk.Label(_("Caffeine Mode"));
+        caffeine_mode_label.set_halign(Gtk.Align.START);
         Gtk.Label timer_label = new Gtk.Label(_("Timer (minutes)"));
+        timer_label.set_halign(Gtk.Align.START);
+
+        // Prepare control widget
         mode = new Gtk.Switch();
+        mode.set_halign(Gtk.Align.END);
         var adjustment = new Gtk.Adjustment(0, 0, 1440, 1, 10, 0);
         timer = new Gtk.SpinButton(adjustment, 0, 0);
+        timer.set_halign(Gtk.Align.END);
+
+        // Attach widgets
         grid.attach(caffeine_mode_label, 0, 0);
         grid.attach(timer_label, 0, 1);
         grid.attach(mode, 1, 0);
