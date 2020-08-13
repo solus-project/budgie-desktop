@@ -53,6 +53,7 @@ namespace Budgie {
         public signal void added_window();
         public signal void closed_all();
         public signal void closed_window();
+        public signal void activated_window();
         public signal void changed_pin_state(bool new_state);
         public signal void launch_new_instance();
         public signal void move_window_to_workspace(ulong xid, int workspace_num);
@@ -466,6 +467,8 @@ namespace Budgie {
                 if (selected_window != null) {
                     if (!selected_window.is_active()) { // If this window is currently not active
                         selected_window.activate(Gtk.get_current_event_time());
+
+                        activated_window();
                     } else {
                         selected_window.minimize();
                     }

@@ -22,7 +22,8 @@ const int INACTIVE_INDICATOR_SPACING = 2;
 public class IconButton : Gtk.ToggleButton
 {
     private Budgie.AbominationRunningApp? first_app = null;
-    private Budgie.IconPopover? popover = null;
+    //private Budgie.IconPopover? popover = null;
+    private Budgie.PreviewPopover? popover = null;
     private Wnck.Screen? screen = null;
     private GLib.Settings? settings = null;
     private Wnck.Window? window = null;          // This will always be null if grouping is enabled
@@ -212,15 +213,32 @@ public class IconButton : Gtk.ToggleButton
      */
     public void create_popover() {
         this.screen = Wnck.Screen.get_default(); // Get the default screen
-        this.popover = new Budgie.IconPopover(this, this.app_info, screen.get_workspace_count());
+
+        this.popover = new Budgie.PreviewPopover(this, this.app_info, this.screen.get_workspace_count());
+
+        // this.popover = new Budgie.IconPopover(this, this.app_info, screen.get_workspace_count());
+
+
+        // this.popover.move_window_to_workspace.connect((xid, wid) => { // On a request to move a window to a workspace
+        //     Wnck.Window requested_window = Wnck.Window.@get(xid);
+        //     Wnck.Workspace workspace = this.screen.get_workspace(wid - 1);
+
+        //     if ((requested_window != null) && (workspace != null)) {
+        //         requested_window.move_to_workspace(workspace);
+        //     }
+        // });
+
+        // common
         this.popover.set_pinned_state(this.pinned); // Set our pinned state
 
         this.popover.launch_new_instance.connect(() => { // If we're going to launch a new instance
+            this.popover.hide();
             launch_app(Gtk.get_current_event_time());
         });
 
         this.popover.added_window.connect(() => { // If we added a window
             window_count++;
+            this.popover.hide();
         });
 
         this.popover.closed_all.connect(() => { // If we closed all windows
@@ -231,6 +249,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.popover.closed_window.connect(() => { // If we closed a window related to this popover
             window_count--;
+            this.popover.hide();
         });
 
         this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
@@ -242,15 +261,6 @@ public class IconButton : Gtk.ToggleButton
             }
         });
 
-        this.popover.move_window_to_workspace.connect((xid, wid) => { // On a request to move a window to a workspace
-            Wnck.Window requested_window = Wnck.Window.@get(xid);
-            Wnck.Workspace workspace = this.screen.get_workspace(wid - 1);
-
-            if ((requested_window != null) && (workspace != null)) {
-                requested_window.move_to_workspace(workspace);
-            }
-        });
-
         this.popover.perform_action.connect((action) => {
             if (this.app_info != null) {
                 launch_context.set_screen(get_screen());
@@ -258,6 +268,11 @@ public class IconButton : Gtk.ToggleButton
                 this.app_info.launch_action(action, launch_context);
                 popover.render(); // Re-render
             }
+        });
+
+        this.popover.activated_window.connect(() => {
+            // close popover
+            this.popover.hide();
         });
 
         /**
@@ -296,13 +311,15 @@ public class IconButton : Gtk.ToggleButton
             }
         });
 
-        this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
-            this.popover.set_workspace_count(screen.get_workspace_count());
-        });
 
-        this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
-            this.popover.set_workspace_count(screen.get_workspace_count());
-        });
+        // IconPopover
+        // this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
+        //     this.popover.set_workspace_count(screen.get_workspace_count());
+        // });
+
+        // this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
+        //     this.popover.set_workspace_count(screen.get_workspace_count());
+        // });
 
         this.popover_manager.register_popover(this, popover); // Register
     }
@@ -917,6 +934,7 @@ public class IconButton : Gtk.ToggleButton
         if (event.button == 3) { // Right click
             this.popover.render();
             this.popover_manager.show_popover(this); // Show the popover
+
             return Gdk.EVENT_STOP;
         } else if (event.button == 1) { // Left click
             if (this.window != null) {
