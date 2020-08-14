@@ -275,6 +275,11 @@ public class IconButton : Gtk.ToggleButton
             this.popover.hide();
         });
 
+        this.popover.minimized_window.connect(() => {
+            // close popover
+            this.popover.hide();
+        });
+
         /**
          * Wnck bits that are relevant to the popover
          */

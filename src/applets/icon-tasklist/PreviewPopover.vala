@@ -54,6 +54,12 @@ namespace Budgie {
         border-radius: 1px;
         border-style: solid;
         }
+        .windowbutton:focus {
+        border-color: white;
+        background-color: transparent;
+        border-width: 2px;
+        padding: 3px;
+        }
         .label {
         color: white;
         padding-bottom: 0px;
@@ -61,12 +67,6 @@ namespace Budgie {
         """;
         /*
         
-        .windowbutton:focus {
-        border-color: white;
-        background-color: transparent;
-        border-width: 2px;
-        padding: 3px;
-        }
         */
 
         /**
@@ -76,6 +76,7 @@ namespace Budgie {
         public signal void closed_all();
         public signal void closed_window();
         public signal void activated_window();
+        public signal void minimized_window();
         public signal void launch_new_instance();
         public signal void changed_pin_state(bool new_state);
         public signal void perform_action(string action);
@@ -287,7 +288,7 @@ namespace Budgie {
                 Budgie.PreviewItem item = new Budgie.PreviewItem(xid, name);
 
                 item.window_button.clicked.connect(() => { // When we click on the window
-                    this.activate_window(item.xid); // Toggle the window state
+                    this.toggle_window(item.xid); // Toggle the window state
                 });
 
                 item.close_button.clicked.connect(() => { // Create our close button click handler
@@ -405,6 +406,29 @@ namespace Budgie {
         }
 
 
+        /**
+         * toggle_window will activate or minimize this window
+         */
+        public void toggle_window(ulong xid) {
+            if (window_id_to_name.contains(xid)) { // If we have this xid
+                Wnck.Window selected_window = Wnck.Window.@get(xid); // Get the window
+
+                if (selected_window != null) {
+                    if (!selected_window.is_active()) { // If this window is currently not active
+                        selected_window.activate(Gtk.get_current_event_time());
+
+                        activated_window();
+                    } else {
+                        selected_window.minimize();
+
+                        minimized_window();
+                    }
+                }
+            }
+        }
+
+
+
         public void close_all_windows() {
             if (window_id_to_name.length != 0) { // If there are windows to close
                 window_id_to_name.foreach((xid, name) => {
@@ -420,12 +444,16 @@ namespace Budgie {
 
             int num_windows = (int) window_id_to_name.length;
 
+            //this.set_focus_child(this.launch_new_instance_box);
             // call display on all PreviewItem s
             int i = 0;
             this.window_id_to_controls.foreach((xid, item) => {
             
                 if(xid == null) return;
+
                 item.render();
+
+
                 i++;
                 if( i == MAX_WINDOWS){
                     return;
@@ -437,6 +465,7 @@ namespace Budgie {
         }
     } // PreviewPopover
 
+
     public class PreviewItem : Gtk.Grid {
 
         public ulong xid;
@@ -447,6 +476,7 @@ namespace Budgie {
 
         private Gdk.Screen gdk_scr;
         private Gdk.Window window;
+        private Wnck.Window wnck_window;
 
         /* Create a new PreviewItem with app icon, title and window preview image and close button
          */
@@ -459,11 +489,11 @@ namespace Budgie {
 
             this.gdk_scr = Gdk.Screen.get_default();
 
-            Wnck.Window wnck_window = Wnck.Window.@get(xid); // Get the window
+            this.wnck_window = Wnck.Window.@get(xid); // Get the window
 
             // this check was in the original code
             // if(wnck_window == null || wnck_window.get_window_type() != Wnck.WindowType.NORMAL) return;
-            Gdk.Pixbuf icon = wnck_window.get_mini_icon();
+            Gdk.Pixbuf icon = this.wnck_window.get_mini_icon();
             Gtk.Image app_icon = new Gtk.Image.from_pixbuf(icon);
 
             this.set_row_spacing(5);
@@ -611,6 +641,7 @@ namespace Budgie {
             }
 
             this.window_button.set_image(window_image);
+            this.window_button.is_focus = this.wnck_window.is_active();
         }
 
     } // PreviewItem
