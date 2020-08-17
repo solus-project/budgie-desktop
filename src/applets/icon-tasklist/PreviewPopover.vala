@@ -219,13 +219,6 @@ namespace Budgie {
 
             apply_button_style();
 
-            /*
-            this.grid.attach(new Gtk.Label(""), 0, 0, 1, 1);
-            this.grid.attach(new Gtk.Label("\n"), 100, 100, 1, 1);
-            this.grid.set_column_spacing(20);
-            this.grid.set_row_spacing(20);
-            */
-            //prev_winexists = true;
             this.add(this.grid);
 
             this.title = "PreviewPopover";

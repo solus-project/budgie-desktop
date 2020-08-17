@@ -10,9 +10,11 @@
  */
 
 const double DEFAULT_OPACITY = 0.1;
-const int INDICATOR_SIZE     = 2;
-const int INDICATOR_SPACING  = 1;
+const int INDICATOR_SIZE     = 4; // must be a multiple of two, since arc command uses radius
+const int INDICATOR_SPACING  = 2;
 const int INACTIVE_INDICATOR_SPACING = 2;
+const int INACTIVE_INDICATOR_SPACING_BOTTOM = 1; // make this negative if you want to cut off some of the indicator
+const int MAX_WINDOWS = 6;
 
 /**
  * IconButton provides the pretty IconTasklist button to house one or more
@@ -200,7 +202,7 @@ public class IconButton : Gtk.ToggleButton
         var st = get_style_context();
         st.remove_class(Gtk.STYLE_CLASS_BUTTON);
         st.remove_class("toggle");
-        st.add_class("launcher");
+        //st.add_class("launcher");
         this.relief = Gtk.ReliefStyle.NONE;
 
         size_allocate.connect(this.on_size_allocate);
@@ -249,7 +251,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.popover.closed_window.connect(() => { // If we closed a window related to this popover
             window_count--;
-            this.popover.hide();
+            //this.popover.hide();
         });
 
         this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
@@ -277,7 +279,7 @@ public class IconButton : Gtk.ToggleButton
 
         this.popover.minimized_window.connect(() => {
             // close popover
-            this.popover.hide();
+            //this.popover.hide();
         });
 
         /**
@@ -642,48 +644,61 @@ public class IconButton : Gtk.ToggleButton
             return;
         }
 
-        count = (count > 5) ? 5 : count;
+        count = (count > MAX_WINDOWS) ? MAX_WINDOWS : count;
 
         int counter = 0;
+        // total width of all indicators plus spaces between
+        int total_indicator_size = (count * INDICATOR_SIZE) + ((count - 1) * INACTIVE_INDICATOR_SPACING);
+
+        int indicator_x = 0;
+        int indicator_y = 0;
         foreach (Wnck.Window window in windows) {
             if (counter == count) {
                 break;
             }
 
             if (!window.is_skip_tasklist()) {
-                int indicator_x = 0;
-                int indicator_y = 0;
                 switch (this.desktop_helper.panel_position) {
                     case Budgie.PanelPosition.TOP:
-                        indicator_x = x + (width / 2);
-                        indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-                        indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-                        indicator_y = y + (INDICATOR_SIZE / 2);
+                        if (counter == 0) {
+                            indicator_x = x + (width / 2) - (total_indicator_size / 2) + INDICATOR_SIZE / 2;
+                        } else {
+                            indicator_x += (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING);
+                        }
+                        indicator_y = y + INDICATOR_SIZE/2 + INACTIVE_INDICATOR_SPACING_BOTTOM;
                         break;
                     case Budgie.PanelPosition.BOTTOM:
-                        indicator_x = x + (width / 2);
-                        indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-                        indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-                        indicator_y = y + height - (INDICATOR_SIZE / 2);
+                        if (counter == 0) {
+                            indicator_x = x + (width / 2) - (total_indicator_size / 2) + INDICATOR_SIZE / 2;
+                        } else {
+                            indicator_x += (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING);
+                        }
+                        indicator_y = y + height - INDICATOR_SIZE/2 - INACTIVE_INDICATOR_SPACING_BOTTOM;
                         break;
                     case Budgie.PanelPosition.LEFT:
-                        indicator_y = x + (height / 2);
-                        indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - (INACTIVE_INDICATOR_SPACING * 2);
-                        indicator_y += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-                        indicator_x = y + (INDICATOR_SIZE / 2);
+
+                        if (counter == 0) {
+                            indicator_y = y + (height / 2) - (total_indicator_size / 2) + INDICATOR_SIZE / 2;
+                        } else {
+                            indicator_y += INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING;
+                        }
+                        indicator_x = x + INDICATOR_SIZE/2 + INACTIVE_INDICATOR_SPACING_BOTTOM;
                         break;
                     case Budgie.PanelPosition.RIGHT:
-                        indicator_y = x + (height / 2);
-                        indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-                        indicator_y += ((INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING) * counter);
-                        indicator_x = y + width - (INDICATOR_SIZE / 2);
+
+                        if (counter == 0) {
+                            indicator_y = y + (height / 2) - (total_indicator_size / 2) + INDICATOR_SIZE / 2;
+                        } else {
+                            indicator_y += INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING;
+                        }
+                        indicator_x = x + width - INDICATOR_SIZE/2 - INACTIVE_INDICATOR_SPACING_BOTTOM;
                         break;
                     default:
                         break;
                 }
 
                 cr.set_source_rgba(col.red, col.green, col.blue, 1);
-                cr.arc(indicator_x, indicator_y, INDICATOR_SIZE, 0, Math.PI * 2);
+                cr.arc(indicator_x, indicator_y, INDICATOR_SIZE/2, 0, Math.PI * 2);
                 cr.fill();
                 counter++;
             }
@@ -699,6 +714,7 @@ public class IconButton : Gtk.ToggleButton
 
         if (class_group != null) {
             windows = class_group.get_windows().copy();
+            windows.reverse();
         } else {
             windows = new GLib.List<unowned Wnck.Window>();
             windows.insert(this.window, 0);
@@ -709,7 +725,7 @@ public class IconButton : Gtk.ToggleButton
             return base.draw(cr);
         }
 
-        count = (count > 5) ? 5 : count;
+        count = (count > MAX_WINDOWS) ? MAX_WINDOWS : count;
 
         Gtk.StyleContext context = this.get_style_context();
 
@@ -733,10 +749,31 @@ public class IconButton : Gtk.ToggleButton
         }
 
         int counter = 0;
-        int previous_x = 0;
-        int previous_y = 0;
-        int spacing = width % count;
-        spacing = (spacing == 0) ? 1 : spacing;
+        int previous_x_end = 0;
+        int previous_y_end = 0;
+
+
+        // total width should include count times indicator widths and count minus one spaces
+        // this is the result when solving that equation for indicator width
+        int base_indicator_size = 0;
+        switch (this.desktop_helper.panel_position) {
+            case Budgie.PanelPosition.LEFT:
+            case Budgie.PanelPosition.RIGHT:
+                base_indicator_size = (height + INDICATOR_SPACING)/count - INDICATOR_SPACING;
+            break;
+        default:
+                base_indicator_size = (width + INDICATOR_SPACING)/count - INDICATOR_SPACING;
+            break;
+        }
+
+        // since the above is an integer, some space will sometimes be leftover
+        // this gets added back in a balanced pattern, working in from each end, until it runs out
+        int remainder = width - (count * base_indicator_size + (count - 1) * INDICATOR_SPACING);
+
+        int[] remainder_locations = {count-1, 0, count-2, 1, count-3};
+
+        remainder_locations = remainder_locations[0:remainder];
+
         foreach (Wnck.Window window in windows) {
             if (counter == count) {
                 break;
@@ -750,43 +787,40 @@ public class IconButton : Gtk.ToggleButton
                         if (counter == 0) {
                             indicator_x = x;
                         } else {
-                            previous_x = indicator_x = previous_x + (width/count);
-                            indicator_x += spacing;
+                            indicator_x = previous_x_end + INDICATOR_SPACING;
                         }
-                        indicator_y = y;
+                        indicator_y = y + INDICATOR_SIZE/2;
                         break;
                     case Budgie.PanelPosition.BOTTOM:
                         if (counter == 0) {
                             indicator_x = x;
                         } else {
-                            previous_x = indicator_x = previous_x + (width/count);
-                            indicator_x += spacing;
+                            indicator_x = previous_x_end + INDICATOR_SPACING;
                         }
-                        indicator_y = y + height;
+                        indicator_y = y + height - INDICATOR_SIZE/2;
                         break;
                     case Budgie.PanelPosition.LEFT:
                         if (counter == 0) {
                             indicator_y = y;
                         } else {
-                            previous_y = indicator_y = previous_y + (height/count);
-                            indicator_y += spacing;
+                            indicator_y = previous_y_end + INDICATOR_SPACING;
                         }
-                        indicator_x = x;
+                        indicator_x = x + INDICATOR_SIZE/2;
                         break;
                     case Budgie.PanelPosition.RIGHT:
                         if (counter == 0) {
                             indicator_y = y;
                         } else {
-                            previous_y = indicator_y = previous_y + (height/count);
-                            indicator_y += spacing;
+                            indicator_y = previous_y_end + INDICATOR_SPACING;
                         }
-                        indicator_x = x + width;
+                        indicator_x = x + width - INDICATOR_SIZE/2;
                         break;
                     default:
                         break;
                 }
 
-                cr.set_line_width(6);
+                cr.set_line_width(INDICATOR_SIZE);
+                cr.set_line_cap(Cairo.LineCap.BUTT);
                 if (this.desktop_helper.get_active_window() == window && count > 1) {
                     Gdk.RGBA col2 = col;
                     if (!context.lookup_color("budgie_tasklist_indicator_color_active_window", out col2)) {
@@ -801,22 +835,24 @@ public class IconButton : Gtk.ToggleButton
                 switch (this.desktop_helper.panel_position) {
                     case Budgie.PanelPosition.LEFT:
                     case Budgie.PanelPosition.RIGHT:
-                        int to = 0;
+                        int indicator_y_end = 0;
                         if (counter == count-1) {
-                            to = y + height; 
+                            indicator_y_end = y + height;
                         } else {
-                            to = previous_y+(height/count);
+                            indicator_y_end = indicator_y + base_indicator_size + (contains(remainder_locations, counter) ? 1 : 0);
+                            previous_y_end = indicator_y_end;
                         }
-                        cr.line_to(indicator_x, to);
+                        cr.line_to(indicator_x, indicator_y_end);
                         break;
                     default:
-                        int to = 0;
+                        int indicator_x_end = 0;
                         if (counter == count-1) {
-                            to = x + width; 
+                            indicator_x_end = x + width;
                         } else {
-                            to = previous_x+(width/count);
+                            indicator_x_end = indicator_x + base_indicator_size + (contains(remainder_locations, counter) ? 1 : 0);
+                            previous_x_end = indicator_x_end;
                         }
-                        cr.line_to(to, indicator_y);
+                        cr.line_to(indicator_x_end, indicator_y);
                         break;
                 }
 
@@ -827,6 +863,14 @@ public class IconButton : Gtk.ToggleButton
 
 
         return base.draw(cr);
+        //return true;
+    }
+
+    private bool contains(int[] list, int e){
+        foreach(int l in list){
+            if(e == l) return true;
+        }
+        return false;
     }
 
     protected void on_size_allocate(Gtk.Allocation allocation) {
