@@ -8,8 +8,8 @@ AlignEscapedNewlinesLeft: false
 AlignOperands: true
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
-AllowShortCaseLabelsOnASingleLine: false
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
@@ -24,12 +24,12 @@ BinPackParameters: true
 BreakBeforeBinaryOperators: None
 # BreakAfterJavaFieldAnnotations: (not java)
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Linux
+BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: false
 #uncomment for clang 3.9
 #BreakStringLiterals: false
-ColumnLimit: 100
+ColumnLimit: 120
 CommentPragmas:  '\*\<'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
@@ -44,15 +44,15 @@ ForEachMacros: [ ]
 #  - Regex: '^"'
 #    Priority: 1
 # IncludeIsMainRegex: (project doesn't use a main includes that can add other includes via regex)
-IndentCaseLabels: false
-IndentWidth: 8
+IndentCaseLabels: true
+IndentWidth: 4
 IndentWrappedFunctionNames: false
 # JavaScriptQuotes: (not javascript)
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
-MaxEmptyLinesToKeep: 1
+MaxEmptyLinesToKeep: 3
 NamespaceIndentation: None
 # ObjCBlockIndentWidth: (not objc)
 # ObjCSpaceAfterProperty: (not objc)
@@ -68,7 +68,7 @@ PointerAlignment: Right
 #ReflowComments: true
 #uncomment for clang 3.9
 #SortIncludes: true
-SpaceAfterCStyleCast: false
+SpaceAfterCStyleCast: true
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
@@ -79,6 +79,6 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Cpp11
-TabWidth:        8
-UseTab:          Never
+TabWidth:        4
+UseTab:          Always
 ...
