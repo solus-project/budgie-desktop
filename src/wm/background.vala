@@ -214,8 +214,13 @@ public class BudgieBackground : Clutter.Actor
 
         var actor = new Meta.BackgroundActor(display, index);
         var background = new Meta.Background(display);
+#if HAVE_MUTTER_6
         actor.set_background(background);
-
+#else
+        var content = actor.get_content();
+        unowned Meta.BackgroundContent background_content = (Meta.BackgroundContent) content;
+        background_content.set_background(background);
+#endif
         rect = display.get_monitor_geometry(index);
         actor.set_size(rect.width, rect.height);
         actor.set("opacity", 0);
@@ -231,13 +236,21 @@ public class BudgieBackground : Clutter.Actor
         shading_direction = (GDesktop.BackgroundShading)settings.get_enum(COLOR_SHADING_TYPE_KEY);
         var color_str = settings.get_string(PRIMARY_COLOR_KEY);
         if (color_str != null && color_str != "") {
+#if HAVE_MUTTER_6
             primary_color = Clutter.Color.from_string(color_str);
+#else
+            Clutter.Color.from_string(out primary_color, color_str);
+#endif
             color_str = null;
         }
 
         color_str = settings.get_string(SECONDARY_COLOR_KEY);
         if (color_str != null && color_str != "") {
+#if HAVE_MUTTER_6
             secondary_color = Clutter.Color.from_string(color_str);
+#else
+            Clutter.Color.from_string(out secondary_color, color_str);
+#endif
             color_str = null;
         }
 
