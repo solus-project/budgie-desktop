@@ -1,8 +1,0 @@
-gdk-3.0
-gdk-pixbuf-2.0
-gsettings-desktop-schemas
-gtk+-3.0
-mutter-clutter-4
-mutter-cogl-4
-x11
-xfixes-4.0

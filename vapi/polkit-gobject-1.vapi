@@ -7,7 +7,7 @@ namespace Polkit {
 		[CCode (has_construct_function = false)]
 		protected ActionDescription ();
 		public unowned string get_action_id ();
-		public unowned string get_annotation (string key);
+		public unowned string? get_annotation (string key);
 		[CCode (array_length = false, array_null_terminated = true)]
 		public unowned string[] get_annotation_keys ();
 		public unowned string get_description ();
@@ -34,7 +34,7 @@ namespace Polkit {
 		public Polkit.AuthorityFeatures get_backend_features ();
 		public unowned string get_backend_name ();
 		public unowned string get_backend_version ();
-		public string get_owner ();
+		public string? get_owner ();
 		public static Polkit.Authority get_sync (GLib.Cancellable? cancellable = null) throws GLib.Error;
 		public async bool register_authentication_agent (Polkit.Subject subject, string locale, string object_path, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool register_authentication_agent_sync (Polkit.Subject subject, string locale, string object_path, GLib.Cancellable? cancellable = null) throws GLib.Error;
@@ -56,21 +56,22 @@ namespace Polkit {
 	public class AuthorizationResult : GLib.Object {
 		[CCode (has_construct_function = false)]
 		public AuthorizationResult (bool is_authorized, bool is_challenge, Polkit.Details? details);
-		public unowned Polkit.Details get_details ();
+		public unowned Polkit.Details? get_details ();
+		[Version (since = "0.101")]
 		public bool get_dismissed ();
 		public bool get_is_authorized ();
 		public bool get_is_challenge ();
 		public bool get_retains_authorization ();
-		public unowned string get_temporary_authorization_id ();
+		public unowned string? get_temporary_authorization_id ();
 	}
 	[CCode (cheader_filename = "polkit/polkit.h", type_id = "polkit_details_get_type ()")]
 	public class Details : GLib.Object {
 		[CCode (has_construct_function = false)]
 		public Details ();
 		[CCode (array_length = false, array_null_terminated = true)]
-		public string[] get_keys ();
+		public string[]? get_keys ();
 		public void insert (string key, string? value);
-		public unowned string lookup (string key);
+		public unowned string? lookup (string key);
 	}
 	[CCode (cheader_filename = "polkit/polkit.h", type_id = "polkit_permission_get_type ()")]
 	public class Permission : GLib.Permission, GLib.AsyncInitable, GLib.Initable {
@@ -88,7 +89,8 @@ namespace Polkit {
 		[CCode (has_construct_function = false)]
 		protected SystemBusName ();
 		public unowned string get_name ();
-		public Polkit.Subject get_process_sync (GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public Polkit.Subject? get_process_sync (GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public Polkit.UnixUser? get_user_sync (GLib.Cancellable? cancellable = null) throws GLib.Error;
 		public static Polkit.Subject @new (string name);
 		public void set_name (string name);
 		public string name { get; set construct; }
@@ -146,9 +148,10 @@ namespace Polkit {
 		protected UnixSession ();
 		public unowned string get_session_id ();
 		public static Polkit.Subject @new (string session_id);
-		public static async Polkit.Subject new_for_process (int pid, GLib.Cancellable? cancellable) throws GLib.Error;
-		public static Polkit.Subject new_for_process_sync (int pid, GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public static async Polkit.Subject? new_for_process (int pid, GLib.Cancellable? cancellable) throws GLib.Error;
+		public static Polkit.Subject? new_for_process_sync (int pid, GLib.Cancellable? cancellable = null) throws GLib.Error;
 		public void set_session_id (string session_id);
+		[NoAccessorMethod]
 		public int pid { construct; }
 		public string session_id { get; set construct; }
 	}
@@ -156,17 +159,17 @@ namespace Polkit {
 	public class UnixUser : GLib.Object, Polkit.Identity {
 		[CCode (has_construct_function = false)]
 		protected UnixUser ();
-		public unowned string get_name ();
+		public unowned string? get_name ();
 		public int get_uid ();
 		public static Polkit.Identity @new (int uid);
-		public static Polkit.Identity new_for_name (string name) throws GLib.Error;
+		public static Polkit.Identity? new_for_name (string name) throws GLib.Error;
 		public void set_uid (int uid);
 		public int uid { get; set construct; }
 	}
 	[CCode (cheader_filename = "polkit/polkit.h", type_id = "polkit_identity_get_type ()")]
 	public interface Identity : GLib.Object {
 		public abstract bool equal (Polkit.Identity b);
-		public static Polkit.Identity from_string (string str) throws GLib.Error;
+		public static Polkit.Identity? from_string (string str) throws GLib.Error;
 		public abstract uint hash ();
 		public abstract string to_string ();
 	}
@@ -201,7 +204,7 @@ namespace Polkit {
 		ADMINISTRATOR_AUTHENTICATION_REQUIRED_RETAINED,
 		AUTHORIZED;
 		public static bool from_string (string string, Polkit.ImplicitAuthorization out_implicit_authorization);
-		public static unowned string to_string (Polkit.ImplicitAuthorization implicit_authorization);
+		public unowned string to_string ();
 	}
 	[CCode (cheader_filename = "polkit/polkit.h", cprefix = "POLKIT_ERROR_")]
 	public errordomain Error {
@@ -212,7 +215,7 @@ namespace Polkit {
 		public static GLib.Quark quark ();
 	}
 	[CCode (cheader_filename = "polkit/polkit.h")]
-	public static Polkit.Identity identity_from_string (string str) throws GLib.Error;
+	public static Polkit.Identity? identity_from_string (string str) throws GLib.Error;
 	[CCode (cheader_filename = "polkit/polkit.h")]
 	public static Polkit.Subject subject_from_string (string str) throws GLib.Error;
 }

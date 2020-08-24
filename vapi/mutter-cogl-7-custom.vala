@@ -1,12 +1,6 @@
 namespace Cogl {
 	[Compact]
 	[CCode (cname = "CoglHandle")]
-	public class Bitmap: Handle {
-		public static Bitmap new_from_file (string filename) throws GLib.Error;
-	}
-
-	[Compact]
-	[CCode (cname = "CoglHandle")]
 	public class Buffer: Handle {
 		public uint get_size ();
 		public bool set_data (size_t offset, [CCode (array_length_type = "size_t")] uint8[] data);
