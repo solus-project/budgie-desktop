@@ -23,8 +23,7 @@ typedef struct _BudgieThemeManagerClass BudgieThemeManagerClass;
 #define BUDGIE_IS_THEME_MANAGER(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_THEME_MANAGER))
 #define BUDGIE_THEME_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 #define BUDGIE_IS_THEME_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_THEME_MANAGER))
-#define BUDGIE_THEME_MANAGER_GET_CLASS(o)                                                                              \
-	(G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
+#define BUDGIE_THEME_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 
 BudgieThemeManager* budgie_theme_manager_new(void);
 

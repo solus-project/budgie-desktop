@@ -31,22 +31,16 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_
  * Borrowed from brisk's popover-manager.c (in turn borrowed from) gdkseatdefault.c
  */
 #define KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK)
-#define POINTER_EVENTS                                                                                                 \
-	(GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |                     \
-	 GDK_SMOOTH_SCROLL_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_PROXIMITY_IN_MASK |                  \
-	 GDK_PROXIMITY_OUT_MASK)
+#define POINTER_EVENTS (GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |    \
+						GDK_SMOOTH_SCROLL_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_PROXIMITY_IN_MASK | \
+						GDK_PROXIMITY_OUT_MASK)
 #endif
 
-static void budgie_popover_manager_link_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget,
-												BudgiePopover* popover);
-static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget,
-												  BudgiePopover* popover);
-static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, GdkEvent* event,
-													  BudgiePopoverManager* self);
-static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, GdkEvent* event,
-														BudgiePopoverManager* self);
-static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed,
-											   BudgiePopover* popover);
+static void budgie_popover_manager_link_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget, BudgiePopover* popover);
+static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget, BudgiePopover* popover);
+static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, GdkEvent* event, BudgiePopoverManager* self);
+static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, GdkEvent* event, BudgiePopoverManager* self);
+static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed, BudgiePopover* popover);
 static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, GdkEvent* event, BudgiePopover* popover);
 static void budgie_popover_manager_grab(BudgiePopoverManager* self, BudgiePopover* popover);
 static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopover* popover);
@@ -114,8 +108,7 @@ static void budgie_popover_manager_init(BudgiePopoverManager* self) {
  * This allows the panel to provide a "menubar" like functionality for interaction
  * with multiple popovers in a natural fashion.
  */
-void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidget* parent_widget,
-											 BudgiePopover* popover) {
+void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidget* parent_widget, BudgiePopover* popover) {
 	g_assert(self != NULL);
 	g_return_if_fail(parent_widget != NULL && popover != NULL);
 
@@ -207,8 +200,7 @@ static void budgie_popover_manager_widget_died(BudgiePopoverManager* self, GtkWi
  *
  * Hook up the various signals we need to manage this popover correctly
  */
-static void budgie_popover_manager_link_signals(BudgiePopoverManager* self, GtkWidget* parent_widget,
-												BudgiePopover* popover) {
+static void budgie_popover_manager_link_signals(BudgiePopoverManager* self, GtkWidget* parent_widget, BudgiePopover* popover) {
 	g_signal_connect_swapped(parent_widget, "destroy", G_CALLBACK(budgie_popover_manager_widget_died), self);
 
 	/* Monitor map/unmap to manage the grab semantics */
@@ -225,8 +217,7 @@ static void budgie_popover_manager_link_signals(BudgiePopoverManager* self, GtkW
  *
  * Disconnect any prior signals for this popover so we stop receiving events for it
  */
-static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* self, GtkWidget* parent_widget,
-												  BudgiePopover* popover) {
+static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* self, GtkWidget* parent_widget, BudgiePopover* popover) {
 	g_signal_handlers_disconnect_by_data(parent_widget, self);
 	g_signal_handlers_disconnect_by_data(popover, self);
 }
@@ -237,8 +228,7 @@ static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* self, Gt
  * Handle the BudgiePopover becoming visible on screen, updating our knowledge
  * of who the currently active popover is
  */
-static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event,
-													  BudgiePopoverManager* self) {
+static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event, BudgiePopoverManager* self) {
 	/* Someone might have forcibly opened a new popover with one active, so
 	 * if we're already managing a popover, the only sane thing to do is
 	 * to tell it to sod off and start managing the new one.
@@ -277,8 +267,7 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, __
  * Handle the BudgiePopover becoming invisible on screen, updating our knowledge
  * of who the currently active popover is
  */
-static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event,
-														BudgiePopoverManager* self) {
+static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event, BudgiePopoverManager* self) {
 	budgie_popover_manager_ungrab(self, popover);
 
 	if (popover == self->priv->active_popover) {
@@ -398,8 +387,7 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopo
  *
  * Grab was broken, most likely due to a window within our application
  */
-static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, __budgie_unused__ GdkEvent* event,
-												   BudgiePopover* popover) {
+static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, __budgie_unused__ GdkEvent* event, BudgiePopover* popover) {
 	if (popover != self->priv->active_popover) {
 		return GDK_EVENT_PROPAGATE;
 	}
@@ -416,8 +404,7 @@ static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, _
  * If our grab was broken, i.e. due to some popup menu, and we're still visible,
  * we'll now try and grab focus once more.
  */
-static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed,
-											   BudgiePopover* popover) {
+static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed, BudgiePopover* popover) {
 	/* Only interested in unshadowed */
 	if (!was_grabbed || popover != self->priv->active_popover) {
 		return;

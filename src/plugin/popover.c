@@ -73,7 +73,11 @@ struct _BudgiePopoverPrivate {
 	BudgiePopoverPositionPolicy policy;
 };
 
-enum { PROP_RELATIVE_TO = 1, PROP_POLICY, N_PROPS };
+enum {
+	PROP_RELATIVE_TO = 1,
+	PROP_POLICY,
+	N_PROPS
+};
 
 static GParamSpec* obj_properties[N_PROPS] = {
 	NULL,
@@ -82,9 +86,12 @@ static GParamSpec* obj_properties[N_PROPS] = {
 /*
  * IDs for our signals
  */
-enum { POPOVER_SIGNAL_CLOSED = 0, N_SIGNALS };
+enum {
+	POPOVER_SIGNAL_CLOSED = 0,
+	N_SIGNALS
+};
 
-static guint popover_signals[N_SIGNALS] = { 0 };
+static guint popover_signals[N_SIGNALS] = {0};
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopover, budgie_popover, GTK_TYPE_WINDOW)
 
@@ -138,30 +145,20 @@ static GObject* budgie_popover_constructor(GType type, guint n_properties, GObje
 	o = G_OBJECT_CLASS(budgie_popover_parent_class)->constructor(type, n_properties, properties);
 
 	/* Blame clang-format for weird wrapping */
-	g_object_set(o,
-				 "app-paintable",
-				 TRUE,
-				 "decorated",
-				 FALSE,
-				 "deletable",
-				 FALSE,
-				 "focus-on-map",
-				 TRUE,
-				 "gravity",
-				 GDK_GRAVITY_NORTH_WEST,
-				 "modal",
-				 FALSE,
-				 "resizable",
-				 FALSE,
-				 "skip-pager-hint",
-				 TRUE,
-				 "skip-taskbar-hint",
-				 TRUE,
-				 "type-hint",
-				 GDK_WINDOW_TYPE_HINT_POPUP_MENU,
-				 "window-position",
-				 GTK_WIN_POS_NONE,
-				 NULL);
+	g_object_set(
+		o,
+		"app-paintable", TRUE,
+		"decorated", FALSE,
+		"deletable", FALSE,
+		"focus-on-map", TRUE,
+		"gravity", GDK_GRAVITY_NORTH_WEST,
+		"modal", FALSE,
+		"resizable", FALSE,
+		"skip-pager-hint", TRUE,
+		"skip-taskbar-hint", TRUE,
+		"type-hint", GDK_WINDOW_TYPE_HINT_POPUP_MENU,
+		"window-position", GTK_WIN_POS_NONE,
+		NULL);
 
 	return o;
 }
@@ -199,38 +196,31 @@ static void budgie_popover_class_init(BudgiePopoverClass* klazz) {
 	 * through a toggling action, such as being rolled past in a
 	 * #BudgiePopoverManager set of popovers.
 	 */
-	popover_signals[POPOVER_SIGNAL_CLOSED] = g_signal_new("closed",
-														  BUDGIE_TYPE_POPOVER,
-														  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-														  G_STRUCT_OFFSET(BudgiePopoverClass, closed),
-														  NULL,
-														  NULL,
-														  NULL,
-														  G_TYPE_NONE,
-														  0);
+	popover_signals[POPOVER_SIGNAL_CLOSED] = g_signal_new(
+		"closed",
+		BUDGIE_TYPE_POPOVER,
+		G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		G_STRUCT_OFFSET(BudgiePopoverClass, closed),
+		NULL, NULL, NULL,
+		G_TYPE_NONE, 0);
 
 	/*
 	 * BudgiePopover:relative-to
 	 *
 	 * Determines the GtkWidget that we'll appear next to
 	 */
-	obj_properties[PROP_RELATIVE_TO] = g_param_spec_object("relative-to",
-														   "Relative widget",
-														   "Set the relative widget",
-														   GTK_TYPE_WIDGET,
-														   G_PARAM_READWRITE);
+	obj_properties[PROP_RELATIVE_TO] = g_param_spec_object(
+		"relative-to", "Relative widget", "Set the relative widget",
+		GTK_TYPE_WIDGET, G_PARAM_READWRITE);
 
 	/**
 	 * BudgiePopover:position-policy:
 	 *
 	 * Control the behavior used to place the popover on screen.
 	 */
-	obj_properties[PROP_POLICY] = g_param_spec_enum("position-policy",
-													"Positioning policy",
-													"Get/set the popover position policy",
-													BUDGIE_TYPE_POPOVER_POSITION_POLICY,
-													BUDGIE_POPOVER_POSITION_AUTOMATIC,
-													G_PARAM_READWRITE);
+	obj_properties[PROP_POLICY] = g_param_spec_enum(
+		"position-policy", "Positioning policy", "Get/set the popover position policy",
+		BUDGIE_TYPE_POPOVER_POSITION_POLICY, BUDGIE_POPOVER_POSITION_AUTOMATIC, G_PARAM_READWRITE);
 
 	g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
 }
@@ -285,7 +275,7 @@ static void budgie_popover_init(BudgiePopover* self) {
 
 static void budgie_popover_map(GtkWidget* widget) {
 	GdkWindow* window = NULL;
-	GdkRectangle coords = { 0 };
+	GdkRectangle coords = {0};
 	BudgiePopover* self = NULL;
 
 	self = BUDGIE_POPOVER(widget);
@@ -328,9 +318,8 @@ static void budgie_popover_unmap(GtkWidget* widget) {
  * Upon having our contents resize us, i.e. a #GtkStack or #GtkRevealer, we
  * re-calculate our position to ensure we resize in the right direction.
  */
-static void budgie_popover_size_allocate(GtkWidget* widget, __budgie_unused__ GdkRectangle* rectangle,
-										 __budgie_unused__ gpointer udata) {
-	GdkRectangle coords = { 0 };
+static void budgie_popover_size_allocate(GtkWidget* widget, __budgie_unused__ GdkRectangle* rectangle, __budgie_unused__ gpointer udata) {
+	GdkRectangle coords = {0};
 	BudgiePopover* self = NULL;
 	GdkWindow* window = NULL;
 
@@ -388,8 +377,7 @@ static GtkPositionType budgie_popover_select_position_toplevel(BudgiePopover* se
  * The side options will also utilise Y-offsets and bounding to ensure there
  * is always some way to fit the popover sanely on screen.
  */
-static GtkPositionType budgie_popover_select_position_automatic(gint our_height, GdkRectangle screen_rect,
-																GdkRectangle widget_rect) {
+static GtkPositionType budgie_popover_select_position_automatic(gint our_height, GdkRectangle screen_rect, GdkRectangle widget_rect) {
 	/* Try to show the popover underneath */
 	if (widget_rect.y + widget_rect.height + TAIL_HEIGHT + SHADOW_DIMENSION + our_height <=
 		screen_rect.y + screen_rect.height) {
@@ -420,7 +408,7 @@ static GtkPositionType budgie_popover_select_position_automatic(gint our_height,
 static void budgie_popover_update_position_hints(BudgiePopover* self) {
 	GtkStyleContext* style = NULL;
 	const gchar* style_class = NULL;
-	static const gchar* position_classes[] = { "top", "left", "right", "bottom" };
+	static const gchar* position_classes[] = {"top", "left", "right", "bottom"};
 
 	/* Allow themers to know what kind of popover this is, and set the
 	 * CSS class in accordance with the direction that the popover is
@@ -433,58 +421,47 @@ static void budgie_popover_update_position_hints(BudgiePopover* self) {
 
 	switch (self->priv->tail.position) {
 		case GTK_POS_BOTTOM:
-			g_object_set(self->priv->add_area,
-						 "margin-top",
-						 5,
-						 "margin-bottom",
-						 13,
-						 "margin-start",
-						 5,
-						 "margin-end",
-						 5,
-						 NULL);
+			g_object_set(
+				self->priv->add_area,
+				"margin-top", 5,
+				"margin-bottom", 13,
+				"margin-start", 5,
+				"margin-end", 5,
+				NULL);
 			style_class = "bottom";
 			break;
 		case GTK_POS_TOP:
-			g_object_set(self->priv->add_area,
-						 "margin-top",
-						 9,
-						 "margin-bottom",
-						 9,
-						 "margin-start",
-						 5,
-						 "margin-end",
-						 5,
-						 NULL);
+			g_object_set(
+				self->priv->add_area,
+				"margin-top", 9,
+				"margin-bottom", 9,
+				"margin-start", 5,
+				"margin-end", 5,
+				NULL);
 			style_class = "top";
 			break;
 		case GTK_POS_LEFT:
-			g_object_set(self->priv->add_area,
-						 "margin-top",
-						 5,
-						 "margin-bottom",
-						 9,
-						 "margin-start",
-						 13,
-						 "margin-end",
-						 5,
-						 NULL);
+			g_object_set(
+				self->priv->add_area,
+				"margin-top", 5,
+				"margin-bottom", 9,
+				"margin-start", 13,
+				"margin-end", 5,
+				NULL);
 			style_class = "left";
 			break;
 		case GTK_POS_RIGHT:
-			g_object_set(self->priv->add_area,
-						 "margin-top",
-						 5,
-						 "margin-bottom",
-						 9,
-						 "margin-start",
-						 5,
-						 "margin-end",
-						 13,
-						 NULL);
+			g_object_set(
+				self->priv->add_area,
+				"margin-top", 5,
+				"margin-bottom", 9,
+				"margin-start", 5,
+				"margin-end", 13,
+				NULL);
 			style_class = "right";
 			break;
-		default: break;
+		default:
+			break;
 	}
 
 	gtk_style_context_add_class(style, style_class);
@@ -497,11 +474,11 @@ static void budgie_popover_update_position_hints(BudgiePopover* self) {
  * on the screen.
  */
 static void budgie_popover_compute_widget_geometry(BudgiePopover* self) {
-	GtkAllocation alloc = { 0 };
+	GtkAllocation alloc = {0};
 	GtkWidget* toplevel = NULL;
 	gint rx, ry = 0;
 	gint x, y = 0;
-	GdkRectangle display_geom = { 0 };
+	GdkRectangle display_geom = {0};
 	gint our_height = 0, our_width = 0;
 	GtkPositionType tail_position = GTK_POS_TOP;
 
@@ -518,7 +495,7 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover* self) {
 	gtk_widget_translate_coordinates(self->priv->relative_to, toplevel, x, y, &rx, &ry);
 	gtk_widget_get_allocation(self->priv->relative_to, &alloc);
 
-	self->priv->widget_rect = (GdkRectangle){ .x = rx, .y = ry, .width = alloc.width, .height = alloc.height };
+	self->priv->widget_rect = (GdkRectangle){.x = rx, .y = ry, .width = alloc.width, .height = alloc.height};
 
 	/* Determine our position now based on the widget's geometry and our own */
 	if (self->priv->policy == BUDGIE_POPOVER_POSITION_TOPLEVEL_HINT) {
@@ -577,8 +554,8 @@ static void budgie_popover_compute_positition(BudgiePopover* self, GdkRectangle*
 	GtkPositionType tail_position = GTK_POS_BOTTOM;
 	gint our_width = 0, our_height = 0;
 	int x = 0, y = 0, width = 0, height = 0;
-	GdkRectangle display_geom = { 0 };
-	GdkRectangle widget_rect = { 0 };
+	GdkRectangle display_geom = {0};
+	GdkRectangle widget_rect = {0};
 
 	/* Work out our own size */
 	gtk_window_get_size(GTK_WINDOW(self), &our_width, &our_height);
@@ -611,7 +588,8 @@ static void budgie_popover_compute_positition(BudgiePopover* self, GdkRectangle*
 			y = (widget_rect.y + (widget_rect.height / 2)) - (our_height / 2);
 			x = widget_rect.x - our_width;
 			break;
-		default: break;
+		default:
+			break;
 	}
 
 	static int pad_num = 1;
@@ -654,12 +632,12 @@ static void budgie_popover_compute_positition(BudgiePopover* self, GdkRectangle*
 	}
 
 	/* Set the target rectangle */
-	*target = (GdkRectangle){ .x = x, .y = y, .width = width, .height = height };
+	*target = (GdkRectangle){.x = x, .y = y, .width = width, .height = height};
 }
 
 static void budgie_popover_compute_tail(BudgiePopover* self) {
-	GtkAllocation alloc = { 0 };
-	BudgieTail t = { 0 };
+	GtkAllocation alloc = {0};
+	BudgieTail t = {0};
 
 	gtk_widget_get_allocation(GTK_WIDGET(self), &alloc);
 
@@ -723,13 +701,13 @@ static void budgie_popover_draw_tail(BudgiePopover* self, cairo_t* cr) {
  */
 static gboolean budgie_popover_draw(GtkWidget* widget, cairo_t* cr) {
 	GtkStyleContext* style = NULL;
-	GtkAllocation alloc = { 0 };
-	GdkRGBA border_color = { 0 };
-	GtkBorder border = { 0 };
+	GtkAllocation alloc = {0};
+	GdkRGBA border_color = {0};
+	GtkBorder border = {0};
 	GtkStateFlags fl;
 	BudgiePopover* self = NULL;
 	BudgieTail* tail = NULL;
-	GtkAllocation body_alloc = { 0 };
+	GtkAllocation body_alloc = {0};
 	GtkWidget* child = NULL;
 
 	self = BUDGIE_POPOVER(widget);
@@ -791,15 +769,13 @@ static gboolean budgie_popover_draw(GtkWidget* widget, cairo_t* cr) {
 	gtk_style_context_get_border(style, fl, &border);
 	gtk_render_background(style, cr, body_alloc.x, body_alloc.y, body_alloc.width, body_alloc.height);
 
-	gtk_render_frame_gap(style,
-						 cr,
-						 body_alloc.x,
-						 body_alloc.y,
-						 body_alloc.width,
-						 body_alloc.height,
-						 self->priv->tail.position,
-						 gap_start,
-						 gap_end);
+	gtk_render_frame_gap(
+		style, cr,
+		body_alloc.x, body_alloc.y,
+		body_alloc.width, body_alloc.height,
+		self->priv->tail.position,
+		gap_start,
+		gap_end);
 	gtk_style_context_set_state(style, fl);
 
 	cairo_save(cr);
@@ -843,8 +819,7 @@ static gboolean budgie_popover_hide_self(gpointer v) {
  *
  * If the mouse button is pressed outside of our window, that's our cue to close.
  */
-static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* button,
-											__budgie_unused__ gpointer udata) {
+static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* button, __budgie_unused__ gpointer udata) {
 	gint x, y = 0;
 	gint w, h = 0;
 	gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
@@ -875,8 +850,11 @@ static gboolean budgie_popover_key_press(GtkWidget* widget, GdkEventKey* key, __
 	switch (key->keyval) {
 		case GDK_KEY_Escape:
 		case GDK_KEY_Super_L:
-		case GDK_KEY_Super_R: gtk_widget_hide(widget); return GDK_EVENT_STOP;
-		default: return GDK_EVENT_PROPAGATE;
+		case GDK_KEY_Super_R:
+			gtk_widget_hide(widget);
+			return GDK_EVENT_STOP;
+		default:
+			return GDK_EVENT_PROPAGATE;
 	}
 }
 
@@ -904,8 +882,12 @@ static void budgie_popover_set_property(GObject* object, guint id, const GValue*
 				budgie_popover_compute_tail(self);
 			}
 			break;
-		case PROP_POLICY: self->priv->policy = g_value_get_enum(value); break;
-		default: G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec); break;
+		case PROP_POLICY:
+			self->priv->policy = g_value_get_enum(value);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+			break;
 	}
 }
 
@@ -913,9 +895,15 @@ static void budgie_popover_get_property(GObject* object, guint id, GValue* value
 	BudgiePopover* self = BUDGIE_POPOVER(object);
 
 	switch (id) {
-		case PROP_RELATIVE_TO: g_value_set_object(value, self->priv->relative_to); break;
-		case PROP_POLICY: g_value_set_enum(value, self->priv->policy); break;
-		default: G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec); break;
+		case PROP_RELATIVE_TO:
+			g_value_set_object(value, self->priv->relative_to);
+			break;
+		case PROP_POLICY:
+			g_value_set_enum(value, self->priv->policy);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+			break;
 	}
 }
 

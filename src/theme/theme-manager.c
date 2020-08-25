@@ -76,20 +76,13 @@ static void budgie_theme_manager_init(BudgieThemeManager* self) {
 	self->builtin_enabled = g_settings_get_boolean(self->desktop_settings, "builtin-theme");
 
 	/* Update whether we can use the builtin theme or not */
-	g_signal_connect_swapped(self->desktop_settings,
-							 "changed::builtin-theme",
-							 G_CALLBACK(budgie_theme_manager_builtin_changed),
-							 self);
+	g_signal_connect_swapped(self->desktop_settings, "changed::builtin-theme", G_CALLBACK(budgie_theme_manager_builtin_changed), self);
 
 	settings = gtk_settings_get_default();
 	g_signal_connect_swapped(settings, "notify::gtk-theme-name", G_CALLBACK(budgie_theme_manager_theme_changed), self);
 
 	/* Bind the dark-theme option for the whole process */
-	g_settings_bind(self->desktop_settings,
-					"dark-theme",
-					settings,
-					"gtk-application-prefer-dark-theme",
-					G_SETTINGS_BIND_GET);
+	g_settings_bind(self->desktop_settings, "dark-theme", settings, "gtk-application-prefer-dark-theme", G_SETTINGS_BIND_GET);
 
 	/* Trigger theme changed */
 	budgie_theme_manager_theme_changed(self, NULL, settings);
@@ -147,14 +140,11 @@ remove_provider:
 		return;
 	}
 	/* Set the style globally */
-	gtk_style_context_add_provider_for_screen(screen,
-											  GTK_STYLE_PROVIDER(css_provider),
-											  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	self->css_provider = css_provider;
 }
 
-static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop,
-											   GtkSettings* settings) {
+static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GtkSettings* settings) {
 	gchar* theme_name = NULL;
 	const gchar* theme_css = NULL;
 

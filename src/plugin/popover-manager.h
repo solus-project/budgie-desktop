@@ -34,11 +34,9 @@ struct _BudgiePopoverManager {
 #define BUDGIE_TYPE_POPOVER_MANAGER budgie_popover_manager_get_type()
 #define BUDGIE_POPOVER_MANAGER(o) (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManager))
 #define BUDGIE_IS_POPOVER_MANAGER(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_POPOVER_MANAGER))
-#define BUDGIE_POPOVER_MANAGER_CLASS(o)                                                                                \
-	(G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManagerClass))
+#define BUDGIE_POPOVER_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManagerClass))
 #define BUDGIE_IS_POPOVER_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_POPOVER_MANAGER))
-#define BUDGIE_POPOVER_MANAGER_GET_CLASS(o)                                                                            \
-	(G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManagerClass))
+#define BUDGIE_POPOVER_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManagerClass))
 
 BudgiePopoverManager* budgie_popover_manager_new(void);
 
@@ -47,8 +45,7 @@ GType budgie_popover_manager_get_type(void);
 /*
  * API Methods follow
  */
-void budgie_popover_manager_register_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget,
-											 BudgiePopover* popover);
+void budgie_popover_manager_register_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget, BudgiePopover* popover);
 void budgie_popover_manager_unregister_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
 void budgie_popover_manager_show_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
 

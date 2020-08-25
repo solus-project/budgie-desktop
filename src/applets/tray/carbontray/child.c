@@ -95,11 +95,11 @@ void carbon_child_draw_on_tray(CarbonChild* self, GtkWidget* parent, cairo_t* cr
 	g_return_if_fail(parent != NULL);
 	g_return_if_fail(cr != NULL);
 
-	GtkAllocation allocation = { 0 };
+	GtkAllocation allocation = {0};
 	gtk_widget_get_allocation(GTK_WIDGET(self), &allocation);
 
 	if (!gtk_widget_get_has_window(GTK_WIDGET(parent))) {
-		GtkAllocation parentAllocation = { 0 };
+		GtkAllocation parentAllocation = {0};
 		gtk_widget_get_allocation(GTK_WIDGET(parent), &parentAllocation);
 
 		allocation.x = allocation.x - parentAllocation.x;

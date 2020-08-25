@@ -49,8 +49,7 @@ struct _BudgieAppletInfo {
 	BudgieAppletInfoPrivate* priv;
 };
 
-BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char* uuid, BudgieApplet* applet,
-										 GSettings* settings);
+BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char* uuid, BudgieApplet* applet, GSettings* settings);
 
 GType budgie_applet_info_get_type(void);
 

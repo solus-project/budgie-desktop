@@ -18,6 +18,7 @@ gchar* budgie_form_theme_path(const gchar* suffix) {
 
 	switch (minor_version) {
 		case 20:
-		default: return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
+		default:
+			return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
 	}
 }
