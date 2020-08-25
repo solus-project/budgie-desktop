@@ -25,21 +25,19 @@ typedef struct _BudgiePluginIface BudgiePluginIface;
 #define BUDGIE_TYPE_PLUGIN (budgie_plugin_get_type())
 #define BUDGIE_PLUGIN(o) (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_PLUGIN, BudgiePlugin))
 #define BUDGIE_IS_PLUGIN(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_PLUGIN))
-#define BUDGIE_PLUGIN_IFACE(o)                                                                     \
-        (G_TYPE_CHECK_INTERFACE_CAST((o), BUDGIE_TYPE_PLUGIN, BudgiePluginIface))
+#define BUDGIE_PLUGIN_IFACE(o) (G_TYPE_CHECK_INTERFACE_CAST((o), BUDGIE_TYPE_PLUGIN, BudgiePluginIface))
 #define BUDGIE_IS_PLUGIN_IFACE(o) (G_TYPE_CHECK_INTERFACE_TYPE((o), BUDGIE_TYPE_PLUGIN))
-#define BUDGIE_PLUGIN_GET_IFACE(o)                                                                 \
-        (G_TYPE_INSTANCE_GET_INTERFACE((o), BUDGIE_TYPE_PLUGIN, BudgiePluginIface))
+#define BUDGIE_PLUGIN_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE((o), BUDGIE_TYPE_PLUGIN, BudgiePluginIface))
 
 /**
  * BudgiePluginIface
  */
 struct _BudgiePluginIface {
-        GTypeInterface parent_iface;
+	GTypeInterface parent_iface;
 
-        BudgieApplet *(*get_panel_widget)(BudgiePlugin *self, gchar *uuid);
+	BudgieApplet *(*get_panel_widget)(BudgiePlugin *self, gchar *uuid);
 
-        gpointer padding[4];
+	gpointer padding[4];
 };
 
 BudgieApplet *budgie_plugin_get_panel_widget(BudgiePlugin *self, gchar *uuid);

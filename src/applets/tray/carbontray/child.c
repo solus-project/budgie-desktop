@@ -9,7 +9,7 @@
  * (at your option) any later version.
  *
  * This file's contents largely use xfce4-panel as a reference, which is licensed under the terms of the GNU GPL v2.
- * Additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop 
+ * Additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop
  * and licensed under the terms of the GNU GPL v2.
  */
 
@@ -18,11 +18,11 @@
 
 // static method header
 
-static void carbon_child_init(CarbonChild*);
-static void carbon_child_realize(GtkWidget*);
-static void carbon_child_get_preferred_width(GtkWidget*, int*, int*);
-static void carbon_child_get_preferred_height(GtkWidget*, int*, int*);
-static void set_wmclass(CarbonChild*, Display*);
+static void carbon_child_init(CarbonChild *);
+static void carbon_child_realize(GtkWidget *);
+static void carbon_child_get_preferred_width(GtkWidget *, int *, int *);
+static void carbon_child_get_preferred_height(GtkWidget *, int *, int *);
+static void set_wmclass(CarbonChild *, Display *);
 
 
 
@@ -34,7 +34,7 @@ G_DEFINE_TYPE(CarbonChild, carbon_child, GTK_TYPE_SOCKET)
 
 // public method implementations
 
-CarbonChild* carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
+CarbonChild *carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 	if (GDK_IS_SCREEN(screen) == FALSE) {
 		g_warning("No screen to place tray icon onto");
 		return NULL;
@@ -68,7 +68,7 @@ CarbonChild* carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 		return NULL;
 
 	CarbonChild *self = g_object_new(CARBON_TYPE_CHILD, NULL);
-    self->preferredWidth = size;
+	self->preferredWidth = size;
 	self->preferredHeight = size;
 	self->iconWindow = iconWindow;
 	self->isComposited = FALSE;
@@ -87,7 +87,7 @@ CarbonChild* carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 	self->wmclass = NULL;
 	set_wmclass(self, xdisplay);
 
-  	return self;
+	return self;
 }
 
 void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr) {
@@ -95,11 +95,11 @@ void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr
 	g_return_if_fail(parent != NULL);
 	g_return_if_fail(cr != NULL);
 
-    GtkAllocation allocation = {0};
+	GtkAllocation allocation = { 0 };
 	gtk_widget_get_allocation(GTK_WIDGET(self), &allocation);
 
 	if (!gtk_widget_get_has_window(GTK_WIDGET(parent))) {
-		GtkAllocation parentAllocation = {0};
+		GtkAllocation parentAllocation = { 0 };
 		gtk_widget_get_allocation(GTK_WIDGET(parent), &parentAllocation);
 
 		allocation.x = allocation.x - parentAllocation.x;
@@ -119,7 +119,7 @@ void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr
 // static method implementations
 
 static void carbon_child_init(CarbonChild *self) {
-    GtkWidget *widget = GTK_WIDGET(self);
+	GtkWidget *widget = GTK_WIDGET(self);
 
 	gtk_widget_set_halign(widget, GTK_ALIGN_CENTER);
 	gtk_widget_set_valign(widget, GTK_ALIGN_CENTER);
@@ -150,26 +150,26 @@ static void carbon_child_realize(GtkWidget *widget) {
 
 static void carbon_child_get_preferred_width(GtkWidget *base, int *minimum_width, int *natural_width) {
 	CarbonChild *self = CARBON_CHILD(base);
-    int scale = gtk_widget_get_scale_factor(base);
+	int scale = gtk_widget_get_scale_factor(base);
 
-    *minimum_width = self->preferredWidth / scale;
-    *natural_width = self->preferredWidth / scale;
+	*minimum_width = self->preferredWidth / scale;
+	*natural_width = self->preferredWidth / scale;
 }
 
 static void carbon_child_get_preferred_height(GtkWidget *base, int *minimum_height, int *natural_height) {
 	CarbonChild *self = CARBON_CHILD(base);
-    int scale = gtk_widget_get_scale_factor(base);
+	int scale = gtk_widget_get_scale_factor(base);
 
-    *minimum_height = self->preferredHeight / scale;
-    *natural_height = self->preferredHeight / scale;
+	*minimum_height = self->preferredHeight / scale;
+	*natural_height = self->preferredHeight / scale;
 }
 
 static void carbon_child_class_init(CarbonChildClass *klass) {
-    GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
+	GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
 	gtkwidget_class->get_preferred_width = carbon_child_get_preferred_width;
 	gtkwidget_class->get_preferred_height = carbon_child_get_preferred_height;
-    gtkwidget_class->realize = carbon_child_realize;
+	gtkwidget_class->realize = carbon_child_realize;
 }
 
 static void set_wmclass(CarbonChild *self, Display *xdisplay) {

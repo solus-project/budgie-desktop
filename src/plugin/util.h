@@ -22,9 +22,8 @@
  *
  * This provides a quick useful macro to wrap around the inclusion of GTK/GLib header files
  */
-#define _BUDGIE_BEGIN_PEDANTIC(COMP)                                                               \
-        _Pragma(_STRINGIFY(COMP diagnostic push))                                                  \
-            _Pragma(_STRINGIFY(COMP diagnostic ignored "-Wpedantic"))
+#define _BUDGIE_BEGIN_PEDANTIC(COMP)                                                                                   \
+	_Pragma(_STRINGIFY(COMP diagnostic push)) _Pragma(_STRINGIFY(COMP diagnostic ignored "-Wpedantic"))
 
 /**
  * End the includes block, i.e. by popping the diagnostic once more

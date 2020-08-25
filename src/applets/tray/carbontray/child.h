@@ -37,14 +37,14 @@ typedef struct _CarbonChildClass {
 
 #define CARBON_TYPE_CHILD (carbon_child_get_type())
 #define CARBON_CHILD(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), CARBON_TYPE_CHILD, CarbonChild))
-#define CARBON_IS_CHILD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CARBON_TYPE_CHILD))
+#define CARBON_IS_CHILD(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), CARBON_TYPE_CHILD))
 
 
 
 GType carbon_child_get_type(void);
 
-CarbonChild* carbon_child_new(int, GdkScreen*, Window);
+CarbonChild *carbon_child_new(int, GdkScreen *, Window);
 
-void carbon_child_draw_on_tray(CarbonChild*, GtkWidget*, cairo_t*);
+void carbon_child_draw_on_tray(CarbonChild *, GtkWidget *, cairo_t *);
 
 #endif

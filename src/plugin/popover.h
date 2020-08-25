@@ -25,17 +25,17 @@ typedef struct _BudgiePopoverPrivate BudgiePopoverPrivate;
  * @closed: Virtual closed signal
  */
 struct _BudgiePopoverClass {
-        GtkWindowClass parent_class;
+	GtkWindowClass parent_class;
 
-        /* Marked for gtk-doc syntax */
-        void (*closed)(BudgiePopover *popover);
+	/* Marked for gtk-doc syntax */
+	void (*closed)(BudgiePopover *popover);
 
-        gpointer padding[12];
+	gpointer padding[12];
 };
 
 struct _BudgiePopover {
-        GtkWindow parent;
-        BudgiePopoverPrivate *priv;
+	GtkWindow parent;
+	BudgiePopoverPrivate *priv;
 };
 
 /**
@@ -53,18 +53,16 @@ struct _BudgiePopover {
  * in accordance with the screen edge, i.e. top, left, bottom, right.
  */
 typedef enum {
-        BUDGIE_POPOVER_POSITION_AUTOMATIC = 0,
-        BUDGIE_POPOVER_POSITION_TOPLEVEL_HINT,
+	BUDGIE_POPOVER_POSITION_AUTOMATIC = 0,
+	BUDGIE_POPOVER_POSITION_TOPLEVEL_HINT,
 } BudgiePopoverPositionPolicy;
 
 #define BUDGIE_TYPE_POPOVER budgie_popover_get_type()
 #define BUDGIE_POPOVER(o) (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_POPOVER, BudgiePopover))
 #define BUDGIE_IS_POPOVER(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_POPOVER))
-#define BUDGIE_POPOVER_CLASS(o)                                                                    \
-        (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_POPOVER, BudgiePopoverClass))
+#define BUDGIE_POPOVER_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_POPOVER, BudgiePopoverClass))
 #define BUDGIE_IS_POPOVER_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_POPOVER))
-#define BUDGIE_POPOVER_GET_CLASS(o)                                                                \
-        (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER, BudgiePopoverClass))
+#define BUDGIE_POPOVER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER, BudgiePopoverClass))
 
 /*
  * API Methods

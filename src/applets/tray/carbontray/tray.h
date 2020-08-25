@@ -12,11 +12,11 @@
 #ifndef __CARBON_TRAY_H__
 #define __CARBON_TRAY_H__
 
+#include "child.h"
+#include <X11/Xatom.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
-#include <X11/Xatom.h>
 #include <stdbool.h>
-#include "child.h"
 
 typedef struct {
 	GObject parent_instance;
@@ -40,14 +40,14 @@ typedef struct {
 } CarbonTrayClass;
 
 typedef struct {
-    char *string;
+	char *string;
 
-    long id;
-    long length;
-    long remainingLength;
-    long timeout;
+	long id;
+	long length;
+	long remainingLength;
+	long timeout;
 
-    Window window;
+	Window window;
 } CarbonMessage;
 
 typedef struct {
@@ -66,18 +66,18 @@ typedef struct {
 
 GType carbon_tray_get_type(void);
 
-CarbonTray* carbon_tray_new(GtkOrientation, int, int);
+CarbonTray *carbon_tray_new(GtkOrientation, int, int);
 
-void carbon_tray_add_to_container(CarbonTray*, GtkContainer*);
+void carbon_tray_add_to_container(CarbonTray *, GtkContainer *);
 
-void carbon_tray_remove_from_container(CarbonTray*, GtkContainer*);
+void carbon_tray_remove_from_container(CarbonTray *, GtkContainer *);
 
-bool carbon_tray_register(CarbonTray*, GdkScreen*);
+bool carbon_tray_register(CarbonTray *, GdkScreen *);
 
-void carbon_tray_unregister(CarbonTray*);
+void carbon_tray_unregister(CarbonTray *);
 
-void carbon_tray_set_spacing(CarbonTray*, int spacing);
+void carbon_tray_set_spacing(CarbonTray *, int spacing);
 
-void carbon_tray_unref(CarbonTray*);
+void carbon_tray_unref(CarbonTray *);
 
 #endif

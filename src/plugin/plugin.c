@@ -52,8 +52,7 @@ typedef BudgiePluginIface BudgiePluginInterface;
 
 G_DEFINE_INTERFACE(BudgiePlugin, budgie_plugin, G_TYPE_OBJECT)
 
-static void budgie_plugin_default_init(__attribute__((unused)) BudgiePluginIface *iface)
-{
+static void budgie_plugin_default_init(__attribute__((unused)) BudgiePluginIface *iface) {
 }
 
 /**
@@ -63,10 +62,9 @@ static void budgie_plugin_default_init(__attribute__((unused)) BudgiePluginIface
  *
  * Returns: (transfer full): A newly initialised panel widget
  */
-BudgieApplet *budgie_plugin_get_panel_widget(BudgiePlugin *self, gchar *uuid)
-{
-        if (!self) {
-                return NULL;
-        }
-        return BUDGIE_PLUGIN_GET_IFACE(self)->get_panel_widget(self, uuid);
+BudgieApplet *budgie_plugin_get_panel_widget(BudgiePlugin *self, gchar *uuid) {
+	if (!self) {
+		return NULL;
+	}
+	return BUDGIE_PLUGIN_GET_IFACE(self)->get_panel_widget(self, uuid);
 }
