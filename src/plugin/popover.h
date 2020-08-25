@@ -76,16 +76,3 @@ BudgiePopoverPositionPolicy budgie_popover_get_position_policy(BudgiePopover* po
 GType budgie_popover_get_type(void);
 
 G_END_DECLS
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 8
- * tab-width: 8
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=8 tabstop=8 expandtab:
- * :indentSize=8:tabSize=8:noTabs=true:
- */

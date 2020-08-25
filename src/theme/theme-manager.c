@@ -177,16 +177,3 @@ static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const
 	/* Update now based on whether we can use the built-in */
 	budgie_theme_manager_theme_changed(self, NULL, gtk_settings_get_default());
 }
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 8
- * tab-width: 8
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=8 tabstop=8 expandtab:
- * :indentSize=8:tabSize=8:noTabs=true:
- */
