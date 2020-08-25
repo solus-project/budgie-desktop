@@ -1,44 +1,27 @@
-namespace Caffeine
-{
+namespace Caffeine {
+	[GtkTemplate (ui = "/com/solus-project/caffeine/settings.ui")]
+	public class AppletSettings : Gtk.Grid {
+		private Settings? settings = null;
+		private Settings? wm_settings = null;
 
-[GtkTemplate (ui = "/com/solus-project/caffeine/settings.ui")]
-public class AppletSettings : Gtk.Grid
-{
-    private Settings? settings = null;
-    private Settings? wm_settings = null;
+		[GtkChild]
+		private Gtk.Switch? notify_switch;
 
-    [GtkChild]
-    private Gtk.Switch? notify_switch;
+		[GtkChild]
+		private Gtk.Switch? brightness_switch;
 
-    [GtkChild]
-    private Gtk.Switch? brightness_switch;
+		[GtkChild]
+		private Gtk.SpinButton? brightness_level;
 
-    [GtkChild]
-    private Gtk.SpinButton? brightness_level;
+		public AppletSettings(Settings? settings) {
+			Object();
+			this.settings = settings;
+			this.wm_settings = new Settings("com.solus-project.budgie-wm");
 
-    public AppletSettings(Settings? settings)
-    {
-        Object();
-        this.settings = settings;
-        this.wm_settings = new Settings("com.solus-project.budgie-wm");
-
-        // Bind settings to widget value
-        wm_settings.bind("caffeine-mode-notification", notify_switch, "active", SettingsBindFlags.DEFAULT);
-        wm_settings.bind("caffeine-mode-toggle-brightness", brightness_switch, "active", SettingsBindFlags.DEFAULT);
-        wm_settings.bind("caffeine-mode-screen-brightness", brightness_level, "value", SettingsBindFlags.DEFAULT);
-    }
+			// Bind settings to widget value
+			wm_settings.bind("caffeine-mode-notification", notify_switch, "active", SettingsBindFlags.DEFAULT);
+			wm_settings.bind("caffeine-mode-toggle-brightness", brightness_switch, "active", SettingsBindFlags.DEFAULT);
+			wm_settings.bind("caffeine-mode-screen-brightness", brightness_level, "value", SettingsBindFlags.DEFAULT);
+		}
+	}
 }
-} //End namespace
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */

@@ -15,17 +15,14 @@ const int BACKGROUND_SIZE = 250;
  * A fancier Gtk.Image, which forces a fade-effect across the bottom of the image
  * making it easier to use/see the overlayed playback controls within the ClientWidget
  */
-public class ClientImage : Gtk.Image
-{
-    public ClientImage.from_pixbuf(Gdk.Pixbuf pbuf)
-    {
-        Object(pixbuf: pbuf);
-    }
+public class ClientImage : Gtk.Image {
+	public ClientImage.from_pixbuf(Gdk.Pixbuf pbuf) {
+		Object(pixbuf: pbuf);
+	}
 
-    public ClientImage.from_icon_name(string icon_name, Gtk.IconSize size)
-    {
-        Object(icon_name : icon_name, icon_size: size);
-    }
+	public ClientImage.from_icon_name(string icon_name, Gtk.IconSize size) {
+		Object(icon_name : icon_name, icon_size: size);
+	}
 }
 
 /**
@@ -34,361 +31,349 @@ public class ClientImage : Gtk.Image
  * It is "designed" to be self contained and added to a large UI, enabling multiple
  * MPRIS clients to be controlled with multiple widgets
  */
-public class ClientWidget : Gtk.Box
-{
-    Budgie.RavenExpander player_revealer;
-    Gtk.Image background;
-    Gtk.EventBox background_wrap;
-    MprisClient client;
-    Gtk.Label title_label;
-    Gtk.Label artist_label;
-    Gtk.Label album_label;
-    Gtk.Button prev_btn;
-    Gtk.Button play_btn;
-    Gtk.Button next_btn;
-    string filename = "";
-    GLib.Cancellable? cancel;
+public class ClientWidget : Gtk.Box {
+	Budgie.RavenExpander player_revealer;
+	Gtk.Image background;
+	Gtk.EventBox background_wrap;
+	MprisClient client;
+	Gtk.Label title_label;
+	Gtk.Label artist_label;
+	Gtk.Label album_label;
+	Gtk.Button prev_btn;
+	Gtk.Button play_btn;
+	Gtk.Button next_btn;
+	string filename = "";
+	GLib.Cancellable? cancel;
 
-    int our_width = BACKGROUND_SIZE;
+	int our_width = BACKGROUND_SIZE;
 
-    Budgie.HeaderWidget? header = null;
+	Budgie.HeaderWidget? header = null;
 
-    /**
-     * Create a new ClientWidget
-     *
-     * @param client The underlying MprisClient instance to use
-     */
-    public ClientWidget(MprisClient client, int width)
-    {
-        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
-        Gtk.Widget? row = null;
-        cancel = new GLib.Cancellable();
+	/**
+	 * Create a new ClientWidget
+	 *
+	 * @param client The underlying MprisClient instance to use
+	 */
+	public ClientWidget(MprisClient client, int width) {
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+		Gtk.Widget? row = null;
+		cancel = new GLib.Cancellable();
 
-        our_width = width;
+		our_width = width;
 
-        this.client = client;
+		this.client = client;
 
-        /* Set up our header widget */
-        header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
-        header.closed.connect(()=> {
-            if (client.player.can_quit) {
-                client.player.quit.begin((obj, res) => {
-                    try {
-                        try {
-                            client.player.quit.end(res);
-                        } catch (IOError e) {
-                            warning("Error closing %s: %s", client.player.identity, e.message);
-                        }
-                    } catch (DBusError e) {
-                        warning("Error closing %s: %s", client.player.identity, e.message);
-                    }
-                });
-            }
-        });
+		/* Set up our header widget */
+		header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
+		header.closed.connect(()=> {
+			if (client.player.can_quit) {
+				client.player.quit.begin((obj, res) => {
+					try {
+						try {
+							client.player.quit.end(res);
+						} catch (IOError e) {
+							warning("Error closing %s: %s", client.player.identity, e.message);
+						}
+					} catch (DBusError e) {
+						warning("Error closing %s: %s", client.player.identity, e.message);
+					}
+				});
+			}
+		});
 
-        player_revealer = new Budgie.RavenExpander(header);
-        player_revealer.expanded = true;
-        var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		player_revealer = new Budgie.RavenExpander(header);
+		player_revealer.expanded = true;
+		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-        header.can_close = client.player.can_quit;
+		header.can_close = client.player.can_quit;
 
-        background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-        background.pixel_size = our_width;
-        background_wrap = new Gtk.EventBox();
-        background_wrap.add(background);
-        background_wrap.button_release_event.connect(this.on_raise_player);
+		background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+		background.pixel_size = our_width;
+		background_wrap = new Gtk.EventBox();
+		background_wrap.add(background);
+		background_wrap.button_release_event.connect(this.on_raise_player);
 
-        var layout = new Gtk.Overlay();
-        player_box.pack_start(layout, true, true, 0);
+		var layout = new Gtk.Overlay();
+		player_box.pack_start(layout, true, true, 0);
 
-        layout.add(background_wrap);
+		layout.add(background_wrap);
 
-        /* normal info */
-        var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        top_box.valign = Gtk.Align.END;
-        top_box.get_style_context().add_class("raven-mpris");
+		/* normal info */
+		var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		top_box.valign = Gtk.Align.END;
+		top_box.get_style_context().add_class("raven-mpris");
 
-        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
-        box.margin = 6;
-        box.margin_top = 12;
-        top_box.pack_start(box, true, true, 0);
+		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
+		box.margin = 6;
+		box.margin_top = 12;
+		top_box.pack_start(box, true, true, 0);
 
 
-        var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        controls.get_style_context().add_class("raven-mpris-controls");
+		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		controls.get_style_context().add_class("raven-mpris-controls");
 
-        row = create_row("Unknown Artist", "user-info-symbolic");
-        artist_label = row.get_data("label_item");
-        box.pack_start(row, false, false, 0);
-        row = create_row("Unknown Title", "emblem-music-symbolic");
-        title_label = row.get_data("label_item");
-        box.pack_start(row, false, false, 0);
-        row = create_row("Unknown Album", "media-optical-symbolic");
-        album_label = row.get_data("label_item");
-        box.pack_start(row, false, false, 0);
+		row = create_row("Unknown Artist", "user-info-symbolic");
+		artist_label = row.get_data("label_item");
+		box.pack_start(row, false, false, 0);
+		row = create_row("Unknown Title", "emblem-music-symbolic");
+		title_label = row.get_data("label_item");
+		box.pack_start(row, false, false, 0);
+		row = create_row("Unknown Album", "media-optical-symbolic");
+		album_label = row.get_data("label_item");
+		box.pack_start(row, false, false, 0);
 
-        box.pack_start(controls, false, false, 0);
-
-
-        var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-        btn.set_sensitive(false);
-        btn.set_can_focus(false);
-        prev_btn = btn;
-        btn.clicked.connect(()=> {
-            if (client.player.can_go_previous) {
-                try { 
-                    client.player.previous.begin();
-                } catch (Error e) {
-                    warning("Could not go to previous track: %s", e.message);
-                }
-            }
-        });
-        btn.get_style_context().add_class("flat");
-        controls.pack_start(btn, false, false, 0);
-
-        btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-        play_btn = btn;
-        btn.set_can_focus(false);
-        btn.clicked.connect(()=> {
-            try {
-                client.player.play_pause.begin();
-            } catch (Error e) {
-                warning("Could not play/pause: %s", e.message);
-            }
-        });
-        btn.get_style_context().add_class("flat");
-        controls.pack_start(btn, false, false, 0);
-
-        btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-        btn.set_sensitive(false);
-        btn.set_can_focus(false);
-        next_btn = btn;
-        btn.clicked.connect(()=> {
-            if (client.player.can_go_next) {
-                try { 
-                    client.player.next.begin();
-                } catch (Error e) {
-                    warning("Could not go to next track: %s", e.message);
-                }
-            }
-        });
-        btn.get_style_context().add_class("flat");
-        controls.pack_start(btn, false, false, 0);
+		box.pack_start(controls, false, false, 0);
 
 
-        controls.set_halign(Gtk.Align.CENTER);
-        controls.set_valign(Gtk.Align.END);
-        layout.add_overlay(top_box);
+		var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		btn.set_sensitive(false);
+		btn.set_can_focus(false);
+		prev_btn = btn;
+		btn.clicked.connect(()=> {
+			if (client.player.can_go_previous) {
+				try { 
+					client.player.previous.begin();
+				} catch (Error e) {
+					warning("Could not go to previous track: %s", e.message);
+				}
+			}
+		});
+		btn.get_style_context().add_class("flat");
+		controls.pack_start(btn, false, false, 0);
 
-        update_from_meta();
-        update_play_status();
-        update_controls();
+		btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		play_btn = btn;
+		btn.set_can_focus(false);
+		btn.clicked.connect(()=> {
+			try {
+				client.player.play_pause.begin();
+			} catch (Error e) {
+				warning("Could not play/pause: %s", e.message);
+			}
+		});
+		btn.get_style_context().add_class("flat");
+		controls.pack_start(btn, false, false, 0);
 
-        client.prop.properties_changed.connect((i,p,inv)=> {
-            if (i == "org.mpris.MediaPlayer2.Player") {
-                /* Handle mediaplayer2 iface */
-                p.foreach((k,v)=> {
-                    if (k == "Metadata") {
-                        Idle.add(()=> {
-                            update_from_meta();
-                            return false;
-                        });
-                    } else if (k == "PlaybackStatus") {
-                        Idle.add(()=> {
-                            update_play_status();
-                            return false;
-                        });
-                    } else if (k == "CanGoNext" || k == "CanGoPrevious") {
-                        Idle.add(()=> {
-                            update_controls();
-                            return false;
-                        });
-                    }
-                });
-            }
-        });
+		btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		btn.set_sensitive(false);
+		btn.set_can_focus(false);
+		next_btn = btn;
+		btn.clicked.connect(()=> {
+			if (client.player.can_go_next) {
+				try { 
+					client.player.next.begin();
+				} catch (Error e) {
+					warning("Could not go to next track: %s", e.message);
+				}
+			}
+		});
+		btn.get_style_context().add_class("flat");
+		controls.pack_start(btn, false, false, 0);
 
-        player_box.get_style_context().add_class("raven-background");
 
-        /**
-         * Custom Player Styling
-         * We do this against the parent box itself so styling includes the header
-         */
-        if ((client.player.desktop_entry != null) && (client.player.desktop_entry != "")) { // If a desktop entry is set
-            get_style_context().add_class(client.player.desktop_entry); // Add our desktop entry, such as "spotify" to player_box
-        } else { // If no desktop entry is set, use identity
-            get_style_context().add_class(client.player.identity.down()); // Lowercase identity
-        }
+		controls.set_halign(Gtk.Align.CENTER);
+		controls.set_valign(Gtk.Align.END);
+		layout.add_overlay(top_box);
 
-        get_style_context().add_class("mpris-widget");
+		update_from_meta();
+		update_play_status();
+		update_controls();
 
-        player_revealer.add(player_box);
-        pack_start(player_revealer);
-    }
+		client.prop.properties_changed.connect((i,p,inv)=> {
+			if (i == "org.mpris.MediaPlayer2.Player") {
+				/* Handle mediaplayer2 iface */
+				p.foreach((k,v)=> {
+					if (k == "Metadata") {
+						Idle.add(()=> {
+							update_from_meta();
+							return false;
+						});
+					} else if (k == "PlaybackStatus") {
+						Idle.add(()=> {
+							update_play_status();
+							return false;
+						});
+					} else if (k == "CanGoNext" || k == "CanGoPrevious") {
+						Idle.add(()=> {
+							update_controls();
+							return false;
+						});
+					}
+				});
+			}
+		});
 
-    public void update_width(int new_width)
-    {
-        this.our_width = new_width;
-        // force the reload of the current art
-        update_art(filename, true);
-    }
+		player_box.get_style_context().add_class("raven-background");
 
-    /**
-     * You raise me up ...
-     */
-    private bool on_raise_player()
-    {
-        if (client == null || !client.player.can_raise) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-        try {
-            client.player.raise.begin();
-        } catch (Error e) {
-            message(e.message);
-        }
-        return Gdk.EVENT_STOP;
-    }
+		/**
+		 * Custom Player Styling
+		 * We do this against the parent box itself so styling includes the header
+		 */
+		if ((client.player.desktop_entry != null) && (client.player.desktop_entry != "")) { // If a desktop entry is set
+			get_style_context().add_class(client.player.desktop_entry); // Add our desktop entry, such as "spotify" to player_box
+		} else { // If no desktop entry is set, use identity
+			get_style_context().add_class(client.player.identity.down()); // Lowercase identity
+		}
 
-    /**
-     * Update play status based on player requirements
-     */
-    void update_play_status()
-    {
-        switch (client.player.playback_status) {
-            case "Playing":
-                header.icon_name = "media-playback-start-symbolic";
-                header.text = "%s - Playing".printf(client.player.identity);
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-                break;
-            case "Paused":
-                header.icon_name = "media-playback-pause-symbolic";
-                header.text = "%s - Paused".printf(client.player.identity);
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-                break;
-            default:
-                header.text = client.player.identity;
-                header.icon_name = "media-playback-stop-symbolic";
-                (play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-                break;
-        }
-    }
+		get_style_context().add_class("mpris-widget");
 
-    /**
-     * Update prev/next sensitivity based on player requirements
-     */
-    void update_controls()
-    {
-        prev_btn.set_sensitive(client.player.can_go_previous);
-        next_btn.set_sensitive(client.player.can_go_next);
-    }
+		player_revealer.add(player_box);
+		pack_start(player_revealer);
+	}
 
-    /**
-     * Utility, handle updating the album art
-     */
-    void update_art(string uri, bool force_reload = false)
-    {
-        // Only load the same art again if a force reload was requested
-        if (uri == this.filename && !force_reload) {
-            return;
-        }
+	public void update_width(int new_width) {
+		this.our_width = new_width;
+		// force the reload of the current art
+		update_art(filename, true);
+	}
 
-        if (uri.has_prefix("http")) {
-            // Cancel the previous fetch if necessary
-            if (!this.cancel.is_cancelled()) {
-                this.cancel.cancel();
-            }
-            this.cancel.reset();
+	/**
+	 * You raise me up ...
+	 */
+	private bool on_raise_player() {
+		if (client == null || !client.player.can_raise) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		try {
+			client.player.raise.begin();
+		} catch (Error e) {
+			message(e.message);
+		}
+		return Gdk.EVENT_STOP;
+	}
 
-            download_art.begin(uri);
-        } else if (uri.has_prefix("file://")) {
-            // local
-            string fname = uri.split("file://")[1];
-            try {
-                var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
-                background.set_from_pixbuf(pbuf);
-                get_style_context().remove_class("no-album-art");
-            } catch (Error e) {
-                update_art_fallback();
-            }
-        } else {
-            update_art_fallback();
-        }
+	/**
+	 * Update play status based on player requirements
+	 */
+	void update_play_status() {
+		switch (client.player.playback_status) {
+			case "Playing":
+				header.icon_name = "media-playback-start-symbolic";
+				header.text = "%s - Playing".printf(client.player.identity);
+				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				break;
+			case "Paused":
+				header.icon_name = "media-playback-pause-symbolic";
+				header.text = "%s - Paused".printf(client.player.identity);
+				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				break;
+			default:
+				header.text = client.player.identity;
+				header.icon_name = "media-playback-stop-symbolic";
+				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				break;
+		}
+	}
 
-        // record the current uri
-        this.filename = uri;
-    }
+	/**
+	 * Update prev/next sensitivity based on player requirements
+	 */
+	void update_controls() {
+		prev_btn.set_sensitive(client.player.can_go_previous);
+		next_btn.set_sensitive(client.player.can_go_next);
+	}
 
-    void update_art_fallback()
-    {
-        get_style_context().add_class("no-album-art");
-        background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-        background.pixel_size = this.our_width;
-    }
+	/**
+	 * Utility, handle updating the album art
+	 */
+	void update_art(string uri, bool force_reload = false) {
+		// Only load the same art again if a force reload was requested
+		if (uri == this.filename && !force_reload) {
+			return;
+		}
 
-    /**
-     * Fetch the cover art asynchronously and set it as the background image
-     */
-    async void download_art(string uri)
-    {
-        // Spotify broke album artwork for open.spotify.com around time of this commit
-        var proper_uri = uri.replace("https://open.spotify.com/image/", "https://i.scdn.co/image/");
+		if (uri.has_prefix("http")) {
+			// Cancel the previous fetch if necessary
+			if (!this.cancel.is_cancelled()) {
+				this.cancel.cancel();
+			}
+			this.cancel.reset();
 
-        try {
-            // open the stream
-            var art_file = GLib.File.new_for_uri(proper_uri);
-            // download the art
-            var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
-            Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
-                this.our_width, this.our_width, true, cancel);
-            background.set_from_pixbuf(pbuf);
-            get_style_context().remove_class("no-album-art");
-        } catch (Error e) {
-            update_art_fallback();
-        }
-    }
+			download_art.begin(uri);
+		} else if (uri.has_prefix("file://")) {
+			// local
+			string fname = uri.split("file://")[1];
+			try {
+				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
+				background.set_from_pixbuf(pbuf);
+				get_style_context().remove_class("no-album-art");
+			} catch (Error e) {
+				update_art_fallback();
+			}
+		} else {
+			update_art_fallback();
+		}
 
-    /* Work around Spotify, etc */
-    string? get_meta_string(string key, string fallback)
-    {
-        if (key in client.player.metadata) {
-            var label = client.player.metadata[key];
-            string? lab = null;
-            unowned VariantType type = label.get_type();
+		// record the current uri
+		this.filename = uri;
+	}
 
-            /* Simple string */
-            if (type.is_subtype_of(VariantType.STRING)) {
-                lab = label.get_string();
-            /* string[] */
-            } else if (type.is_subtype_of(VariantType.STRING_ARRAY)) {
-                string[] vals = label.dup_strv();
-                lab = string.joinv(", ", vals);
-            }
-            /* Return if set */
-            if (lab != null && lab != "") {
-                return lab;
-            }
-        }
-        /* Fallback to sanity */
-        return fallback;
-    }
+	void update_art_fallback() {
+		get_style_context().add_class("no-album-art");
+		background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+		background.pixel_size = this.our_width;
+	}
 
-    /**
-     * Update display info such as artist, the background image, etc.
-     */
-    protected void update_from_meta()
-    {
+	/**
+	 * Fetch the cover art asynchronously and set it as the background image
+	 */
+	async void download_art(string uri) {
+		// Spotify broke album artwork for open.spotify.com around time of this commit
+		var proper_uri = uri.replace("https://open.spotify.com/image/", "https://i.scdn.co/image/");
 
-        if ("mpris:artUrl" in client.player.metadata) {
-            var url = client.player.metadata["mpris:artUrl"].get_string();
-            update_art(url);
-        } else {
-            update_art_fallback();
-        }
+		try {
+			// open the stream
+			var art_file = GLib.File.new_for_uri(proper_uri);
+			// download the art
+			var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
+			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
+				this.our_width, this.our_width, true, cancel);
+			background.set_from_pixbuf(pbuf);
+			get_style_context().remove_class("no-album-art");
+		} catch (Error e) {
+			update_art_fallback();
+		}
+	}
 
-        title_label.set_text(get_meta_string("xesam:title", "Unknown Title"));
-        album_label.set_text(get_meta_string("xesam:album", "Unknown Album"));
-        artist_label.set_text(get_meta_string("xesam:artist", "Unknown Artist"));
-    }
+	/* Work around Spotify, etc */
+	string? get_meta_string(string key, string fallback) {
+		if (key in client.player.metadata) {
+			var label = client.player.metadata[key];
+			string? lab = null;
+			unowned VariantType type = label.get_type();
+
+			/* Simple string */
+			if (type.is_subtype_of(VariantType.STRING)) {
+				lab = label.get_string();
+			/* string[] */
+			} else if (type.is_subtype_of(VariantType.STRING_ARRAY)) {
+				string[] vals = label.dup_strv();
+				lab = string.joinv(", ", vals);
+			}
+			/* Return if set */
+			if (lab != null && lab != "") {
+				return lab;
+			}
+		}
+		/* Fallback to sanity */
+		return fallback;
+	}
+
+	/**
+	 * Update display info such as artist, the background image, etc.
+	 */
+	protected void update_from_meta() {
+		if ("mpris:artUrl" in client.player.metadata) {
+			var url = client.player.metadata["mpris:artUrl"].get_string();
+			update_art(url);
+		} else {
+			update_art_fallback();
+		}
+
+		title_label.set_text(get_meta_string("xesam:title", "Unknown Title"));
+		album_label.set_text(get_meta_string("xesam:album", "Unknown Album"));
+		artist_label.set_text(get_meta_string("xesam:artist", "Unknown Artist"));
+	}
 }
 
 /**
@@ -400,44 +385,30 @@ public class ClientWidget : Gtk.Box
  *
  * @return A Gtk.Box with the boilerplate cruft out of the way
  */
-public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = null)
-{
-    var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-    Gtk.Image img;
+public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = null) {
+	var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+	Gtk.Image img;
 
-    if (icon == null && gicon != null) {
-        img = new Gtk.Image.from_gicon(gicon, Gtk.IconSize.MENU);
-    } else {
-        img = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU);
-    }
+	if (icon == null && gicon != null) {
+		img = new Gtk.Image.from_gicon(gicon, Gtk.IconSize.MENU);
+	} else {
+		img = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU);
+	}
 
-    img.margin_start = 8;
-    img.margin_end = 8;
-    box.pack_start(img, false, false, 0);
-    var label = new Gtk.Label(name);
-    label.set_line_wrap(true);
-    label.set_line_wrap_mode(Pango.WrapMode.WORD);
-    label.halign = Gtk.Align.START;
-    /* I truly don't care that this is deprecated, it's the only way
-     * to actually fix the alignment on line wrap. */
-    label.set_alignment(0.0f, 0.5f);
-    box.pack_start(label, true, true, 0);
+	img.margin_start = 8;
+	img.margin_end = 8;
+	box.pack_start(img, false, false, 0);
+	var label = new Gtk.Label(name);
+	label.set_line_wrap(true);
+	label.set_line_wrap_mode(Pango.WrapMode.WORD);
+	label.halign = Gtk.Align.START;
+	/* I truly don't care that this is deprecated, it's the only way
+	 * to actually fix the alignment on line wrap. */
+	label.set_alignment(0.0f, 0.5f);
+	box.pack_start(label, true, true, 0);
 
-    box.set_data("label_item", label);
-    box.set_data("image_item", img);
+	box.set_data("label_item", label);
+	box.set_data("image_item", img);
 
-    return box;
+	return box;
 }
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */
