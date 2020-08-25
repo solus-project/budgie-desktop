@@ -26,7 +26,7 @@ typedef struct _BudgieThemeManagerClass BudgieThemeManagerClass;
 #define BUDGIE_THEME_MANAGER_GET_CLASS(o)                                                                              \
 	(G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 
-BudgieThemeManager *budgie_theme_manager_new(void);
+BudgieThemeManager* budgie_theme_manager_new(void);
 
 GType budgie_theme_manager_get_type(void);
 

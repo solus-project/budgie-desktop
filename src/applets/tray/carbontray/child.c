@@ -18,11 +18,11 @@
 
 // static method header
 
-static void carbon_child_init(CarbonChild *);
-static void carbon_child_realize(GtkWidget *);
-static void carbon_child_get_preferred_width(GtkWidget *, int *, int *);
-static void carbon_child_get_preferred_height(GtkWidget *, int *, int *);
-static void set_wmclass(CarbonChild *, Display *);
+static void carbon_child_init(CarbonChild*);
+static void carbon_child_realize(GtkWidget*);
+static void carbon_child_get_preferred_width(GtkWidget*, int*, int*);
+static void carbon_child_get_preferred_height(GtkWidget*, int*, int*);
+static void set_wmclass(CarbonChild*, Display*);
 
 
 
@@ -34,7 +34,7 @@ G_DEFINE_TYPE(CarbonChild, carbon_child, GTK_TYPE_SOCKET)
 
 // public method implementations
 
-CarbonChild *carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
+CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
 	if (GDK_IS_SCREEN(screen) == FALSE) {
 		g_warning("No screen to place tray icon onto");
 		return NULL;
@@ -45,8 +45,8 @@ CarbonChild *carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 		return NULL;
 	}
 
-	GdkDisplay *display = gdk_screen_get_display(screen);
-	Display *xdisplay = GDK_DISPLAY_XDISPLAY(display);
+	GdkDisplay* display = gdk_screen_get_display(screen);
+	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
 
 	gdk_x11_display_error_trap_push(display);
 	XWindowAttributes attributes;
@@ -63,11 +63,11 @@ CarbonChild *carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 		return NULL;
 	}
 
-	GdkVisual *visual = gdk_x11_screen_lookup_visual(screen, attributes.visual->visualid);
+	GdkVisual* visual = gdk_x11_screen_lookup_visual(screen, attributes.visual->visualid);
 	if (visual == NULL || GDK_IS_VISUAL(visual) == FALSE)
 		return NULL;
 
-	CarbonChild *self = g_object_new(CARBON_TYPE_CHILD, NULL);
+	CarbonChild* self = g_object_new(CARBON_TYPE_CHILD, NULL);
 	self->preferredWidth = size;
 	self->preferredHeight = size;
 	self->iconWindow = iconWindow;
@@ -90,7 +90,7 @@ CarbonChild *carbon_child_new(int size, GdkScreen *screen, Window iconWindow) {
 	return self;
 }
 
-void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr) {
+void carbon_child_draw_on_tray(CarbonChild* self, GtkWidget* parent, cairo_t* cr) {
 	g_return_if_fail(self != NULL);
 	g_return_if_fail(parent != NULL);
 	g_return_if_fail(cr != NULL);
@@ -106,7 +106,7 @@ void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr
 		allocation.y = allocation.y - parentAllocation.y;
 	}
 	cairo_save(cr);
-	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(self));
+	GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(self));
 	gdk_cairo_set_source_window(cr, window, allocation.x, allocation.y);
 	cairo_rectangle(cr, allocation.x, allocation.y, allocation.width, allocation.height);
 	cairo_clip(cr);
@@ -118,8 +118,8 @@ void carbon_child_draw_on_tray(CarbonChild *self, GtkWidget *parent, cairo_t *cr
 
 // static method implementations
 
-static void carbon_child_init(CarbonChild *self) {
-	GtkWidget *widget = GTK_WIDGET(self);
+static void carbon_child_init(CarbonChild* self) {
+	GtkWidget* widget = GTK_WIDGET(self);
 
 	gtk_widget_set_halign(widget, GTK_ALIGN_CENTER);
 	gtk_widget_set_valign(widget, GTK_ALIGN_CENTER);
@@ -127,13 +127,13 @@ static void carbon_child_init(CarbonChild *self) {
 	gtk_widget_set_vexpand(widget, FALSE);
 }
 
-static void carbon_child_realize(GtkWidget *widget) {
-	CarbonChild *self = CARBON_CHILD(widget);
+static void carbon_child_realize(GtkWidget* widget) {
+	CarbonChild* self = CARBON_CHILD(widget);
 
 	gtk_widget_set_size_request(widget, self->preferredWidth, self->preferredHeight);
 	GTK_WIDGET_CLASS(carbon_child_parent_class)->realize(widget);
 
-	GdkWindow *window = gtk_widget_get_window(widget);
+	GdkWindow* window = gtk_widget_get_window(widget);
 
 	if (self->isComposited) {
 		GdkRGBA transparent;
@@ -148,35 +148,35 @@ static void carbon_child_realize(GtkWidget *widget) {
 	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
 }
 
-static void carbon_child_get_preferred_width(GtkWidget *base, int *minimum_width, int *natural_width) {
-	CarbonChild *self = CARBON_CHILD(base);
+static void carbon_child_get_preferred_width(GtkWidget* base, int* minimum_width, int* natural_width) {
+	CarbonChild* self = CARBON_CHILD(base);
 	int scale = gtk_widget_get_scale_factor(base);
 
 	*minimum_width = self->preferredWidth / scale;
 	*natural_width = self->preferredWidth / scale;
 }
 
-static void carbon_child_get_preferred_height(GtkWidget *base, int *minimum_height, int *natural_height) {
-	CarbonChild *self = CARBON_CHILD(base);
+static void carbon_child_get_preferred_height(GtkWidget* base, int* minimum_height, int* natural_height) {
+	CarbonChild* self = CARBON_CHILD(base);
 	int scale = gtk_widget_get_scale_factor(base);
 
 	*minimum_height = self->preferredHeight / scale;
 	*natural_height = self->preferredHeight / scale;
 }
 
-static void carbon_child_class_init(CarbonChildClass *klass) {
-	GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
+static void carbon_child_class_init(CarbonChildClass* klass) {
+	GtkWidgetClass* gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
 	gtkwidget_class->get_preferred_width = carbon_child_get_preferred_width;
 	gtkwidget_class->get_preferred_height = carbon_child_get_preferred_height;
 	gtkwidget_class->realize = carbon_child_realize;
 }
 
-static void set_wmclass(CarbonChild *self, Display *xdisplay) {
+static void set_wmclass(CarbonChild* self, Display* xdisplay) {
 	XClassHint ch;
 	ch.res_class = NULL;
 
-	GdkDisplay *display = gdk_display_get_default();
+	GdkDisplay* display = gdk_display_get_default();
 	gdk_x11_display_error_trap_push(display);
 	XGetClassHint(xdisplay, self->iconWindow, &ch);
 	gdk_x11_display_error_trap_pop_ignored(display);

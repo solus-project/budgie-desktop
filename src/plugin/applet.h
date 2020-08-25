@@ -78,37 +78,37 @@ typedef struct _BudgieAppletClass BudgieAppletClass;
 struct _BudgieAppletClass {
 	GtkEventBoxClass parent_class;
 
-	void (*invoke_action)(BudgieApplet *self, BudgiePanelAction action);
-	gboolean (*supports_settings)(BudgieApplet *self);
-	GtkWidget *(*get_settings_ui)(BudgieApplet *self);
-	void (*panel_size_changed)(BudgieApplet *applet, int panel_size, int icon_size, int small_icon_size);
-	void (*panel_position_changed)(BudgieApplet *applet, BudgiePanelPosition position);
-	void (*update_popovers)(BudgieApplet *applet, BudgiePopoverManager *manager);
+	void (*invoke_action)(BudgieApplet* self, BudgiePanelAction action);
+	gboolean (*supports_settings)(BudgieApplet* self);
+	GtkWidget* (*get_settings_ui)(BudgieApplet* self);
+	void (*panel_size_changed)(BudgieApplet* applet, int panel_size, int icon_size, int small_icon_size);
+	void (*panel_position_changed)(BudgieApplet* applet, BudgiePanelPosition position);
+	void (*update_popovers)(BudgieApplet* applet, BudgiePopoverManager* manager);
 
 	gpointer padding[12];
 };
 
 struct _BudgieApplet {
 	GtkEventBox parent_instance;
-	BudgieAppletPrivate *priv;
+	BudgieAppletPrivate* priv;
 };
 
-BudgieApplet *budgie_applet_new(void);
+BudgieApplet* budgie_applet_new(void);
 
-void budgie_applet_invoke_action(BudgieApplet *self, BudgiePanelAction action);
-gboolean budgie_applet_supports_settings(BudgieApplet *self);
-GtkWidget *budgie_applet_get_settings_ui(BudgieApplet *self);
-GSettings *budgie_applet_get_applet_settings(BudgieApplet *self, gchar *uuid);
+void budgie_applet_invoke_action(BudgieApplet* self, BudgiePanelAction action);
+gboolean budgie_applet_supports_settings(BudgieApplet* self);
+GtkWidget* budgie_applet_get_settings_ui(BudgieApplet* self);
+GSettings* budgie_applet_get_applet_settings(BudgieApplet* self, gchar* uuid);
 
-void budgie_applet_set_settings_schema(BudgieApplet *self, const gchar *schema);
-const gchar *budgie_applet_get_settings_schema(BudgieApplet *self);
+void budgie_applet_set_settings_schema(BudgieApplet* self, const gchar* schema);
+const gchar* budgie_applet_get_settings_schema(BudgieApplet* self);
 
-void budgie_applet_set_settings_prefix(BudgieApplet *self, const gchar *prefix);
-const gchar *budgie_applet_get_settings_prefix(BudgieApplet *self);
+void budgie_applet_set_settings_prefix(BudgieApplet* self, const gchar* prefix);
+const gchar* budgie_applet_get_settings_prefix(BudgieApplet* self);
 
-void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *manager);
+void budgie_applet_update_popovers(BudgieApplet* self, BudgiePopoverManager* manager);
 
-BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self);
+BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet* self);
 
 GType budgie_applet_get_type(void);
 

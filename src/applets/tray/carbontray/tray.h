@@ -21,26 +21,26 @@
 typedef struct {
 	GObject parent_instance;
 
-	GtkWidget *box;
+	GtkWidget* box;
 	int iconSize;
 
-	GHashTable *socketTable;
-	GtkWidget *invisible;
+	GHashTable* socketTable;
+	GtkWidget* invisible;
 
 	GdkAtom selectionAtom;
 	Atom opcodeAtom;
 	Atom dataAtom;
-	GSList *messages;
+	GSList* messages;
 } CarbonTray;
 
 typedef struct {
 	GObjectClass parent_class;
 
-	void (*message_sent)(CarbonTray *tray, CarbonChild *child, char *message, long id, long timeout);
+	void (*message_sent)(CarbonTray* tray, CarbonChild* child, char* message, long id, long timeout);
 } CarbonTrayClass;
 
 typedef struct {
-	char *string;
+	char* string;
 
 	long id;
 	long length;
@@ -51,8 +51,8 @@ typedef struct {
 } CarbonMessage;
 
 typedef struct {
-	GtkWidget *box;
-	cairo_t *cr;
+	GtkWidget* box;
+	cairo_t* cr;
 } CarbonDrawData;
 
 
@@ -66,18 +66,18 @@ typedef struct {
 
 GType carbon_tray_get_type(void);
 
-CarbonTray *carbon_tray_new(GtkOrientation, int, int);
+CarbonTray* carbon_tray_new(GtkOrientation, int, int);
 
-void carbon_tray_add_to_container(CarbonTray *, GtkContainer *);
+void carbon_tray_add_to_container(CarbonTray*, GtkContainer*);
 
-void carbon_tray_remove_from_container(CarbonTray *, GtkContainer *);
+void carbon_tray_remove_from_container(CarbonTray*, GtkContainer*);
 
-bool carbon_tray_register(CarbonTray *, GdkScreen *);
+bool carbon_tray_register(CarbonTray*, GdkScreen*);
 
-void carbon_tray_unregister(CarbonTray *);
+void carbon_tray_unregister(CarbonTray*);
 
-void carbon_tray_set_spacing(CarbonTray *, int spacing);
+void carbon_tray_set_spacing(CarbonTray*, int spacing);
 
-void carbon_tray_unref(CarbonTray *);
+void carbon_tray_unref(CarbonTray*);
 
 #endif

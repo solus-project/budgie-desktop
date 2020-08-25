@@ -39,20 +39,20 @@ enum { PROP_PREFIX = 1, PROP_SCHEMA, PROP_ACTIONS, N_PROPS };
 enum { APPLET_SIZE_CHANGED = 0, APPLET_POSITION_CHANGED, N_SIGNALS };
 
 struct _BudgieAppletPrivate {
-	char *prefix;
-	char *schema;
+	char* prefix;
+	char* schema;
 	BudgiePanelAction actions;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieApplet, budgie_applet, GTK_TYPE_EVENT_BOX)
 
-static GParamSpec *obj_properties[N_PROPS] = {
+static GParamSpec* obj_properties[N_PROPS] = {
 	NULL,
 };
 static guint applet_signals[N_SIGNALS] = { 0 };
 
-static void budgie_applet_set_property(GObject *object, guint id, const GValue *value, GParamSpec *spec) {
-	BudgieApplet *self = BUDGIE_APPLET(object);
+static void budgie_applet_set_property(GObject* object, guint id, const GValue* value, GParamSpec* spec) {
+	BudgieApplet* self = BUDGIE_APPLET(object);
 
 	switch (id) {
 		case PROP_PREFIX: budgie_applet_set_settings_prefix(self, g_value_get_string(value)); break;
@@ -62,8 +62,8 @@ static void budgie_applet_set_property(GObject *object, guint id, const GValue *
 	}
 }
 
-static void budgie_applet_get_property(GObject *object, guint id, GValue *value, GParamSpec *spec) {
-	BudgieApplet *self = BUDGIE_APPLET(object);
+static void budgie_applet_get_property(GObject* object, guint id, GValue* value, GParamSpec* spec) {
+	BudgieApplet* self = BUDGIE_APPLET(object);
 
 	switch (id) {
 		case PROP_PREFIX: g_value_set_string(value, budgie_applet_get_settings_prefix(self)); break;
@@ -115,8 +115,8 @@ static void budgie_applet_get_property(GObject *object, guint id, GValue *value,
  *      }
  * ]|
  */
-void budgie_applet_invoke_action(BudgieApplet *self, BudgiePanelAction action) {
-	BudgieAppletClass *klazz = NULL;
+void budgie_applet_invoke_action(BudgieApplet* self, BudgiePanelAction action) {
+	BudgieAppletClass* klazz = NULL;
 
 	if (!BUDGIE_IS_APPLET(self)) {
 		return;
@@ -137,8 +137,8 @@ void budgie_applet_invoke_action(BudgieApplet *self, BudgiePanelAction action) {
  *
  * Returns: true if this implementation supports a Settings UI
  */
-gboolean budgie_applet_supports_settings(BudgieApplet *self) {
-	BudgieAppletClass *klazz = NULL;
+gboolean budgie_applet_supports_settings(BudgieApplet* self) {
+	BudgieAppletClass* klazz = NULL;
 
 	if (!BUDGIE_IS_APPLET(self)) {
 		return FALSE;
@@ -164,8 +164,8 @@ gboolean budgie_applet_supports_settings(BudgieApplet *self) {
  *
  * Returns: (transfer full) (nullable): A GTK Settings UI
  */
-GtkWidget *budgie_applet_get_settings_ui(BudgieApplet *self) {
-	BudgieAppletClass *klazz = NULL;
+GtkWidget* budgie_applet_get_settings_ui(BudgieApplet* self) {
+	BudgieAppletClass* klazz = NULL;
 
 	if (!BUDGIE_IS_APPLET(self)) {
 		return NULL;
@@ -196,9 +196,9 @@ GtkWidget *budgie_applet_get_settings_ui(BudgieApplet *self) {
  *
  * Returns: (transfer full): A newly created #GSettings for this applet instance
  */
-GSettings *budgie_applet_get_applet_settings(BudgieApplet *self, gchar *uuid) {
-	GSettings *settings = NULL;
-	gchar *path = NULL;
+GSettings* budgie_applet_get_applet_settings(BudgieApplet* self, gchar* uuid) {
+	GSettings* settings = NULL;
+	gchar* path = NULL;
 
 	if (!self || !self->priv || !self->priv->schema || !self->priv->prefix) {
 		return NULL;
@@ -214,8 +214,8 @@ GSettings *budgie_applet_get_applet_settings(BudgieApplet *self, gchar *uuid) {
 	return settings;
 }
 
-static void budgie_applet_dispose(GObject *g_object) {
-	BudgieApplet *self = BUDGIE_APPLET(g_object);
+static void budgie_applet_dispose(GObject* g_object) {
+	BudgieApplet* self = BUDGIE_APPLET(g_object);
 
 	g_clear_pointer(&self->priv->prefix, g_free);
 	g_clear_pointer(&self->priv->schema, g_free);
@@ -223,8 +223,8 @@ static void budgie_applet_dispose(GObject *g_object) {
 	G_OBJECT_CLASS(budgie_applet_parent_class)->dispose(g_object);
 }
 
-static void budgie_applet_class_init(BudgieAppletClass *klazz) {
-	GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+static void budgie_applet_class_init(BudgieAppletClass* klazz) {
+	GObjectClass* obj_class = G_OBJECT_CLASS(klazz);
 
 	obj_class->get_property = budgie_applet_get_property;
 	obj_class->set_property = budgie_applet_set_property;
@@ -343,12 +343,12 @@ static void budgie_applet_class_init(BudgieAppletClass *klazz) {
  *
  * Utility function for Python usage. See: #BudgieApplet:settings-prefix
  */
-void budgie_applet_set_settings_prefix(BudgieApplet *self, const gchar *prefix) {
+void budgie_applet_set_settings_prefix(BudgieApplet* self, const gchar* prefix) {
 	if (!self || !prefix) {
 		return;
 	}
 
-	BudgieAppletPrivate *priv = self->priv;
+	BudgieAppletPrivate* priv = self->priv;
 	if (priv->prefix) {
 		g_free(priv->prefix);
 	}
@@ -360,11 +360,11 @@ void budgie_applet_set_settings_prefix(BudgieApplet *self, const gchar *prefix) 
  *
  * Utility function for Python usage. See: #BudgieApplet:settings-prefix
  */
-const gchar *budgie_applet_get_settings_prefix(BudgieApplet *self) {
+const gchar* budgie_applet_get_settings_prefix(BudgieApplet* self) {
 	if (!self) {
 		return NULL;
 	}
-	return (const gchar *) self->priv->prefix;
+	return (const gchar*) self->priv->prefix;
 }
 
 /**
@@ -372,12 +372,12 @@ const gchar *budgie_applet_get_settings_prefix(BudgieApplet *self) {
  *
  * Utility function for Python usage. See #BudgieApplet:settings-schema
  */
-void budgie_applet_set_settings_schema(BudgieApplet *self, const gchar *schema) {
+void budgie_applet_set_settings_schema(BudgieApplet* self, const gchar* schema) {
 	if (!self || !schema) {
 		return;
 	}
 
-	BudgieAppletPrivate *priv = self->priv;
+	BudgieAppletPrivate* priv = self->priv;
 	;
 	if (priv->schema) {
 		g_free(priv->schema);
@@ -390,11 +390,11 @@ void budgie_applet_set_settings_schema(BudgieApplet *self, const gchar *schema) 
  *
  * Utility function for Python usage. See #BudgieApplet:settings-schema
  */
-const gchar *budgie_applet_get_settings_schema(BudgieApplet *self) {
+const gchar* budgie_applet_get_settings_schema(BudgieApplet* self) {
 	if (!self) {
 		return NULL;
 	}
-	return (const gchar *) self->priv->schema;
+	return (const gchar*) self->priv->schema;
 }
 
 /**
@@ -415,11 +415,11 @@ const gchar *budgie_applet_get_settings_schema(BudgieApplet *self) {
  * the GtkPopover.
  *
  */
-void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *manager) {
+void budgie_applet_update_popovers(BudgieApplet* self, BudgiePopoverManager* manager) {
 	if (!self) {
 		return;
 	}
-	BudgieAppletClass *klazz = BUDGIE_APPLET_GET_CLASS(self);
+	BudgieAppletClass* klazz = BUDGIE_APPLET_GET_CLASS(self);
 
 	if (klazz->update_popovers) {
 		klazz->update_popovers(self, manager);
@@ -431,14 +431,14 @@ void budgie_applet_update_popovers(BudgieApplet *self, BudgiePopoverManager *man
  *
  * Utility function for Python bindings. See #BudgieApplet:supported-actions
  */
-BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet *self) {
+BudgiePanelAction budgie_applet_get_supported_actions(BudgieApplet* self) {
 	if (!self) {
 		return BUDGIE_PANEL_ACTION_NONE;
 	}
 	return self->priv->actions;
 }
 
-static void budgie_applet_init(BudgieApplet *self) {
+static void budgie_applet_init(BudgieApplet* self) {
 	self->priv = budgie_applet_get_instance_private(self);
 
 	gtk_widget_set_can_focus(GTK_WIDGET(self), FALSE);
@@ -449,6 +449,6 @@ static void budgie_applet_init(BudgieApplet *self) {
  *
  * Returns: (transfer full): A new BudgieApplet
  */
-BudgieApplet *budgie_applet_new() {
+BudgieApplet* budgie_applet_new() {
 	return g_object_new(BUDGIE_TYPE_APPLET, NULL);
 }

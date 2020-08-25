@@ -23,7 +23,7 @@ typedef struct _CarbonChild {
 	int preferredHeight;
 	Window iconWindow;
 
-	char *wmclass;
+	char* wmclass;
 
 	bool parentRelativeBg;
 	bool isComposited;
@@ -43,8 +43,8 @@ typedef struct _CarbonChildClass {
 
 GType carbon_child_get_type(void);
 
-CarbonChild *carbon_child_new(int, GdkScreen *, Window);
+CarbonChild* carbon_child_new(int, GdkScreen*, Window);
 
-void carbon_child_draw_on_tray(CarbonChild *, GtkWidget *, cairo_t *);
+void carbon_child_draw_on_tray(CarbonChild*, GtkWidget*, cairo_t*);
 
 #endif

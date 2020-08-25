@@ -28,7 +28,7 @@ struct _BudgiePopoverManagerClass {
 
 struct _BudgiePopoverManager {
 	GObject parent;
-	BudgiePopoverManagerPrivate *priv;
+	BudgiePopoverManagerPrivate* priv;
 };
 
 #define BUDGIE_TYPE_POPOVER_MANAGER budgie_popover_manager_get_type()
@@ -40,17 +40,17 @@ struct _BudgiePopoverManager {
 #define BUDGIE_POPOVER_MANAGER_GET_CLASS(o)                                                                            \
 	(G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_POPOVER_MANAGER, BudgiePopoverManagerClass))
 
-BudgiePopoverManager *budgie_popover_manager_new(void);
+BudgiePopoverManager* budgie_popover_manager_new(void);
 
 GType budgie_popover_manager_get_type(void);
 
 /*
  * API Methods follow
  */
-void budgie_popover_manager_register_popover(BudgiePopoverManager *manager, GtkWidget *parent_widget,
-											 BudgiePopover *popover);
-void budgie_popover_manager_unregister_popover(BudgiePopoverManager *manager, GtkWidget *parent_widget);
-void budgie_popover_manager_show_popover(BudgiePopoverManager *manager, GtkWidget *parent_widget);
+void budgie_popover_manager_register_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget,
+											 BudgiePopover* popover);
+void budgie_popover_manager_unregister_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
+void budgie_popover_manager_show_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
 
 G_END_DECLS
 

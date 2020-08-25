@@ -66,8 +66,8 @@ typedef struct BudgieTail {
 } BudgieTail;
 
 struct _BudgiePopoverPrivate {
-	GtkWidget *add_area;
-	GtkWidget *relative_to;
+	GtkWidget* add_area;
+	GtkWidget* relative_to;
 	BudgieTail tail;
 	GdkRectangle widget_rect;
 	BudgiePopoverPositionPolicy policy;
@@ -75,7 +75,7 @@ struct _BudgiePopoverPrivate {
 
 enum { PROP_RELATIVE_TO = 1, PROP_POLICY, N_PROPS };
 
-static GParamSpec *obj_properties[N_PROPS] = {
+static GParamSpec* obj_properties[N_PROPS] = {
 	NULL,
 };
 
@@ -88,27 +88,27 @@ static guint popover_signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopover, budgie_popover, GTK_TYPE_WINDOW)
 
-static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr);
-static void budgie_popover_map(GtkWidget *widget);
-static void budgie_popover_unmap(GtkWidget *widget);
-static void budgie_popover_size_allocate(GtkWidget *widget, GdkRectangle *rectangle, gpointer udata);
-static void budgie_popover_add(GtkContainer *container, GtkWidget *widget);
-static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *button, gpointer udata);
-static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key, gpointer udata);
-static void budgie_popover_set_property(GObject *object, guint id, const GValue *value, GParamSpec *spec);
-static void budgie_popover_get_property(GObject *object, guint id, GValue *value, GParamSpec *spec);
-static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle *target);
-static void budgie_popover_compute_widget_geometry(BudgiePopover *self);
-static void budgie_popover_compute_tail(BudgiePopover *self);
-static void budgie_popover_update_position_hints(BudgiePopover *self);
-static void budgie_popover_get_screen_for_widget(GtkWidget *widget, GdkRectangle *rectangle);
+static gboolean budgie_popover_draw(GtkWidget* widget, cairo_t* cr);
+static void budgie_popover_map(GtkWidget* widget);
+static void budgie_popover_unmap(GtkWidget* widget);
+static void budgie_popover_size_allocate(GtkWidget* widget, GdkRectangle* rectangle, gpointer udata);
+static void budgie_popover_add(GtkContainer* container, GtkWidget* widget);
+static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* button, gpointer udata);
+static gboolean budgie_popover_key_press(GtkWidget* widget, GdkEventKey* key, gpointer udata);
+static void budgie_popover_set_property(GObject* object, guint id, const GValue* value, GParamSpec* spec);
+static void budgie_popover_get_property(GObject* object, guint id, GValue* value, GParamSpec* spec);
+static void budgie_popover_compute_positition(BudgiePopover* self, GdkRectangle* target);
+static void budgie_popover_compute_widget_geometry(BudgiePopover* self);
+static void budgie_popover_compute_tail(BudgiePopover* self);
+static void budgie_popover_update_position_hints(BudgiePopover* self);
+static void budgie_popover_get_screen_for_widget(GtkWidget* widget, GdkRectangle* rectangle);
 
 /**
  * budgie_popover_dispose:
  *
  * Clean up a BudgiePopover instance
  */
-static void budgie_popover_dispose(GObject *obj) {
+static void budgie_popover_dispose(GObject* obj) {
 	G_OBJECT_CLASS(budgie_popover_parent_class)->dispose(obj);
 }
 
@@ -120,10 +120,10 @@ static void budgie_popover_dispose(GObject *obj) {
  * Influence:
  * https://stackoverflow.com/questions/16557905/change-g-param-construct-only-property-via-inheritance
  */
-static GObject *budgie_popover_constructor(GType type, guint n_properties, GObjectConstructParam *properties) {
-	GObject *o = NULL;
-	const gchar *prop_name = NULL;
-	GObjectConstructParam *param = NULL;
+static GObject* budgie_popover_constructor(GType type, guint n_properties, GObjectConstructParam* properties) {
+	GObject* o = NULL;
+	const gchar* prop_name = NULL;
+	GObjectConstructParam* param = NULL;
 
 	/* Override the construct-only type property */
 	for (guint i = 0; i < n_properties; i++) {
@@ -171,10 +171,10 @@ static GObject *budgie_popover_constructor(GType type, guint n_properties, GObje
  *
  * Handle class initialisation
  */
-static void budgie_popover_class_init(BudgiePopoverClass *klazz) {
-	GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
-	GtkWidgetClass *wid_class = GTK_WIDGET_CLASS(klazz);
-	GtkContainerClass *cont_class = GTK_CONTAINER_CLASS(klazz);
+static void budgie_popover_class_init(BudgiePopoverClass* klazz) {
+	GObjectClass* obj_class = G_OBJECT_CLASS(klazz);
+	GtkWidgetClass* wid_class = GTK_WIDGET_CLASS(klazz);
+	GtkContainerClass* cont_class = GTK_CONTAINER_CLASS(klazz);
 
 	/* gobject vtable hookup */
 	obj_class->constructor = budgie_popover_constructor;
@@ -240,11 +240,11 @@ static void budgie_popover_class_init(BudgiePopoverClass *klazz) {
  *
  * Handle construction of the BudgiePopover
  */
-static void budgie_popover_init(BudgiePopover *self) {
-	GtkWindow *win = GTK_WINDOW(self);
-	GdkScreen *screen = NULL;
-	GdkVisual *visual = NULL;
-	GtkStyleContext *style = NULL;
+static void budgie_popover_init(BudgiePopover* self) {
+	GtkWindow* win = GTK_WINDOW(self);
+	GdkScreen* screen = NULL;
+	GdkVisual* visual = NULL;
+	GtkStyleContext* style = NULL;
 
 	self->priv = budgie_popover_get_instance_private(self);
 
@@ -283,10 +283,10 @@ static void budgie_popover_init(BudgiePopover *self) {
 	budgie_popover_update_position_hints(self);
 }
 
-static void budgie_popover_map(GtkWidget *widget) {
-	GdkWindow *window = NULL;
+static void budgie_popover_map(GtkWidget* widget) {
+	GdkWindow* window = NULL;
 	GdkRectangle coords = { 0 };
-	BudgiePopover *self = NULL;
+	BudgiePopover* self = NULL;
 
 	self = BUDGIE_POPOVER(widget);
 
@@ -317,7 +317,7 @@ static inline gboolean budgie_popover_trigger_closed(gpointer v) {
 	return G_SOURCE_REMOVE;
 }
 
-static void budgie_popover_unmap(GtkWidget *widget) {
+static void budgie_popover_unmap(GtkWidget* widget) {
 	GTK_WIDGET_CLASS(budgie_popover_parent_class)->unmap(widget);
 	g_idle_add(budgie_popover_trigger_closed, widget);
 }
@@ -328,11 +328,11 @@ static void budgie_popover_unmap(GtkWidget *widget) {
  * Upon having our contents resize us, i.e. a #GtkStack or #GtkRevealer, we
  * re-calculate our position to ensure we resize in the right direction.
  */
-static void budgie_popover_size_allocate(GtkWidget *widget, __budgie_unused__ GdkRectangle *rectangle,
+static void budgie_popover_size_allocate(GtkWidget* widget, __budgie_unused__ GdkRectangle* rectangle,
 										 __budgie_unused__ gpointer udata) {
 	GdkRectangle coords = { 0 };
-	BudgiePopover *self = NULL;
-	GdkWindow *window = NULL;
+	BudgiePopover* self = NULL;
+	GdkWindow* window = NULL;
 
 	if (!gtk_widget_get_realized(widget)) {
 		return;
@@ -354,8 +354,8 @@ static void budgie_popover_size_allocate(GtkWidget *widget, __budgie_unused__ Gd
  * Select the position of the popover tail (and extend outwards from it)
  * based on the hints provided by the toplevel
  */
-static GtkPositionType budgie_popover_select_position_toplevel(BudgiePopover *self) {
-	GtkWidget *parent_window = NULL;
+static GtkPositionType budgie_popover_select_position_toplevel(BudgiePopover* self) {
+	GtkWidget* parent_window = NULL;
 
 	/* Tail points out from the panel */
 	parent_window = gtk_widget_get_toplevel(self->priv->relative_to);
@@ -363,7 +363,7 @@ static GtkPositionType budgie_popover_select_position_toplevel(BudgiePopover *se
 		return GTK_POS_BOTTOM;
 	}
 
-	GtkStyleContext *context = gtk_widget_get_style_context(parent_window);
+	GtkStyleContext* context = gtk_widget_get_style_context(parent_window);
 	if (gtk_style_context_has_class(context, "top")) {
 		return GTK_POS_TOP;
 	} else if (gtk_style_context_has_class(context, "left")) {
@@ -417,10 +417,10 @@ static GtkPositionType budgie_popover_select_position_automatic(gint our_height,
  *
  * Update our style classes and padding in response to a tail change
  */
-static void budgie_popover_update_position_hints(BudgiePopover *self) {
-	GtkStyleContext *style = NULL;
-	const gchar *style_class = NULL;
-	static const gchar *position_classes[] = { "top", "left", "right", "bottom" };
+static void budgie_popover_update_position_hints(BudgiePopover* self) {
+	GtkStyleContext* style = NULL;
+	const gchar* style_class = NULL;
+	static const gchar* position_classes[] = { "top", "left", "right", "bottom" };
 
 	/* Allow themers to know what kind of popover this is, and set the
 	 * CSS class in accordance with the direction that the popover is
@@ -496,9 +496,9 @@ static void budgie_popover_update_position_hints(BudgiePopover *self) {
  * Work out the geometry for the relative_to widget in absolute coordinates
  * on the screen.
  */
-static void budgie_popover_compute_widget_geometry(BudgiePopover *self) {
+static void budgie_popover_compute_widget_geometry(BudgiePopover* self) {
 	GtkAllocation alloc = { 0 };
-	GtkWidget *toplevel = NULL;
+	GtkWidget* toplevel = NULL;
 	gint rx, ry = 0;
 	gint x, y = 0;
 	GdkRectangle display_geom = { 0 };
@@ -544,17 +544,17 @@ static void budgie_popover_compute_widget_geometry(BudgiePopover *self) {
  * Use the appropriate function to find out the monitor's resolution for the
  * given @widget.
  */
-static void budgie_popover_get_screen_for_widget(GtkWidget *widget, GdkRectangle *rectangle) {
-	GdkScreen *screen = NULL;
-	GdkWindow *assoc_window = NULL;
-	GdkDisplay *display = NULL;
+static void budgie_popover_get_screen_for_widget(GtkWidget* widget, GdkRectangle* rectangle) {
+	GdkScreen* screen = NULL;
+	GdkWindow* assoc_window = NULL;
+	GdkDisplay* display = NULL;
 
 	assoc_window = gtk_widget_get_parent_window(widget);
 	screen = gtk_widget_get_screen(widget);
 	display = gdk_screen_get_display(screen);
 
 #if GTK_CHECK_VERSION(3, 22, 0)
-	GdkMonitor *monitor = gdk_display_get_monitor_at_window(display, assoc_window);
+	GdkMonitor* monitor = gdk_display_get_monitor_at_window(display, assoc_window);
 	gdk_monitor_get_geometry(monitor, rectangle);
 #else
 	gint monitor = gdk_screen_get_monitor_at_window(screen, assoc_window);
@@ -573,7 +573,7 @@ static void budgie_popover_get_screen_for_widget(GtkWidget *widget, GdkRectangle
  * Unlike a typical popover implementation, this relies on some information
  * from the toplevel window on what edge it happens to be on.
  */
-static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle *target) {
+static void budgie_popover_compute_positition(BudgiePopover* self, GdkRectangle* target) {
 	GtkPositionType tail_position = GTK_POS_BOTTOM;
 	gint our_width = 0, our_height = 0;
 	int x = 0, y = 0, width = 0, height = 0;
@@ -657,7 +657,7 @@ static void budgie_popover_compute_positition(BudgiePopover *self, GdkRectangle 
 	*target = (GdkRectangle){ .x = x, .y = y, .width = width, .height = height };
 }
 
-static void budgie_popover_compute_tail(BudgiePopover *self) {
+static void budgie_popover_compute_tail(BudgiePopover* self) {
 	GtkAllocation alloc = { 0 };
 	BudgieTail t = { 0 };
 
@@ -707,8 +707,8 @@ static void budgie_popover_compute_tail(BudgiePopover *self) {
  *
  * Draw the popover's tail section.
  */
-static void budgie_popover_draw_tail(BudgiePopover *self, cairo_t *cr) {
-	BudgieTail *tail = &(self->priv->tail);
+static void budgie_popover_draw_tail(BudgiePopover* self, cairo_t* cr) {
+	BudgieTail* tail = &(self->priv->tail);
 
 	cairo_move_to(cr, tail->start_x + tail->x_offset, tail->start_y + tail->y_offset);
 	cairo_line_to(cr, tail->x + tail->x_offset, tail->y + tail->y_offset);
@@ -721,16 +721,16 @@ static void budgie_popover_draw_tail(BudgiePopover *self, cairo_t *cr) {
  *
  * Handle the main rendering + clipping of the BudgiePopover
  */
-static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr) {
-	GtkStyleContext *style = NULL;
+static gboolean budgie_popover_draw(GtkWidget* widget, cairo_t* cr) {
+	GtkStyleContext* style = NULL;
 	GtkAllocation alloc = { 0 };
 	GdkRGBA border_color = { 0 };
 	GtkBorder border = { 0 };
 	GtkStateFlags fl;
-	BudgiePopover *self = NULL;
-	BudgieTail *tail = NULL;
+	BudgiePopover* self = NULL;
+	BudgieTail* tail = NULL;
 	GtkAllocation body_alloc = { 0 };
-	GtkWidget *child = NULL;
+	GtkWidget* child = NULL;
 
 	self = BUDGIE_POPOVER(widget);
 	tail = &(self->priv->tail);
@@ -819,8 +819,8 @@ static gboolean budgie_popover_draw(GtkWidget *widget, cairo_t *cr) {
 	return GDK_EVENT_PROPAGATE;
 }
 
-static void budgie_popover_add(GtkContainer *container, GtkWidget *widget) {
-	BudgiePopover *self = NULL;
+static void budgie_popover_add(GtkContainer* container, GtkWidget* widget) {
+	BudgiePopover* self = NULL;
 
 	self = BUDGIE_POPOVER(container);
 
@@ -843,7 +843,7 @@ static gboolean budgie_popover_hide_self(gpointer v) {
  *
  * If the mouse button is pressed outside of our window, that's our cue to close.
  */
-static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *button,
+static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* button,
 											__budgie_unused__ gpointer udata) {
 	gint x, y = 0;
 	gint w, h = 0;
@@ -871,7 +871,7 @@ static gboolean budgie_popover_button_press(GtkWidget *widget, GdkEventButton *b
  *
  * If the Escape/Super key is pressed, then we also need to close.
  */
-static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key, __budgie_unused__ gpointer udata) {
+static gboolean budgie_popover_key_press(GtkWidget* widget, GdkEventKey* key, __budgie_unused__ gpointer udata) {
 	switch (key->keyval) {
 		case GDK_KEY_Escape:
 		case GDK_KEY_Super_L:
@@ -885,13 +885,13 @@ static gboolean budgie_popover_key_press(GtkWidget *widget, GdkEventKey *key, __
  *
  * Our associated widget has died, so we must unref ourselves now.
  */
-static void budgie_popover_disconnect(__budgie_unused__ GtkWidget *relative_to, BudgiePopover *self) {
+static void budgie_popover_disconnect(__budgie_unused__ GtkWidget* relative_to, BudgiePopover* self) {
 	self->priv->relative_to = NULL;
 	gtk_widget_destroy(GTK_WIDGET(self));
 }
 
-static void budgie_popover_set_property(GObject *object, guint id, const GValue *value, GParamSpec *spec) {
-	BudgiePopover *self = BUDGIE_POPOVER(object);
+static void budgie_popover_set_property(GObject* object, guint id, const GValue* value, GParamSpec* spec) {
+	BudgiePopover* self = BUDGIE_POPOVER(object);
 
 	switch (id) {
 		case PROP_RELATIVE_TO:
@@ -909,8 +909,8 @@ static void budgie_popover_set_property(GObject *object, guint id, const GValue 
 	}
 }
 
-static void budgie_popover_get_property(GObject *object, guint id, GValue *value, GParamSpec *spec) {
-	BudgiePopover *self = BUDGIE_POPOVER(object);
+static void budgie_popover_get_property(GObject* object, guint id, GValue* value, GParamSpec* spec) {
+	BudgiePopover* self = BUDGIE_POPOVER(object);
 
 	switch (id) {
 		case PROP_RELATIVE_TO: g_value_set_object(value, self->priv->relative_to); break;
@@ -927,7 +927,7 @@ static void budgie_popover_get_property(GObject *object, guint id, GValue *value
  *
  * Returns: (transfer full): A newly created #BudgiePopover
  */
-GtkWidget *budgie_popover_new(GtkWidget *relative_to) {
+GtkWidget* budgie_popover_new(GtkWidget* relative_to) {
 	return g_object_new(BUDGIE_TYPE_POPOVER, "relative-to", relative_to, "type", GTK_WINDOW_POPUP, NULL);
 }
 
@@ -937,7 +937,7 @@ GtkWidget *budgie_popover_new(GtkWidget *relative_to) {
  *
  * Set the positioning policy employed by the popover
  */
-void budgie_popover_set_position_policy(BudgiePopover *self, BudgiePopoverPositionPolicy policy) {
+void budgie_popover_set_position_policy(BudgiePopover* self, BudgiePopoverPositionPolicy policy) {
 	g_return_if_fail(self != NULL);
 	g_object_set(self, "position-policy", policy, NULL);
 }
@@ -949,7 +949,7 @@ void budgie_popover_set_position_policy(BudgiePopover *self, BudgiePopoverPositi
  *
  * Returns: The #BudgiePopoverPositionPolicy currently in use
  */
-BudgiePopoverPositionPolicy budgie_popover_get_position_policy(BudgiePopover *self) {
+BudgiePopoverPositionPolicy budgie_popover_get_position_policy(BudgiePopover* self) {
 	g_return_val_if_fail(self != NULL, 0);
 	return self->priv->policy;
 }

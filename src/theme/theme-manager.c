@@ -21,14 +21,14 @@ struct _BudgieThemeManagerClass {
 
 struct _BudgieThemeManager {
 	GObject parent;
-	GtkCssProvider *css_provider;
-	GSettings *desktop_settings;
+	GtkCssProvider* css_provider;
+	GSettings* desktop_settings;
 	gboolean builtin_enabled;
 };
 
-static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self, const gchar *theme_portion);
-static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, GParamSpec *prop, GtkSettings *settings);
-static void budgie_theme_manager_builtin_changed(BudgieThemeManager *self, const gchar *key, GSettings *settings);
+static void budgie_theme_manager_set_theme_css(BudgieThemeManager* self, const gchar* theme_portion);
+static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GtkSettings* settings);
+static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const gchar* key, GSettings* settings);
 
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
@@ -37,15 +37,15 @@ G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
  *
  * Construct a new BudgieThemeManager object
  */
-BudgieThemeManager *budgie_theme_manager_new() {
+BudgieThemeManager* budgie_theme_manager_new() {
 	return g_object_new(BUDGIE_TYPE_THEME_MANAGER, NULL);
 }
 
 /**
  * Handle cleanup
  */
-static void budgie_theme_manager_dispose(GObject *obj) {
-	BudgieThemeManager *self = BUDGIE_THEME_MANAGER(obj);
+static void budgie_theme_manager_dispose(GObject* obj) {
+	BudgieThemeManager* self = BUDGIE_THEME_MANAGER(obj);
 
 	/* Ensure we nuke the style provider */
 	budgie_theme_manager_set_theme_css(self, NULL);
@@ -58,8 +58,8 @@ static void budgie_theme_manager_dispose(GObject *obj) {
 /**
  * Class initialisation
  */
-static void budgie_theme_manager_class_init(BudgieThemeManagerClass *klazz) {
-	GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+static void budgie_theme_manager_class_init(BudgieThemeManagerClass* klazz) {
+	GObjectClass* obj_class = G_OBJECT_CLASS(klazz);
 
 	/* gobject vtable hookup */
 	obj_class->dispose = budgie_theme_manager_dispose;
@@ -68,8 +68,8 @@ static void budgie_theme_manager_class_init(BudgieThemeManagerClass *klazz) {
 /**
  * Instaniation
  */
-static void budgie_theme_manager_init(BudgieThemeManager *self) {
-	GtkSettings *settings = NULL;
+static void budgie_theme_manager_init(BudgieThemeManager* self) {
+	GtkSettings* settings = NULL;
 
 	/* TODO: Stop using .budgie-panel for desktop-wide schema ! */
 	self->desktop_settings = g_settings_new("com.solus-project.budgie-panel");
@@ -102,12 +102,12 @@ static void budgie_theme_manager_init(BudgieThemeManager *self) {
  * @note passing NULL to theme_portion will remove any theme providers allowing
  * user themes to completely override the styling.
  */
-static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self, const gchar *theme_portion) {
-	GdkScreen *screen = NULL;
-	GtkCssProvider *css_provider = NULL;
-	gchar *theme_uri = NULL;
-	GError *error = NULL;
-	GFile *file = NULL;
+static void budgie_theme_manager_set_theme_css(BudgieThemeManager* self, const gchar* theme_portion) {
+	GdkScreen* screen = NULL;
+	GtkCssProvider* css_provider = NULL;
+	gchar* theme_uri = NULL;
+	GError* error = NULL;
+	GFile* file = NULL;
 
 	screen = gdk_screen_get_default();
 
@@ -153,10 +153,10 @@ remove_provider:
 	self->css_provider = css_provider;
 }
 
-static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, __attribute__((unused)) GParamSpec *prop,
-											   GtkSettings *settings) {
-	gchar *theme_name = NULL;
-	const gchar *theme_css = NULL;
+static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop,
+											   GtkSettings* settings) {
+	gchar* theme_name = NULL;
+	const gchar* theme_css = NULL;
 
 	/* Set theme_css NULL if internal theming is disabled */
 	if (self->builtin_enabled) {
@@ -172,7 +172,7 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, __attri
 	budgie_theme_manager_set_theme_css(self, theme_css);
 }
 
-static void budgie_theme_manager_builtin_changed(BudgieThemeManager *self, const gchar *key, GSettings *settings) {
+static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const gchar* key, GSettings* settings) {
 	self->builtin_enabled = g_settings_get_boolean(settings, key);
 	/* Update now based on whether we can use the built-in */
 	budgie_theme_manager_theme_changed(self, NULL, gtk_settings_get_default());

@@ -28,14 +28,14 @@ struct _BudgiePopoverClass {
 	GtkWindowClass parent_class;
 
 	/* Marked for gtk-doc syntax */
-	void (*closed)(BudgiePopover *popover);
+	void (*closed)(BudgiePopover* popover);
 
 	gpointer padding[12];
 };
 
 struct _BudgiePopover {
 	GtkWindow parent;
-	BudgiePopoverPrivate *priv;
+	BudgiePopoverPrivate* priv;
 };
 
 /**
@@ -68,10 +68,10 @@ typedef enum {
  * API Methods
  */
 
-GtkWidget *budgie_popover_new(GtkWidget *relative_to);
+GtkWidget* budgie_popover_new(GtkWidget* relative_to);
 
-void budgie_popover_set_position_policy(BudgiePopover *popover, BudgiePopoverPositionPolicy policy);
-BudgiePopoverPositionPolicy budgie_popover_get_position_policy(BudgiePopover *popover);
+void budgie_popover_set_position_policy(BudgiePopover* popover, BudgiePopoverPositionPolicy policy);
+BudgiePopoverPositionPolicy budgie_popover_get_position_policy(BudgiePopover* popover);
 
 GType budgie_popover_get_type(void);
 

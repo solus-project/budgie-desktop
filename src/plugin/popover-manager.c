@@ -19,8 +19,8 @@ BUDGIE_BEGIN_PEDANTIC
 BUDGIE_END_PEDANTIC
 
 struct _BudgiePopoverManagerPrivate {
-	GHashTable *popovers;
-	BudgiePopover *active_popover;
+	GHashTable* popovers;
+	BudgiePopover* active_popover;
 	gboolean grabbed;
 };
 
@@ -37,19 +37,19 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_
 	 GDK_PROXIMITY_OUT_MASK)
 #endif
 
-static void budgie_popover_manager_link_signals(BudgiePopoverManager *manager, GtkWidget *parent_widget,
-												BudgiePopover *popover);
-static void budgie_popover_manager_unlink_signals(BudgiePopoverManager *manager, GtkWidget *parent_widget,
-												  BudgiePopover *popover);
-static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover, GdkEvent *event,
-													  BudgiePopoverManager *self);
-static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover, GdkEvent *event,
-														BudgiePopoverManager *self);
-static void budgie_popover_manager_grab_notify(BudgiePopoverManager *self, gboolean was_grabbed,
-											   BudgiePopover *popover);
-static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager *self, GdkEvent *event, BudgiePopover *popover);
-static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopover *popover);
-static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopover *popover);
+static void budgie_popover_manager_link_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget,
+												BudgiePopover* popover);
+static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* manager, GtkWidget* parent_widget,
+												  BudgiePopover* popover);
+static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, GdkEvent* event,
+													  BudgiePopoverManager* self);
+static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, GdkEvent* event,
+														BudgiePopoverManager* self);
+static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed,
+											   BudgiePopover* popover);
+static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, GdkEvent* event, BudgiePopover* popover);
+static void budgie_popover_manager_grab(BudgiePopoverManager* self, BudgiePopover* popover);
+static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopover* popover);
 /**
  * budgie_popover_manager_new:
 
@@ -57,7 +57,7 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopo
  *
  * Return value: A pointer to a new #BudgiePopoverManager object.
  */
-BudgiePopoverManager *budgie_popover_manager_new() {
+BudgiePopoverManager* budgie_popover_manager_new() {
 	return g_object_new(BUDGIE_TYPE_POPOVER_MANAGER, NULL);
 }
 
@@ -66,8 +66,8 @@ BudgiePopoverManager *budgie_popover_manager_new() {
  *
  * Clean up a BudgiePopoverManager instance
  */
-static void budgie_popover_manager_dispose(GObject *obj) {
-	BudgiePopoverManager *self = NULL;
+static void budgie_popover_manager_dispose(GObject* obj) {
+	BudgiePopoverManager* self = NULL;
 
 	self = BUDGIE_POPOVER_MANAGER(obj);
 	g_clear_pointer(&self->priv->popovers, g_hash_table_unref);
@@ -80,8 +80,8 @@ static void budgie_popover_manager_dispose(GObject *obj) {
  *
  * Handle class initialisation
  */
-static void budgie_popover_manager_class_init(BudgiePopoverManagerClass *klazz) {
-	GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+static void budgie_popover_manager_class_init(BudgiePopoverManagerClass* klazz) {
+	GObjectClass* obj_class = G_OBJECT_CLASS(klazz);
 
 	/* gobject vtable hookup */
 	obj_class->dispose = budgie_popover_manager_dispose;
@@ -92,7 +92,7 @@ static void budgie_popover_manager_class_init(BudgiePopoverManagerClass *klazz) 
  *
  * Handle construction of the BudgiePopoverManager
  */
-static void budgie_popover_manager_init(BudgiePopoverManager *self) {
+static void budgie_popover_manager_init(BudgiePopoverManager* self) {
 	self->priv = budgie_popover_manager_get_instance_private(self);
 	self->priv->grabbed = FALSE;
 
@@ -114,8 +114,8 @@ static void budgie_popover_manager_init(BudgiePopoverManager *self) {
  * This allows the panel to provide a "menubar" like functionality for interaction
  * with multiple popovers in a natural fashion.
  */
-void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidget *parent_widget,
-											 BudgiePopover *popover) {
+void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidget* parent_widget,
+											 BudgiePopover* popover) {
 	g_assert(self != NULL);
 	g_return_if_fail(parent_widget != NULL && popover != NULL);
 
@@ -140,10 +140,10 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager *self, GtkWidg
  * Unregister a popover so that it is no longer managed by this implementation,
  * and is free to manage itself.
  */
-void budgie_popover_manager_unregister_popover(BudgiePopoverManager *self, GtkWidget *parent_widget) {
+void budgie_popover_manager_unregister_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
 	g_assert(self != NULL);
 	g_return_if_fail(parent_widget != NULL);
-	BudgiePopover *popover = NULL;
+	BudgiePopover* popover = NULL;
 
 	popover = g_hash_table_lookup(self->priv->popovers, parent_widget);
 	if (!popover) {
@@ -175,8 +175,8 @@ static gboolean show_one_popover(gpointer v) {
  *
  * Show a #BudgiePopover on screen belonging to the specified @parent_widget
  */
-void budgie_popover_manager_show_popover(BudgiePopoverManager *self, GtkWidget *parent_widget) {
-	BudgiePopover *popover = NULL;
+void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
+	BudgiePopover* popover = NULL;
 
 	g_assert(self != NULL);
 	g_return_if_fail(parent_widget != NULL);
@@ -195,7 +195,7 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager *self, GtkWidget *
  *
  * The widget has died, so remove it from our internal state
  */
-static void budgie_popover_manager_widget_died(BudgiePopoverManager *self, GtkWidget *child) {
+static void budgie_popover_manager_widget_died(BudgiePopoverManager* self, GtkWidget* child) {
 	if (!g_hash_table_contains(self->priv->popovers, child)) {
 		return;
 	}
@@ -207,8 +207,8 @@ static void budgie_popover_manager_widget_died(BudgiePopoverManager *self, GtkWi
  *
  * Hook up the various signals we need to manage this popover correctly
  */
-static void budgie_popover_manager_link_signals(BudgiePopoverManager *self, GtkWidget *parent_widget,
-												BudgiePopover *popover) {
+static void budgie_popover_manager_link_signals(BudgiePopoverManager* self, GtkWidget* parent_widget,
+												BudgiePopover* popover) {
 	g_signal_connect_swapped(parent_widget, "destroy", G_CALLBACK(budgie_popover_manager_widget_died), self);
 
 	/* Monitor map/unmap to manage the grab semantics */
@@ -225,8 +225,8 @@ static void budgie_popover_manager_link_signals(BudgiePopoverManager *self, GtkW
  *
  * Disconnect any prior signals for this popover so we stop receiving events for it
  */
-static void budgie_popover_manager_unlink_signals(BudgiePopoverManager *self, GtkWidget *parent_widget,
-												  BudgiePopover *popover) {
+static void budgie_popover_manager_unlink_signals(BudgiePopoverManager* self, GtkWidget* parent_widget,
+												  BudgiePopover* popover) {
 	g_signal_handlers_disconnect_by_data(parent_widget, self);
 	g_signal_handlers_disconnect_by_data(popover, self);
 }
@@ -237,8 +237,8 @@ static void budgie_popover_manager_unlink_signals(BudgiePopoverManager *self, Gt
  * Handle the BudgiePopover becoming visible on screen, updating our knowledge
  * of who the currently active popover is
  */
-static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover, __budgie_unused__ GdkEvent *event,
-													  BudgiePopoverManager *self) {
+static gboolean budgie_popover_manager_popover_mapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event,
+													  BudgiePopoverManager* self) {
 	/* Someone might have forcibly opened a new popover with one active, so
 	 * if we're already managing a popover, the only sane thing to do is
 	 * to tell it to sod off and start managing the new one.
@@ -277,8 +277,8 @@ static gboolean budgie_popover_manager_popover_mapped(BudgiePopover *popover, __
  * Handle the BudgiePopover becoming invisible on screen, updating our knowledge
  * of who the currently active popover is
  */
-static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover, __budgie_unused__ GdkEvent *event,
-														BudgiePopoverManager *self) {
+static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover* popover, __budgie_unused__ GdkEvent* event,
+														BudgiePopoverManager* self) {
 	budgie_popover_manager_ungrab(self, popover);
 
 	if (popover == self->priv->active_popover) {
@@ -293,9 +293,9 @@ static gboolean budgie_popover_manager_popover_unmapped(BudgiePopover *popover, 
  *
  * Grab the input events using the GdkSeat
  */
-static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopover *popover) {
-	GdkDisplay *display = NULL;
-	GdkWindow *window = NULL;
+static void budgie_popover_manager_grab(BudgiePopoverManager* self, BudgiePopover* popover) {
+	GdkDisplay* display = NULL;
+	GdkWindow* window = NULL;
 	GdkGrabStatus st;
 
 	if (self->priv->grabbed || popover != self->priv->active_popover) {
@@ -313,7 +313,7 @@ static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopove
 
 #if GTK_CHECK_VERSION(3, 20, 0)
 	/* 3.20 and newer use GdkSeat API */
-	GdkSeat *seat = NULL;
+	GdkSeat* seat = NULL;
 	GdkSeatCapabilities caps = GDK_SEAT_CAPABILITY_ALL;
 
 	seat = gdk_display_get_default_seat(display);
@@ -325,7 +325,7 @@ static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopove
 	}
 #else
 	/* Likely 3.18, use old GdkDevice API */
-	GdkDeviceManager *manager = NULL;
+	GdkDeviceManager* manager = NULL;
 	GdkDevice *pointer, *keyboard = NULL;
 
 	manager = gdk_display_get_device_manager(display);
@@ -355,8 +355,8 @@ static void budgie_popover_manager_grab(BudgiePopoverManager *self, BudgiePopove
  *
  * Ungrab a previous grab by this widget
  */
-static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopover *popover) {
-	GdkDisplay *display = NULL;
+static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopover* popover) {
+	GdkDisplay* display = NULL;
 
 	if (!self->priv->grabbed || popover != self->priv->active_popover) {
 		return;
@@ -366,7 +366,7 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopo
 
 #if GTK_CHECK_VERSION(3, 20, 0)
 	/* 3.20 and newer use GdkSeat API */
-	GdkSeat *seat = NULL;
+	GdkSeat* seat = NULL;
 
 	seat = gdk_display_get_default_seat(display);
 
@@ -375,7 +375,7 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopo
 	self->priv->grabbed = FALSE;
 #else
 	/* Likely 3.18 */
-	GdkDeviceManager *manager = NULL;
+	GdkDeviceManager* manager = NULL;
 	GdkDevice *pointer, *keyboard = NULL;
 
 	manager = gdk_display_get_device_manager(display);
@@ -398,8 +398,8 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager *self, BudgiePopo
  *
  * Grab was broken, most likely due to a window within our application
  */
-static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager *self, __budgie_unused__ GdkEvent *event,
-												   BudgiePopover *popover) {
+static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager* self, __budgie_unused__ GdkEvent* event,
+												   BudgiePopover* popover) {
 	if (popover != self->priv->active_popover) {
 		return GDK_EVENT_PROPAGATE;
 	}
@@ -416,8 +416,8 @@ static gboolean budgie_popover_manager_grab_broken(BudgiePopoverManager *self, _
  * If our grab was broken, i.e. due to some popup menu, and we're still visible,
  * we'll now try and grab focus once more.
  */
-static void budgie_popover_manager_grab_notify(BudgiePopoverManager *self, gboolean was_grabbed,
-											   BudgiePopover *popover) {
+static void budgie_popover_manager_grab_notify(BudgiePopoverManager* self, gboolean was_grabbed,
+											   BudgiePopover* popover) {
 	/* Only interested in unshadowed */
 	if (!was_grabbed || popover != self->priv->active_popover) {
 		return;
