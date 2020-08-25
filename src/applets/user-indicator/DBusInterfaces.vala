@@ -11,37 +11,35 @@
 
 [DBus (name = "org.freedesktop.Accounts")]
 interface AccountsInterface : Object {
-    public abstract string find_user_by_name(string username) throws IOError;
+	public abstract string find_user_by_name(string username) throws IOError;
 }
 
 [DBus (name = "org.freedesktop.Accounts.User")]
 interface AccountUserInterface : Object {
-    public signal void changed();
+	public signal void changed();
 }
 
 [DBus (name = "org.freedesktop.DBus.Properties")]
 interface PropertiesInterface : Object {
-    public abstract Variant get(string interface, string property) throws IOError;
-    public signal void properties_changed();
+	public abstract Variant get(string interface, string property) throws IOError;
+	public signal void properties_changed();
 }
 
 /* logind */
 [DBus (name = "org.freedesktop.login1.Manager")]
 public interface LogindInterface : Object {
-    public abstract void suspend(bool interactive) throws IOError;
-    public abstract void hibernate(bool interactive) throws IOError;
+	public abstract void suspend(bool interactive) throws IOError;
+	public abstract void hibernate(bool interactive) throws IOError;
 }
 
 [DBus (name="org.gnome.SessionManager")]
-public interface SessionManager : Object
-{
-    public abstract void Logout (uint mode) throws IOError;
-    public abstract async void Reboot() throws Error;
-    public abstract async void Shutdown() throws Error;
+public interface SessionManager : Object {
+	public abstract void Logout (uint mode) throws IOError;
+	public abstract async void Reboot() throws Error;
+	public abstract async void Shutdown() throws Error;
 }
 
 [DBus (name="org.gnome.ScreenSaver")]
-public interface ScreenSaver : Object
-{
-    public abstract void lock() throws Error;
+public interface ScreenSaver : Object {
+	public abstract void lock() throws Error;
 }

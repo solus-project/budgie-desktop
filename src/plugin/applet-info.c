@@ -222,8 +222,7 @@ static void budgie_applet_info_init(BudgieAppletInfo* self) {
 	self->priv = budgie_applet_info_get_instance_private(self);
 }
 
-BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char* uuid, BudgieApplet* applet,
-	GSettings* settings) {
+BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char* uuid, BudgieApplet* applet, GSettings* settings) {
 	if (plugin_info) {
 		return g_object_new(
 			BUDGIE_TYPE_APPLET_INFO,

@@ -12,37 +12,36 @@
 static bool replace = false;
 static bool reset = false;
 
-const GLib.OptionEntry[] options = {
-    { "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" },
-    { "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" },
-    { null }
+const GLib.OptionEntry[] options = { 
+	{ "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" }, 
+	{ "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" }, 
+	{ null }
 };
 
-public static int main(string[] args)
-{
-    Gtk.init(ref args);
-    OptionContext ctx;
+public static int main(string[] args) {
+	Gtk.init(ref args);
+	OptionContext ctx;
 
-    Intl.setlocale(LocaleCategory.ALL, "");
-    Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
-    Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
-    Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+	Intl.setlocale(LocaleCategory.ALL, "");
+	Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+	Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+	Intl.textdomain(Budgie.GETTEXT_PACKAGE);
 
-    ctx = new OptionContext("- Budgie Panel");
-    ctx.set_help_enabled(true);
-    ctx.add_main_entries(options, null);
-    ctx.add_group(Gtk.get_option_group(false));
+	ctx = new OptionContext("- Budgie Panel");
+	ctx.set_help_enabled(true);
+	ctx.add_main_entries(options, null);
+	ctx.add_group(Gtk.get_option_group(false));
 
-    try {
-        ctx.parse(ref args);
-    } catch (Error e) {
-        stderr.printf("Error: %s\n", e.message);
-        return 0;
-    }
+	try {
+		ctx.parse(ref args);
+	} catch (Error e) {
+		stderr.printf("Error: %s\n", e.message);
+		return 0;
+	}
 
-    var manager = new Budgie.PanelManager(reset);
-    manager.serve(replace);
+	var manager = new Budgie.PanelManager(reset);
+	manager.serve(replace);
 
-    Gtk.main();
-    return 0;
+	Gtk.main();
+	return 0;
 }

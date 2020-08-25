@@ -1,5 +1,4 @@
 namespace Clutter {
-
   public struct Matrix : Cogl.Matrix {
   }
 
