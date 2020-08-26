@@ -44,7 +44,7 @@ namespace Budgie {
 		public void do_init() {
 			/* No ibus-daemon = no ibus manager */
 			if (Environment.find_program_in_path("ibus-daemon") == null) {
-				GLib.message("ibus-daemon unsupported on this system");
+				message("ibus-daemon unsupported on this system");
 				this.ibus_available = false;
 				this.ready();
 				return;
@@ -77,7 +77,7 @@ namespace Budgie {
 			try {
 				new Subprocess.newv(cmdline, SubprocessFlags.NONE);
 			} catch (Error e) {
-				GLib.message("Failed to launch ibus: %s", e.message);
+				message("Failed to launch ibus: %s", e.message);
 				this.ibus_available = false;
 			}
 		}
@@ -89,7 +89,7 @@ namespace Budgie {
 			this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 		}
 
-		private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res) {
+		private void on_engines_get(Object? o, AsyncResult? res) {
 			try {
 				this.enginelist = this.bus.list_engines_async_finish(res);
 				this.reset_ibus();
@@ -98,7 +98,7 @@ namespace Budgie {
 					this.engines[engine.get_name()] = engine;
 				}
 			} catch (Error e) {
-				GLib.message("Failed to get engines: %s", e.message);
+				message("Failed to get engines: %s", e.message);
 				this.reset_ibus();
 				return;
 			}
@@ -149,7 +149,7 @@ namespace Budgie {
 				return;
 			}
 
-			this.bus.set_global_engine_async.begin(name, ENGINE_SET_TIMEOUT, null, ()=> {
+			this.bus.set_global_engine_async.begin(name, ENGINE_SET_TIMEOUT, null, () => {
 				this.kbm.release_keyboard();
 			});
 		}

@@ -10,7 +10,7 @@
  */
 
 namespace Workspaces {
-	const Gtk.TargetEntry[] target_list = { 
+	const Gtk.TargetEntry[] target_list = {
 		{ "application/x-wnck-window-id", 0, 0 }
 	};
 
@@ -182,7 +182,7 @@ namespace Workspaces {
 			Gtk.drag_finish(context, dnd_success, true, time);
 		}
 
-		public void update_windows(GLib.List<unowned Wnck.Window> window_list) {
+		public void update_windows(List<unowned Wnck.Window> window_list) {
 			int column_offset = 0;
 			int row_offset = 0;
 

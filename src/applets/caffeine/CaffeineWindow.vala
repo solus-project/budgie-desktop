@@ -56,7 +56,7 @@ namespace Caffeine {
 				SignalHandler.unblock(timer, timer_id);
 			});
 
-			mode_id = mode.notify["active"].connect (() => { // On active change
+			mode_id = mode.notify["active"].connect(() => { // On active change
 				SignalHandler.block(mode, mode_id); // Block to prevent update on set_caffeine_mode schema change
 				timer.sensitive = !mode.active; // Set timer sensitivity
 				settings.set_boolean("caffeine-mode", mode.active); // Update our caffeine-mode WM setting

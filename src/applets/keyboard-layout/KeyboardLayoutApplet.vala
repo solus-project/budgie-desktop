@@ -45,7 +45,7 @@ class AppletIBusManager : GLib.Object {
 	public void do_init() {
 		this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 		if (Environment.find_program_in_path("ibus-daemon") == null) {
-			GLib.message("ibus-daemon unsupported on this system");
+			message("ibus-daemon unsupported on this system");
 			this.ibus_available = false;
 			this.ready();
 			return;
@@ -74,7 +74,7 @@ class AppletIBusManager : GLib.Object {
 		this.engines = new HashTable<string,weak IBus.EngineDesc>(str_hash, str_equal);
 	}
 
-	private void on_engines_get(GLib.Object? o, GLib.AsyncResult? res) {
+	private void on_engines_get(Object? o, AsyncResult? res) {
 		try {
 			this.enginelist = this.bus.list_engines_async_finish(res);
 			this.reset_ibus();
@@ -83,7 +83,7 @@ class AppletIBusManager : GLib.Object {
 				this.engines[engine.get_name()] = engine;
 			}
 		} catch (Error e) {
-			GLib.message("Failed to get engines: %s", e.message);
+			message("Failed to get engines: %s", e.message);
 			this.reset_ibus();
 			return;
 		}
@@ -243,7 +243,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		widget = new Gtk.EventBox();
 
 		/* Hook up the popover clicks */
-		widget.button_press_event.connect((e)=> {
+		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
 			}
@@ -445,7 +445,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 			Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 		}
 
-		if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
+		if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
 			fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, display_name, true);
 		} else {
 			fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);

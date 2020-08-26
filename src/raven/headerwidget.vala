@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -166,7 +166,7 @@ namespace Budgie {
 			close_button.get_child().show();
 			header_box.pack_start(close_button, false, false, 0);
 
-			close_button.clicked.connect(()=> {
+			close_button.clicked.connect(() => {
 				this.closed();
 			});
 
@@ -213,16 +213,16 @@ namespace Budgie {
 			pack_start(content, false, false, 0);
 
 			this.header.bind_property("expanded", this, "expanded");
-			content.notify["child-revealed"].connect_after(()=> {
+			content.notify["child-revealed"].connect_after(() => {
 				this.get_toplevel().queue_draw();
 				this.track_animations = false;
 			});
 
-			content.notify["reveal-child"].connect(()=> {
+			content.notify["reveal-child"].connect(() => {
 				this.track_animations = true;
 			});
 
-			content.map.connect_after(()=> {
+			content.map.connect_after(() => {
 				var clock = content.get_frame_clock();
 				clock.after_paint.connect(this.after_paint);
 			});

@@ -31,7 +31,7 @@ namespace Budgie {
 
 		public MainView() {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
-			raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
+			raven_settings = new Settings("com.solus-project.budgie-raven");
 			raven_settings.changed.connect(this.on_raven_settings_changed);
 
 			var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);

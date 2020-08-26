@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2016-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,7 +13,7 @@ namespace Budgie {
 	/**
 	* Our name on the session bus. Reserved for Budgie use
 	*/
-	public const string MENU_DBUS_NAME		  = "org.budgie_desktop.MenuManager";
+	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
 
 	/**
 	* Unique object path on OSD_DBUS_NAME
@@ -25,14 +25,14 @@ namespace Budgie {
 	* BudgieMenuManager is responsible for managing the right click menus of
 	* the budgie desktop over dbus, so that GTK+ isn't used inside the WM process
 	*/
-	[DBus (name = "org.budgie_desktop.MenuManager")]
+	[DBus (name="org.budgie_desktop.MenuManager")]
 	public class MenuManager {
 		private Gtk.Menu? desktop_menu = null;
 		private unowned Wnck.Window? active_window = null;
 		private Wnck.ActionMenu? action_menu = null;
 		private uint32 xid = 0;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public MenuManager() {
 			init_desktop_menu();
 		}
@@ -104,7 +104,7 @@ namespace Budgie {
 		/**
 		* Own the MENU_DBUS_NAME
 		*/
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public void setup_dbus(bool replace) {
 			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
 			if (replace) {
@@ -131,7 +131,7 @@ namespace Budgie {
 		* which contains actions for launching the settings, etc.
 		*/
 		public void ShowDesktopMenu(uint button, uint32 timestamp) {
-			Idle.add(()=> {
+			Idle.add(() => {
 				if (desktop_menu.get_visible()) {
 					desktop_menu.hide();
 				} else {

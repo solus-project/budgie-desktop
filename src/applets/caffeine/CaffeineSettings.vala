@@ -1,5 +1,5 @@
 namespace Caffeine {
-	[GtkTemplate (ui = "/com/solus-project/caffeine/settings.ui")]
+	[GtkTemplate (ui="/com/solus-project/caffeine/settings.ui")]
 	public class AppletSettings : Gtk.Grid {
 		private Settings? settings = null;
 		private Settings? wm_settings = null;

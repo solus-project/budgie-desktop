@@ -1,4 +1,3 @@
-
 /*
  * This file is part of budgie-desktop
  *
@@ -53,7 +52,7 @@ namespace Caffeine {
 			});
 
 			interface_settings.changed["icon-theme"].connect_after(() => {
-				Timeout.add(200, ()=> {
+				Timeout.add(200, () => {
 					set_caffeine_icons(); // Update our Caffeine Icons
 					update_icon(); // Update the icon
 					return false;
@@ -61,7 +60,7 @@ namespace Caffeine {
 			});
 
 			// On click icon
-			event_box.button_press_event.connect((e)=> {
+			event_box.button_press_event.connect((e) => {
 				switch (e.button) {
 				case 1:
 					if (popover.get_visible()) {

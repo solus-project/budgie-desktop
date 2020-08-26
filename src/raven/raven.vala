@@ -10,19 +10,19 @@
  */
 
 namespace Budgie {
-	public const string RAVEN_DBUS_NAME		   = "org.budgie_desktop.Raven";
+	public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 	public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
-	[DBus (name = "org.budgie_desktop.Raven")]
+	[DBus (name="org.budgie_desktop.Raven")]
 	public class RavenIface {
 		private Raven? parent = null;
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		private bool dnd_enabled = false;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public uint notifications = 0;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public RavenIface(Raven? parent) {
 			this.parent = parent;
 		}
@@ -101,7 +101,7 @@ namespace Budgie {
 			}
 		}
 
-		
+
 		public signal void NotificationsChanged();
 
 		public uint GetNotificationCount() {
@@ -274,7 +274,7 @@ namespace Budgie {
 
 			set_wmclass("raven", "raven");
 
-			settings = new GLib.Settings("com.solus-project.budgie-raven");
+			settings = new Settings("com.solus-project.budgie-raven");
 			settings.changed.connect(this.on_raven_settings_changed);
 
 			Raven._instance = this;
@@ -287,7 +287,7 @@ namespace Budgie {
 			}
 
 			// Response to a scale factor change
-			notify["scale-factor"].connect(()=> {
+			notify["scale-factor"].connect(() => {
 				this.update_geometry(this.old_rect);
 				queue_resize();
 			});
@@ -298,7 +298,7 @@ namespace Budgie {
 			layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			add(layout);
 
-			enter_notify_event.connect((e)=> {
+			enter_notify_event.connect((e) => {
 				steal_focus();
 				return Gdk.EVENT_PROPAGATE;
 			});
@@ -357,7 +357,7 @@ namespace Budgie {
 					} else { // If we should hide the strip
 						strip.hide();
 					}
-				} catch (GLib.Error e) {
+				} catch (Error e) {
 					strip.show_all(); // Default to showing
 				}
 			}
@@ -375,7 +375,7 @@ namespace Budgie {
 
 		public void setup_dbus() {
 			Bus.own_name(BusType.SESSION, Budgie.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-				on_bus_acquired, ()=> {}, ()=> { warning("Raven could not take dbus!"); });
+				on_bus_acquired, () => {}, () => { warning("Raven could not take dbus!"); });
 		}
 
 		/**
@@ -396,7 +396,7 @@ namespace Budgie {
 
 			this.old_rect = rect;
 
-			move(x,y);
+			move(x, y);
 
 			our_height = height;
 			our_width = width;
@@ -513,7 +513,7 @@ namespace Budgie {
 				}
 			};
 
-			anim.start((a)=> {
+			anim.start((a) => {
 				if ((a.widget as Budgie.Raven).nscale == 0.0) {
 					a.widget.hide();
 				} else {

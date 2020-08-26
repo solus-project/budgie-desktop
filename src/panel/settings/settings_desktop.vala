@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -47,7 +47,7 @@ namespace Budgie {
 				_("Control whether to allow launchers and icons on the desktop.")));
 
 			/* Hook up settings */
-			bg_settings = new GLib.Settings("org.gnome.desktop.background");
+			bg_settings = new Settings("org.gnome.desktop.background");
 			bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
 			bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
 
@@ -76,7 +76,7 @@ namespace Budgie {
 				_("Mounted volumes & drives will appear on the desktop.")));
 
 
-			nautilus_settings = new GLib.Settings("org.gnome.nautilus.desktop");
+			nautilus_settings = new Settings("org.gnome.nautilus.desktop");
 			nautilus_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
 			nautilus_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
 			nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);

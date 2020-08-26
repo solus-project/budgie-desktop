@@ -10,7 +10,7 @@
  */
 
 namespace Budgie {
-	[GtkTemplate (ui = "/com/solus-project/budgie/polkit/dialog.ui")]
+	[GtkTemplate (ui="/com/solus-project/budgie/polkit/dialog.ui")]
 	public class AgentDialog : Gtk.Window {
 		[GtkChild]
 		private Gtk.Entry? entry_auth;
@@ -66,12 +66,12 @@ namespace Budgie {
 		}
 
 		/* Manipulate Vala's pointer logic to prevent a copy */
-		public unowned GLib.Cancellable? cancellable { public set ; public get; }
+		public unowned Cancellable? cancellable { public set ; public get; }
 
 		public string cookie { public get; public set; }
 
 		/* Save manually setting all this crap via some nice properties */
-		public AgentDialog(string action_id, string message, string icon_name, string cookie, GLib.Cancellable? cancellable) {
+		public AgentDialog(string action_id, string message, string icon_name, string cookie, Cancellable? cancellable) {
 			Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable);
 
 			set_keep_above(true);
@@ -263,14 +263,14 @@ namespace Budgie {
 		/* Theme management */
 		private Budgie.ThemeManager theme_manager;
 
-		public signal void stopagent ();
+		public signal void stopagent();
 
 		public override async bool initiate_authentication(
 			string action_id, string message, string icon_name,
-			Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable
+			Polkit.Details details, string cookie, List<Polkit.Identity?>? identities, Cancellable cancellable
 		) throws Polkit.Error {
 			var dialog = new AgentDialog(action_id, message, "dialog-password-symbolic", cookie, cancellable);
-			dialog.done.connect(()=> {
+			dialog.done.connect(() => {
 				initiate_authentication.callback();
 			});
 
@@ -296,7 +296,7 @@ namespace Budgie {
 		public Agent() {
 			theme_manager = new Budgie.ThemeManager();
 
-			register_with_session.begin((o,res)=> {
+			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
 					message("Failed to register with Session manager");
@@ -311,13 +311,13 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(()=> {
+			sclient.QueryEndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.EndSession.connect(()=> {
+			sclient.EndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.Stop.connect(()=> {
+			sclient.Stop.connect(() => {
 				end_session(true);
 			});
 			return true;

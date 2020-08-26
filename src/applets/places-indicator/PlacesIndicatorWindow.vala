@@ -10,7 +10,7 @@
  */
 
 public class PlacesIndicatorWindow : Budgie.Popover {
-	private GLib.VolumeMonitor volume_monitor;
+	private VolumeMonitor volume_monitor;
 
 	private MessageRevealer message_bar;
 	private PlacesSection places_section;
@@ -19,7 +19,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	private Gtk.ListBox networks_listbox;
 	private Gtk.Box placeholder;
 
-	private GLib.GenericSet<string> places_list;
+	private GenericSet<string> places_list;
 
 	private bool _expand_places = false;
 	private bool _show_places = false;
@@ -28,7 +28,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 
 	private bool only_places = true;
 
-	private GLib.FileMonitor bookmarks_monitor;
+	private FileMonitor bookmarks_monitor;
 
 	public bool expand_places {
 		get { return _expand_places; }
@@ -63,12 +63,12 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 	}
 
-	private GLib.UserDirectory[] DEFAULT_DIRECTORIES = {
-		GLib.UserDirectory.DOCUMENTS,
-		GLib.UserDirectory.DOWNLOAD,
-		GLib.UserDirectory.MUSIC,
-		GLib.UserDirectory.PICTURES,
-		GLib.UserDirectory.VIDEOS
+	private UserDirectory[] DEFAULT_DIRECTORIES = {
+		UserDirectory.DOCUMENTS,
+		UserDirectory.DOWNLOAD,
+		UserDirectory.MUSIC,
+		UserDirectory.PICTURES,
+		UserDirectory.VIDEOS
 	};
 
 	public PlacesIndicatorWindow(Gtk.Widget? window_parent) {
@@ -76,7 +76,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		set_size_request(280, 0);
 		get_style_context().add_class("places-menu");
 
-		places_list = new GLib.GenericSet<string>(str_hash, str_equal);
+		places_list = new GenericSet<string>(str_hash, str_equal);
 
 		Gtk.Box main_content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		main_content.get_style_context().add_class("container");
@@ -103,7 +103,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		main_content.pack_start(placeholder, true, true, 0);
 		placeholder.hide();
 
-		volume_monitor = GLib.VolumeMonitor.get();
+		volume_monitor = VolumeMonitor.get();
 
 		connect_signals();
 
@@ -150,7 +150,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 
 		if (before == null || after == null || prev != next) {
-			Gtk.Label label = new Gtk.Label(GLib.Markup.printf_escaped("<span font=\"11\">%s</span>", prev));
+			Gtk.Label label = new Gtk.Label(Markup.printf_escaped("<span font=\"11\">%s</span>", prev));
 			label.get_style_context().add_class("dim-label");
 			label.set_halign(Gtk.Align.START);
 			label.set_use_markup(true);
@@ -192,35 +192,35 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	}
 
 	/*
-	 * Returns a GLib.File for the bookmarks file location
+	 * Returns a File for the bookmarks file location
 	 */
-	private GLib.File get_bookmarks_file() {
-		string path = GLib.Path.build_filename(GLib.Environment.get_user_config_dir(), "gtk-3.0", "bookmarks");
-		return GLib.File.new_for_path(path);
+	private File get_bookmarks_file() {
+		string path = Path.build_filename(Environment.get_user_config_dir(), "gtk-3.0", "bookmarks");
+		return File.new_for_path(path);
 	}
 
 	/*
 	 * Sets up a file monitor for the bookmarks file and listens for changes
 	 */
 	private void connect_bookmarks_monitor() {
-		GLib.File bookmarks_file = get_bookmarks_file();
+		File bookmarks_file = get_bookmarks_file();
 		if (!bookmarks_file.query_exists()) {
 			return;
 		}
 
 		try {
-			bookmarks_monitor = bookmarks_file.monitor_file(GLib.FileMonitorFlags.WATCH_MOVES, null);
+			bookmarks_monitor = bookmarks_file.monitor_file(FileMonitorFlags.WATCH_MOVES, null);
 			bookmarks_monitor.set_rate_limit(1000);
 
 			// Refresh special directories (including the bookmarks) when the file changes
 			bookmarks_monitor.changed.connect(on_bookmarks_change);
-		} catch (GLib.IOError e) {
+		} catch (IOError e) {
 			warning(e.message);
 		}
 	}
 
-	private void on_bookmarks_change(GLib.File src, GLib.File? dest, GLib.FileMonitorEvent event) {
-		if ((event == GLib.FileMonitorEvent.CHANGES_DONE_HINT) || (event == GLib.FileMonitorEvent.RENAMED)) {
+	private void on_bookmarks_change(File src, File? dest, FileMonitorEvent event) {
+		if ((event == FileMonitorEvent.CHANGES_DONE_HINT) || (event == FileMonitorEvent.RENAMED)) {
 			refresh_special_dirs();
 		}
 	}
@@ -301,17 +301,17 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	 * Reads the bookmarks file and adds all of the bookmarks to the view
 	 */
 	private void refresh_bookmarks() {
-		GLib.File bookmarks_file = get_bookmarks_file();
+		File bookmarks_file = get_bookmarks_file();
 		if (!bookmarks_file.query_exists()) {
 			return;
 		}
 		try {
-			var dis = new GLib.DataInputStream(bookmarks_file.read());
+			var dis = new DataInputStream(bookmarks_file.read());
 			string line;
 			while ((line = dis.read_line(null)) != null) {
 				add_place(line, "bookmark");
 			}
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			warning(e.message);
 		}
 	}
@@ -324,11 +324,11 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		places_section.clear();
 
 		// Add home dir
-		string path = GLib.Environment.get_home_dir();
+		string path = Environment.get_home_dir();
 		add_place(@"file://$path", "place");
 
 		foreach (var special_dir in DEFAULT_DIRECTORIES) {
-			path = GLib.Environment.get_user_special_dir(special_dir);
+			path = Environment.get_user_special_dir(special_dir);
 			add_place(@"file://$path", "place");
 		}
 
@@ -348,9 +348,9 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 
 		// Add volumes connected with a drive
-		foreach (GLib.Drive drive in volume_monitor.get_connected_drives()) {
-			foreach (GLib.Volume volume in drive.get_volumes()) {
-				GLib.Mount mount = volume.get_mount();
+		foreach (Drive drive in volume_monitor.get_connected_drives()) {
+			foreach (Volume volume in drive.get_volumes()) {
+				Mount mount = volume.get_mount();
 				if (mount == null) {
 					add_volume(volume);
 				} else {
@@ -360,11 +360,11 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 
 		// Add volumes not connected with a drive
-		foreach (GLib.Volume volume in volume_monitor.get_volumes()) {
+		foreach (Volume volume in volume_monitor.get_volumes()) {
 			if (volume.get_drive() != null) {
 				continue;
 			}
-			GLib.Mount mount = volume.get_mount();
+			Mount mount = volume.get_mount();
 			if (mount == null) {
 				add_volume(volume);
 			} else {
@@ -373,12 +373,12 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 
 		// Add mounts without volumes
-		foreach (GLib.Mount mount in volume_monitor.get_mounts()) {
+		foreach (Mount mount in volume_monitor.get_mounts()) {
 			if (mount.is_shadowed() || mount.get_volume() != null) {
 				continue;
 			}
 
-			GLib.File root = mount.get_default_location();
+			File root = mount.get_default_location();
 
 			if (!root.is_native()) {
 				add_mount(mount, "network");
@@ -394,7 +394,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	/*
 	 * Adds a volume to the view
 	 */
-	private void add_volume(GLib.Volume volume) {
+	private void add_volume(Volume volume) {
 		string? volume_class = volume.get_identifier("class");
 
 		VolumeItem volume_item = new VolumeItem(volume);
@@ -414,7 +414,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	/*
 	 * Adds a mount to the view
 	 */
-	private void add_mount(GLib.Mount mount, string? mount_class) {
+	private void add_mount(Mount mount, string? mount_class) {
 		if (!mount.can_unmount() && !mount.can_eject()) {
 			return;
 		}
@@ -448,13 +448,13 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		for (int i = 1; i < arr.length; i++) {
 			place_name += arr[i] + " ";
 		}
-		string unescaped_path = GLib.Uri.unescape_string(place);
+		string unescaped_path = Uri.unescape_string(place);
 
 		if (places_list.contains(unescaped_path)) {
 			return;
 		}
 
-		GLib.File file = GLib.File.new_for_uri(unescaped_path);
+		File file = File.new_for_uri(unescaped_path);
 
 		PlaceItem place_item;
 		if (class == "bookmark" && place_name != "") {

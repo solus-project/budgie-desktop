@@ -37,7 +37,7 @@ public class MessageRevealer : Gtk.Revealer {
 
 	public bool hide_it() {
 		if (expire_id != 0) {
-			GLib.Source.remove(expire_id);
+			Source.remove(expire_id);
 		}
 
 		expire_id = 0;
@@ -46,7 +46,7 @@ public class MessageRevealer : Gtk.Revealer {
 			hide();
 		});
 		set_reveal_child(false);
-		GLib.Timeout.add(300, ()=> {
+		Timeout.add(300, () => {
 			this.disconnect(connection);
 			return false;
 		});
@@ -58,8 +58,8 @@ public class MessageRevealer : Gtk.Revealer {
 		show_it();
 
 		if (expire_id != 0) {
-			GLib.Source.remove(expire_id);
+			Source.remove(expire_id);
 		}
-		expire_id = GLib.Timeout.add(5000, hide_it);
+		expire_id = Timeout.add(5000, hide_it);
 	}
 }

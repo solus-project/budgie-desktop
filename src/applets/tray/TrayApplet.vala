@@ -15,7 +15,7 @@ public class TrayPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-[GtkTemplate (ui = "/com/solus-project/tray/settings.ui")]
+[GtkTemplate (ui="/com/solus-project/tray/settings.ui")]
 public class TraySettings : Gtk.Grid {
 	Settings? settings = null;
 

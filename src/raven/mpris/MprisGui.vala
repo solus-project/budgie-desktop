@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -43,7 +43,7 @@ public class ClientWidget : Gtk.Box {
 	Gtk.Button play_btn;
 	Gtk.Button next_btn;
 	string filename = "";
-	GLib.Cancellable? cancel;
+	Cancellable? cancel;
 
 	int our_width = BACKGROUND_SIZE;
 
@@ -57,7 +57,7 @@ public class ClientWidget : Gtk.Box {
 	public ClientWidget(MprisClient client, int width) {
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 		Gtk.Widget? row = null;
-		cancel = new GLib.Cancellable();
+		cancel = new Cancellable();
 
 		our_width = width;
 
@@ -65,7 +65,7 @@ public class ClientWidget : Gtk.Box {
 
 		/* Set up our header widget */
 		header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
-		header.closed.connect(()=> {
+		header.closed.connect(() => {
 			if (client.player.can_quit) {
 				client.player.quit.begin((obj, res) => {
 					try {
@@ -129,9 +129,9 @@ public class ClientWidget : Gtk.Box {
 		btn.set_sensitive(false);
 		btn.set_can_focus(false);
 		prev_btn = btn;
-		btn.clicked.connect(()=> {
+		btn.clicked.connect(() => {
 			if (client.player.can_go_previous) {
-				try { 
+				try {
 					client.player.previous.begin();
 				} catch (Error e) {
 					warning("Could not go to previous track: %s", e.message);
@@ -144,7 +144,7 @@ public class ClientWidget : Gtk.Box {
 		btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 		play_btn = btn;
 		btn.set_can_focus(false);
-		btn.clicked.connect(()=> {
+		btn.clicked.connect(() => {
 			try {
 				client.player.play_pause.begin();
 			} catch (Error e) {
@@ -158,9 +158,9 @@ public class ClientWidget : Gtk.Box {
 		btn.set_sensitive(false);
 		btn.set_can_focus(false);
 		next_btn = btn;
-		btn.clicked.connect(()=> {
+		btn.clicked.connect(() => {
 			if (client.player.can_go_next) {
-				try { 
+				try {
 					client.player.next.begin();
 				} catch (Error e) {
 					warning("Could not go to next track: %s", e.message);
@@ -179,22 +179,22 @@ public class ClientWidget : Gtk.Box {
 		update_play_status();
 		update_controls();
 
-		client.prop.properties_changed.connect((i,p,inv)=> {
+		client.prop.properties_changed.connect((i, p, inv) => {
 			if (i == "org.mpris.MediaPlayer2.Player") {
 				/* Handle mediaplayer2 iface */
-				p.foreach((k,v)=> {
+				p.foreach((k, v) => {
 					if (k == "Metadata") {
-						Idle.add(()=> {
+						Idle.add(() => {
 							update_from_meta();
 							return false;
 						});
 					} else if (k == "PlaybackStatus") {
-						Idle.add(()=> {
+						Idle.add(() => {
 							update_play_status();
 							return false;
 						});
 					} else if (k == "CanGoNext" || k == "CanGoPrevious") {
-						Idle.add(()=> {
+						Idle.add(() => {
 							update_controls();
 							return false;
 						});
@@ -323,7 +323,7 @@ public class ClientWidget : Gtk.Box {
 
 		try {
 			// open the stream
-			var art_file = GLib.File.new_for_uri(proper_uri);
+			var art_file = File.new_for_uri(proper_uri);
 			// download the art
 			var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
 			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,

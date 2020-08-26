@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-[GtkTemplate (ui = "/com/solus-project/budgie-menu/settings.ui")]
+[GtkTemplate (ui="/com/solus-project/budgie-menu/settings.ui")]
 public class BudgieMenuSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Switch? switch_menu_label;
@@ -117,7 +117,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 		popover = new BudgieMenuWindow(settings, widget);
 		popover.bind_property("visible", widget, "active");
 
-		widget.button_press_event.connect((e)=> {
+		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
 			}
@@ -144,14 +144,14 @@ public class BudgieMenuApplet : Budgie.Applet {
 		on_settings_changed("menu-label");
 
 		/* Potentially reload icon on pixel size jumps */
-		panel_size_changed.connect((p,i,s)=> {
+		panel_size_changed.connect((p, i, s) => {
 			if (this.pixel_size != i) {
 				this.pixel_size = (int)i;
 				this.on_settings_changed("menu-icon");
 			}
 		});
 
-		popover.key_release_event.connect((e)=> {
+		popover.key_release_event.connect((e) => {
 			if (e.keyval == Gdk.Key.Escape) {
 				popover.hide();
 			}

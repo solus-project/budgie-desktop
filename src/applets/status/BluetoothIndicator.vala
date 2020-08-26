@@ -13,7 +13,7 @@
  */
 
 [DBus (name="org.gnome.SettingsDaemon.Rfkill")]
-public interface Rfkill : Object {
+public interface Rfkill : GLib.Object {
 	public abstract bool BluetoothAirplaneMode { set; get; }
 }
 
@@ -83,7 +83,7 @@ public class BluetoothIndicator : Gtk.Bin {
 
 		this.resync();
 
-		this.setup_dbus.begin(()=> {
+		this.setup_dbus.begin(() => {
 			if (this.killer == null) {
 				return;
 			}

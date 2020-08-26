@@ -10,30 +10,30 @@
  */
 
 namespace Budgie {
-	public const string MUTTER_EDGE_TILING	 = "edge-tiling";
-	public const string MUTTER_MODAL_ATTACH	 = "attach-modal-dialogs";
+	public const string MUTTER_EDGE_TILING = "edge-tiling";
+	public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 	public const string MUTTER_BUTTON_LAYOUT = "button-layout";
 	public const string EXPERIMENTAL_DIALOG = "experimental-enable-run-dialog-as-menu";
-	public const string WM_FORCE_UNREDIRECT	 = "force-unredirect";
-	public const string WM_SCHEMA			 = "com.solus-project.budgie-wm";
+	public const string WM_FORCE_UNREDIRECT = "force-unredirect";
+	public const string WM_SCHEMA = "com.solus-project.budgie-wm";
 
 	public const bool CLUTTER_EVENT_PROPAGATE = false;
-	public const bool CLUTTER_EVENT_STOP	  = true;
+	public const bool CLUTTER_EVENT_STOP = true;
 
-	public const string RAVEN_DBUS_NAME		   = "org.budgie_desktop.Raven";
+	public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 	public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
-	public const string PANEL_DBUS_NAME		   = "org.budgie_desktop.Panel";
+	public const string PANEL_DBUS_NAME = "org.budgie_desktop.Panel";
 	public const string PANEL_DBUS_OBJECT_PATH = "/org/budgie_desktop/Panel";
 
-	public const string LOGIND_DBUS_NAME		= "org.freedesktop.login1";
+	public const string LOGIND_DBUS_NAME = "org.freedesktop.login1";
 	public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 
 	/** Menu management */
-	public const string MENU_DBUS_NAME		  = "org.budgie_desktop.MenuManager";
+	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
 	public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
-	public const string SWITCHER_DBUS_NAME		  = "org.budgie_desktop.TabSwitcher";
+	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
 	[Flags]
@@ -44,10 +44,10 @@ namespace Budgie {
 	}
 
 	public enum AnimationState {
-		MAP			= 1 << 0,
-		MINIMIZE	= 1 << 1,
-		UNMINIMIZE	= 1 << 2,
-		DESTROY		= 1 << 3
+		MAP = 1 << 0,
+		MINIMIZE = 1 << 1,
+		UNMINIMIZE = 1 << 2,
+		DESTROY = 1 << 3
 	}
 
 	public class ScreenTilePreview : Clutter.Actor {
@@ -63,7 +63,7 @@ namespace Budgie {
 
 
 	[DBus (name="org.budgie_desktop.Raven")]
-	public interface RavenRemote : Object {
+	public interface RavenRemote : GLib.Object {
 		public abstract bool GetExpanded() throws Error;
 		public abstract async void Toggle() throws Error;
 		public abstract async void ToggleNotificationsView() throws Error;
@@ -72,12 +72,12 @@ namespace Budgie {
 		public abstract async void Dismiss() throws Error;
 	}
 
-	[DBus (name = "org.budgie_desktop.Panel")]
-	public interface PanelRemote : Object {
+	[DBus (name="org.budgie_desktop.Panel")]
+	public interface PanelRemote : GLib.Object {
 		public abstract async void ActivateAction(int flags) throws Error;
 	}
 
-	[DBus (name = "org.freedesktop.login1.Manager")]
+	[DBus (name="org.freedesktop.login1.Manager")]
 	public interface LoginDRemote : GLib.Object {
 		public signal void PrepareForSleep(bool suspending);
 	}
@@ -85,7 +85,7 @@ namespace Budgie {
 	/**
 	* Allows us to invoke desktop menus without directly using GTK+ ourselves
 	*/
-	[DBus (name = "org.budgie_desktop.MenuManager")]
+	[DBus (name="org.budgie_desktop.MenuManager")]
 	public interface MenuManager: GLib.Object {
 		public abstract async void ShowDesktopMenu(uint button, uint32 timestamp) throws Error;
 		public abstract async void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws Error;
@@ -94,7 +94,7 @@ namespace Budgie {
 	/**
 	* Allows us to display the tab switcher without Gtk
 	*/
-	[DBus (name = "org.budgie_desktop.TabSwitcher")]
+	[DBus (name="org.budgie_desktop.TabSwitcher")]
 	public interface Switcher: GLib.Object {
 		public abstract async void PassItem(uint32 xid, uint32 timestamp) throws Error;
 		public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
@@ -147,7 +147,7 @@ namespace Budgie {
 
 		private bool force_unredirect = false;
 
-		HashTable<Meta.WindowActor?,AnimationState?> state_map;
+		HashTable<Meta.WindowActor?, AnimationState?> state_map;
 		Clutter.Actor? display_group;
 		bool enabled_experimental_run_diag_as_menu = false;
 
@@ -172,7 +172,7 @@ namespace Budgie {
 		}
 
 		/* Hold onto our Raven proxy ref */
-		void on_raven_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_raven_get(Object? o, AsyncResult? res) {
 			try {
 				raven_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
@@ -181,7 +181,7 @@ namespace Budgie {
 		}
 
 		/* Obtain Panel manager */
-		void on_panel_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_panel_get(Object? o, AsyncResult? res) {
 			try {
 				panel_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
@@ -200,7 +200,7 @@ namespace Budgie {
 		}
 
 		/* Obtain Menu manager */
-		void on_menu_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_menu_get(Object? o, AsyncResult? res) {
 			try {
 				menu_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
@@ -219,7 +219,7 @@ namespace Budgie {
 		}
 
 		/* Obtain login manager */
-		void on_logind_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_logind_get(Object? o, AsyncResult? res) {
 			try {
 				logind_proxy = Bus.get_proxy.end(res);
 				if (logind_proxy == null) {
@@ -251,7 +251,7 @@ namespace Budgie {
 			switcher_proxy = null;
 		}
 
-		void on_switcher_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_switcher_get(Object? o, AsyncResult? res) {
 			try {
 				switcher_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
@@ -260,7 +260,7 @@ namespace Budgie {
 		}
 
 		void has_switcher() {
-			if(switcher_proxy == null) {
+			if (switcher_proxy == null) {
 				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_switcher_get);
 			}
 		}
@@ -270,9 +270,9 @@ namespace Budgie {
 			try {
 				string cmd=this.settings.get_string("full-screenshot-cmd");
 				if (cmd != "")
-					Process.spawn_command_line_async (cmd);
+					Process.spawn_command_line_async(cmd);
 			} catch (SpawnError e) {
-				print ("Error: %s\n", e.message);
+				print("Error: %s\n", e.message);
 			}
 		}
 
@@ -281,9 +281,9 @@ namespace Budgie {
 			try {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
 				if (cmd != "")
-					Process.spawn_command_line_async (cmd);
+					Process.spawn_command_line_async(cmd);
 			} catch (SpawnError e) {
-				print ("Error: %s\n", e.message);
+				print("Error: %s\n", e.message);
 			}
 		}
 
@@ -292,9 +292,9 @@ namespace Budgie {
 			try {
 				string cmd=this.settings.get_string("take-window-screenshot-cmd");
 				if (cmd != "")
-					Process.spawn_command_line_async (cmd);
+					Process.spawn_command_line_async(cmd);
 			} catch (SpawnError e) {
-				print ("Error: %s\n", e.message);
+				print("Error: %s\n", e.message);
 			}
 		}
 
@@ -369,7 +369,7 @@ namespace Budgie {
 					message("Failed to launch Budgie Run Dialog: %s", e.message);
 				}
 			} else {
-				Idle.add(()=> {
+				Idle.add(() => {
 					try {
 						panel_proxy.ActivateAction.begin((int) PanelAction.MENU);
 					} catch (Error e) {
@@ -394,7 +394,7 @@ namespace Budgie {
 			} catch (Error e) {}
 		}
 
-		void on_dialog_closed(GLib.Pid pid, int status) {
+		void on_dialog_closed(Pid pid, int status) {
 			bool ok = false;
 			try {
 				ok = Process.check_exit_status(status);
@@ -404,7 +404,7 @@ namespace Budgie {
 		}
 
 		public override void confirm_display_change() {
-			GLib.Pid pid = Meta.Util.show_dialog("--question",
+			Pid pid = Meta.Util.show_dialog("--question",
 							"Does the display look OK?",
 							"20",
 							null,
@@ -439,7 +439,7 @@ namespace Budgie {
 			display_group = Meta.Compositor.get_window_group_for_display(display);
 			var stage = Meta.Compositor.get_stage_for_display(display);
 
-			state_map = new HashTable<Meta.WindowActor?,AnimationState?>(GLib.direct_hash, GLib.direct_equal);
+			state_map = new HashTable<Meta.WindowActor?, AnimationState?>(direct_hash, direct_equal);
 
 			iface_settings = new Settings("org.gnome.desktop.interface");
 			iface_settings.bind("enable-animations", this, "use-animations", SettingsBindFlags.DEFAULT);
@@ -564,7 +564,7 @@ namespace Budgie {
 			if (menu_proxy == null) {
 				return;
 			}
-			Timeout.add(100, ()=> {
+			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
 				try {
 					menu_proxy.ShowWindowMenu.begin(xid, 3, 0);
@@ -623,13 +623,13 @@ namespace Budgie {
 			}
 		}
 
-		const int MAP_TIMEOUT  = 100;
+		const int MAP_TIMEOUT = 100;
 		const int MENU_MAP_TIMEOUT = 120;
-		const float MAP_SCALE  = 0.94f;
+		const float MAP_SCALE = 0.94f;
 		const float MENU_MAP_SCALE_X = 0.98f;
 		const float MENU_MAP_SCALE_Y = 0.95f;
-		const float NOTIFICATION_MAP_SCALE_X  = 0.5f;
-		const float NOTIFICATION_MAP_SCALE_Y  = 0.8f;
+		const float NOTIFICATION_MAP_SCALE_X = 0.5f;
+		const float NOTIFICATION_MAP_SCALE_Y = 0.8f;
 		const int FADE_TIMEOUT = 145;
 
 		void finalize_animations(Meta.WindowActor? actor) {
@@ -866,7 +866,7 @@ namespace Budgie {
 			finalize_animations(actor as Meta.WindowActor);
 		}
 
-		const int DESTROY_TIMEOUT  = 120;
+		const int DESTROY_TIMEOUT = 120;
 		const double DESTROY_SCALE = 0.88;
 
 		public override void destroy(Meta.WindowActor actor) {
@@ -1126,8 +1126,8 @@ namespace Budgie {
 		}
 
 		/* Return sorted list of user open tabs */
-		private List<weak Meta.Window> get_current_tabs(Meta.Display display, 
-						Meta.Workspace workspace, 
+		private List<weak Meta.Window> get_current_tabs(Meta.Display display,
+						Meta.Workspace workspace,
 						bool getTabsForAllWindows) {
 			List<weak Meta.Window> tabs;
 			CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort_reverse;
@@ -1135,7 +1135,7 @@ namespace Budgie {
 			if (getTabsForAllWindows) {
 				tabs = display.get_tab_list(Meta.TabList.NORMAL, null);
 			} else {
-				//	Return only tabs for the current workspace
+				// Return only tabs for the current workspace
 				tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
 			}
 
@@ -1307,16 +1307,16 @@ namespace Budgie {
 	* This part of the equation is inspired by wingpanel, which uses our
 	* popover manager.
 	*/
-	[DBus (name = "org.budgie_desktop.BudgieWM")]
+	[DBus (name="org.budgie_desktop.BudgieWM")]
 	public class BudgieWMDBUS : GLib.Object {
 		unowned Budgie.BudgieWM? wm;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public BudgieWMDBUS(Budgie.BudgieWM? wm) {
 			this.wm = wm;
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void on_bus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object("/org/budgie_desktop/BudgieWM", this);
@@ -1325,7 +1325,7 @@ namespace Budgie {
 			}
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public void serve() {
 			Bus.own_name(BusType.SESSION, "org.budgie_desktop.BudgieWM",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,

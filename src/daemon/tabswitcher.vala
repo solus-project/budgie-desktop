@@ -80,7 +80,7 @@ namespace Budgie {
 	/**
 	*
 	*/
-	[GtkTemplate (ui = "/com/solus-project/budgie/daemon/tabswitcher.ui")]
+	[GtkTemplate (ui="/com/solus-project/budgie/daemon/tabswitcher.ui")]
 	public class TabSwitcherWindow : Gtk.Window {
 		[GtkChild]
 		private Gtk.FlowBox window_box;
@@ -93,7 +93,7 @@ namespace Budgie {
 		*/
 		private Gdk.Monitor primary_monitor;
 
-		private HashTable<uint32, TabSwitcherWidget?> xids = null;
+		private HashTable<uint32,TabSwitcherWidget?> xids = null;
 
 		private Budgie.AppSystem? app_system = null;
 
@@ -136,7 +136,7 @@ namespace Budgie {
 		public TabSwitcherWindow() {
 			Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
 			set_position(Gtk.WindowPosition.CENTER_ALWAYS);
-			this.xids = new HashTable<uint32, TabSwitcherWidget?>(GLib.direct_hash, GLib.direct_equal);
+			this.xids = new HashTable<uint32,TabSwitcherWidget?>(direct_hash, direct_equal);
 			this.app_system = new Budgie.AppSystem();
 
 			this.hide.connect(this.on_hide);
@@ -235,12 +235,12 @@ namespace Budgie {
 	* TabSwitcher is responsible for managing the BudgieSwitcher over d-bus, receiving
 	* requests, for example, from budgie-wm
 	*/
-	[DBus (name = "org.budgie_desktop.TabSwitcher")]
-	public class TabSwitcher : Object {
+	[DBus (name="org.budgie_desktop.TabSwitcher")]
+	public class TabSwitcher : GLib.Object {
 		private TabSwitcherWindow? switcher_window = null;
 		private uint32 mod_timeout = 0;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public TabSwitcher() {
 			switcher_window = new TabSwitcherWindow();
 		}
@@ -248,7 +248,7 @@ namespace Budgie {
 		/**
 		* Own the SWITCHER_DBUS_NAME
 		*/
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public void setup_dbus(bool replace) {
 			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
 			if (replace) {
@@ -295,11 +295,11 @@ namespace Budgie {
 		}
 
 		private void add_mod_key_watcher() {
-			if(mod_timeout != 0){
+			if (mod_timeout != 0) {
 				Source.remove(mod_timeout);
 				mod_timeout = 0;
 			}
-			mod_timeout = Timeout.add(SWITCHER_MOD_EXPIRE_TIME, (GLib.SourceFunc)this.check_mod_key);
+			mod_timeout = Timeout.add(SWITCHER_MOD_EXPIRE_TIME, (SourceFunc)this.check_mod_key);
 		}
 
 		private bool check_mod_key() {

@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -126,7 +126,7 @@ namespace Budgie {
 				if ((info.applet.supported_actions & action) != 0) {
 					this.present();
 
-					Idle.add(()=> {
+					Idle.add(() => {
 						info.applet.invoke_action(action);
 						return false;
 					});
@@ -205,8 +205,8 @@ namespace Budgie {
 			this.update_dock_behavior();
 		}
 
-		public override GLib.List<AppletInfo?> get_applets() {
-			GLib.List<Budgie.AppletInfo?> ret = new GLib.List<Budgie.AppletInfo?>();
+		public override List<AppletInfo?> get_applets() {
+			List<Budgie.AppletInfo?> ret = new List<Budgie.AppletInfo?>();
 			unowned string? key = null;
 			unowned Budgie.AppletInfo? appl_info = null;
 
@@ -282,12 +282,12 @@ namespace Budgie {
 			nscale = 1.0;
 
 			// Respond to a scale factor change
-			notify["scale-factor"].connect(()=> {
+			notify["scale-factor"].connect(() => {
 				this.scale = get_scale_factor();
 				this.placement();
 			});
 			// Handle intelligent dock behavior
-			notify["intersected"].connect(()=> {
+			notify["intersected"].connect(() => {
 				if (this.autohide != AutohidePolicy.NONE) {
 					this.update_dock_behavior();
 				}
@@ -509,7 +509,7 @@ namespace Budgie {
 					if (info == null) {
 						/* Faiiiil */
 						if (name == null) {
-							unowned List<string?> g = expected_uuids.find_custom(applets[i], GLib.strcmp);
+							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
 							/* TODO: No longer expecting this guy to load */
 							if (g != null) {
 								expected_uuids.remove_link(g);
@@ -747,7 +747,7 @@ namespace Budgie {
 
 			if (!this.is_fully_loaded) {
 				lock (expected_uuids) {
-					unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, GLib.strcmp);
+					unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, strcmp);
 					if (exp_fin != null) {
 						expected_uuids.remove_link(exp_fin);
 					}
@@ -954,7 +954,7 @@ namespace Budgie {
 			if (this.dock_mode) {
 				switch (position) {
 				case Budgie.PanelPosition.TOP:
-					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2)	 - (alloc.width / 2));
+					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2) - (alloc.width / 2));
 					if (x < orig_scr.x) {
 						x = orig_scr.x;
 					}
@@ -976,7 +976,7 @@ namespace Budgie {
 					break;
 				case Budgie.PanelPosition.BOTTOM:
 				default:
-					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2)	 - (alloc.width / 2));
+					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2) - (alloc.width / 2));
 					y = orig_scr.y + (orig_scr.height - intended_size);
 					if (x < orig_scr.x) {
 						x = orig_scr.x;
@@ -1565,7 +1565,7 @@ namespace Budgie {
 				}
 			};
 
-			dock_animation.start((a)=> {
+			dock_animation.start((a) => {
 				this.set_input_region();
 				this.animation = PanelAnimation.NONE;
 			});
@@ -1608,7 +1608,7 @@ namespace Budgie {
 				}
 			};
 
-			dock_animation.start((a)=> {
+			dock_animation.start((a) => {
 				this.unset_input_region();
 				this.animation = PanelAnimation.NONE;
 			});
@@ -1673,12 +1673,12 @@ namespace Budgie {
 		*/
 		public void perform_migration(int current_migration_level) {
 			if (current_migration_level != 0) {
-				GLib.warning("Unknown migration level: %d", current_migration_level);
+				warning("Unknown migration level: %d", current_migration_level);
 				return;
 			}
 			this.need_migratory = true;
 			if (this.is_fully_loaded) {
-				GLib.message("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
+				message("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
 				this.add_migratory();
 			}
 		}

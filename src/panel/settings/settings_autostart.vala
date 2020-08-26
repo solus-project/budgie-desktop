@@ -24,7 +24,7 @@ namespace Budgie {
 		public string description;
 		public string command;
 		public string executable;
-		public GLib.Icon? icon = null;
+		public Icon? icon = null;
 
 		construct {
 			id = "";
@@ -35,7 +35,7 @@ namespace Budgie {
 			executable = "";
 		}
 
-		public AutostartItem.from_app_info(GLib.DesktopAppInfo info) {
+		public AutostartItem.from_app_info(DesktopAppInfo info) {
 			this.id = info.get_id() ?? "";
 			this.filename = info.get_filename() ?? "";
 			this.title = info.get_display_name() ?? "";
@@ -51,28 +51,28 @@ namespace Budgie {
 		}
 
 		public string? make_autostart() {
-			DirUtils.create_with_parents(GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH), 00755);
+			DirUtils.create_with_parents(Path.build_path("/", AutostartPage.AUTOSTART_PATH), 00755);
 			if (filename != "") {
-				string destination_path = GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH, GLib.Filename.display_basename(filename));
-				GLib.File destination = GLib.File.new_for_path(destination_path);
-				GLib.File file = GLib.File.new_for_path(filename);
+				string destination_path = Path.build_path("/", AutostartPage.AUTOSTART_PATH, Filename.display_basename(filename));
+				File destination = File.new_for_path(destination_path);
+				File file = File.new_for_path(filename);
 				try {
-					file.copy(destination, GLib.FileCopyFlags.NONE);
+					file.copy(destination, FileCopyFlags.NONE);
 					this.filename = destination_path;
-				} catch (GLib.Error e) {
+				} catch (Error e) {
 					warning(e.message);
 					return null;
 				}
 			} else if (command != "") {
-				string destination_path = GLib.Path.build_path("/", AutostartPage.AUTOSTART_PATH, @"$title.desktop");
-				GLib.File file = GLib.File.new_for_path(destination_path);
+				string destination_path = Path.build_path("/", AutostartPage.AUTOSTART_PATH, @"$title.desktop");
+				File file = File.new_for_path(destination_path);
 				try {
-					GLib.FileOutputStream file_stream = file.create(GLib.FileCreateFlags.NONE);
+					FileOutputStream file_stream = file.create(FileCreateFlags.NONE);
 					if (file.query_exists()) {
-						GLib.DataOutputStream data_stream = new GLib.DataOutputStream(file_stream);
+						DataOutputStream data_stream = new DataOutputStream(file_stream);
 						data_stream.put_string(@"[Desktop Entry]\nType=Application\nName=$title\nDescription=$description\nExec=$command\n");
 						this.filename = file.get_path();
-						GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(file.get_path());
+						DesktopAppInfo? info = new DesktopAppInfo.from_filename(file.get_path());
 						if (info == null) {
 							this.delete();
 							return null;
@@ -81,7 +81,7 @@ namespace Budgie {
 					} else {
 						return null;
 					}
-				} catch (GLib.Error e) {
+				} catch (Error e) {
 					warning(e.message);
 					return null;
 				}
@@ -91,10 +91,10 @@ namespace Budgie {
 		}
 
 		public void delete() {
-			GLib.File file = GLib.File.new_for_path(filename);
+			File file = File.new_for_path(filename);
 			try {
 				file.delete();
-			} catch (GLib.Error e) {
+			} catch (Error e) {
 				warning(e.message);
 			}
 			AutostartPage.autostart_files.remove(this.id);
@@ -131,14 +131,14 @@ namespace Budgie {
 			text_box.valign = Gtk.Align.CENTER;
 
 			string title = item.title;
-			title = (title != "") ? GLib.Markup.escape_text(title) : "<i>" + _("Untitled") + "</i>";
+			title = (title != "") ? Markup.escape_text(title) : "<i>" + _("Untitled") + "</i>";
 			Gtk.Label title_label = new Gtk.Label(@"<big>$title</big>");
 			text_box.add(title_label);
 			title_label.set_use_markup(true);
 			title_label.halign = Gtk.Align.START;
 
 			string description = item.description;
-			description = (description != "") ? GLib.Markup.escape_text(description) : "<i>" + _("No description") + "</i>";
+			description = (description != "") ? Markup.escape_text(description) : "<i>" + _("No description") + "</i>";
 			Gtk.Label desc_label = new Gtk.Label(description);
 			text_box.add(desc_label);
 			desc_label.set_max_width_chars(35);
@@ -175,7 +175,7 @@ namespace Budgie {
 		private Gtk.ListBox app_listbox;
 		private Gtk.Widget button_ok;
 		private Gtk.SearchEntry search_entry;
-		private GLib.GenericSet<string> running_processes;
+		private GenericSet<string> running_processes;
 
 		private AutostartItem? selected_item = null;
 
@@ -185,7 +185,7 @@ namespace Budgie {
 				title: _("Applications"),
 				transient_for: parent);
 
-			running_processes = new GLib.GenericSet<string>(str_hash, str_equal);
+			running_processes = new GenericSet<string>(str_hash, str_equal);
 
 			get_running_processes();
 
@@ -232,7 +232,7 @@ namespace Budgie {
 			content_area.show_all();
 
 			set_default_size(400, 450);
-			set_app_list(GLib.AppInfo.get_all());
+			set_app_list(AppInfo.get_all());
 		}
 
 		private bool search_filter(Gtk.ListBoxRow row) {
@@ -257,7 +257,7 @@ namespace Budgie {
 				return 1;
 			}
 
-			return GLib.strcmp(item1.autostart_item.title, item2.autostart_item.title);
+			return strcmp(item1.autostart_item.title, item2.autostart_item.title);
 		}
 
 		public new AutostartItem? run() {
@@ -291,14 +291,14 @@ namespace Budgie {
 			}
 		}
 
-		private void set_app_list(GLib.List<GLib.AppInfo> app_list) {
+		private void set_app_list(List<AppInfo> app_list) {
 			foreach (var child in app_listbox.get_children()) {
 				child.destroy();
 			}
 
 			foreach (var app in app_list) {
 				if (app.should_show()) {
-					GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo(app.get_id());
+					DesktopAppInfo? info = new DesktopAppInfo(app.get_id());
 					if (info != null) {
 						AutostartItem item = new AutostartItem.from_app_info(info);
 						bool running = running_processes.contains(item.executable);
@@ -315,9 +315,9 @@ namespace Budgie {
 			int ls_status;
 
 			try {
-				string username = GLib.Environment.get_user_name();
+				string username = Environment.get_user_name();
 				// Credit to gnome-tweak-tool for inspiration
-				GLib.Process.spawn_command_line_sync(@"ps -e -w -w -U $username -o cmd",
+				Process.spawn_command_line_sync(@"ps -e -w -w -U $username -o cmd",
 					out ls_stdout,
 					out ls_stderr,
 					out ls_status);
@@ -335,7 +335,7 @@ namespace Budgie {
 						}
 					}
 				}
-			} catch (GLib.SpawnError e) {
+			} catch (SpawnError e) {
 				warning(e.message);
 			}
 		}
@@ -437,7 +437,7 @@ namespace Budgie {
 	*/
 	public class AutostartPage : Budgie.SettingsPage {
 		private Gtk.ListBox listbox_autostart;
-		public static GLib.HashTable<string, string> autostart_files;
+		public static HashTable<string,string> autostart_files;
 		public static string AUTOSTART_PATH;
 
 		public AutostartPage() {
@@ -448,9 +448,9 @@ namespace Budgie {
 				icon_name: "preferences-other",
 				halign: Gtk.Align.FILL);
 
-			AUTOSTART_PATH = GLib.Path.build_path("/", GLib.Environment.get_user_config_dir(), "autostart");
+			AUTOSTART_PATH = Path.build_path("/", Environment.get_user_config_dir(), "autostart");
 
-			autostart_files = new GLib.HashTable<string, string>(str_hash, str_equal);
+			autostart_files = new HashTable<string,string>(str_hash, str_equal);
 
 			Gtk.Frame frame = new Gtk.Frame(null);
 			this.pack_start(frame, true, true, 0);
@@ -491,7 +491,7 @@ namespace Budgie {
 			list_directory.begin(AUTOSTART_PATH, (obj, res) => {
 				string[] files = list_directory.end(res);
 				foreach (string file in files) {
-					GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(file);
+					DesktopAppInfo? info = new DesktopAppInfo.from_filename(file);
 					if (info != null) {
 						AutostartItem item = new AutostartItem.from_app_info(info);
 						add_item(item);
@@ -522,23 +522,23 @@ namespace Budgie {
 
 		private async string[] list_directory(string directory) {
 			string[] filelist = {};
-			GLib.File dir = GLib.File.new_for_path(directory);
+			File dir = File.new_for_path(directory);
 
 			try {
-				var e = yield dir.enumerate_children_async(GLib.FileAttribute.STANDARD_NAME, 0, GLib.Priority.DEFAULT);
+				var e = yield dir.enumerate_children_async(FileAttribute.STANDARD_NAME, 0, Priority.DEFAULT);
 				while (true) {
-					var files = yield e.next_files_async(10, GLib.Priority.DEFAULT);
+					var files = yield e.next_files_async(10, Priority.DEFAULT);
 					if (files == null) {
 						break;
 					}
-					foreach (GLib.FileInfo info in files) {
+					foreach (FileInfo info in files) {
 						if (info.get_name().has_suffix(".desktop")) {
-							string path = GLib.Path.build_path("/", directory, info.get_name());
+							string path = Path.build_path("/", directory, info.get_name());
 							filelist += path;
 						}
 					}
 				}
-			} catch (GLib.Error e) {
+			} catch (Error e) {
 				warning("Error: list_directory failed: %s\n", e.message);
 			}
 

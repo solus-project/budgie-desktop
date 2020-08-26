@@ -34,7 +34,7 @@ namespace NightLight {
 			this.add(event_box);
 			this.show_all();
 
-			event_box.button_press_event.connect((e)=> {
+			event_box.button_press_event.connect((e) => {
 				if (e.button == 1) {
 					if (popover.get_visible()) {
 						popover.hide();

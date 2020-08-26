@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -11,7 +11,7 @@
 
 namespace Budgie {
 	/* Currently unused by us */
-	[DBus (name = "org.gnome.SessionManager.Inhibitor")]
+	[DBus (name="org.gnome.SessionManager.Inhibitor")]
 	public interface Inhibitor : GLib.Object {
 		public abstract string GetAppId() throws Error;
 		public abstract string GetReason() throws Error;
@@ -25,7 +25,7 @@ namespace Budgie {
 	}
 
 	[GtkTemplate (ui="/com/solus-project/budgie/endsession/endsession.ui")]
-	[DBus (name = "org.budgie_desktop.Session.EndSessionDialog")]
+	[DBus (name="org.budgie_desktop.Session.EndSessionDialog")]
 	public class EndSessionDialog : Gtk.Window {
 		public signal void ConfirmedLogout();
 		public signal void ConfirmedReboot();
@@ -78,7 +78,7 @@ namespace Budgie {
 			ConfirmedShutdown();
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void on_bus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object("/org/budgie_desktop/Session/EndSessionDialog", this);
@@ -91,7 +91,7 @@ namespace Budgie {
 		/**
 		* Attempt to set the RGBA visual
 		*/
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		private void on_realized() {
 			Gdk.Visual? visual = screen.get_rgba_visual();
 			if (visual != null) {
@@ -104,7 +104,7 @@ namespace Budgie {
 		* This is required as we may be constructed before the window manager
 		* springs into life
 		*/
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		private void on_composite_changed() {
 			Gdk.Visual? visual = screen.get_rgba_visual();
 			if (visual != null) {
@@ -114,14 +114,14 @@ namespace Budgie {
 			}
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public EndSessionDialog(bool replace) {
 			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
 			if (replace) {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", flags,
-				on_bus_acquired, ()=> {} , Budgie.DaemonNameLost);
+				on_bus_acquired, () => {}, Budgie.DaemonNameLost);
 			set_keep_above(true);
 			set_resizable(false);
 
@@ -132,7 +132,7 @@ namespace Budgie {
 			set_titlebar(header);
 			header.get_style_context().remove_class("titlebar");
 
-			delete_event.connect(()=> {
+			delete_event.connect(() => {
 				this.cancel_clicked();
 				return Gdk.EVENT_STOP;
 			});

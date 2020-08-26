@@ -78,7 +78,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 
 	public UserIndicatorWindow(Gtk.Widget? window_parent) {
 		Object(relative_to: window_parent);
-		current_username = GLib.Environment.get_user_name();
+		current_username = Environment.get_user_name();
 
 		setup_dbus.begin();
 
@@ -265,7 +265,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			try {
 				session.Logout(0);
 			} catch (Error e) {
@@ -281,7 +281,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			try {
 				lock_screen();
 				logind_interface.hibernate(false);
@@ -298,7 +298,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			session.Reboot.begin();
 			return false;
 		});
@@ -310,7 +310,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			session.Shutdown.begin();
 			return false;
 		});
@@ -322,7 +322,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			try {
 				lock_screen();
 				logind_interface.suspend(false);
@@ -335,7 +335,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 
 	private void lock_screen() {
 		hide();
-		Idle.add(()=> {
+		Idle.add(() => {
 			try {
 				saver.lock();
 			} catch (Error e) {

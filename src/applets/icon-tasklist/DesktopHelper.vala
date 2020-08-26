@@ -8,12 +8,12 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
- 
+
 /**
  * Trivial helper for IconTasklist - i.e. desktop lookups
  */
 public class DesktopHelper : GLib.Object {
-	private GLib.Settings? settings = null;
+	private Settings? settings = null;
 	private Wnck.Screen? screen = null;
 	private Gtk.Box? icon_layout = null;
 
@@ -29,7 +29,7 @@ public class DesktopHelper : GLib.Object {
 	/**
 	 * Handle initial bootstrap of the desktop helper
 	 */
-	public DesktopHelper(GLib.Settings? settings, Gtk.Box? icon_layout) {
+	public DesktopHelper(Settings? settings, Gtk.Box? icon_layout) {
 		/* Stash privates */
 		this.settings = settings;
 		this.icon_layout = icon_layout;
@@ -67,8 +67,8 @@ public class DesktopHelper : GLib.Object {
 	/**
 	 * Grab the list of windows stacked for the given class_group
 	 */
-	public GLib.List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group) {
-		GLib.List<unowned Wnck.Window> list = new GLib.List<unowned Wnck.Window>();
+	public List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group) {
+		List<unowned Wnck.Window> list = new List<unowned Wnck.Window>();
 		screen.get_windows_stacked().foreach((window) => {
 			if (window.get_class_group() == class_group && !window.is_skip_tasklist()) {
 				var workspace = window.get_workspace();

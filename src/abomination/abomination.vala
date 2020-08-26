@@ -15,13 +15,13 @@ namespace Budgie {
 	 */
 	public class Abomination : GLib.Object {
 		private Budgie.AppSystem? app_system = null;
-		private GLib.Settings? color_settings = null;
-		private GLib.Settings? wm_settings = null;
+		private Settings? color_settings = null;
+		private Settings? wm_settings = null;
 		private bool original_night_light_setting = false;
 		private bool should_disable_on_fullscreen = false;
-		public HashTable<string?, Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their name and respective Wnck.Window
-		public HashTable<string?, Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
-		public HashTable<ulong?, AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
+		public HashTable<string?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their name and respective Wnck.Window
+		public HashTable<string?,Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
+		public HashTable<ulong?,AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
 		private Wnck.Screen screen = null;
 
 		/**
@@ -34,12 +34,12 @@ namespace Budgie {
 
 		public Abomination() {
 			app_system = new Budgie.AppSystem();
-			color_settings = new GLib.Settings("org.gnome.settings-daemon.plugins.color");
-			wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+			color_settings = new Settings("org.gnome.settings-daemon.plugins.color");
+			wm_settings = new Settings("com.solus-project.budgie-wm");
 
-			fullscreen_windows = new HashTable<string?, Wnck.Window?>(str_hash, str_equal);
-			running_apps = new HashTable<string?, Array<AbominationRunningApp>?>(str_hash, str_equal);
-			running_apps_id = new HashTable<ulong?, AbominationRunningApp?>(int_hash, int_equal);
+			fullscreen_windows = new HashTable<string?,Wnck.Window?>(str_hash, str_equal);
+			running_apps = new HashTable<string?,Array<AbominationRunningApp>?>(str_hash, str_equal);
+			running_apps_id = new HashTable<ulong?,AbominationRunningApp?>(int_hash, int_equal);
 			screen = Wnck.Screen.get_default();
 
 			if (color_settings != null) { // gsd colors plugin schema defined
@@ -69,8 +69,8 @@ namespace Budgie {
 					Array<AbominationRunningApp> group_apps = running_apps.get(group_name); // Get the apps associated with the group name
 
 					if ((group_apps != null) && (group_apps.length > 0)) { // If there are apps (and this exists)
-						for (int i = 0; i < group_apps.length; i++)	 {
-							AbominationRunningApp app =	 group_apps.index(i);
+						for (int i = 0; i < group_apps.length; i++) {
+							AbominationRunningApp app = group_apps.index(i);
 							running_apps_id.steal(app.id); // Remove from running_apps_id
 						}
 
@@ -296,7 +296,6 @@ namespace Budgie {
 		/**
 		 * invalid_window will check if the provided window is our current window
 		 * If the provided window is our current window, update to any new window in the class group, update our name, etc.
-		 * 
 		 */
 		public void invalidate_window(Wnck.Window window) {
 			if (this.window == null || window == null) {
@@ -359,7 +358,7 @@ namespace Budgie {
 				string old_icon = this.icon;
 				update_icon();
 
-				if (this.icon !=  old_icon) { // Actually changed
+				if (this.icon != old_icon) { // Actually changed
 					icon_changed(this.icon);
 				}
 			});

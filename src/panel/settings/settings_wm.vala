@@ -14,7 +14,7 @@ namespace Budgie {
 	* WindowsPage allows users to control window manager settings
 	*/
 	public class WindowsPage : Budgie.SettingsPage {
-		private GLib.Settings budgie_wm_settings;
+		private Settings budgie_wm_settings;
 		private Gtk.Switch center_windows;
 		private Gtk.Switch disable_night_light;
 		private Gtk.ComboBox combo_layouts;
@@ -99,9 +99,9 @@ namespace Budgie {
 			combo_layouts.set_id_column(0);
 
 			/* Hook up settings */
-			budgie_wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
-			budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs,	 "active", SettingsBindFlags.DEFAULT);
-			budgie_wm_settings.bind("button-style", combo_layouts,	"active-id", SettingsBindFlags.DEFAULT);
+			budgie_wm_settings = new Settings("com.solus-project.budgie-wm");
+			budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs, "active", SettingsBindFlags.DEFAULT);
+			budgie_wm_settings.bind("button-style", combo_layouts, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("center-windows", center_windows, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);

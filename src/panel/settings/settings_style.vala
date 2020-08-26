@@ -21,8 +21,8 @@ namespace Budgie {
 		private Gtk.Switch? switch_dark;
 		private Gtk.Switch? switch_builtin;
 		private Gtk.Switch? switch_animations;
-		private GLib.Settings ui_settings;
-		private GLib.Settings budgie_settings;
+		private Settings ui_settings;
+		private Settings budgie_settings;
 		private SettingsRow? builtin_row;
 		private ThemeScanner? theme_scanner;
 
@@ -34,8 +34,8 @@ namespace Budgie {
 				icon_name: "preferences-desktop-theme"
 			);
 
-			budgie_settings = new GLib.Settings("com.solus-project.budgie-panel");
-			ui_settings = new GLib.Settings("org.gnome.desktop.interface");
+			budgie_settings = new Settings("com.solus-project.budgie-panel");
+			ui_settings = new Settings("org.gnome.desktop.interface");
 
 			var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 			var grid = new SettingsGrid();
@@ -127,7 +127,7 @@ namespace Budgie {
 			ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
 			this.theme_scanner = new ThemeScanner();
 
-			Idle.add(()=> {
+			Idle.add(() => {
 				this.load_themes();
 				return false;
 			});
@@ -135,7 +135,7 @@ namespace Budgie {
 
 		public void load_themes() {
 			/* Scan the themes */
-			this.theme_scanner.scan_themes.begin(()=> {
+			this.theme_scanner.scan_themes.begin(() => {
 				/* Gtk themes */ {
 					Gtk.TreeIter iter;
 					var model = new Gtk.ListStore(1, typeof(string));

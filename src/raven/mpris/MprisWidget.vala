@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,7 +17,7 @@ public class MprisWidget : RavenWidget {
 	int our_width = 250;
 
 	public MprisWidget() {
-		Object (orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
 		ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
 
@@ -84,14 +84,14 @@ public class MprisWidget : RavenWidget {
 			return;
 		}
 		if (o == "") {
-			new_iface.begin(n, (o,r) => {
+			new_iface.begin(n, (o, r) => {
 				var iface = new_iface.end(r);
 				if (iface != null) {
 					add_iface(n, iface);
 				}
 			});
 		} else {
-			Idle.add(()=> {
+			Idle.add(() => {
 				destroy_iface(n);
 				return false;
 			});

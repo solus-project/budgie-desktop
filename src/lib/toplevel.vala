@@ -51,7 +51,7 @@ namespace Budgie {
 		public Budgie.AutohidePolicy autohide { public set; public get; default = Budgie.AutohidePolicy.NONE; }
 
 
-		public abstract GLib.List<Budgie.AppletInfo?> get_applets();
+		public abstract List<Budgie.AppletInfo?> get_applets();
 		public signal void applet_added(Budgie.AppletInfo? info);
 		public signal void applet_removed(string uuid);
 
@@ -136,15 +136,15 @@ namespace Budgie {
 
 	[Flags]
 	public enum PanelTransparency {
-		NONE		= 1 << 0,
-		DYNAMIC		= 1 << 1,
-		ALWAYS		= 1 << 2
+		NONE = 1 << 0,
+		DYNAMIC = 1 << 1,
+		ALWAYS = 1 << 2
 	}
 
 	[Flags]
 	public enum AutohidePolicy {
-		NONE		= 1 << 0,
-		AUTOMATIC	= 1 << 1,
+		NONE = 1 << 0,
+		AUTOMATIC = 1 << 1,
 		INTELLIGENT = 1 << 2
 	}
 

@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class MountHelper : GLib.MountOperation {
+public class MountHelper : MountOperation {
 	private Gtk.Revealer revealer;
 	private Gtk.Entry password_entry;
 	private Gtk.Button unlock_button;
@@ -19,26 +19,26 @@ public class MountHelper : GLib.MountOperation {
 	public signal void request_mount();
 
 	public MountHelper() {
-		this.set_password_save(GLib.PasswordSave.FOR_SESSION);
+		this.set_password_save(PasswordSave.FOR_SESSION);
 
 		this.ask_password.connect(handle_password);
 		this.show_processes.connect(handle_block);
 		this.aborted.connect(handle_aborted);
 	}
 
-	private void handle_password(string message, string default_user, string default_domain, GLib.AskPasswordFlags flags) {
+	private void handle_password(string message, string default_user, string default_domain, AskPasswordFlags flags) {
 		password_asked();
-		this.reply(GLib.MountOperationResult.HANDLED);
+		this.reply(MountOperationResult.HANDLED);
 	}
 
 	private void handle_block() {
 		send_message(_("Volume is in use by other processes"));
-		this.reply(GLib.MountOperationResult.HANDLED);
+		this.reply(MountOperationResult.HANDLED);
 	}
 
 	private void handle_aborted() {
 		send_message(_("Operation aborted"));
-		this.reply(GLib.MountOperationResult.HANDLED);
+		this.reply(MountOperationResult.HANDLED);
 	}
 
 	public Gtk.Revealer get_encryption_form() {

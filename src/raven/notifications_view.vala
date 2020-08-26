@@ -1,9 +1,9 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
  * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie 10)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -12,7 +12,7 @@
 
 namespace Budgie {
 	[DBus (name="org.budgie_desktop.Raven")]
-	public interface RavenRemote : Object {
+	public interface RavenRemote : GLib.Object {
 		public signal void ClearAllNotifications();
 	}
 
@@ -34,10 +34,10 @@ namespace Budgie {
 	};
 
 	public enum NotificationCloseReason {
-		EXPIRED = 1,	/** The notification expired. */
-		DISMISSED = 2,	/** The notification was dismissed by the user. */
-		CLOSED = 3,		/** The notification was closed by a call to CloseNotification. */
-		UNDEFINED = 4	/** Undefined/reserved reasons. */
+		EXPIRED = 1, /** The notification expired. */
+		DISMISSED = 2, /** The notification was dismissed by the user. */
+		CLOSED = 3, /** The notification was closed by a call to CloseNotification. */
+		UNDEFINED = 4 /** Undefined/reserved reasons. */
 	}
 
 	public enum NotificationPosition {
@@ -55,7 +55,7 @@ namespace Budgie {
 		/* Explicit copy */
 		string inp2 = "" + inp;
 
-		/* 
+		/*
 		* is it already escaped?
 		*/
 		foreach (string str in ESCAPE_STRINGS) {
@@ -108,11 +108,11 @@ namespace Budgie {
 		}
 	}
 
-	[GtkTemplate (ui = "/com/solus-project/budgie/raven/notification.ui")]
+	[GtkTemplate (ui="/com/solus-project/budgie/raven/notification.ui")]
 	public class NotificationWindow : Gtk.Window {
 		public NotificationsView? owner { public set ; public get; }
 
-		public NotificationWindow(NotificationsView? owner)	 {
+		public NotificationWindow(NotificationsView? owner) {
 			Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION, owner: owner);
 			resizable = false;
 			skip_pager_hint = true;
@@ -123,11 +123,11 @@ namespace Budgie {
 			if (vis != null) {
 				this.set_visual(vis);
 			}
-			cancel = new GLib.Cancellable();
+			cancel = new Cancellable();
 
 			set_default_size(NOTIFICATION_SIZE, -1);
 
-			button_release_event.connect(()=> {
+			button_release_event.connect(() => {
 				if (!this.has_default_action) {
 					return Gdk.EVENT_PROPAGATE;
 				}
@@ -208,7 +208,7 @@ namespace Budgie {
 		private uint expire_id = 0;
 		private uint32 timeout = 0;
 
-		private GLib.Cancellable? cancel;
+		private Cancellable? cancel;
 		public string? category = null;
 
 		public bool did_interact = false;
@@ -293,19 +293,19 @@ namespace Budgie {
 			}
 
 			// Read the image fields
-			int width			= img.get_child_value(0).get_int32();
-			int height			= img.get_child_value(1).get_int32();
-			int rowstride		= img.get_child_value(2).get_int32();
-			bool has_alpha		= img.get_child_value(3).get_boolean();
+			int width = img.get_child_value(0).get_int32();
+			int height = img.get_child_value(1).get_int32();
+			int rowstride = img.get_child_value(2).get_int32();
+			bool has_alpha = img.get_child_value(3).get_boolean();
 			int bits_per_sample = img.get_child_value(4).get_int32();
-			int n_channels		= img.get_child_value(5).get_int32();
+			int n_channels = img.get_child_value(5).get_int32();
 			// read the raw data
-			unowned uint8[] raw = (uint8[]) img.get_child_value (6).get_data();
+			unowned uint8[] raw = (uint8[]) img.get_child_value(6).get_data();
 
 			// rebuild and scale the image
-			var pixbuf = new Gdk.Pixbuf.with_unowned_data (raw, Gdk.Colorspace.RGB,
+			var pixbuf = new Gdk.Pixbuf.with_unowned_data(raw, Gdk.Colorspace.RGB,
 				has_alpha, bits_per_sample, width, height, rowstride, null);
-			var scaled_pixbuf = pixbuf.scale_simple(48, 48,	 Gdk.InterpType.BILINEAR);
+			var scaled_pixbuf = pixbuf.scale_simple(48, 48, Gdk.InterpType.BILINEAR);
 
 			// set the image
 			if (scaled_pixbuf != null) {
@@ -322,7 +322,7 @@ namespace Budgie {
 		}
 
 		public async void set_from_notify(uint32 id, string app_name, string app_icon,
-											string summary, string body, HashTable<string, Variant> hints,
+											string summary, string body, HashTable<string,Variant> hints,
 											int32 expire_timeout) {
 			this.id = id;
 			this.hints = hints;
@@ -395,7 +395,7 @@ namespace Budgie {
 			}
 
 			label_title.ellipsize = Pango.EllipsizeMode.END;
-		
+
 			label_body.set_markup(safe_markup_string(body));
 			this.body = body;
 
@@ -489,7 +489,7 @@ namespace Budgie {
 	public const int INITIAL_BUFFER_ZONE = 45;
 	public const int NOTIFICATION_SIZE = 400;
 
-	[DBus (name = "org.freedesktop.Notifications")]
+	[DBus (name="org.freedesktop.Notifications")]
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
 		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications.application";
@@ -502,7 +502,7 @@ namespace Budgie {
 		RavenRemote? raven_proxy = null;
 
 		/* Hold onto our Raven proxy ref */
-		void on_raven_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_raven_get(Object? o, AsyncResult? res) {
 			try {
 				raven_proxy = Bus.get_proxy.end(res);
 				raven_proxy.ClearAllNotifications.connect(on_clear_all);
@@ -511,7 +511,7 @@ namespace Budgie {
 			}
 		}
 
-		private Settings settings = new GLib.Settings(BUDGIE_PANEL_SCHEMA);
+		private Settings settings = new Settings(BUDGIE_PANEL_SCHEMA);
 
 		private Gtk.Button button_mute;
 		private Gtk.Button clear_notifications_button;
@@ -523,7 +523,7 @@ namespace Budgie {
 		private HeaderWidget? header = null;
 		private bool dnd_enabled = false;
 
-		private GLib.Queue<NotificationWindow?> stack = null;
+		private Queue<NotificationWindow?> stack = null;
 
 		/* Obviously we'll change this.. */
 		private HashTable<uint32,NotificationWindow?> notifications;
@@ -539,7 +539,7 @@ namespace Budgie {
 		}
 
 		private uint32 notif_id = 0;
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void on_notification_closed(NotificationWindow? widget, NotificationCloseReason reason) {
 			ulong nid = widget.get_data("npack_id");
 
@@ -621,7 +621,7 @@ namespace Budgie {
 			this.remove_notification(widget.id);
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		bool remove_notification(uint32 id) {
 			unowned NotificationWindow? widget = notifications.lookup(id);
 			if (widget == null) {
@@ -636,7 +636,7 @@ namespace Budgie {
 			return true;
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void update_child_count() {
 			int len = 0;
 
@@ -662,7 +662,7 @@ namespace Budgie {
 
 		public uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
 							string summary, string body, string[] actions,
-							HashTable<string, Variant> hints, int32 expire_timeout) {
+							HashTable<string,Variant> hints, int32 expire_timeout) {
 			++notif_id;
 
 			/**
@@ -722,7 +722,7 @@ namespace Budgie {
 				actions_copy += "%s".printf(action);
 			}
 			/* When we yield vala unrefs everything and we get double frees. GG */
-			pack.set_from_notify.begin(notif_id, app_name, app_icon, summary, body, hints, expire, ()=> {
+			pack.set_from_notify.begin(notif_id, app_name, app_icon, summary, body, hints, expire, () => {
 				pack.set_actions(actions_copy);
 
 				if (configure) {
@@ -731,7 +731,7 @@ namespace Budgie {
 					pack.begin_decay();
 				}
 			});
-			
+
 			return notif_id;
 		}
 
@@ -783,7 +783,7 @@ namespace Budgie {
 						y = ny - tail.get_child().get_allocated_height() - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
-						
+
 						int height;
 						window.get_size(null, out height); // Get the estimated height of the notification
 						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
@@ -836,7 +836,7 @@ namespace Budgie {
 		}
 
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void clear_all() {
 			performing_clear_all = true;
 
@@ -856,7 +856,7 @@ namespace Budgie {
 			update_child_count();
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void do_not_disturb_toggle() {
 			dnd_enabled = !dnd_enabled; // Invert value, so if DND was enabled, set to disabled, otherwise set to enabled
 			button_mute.set_image(!dnd_enabled ? image_notifications_enabled : image_notifications_disabled);
@@ -864,7 +864,7 @@ namespace Budgie {
 		}
 
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public NotificationsView() {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 			get_style_context().add_class("raven-notifications-view");
@@ -873,12 +873,12 @@ namespace Budgie {
 			clear_notifications_button.relief = Gtk.ReliefStyle.NONE;
 			clear_notifications_button.no_show_all = true;
 			clear_notifications_button.get_style_context().add_class("clear-all-notifications");
-			
+
 			button_mute = new Gtk.Button();
 			button_mute.set_image(image_notifications_enabled);
 			button_mute.relief = Gtk.ReliefStyle.NONE;
 			button_mute.get_style_context().add_class("do-not-disturb");
-			
+
 			var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			control_buttons.pack_start(button_mute, false, false, 0);
 			control_buttons.pack_start(clear_notifications_button, false, false, 0);
@@ -893,7 +893,7 @@ namespace Budgie {
 
 			notifications_list = new HashTable<string,NotificationGroup>(str_hash, str_equal);
 			notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
-			stack = new GLib.Queue<NotificationWindow?>();
+			stack = new Queue<NotificationWindow?>();
 
 			var scrolledwindow = new Gtk.ScrolledWindow(null, null);
 			scrolledwindow.get_style_context().add_class("raven-background");
@@ -915,7 +915,7 @@ namespace Budgie {
 		}
 
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void on_bus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object("/org/freedesktop/Notifications", this);
@@ -924,7 +924,7 @@ namespace Budgie {
 			}
 		}
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		void serve_dbus() {
 			Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications",
 				BusNameOwnerFlags.NONE,

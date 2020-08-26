@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -12,7 +12,7 @@
 /**
  * Simple wrapper to ensure a lifetime reference to the encapsulated objects
  */
-public class MprisClient : Object {
+public class MprisClient : GLib.Object {
 	public PlayerIface player { construct set; get; }
 	public DbusPropIface prop { construct set; get; }
 
@@ -25,7 +25,7 @@ public class MprisClient : Object {
  * We need to probe the dbus daemon directly, hence this interface
  */
 [DBus (name="org.freedesktop.DBus")]
-public interface DBusImpl : Object {
+public interface DBusImpl : GLib.Object {
 	public abstract async string[] list_names() throws IOError;
 	public signal void name_owner_changed(string name, string old_owner, string new_owner);
 	public signal void name_acquired(string name);
@@ -35,7 +35,7 @@ public interface DBusImpl : Object {
  * Vala dbus property notifications are not working. Manually probe property changes.
  */
 [DBus (name="org.freedesktop.DBus.Properties")]
-public interface DbusPropIface : Object {
+public interface DbusPropIface : GLib.Object {
 	public signal void properties_changed(string iface, HashTable<string,Variant> changed, string[] invalid);
 }
 
@@ -43,7 +43,7 @@ public interface DbusPropIface : Object {
  * Represents the base org.mpris.MediaPlayer2 spec
  */
 [DBus (name="org.mpris.MediaPlayer2")]
-public interface MprisIface : Object {
+public interface MprisIface : GLib.Object {
 	public abstract async void raise() throws DBusError, IOError;
 	public abstract async void quit() throws DBusError, IOError;
 
@@ -94,7 +94,6 @@ public interface PlayerIface : MprisIface {
 	public abstract bool can_pause { get; }
 	public abstract bool can_seek { get; }
 	public abstract bool can_control { get; }
-	
 }
 
 /**

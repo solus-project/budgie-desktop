@@ -14,12 +14,12 @@ namespace LibSession {
 	 * Proxy for gnome-session
 	 */
 	[DBus (name="org.gnome.SessionManager")]
-	public interface SessionManager : Object {
+	public interface SessionManager : GLib.Object {
 		public abstract async ObjectPath RegisterClient(string app_id, string client_start_id) throws IOError;
 	}
 
 	[DBus (name="org.gnome.SessionManager.ClientPrivate")]
-	public interface SessionClient : Object {
+	public interface SessionClient : GLib.Object {
 		public abstract void EndSessionResponse(bool is_ok, string reason) throws IOError;
 
 		public signal void Stop() ;

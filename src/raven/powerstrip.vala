@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -11,12 +11,12 @@
 
 namespace Budgie {
 	[DBus (name="org.gnome.ScreenSaver")]
-	public interface ScreenSaver : Object {
+	public interface ScreenSaver : GLib.Object {
 		public abstract void lock() throws Error;
 	}
 
 	[DBus (name="org.gnome.SessionManager")]
-	public interface SessionManager : Object {
+	public interface SessionManager : GLib.Object {
 		public abstract async void Logout(uint mode) throws DBusError, IOError;
 	}
 
@@ -41,7 +41,7 @@ namespace Budgie {
 				warning("Unable to contact GNOME Session: %s", e.message);
 			}
 		}
-				
+
 		public PowerStrip(Budgie.Raven? raven) {
 			Gtk.Box? bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 20);
 
@@ -57,7 +57,7 @@ namespace Budgie {
 			get_style_context().add_class("primary-control");
 
 			var btn = new Gtk.Button.from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			btn.clicked.connect(()=> {
+			btn.clicked.connect(() => {
 				raven.set_expanded(false);
 				raven.request_settings_ui();
 			});
@@ -66,7 +66,7 @@ namespace Budgie {
 			bottom.pack_start(btn, false, false, 0);
 
 			btn = new Gtk.Button.from_icon_name("system-lock-screen-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			btn.clicked.connect(()=> {
+			btn.clicked.connect(() => {
 				raven.set_expanded(false);
 				lock_screen();
 			});
@@ -77,7 +77,7 @@ namespace Budgie {
 
 			btn = new Gtk.Button.from_icon_name("system-log-out-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			power_btn = btn;
-			btn.clicked.connect(()=> {
+			btn.clicked.connect(() => {
 				try {
 					raven.set_expanded(false);
 					if (session == null) {
@@ -94,7 +94,7 @@ namespace Budgie {
 
 			lock_btn.no_show_all = true;
 			lock_btn.hide();
-			setup_dbus.begin((obj,res)=> {
+			setup_dbus.begin((obj, res) => {
 				if (saver != null) {
 					lock_btn.no_show_all = false;
 					lock_btn.show_all();
@@ -108,6 +108,6 @@ namespace Budgie {
 			} catch (Error e) {
 				warning("Cannot lock screen: %s", e.message);
 			}
-		}	 
+		}
 	}
 }

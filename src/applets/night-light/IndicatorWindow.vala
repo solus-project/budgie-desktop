@@ -10,7 +10,7 @@
  */
 
 namespace NightLight {
-	[GtkTemplate (ui = "/org/budgie-desktop/night-light/indicator_window.ui")]
+	[GtkTemplate (ui="/org/budgie-desktop/night-light/indicator_window.ui")]
 	class IndicatorWindow : Budgie.Popover {
 		[GtkChild]
 		private Gtk.Switch? nightlight_switch;
@@ -24,16 +24,16 @@ namespace NightLight {
 		[GtkChild]
 		private Gtk.ComboBoxText? schedule_combobox;
 
-		private GLib.Settings settings;
+		private Settings settings;
 
 		public IndicatorWindow(Gtk.Widget? window_parent) {
 			Object(relative_to: window_parent);
 
-			settings = new GLib.Settings("org.gnome.settings-daemon.plugins.color");
+			settings = new Settings("org.gnome.settings-daemon.plugins.color");
 
-			settings.bind("night-light-enabled", nightlight_switch, "active", GLib.SettingsBindFlags.DEFAULT);
-			settings.bind("night-light-enabled", item_grid, "sensitive", GLib.SettingsBindFlags.DEFAULT);
-			settings.bind("night-light-temperature", temperature_spinbutton, "value", GLib.SettingsBindFlags.DEFAULT);
+			settings.bind("night-light-enabled", nightlight_switch, "active", SettingsBindFlags.DEFAULT);
+			settings.bind("night-light-enabled", item_grid, "sensitive", SettingsBindFlags.DEFAULT);
+			settings.bind("night-light-temperature", temperature_spinbutton, "value", SettingsBindFlags.DEFAULT);
 
 			settings.changed["night-light-schedule-automatic"].connect(() => {
 				schedule_combobox.set_active_id(settings.get_boolean("night-light-schedule-automatic").to_string());
@@ -54,7 +54,7 @@ namespace NightLight {
 
 		[GtkCallback]
 		private void open_settings() {
-			GLib.DesktopAppInfo app_info = new GLib.DesktopAppInfo("gnome-display-panel.desktop");
+			DesktopAppInfo app_info = new DesktopAppInfo("gnome-display-panel.desktop");
 
 			if (app_info == null) {
 				return;
@@ -63,7 +63,7 @@ namespace NightLight {
 			try {
 				this.hide();
 				app_info.launch(null, null);
-			} catch (GLib.Error e) {
+			} catch (Error e) {
 				message("Unable to launch gnome-display-panel.desktop: %s", e.message);
 			}
 		}

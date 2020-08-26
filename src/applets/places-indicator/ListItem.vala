@@ -64,7 +64,7 @@ public abstract class ListItem : Gtk.Box {
 	 * Retrieves the file icon.
 	 * Returns an appropriate substitute if the file does not provide an icon
 	 */
-	protected Gtk.Image get_icon(GLib.Icon? icon) {
+	protected Gtk.Image get_icon(Icon? icon) {
 		if (icon != null) {
 			return new Gtk.Image.from_gicon(icon, Gtk.IconSize.MENU);
 		}
@@ -97,19 +97,19 @@ public abstract class ListItem : Gtk.Box {
 	/*
 	 * Opens the given directory
 	 */
-	protected void open_directory(GLib.File? root) {
+	protected void open_directory(File? root) {
 		if (root == null) {
 			return;
 		}
 
-		GLib.AppLaunchContext launch_context = Gdk.Display.get_default().get_app_launch_context();
-		GLib.List<GLib.File> file_list = new GLib.List<GLib.File>();
+		AppLaunchContext launch_context = Gdk.Display.get_default().get_app_launch_context();
+		List<File> file_list = new List<File>();
 		file_list.append(root);
 
 		try {
-			GLib.AppInfo.get_default_for_type("inode/directory", true).launch(file_list, launch_context);
+			AppInfo.get_default_for_type("inode/directory", true).launch(file_list, launch_context);
 			close_popover();
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			warning(e.message);
 		}
 	}

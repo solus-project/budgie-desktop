@@ -10,8 +10,8 @@
  */
 
 const double DEFAULT_OPACITY = 0.1;
-const int INDICATOR_SIZE	 = 2;
-const int INDICATOR_SPACING	 = 1;
+const int INDICATOR_SIZE = 2;
+const int INDICATOR_SPACING = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
 /**
@@ -23,10 +23,10 @@ public class IconButton : Gtk.ToggleButton {
 	private Budgie.AbominationRunningApp? first_app = null;
 	private Budgie.IconPopover? popover = null;
 	private Wnck.Screen? screen = null;
-	private GLib.Settings? settings = null;
-	private Wnck.Window? window = null;			 // This will always be null if grouping is enabled
+	private Settings? settings = null;
+	private Wnck.Window? window = null; // This will always be null if grouping is enabled
 	private Wnck.ClassGroup? class_group = null; // This will always be null if grouping is disabled
-	private GLib.DesktopAppInfo? app_info = null;
+	private DesktopAppInfo? app_info = null;
 	private int window_count = 0;
 	public Icon icon;
 	private Gtk.Allocation definite_allocation;
@@ -43,7 +43,7 @@ public class IconButton : Gtk.ToggleButton {
 	public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
 	public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
 
-	public IconButton(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, GLib.DesktopAppInfo info, bool pinned) {
+	public IconButton(Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
 		Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.app_info = info;
@@ -59,7 +59,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
-	public IconButton.from_window(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, GLib.DesktopAppInfo? info, bool pinned = false) {
+	public IconButton.from_window(Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, DesktopAppInfo? info, bool pinned = false) {
 		Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.app_info = info;
@@ -94,7 +94,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.set_wnck_window(window);
 	}
 
-	public IconButton.from_group(Budgie.AppSystem? appsys, GLib.Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, GLib.DesktopAppInfo? info) {
+	public IconButton.from_group(Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.ClassGroup class_group, DesktopAppInfo? info) {
 		Object(app_system: appsys, desktop_helper: helper, popover_manager: manager);
 
 		this.settings = c_settings;
@@ -164,7 +164,7 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		});
 
-		drag_data_get.connect((widget, context, selection_data, info, time)=> {
+		drag_data_get.connect((widget, context, selection_data, info, time) => {
 			string id = "";
 			if (this.is_from_window) { // If this is from a window
 				if (this.pinned && this.originally_pinned) { // Has been pinned from the start
@@ -523,7 +523,7 @@ public class IconButton : Gtk.ToggleButton {
 
 		try {
 			app_info.launch(null, launch_context);
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			warning(e.message);
 		}
 	}
@@ -568,14 +568,14 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * Handle startup notification, set our own ID to the ID selected
 	 */
-	private void on_launched(GLib.AppInfo info, Variant v) {
-		GLib.Variant? elem;
+	private void on_launched(AppInfo info, Variant v) {
+		Variant? elem;
 
 		var iter = v.iterator();
 
 		while ((elem = iter.next_value()) != null) {
 			string? key = null;
-			GLib.Variant? val = null;
+			Variant? val = null;
 
 			elem.get("{sv}", out key, out val);
 
@@ -583,7 +583,7 @@ public class IconButton : Gtk.ToggleButton {
 				continue;
 			}
 
-			if (!val.is_of_type(GLib.VariantType.STRING)) {
+			if (!val.is_of_type(VariantType.STRING)) {
 				continue;
 			}
 
@@ -605,12 +605,12 @@ public class IconButton : Gtk.ToggleButton {
 		int y = definite_allocation.y;
 		int width = definite_allocation.width;
 		int height = definite_allocation.height;
-		GLib.List<unowned Wnck.Window> windows;
+		List<unowned Wnck.Window> windows;
 
 		if (class_group != null) {
 			windows = class_group.get_windows().copy();
 		} else {
-			windows = new GLib.List<unowned Wnck.Window>();
+			windows = new List<unowned Wnck.Window>();
 			windows.insert(this.window, 0);
 		}
 
@@ -672,12 +672,12 @@ public class IconButton : Gtk.ToggleButton {
 		int y = definite_allocation.y;
 		int width = definite_allocation.width;
 		int height = definite_allocation.height;
-		GLib.List<unowned Wnck.Window> windows;
+		List<unowned Wnck.Window> windows;
 
 		if (class_group != null) {
 			windows = class_group.get_windows().copy();
 		} else {
-			windows = new GLib.List<unowned Wnck.Window>();
+			windows = new List<unowned Wnck.Window>();
 			windows.insert(this.window, 0);
 		}
 
@@ -780,7 +780,7 @@ public class IconButton : Gtk.ToggleButton {
 					case Budgie.PanelPosition.RIGHT:
 						int to = 0;
 						if (counter == count-1) {
-							to = y + height; 
+							to = y + height;
 						} else {
 							to = previous_y+(height/count);
 						}
@@ -789,7 +789,7 @@ public class IconButton : Gtk.ToggleButton {
 					default:
 						int to = 0;
 						if (counter == count-1) {
-							to = x + width; 
+							to = x + width;
 						} else {
 							to = previous_x+(width/count);
 						}
@@ -932,7 +932,7 @@ public class IconButton : Gtk.ToggleButton {
 		} else if (event.button == 1) { // Left click
 			handle_launch_clicks(event, false);
 		} else if (event.button == 2) { // Middle click
-			GLib.List<unowned Wnck.Window> windows;
+			List<unowned Wnck.Window> windows;
 			bool middle_click_create_new_instance = false;
 
 			if (this.settings != null) { // Settings defined
@@ -943,7 +943,7 @@ public class IconButton : Gtk.ToggleButton {
 				if (class_group != null) {
 					windows = class_group.get_windows().copy();
 				} else {
-					windows = new GLib.List<unowned Wnck.Window>();
+					windows = new List<unowned Wnck.Window>();
 				}
 
 				if (windows.length() == 0) {
@@ -1035,7 +1035,7 @@ public class IconButton : Gtk.ToggleButton {
 			return Gdk.EVENT_STOP;
 		}
 
-		if (GLib.get_monotonic_time() - last_scroll_time < 300000) {
+		if (get_monotonic_time() - last_scroll_time < 300000) {
 			return Gdk.EVENT_STOP;
 		}
 
@@ -1092,10 +1092,10 @@ public class IconButton : Gtk.ToggleButton {
 					target_window.unminimize(event.time);
 				}
 
-				last_scroll_time = GLib.get_monotonic_time();
+				last_scroll_time = get_monotonic_time();
 			}
 		} else if (ids_length == 1) { // Only has one window and scrolling up
-			var id = ids.nth_data(0);  // Get id at 0
+			var id = ids.nth_data(0); // Get id at 0
 			target_window = Wnck.Window.@get(id);
 
 			if (target_window != null) {
@@ -1109,14 +1109,14 @@ public class IconButton : Gtk.ToggleButton {
 					target_window.minimize();
 				}
 
-				last_scroll_time = GLib.get_monotonic_time();
+				last_scroll_time = get_monotonic_time();
 			}
 		}
 
 		return Gdk.EVENT_STOP;
 	}
 
-	public GLib.DesktopAppInfo? get_appinfo() {
+	public DesktopAppInfo? get_appinfo() {
 		return this.app_info;
 	}
 
