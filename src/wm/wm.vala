@@ -1201,6 +1201,8 @@ namespace Budgie {
 				}
 			}
 
+			bool use_animations = iface_settings.get_boolean("enable-animations");
+
 			// Stop the Switcher if it was showing
 			this.stop_switch_windows();
 
@@ -1212,43 +1214,43 @@ namespace Budgie {
 				return;
 			}
 
-			out_group = new Clutter.Actor();
-			in_group = new Clutter.Actor();
-
 			var display = this.get_display();
 			var stage = Meta.Compositor.get_stage_for_display(display);
+			display.get_size(out screen_width, out screen_height);
+
+			out_group = new Clutter.Actor();
+			in_group = new Clutter.Actor();
 
 			stage.add_child(in_group);
 			stage.add_child(out_group);
 			stage.set_child_above_sibling(in_group, null);
 
-			display.get_size(out screen_width, out screen_height);
-
 			/* TODO: Windows should slide "under" the panel/dock
 			* Move "in-between" workspaces, e.g. 1->3 shows 2 */
 
+			if (use_animations) { // If animations are enabled
+				foreach (var actor in Meta.Compositor.get_window_actors(display)) {
+					var window = (actor as Meta.WindowActor).get_meta_window();
 
-			foreach (var actor in Meta.Compositor.get_window_actors(display)) {
-				var window = (actor as Meta.WindowActor).get_meta_window();
+					if (!window.showing_on_its_workspace() || window.is_on_all_workspaces()) {
+						continue;
+					}
 
-				if (!window.showing_on_its_workspace() || window.is_on_all_workspaces()) {
-					continue;
-				}
+					var space = window.get_workspace();
+					var win_space = space.index();
 
-				var space = window.get_workspace();
-				var win_space = space.index();
+					if (win_space == to || win_space == from) {
+						var orig_parent = actor.get_parent();
+						unowned Clutter.Actor? new_parent = win_space == to ? in_group : out_group;
+						actor.set_data("orig-parent", orig_parent);
 
-				if (win_space == to || win_space == from) {
-					var orig_parent = actor.get_parent();
-					unowned Clutter.Actor? new_parent = win_space == to ? in_group : out_group;
-					actor.set_data("orig-parent", orig_parent);
-
-					actor.ref();
-					orig_parent.remove_child(actor);
-					new_parent.add_child(actor);
-					actor.unref();
-				} else {
-					actor.hide();
+						actor.ref();
+						orig_parent.remove_child(actor);
+						new_parent.add_child(actor);
+						actor.unref();
+					} else {
+						actor.hide();
+					}
 				}
 			}
 
@@ -1277,16 +1279,24 @@ namespace Budgie {
 
 			in_group.set_position(-x_dest, -y_dest);
 			in_group.save_easing_state();
-			in_group.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
-			in_group.set_easing_duration(SWITCH_TIMEOUT);
+
+			if (use_animations) { // If animations are enabled
+				in_group.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+				in_group.set_easing_duration(SWITCH_TIMEOUT);
+			}
+
 			in_group.set_position(0, 0);
 			in_group.restore_easing_state();
 
-			out_group.transitions_completed.connect(switch_workspace_done);;
+			out_group.transitions_completed.connect(switch_workspace_done);
 
 			out_group.save_easing_state();
-			out_group.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
-			out_group.set_easing_duration(SWITCH_TIMEOUT);
+
+			if (use_animations) { // If animations are enabled
+				out_group.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
+				out_group.set_easing_duration(SWITCH_TIMEOUT);
+			}
+
 			out_group.set_position(x_dest, y_dest);
 			out_group.restore_easing_state();
 		}
