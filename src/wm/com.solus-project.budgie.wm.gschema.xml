@@ -109,6 +109,18 @@
       <description>Application that is run when taking a screenshot of all displays</description>
     </key>
 
+    <key type="as" name="switch-input-source">
+      <default><![CDATA[['<Alt>Shift_L', '<Super>space', 'XF86Keyboard']]]></default>
+      <summary>Switch to the next input source</summary>
+      <description>Switch to the next input souce</description>
+    </key>
+
+    <key type="as" name="switch-input-source-backward">
+      <default><![CDATA[['<Super><Shift>space', '<Shift>XF86Keyboard']]]></default>
+      <summary>Switch to the previous input source</summary>
+      <description>Switch to the previous input souce</description>
+    </key>
+
     <key type="as" name="take-region-screenshot">
       <default><![CDATA[['<Ctrl>Print']]]></default>
       <summary>Take screenshot of selectable region</summary>

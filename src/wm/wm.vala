@@ -251,16 +251,17 @@ namespace Budgie {
 			switcher_proxy = null;
 		}
 
-		void on_swicher_get(GLib.Object? o, GLib.AsyncResult? res) {
+		void on_switcher_get(GLib.Object? o, GLib.AsyncResult? res) {
 			try {
 				switcher_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
 				warning("Failed to get Switcher proxy: %s", e.message);
 			}
 		}
+
 		void has_switcher() {
 			if(switcher_proxy == null) {
-				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_swicher_get);
+				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_switcher_get);
 			}
 		}
 
@@ -353,7 +354,6 @@ namespace Budgie {
 			raven_proxy = null;
 		}
 
-
 		public override unowned Meta.PluginInfo? plugin_info() {
 			return info;
 		}
@@ -379,7 +379,6 @@ namespace Budgie {
 				});
 			}
 		}
-
 
 		void launch_menu(Meta.Display display,
 						Meta.Window? window, Clutter.KeyEvent? event,

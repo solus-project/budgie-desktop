@@ -121,7 +121,7 @@ namespace Budgie {
 			var display = wm.get_display();
 
 			/* Hook into GNOME defaults */
-			var schema = new Settings("org.gnome.desktop.wm.keybindings");
+			var schema = new Settings("com.solus-project.budgie-wm");
 			display.add_keybinding("switch-input-source", schema, Meta.KeyBindingFlags.NONE, switch_input_source);
 			display.add_keybinding("switch-input-source-backward", schema, Meta.KeyBindingFlags.NONE, switch_input_source_backward);
 		}
