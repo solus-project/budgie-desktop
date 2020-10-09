@@ -97,7 +97,7 @@ namespace Budgie {
 			}
 
 			notifications.insert(id, notification);
-			list.add(notification);
+			list.prepend(notification); // Most recent should be at the top
 			update_count();
 
 			notification.closed_individually.connect(() => { // When this notification is closed
@@ -143,7 +143,7 @@ namespace Budgie {
 		 * update_count updates our notifications count for this group
 		 */
 		public void update_count() {
-			count = (int) list.get_children().length();
+			count = (int) notifications.length;
 			app_label.set_markup("<b>%s (%i)</b>".printf(app_name, count));
 		}
 	}
