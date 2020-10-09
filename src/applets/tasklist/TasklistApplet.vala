@@ -18,15 +18,39 @@ public class TasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 }
 
 public class TasklistApplet : Budgie.Applet {
+	Gtk.ScrolledWindow? scroller;
 	Wnck.Tasklist? tlist;
 
 	public TasklistApplet() {
+		scroller = new Gtk.ScrolledWindow(null, null);
 		tlist = new Wnck.Tasklist();
-		add(tlist);
+
+		scroller.overlay_scrolling = true;
+		scroller.propagate_natural_height = true;
+		scroller.propagate_natural_width = true;
+		scroller.shadow_type = Gtk.ShadowType.NONE;
+		scroller.hscrollbar_policy = Gtk.PolicyType.EXTERNAL;
+		scroller.vscrollbar_policy = Gtk.PolicyType.NEVER;
+
+		tlist.set_scroll_enabled(false);
+
+		scroller.add(tlist);
+		add(scroller);
 
 		tlist.set_grouping(Wnck.TasklistGroupingType.AUTO_GROUP);
 
+		add_events(Gdk.EventMask.SCROLL_MASK);
 		show_all();
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		if (event.direction == Gdk.ScrollDirection.UP) { // Scrolling up
+			scroller.hadjustment.value-=50;
+		} else { // Scrolling down
+			scroller.hadjustment.value+=50; // Always increment by 50
+		}
+
+		return Gdk.EVENT_STOP;
 	}
 
 	/**

@@ -356,6 +356,11 @@ namespace Budgie {
 
 			get_child().show_all();
 
+			// Immediately hide our inner boxes
+			start_box.hide();
+			center_box.hide();
+			end_box.hide();
+
 			this.manager.extension_loaded.connect_after(this.on_extension_loaded);
 
 			/* bit of a no-op. */
@@ -578,9 +583,11 @@ namespace Budgie {
 			/* Safety clamp */
 			var kids = target.get_children();
 			uint nkids = kids.length();
+
 			if (position >= nkids) {
 				position = (int) nkids;
 			}
+
 			if (position < 0) {
 				position = 0;
 			}
@@ -661,6 +668,24 @@ namespace Budgie {
 			}
 		}
 
+		// toggle_container_visibilities is used to toggle the visibility of a panel container (start, center, end) based on if it has children
+		void toggle_container_visibilities() {
+			Gtk.Box?[] regions = { start_box, center_box, end_box };
+
+			for (var i = 0; i < regions.length; i++) {
+				Gtk.Box region = regions[i];
+
+				if (region.get_children().length() > 0) { // If this has a child
+					if (!region.get_visible()) { // Not already visible
+						region.show_all(); // Ensure we show this
+						region.queue_draw(); // Ensure we queue a draw
+					}
+				} else {
+					region.hide(); // Hide this area
+				}
+			}
+		}
+
 		void set_applets() {
 			string[]? uuids = null;
 			unowned string? uuid = null;
@@ -686,7 +711,9 @@ namespace Budgie {
 			ulong notify_id = info.get_data("notify_id");
 
 			SignalHandler.disconnect(info, notify_id);
-			info.applet.get_parent().remove(info.applet);
+			Gtk.Box applet_parent = (Gtk.Box) info.applet.get_parent();
+			applet_parent.remove(info.applet);
+			toggle_container_visibilities();
 
 			Settings? app_settings = info.applet.get_applet_settings(uuid);
 			if (app_settings != null) {
@@ -749,6 +776,8 @@ namespace Budgie {
 			pack_target.pack_start(info.applet, false, false, 0);
 
 			pack_target.child_set(info.applet, "position", info.position);
+			toggle_container_visibilities(); // Ensure container is updated
+
 			ulong id = info.notify.connect(applet_updated);
 			info.set_data("notify_id", id);
 			this.applet_added(info);
@@ -780,17 +809,20 @@ namespace Budgie {
 					break;
 			}
 			/* Don't needlessly reparent */
-			var current_parent = info.applet.get_parent();
+			Gtk.Box current_parent = (Gtk.Box) info.applet.get_parent();
 			if (new_parent != current_parent) {
 				current_parent.remove(info.applet);
 				new_parent.add(info.applet);
+
+				toggle_container_visibilities(); // Update the containers
+
 				info.applet.queue_resize();
-				new_parent.queue_draw();
 			}
 		}
 
 		void applet_reposition(Budgie.AppletInfo? info) {
 			info.applet.get_parent().child_set(info.applet, "position", info.position);
+			toggle_container_visibilities(); // Update the containers
 		}
 
 		void applet_updated(Object o, ParamSpec p) {
