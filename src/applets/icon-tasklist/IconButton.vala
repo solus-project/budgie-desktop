@@ -908,6 +908,18 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
+	public override bool button_press_event(Gdk.EventButton event) {
+		bool was_double_click = (event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS);
+
+		if (!was_double_click || (was_double_click && (event.button != 1))) { // Wasn't left click or was but not left
+			return Gdk.EVENT_PROPAGATE; // Continue propagation
+		}
+
+		handle_launch_clicks(event, true); // Got this far, meaning double left clicked
+
+		return base.button_press_event(event);
+	}
+
 	public override bool button_release_event(Gdk.EventButton event) {
 		if (class_group != null && (last_active_window == null || class_group.get_windows().find(last_active_window) == null)) {
 			last_active_window = class_group.get_windows().nth_data(0);
@@ -918,53 +930,7 @@ public class IconButton : Gtk.ToggleButton {
 			this.popover_manager.show_popover(this); // Show the popover
 			return Gdk.EVENT_STOP;
 		} else if (event.button == 1) { // Left click
-			if (this.window != null) {
-				if (this.window.is_active()) {
-					this.window.minimize();
-				} else {
-					this.window.unminimize(event.time);
-					this.window.activate(event.time);
-				}
-			} else if (class_group != null) {
-				bool all_unminimized = true;
-				bool one_active = false;
-				int num = 0;
-
-				GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
-
-				foreach (Wnck.Window win in list) {
-					if (win.is_minimized()) {
-						all_unminimized = false;
-					}
-					if (win.is_active()) {
-						one_active = true;
-					}
-					num++;
-				}
-				if (num > 0) { // we have windows on this workspace
-					bool show_all_windows_on_click = false;
-
-					if (this.settings != null) { // Settings defined
-						show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
-					}
-
-					list.foreach((w) => {
-						if (one_active) {
-							w.minimize();
-						} else {
-							if (show_all_windows_on_click) { // Show all windows
-								w.activate(event.time);
-							} else { // Only show last active window
-								last_active_window.activate(event.time);
-							}
-						}
-					});
-				} else {
-					last_active_window.activate(event.time);
-				}
-			} else {
-				launch_app(event.time);
-			}
+			handle_launch_clicks(event, false);
 		} else if (event.button == 2) { // Middle click
 			GLib.List<unowned Wnck.Window> windows;
 			bool middle_click_create_new_instance = false;
@@ -979,12 +945,12 @@ public class IconButton : Gtk.ToggleButton {
 				} else {
 					windows = new GLib.List<unowned Wnck.Window>();
 				}
-	
+
 				if (windows.length() == 0) {
 					launch_app(Gtk.get_current_event_time());
 				} else if (this.app_info != null) {
 					string[] actions = app_info.list_actions();
-	
+
 					if ("new-window" in actions) { // If we have a preferred action set
 						launch_context.set_screen(get_screen());
 						launch_context.set_timestamp(Gdk.CURRENT_TIME);
@@ -997,6 +963,61 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		return base.button_release_event(event);
+	}
+
+	private void handle_launch_clicks(Gdk.EventButton event, bool was_double_click) {
+		if (this.window != null) {
+			if (this.window.is_active()) {
+				this.window.minimize();
+			} else {
+				this.window.unminimize(event.time);
+				this.window.activate(event.time);
+			}
+		} else if (class_group != null) {
+			bool all_unminimized = true;
+			bool one_active = false;
+			int num = 0;
+
+			GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
+
+			foreach (Wnck.Window win in list) {
+				if (win.is_minimized()) {
+					all_unminimized = false;
+				}
+				if (win.is_active()) {
+					one_active = true;
+				}
+				num++;
+			}
+
+			if (num > 0) { // we have windows on this workspace
+				bool show_all_windows_on_click = false;
+
+				if (this.settings != null) { // Settings defined
+					show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
+				}
+
+				list.foreach((w) => {
+					if (one_active) {
+						w.minimize();
+					} else {
+						if (show_all_windows_on_click) { // Show all windows
+							w.activate(event.time);
+						} else { // Only show last active window
+							last_active_window.activate(event.time);
+						}
+					}
+				});
+			} else {
+				last_active_window.activate(event.time);
+			}
+		} else {
+			bool require_double_click = this.settings.get_boolean("require-double-click-to-launch");
+
+			if ((was_double_click && require_double_click) || !require_double_click) { // Used double click when enabled, or don't require double click
+				launch_app(event.time);
+			}
+		}
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
