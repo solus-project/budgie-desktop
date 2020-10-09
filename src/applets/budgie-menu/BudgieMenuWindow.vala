@@ -25,6 +25,7 @@ static string? searchable_string(string input) {
 
 public class BudgieMenuWindow : Budgie.Popover {
 	protected Gtk.SearchEntry search_entry;
+	protected Gtk.Box main_layout;
 	protected Gtk.Box categories;
 	protected Gtk.ListBox content;
 	private GMenu.Tree tree;
@@ -34,7 +35,16 @@ public class BudgieMenuWindow : Budgie.Popover {
 	protected Gtk.ScrolledWindow content_scroll;
 	protected CategoryButton all_categories;
 
-	/* Mapped id -> button */
+	// desktop_dir_overrides is a hashtable of dirs -> preferred dirs
+	protected HashTable<string,string?> desktop_dir_overrides = null;
+
+	// Mapped category name to item bool
+	protected HashTable<string,bool?> category_has_items = null;
+
+	// Mapped category name to the category button
+	protected HashTable<string,CategoryButton?> category_buttons = null;
+
+	// Mapped id to MenuButton
 	protected HashTable<string,MenuButton?> menu_buttons = null;
 
 	// The current group
@@ -54,6 +64,109 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 	private bool reloading = false;
 
+	public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent) {
+		Object(settings: settings, relative_to: leparent);
+		get_style_context().add_class("budgie-menu");
+
+		main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		add(main_layout);
+
+		category_buttons = new HashTable<string,CategoryButton?>(GLib.str_hash, GLib.str_equal);
+		category_has_items = new HashTable<string,bool?>(GLib.str_hash, GLib.str_equal);
+		menu_buttons = new HashTable<string,MenuButton?>(GLib.str_hash, GLib.str_equal);
+
+		icon_size = settings.get_int("menu-icons-size");
+
+		// search entry up north
+		search_entry = new Gtk.SearchEntry();
+		main_layout.pack_start(search_entry, false, false, 0);
+
+		// middle holds the categories and applications
+		var middle = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		main_layout.pack_start(middle, true, true, 0);
+
+		// clickable categories
+		categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		categories.margin_top = 3;
+		categories.margin_bottom = 3;
+		categories_scroll = new Gtk.ScrolledWindow(null, null);
+		categories_scroll.set_overlay_scrolling(false);
+		categories_scroll.set_shadow_type(Gtk.ShadowType.NONE); // Don't have an outline
+		categories_scroll.get_style_context().add_class("categories");
+		categories_scroll.get_style_context().add_class("sidebar");
+		categories_scroll.add(categories);
+		categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC); // Allow scrolling categories vertically if necessary
+		middle.pack_start(categories_scroll, false, false, 0);
+
+		// "All" button"
+		all_categories = new CategoryButton(null);
+		all_categories.enter_notify_event.connect(this.on_mouse_enter);
+		all_categories.toggled.connect(()=> {
+			update_category(all_categories);
+		});
+		categories.pack_start(all_categories, false, false, 0);
+
+		var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		middle.pack_start(right_layout, true, true, 0);
+
+		// holds all the applications
+		content = new Gtk.ListBox();
+		content.row_activated.connect(on_row_activate);
+		content.set_selection_mode(Gtk.SelectionMode.NONE);
+		content_scroll = new Gtk.ScrolledWindow(null, null);
+		content_scroll.set_overlay_scrolling(true);
+		content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+		content_scroll.add(content);
+		right_layout.pack_start(content_scroll, true, true, 0);
+
+		// placeholder in case of no results
+		var placeholder = new Gtk.Label("<big>%s</big>".printf(_("Sorry, no items found")));
+		placeholder.use_markup = true;
+		placeholder.get_style_context().add_class("dim-label");
+		placeholder.show();
+		placeholder.margin = 6;
+		content.valign = Gtk.Align.START;
+		content.set_placeholder(placeholder);
+
+		settings.changed.connect(on_settings_changed);
+		on_settings_changed("menu-compact");
+		on_settings_changed("menu-headers");
+		on_settings_changed("menu-categories-hover");
+
+		// management of our listbox
+		content.set_filter_func(do_filter_list);
+		content.set_sort_func(do_sort_list);
+
+		// searching functionality :)
+		search_entry.changed.connect(()=> {
+			search_term = searchable_string(search_entry.text);
+			content.invalidate_headers();
+			content.invalidate_filter();
+			content.invalidate_sort();
+		});
+
+		search_entry.grab_focus();
+
+		// Enabling activation by search entry
+		search_entry.activate.connect(on_entry_activate);
+		// sensible vertical height
+		set_size_request(300, 510);
+		categories_scroll.min_content_height = 510; // Have a minimum height on the categories scroll that matches the menu size
+		categories_scroll.propagate_natural_height = true;
+		// load them in the background
+		Idle.add(()=> {
+			load_menus(null);
+			content.invalidate_headers();
+			content.invalidate_filter();
+			content.invalidate_sort();
+			queue_resize();
+			if (!get_realized()) {
+				realize();
+			}
+			return false;
+		});
+	}
+
 	/* Reload menus, essentially. */
 	public void refresh_tree() {
 		lock (reloading) {
@@ -62,18 +175,25 @@ public class BudgieMenuWindow : Budgie.Popover {
 			}
 			reloading = true;
 		}
+
 		foreach (var child in content.get_children()) {
 			child.destroy();
 		}
+
+		category_buttons.remove_all();
+		category_has_items.remove_all();
 		menu_buttons.remove_all();
+
 		foreach (var child in categories.get_children()) {
 			if (child != all_categories) {
 				SignalHandler.disconnect_by_func(child, (void*)on_mouse_enter, this);
 				child.destroy();
 			}
 		}
+
 		SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
 		this.tree = null;
+
 		Idle.add(()=> {
 			load_menus(null);
 			content.invalidate_headers();
@@ -81,6 +201,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 			content.invalidate_sort();
 			return false;
 		});
+
 		lock (reloading) {
 			reloading = false;
 		}
@@ -112,9 +233,11 @@ public class BudgieMenuWindow : Budgie.Popover {
 	 */
 	private void load_menus(GMenu.TreeDirectory? tree_root = null) {
 		GMenu.TreeDirectory root;
+		bool is_top_level = false;
 
 		// Load the tree for the first time
 		if (tree == null) {
+			is_top_level = true;
 			tree = new GMenu.Tree(APPS_ID, GMenu.TreeFlags.SORT_DISPLAY_NAME);
 
 			try {
@@ -132,6 +255,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 				return false;
 			});
 		}
+
 		if (tree_root == null) {
 			root = tree.get_root_directory();
 		} else {
@@ -163,12 +287,15 @@ public class BudgieMenuWindow : Budgie.Popover {
 		while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
 			if (type == GMenu.TreeItemType.DIRECTORY) {
 				var dir = it.get_directory();
-				bool is_sundry = dir.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory");
+				string desktop_file_path = dir.get_desktop_file_path();
+				bool is_sundry = desktop_file_path.has_suffix("X-GNOME-Sundry.directory");
 
 				if (!is_sundry || (is_sundry && (other_tree == null))) { // Create a button if not Sundry or is Sundry and Other tree is null
 					var btn = new CategoryButton(dir);
 					btn.join_group(all_categories);
 					btn.enter_notify_event.connect(this.on_mouse_enter);
+
+					category_buttons.insert(desktop_file_path, btn); // Add the button for the desktop file path
 					categories.pack_start(btn, false, false, 0);
 
 					// Ensures we find the correct button
@@ -227,108 +354,21 @@ public class BudgieMenuWindow : Budgie.Popover {
 						menu_buttons.insert(app_id, btn);
 						btn.show_all();
 						content.add(btn);
+
+						string desktop_file_path = use_root.get_desktop_file_path(); // Get the desktop file path for the root we're using
+						category_has_items.set(desktop_file_path, true); // Ensure we indicate the desktop file path as items
 					}
 				}
 			}
 		}
-	}
 
-	public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent) {
-		Object(settings: settings, relative_to: leparent);
-		get_style_context().add_class("budgie-menu");
-		var master_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		add(master_layout);
-
-		menu_buttons = new HashTable<string,MenuButton?>(GLib.str_hash, GLib.str_equal);
-
-		icon_size = settings.get_int("menu-icons-size");
-
-		// search entry up north
-		search_entry = new Gtk.SearchEntry();
-		master_layout.pack_start(search_entry, false, false, 0);
-
-		// middle holds the categories and applications
-		var middle = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		master_layout.pack_start(middle, true, true, 0);
-
-		// clickable categories
-		categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		categories.margin_top = 3;
-		categories.margin_bottom = 3;
-		categories_scroll = new Gtk.ScrolledWindow(null, null);
-		categories_scroll.set_overlay_scrolling(false);
-		categories_scroll.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
-		categories_scroll.get_style_context().add_class("categories");
-		categories_scroll.get_style_context().add_class("sidebar");
-		categories_scroll.add(categories);
-		categories_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
-		middle.pack_start(categories_scroll, false, false, 0);
-
-		// "All" button"
-		all_categories = new CategoryButton(null);
-		all_categories.enter_notify_event.connect(this.on_mouse_enter);
-		all_categories.toggled.connect(()=> {
-			update_category(all_categories);
-		});
-		categories.pack_start(all_categories, false, false, 0);
-
-		var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		middle.pack_start(right_layout, true, true, 0);
-
-		// holds all the applications
-		content = new Gtk.ListBox();
-		content.row_activated.connect(on_row_activate);
-		content.set_selection_mode(Gtk.SelectionMode.NONE);
-		content_scroll = new Gtk.ScrolledWindow(null, null);
-		content_scroll.set_overlay_scrolling(true);
-		content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-		content_scroll.add(content);
-		right_layout.pack_start(content_scroll, true, true, 0);
-
-		// placeholder in case of no results
-		var placeholder = new Gtk.Label("<big>%s</big>".printf(_("Sorry, no items found")));
-		placeholder.use_markup = true;
-		placeholder.get_style_context().add_class("dim-label");
-		placeholder.show();
-		placeholder.margin = 6;
-		content.valign = Gtk.Align.START;
-		content.set_placeholder(placeholder);
-
-		settings.changed.connect(on_settings_changed);
-		on_settings_changed("menu-compact");
-		on_settings_changed("menu-headers");
-		on_settings_changed("menu-categories-hover");
-
-		// management of our listbox
-		content.set_filter_func(do_filter_list);
-		content.set_sort_func(do_sort_list);
-
-		// searching functionality :)
-		search_entry.changed.connect(()=> {
-			search_term = searchable_string(search_entry.text);
-			content.invalidate_headers();
-			content.invalidate_filter();
-			content.invalidate_sort();
-		});
-
-		search_entry.grab_focus();
-
-		// Enabling activation by search entry
-		search_entry.activate.connect(on_entry_activate);
-		// sensible vertical height
-		set_size_request(300, 510);
-		// load them in the background
-		Idle.add(()=> {
-			load_menus(null);
-			content.invalidate_headers();
-			content.invalidate_filter();
-			content.invalidate_sort();
-			queue_resize();
-			if (!get_realized()) {
-				realize();
-			}
-			return false;
-		});
+		if (is_top_level) { // If we're running load_menus at the top level in our tree
+			category_buttons.foreach((category_desktop_path, btn) => { // For each button
+				if (!category_has_items.contains(category_desktop_path)) { // If our category has no items
+					categories.remove(btn); // Remove the button
+				}
+			});
+		}
 	}
 
 	protected void on_settings_changed(string key) {

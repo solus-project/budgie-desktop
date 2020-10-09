@@ -155,8 +155,8 @@ namespace Budgie {
 			info = Meta.PluginInfo() {
 				name = "Budgie WM",
 				version = Budgie.VERSION,
-				author = "Ikey Doherty",
-				license = "GPL-2.0",
+				author = "Solus",
+				license = "GPL-2.0-only",
 				description = "Budgie Window Manager"
 			};
 			PV_CENTER = Graphene.Point();
@@ -167,7 +167,6 @@ namespace Budgie {
 			PV_NORM.y = 0.0f;
 		}
 
-		/* TODO: Make this support BSD, etc! */
 		bool have_logind() {
 			return FileUtils.test("/run/systemd/seats", FileTest.EXISTS);
 		}
