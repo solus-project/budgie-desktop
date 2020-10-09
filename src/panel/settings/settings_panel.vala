@@ -64,18 +64,11 @@ namespace Budgie {
 			this.toplevel = toplevel;
 
 			border_width = 0;
+			margin_top = 8;
+			margin_bottom = 8;
 
 			var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-			swbox.margin_top = 8;
 			this.pack_start(swbox, false, false, 0);
-
-			button_remove_panel = new TrashButton();
-			button_remove_panel.set_tooltip_text(_("Remove this panel from the screen"));
-			button_remove_panel.clicked.connect_after(this.delete_panel);
-			button_remove_panel.valign = Gtk.Align.CENTER;
-			button_remove_panel.vexpand = false;
-
-			swbox.pack_end(button_remove_panel, false, false, 0);
 
 			/* Main layout bits */
 			switcher = new Gtk.StackSwitcher();
@@ -89,15 +82,34 @@ namespace Budgie {
 			this.stack.add_titled(this.applets_page(), "main", _("Applets"));
 			this.stack.add_titled(this.settings_page(), "applets", _("Settings"));
 
+			button_remove_panel = new Gtk.Button.with_label(_("Remove Panel"));
+			button_remove_panel.set_tooltip_text(_("Remove this panel from the screen"));
+			button_remove_panel.clicked.connect_after(this.delete_panel);
+			button_remove_panel.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION); // Indicate it is a destructive action
+			button_remove_panel.halign = Gtk.Align.CENTER;
+			button_remove_panel.valign = Gtk.Align.CENTER;
+			button_remove_panel.margin_bottom = 8;
+			button_remove_panel.vexpand = false;
+
+			this.pack_end(button_remove_panel, false, false, 0);
+
 			manager.panels_changed.connect(this.on_panels_changed);
 			this.on_panels_changed();
 			this.show_all();
+
+			on_panels_changed(); // Call our on_panels_changed so we can immediately set the sensitivity and hide our Remove Panel button if necessary.
 		}
 
 		void on_panels_changed() {
 			/* Must have at least *one* panel */
 			button_remove_panel.set_sensitive(manager.slots_used() > 1);
 			this.display_weight = PanelPage.get_panel_weight(this.toplevel);
+
+			if (manager.slots_used() > 1) { // More than one panel
+				button_remove_panel.show(); // Show the button
+			} else { // Only one panel
+				button_remove_panel.hide(); // Don't even show the Remove Panel button, regardless of sensitivity
+			}
 		}
 
 		/**

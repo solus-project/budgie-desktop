@@ -15,7 +15,6 @@ namespace Budgie {
 	* removed
 	*/
 	public class RemovePanelDialog : Gtk.Dialog {
-		Settings settings;
 		Gtk.CheckButton check_confirm;
 		Gtk.Label confirm_label;
 		Gtk.Image confirm_image;
@@ -39,19 +38,6 @@ namespace Budgie {
 
 			content.pack_start(box, false, false, 0);
 			content.margin = 12;
-
-			var sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-			sep.margin_top = 6;
-			sep.margin_bottom = 6;
-			content.pack_start(sep, false, false, 0);
-
-			check_confirm = new Gtk.CheckButton.with_label(_("Don't ask me again"));
-			check_confirm.halign = Gtk.Align.START;
-			settings = new Settings("com.solus-project.budgie-panel");
-			settings.bind("confirm-remove-panel", check_confirm, "active", SettingsBindFlags.DEFAULT|SettingsBindFlags.INVERT_BOOLEAN);
-
-			check_confirm.margin_bottom = 6;
-			content.pack_end(check_confirm, false, false, 0);
 			content.show_all();
 
 			this.add_button(_("Remove panel"), Gtk.ResponseType.ACCEPT).get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
@@ -62,9 +48,6 @@ namespace Budgie {
 		* Simple wrapper to ensure dialog always does the right thing
 		*/
 		public new bool run() {
-			if (!this.settings.get_boolean("confirm-remove-panel")) {
-				return true;
-			}
 			return base.run() == Gtk.ResponseType.ACCEPT;
 		}
 	}
