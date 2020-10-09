@@ -111,12 +111,6 @@ custom_target('desktop-file-xsession',
     install_dir : join_paths(datadir, 'xsessions'),
 )
 
-# Solus only allows stateless XDG (/usr/share/xdg/autostart) in packaging
-if with_stateless == true
-    xdg_appdir = join_paths(datadir, 'xdg', 'autostart')
-else
-    xdg_appdir = join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
-endif
 
 # Merge + install nm-applet
 custom_target('desktop-file-nm-applet',

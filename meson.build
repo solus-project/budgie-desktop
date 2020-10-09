@@ -110,6 +110,15 @@ if with_stateless == true
     warning('Only use stateless option with a supported OS like Solus')
 endif
 
+xdg_appdir = get_option('xdg-appdir')
+if xdg_appdir == ''
+    if with_stateless == true
+        xdg_appdir = join_paths(datadir, 'xdg', 'autostart')
+    else
+        xdg_appdir = join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
+    endif
+endif
+
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
 # so we have to use a shared library to prevent multiple registration of the same types..
 rpath_libdir = join_paths(libdir, meson.project_name())
@@ -163,6 +172,7 @@ report = [
     '    libdir:                                 @0@'.format(libdir),
     '    module library directory:               @0@'.format(plugin_libdir),
     '    module data directory:                  @0@'.format(plugin_datadir),
+    '    xdg config directory:                   @0@'.format(xdg_appdir),
     '',
     '    Extra options:',
     '    ==============',
