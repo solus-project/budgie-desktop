@@ -185,6 +185,30 @@ public class BudgieMenuWindow : Budgie.Popover {
 					warning("%s has no parent directory, not adding to menu\n", appinfo.get_display_name());
 				} else {
 					var use_root = root;
+
+					if (appinfo.get_is_hidden() || appinfo.get_nodisplay()) { // Hidden or shouldn't be displayed
+						continue; // Skip this entry
+					}
+
+					string[]? not_show_in = appinfo.get_string_list("NotShowIn"); // Get any NotShowIn in the Desktop file
+					bool not_show_in_budgie = false;
+
+					if (not_show_in != null) { // If we got a NotShowIn list
+						for (int i = 0; i < not_show_in.length; i++) { // For each item
+							var item = not_show_in[i];
+
+							not_show_in_budgie = item.contains("Budgie"); // Update not_show_in
+
+							if (not_show_in_budgie) { // Has Budgie
+								break;
+							}
+						}
+					}
+
+					if (not_show_in_budgie) { // Have NoShowIn and it contains Budgie
+						continue; // Skip entry
+					}
+
 					var app_id = appinfo.get_id();
 
 					if (root.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory")) { // If we're iterating over desktop entries in Sundry
@@ -434,6 +458,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 	/* Helper ported from brisk */
 	private bool info_matches_term(AppInfo? info, string term) {
+		if (info == null) { // No valid AppInfo provided
+			return false;
+		}
+
 		string?[] fields = {
 			info.get_display_name(),
 			info.get_description(),

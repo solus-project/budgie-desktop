@@ -36,22 +36,22 @@ meson.add_install_script('meson_post_install.sh')
 gnome_minimum_version = '>= 3.24.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: gnome_minimum_version)
-dep_glib = dependency('glib-2.0', version: '>= 2.62.0')
-dep_giounix = dependency('gio-unix-2.0', version: '>= 2.62.0')
-dep_peas = dependency('libpeas-1.0', version: '>= 1.24.0')
+dep_glib = dependency('glib-2.0', version: '>= 2.64.0')
+dep_giounix = dependency('gio-unix-2.0', version: '>= 2.64.0')
+dep_peas = dependency('libpeas-1.0', version: '>= 1.26.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: gnome_minimum_version)
 dep_libuuid = dependency('uuid')
-dep_vala = dependency('vapigen', version: '>= 0.46.0')
+dep_vala = dependency('vapigen', version: '>= 0.48.0')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
 dep_notify = dependency('libnotify', version: '>= 0.7')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
-dep_gsd = dependency('gnome-settings-daemon', version: '>=3.28.0')
+dep_gsd = dependency('gnome-settings-daemon', version: '>=3.36.0')
 
 # wnck used all over the place..
-dep_wnck = dependency('libwnck-3.0', version: '>= 3.32.0')
+dep_wnck = dependency('libwnck-3.0', version: '>= 3.36.0')
 
 # accountsservice in multiple applets
 dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
