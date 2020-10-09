@@ -287,16 +287,15 @@ public class BudgieMenuWindow : Budgie.Popover {
 		while ((type = it.next()) != GMenu.TreeItemType.INVALID) {
 			if (type == GMenu.TreeItemType.DIRECTORY) {
 				var dir = it.get_directory();
-				string desktop_file_path = dir.get_desktop_file_path();
-				bool is_sundry = desktop_file_path.has_suffix("X-GNOME-Sundry.directory");
+				bool is_sundry = dir.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory");
 
 				if (!is_sundry || (is_sundry && (other_tree == null))) { // Create a button if not Sundry or is Sundry and Other tree is null
 					var btn = new CategoryButton(dir);
 					btn.join_group(all_categories);
 					btn.enter_notify_event.connect(this.on_mouse_enter);
 
-					category_buttons.insert(desktop_file_path, btn); // Add the button for the desktop file path
-					categories.pack_start(btn, false, false, 0);
+					// Note: We're intentionally not adding the categories yet
+					category_buttons.insert(dir.get_name(), btn); // Add the button for the desktop file path
 
 					// Ensures we find the correct button
 					btn.toggled.connect(()=>{
@@ -355,7 +354,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 						btn.show_all();
 						content.add(btn);
 
-						string desktop_file_path = use_root.get_desktop_file_path(); // Get the desktop file path for the root we're using
+						string desktop_file_path = use_root.get_name(); // Get the name of the category of this root
 						category_has_items.set(desktop_file_path, true); // Ensure we indicate the desktop file path as items
 					}
 				}
@@ -363,9 +362,24 @@ public class BudgieMenuWindow : Budgie.Popover {
 		}
 
 		if (is_top_level) { // If we're running load_menus at the top level in our tree
-			category_buttons.foreach((category_desktop_path, btn) => { // For each button
-				if (!category_has_items.contains(category_desktop_path)) { // If our category has no items
-					categories.remove(btn); // Remove the button
+			List<string> category_names = new List<string>();
+			category_has_items.foreach((name, has) => { // For each category
+				if (has) {
+					category_names.append(name); // Add the category name
+				} else { // Don't have any items for this category
+					category_buttons.remove(name); // Remove the button from the categories HashTable since we won't need it
+				}
+			});
+
+			category_names.sort((cat_one, cat_two) => { // Sort the categories
+				return cat_one.collate(cat_two);
+			});
+
+			category_names.foreach((category_name) => {
+				CategoryButton? button = category_buttons.get(category_name); // Get the button for this category
+
+				if (button != null) { // If the button exists
+					categories.pack_start(button, false, false, 0); // Add the button
 				}
 			});
 		}
