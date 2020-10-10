@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,11 +17,11 @@ public class NotificationsPlugin : Budgie.Plugin, Peas.ExtensionBase {
 
 private const string ALERT_SYMBOLIC = "notification-alert-symbolic";
 private const string DND_SYMBOLIC = "notification-disabled-symbolic";
-public const string RAVEN_DBUS_NAME		   = "org.budgie_desktop.Raven";
+public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
 [DBus (name="org.budgie_desktop.Raven")]
-public interface RavenRemote : Object {
+public interface RavenRemote : GLib.Object {
 	public signal void DoNotDisturbChanged(bool active);
 	public abstract async bool GetDoNotDisturbState() throws Error;
 	public abstract async void ToggleNotificationsView() throws Error;
@@ -66,7 +66,7 @@ public class NotificationsApplet : Budgie.Applet {
 	}
 
 	/* Hold onto our Raven proxy ref */
-	void on_raven_get(GLib.Object? o, GLib.AsyncResult? res) {
+	void on_raven_get(Object? o, AsyncResult? res) {
 		try {
 			raven_proxy = Bus.get_proxy.end(res);
 			raven_proxy.DoNotDisturbChanged.connect(on_dnd_changed);
@@ -92,7 +92,7 @@ public class NotificationsApplet : Budgie.Applet {
 		this.icon.get_style_context().add_class("alert");
 	}
 
-	void on_get_count(GLib.Object? o, AsyncResult? res) {
+	void on_get_count(Object? o, AsyncResult? res) {
 		uint count = 0;
 
 		try {
@@ -111,7 +111,7 @@ public class NotificationsApplet : Budgie.Applet {
 		}
 	}
 
-	void on_get_dnd_state(GLib.Object? o, AsyncResult? res) {
+	void on_get_dnd_state(Object? o, AsyncResult? res) {
 		bool active = true; // Default to true
 
 		try {
@@ -144,7 +144,7 @@ public class NotificationsApplet : Budgie.Applet {
 		if (raven_proxy == null) {
 			return Gdk.EVENT_PROPAGATE;
 		}
-	
+
 		if (button.button != 1) {
 			return Gdk.EVENT_PROPAGATE;
 		}

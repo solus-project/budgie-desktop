@@ -10,14 +10,14 @@
  */
 
 namespace Budgie {
-	public const string BACKGROUND_SCHEMA	   = "org.gnome.desktop.background";
-	public const string PICTURE_URI_KEY		   = "picture-uri";
-	public const string PRIMARY_COLOR_KEY	   = "primary-color";
-	public const string SECONDARY_COLOR_KEY	   = "secondary-color";
+	public const string BACKGROUND_SCHEMA = "org.gnome.desktop.background";
+	public const string PICTURE_URI_KEY = "picture-uri";
+	public const string PRIMARY_COLOR_KEY = "primary-color";
+	public const string SECONDARY_COLOR_KEY = "secondary-color";
 	public const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
-	public const string BACKGROUND_STYLE_KEY   = "picture-options";
-	public const string GNOME_COLOR_HACK	   = "gnome-control-center/pixmaps/noise-texture-light.png";
-	public const string ACCOUNTS_SCHEMA		   = "org.freedesktop.Accounts";
+	public const string BACKGROUND_STYLE_KEY = "picture-options";
+	public const string GNOME_COLOR_HACK = "gnome-control-center/pixmaps/noise-texture-light.png";
+	public const string ACCOUNTS_SCHEMA = "org.freedesktop.Accounts";
 
 	public class BudgieBackground : Clutter.Actor {
 		private Meta.BackgroundGroup bg_group;
@@ -69,12 +69,12 @@ namespace Budgie {
 			this.set_size(rect.width, rect.height);
 
 			/* If the background keys change, proxy it to libgnomedesktop */
-			settings.change_event.connect(()=> {
+			settings.change_event.connect(() => {
 				gnome_bg.load_from_preferences(this.settings);
 				return false;
 			});
 
-			gnome_bg.changed.connect(()=> {
+			gnome_bg.changed.connect(() => {
 				this.update();
 			});
 			this.set_background_color(Clutter.Color.get_static(Clutter.StaticColor.BLACK));
@@ -117,7 +117,7 @@ namespace Budgie {
 			}
 			images.insert(uri, image);
 			ulong rid = 0;
-			rid = image.loaded.connect(()=> {
+			rid = image.loaded.connect(() => {
 				image.disconnect(rid);
 				Idle.add(load_uri.callback);
 			});
@@ -150,7 +150,7 @@ namespace Budgie {
 		*/
 		void set_accountsservice_user_bg(string background) {
 			DBusConnection bus;
-			Variant		   variant;
+			Variant variant;
 
 			try {
 				bus = Bus.get_sync(BusType.SYSTEM);
@@ -255,7 +255,7 @@ namespace Budgie {
 				var bg_file = File.new_for_uri("file://" + bg_filename);
 				/* Once we know the image is in the image cache, set the background */
 
-				load_uri.begin("file://" + bg_filename, ()=> {
+				load_uri.begin("file://" + bg_filename, () => {
 					background.set_file(bg_file, gnome_bg.get_placement());
 					on_update();
 					set_accountsservice_user_bg(bg_filename);

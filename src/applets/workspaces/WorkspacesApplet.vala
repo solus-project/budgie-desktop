@@ -12,8 +12,8 @@
 namespace Workspaces {
 	[Flags]
 	public enum AddButtonVisibility {
-		NEVER  = 1 << 0,
-		HOVER  = 1 << 1,
+		NEVER = 1 << 0,
+		HOVER = 1 << 1,
 		ALWAYS = 1 << 2
 	}
 
@@ -23,21 +23,21 @@ namespace Workspaces {
 		}
 	}
 
-	[GtkTemplate (ui = "/com/solus-project/workspaces/settings.ui")]
+	[GtkTemplate (ui="/com/solus-project/workspaces/settings.ui")]
 	public class WorkspacesAppletSettings : Gtk.Grid {
 		[GtkChild]
 		private Gtk.ComboBoxText? combobox_visibility;
 
-		private GLib.Settings? settings;
+		private Settings? settings;
 
-		public WorkspacesAppletSettings(GLib.Settings? settings) {
+		public WorkspacesAppletSettings(Settings? settings) {
 			this.settings = settings;
 			settings.bind("addbutton-visibility", combobox_visibility, "active_id", SettingsBindFlags.DEFAULT);
 		}
 	}
 
 	[DBus (name="org.budgie_desktop.BudgieWM")]
-	public interface BudgieWM : Object {
+	public interface BudgieWM : GLib.Object {
 		public abstract void RemoveWorkspaceByIndex(int index, uint32 time) throws Error;
 		public abstract int AppendNewWorkspace(uint32 time) throws Error;
 	}
@@ -54,9 +54,9 @@ namespace Workspaces {
 		private int size_change = 0;
 		private bool updating = false;
 		private ulong[] wnck_connections = {};
-		private GLib.HashTable<unowned Wnck.Window, ulong> window_connections;
-		private GLib.List<int> dynamically_created_workspaces;
-		private GLib.Settings settings;
+		private HashTable<unowned Wnck.Window, ulong> window_connections;
+		private List<int> dynamically_created_workspaces;
+		private Settings settings;
 		private AddButtonVisibility button_visibility = AddButtonVisibility.ALWAYS;
 
 		public string uuid { public set ; public get ; }
@@ -88,8 +88,8 @@ namespace Workspaces {
 
 			WorkspacesApplet.wnck_screen = Wnck.Screen.get_default();
 
-			dynamically_created_workspaces = new GLib.List<int>();
-			window_connections = new GLib.HashTable<unowned Wnck.Window, ulong>(str_hash, str_equal);
+			dynamically_created_workspaces = new List<int>();
+			window_connections = new HashTable<unowned Wnck.Window, ulong>(str_hash, str_equal);
 
 			Bus.watch_name(BusType.SESSION, "org.budgie_desktop.BudgieWM", BusNameWatcherFlags.NONE,
 				has_wm, lost_wm);
@@ -140,8 +140,8 @@ namespace Workspaces {
 				return false;
 			});
 
-			GLib.Idle.add(() => {
-				GLib.Timeout.add(500, () => {
+			Idle.add(() => {
+				Timeout.add(500, () => {
 					startup = false;
 					update_workspaces();
 					return false;
@@ -179,7 +179,7 @@ namespace Workspaces {
 					return Gdk.EVENT_STOP;
 				}
 
-				if (GLib.get_monotonic_time() - last_scroll_time < 300000) {
+				if (get_monotonic_time() - last_scroll_time < 300000) {
 					return Gdk.EVENT_STOP;
 				}
 
@@ -194,7 +194,7 @@ namespace Workspaces {
 
 				if (next != null) {
 					next.activate(e.time);
-					last_scroll_time = GLib.get_monotonic_time();
+					last_scroll_time = get_monotonic_time();
 				}
 
 				return Gdk.EVENT_STOP;
@@ -226,10 +226,10 @@ namespace Workspaces {
 			wm_proxy = null;
 		}
 
-		private void on_wm_get(GLib.Object? o, GLib.AsyncResult? res) {
+		private void on_wm_get(Object? o, AsyncResult? res) {
 			try {
 				wm_proxy = Bus.get_proxy.end(res);
-			} catch (GLib.Error e) {
+			} catch (Error e) {
 				warning("Failed to get BudgieWM proxy: %s", e.message);
 			}
 		}
@@ -297,7 +297,7 @@ namespace Workspaces {
 				if (item.get_workspace() == space) {
 					revealer.set_transition_type(hide_transition);
 					revealer.set_reveal_child(false);
-					GLib.Timeout.add(200, () => {
+					Timeout.add(200, () => {
 						widget.destroy();
 						return false;
 					});
@@ -364,7 +364,7 @@ namespace Workspaces {
 
 					if (index != -1) { // Successfully added workspace
 						dynamically_created_workspaces.append(index);
-						GLib.Timeout.add(50, () => {
+						Timeout.add(50, () => {
 							window.move_to_workspace(wnck_screen.get_workspace(index));
 							return false;
 						});
@@ -413,7 +413,7 @@ namespace Workspaces {
 			}
 
 			if (!startup) {
-				GLib.Timeout.add(500, () => {
+				Timeout.add(500, () => {
 					update_workspaces();
 					return false;
 				});
@@ -462,21 +462,21 @@ namespace Workspaces {
 			foreach (Gtk.Widget widget in workspaces_layout.get_children()) {
 				Gtk.Revealer revealer = widget as Gtk.Revealer;
 				WorkspaceItem item = revealer.get_child() as WorkspaceItem;
-				GLib.List<unowned Wnck.Window> windows = wnck_screen.get_windows_stacked().copy();
+				List<unowned Wnck.Window> windows = wnck_screen.get_windows_stacked().copy();
 				windows.reverse();
-				GLib.List<unowned Wnck.Window> window_list = new GLib.List<unowned Wnck.Window>();
+				List<unowned Wnck.Window> window_list = new List<unowned Wnck.Window>();
 				windows.foreach((window) => {
 					if (window.get_workspace() == item.get_workspace() && !window.is_skip_tasklist() && !window.is_skip_pager() && window.get_window_type() == Wnck.WindowType.NORMAL) {
 						window_list.append(window);
 					}
 				});
 				int index = item.get_workspace().get_number();
-				unowned GLib.List<int>? dyn = dynamically_created_workspaces.find(index);
+				unowned List<int>? dyn = dynamically_created_workspaces.find(index);
 				if (window_list.length() == 0 && dyn != null) {
 					dynamically_created_workspaces.remove(index);
 					dyn = dynamically_created_workspaces.find(index+1);
 					if (dyn == null) {
-						GLib.Timeout.add(200, () => {
+						Timeout.add(200, () => {
 							wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
 							return false;
 						});

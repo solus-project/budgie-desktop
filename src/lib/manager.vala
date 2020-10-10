@@ -15,8 +15,8 @@ namespace Budgie {
 		public signal void panel_deleted(string uuid);
 		public signal void panel_added(string uuid, Budgie.Toplevel toplevel);
 
-		public virtual GLib.List<Budgie.Toplevel?> get_panels() {
-			return new GLib.List<Budgie.Toplevel?>();
+		public virtual List<Budgie.Toplevel?> get_panels() {
+			return new List<Budgie.Toplevel?>();
 		}
 
 		public abstract uint slots_available();
@@ -29,7 +29,7 @@ namespace Budgie {
 
 		public abstract void create_new_panel();
 		public abstract void delete_panel(string uuid);
-		public abstract GLib.List<Peas.PluginInfo?> get_panel_plugins();
+		public abstract List<Peas.PluginInfo?> get_panel_plugins();
 
 	}
 }

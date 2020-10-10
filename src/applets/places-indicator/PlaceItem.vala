@@ -10,7 +10,7 @@
  */
 
 public class PlaceItem : ListItem {
-	public PlaceItem(GLib.File file, string class, string? bookmark_name) {
+	public PlaceItem(File file, string class, string? bookmark_name) {
 		item_class = class;
 
 		string name = "";
@@ -27,15 +27,15 @@ public class PlaceItem : ListItem {
 
 		// Get and set the appropriate icon
 		try {
-			GLib.FileInfo info = file.query_info("standard::symbolic-icon", GLib.FileQueryInfoFlags.NONE, null);
+			FileInfo info = file.query_info("standard::symbolic-icon", FileQueryInfoFlags.NONE, null);
 			set_button(name.strip(), get_icon(info.get_symbolic_icon()));
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			set_button(name.strip(), get_icon(null));
 		}
 
 		name_button.set_tooltip_text(_("Open \"%s\"".printf(name.strip())));
 
-		name_button.clicked.connect(()=> {
+		name_button.clicked.connect(() => {
 			open_directory(file);
 		});
 	}

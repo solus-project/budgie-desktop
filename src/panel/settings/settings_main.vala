@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -114,7 +114,7 @@ namespace Budgie {
 		*/
 		void on_panels_changed() {
 			item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
-			Idle.add(()=> {
+			Idle.add(() => {
 				this.sidebar.invalidate_sort();
 				this.sidebar.invalidate_filter();
 				return false;
@@ -254,7 +254,7 @@ namespace Budgie {
 		* Emulate sidebar activation for the user
 		*/
 		void force_select_page(string content_id) {
-			Idle.add(()=> {
+			Idle.add(() => {
 				Gtk.ListBoxRow? row = this.sidebar_map[content_id].get_parent() as Gtk.ListBoxRow;
 				sidebar.select_row(row);
 				row.grab_focus();

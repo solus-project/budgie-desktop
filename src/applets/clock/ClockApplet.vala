@@ -149,7 +149,7 @@ public class ClockApplet : Budgie.Applet {
 		menu.pack_start(time_button, false, false, 0);
 		menu.pack_start(cal_button, false, false, 0);
 		var sub_button = this.new_directional_button(_("Preferences"), Gtk.PositionType.RIGHT);
-		sub_button.clicked.connect(()=> { stack.set_visible_child_name("prefs"); });
+		sub_button.clicked.connect(() => { stack.set_visible_child_name("prefs"); });
 		menu.pack_end(sub_button, false, false, 2);
 
 		stack.add_named(menu, "root");
@@ -172,7 +172,7 @@ public class ClockApplet : Budgie.Applet {
 		clock_format = new Gtk.CheckButton.with_label(_("Use 24 hour time"));
 		clock_format.get_child().set_property("margin-start", 8);
 
-		check_id = clock_format.toggled.connect_after(()=> {
+		check_id = clock_format.toggled.connect_after(() => {
 			ClockFormat f = (ClockFormat)settings.get_enum("clock-format");
 			ClockFormat newf = f == ClockFormat.TWELVE ? ClockFormat.TWENTYFOUR : ClockFormat.TWELVE;
 			this.settings.set_enum("clock-format", newf);
@@ -180,7 +180,7 @@ public class ClockApplet : Budgie.Applet {
 
 		// pack page2
 		sub_button = this.new_directional_button(_("Preferences"), Gtk.PositionType.LEFT);
-		sub_button.clicked.connect(()=> { stack.set_visible_child_name("root"); });
+		sub_button.clicked.connect(() => { stack.set_visible_child_name("root"); });
 		menu.pack_start(sub_button, false, false, 0);
 		menu.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL), false, false, 2);
 		menu.pack_start(check_date, false, false, 0);
@@ -190,11 +190,11 @@ public class ClockApplet : Budgie.Applet {
 
 
 		// Always open to the root page
-		popover.closed.connect(()=> {
+		popover.closed.connect(() => {
 			stack.set_visible_child_name("root");
 		});
 
-		widget.button_press_event.connect((e)=> {
+		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
 			}
@@ -206,7 +206,7 @@ public class ClockApplet : Budgie.Applet {
 			return Gdk.EVENT_STOP;
 		});
 
-		Timeout.add_seconds_full(GLib.Priority.LOW, 1, update_clock);
+		Timeout.add_seconds_full(Priority.LOW, 1, update_clock);
 
 		settings.changed.connect(on_settings_change);
 
@@ -350,7 +350,7 @@ public class ClockApplet : Budgie.Applet {
 				format += ":%S";
 			}
 		}
-	
+
 		if (ampm) {
 			format += " %p";
 		}

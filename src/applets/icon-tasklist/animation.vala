@@ -19,26 +19,26 @@ namespace BudgieTaskList {
 	/** Animate a GObject property */
 	public struct PropChange {
 		string property; /**<GObject property name */
-		Value old;		 /**<Value pre-animation */
-		Value @new;		 /**<Target value for end of animation */
+		Value old; /**<Value pre-animation */
+		Value @new; /**<Target value for end of animation */
 	}
 
 	/**
 	* Utility to struct to enable easier animations
-	* Inspired by Clutter. 
+	* Inspired by Clutter.
 	*/
 	[Compact]
-	public class Animation : Object {
-		public int64 start_time;		   /**<Start time (microseconds) of animation */
-		public int64 length;			   /**<Length of animation in microseconds */
-		public unowned TweenFunc tween;	   /**<Tween function to use for property changes */
-		public PropChange[] changes;	  /**<Group of properties to change in this animation */
+	public class Animation : GLib.Object {
+		public int64 start_time; /**<Start time (microseconds) of animation */
+		public int64 length; /**<Length of animation in microseconds */
+		public unowned TweenFunc tween; /**<Tween function to use for property changes */
+		public PropChange[] changes; /**<Group of properties to change in this animation */
 		public unowned Gtk.Widget widget;/**<Rendering widget that owns the Gdk.FrameClock */
-		public GLib.Object? object;		   /**<Widget to apply property changes to */
-		public uint id;					   /**<Idle source ID */
-		public bool can_anim;			   /**<Whether we can animate ?*/
-		public int64 elapsed;			  /**<Elapsed time */
-		public bool no_reset;			  /**<Used sometimes for switching an animation*/
+		public Object? object; /**<Widget to apply property changes to */
+		public uint id; /**<Idle source ID */
+		public bool can_anim; /**<Whether we can animate ?*/
+		public int64 elapsed; /**<Elapsed time */
+		public bool no_reset; /**<Used sometimes for switching an animation*/
 		private AnimCompletionFunc compl;
 
 		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock frame) {

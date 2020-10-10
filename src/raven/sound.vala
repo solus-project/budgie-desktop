@@ -69,7 +69,7 @@ namespace Budgie {
 			derpers = new HashTable<string,string?>(str_hash, str_equal); // Create our GVC Stream app derpers
 			derpers.insert("Vivaldi", "vivaldi"); // Vivaldi
 			derpers.insert("Vivaldi Snapshot", "vivaldi-snapshot"); // Vivaldi Snapshot
-			devices = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
+			devices = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash, direct_equal);
 
 			/**
 			 * Shared Construction
@@ -103,7 +103,7 @@ namespace Budgie {
 				devices_list.margin_bottom = 10;
 			} else { // Output
 				settings = new Settings("org.gnome.desktop.sound");
-				apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash,direct_equal);
+				apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash, direct_equal);
 				budgie_settings = new Settings("com.solus-project.budgie-panel");
 				raven_settings = new Settings("com.solus-project.budgie-raven");
 				gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
@@ -275,7 +275,7 @@ namespace Budgie {
 				primary_notify_id = 0;
 			}
 
-			primary_notify_id = stream.notify.connect((n,p)=> {
+			primary_notify_id = stream.notify.connect((n, p) => {
 				if (p.name == "volume" || p.name == "is-muted") {
 					update_volume();
 				}
@@ -459,7 +459,7 @@ namespace Budgie {
 				if (row != null) { // If this row exists
 					try {
 						apps_listbox.remove(row); // Remove row from listbox
-					} catch (GLib.Error e) {
+					} catch (Error e) {
 						warning("Issue during row destroy: %s", e.message);
 					}
 				}

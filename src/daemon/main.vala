@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright (C) 2016-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -14,7 +14,9 @@
  */
 static bool replace = false;
 
-const GLib.OptionEntry[] options = { { "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running daemon" }, { null }
+const OptionEntry[] options = {
+	{ "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running daemon" },
+	{ null }
 };
 
 namespace Budgie {
@@ -65,7 +67,7 @@ public static int main(string[] args) {
 	}
 
 	/* Initialise wnck after gtk-start */
-	Idle.add(()=> {
+	Idle.add(() => {
 		screen = Wnck.Screen.get_default();
 		if (screen != null) {
 			screen.force_update();

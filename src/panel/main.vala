@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -12,9 +12,9 @@
 static bool replace = false;
 static bool reset = false;
 
-const GLib.OptionEntry[] options = { 
-	{ "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" }, 
-	{ "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" }, 
+const OptionEntry[] options = {
+	{ "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" },
+	{ "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" },
 	{ null }
 };
 

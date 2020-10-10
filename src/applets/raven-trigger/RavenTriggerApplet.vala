@@ -1,19 +1,19 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
 
-public const string RAVEN_DBUS_NAME		   = "org.budgie_desktop.Raven";
+public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
 [DBus (name="org.budgie_desktop.Raven")]
-public interface RavenTriggerProxy : Object {
+public interface RavenTriggerProxy : GLib.Object {
 	public abstract async void ToggleAppletView() throws Error;
 	public abstract bool GetExpanded() throws Error;
 	public abstract bool GetLeftAnchored() throws Error;
@@ -129,17 +129,17 @@ public class RavenTriggerApplet : Budgie.Applet {
 	}
 
 	/* Hold onto our Raven proxy ref */
-	void on_raven_get(GLib.Object? o, GLib.AsyncResult? res) {
+	void on_raven_get(Object? o, AsyncResult? res) {
 		try {
 			raven_proxy = Bus.get_proxy.end(res);
-			raven_proxy.ExpansionChanged.connect_after((e)=> {
-				Idle.add(()=> {
+			raven_proxy.ExpansionChanged.connect_after((e) => {
+				Idle.add(() => {
 					on_prop_changed(e);
 					return false;
 				});
 			});
-			raven_proxy.AnchorChanged.connect((e)=> {
-				Idle.add(()=> {
+			raven_proxy.AnchorChanged.connect((e) => {
+				Idle.add(() => {
 					on_anchor_changed(e);
 					return false;
 				});

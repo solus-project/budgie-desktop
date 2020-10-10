@@ -108,7 +108,7 @@ public class Icon : Gtk.Image {
 			};
 		}
 
-		attention_animation.start((a)=> {
+		attention_animation.start((a) => {
 			animate_attention(null);
 		});
 	}
@@ -154,14 +154,14 @@ public class Icon : Gtk.Image {
 			this.icon_opacity = 0.3;
 		});
 
-		GLib.Timeout.add(700, () => {
+		Timeout.add(700, () => {
 			if (!waiting) {
 				wait_animation.stop();
 				wait_animation1.stop();
 				this.icon_opacity = 1.0;
 				return false;
 			}
-			wait_animation1.start((a)=> {
+			wait_animation1.start((a) => {
 				this.icon_opacity = 1.0;
 				animate_wait();
 			});
@@ -192,7 +192,7 @@ public class Icon : Gtk.Image {
 			}
 		};
 
-		launch_animation.start((a)=> {
+		launch_animation.start((a) => {
 			this.bounce = 0.0;
 		});
 	}

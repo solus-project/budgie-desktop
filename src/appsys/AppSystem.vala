@@ -16,12 +16,12 @@ namespace Budgie {
 		HashTable<string?,DesktopAppInfo?> desktops = null;
 		/* Mapping of based TryExec to desktop ID */
 		HashTable<string?,string?> exec_cache = null;
-		HashTable<int64?, string?> pid_cache = null;
+		HashTable<int64?,string?> pid_cache = null;
 		AppInfoMonitor? monitor = null;
 
 		bool invalidated = false;
 
-		private GLib.DBusConnection bus;
+		private DBusConnection bus;
 
 		public signal void app_launched(string desktop_file);
 
@@ -38,9 +38,9 @@ namespace Budgie {
 
 			pid_cache = new HashTable<int64?,string?>(str_hash, str_equal);
 
-			GLib.Bus.@get.begin(GLib.BusType.SESSION, null, (obj, res) => {
+			Bus.@get.begin(BusType.SESSION, null, (obj, res) => {
 				try {
-					bus = GLib.Bus.@get.end(res);
+					bus = Bus.@get.end(res);
 					bus.signal_subscribe(null,
 										"org.gtk.gio.DesktopAppInfo",
 										"Launched",
@@ -48,14 +48,14 @@ namespace Budgie {
 										null,
 										0,
 										this.signal_received);
-				} catch (GLib.IOError e) {
+				} catch (IOError e) {
 					warning(e.message);
 				}
 			});
 
 			monitor = AppInfoMonitor.get();
-			monitor.changed.connect(()=> {
-				Idle.add(()=> {
+			monitor.changed.connect(() => {
+				Idle.add(() => {
 					lock(invalidated) {
 						invalidated = true;
 					}
@@ -65,13 +65,13 @@ namespace Budgie {
 			reload_ids();
 		}
 
-		private void signal_received(GLib.DBusConnection connection,
+		private void signal_received(DBusConnection connection,
 									string? sender,
 									string object_path,
 									string interface_name,
 									string signal_name,
-									GLib.Variant parameters) {
-			GLib.Variant desktop_variant;
+									Variant parameters) {
+			Variant desktop_variant;
 			int64 pid;
 
 			parameters.get("(@aysxas@a{sv})", out desktop_variant, null, out pid, null, null);
@@ -172,7 +172,7 @@ namespace Budgie {
 			/* See if the pid associated with the window is in our pid cache */
 			if (pid in pid_cache) {
 				string filename = pid_cache[pid];
-				GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(filename);
+				DesktopAppInfo? info = new DesktopAppInfo.from_filename(filename);
 				return info;
 			}
 

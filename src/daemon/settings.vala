@@ -10,8 +10,8 @@
  */
 
 namespace Budgie {
-	[DBus (name = "org.gnome.SettingsDaemon.Power.Screen")]
-	interface PowerScreen : Object {
+	[DBus (name="org.gnome.SettingsDaemon.Power.Screen")]
+	interface PowerScreen : GLib.Object {
 		public abstract int32 brightness {owned get; set;}
 	}
 
@@ -81,7 +81,7 @@ namespace Budgie {
 			wm_settings = new Settings("com.solus-project.budgie-wm");
 
 			try {
-				gnome_power_props = Bus.get_proxy_sync (BusType.SESSION, "org.gnome.SettingsDaemon.Power", "/org/gnome/SettingsDaemon/Power");
+				gnome_power_props = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SettingsDaemon.Power", "/org/gnome/SettingsDaemon/Power");
 			} catch (IOError e) {
 				warning("Failed to acquire bus for org.gnome.SettingsDaemon.Power: %s\n", e.message);
 			}
@@ -113,7 +113,7 @@ namespace Budgie {
 		/**
 		* change_brightness will attempt to change our brightness in the power properties
 		*/
-		private void change_brightness (int32 value) {
+		private void change_brightness(int32 value) {
 			if (this.gnome_power_props != null) {
 				try {
 					this.gnome_power_props.brightness = value;

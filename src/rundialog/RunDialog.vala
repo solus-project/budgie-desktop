@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -14,7 +14,7 @@ namespace Budgie {
 	* We need to probe the dbus daemon directly, hence this interface
 	*/
 	[DBus (name="org.freedesktop.DBus")]
-	public interface DBusImpl : Object {
+	public interface DBusImpl : GLib.Object {
 		public abstract async string[] list_names() throws IOError;
 		public signal void name_owner_changed(string name, string old_owner, string new_owner);
 	}
@@ -148,7 +148,7 @@ namespace Budgie {
 			set_border_width(0);
 			set_resizable(false);
 
-			focus_out_event.connect(()=> {
+			focus_out_event.connect(() => {
 				if (!this.focus_quit) {
 					return Gdk.EVENT_STOP;
 				}
@@ -300,7 +300,7 @@ namespace Budgie {
 		*/
 		bool on_key_release(Gdk.EventKey btn) {
 			if (btn.keyval == Gdk.Key.Escape) {
-				Idle.add(()=> {
+				Idle.add(() => {
 					this.application.quit();
 					return false;
 				});
@@ -313,7 +313,7 @@ namespace Budgie {
 		* Handle startup notification, mark it done, quit
 		* We may not get the ID but we'll be told it's launched
 		*/
-		private void on_launched(GLib.AppInfo info, Variant v) {
+		private void on_launched(AppInfo info, Variant v) {
 			Variant? elem;
 
 			var iter = v.iterator();

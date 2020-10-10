@@ -78,7 +78,7 @@ namespace Budgie {
 				nat = 5;
 				return;
 			}
-			min = nat =	 rm;
+			min = nat = rm;
 		}
 
 		public override void get_preferred_width(out int min, out int nat) {

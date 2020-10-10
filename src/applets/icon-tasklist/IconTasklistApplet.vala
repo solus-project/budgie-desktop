@@ -15,7 +15,7 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-[GtkTemplate (ui = "/com/solus-project/icon-tasklist/settings.ui")]
+[GtkTemplate (ui="/com/solus-project/icon-tasklist/settings.ui")]
 public class IconTasklistSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Switch? switch_grouping;
@@ -38,9 +38,9 @@ public class IconTasklistSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Switch? switch_require_double_click_to_launch_new_instance;
 
-	private GLib.Settings? settings;
+	private Settings? settings;
 
-	public IconTasklistSettings(GLib.Settings? settings) {
+	public IconTasklistSettings(Settings? settings) {
 		this.settings = settings;
 		settings.bind("grouping", switch_grouping, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("restrict-to-workspace", switch_restrict, "active", SettingsBindFlags.DEFAULT);
@@ -55,9 +55,9 @@ public class IconTasklistSettings : Gtk.Grid {
 public class IconTasklistApplet : Budgie.Applet {
 	private Budgie.Abomination? abomination = null;
 	private Wnck.Screen? wnck_screen = null;
-	private GLib.Settings? settings = null;
-	private GLib.HashTable<string, IconButton> buttons;
-	private GLib.HashTable<string, string> id_map;
+	private Settings? settings = null;
+	private HashTable<string,IconButton> buttons;
+	private HashTable<string,string> id_map;
 	private Gtk.Box? main_layout = null;
 	private bool grouping = true;
 	private bool restrict_to_workspace = false;
@@ -79,7 +79,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	public IconTasklistApplet(string uuid) {
-		GLib.Object(uuid: uuid);
+		Object(uuid: uuid);
 
 		/* Get our settings working first */
 		settings_schema = "com.solus-project.icon-tasklist";
@@ -87,8 +87,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		settings = this.get_applet_settings(uuid);
 
 		/* Somewhere to store the window mappings */
-		buttons = new GLib.HashTable<string, IconButton>(str_hash, str_equal);
-		id_map = new GLib.HashTable<string, string>(str_hash, str_equal);
+		buttons = new HashTable<string,IconButton>(str_hash, str_equal);
+		id_map = new HashTable<string,string>(str_hash, str_equal);
 		main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
 		/* Initial bootstrap of helpers */
@@ -106,7 +106,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		main_layout.drag_data_received.connect(on_drag_data_received);
 
 		app_system.app_launched.connect((desktop_file) => {
-			GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(desktop_file);
+			DesktopAppInfo? info = new DesktopAppInfo.from_filename(desktop_file);
 			if (info == null) {
 				return;
 			}
@@ -124,7 +124,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		on_settings_changed("lock-icons");
 		on_settings_changed("only-pinned");
 
-		GLib.Timeout.add(1000, () => {
+		Timeout.add(1000, () => {
 			connect_wnck_signals();
 			on_active_window_changed(null);
 			return false;
@@ -138,7 +138,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		string[] pinned = settings.get_strv("pinned-launchers");
 
 		foreach (string launcher in pinned) {
-			GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo(launcher);
+			DesktopAppInfo? info = new DesktopAppInfo(launcher);
 			if (info == null) {
 				continue;
 			}
@@ -200,7 +200,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		switch (key) {
 			case "grouping":
 				this.grouping = settings.get_boolean(key);
-				GLib.Idle.add(() => {
+				Idle.add(() => {
 					rebuild_items();
 					return false;
 				});
@@ -260,7 +260,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			app_id = app_id.split("://")[1];
 			app_id = app_id.strip();
 
-			GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(app_id);
+			DesktopAppInfo? info = new DesktopAppInfo.from_filename(app_id);
 			if (info == null) {
 				return;
 			}
@@ -380,7 +380,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			return;
 		}
 
-		GLib.DesktopAppInfo? app_info = first_app.app;
+		DesktopAppInfo? app_info = first_app.app;
 
 		string app_id = (app_info == null) ? "%s".printf(group_name) : app_info.get_id();
 		app_id = app_id.strip();
@@ -393,7 +393,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			return;
 		}
 
-		IconButton button = new IconButton.from_group(this.app_system, this.settings,this.desktop_helper, this.manager, first_app.group_object, app_info);
+		IconButton button = new IconButton.from_group(this.app_system, this.settings, this.desktop_helper, this.manager, first_app.group_object, app_info);
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = this.get_orientation();
 
@@ -536,7 +536,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	void set_icons_size() {
 		Wnck.set_default_icon_size(this.desktop_helper.icon_size);
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			buttons.foreach((id, button) => {
 				button.update_icon();
 			});

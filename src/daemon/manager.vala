@@ -28,7 +28,7 @@ namespace Budgie {
 		*/
 		public ServiceManager(bool replace) {
 			theme_manager = new Budgie.ThemeManager();
-			register_with_session.begin((o,res)=> {
+			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
 					message("Failed to register with Session manager");
@@ -52,13 +52,13 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(()=> {
+			sclient.QueryEndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.EndSession.connect(()=> {
+			sclient.EndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.Stop.connect(()=> {
+			sclient.Stop.connect(() => {
 				end_session(true);
 			});
 			return true;

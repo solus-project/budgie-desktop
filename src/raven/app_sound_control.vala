@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -82,7 +82,7 @@ namespace Budgie {
 			}
 
 			if (usable_icon_name != "applications-multimedia") { // Successfully got an icon from a valid app
-				app_name = app_name.substring(0,1).ascii_up() + app_name.substring(1); // Titalize the app name. Not doing this for non-compliant icons means apps like mocp don't get wrongly titalized.
+				app_name = app_name.substring(0, 1).ascii_up() + app_name.substring(1); // Titalize the app name. Not doing this for non-compliant icons means apps like mocp don't get wrongly titalized.
 			}
 
 			/**

@@ -12,10 +12,10 @@
 public class VolumeItem : ListItem {
 	private MountHelper operation;
 	private Gtk.Revealer? unlock_revealer = null;
-	private GLib.Volume volume;
+	private Volume volume;
 	private bool first_try = true;
 
-	public VolumeItem(GLib.Volume volume) {
+	public VolumeItem(Volume volume) {
 		item_class = volume.get_identifier("class");
 		this.volume = volume;
 
@@ -42,7 +42,7 @@ public class VolumeItem : ListItem {
 
 		operation = new MountHelper();
 
-		operation.send_message.connect((message)=> { send_message(message); });
+		operation.send_message.connect((message) => { send_message(message); });
 		operation.password_asked.connect(on_password_asked);
 		operation.request_mount.connect(do_mount);
 
@@ -62,7 +62,7 @@ public class VolumeItem : ListItem {
 	}
 
 	private void on_eject_button_clicked() {
-		volume.eject_with_operation.begin(GLib.MountUnmountFlags.NONE, operation, null, on_eject);
+		volume.eject_with_operation.begin(MountUnmountFlags.NONE, operation, null, on_eject);
 	}
 
 	private void on_name_button_clicked() {
@@ -77,13 +77,13 @@ public class VolumeItem : ListItem {
 		}
 	}
 
-	private void on_eject(GLib.Object? obj, GLib.AsyncResult res) {
+	private void on_eject(Object? obj, AsyncResult res) {
 		try {
 			volume.eject_with_operation.end(res);
 			string safe_remove = _("You can now safely remove");
 			string device_name = volume.get_drive().get_name();
 			send_message(@"$safe_remove \"$device_name\"");
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			send_message(e.message);
 			warning(e.message);
 		}
@@ -100,14 +100,14 @@ public class VolumeItem : ListItem {
 
 	private void do_mount() {
 		spin.start();
-		volume.mount.begin(GLib.MountMountFlags.NONE, operation, null, on_mount);
+		volume.mount.begin(MountMountFlags.NONE, operation, null, on_mount);
 	}
 
-	private void on_mount(GLib.Object? obj, GLib.AsyncResult res) {
+	private void on_mount(Object? obj, AsyncResult res) {
 		try {
 			volume.mount.end(res);
 			open_directory(volume.get_mount().get_root());
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			if ("No key available with this passphrase" in e.message) {
 				send_message(_("The password you entered is incorrect"));
 			} else if (first_try && unlock_revealer != null) {

@@ -15,7 +15,7 @@ public class SpacerPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-[GtkTemplate (ui = "/com/solus-project/spacer/settings.ui")]
+[GtkTemplate (ui="/com/solus-project/spacer/settings.ui")]
 public class SpacerSettings : Gtk.Grid {
 	Settings? settings = null;
 

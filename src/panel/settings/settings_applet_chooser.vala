@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -118,7 +118,7 @@ namespace Budgie {
 			Peas.PluginInfo? infoA = (a.get_child() as PluginItem).plugin;
 			Peas.PluginInfo? infoB = (b.get_child() as PluginItem).plugin;
 
-			return GLib.strcmp(infoA.get_name().down(), infoB.get_name().down());
+			return strcmp(infoA.get_name().down(), infoB.get_name().down());
 		}
 
 		/**
@@ -151,7 +151,7 @@ namespace Budgie {
 		/**
 		* Set the available plugins to show in the dialog
 		*/
-		public void set_plugin_list(GLib.List<Peas.PluginInfo?> plugins) {
+		public void set_plugin_list(List<Peas.PluginInfo?> plugins) {
 			foreach (var child in applets.get_children()) {
 				child.destroy();
 			}

@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -104,7 +104,7 @@ public class SoundIndicator : Gtk.Bin {
 
 		/* - button */
 		popover_box.pack_start(sub_button, false, false, 1);
-		sub_button.clicked.connect(()=> {
+		sub_button.clicked.connect(() => {
 			adjust_volume_increment(-step_size);
 		});
 
@@ -116,7 +116,7 @@ public class SoundIndicator : Gtk.Bin {
 
 		/* + button */
 		popover_box.pack_start(plus_button, false, false, 1);
-		plus_button.clicked.connect(()=> {
+		plus_button.clicked.connect(() => {
 			adjust_volume_increment(+step_size);
 		});
 

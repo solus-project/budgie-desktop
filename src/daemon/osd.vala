@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2016-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -23,7 +23,7 @@ namespace Budgie {
 	/**
 	* Our name on the session bus. Reserved for Budgie use
 	*/
-	public const string OSD_DBUS_NAME		 = "org.budgie_desktop.BudgieOSD";
+	public const string OSD_DBUS_NAME = "org.budgie_desktop.BudgieOSD";
 
 	/**
 	* Unique object path on OSD_DBUS_NAME
@@ -48,7 +48,7 @@ namespace Budgie {
 	* meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
 	* users to "hold down" the volume change buttons, for example.
 	*/
-	[GtkTemplate (ui = "/com/solus-project/budgie/daemon/osd.ui")]
+	[GtkTemplate (ui="/com/solus-project/budgie/daemon/osd.ui")]
 	public class OSD : Gtk.Window {
 		/**
 		* Main text display
@@ -184,12 +184,12 @@ namespace Budgie {
 	* BudgieOSDManager is responsible for managing the BudgieOSD over d-bus, receiving
 	* requests, for example, from budgie-wm
 	*/
-	[DBus (name = "org.budgie_desktop.BudgieOSD")]
+	[DBus (name="org.budgie_desktop.BudgieOSD")]
 	public class OSDManager {
 		private OSD? osd_window = null;
 		private uint32 expire_timeout = 0;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public OSDManager() {
 			osd_window = new OSD();
 		}
@@ -197,7 +197,7 @@ namespace Budgie {
 		/**
 		* Own the OSD_DBUS_NAME
 		*/
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public void setup_dbus(bool replace) {
 			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
 			if (replace) {

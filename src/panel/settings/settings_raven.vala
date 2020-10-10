@@ -21,7 +21,7 @@ namespace Budgie {
 		private Gtk.Switch? show_mic_input_widget;
 		private Gtk.Switch? show_mpris_widget;
 		private Gtk.Switch? show_powerstrip;
-		private GLib.Settings raven_settings;
+		private Settings raven_settings;
 
 		public RavenPage() {
 			Object(group: SETTINGS_GROUP_APPEARANCE,
@@ -75,7 +75,7 @@ namespace Budgie {
 				_("Shows or hides the Power Strip in the bottom of Raven.")
 			));
 
-			raven_settings = new GLib.Settings("com.solus-project.budgie-raven");
+			raven_settings = new Settings("com.solus-project.budgie-raven");
 			raven_settings.bind("allow-volume-overdrive", allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("enable-week-numbers", enable_week_numbers, "active", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);

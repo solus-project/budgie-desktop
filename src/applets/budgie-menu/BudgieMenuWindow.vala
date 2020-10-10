@@ -194,7 +194,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		SignalHandler.disconnect_by_func(tree, (void*)refresh_tree, this);
 		this.tree = null;
 
-		Idle.add(()=> {
+		Idle.add(() => {
 			load_menus(null);
 			content.invalidate_headers();
 			content.invalidate_filter();
@@ -250,7 +250,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 				return;
 			}
 			/* Think of deferred routines.. */
-			Idle.add(()=> {
+			Idle.add(() => {
 				tree.changed.connect(refresh_tree);
 				return false;
 			});
@@ -298,7 +298,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 					category_buttons.insert(dir.get_name(), btn); // Add the button for the desktop file path
 
 					// Ensures we find the correct button
-					btn.toggled.connect(()=>{
+					btn.toggled.connect(() => {
 						update_category(btn);
 					});
 				}
@@ -338,7 +338,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 					var app_id = appinfo.get_id();
 
 					if (root.get_desktop_file_path().has_suffix("X-GNOME-Sundry.directory")) { // If we're iterating over desktop entries in Sundry
-						if (other_tree != null)	 {
+						if (other_tree != null) {
 							use_root = other_tree;
 						}
 					}
@@ -346,7 +346,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 					if (!menu_buttons.contains(app_id)) { // If we haven't already added this button
 						var btn = new MenuButton(appinfo, use_root, icon_size);
 
-						btn.clicked.connect(()=> {
+						btn.clicked.connect(() => {
 							hide();
 							launch_app(btn.info);
 						});
@@ -630,13 +630,13 @@ public class BudgieMenuWindow : Budgie.Popover {
 	protected void launch_app(DesktopAppInfo info) {
 		hide();
 		// Do it on the idle thread to make sure we don't have focus wars
-		Idle.add(()=> {
+		Idle.add(() => {
 			try {
 				/*
 				 appinfo.launch has difficulty running pkexec
 				 based apps so lets spawn an async process instead
 				 */
-				var commandline =  info.get_commandline();
+				var commandline = info.get_commandline();
 				string[] spawn_args = {};
 				const string checkstr = "pkexec";
 				if (commandline.contains(checkstr)) {
@@ -677,7 +677,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		content_scroll.get_vadjustment().set_value(0);
 		categories_scroll.get_vadjustment().set_value(0);
 		categories.sensitive = true;
-		Idle.add(()=> {
+		Idle.add(() => {
 			/* grab focus when we're not busy, ensuring it works.. */
 			search_entry.grab_focus();
 			return false;

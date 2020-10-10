@@ -19,7 +19,7 @@ public class CalendarWidget : RavenWidget {
 
 	private const string date_format = "%e %b %Y";
 
-	public CalendarWidget(GLib.Settings c_settings) {
+	public CalendarWidget(Settings c_settings) {
 		Object(orientation: Gtk.Orientation.VERTICAL);
 		this.settings = c_settings;
 
@@ -37,9 +37,9 @@ public class CalendarWidget : RavenWidget {
 		ebox.add(cal);
 		expander.add(ebox);
 
-		Timeout.add_seconds_full(GLib.Priority.LOW, 30, this.update_date);
+		Timeout.add_seconds_full(Priority.LOW, 30, this.update_date);
 
-		cal.month_changed.connect(()=> {
+		cal.month_changed.connect(() => {
 			update_date();
 		});
 
@@ -63,7 +63,7 @@ public class CalendarWidget : RavenWidget {
 		if (this.settings != null) {
 			try {
 				show = this.settings.get_boolean(ENABLE_WEEK_NUM);
-			} catch (GLib.Error e) {
+			} catch (Error e) {
 				warning("Failed to get value for %s: ", ENABLE_WEEK_NUM);
 			}
 		}

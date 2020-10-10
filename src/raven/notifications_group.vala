@@ -15,7 +15,7 @@ namespace Budgie {
 	 */
 	public class NotificationGroup : Gtk.Box {
 		public int? count = 0;
-		private HashTable<uint, NotificationClone>? notifications = null;
+		private HashTable<uint,NotificationClone>? notifications = null;
 		private Gtk.ListBox? list = null;
 		private Gtk.Box? header = null;
 		private Gtk.Image? app_image = null;
@@ -47,7 +47,7 @@ namespace Budgie {
 				app_name = _("Caffeine Mode");
 			}
 
-			notifications = new HashTable<uint, NotificationClone>(direct_hash, direct_equal);
+			notifications = new HashTable<uint,NotificationClone>(direct_hash, direct_equal);
 			list = new Gtk.ListBox();
 			list.can_focus = false; // Disable focus to prevent scroll on click
 			list.focus_on_click = false;

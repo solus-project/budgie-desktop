@@ -11,13 +11,13 @@
 
 namespace LibUUID {
 	public enum UUIDFlags {
-		LOWER_CASE		= 1 << 0,
-		UPPER_CASE		= 1 << 1,
-		DEFAULT_CASE	= 1 << 2,
-		RANDOM_TYPE		= 1 << 3,
-		DEFAULT_TYPE	= 1 << 4,
-		TIME_TYPE		= 1 << 5,
-		TIME_SAFE_TYPE	= 1 << 6
+		LOWER_CASE = 1 << 0,
+		UPPER_CASE = 1 << 1,
+		DEFAULT_CASE = 1 << 2,
+		RANDOM_TYPE = 1 << 3,
+		DEFAULT_TYPE = 1 << 4,
+		TIME_TYPE = 1 << 5,
+		TIME_SAFE_TYPE = 1 << 6
 	}
 
 	public static string @new(LibUUID.UUIDFlags flags) {

@@ -15,7 +15,7 @@ public class PlacesIndicator : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-[GtkTemplate (ui = "/com/solus-project/places-indicator/settings.ui")]
+[GtkTemplate (ui="/com/solus-project/places-indicator/settings.ui")]
 public class PlacesIndicatorSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Switch? switch_label;
@@ -32,15 +32,15 @@ public class PlacesIndicatorSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Switch? switch_networks;
 
-	private GLib.Settings? settings;
+	private Settings? settings;
 
-	public PlacesIndicatorSettings(GLib.Settings? settings) {
+	public PlacesIndicatorSettings(Settings? settings) {
 		this.settings = settings;
-		settings.bind("show-label", switch_label, "active", GLib.SettingsBindFlags.DEFAULT);
-		settings.bind("expand-places", switch_expand_places, "active", GLib.SettingsBindFlags.DEFAULT);
-		settings.bind("show-places", switch_places, "active", GLib.SettingsBindFlags.DEFAULT);
-		settings.bind("show-drives", switch_drives, "active", GLib.SettingsBindFlags.DEFAULT);
-		settings.bind("show-networks", switch_networks, "active", GLib.SettingsBindFlags.DEFAULT);
+		settings.bind("show-label", switch_label, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("expand-places", switch_expand_places, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-places", switch_places, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-drives", switch_drives, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-networks", switch_networks, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
@@ -52,7 +52,7 @@ public class PlacesIndicatorApplet : Budgie.Applet {
 	private Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 
 	private unowned Budgie.PopoverManager? manager = null;
-	private GLib.Settings settings;
+	private Settings settings;
 	public string uuid { public set ; public get; }
 
 	public override Gtk.Widget? get_settings_ui() {
@@ -83,7 +83,7 @@ public class PlacesIndicatorApplet : Budgie.Applet {
 
 		popover = new PlacesIndicatorWindow(image);
 
-		ebox.button_press_event.connect((e)=> {
+		ebox.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
 			}

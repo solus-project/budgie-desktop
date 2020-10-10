@@ -1,18 +1,18 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
- 
+
 using LibUUID;
 
 namespace Budgie {
-	public const string DBUS_NAME		 = "org.budgie_desktop.Panel";
+	public const string DBUS_NAME = "org.budgie_desktop.Panel";
 	public const string DBUS_OBJECT_PATH = "/org/budgie_desktop/Panel";
 
 	public const string MIGRATION_1_APPLETS[] = {
@@ -24,7 +24,7 @@ namespace Budgie {
 	* Available slots
 	*/
 	[Compact]
-	class Screen : Object {
+	class Screen : GLib.Object {
 		public PanelPosition slots;
 		public Gdk.Rectangle area;
 	}
@@ -32,12 +32,12 @@ namespace Budgie {
 	/**
 	* Permit a slot for each edge of the screen
 	*/
-	public const uint MAX_SLOTS			= 4;
+	public const uint MAX_SLOTS = 4;
 
 	/**
 	* Root prefix for fixed schema
 	*/
-	public const string ROOT_SCHEMA		= "com.solus-project.budgie-panel";
+	public const string ROOT_SCHEMA = "com.solus-project.budgie-panel";
 
 	/**
 	* Relocatable schema ID for toplevel panels
@@ -53,50 +53,50 @@ namespace Budgie {
 	/**
 	* Relocatable schema ID for applets
 	*/
-	public const string APPLET_SCHEMA	= "com.solus-project.budgie-panel.applet";
+	public const string APPLET_SCHEMA = "com.solus-project.budgie-panel.applet";
 
 	/**
 	* Prefix for all relocatable applet settings
 	*/
-	public const string APPLET_PREFIX	= "/com/solus-project/budgie-panel/applets";
+	public const string APPLET_PREFIX = "/com/solus-project/budgie-panel/applets";
 
 	/**
 	* Known panels
 	*/
-	public const string ROOT_KEY_PANELS		   = "panels";
+	public const string ROOT_KEY_PANELS = "panels";
 
 	/** Panel position */
-	public const string PANEL_KEY_POSITION	   = "location";
+	public const string PANEL_KEY_POSITION = "location";
 
 	/** Panel transparency */
 	public const string PANEL_KEY_TRANSPARENCY = "transparency";
 
 	/** Panel applets */
-	public const string PANEL_KEY_APPLETS	   = "applets";
+	public const string PANEL_KEY_APPLETS = "applets";
 
 	/** Night mode/dark theme */
-	public const string PANEL_KEY_DARK_THEME   = "dark-theme";
+	public const string PANEL_KEY_DARK_THEME = "dark-theme";
 
 	/** Panel size */
-	public const string PANEL_KEY_SIZE		   = "size";
+	public const string PANEL_KEY_SIZE = "size";
 
 	/** Autohide policy */
-	public const string PANEL_KEY_AUTOHIDE	   = "autohide";
+	public const string PANEL_KEY_AUTOHIDE = "autohide";
 
 	/** Shadow */
-	public const string PANEL_KEY_SHADOW	   = "enable-shadow";
+	public const string PANEL_KEY_SHADOW = "enable-shadow";
 
 	/** Dock mode */
-	public const string PANEL_KEY_DOCK_MODE	   = "dock-mode";
+	public const string PANEL_KEY_DOCK_MODE = "dock-mode";
 
 	/** Theme regions permitted? */
-	public const string PANEL_KEY_REGIONS	   = "theme-regions";
+	public const string PANEL_KEY_REGIONS = "theme-regions";
 
 	/** Current migration level in settings */
-	public const string PANEL_KEY_MIGRATION	   = "migration-level";
+	public const string PANEL_KEY_MIGRATION = "migration-level";
 
 	/** Layout to select when reset/init for the first time */
-	public const string PANEL_KEY_LAYOUT	   = "layout";
+	public const string PANEL_KEY_LAYOUT = "layout";
 
 	/**
 	* The current migration level of Budgie, or format change, if you will.
@@ -104,11 +104,11 @@ namespace Budgie {
 	public const int BUDGIE_MIGRATION_LEVEL = 1;
 
 
-	[DBus (name = "org.budgie_desktop.Panel")]
+	[DBus (name="org.budgie_desktop.Panel")]
 	public class PanelManagerIface {
 		private Budgie.PanelManager? manager = null;
 
-		[DBus (visible = false)]
+		[DBus (visible=false)]
 		public PanelManagerIface(Budgie.PanelManager? manager) {
 			this.manager = manager;
 		}
@@ -142,7 +142,7 @@ namespace Budgie {
 		Peas.Engine engine;
 		Peas.ExtensionSet extensions;
 
-		HashTable<string, Peas.PluginInfo?> plugins;
+		HashTable<string,Peas.PluginInfo?> plugins;
 
 		private Budgie.Raven? raven = null;
 
@@ -193,13 +193,13 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(()=> {
+			sclient.QueryEndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.EndSession.connect(()=> {
+			sclient.EndSession.connect(() => {
 				end_session(false);
 			});
-			sclient.Stop.connect(()=> {
+			sclient.Stop.connect(() => {
 				end_session(true);
 			});
 			return true;
@@ -363,11 +363,11 @@ namespace Budgie {
 		/*
 		* Decide wether or not the panel should be opaque
 		* The panel should be opaque when:
-		*	 - Raven is open
-		*	 - a window fills these requirements:
-		*	   - Maximized horizontally or verically
-		*	   - Not minimized/iconified
-		*	   - On the current active workspace
+		* - Raven is open
+		* - a window fills these requirements:
+		*   - Maximized horizontally or verically
+		*   - Not minimized/iconified
+		*   - On the current active workspace
 		*/
 		public void check_windows() {
 			if (raven.get_expanded()) {
@@ -529,7 +529,7 @@ namespace Budgie {
 		* Reset the entire panel configuration
 		*/
 		void do_reset() {
-			GLib.message("Resetting budgie-panel configuration to defaults");
+			message("Resetting budgie-panel configuration to defaults");
 			Settings s = new Settings(Budgie.ROOT_SCHEMA);
 			this.default_layout = s.get_string(PANEL_KEY_LAYOUT);
 			this.reset_dconf_path(s);
@@ -542,7 +542,7 @@ namespace Budgie {
 		* Reset after a failed load
 		*/
 		void do_live_reset() {
-			GLib.message("Resetting budgie-panel configuration due to failed load");
+			message("Resetting budgie-panel configuration due to failed load");
 
 			string[]? toplevel_ids = null;
 
@@ -572,7 +572,7 @@ namespace Budgie {
 			scr.monitors_changed.connect(this.on_monitors_changed);
 			scr.size_changed.connect(this.on_monitors_changed);
 
-			settings = new GLib.Settings(Budgie.ROOT_SCHEMA);
+			settings = new Settings(Budgie.ROOT_SCHEMA);
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
 			raven = new Budgie.Raven(this);
@@ -603,7 +603,7 @@ namespace Budgie {
 			/* Whatever route we took, set the migration level to the current now */
 			settings.set_int(PANEL_KEY_MIGRATION, BUDGIE_MIGRATION_LEVEL);
 
-			register_with_session.begin((o,res)=> {
+			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
 					message("Failed to register with Session manager");
@@ -648,7 +648,7 @@ namespace Budgie {
 				last = top;
 			}
 
-			/* Ask this panel to perform migratory tasks (add applets) */
+			/* Ask this panel to perform migratory tasks(add applets) */
 			(last as Budgie.Panel).perform_migration(current_migration_level);
 		}
 
@@ -690,7 +690,7 @@ namespace Budgie {
 			extensions = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
 
 			extensions.extension_added.connect(on_extension_added);
-			engine.load_plugin.connect_after((i)=> {
+			engine.load_plugin.connect_after((i) => {
 				Peas.Extension? e = extensions.get_extension(i);
 				if (e == null) {
 					critical("Failed to find extension for: %s", i.get_name());
@@ -736,8 +736,8 @@ namespace Budgie {
 			return true;
 		}
 
-		public override GLib.List<Peas.PluginInfo?> get_panel_plugins() {
-			GLib.List<Peas.PluginInfo?> ret = new GLib.List<Peas.PluginInfo?>();
+		public override List<Peas.PluginInfo?> get_panel_plugins() {
+			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
 			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
 				ret.append(info);
 			}
@@ -768,9 +768,9 @@ namespace Budgie {
 		/**
 		* Attempt to load plugin, will set the plugin-name on failure
 		*/
-		public Budgie.AppletInfo? load_applet_instance(string? uuid, out string name, GLib.Settings? psettings = null) {
+		public Budgie.AppletInfo? load_applet_instance(string? uuid, out string name, Settings? psettings = null) {
 			var path = this.create_applet_path(uuid);
-			GLib.Settings? settings = null;
+			Settings? settings = null;
 			if (psettings == null) {
 				settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
 			} else {
@@ -868,7 +868,7 @@ namespace Budgie {
 			AutohidePolicy policy;
 			int size;
 
-			var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
+			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
 			Budgie.Panel? panel = new Budgie.Panel(this, uuid, settings);
 			panels.insert(uuid, panel);
 
@@ -1304,7 +1304,7 @@ namespace Budgie {
 				}
 			}
 
-			GLib.warning("Failed to find layout '%s'", layout_name);
+			warning("Failed to find layout '%s'", layout_name);
 
 			// Absolute fallback = built in INI config
 			this.load_default_from_config("resource:///com/solus-project/budgie/panel/panel.ini");
@@ -1317,14 +1317,14 @@ namespace Budgie {
 		void create_system_default() {
 			/**
 			* Try in order, and load the first one that exists:
-			*	- /etc/budgie-desktop/panel.ini
-			*	- /usr/share/budgie-desktop/panel.ini
-			*	- Built in panel.ini
+			* - /etc/budgie-desktop/panel.ini
+			* - /usr/share/budgie-desktop/panel.ini
+			* - Built in panel.ini
 			*/
 			string[] system_configs = {
-					@"file://$(Budgie.CONFDIR)/budgie-desktop/panel.ini",
-					@"file://$(Budgie.DATADIR)/budgie-desktop/panel.ini",
-					""
+				@"file://$(Budgie.CONFDIR)/budgie-desktop/panel.ini",
+				@"file://$(Budgie.DATADIR)/budgie-desktop/panel.ini",
+				""
 			};
 
 			foreach (string? filepath in system_configs) {
@@ -1406,8 +1406,8 @@ namespace Budgie {
 				on_bus_acquired, on_name_acquired, on_name_lost);
 		}
 
-		public override GLib.List<Budgie.Toplevel?> get_panels() {
-			var list = new GLib.List<Budgie.Toplevel?>();
+		public override List<Budgie.Toplevel?> get_panels() {
+			var list = new List<Budgie.Toplevel?>();
 			unowned string? key;
 			unowned Budgie.Panel? panel;
 			var iter = HashTableIter<string?,Budgie.Panel?>(panels);
@@ -1426,10 +1426,10 @@ namespace Budgie {
 		* Open up the settings window on screen
 		*/
 		public void open_settings() {
-			Idle.add(()=> {
+			Idle.add(() => {
 				if (this.settings_window == null) {
 					this.settings_window = new Budgie.SettingsWindow(this);
-					this.settings_window.destroy.connect(()=> {
+					this.settings_window.destroy.connect(() => {
 						this.settings_window = null;
 					});
 

@@ -1,9 +1,9 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2019 Budgie Desktop Developers
  * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -97,7 +97,7 @@ namespace Budgie {
 			on_settings_changed("sources");
 		}
 
-		public delegate void KeyHandlerFunc (Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
+		public delegate void KeyHandlerFunc(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
 
 		void switch_input_source(Meta.Display display,
 								Meta.Window? window, Clutter.KeyEvent? event,
@@ -241,7 +241,7 @@ namespace Budgie {
 				Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 			}
 
-			if(xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
+			if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
 				try {
 					fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, true);
 				} catch (Error e) {

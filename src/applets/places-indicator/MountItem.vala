@@ -11,9 +11,9 @@
 
 public class MountItem : ListItem {
 	private MountHelper operation;
-	private GLib.Mount mount;
+	private Mount mount;
 
-	public MountItem(GLib.Mount mount, string? class) {
+	public MountItem(Mount mount, string? class) {
 		item_class = class;
 		this.mount = mount;
 
@@ -46,7 +46,7 @@ public class MountItem : ListItem {
 		unmount_button.set_halign(Gtk.Align.END);
 		overlay.add_overlay(unmount_button);
 
-		unmount_button.clicked.connect(()=> {
+		unmount_button.clicked.connect(() => {
 			if (mount.can_eject()) {
 				do_eject();
 			} else {
@@ -62,7 +62,7 @@ public class MountItem : ListItem {
 
 		name_button.set_tooltip_text(_("Open \"%s\"").printf(mount.get_name()));
 
-		name_button.clicked.connect(()=> {
+		name_button.clicked.connect(() => {
 			open_directory(mount.get_root());
 		});
 	}
@@ -71,16 +71,16 @@ public class MountItem : ListItem {
 	 * Ejects a mount
 	 */
 	private void do_eject() {
-		mount.eject_with_operation.begin(GLib.MountUnmountFlags.NONE, operation, null, on_eject);
+		mount.eject_with_operation.begin(MountUnmountFlags.NONE, operation, null, on_eject);
 		string safe_remove = _("You can now safely remove");
 		string device_name = mount.get_drive().get_name() ?? _("Unknown Device");
 		send_message(@"$safe_remove \"$device_name\"");
 	}
 
-	private void on_eject(GLib.Object? obj, GLib.AsyncResult res) {
+	private void on_eject(Object? obj, AsyncResult res) {
 		try {
 			mount.eject_with_operation.end(res);
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			send_message(_("Error while ejecting device"));
 			warning(e.message);
 		}
@@ -90,13 +90,13 @@ public class MountItem : ListItem {
 	 * Unmounts a mount
 	 */
 	private void do_unmount() {
-		mount.unmount_with_operation.begin(GLib.MountUnmountFlags.NONE, operation, null, on_unmount);
+		mount.unmount_with_operation.begin(MountUnmountFlags.NONE, operation, null, on_unmount);
 	}
 
-	private void on_unmount(GLib.Object? obj, GLib.AsyncResult res) {
+	private void on_unmount(Object? obj, AsyncResult res) {
 		try {
 			mount.unmount_with_operation.end(res);
-		} catch (GLib.Error e) {
+		} catch (Error e) {
 			send_message(_("Error while unmounting volume"));
 			warning(e.message);
 		}

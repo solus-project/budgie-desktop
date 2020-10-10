@@ -68,7 +68,7 @@ namespace Budgie {
 			 * Data / Logic
 			 */
 			this.window_id_to_name = new HashTable<ulong?,string?>(int_hash, int_equal);
-			this.window_id_to_controls = new HashTable<ulong?, Budgie.IconPopoverItem?>(int_hash, int_equal);
+			this.window_id_to_controls = new HashTable<ulong?,Budgie.IconPopoverItem?>(int_hash, int_equal);
 			this.workspace_items = new List<Budgie.IconPopoverItem>();
 			create_images();
 
@@ -402,7 +402,7 @@ namespace Budgie {
 
 						for (int i = 0; i < workspaces_to_remove; i++) {
 							Budgie.IconPopoverItem child = workspace_items.nth_data(i);
-	
+
 							if (child != null) {
 								this.actions_view.remove(child);
 								workspace_items.remove(child);

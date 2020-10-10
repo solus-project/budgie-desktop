@@ -1,6 +1,6 @@
 /*
  * This file is part of budgie-desktop
- * 
+ *
  * Copyright © 2015-2017 Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
@@ -10,12 +10,12 @@
  */
 
 namespace Budgie {
-    [CCode (cheader_filename = "theme.h")]
+    [CCode (cheader_filename="theme.h")]
     public static string form_theme_path(string suffix);
 
-    [CCode (cheader_filename = "theme-manager.h")]
+    [CCode (cheader_filename="theme-manager.h")]
     public class ThemeManager : GLib.Object {
-		[CCode (has_construct_function = false)]
+		[CCode (has_construct_function=false)]
         public ThemeManager();
     }
 }

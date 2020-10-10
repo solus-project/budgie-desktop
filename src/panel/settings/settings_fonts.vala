@@ -133,9 +133,9 @@ namespace Budgie {
 			combobox_antialias.add_attribute(render, "text", 1);
 
 			/* Hook up settings */
-			ui_settings = new GLib.Settings("org.gnome.desktop.interface");
-			wm_settings = new GLib.Settings("org.gnome.desktop.wm.preferences");
-			x_settings = new GLib.Settings("org.gnome.settings-daemon.plugins.xsettings");
+			ui_settings = new Settings("org.gnome.desktop.interface");
+			wm_settings = new Settings("org.gnome.desktop.wm.preferences");
+			x_settings = new Settings("org.gnome.settings-daemon.plugins.xsettings");
 			ui_settings.bind("document-font-name", fontbutton_document, "font-name", SettingsBindFlags.DEFAULT);
 			ui_settings.bind("font-name", fontbutton_interface, "font-name", SettingsBindFlags.DEFAULT);
 			ui_settings.bind("monospace-font-name", fontbutton_monospace, "font-name", SettingsBindFlags.DEFAULT);
