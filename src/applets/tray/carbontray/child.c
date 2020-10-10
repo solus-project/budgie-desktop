@@ -63,8 +63,9 @@ CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
 	}
 
 	GdkVisual* visual = gdk_x11_screen_lookup_visual(screen, attributes.visual->visualid);
-	if (visual == NULL || GDK_IS_VISUAL(visual) == FALSE)
+	if (visual == NULL || GDK_IS_VISUAL(visual) == FALSE) {
 		return NULL;
+	}
 
 	CarbonChild* self = g_object_new(CARBON_TYPE_CHILD, NULL);
 	self->preferredSize = size;
@@ -82,14 +83,16 @@ CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
 		gdk_visual_get_green_pixel_details(visual, NULL, NULL, &green_prec);
 		gdk_visual_get_blue_pixel_details(visual, NULL, NULL, &blue_prec);
 
-		if (red_prec + blue_prec + green_prec < gdk_visual_get_depth(visual))
+		if (red_prec + blue_prec + green_prec < gdk_visual_get_depth(visual)) {
 			self->isComposited = TRUE;
+		}
 	}
 
 	self->wmclass = NULL;
-	if (!set_wmclass(self, xdisplay))
+	if (!set_wmclass(self, xdisplay)) {
 		// the icon window turned sour while we were getting alpha details. ignore the child
 		return NULL;
+	}
 
 	return self;
 }

@@ -311,8 +311,9 @@ static bool handle_undock_request(GtkSocket* socket, void* userData) {
 
 static void handle_message_begin(CarbonTray* tray, XClientMessageEvent* xevent) {
 	GtkSocket* socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(xevent->window));
-	if (socket == NULL)
+	if (socket == NULL) {
 		return;
+	}		
 
 	remove_message(tray, xevent);
 
