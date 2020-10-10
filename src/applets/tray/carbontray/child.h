@@ -14,13 +14,13 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
+#include <X11/extensions/Xcomposite.h>
 #include <stdbool.h>
 
 typedef struct _CarbonChild {
 	GtkSocket parent;
 
-	int preferredWidth;
-	int preferredHeight;
+	int preferredSize;
 	Window iconWindow;
 
 	char* wmclass;

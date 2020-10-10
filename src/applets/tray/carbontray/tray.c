@@ -73,10 +73,6 @@ CarbonTray* carbon_tray_new(GtkOrientation orientation, int iconSize, int spacin
 		gtk_widget_set_valign(self->box, GTK_ALIGN_START);
 	}
 
-	gtk_widget_set_hexpand(self->box, FALSE);
-	gtk_widget_set_vexpand(self->box, FALSE);
-	gtk_widget_set_size_request(self->box, -1, -1);
-
 	return self;
 }
 
@@ -95,7 +91,7 @@ bool carbon_tray_register(CarbonTray* tray, GdkScreen* screen) {
 	gtk_widget_realize(invisible);
 	gtk_widget_add_events(invisible, GDK_PROPERTY_CHANGE_MASK | GDK_STRUCTURE_MASK);
 
-	int screen_number = gdk_screen_get_number(screen);
+	int screen_number = XScreenNumberOfScreen(gdk_x11_screen_get_xscreen(screen));
 	char* selection_name = g_strdup_printf("_NET_SYSTEM_TRAY_S%d", screen_number);
 	tray->selectionAtom = gdk_atom_intern(selection_name, FALSE);
 	g_free(selection_name);
@@ -149,16 +145,15 @@ void carbon_tray_unregister(CarbonTray* tray) {
 	}
 
 	GtkWidget* invisible = tray->invisible;
+	GdkWindow* invisibleWindow = gtk_widget_get_window(invisible);
 	GdkDisplay* display = gtk_widget_get_display(invisible);
 	GdkWindow* owner = gdk_selection_owner_get_for_display(display, tray->selectionAtom);
 
 	if (owner == gtk_widget_get_window(invisible)) {
-		gdk_selection_owner_set_for_display(
-			display, NULL, tray->selectionAtom,
-			gdk_x11_get_server_time(gtk_widget_get_window(invisible)), TRUE);
+		gdk_selection_owner_set_for_display(display, NULL, tray->selectionAtom, gdk_x11_get_server_time(invisibleWindow), TRUE);
 	}
 
-	gdk_window_remove_filter(gtk_widget_get_window(invisible), window_filter, tray);
+	gdk_window_remove_filter(invisibleWindow, window_filter, tray);
 
 	tray->invisible = NULL;
 	gtk_widget_destroy(invisible);
@@ -316,8 +311,9 @@ static bool handle_undock_request(GtkSocket* socket, void* userData) {
 
 static void handle_message_begin(CarbonTray* tray, XClientMessageEvent* xevent) {
 	GtkSocket* socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(xevent->window));
-	if (socket == NULL)
+	if (socket == NULL) {
 		return;
+	}		
 
 	remove_message(tray, xevent);
 
@@ -405,40 +401,27 @@ static void set_xproperties(CarbonTray* tray) {
 		xvisual = GDK_VISUAL_XVISUAL(gdk_screen_get_system_visual(screen));
 	}
 
+	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+	Window xwindow = GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible));
+
+	// set the RGBA visual
+
 	unsigned long data[1] = {XVisualIDFromVisual(xvisual)};
+	unsigned char* dataPtr = (unsigned char*) &data;
 	Atom atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_VISUAL");
-	XChangeProperty(
-		GDK_DISPLAY_XDISPLAY(display),
-		GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-		atom, XA_VISUALID,
-		32,
-		PropModeReplace,
-		(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 
 	// set the icon size
 
 	data[0] = (unsigned int) tray->iconSize;
 	atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_ICON_SIZE");
-	XChangeProperty(
-		GDK_DISPLAY_XDISPLAY(display),
-		GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-		atom, XA_CARDINAL,
-		32,
-		PropModeReplace,
-		(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 
-	// set orientation
+	// set the orientation
 
-	data[0] =
-		(unsigned int) gtk_orientable_get_orientation(GTK_ORIENTABLE(tray->box)) == GTK_ORIENTATION_HORIZONTAL ? 0 : 1;
+	data[0] = (unsigned int) gtk_orientable_get_orientation(GTK_ORIENTABLE(tray->box)) == GTK_ORIENTATION_HORIZONTAL ? 0 : 1;
 	atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_ORIENTATION");
-	XChangeProperty(
-		GDK_DISPLAY_XDISPLAY(display),
-		GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-		atom, XA_CARDINAL,
-		32,
-		PropModeReplace,
-		(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 }
 
 static void draw_child(GtkWidget* widget, void* data) {
