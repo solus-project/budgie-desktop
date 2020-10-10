@@ -236,8 +236,6 @@ public class IconTasklistApplet : Budgie.Applet {
 				visible = button.is_pinned();
 			}
 
-			visible = visible || button.is_pinned();
-
 			(button.get_parent() as ButtonWrapper).orient = this.get_orientation();
 			(button.get_parent() as Gtk.Revealer).set_reveal_child(visible);
 			button.update();
@@ -278,6 +276,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				buttons.set(app_id, button);
 				original_button = new ButtonWrapper(button);
 				original_button.orient = this.get_orientation();
+
 				button.became_empty.connect(() => {
 					if (!button.pinned) {
 						buttons.remove(app_id);
@@ -440,6 +439,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		ButtonWrapper wrapper = (ButtonWrapper)button.get_parent();
 
 		if (wrapper != null) {
+			main_layout.remove(wrapper);
 			wrapper.gracefully_die();
 		}
 
