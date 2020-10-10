@@ -10,284 +10,260 @@
  */
 
 namespace Budgie {
+	public class AppSystem : GLib.Object {
+		HashTable<string?,string?> startupids = null;
+		HashTable<string?,string?> simpletons = null;
+		HashTable<string?,DesktopAppInfo?> desktops = null;
+		/* Mapping of based TryExec to desktop ID */
+		HashTable<string?,string?> exec_cache = null;
+		HashTable<int64?, string?> pid_cache = null;
+		AppInfoMonitor? monitor = null;
 
-public class AppSystem : GLib.Object
-{
+		bool invalidated = false;
 
-    HashTable<string?,string?> startupids = null;
-    HashTable<string?,string?> simpletons = null;
-    HashTable<string?,DesktopAppInfo?> desktops = null;
-    /* Mapping of based TryExec to desktop ID */
-    HashTable<string?,string?> exec_cache = null;
-    HashTable<int64?, string?> pid_cache = null;
-    AppInfoMonitor? monitor = null;
+		private GLib.DBusConnection bus;
 
-    bool invalidated = false;
+		public signal void app_launched(string desktop_file);
 
-    private GLib.DBusConnection bus;
+		public AppSystem() {
+			/* Initialize simpletons. */
+			simpletons = new HashTable<string?,string?>(str_hash, str_equal);
+			simpletons["google-chrome-stable"] = "google-chrome";
+			simpletons["calibre-gui"] = "calibre";
+			simpletons["code - oss"] = "vscode-oss";
+			simpletons["code"] = "vscode";
+			simpletons["psppire"] = "pspp";
+			simpletons["gnome-twitch"] = "com.vinszent.gnometwitch";
+			simpletons["anoise.py"] = "anoise";
 
-    public signal void app_launched(string desktop_file);
+			pid_cache = new HashTable<int64?,string?>(str_hash, str_equal);
 
-    public AppSystem()
-    {
-        /* Initialize simpletons. */
-        simpletons = new HashTable<string?,string?>(str_hash, str_equal);
-        simpletons["google-chrome-stable"] = "google-chrome";
-        simpletons["calibre-gui"] = "calibre";
-        simpletons["code - oss"] = "vscode-oss";
-        simpletons["code"] = "vscode";
-        simpletons["psppire"] = "pspp";
-        simpletons["gnome-twitch"] = "com.vinszent.gnometwitch";
-        simpletons["anoise.py"] = "anoise";
+			GLib.Bus.@get.begin(GLib.BusType.SESSION, null, (obj, res) => {
+				try {
+					bus = GLib.Bus.@get.end(res);
+					bus.signal_subscribe(null,
+										"org.gtk.gio.DesktopAppInfo",
+										"Launched",
+										"/org/gtk/gio/DesktopAppInfo",
+										null,
+										0,
+										this.signal_received);
+				} catch (GLib.IOError e) {
+					warning(e.message);
+				}
+			});
 
-        pid_cache = new HashTable<int64?,string?>(str_hash, str_equal);
+			monitor = AppInfoMonitor.get();
+			monitor.changed.connect(()=> {
+				Idle.add(()=> {
+					lock(invalidated) {
+						invalidated = true;
+					}
+					return false;
+				});
+			});
+			reload_ids();
+		}
 
-        GLib.Bus.@get.begin(GLib.BusType.SESSION, null, (obj, res) => {
-            try {
-                bus = GLib.Bus.@get.end(res);
-                bus.signal_subscribe(null,
-                                     "org.gtk.gio.DesktopAppInfo",
-                                     "Launched",
-                                     "/org/gtk/gio/DesktopAppInfo",
-                                     null,
-                                     0,
-                                     this.signal_received);
-            } catch (GLib.IOError e) {
-                warning(e.message);
-            }
-        });
+		private void signal_received(GLib.DBusConnection connection,
+									string? sender,
+									string object_path,
+									string interface_name,
+									string signal_name,
+									GLib.Variant parameters) {
+			GLib.Variant desktop_variant;
+			int64 pid;
 
-        monitor = AppInfoMonitor.get();
-        monitor.changed.connect(()=> {
-            Idle.add(()=> {
-                lock(invalidated) {
-                    invalidated = true;
-                }
-                return false;
-            });
-        });
-        reload_ids();
-    }
+			parameters.get("(@aysxas@a{sv})", out desktop_variant, null, out pid, null, null);
 
-    private void signal_received(GLib.DBusConnection connection,
-                                 string sender,
-                                 string object_path,
-                                 string interface_name,
-                                 string signal_name,
-                                 GLib.Variant parameters)
-    {
-        GLib.Variant desktop_variant;
-        int64 pid;
+			string desktop_file = desktop_variant.get_bytestring();
+			if (desktop_file == "" || pid == 0) {
+				return;
+			}
 
-        parameters.get("(@aysxas@a{sv})", out desktop_variant, null, out pid, null, null);
+			pid_cache.insert(pid, desktop_file);
+			app_launched(desktop_file);
+		}
 
-        string desktop_file = desktop_variant.get_bytestring();
-        if (desktop_file == "" || pid == 0) {
-            return;
-        }
+		/**
+		* We lazily check if at some point we became invalidated. In most cases
+		* a package operation or similar modified a desktop file, i.e. making it
+		* available or unavailable.
+		*
+		* Instead of immediately reloading the appsystem we wait until something
+		* is actually requested again, check if we're invalidated, reload and then
+		* set us validated again.
+		*/
+		private void check_invalidated() {
+			if (invalidated) {
+				lock (invalidated) {
+					reload_ids();
+					invalidated = false;
+				}
+			}
+		}
 
-        pid_cache.insert(pid, desktop_file);
-        app_launched(desktop_file);
-    }
+		/**
+		* Reload and cache all the desktop IDS
+		*/
+		private void reload_ids() {
+			startupids = new HashTable<string?,string?>(str_hash, str_equal);
+			desktops = new HashTable<string?,DesktopAppInfo?>(str_hash, str_equal);
+			exec_cache = new HashTable<string?,string?>(str_hash, str_equal);
+			foreach (var appinfo in AppInfo.get_all()) {
+				var dinfo = appinfo as DesktopAppInfo;
+				if (dinfo.get_startup_wm_class() != null) {
+					startupids[dinfo.get_startup_wm_class().down()] = dinfo.get_id();
+				}
+				desktops.insert(dinfo.get_id().down(), dinfo);
 
-    /**
-     * We lazily check if at some point we became invalidated. In most cases
-     * a package operation or similar modified a desktop file, i.e. making it
-     * available or unavailable.
-     *
-     * Instead of immediately reloading the appsystem we wait until something
-     * is actually requested again, check if we're invalidated, reload and then
-     * set us validated again.
-     */
-    private void check_invalidated()
-    {
-        if (invalidated) {
-            lock (invalidated) {
-                reload_ids();
-                invalidated = false;
-            }
-        }
-    }
+				/* Get TryExec if we can, otherwise main "executable" */
+				string? try_exec = dinfo.get_string("TryExec");
+				if (try_exec == null) {
+					try_exec = dinfo.get_executable();
+				}
+				if (try_exec == null) {
+					continue;
+				}
+				/* Sanitize it */
+				try_exec = Uri.unescape_string(try_exec);
+				try_exec = Path.get_basename(try_exec);
 
-    /**
-     * Reload and cache all the desktop IDS
-     */
-    private void reload_ids()
-    {
-        startupids = new HashTable<string?,string?>(str_hash, str_equal);
-        desktops = new HashTable<string?,DesktopAppInfo?>(str_hash, str_equal);
-        exec_cache = new HashTable<string?,string?>(str_hash, str_equal);
-        foreach (var appinfo in AppInfo.get_all()) {
-            var dinfo = appinfo as DesktopAppInfo;
-            if (dinfo.get_startup_wm_class() != null) {
-                startupids[dinfo.get_startup_wm_class().down()] = dinfo.get_id();
-            }
-            desktops.insert(dinfo.get_id().down(), dinfo);
+				exec_cache.insert(try_exec, dinfo.get_id());
+			}
+		}
 
-            /* Get TryExec if we can, otherwise main "executable" */
-            string? try_exec = dinfo.get_string("TryExec");
-            if (try_exec == null) {
-                try_exec = dinfo.get_executable();
-            }
-            if (try_exec == null) {
-                continue;
-            }
-            /* Sanitize it */
-            try_exec = Uri.unescape_string(try_exec);
-            try_exec = Path.get_basename(try_exec);
+		/**
+		* Attempt to gain the DesktopAppInfo relating to a given window
+		*/
+		public DesktopAppInfo? query_window(Wnck.Window? window) {
+			ulong xid = window.get_xid();
+			int64 pid = window.get_pid();
 
-            exec_cache.insert(try_exec, dinfo.get_id());
-        }
-    }
+			if (window == null) {
+				return null;
+			}
 
-    /**
-     * Attempt to gain the DesktopAppInfo relating to a given window
-     */
-    public DesktopAppInfo? query_window(Wnck.Window? window)
-    {
-        ulong xid = window.get_xid();
-        int64 pid = window.get_pid();
+			string? cls_name = window.get_class_instance_name();
+			string? grp_name = window.get_class_group_name();
 
-        if (window == null) {
-            return null;
-        }
+			check_invalidated();
 
-        string? cls_name = window.get_class_instance_name();
-        string? grp_name = window.get_class_group_name();
+			string[] checks = new string[] { cls_name, grp_name };
+			foreach (string? check in checks) {
+				if (check == null) {
+					continue;
+				}
+				/* First, check if we have something in the startupids for this app */
+				check = check.down();
+				if (check in startupids) {
+					string dname = startupids[check].down();
+					if (dname in desktops) {
+						return this.desktops[dname];
+					}
+				}
+				/* Wasn't a startupid match, try class -> desktop match */
+				string dname = check + ".desktop";
+				if (dname in this.desktops) {
+					return this.desktops[dname];
+				}
+			}
 
-        check_invalidated();
+			/* See if the pid associated with the window is in our pid cache */
+			if (pid in pid_cache) {
+				string filename = pid_cache[pid];
+				GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(filename);
+				return info;
+			}
 
-        string[] checks = new string[] { cls_name, grp_name };
-        foreach (string? check in checks) {
-            if (check == null) {
-                continue;
-            }
-            /* First, check if we have something in the startupids for this app */
-            check = check.down();
-            if (check in startupids) {
-                string dname = startupids[check].down();
-                if (dname in desktops) {
-                    return this.desktops[dname];
-                }
-            }
-            /* Wasn't a startupid match, try class -> desktop match */
-            string dname = check + ".desktop";
-            if (dname in this.desktops) {
-                return this.desktops[dname];
-            }
-        }
+			/* Next, attempt to get the application based on the GtkApplication ID */
+			string? gtk_id = this.query_gtk_application_id(xid);
+			if (gtk_id != null) {
+				gtk_id = gtk_id.down() + ".desktop";
+				if (gtk_id in this.desktops) {
+					return this.desktops[gtk_id];
+				}
+			}
 
-        /* See if the pid associated with the window is in our pid cache */
-        if (pid in pid_cache) {
-            string filename = pid_cache[pid];
-            GLib.DesktopAppInfo? info = new GLib.DesktopAppInfo.from_filename(filename);
-            return info;
-        }
+			/* Is the group name in the simpletons? */
+			if (grp_name != null && grp_name.down() in this.simpletons) {
+				string dname = this.simpletons[grp_name.down()] + ".desktop";
+				if (dname in this.desktops) {
+					return this.desktops[dname];
+				}
+			} else if (cls_name != null && cls_name.down() in this.simpletons) {
+				string dname = this.simpletons[cls_name.down()] + ".desktop";
+				if (dname in this.desktops) {
+					return this.desktops[dname];
+				}
+			}
 
-        /* Next, attempt to get the application based on the GtkApplication ID */
-        string? gtk_id = this.query_gtk_application_id(xid);
-        if (gtk_id != null) {
-            gtk_id = gtk_id.down() + ".desktop";
-            if (gtk_id in this.desktops) {
-                return this.desktops[gtk_id];
-            }
-        }
+			/* Last shot in the dark, try to match an exec line */
+			foreach (string? check in checks) {
+				if (check == null) {
+					continue;
+				}
+				check = check.down();
+				string? id = exec_cache.lookup(check);
+				if (id == null) {
+					continue;
+				}
+				unowned DesktopAppInfo? a = this.desktops.lookup(id);
+				if (a != null) {
+					return a;
+				}
+			}
 
-        /* Is the group name in the simpletons? */
-        if (grp_name != null && grp_name.down() in this.simpletons) {
-            string dname = this.simpletons[grp_name.down()] + ".desktop";
-            if (dname in this.desktops) {
-                return this.desktops[dname];
-            }
-        } else if (cls_name != null && cls_name.down() in this.simpletons) {
-            string dname = this.simpletons[cls_name.down()] + ".desktop";
-            if (dname in this.desktops) {
-                return this.desktops[dname];
-            }
-        }
+			/* IDK. Sorry. */
+			return null;
+		}
 
-        /* Last shot in the dark, try to match an exec line */
-        foreach (string? check in checks) {
-            if (check == null) {
-                continue;
-            }
-            check = check.down();
-            string? id = exec_cache.lookup(check);
-            if (id == null) {
-                continue;
-            }
-            unowned DesktopAppInfo? a = this.desktops.lookup(id);
-            if (a != null) {
-                return a;
-            }
-        }
+		/**
+		* Return a plain STRING value for the given window id
+		*/
+		public string? query_atom_string(ulong xid, Gdk.Atom atom) {
+			return this.query_atom_string_internal(xid, atom, false);
+		}
 
-        /* IDK. Sorry. */
-        return null;
-    }
+		/**
+		* Return a UTF8_STRING value for the given window id
+		*/
+		public string? query_atom_string_utf8(ulong xid, Gdk.Atom atom) {
+			return this.query_atom_string_internal(xid, atom, true);
+		}
 
-    /**
-     * Return a plain STRING value for the given window id
-     */
-    public string? query_atom_string(ulong xid, Gdk.Atom atom) {
-        return this.query_atom_string_internal(xid, atom, false);
-    }
+		private string? query_atom_string_internal(ulong xid, Gdk.Atom atom, bool utf8) {
+			uint8[]? data = null;
+			Gdk.Atom a_type;
+			int a_f;
+			var display = Gdk.Display.get_default();
 
-    /**
-     * Return a UTF8_STRING value for the given window id
-     */
-    public string? query_atom_string_utf8(ulong xid, Gdk.Atom atom) {
-        return this.query_atom_string_internal(xid, atom, true);
-    }
+			Gdk.Atom req_type;
+			if (utf8) {
+				req_type = Gdk.Atom.intern("UTF8_STRING", false);
+			} else {
+				req_type = Gdk.Atom.intern("STRING", false);
+			}
 
-    private string? query_atom_string_internal(ulong xid, Gdk.Atom atom, bool utf8)
-    {
-        uint8[]? data = null;
-        Gdk.Atom a_type;
-        int a_f;
-        var display = Gdk.Display.get_default();
+			/**
+			* Attempt to gain foreign window connection
+			*/
+			Gdk.Window? foreign = Gdk.X11Window.foreign_new_for_display(display, xid);
+			if (foreign == null) {
+				/* No window, bail */
+				return null;
+			}
+			/* Grab the property in question */
+			Gdk.property_get(foreign, atom, req_type, 0, (ulong)long.MAX, 0,
+							out a_type, out a_f, out data);
+			return data != null ? (string)data : null;
+		}
 
-        Gdk.Atom req_type;
-        if (utf8) {
-            req_type = Gdk.Atom.intern("UTF8_STRING", false);
-        } else {
-            req_type = Gdk.Atom.intern("STRING", false);
-        }
-
-        /**
-         * Attempt to gain foreign window connection
-         */
-        Gdk.Window? foreign = Gdk.X11Window.foreign_new_for_display(display, xid);
-        if (foreign == null) {
-            /* No window, bail */
-            return null;
-        }
-        /* Grab the property in question */
-        Gdk.property_get(foreign, atom, req_type, 0, (ulong)long.MAX, 0,
-                         out a_type, out a_f, out data);
-        return data != null ? (string)data : null;
-    }
-
-    /**
-     * Obtain the GtkApplication id for a given window
-     */
-    public string? query_gtk_application_id(ulong window)
-    {
-        return this.query_atom_string_utf8(window, Gdk.Atom.intern("_GTK_APPLICATION_ID", false));
-    }
+		/**
+		* Obtain the GtkApplication id for a given window
+		*/
+		public string? query_gtk_application_id(ulong window) {
+			return this.query_atom_string_utf8(window, Gdk.Atom.intern("_GTK_APPLICATION_ID", false));
+		}
+	}
 }
-
-} // End namespace Budgie
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */

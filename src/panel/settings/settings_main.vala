@@ -10,303 +10,288 @@
  */
 
 namespace Budgie {
+	public class SettingsWindow : Gtk.Window {
+		Gtk.HeaderBar header;
+		Gtk.ListBox sidebar;
+		Gtk.Stack content;
+		Gtk.Box layout;
+		HashTable<string,string> group_map;
+		HashTable<string,SettingsPage?> page_map;
+		HashTable<string,SettingsItem?> sidebar_map;
 
-public class SettingsWindow : Gtk.Window {
+		public Budgie.DesktopManager? manager { public set ; public get ; }
 
-    Gtk.HeaderBar header;
-    Gtk.ListBox sidebar;
-    Gtk.Stack content;
-    Gtk.Box layout;
-    HashTable<string,string> group_map;
-    HashTable<string,SettingsPage?> page_map;
-    HashTable<string,SettingsItem?> sidebar_map;
+		/* Special item that allows us to add new items to the display */
+		SettingsItem? item_add_panel;
+		bool new_panel_requested = false;
 
-    public Budgie.DesktopManager? manager { public set ; public get ; }
+		public SettingsWindow(Budgie.DesktopManager? manager) {
+			Object(type: Gtk.WindowType.TOPLEVEL, manager: manager);
 
-    /* Special item that allows us to add new items to the display */
-    SettingsItem? item_add_panel;
-    bool new_panel_requested = false;
+			header = new Gtk.HeaderBar();
+			header.set_show_close_button(true);
+			set_titlebar(header);
 
-    public SettingsWindow(Budgie.DesktopManager? manager)
-    {
-        Object(type: Gtk.WindowType.TOPLEVEL, manager: manager);
+			group_map = new HashTable<string,string>(str_hash, str_equal);
+			group_map["appearance"] = _("Appearance");
+			group_map["panel"] = _("Panels");
+			group_map["session"] = _("Session");
+			page_map = new HashTable<string,SettingsPage?>(str_hash, str_equal);
+			sidebar_map = new HashTable<string,SettingsItem?>(str_hash, str_equal);
 
-        header = new Gtk.HeaderBar();
-        header.set_show_close_button(true);
-        set_titlebar(header);
+			layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			add(layout);
 
-        group_map = new HashTable<string,string>(str_hash, str_equal);
-        group_map["appearance"] = _("Appearance");
-        group_map["panel"] = _("Panels");
-        group_map["session"] = _("Session");
-        page_map = new HashTable<string,SettingsPage?>(str_hash, str_equal);
-        sidebar_map = new HashTable<string,SettingsItem?>(str_hash, str_equal);
+			/* Have to override wmclass for pinning support */
+			set_icon_name("preferences-desktop");
+			set_title(_("Budgie Desktop Settings"));
+			set_wmclass("budgie-desktop-settings", "budgie-desktop-settings");
 
-        layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        add(layout);
+			/* Fit even on a spud resolution */
+			set_default_size(750, 550);
 
-        /* Have to override wmclass for pinning support */
-        set_icon_name("preferences-desktop");
-        set_title(_("Budgie Desktop Settings"));
-        set_wmclass("budgie-desktop-settings", "budgie-desktop-settings");
+			/* Sidebar navigation */
+			var scroll = new Gtk.ScrolledWindow(null, null);
+			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+			sidebar = new Gtk.ListBox();
+			sidebar.set_header_func(this.do_headers);
+			sidebar.set_sort_func(this.do_sort);
+			sidebar.row_activated.connect(this.on_row_activate);
+			sidebar.set_activate_on_single_click(true);
+			scroll.add(sidebar);
+			layout.pack_start(scroll, false, false, 0);
+			scroll.margin_end = 24;
 
-        /* Fit even on a spud resolution */
-        set_default_size(750, 550);
+			/* Where actual Things go */
+			content = new Gtk.Stack();
+			content.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
+			layout.pack_start(content, true, true, 0);
 
-        /* Sidebar navigation */
-        var scroll = new Gtk.ScrolledWindow(null, null);
-        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        sidebar = new Gtk.ListBox();
-        sidebar.set_header_func(this.do_headers);
-        sidebar.set_sort_func(this.do_sort);
-        sidebar.row_activated.connect(this.on_row_activate);
-        sidebar.set_activate_on_single_click(true);
-        scroll.add(sidebar);
-        layout.pack_start(scroll, false, false, 0);
-        scroll.margin_end = 24;
+			/* Help our theming community out */
+			get_style_context().add_class("budgie-settings-window");
+			sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 
-        /* Where actual Things go */
-        content = new Gtk.Stack();
-        content.set_transition_type(Gtk.StackTransitionType.CROSSFADE);
-        layout.pack_start(content, true, true, 0);
+			this.build_content();
 
-        /* Help our theming community out */
-        get_style_context().add_class("budgie-settings-window");
-        sidebar.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+			this.item_add_panel = new SettingsItem(SETTINGS_GROUP_PANEL,
+												"x-add-panel",
+												_("Create new panel"),
+												"list-add-symbolic");
 
-        this.build_content();
+			this.sidebar.add(this.item_add_panel);
 
-        this.item_add_panel = new SettingsItem(SETTINGS_GROUP_PANEL,
-                                               "x-add-panel",
-                                               _("Create new panel"),
-                                               "list-add-symbolic");
+			/* We'll need to build panel items for each toplevel */
+			this.manager.panel_added.connect(this.on_panel_added);
+			this.manager.panel_deleted.connect(this.on_panel_deleted);
+			this.manager.panels_changed.connect_after(this.on_panels_changed);
 
-        this.sidebar.add(this.item_add_panel);
+			this.on_panels_changed();
 
-        /* We'll need to build panel items for each toplevel */
-        this.manager.panel_added.connect(this.on_panel_added);
-        this.manager.panel_deleted.connect(this.on_panel_deleted);
-        this.manager.panels_changed.connect_after(this.on_panels_changed);
+			layout.show_all();
+			header.show_all();
+		}
 
-        this.on_panels_changed();
+		/**
+		* Static pages that will always be part of the UI
+		*/
+		void build_content() {
+			this.add_page(new Budgie.StylePage());
 
-        layout.show_all();
-        header.show_all();
-    }
+	#if HAVE_NAUTILUS
+			if (Environment.find_program_in_path("nautilus") != null) {
+				this.add_page(new Budgie.DesktopPage());
+			}
+	#endif
 
-    /**
-     * Static pages that will always be part of the UI
-     */
-    void build_content()
-    {
-        this.add_page(new Budgie.StylePage());
+			this.add_page(new Budgie.FontPage());
+			this.add_page(new Budgie.WindowsPage());
+			this.add_page(new Budgie.AutostartPage());
+			this.add_page(new Budgie.RavenPage());
+		}
 
-#if HAVE_NAUTILUS
-        if (Environment.find_program_in_path("nautilus") != null) {
-            this.add_page(new Budgie.DesktopPage());
-        }
-#endif
+		/**
+		* Update the state of the add-panel button in relation to slots
+		*/
+		void on_panels_changed() {
+			item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
+			Idle.add(()=> {
+				this.sidebar.invalidate_sort();
+				this.sidebar.invalidate_filter();
+				return false;
+			});
+		}
 
-        this.add_page(new Budgie.FontPage());
-        this.add_page(new Budgie.WindowsPage());
-        this.add_page(new Budgie.AutostartPage());
-        this.add_page(new Budgie.RavenPage());
-    }
+		/**
+		* Handle transition between various pages
+		*/
+		void on_row_activate(Gtk.ListBoxRow? row) {
+			if (row == null) {
+				return;
+			}
+			SettingsItem? item = row.get_child() as SettingsItem;
+			if (item != this.item_add_panel) {
+				this.content.set_visible_child_name(item.content_id);
+				return;
+			}
+			this.new_panel_requested = true;
+			if (this.manager.slots_available() >= 1) {
+				this.manager.create_new_panel();
+			}
+		}
 
-    /**
-     * Update the state of the add-panel button in relation to slots
-     */
-    void on_panels_changed()
-    {
-        item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
-        Idle.add(()=> {
-            this.sidebar.invalidate_sort();
-            this.sidebar.invalidate_filter();
-            return false;
-        });
-    }
+		/**
+		* Add a new page to our sidebar + stack
+		*/
+		void add_page(Budgie.SettingsPage? page) {
+			var settings_item = new SettingsItem(page.group, page.content_id, page.title, page.icon_name);
+			settings_item.show_all();
+			sidebar.add(settings_item);
 
-    /**
-     * Handle transition between various pages
-     */
-    void on_row_activate(Gtk.ListBoxRow? row)
-    {
-        if (row == null) {
-            return;
-        }
-        SettingsItem? item = row.get_child() as SettingsItem;
-        if (item != this.item_add_panel) {
-            this.content.set_visible_child_name(item.content_id);
-            return;
-        }
-        this.new_panel_requested = true;
-        if (this.manager.slots_available() >= 1) {
-            this.manager.create_new_panel();
-        }
-    }
+			page.bind_property("title", settings_item, "label", BindingFlags.DEFAULT);
+			page.bind_property("display-weight", settings_item, "display-weight", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
 
-    /**
-     * Add a new page to our sidebar + stack
-     */
-    void add_page(Budgie.SettingsPage? page)
-    {
-        var settings_item = new SettingsItem(page.group, page.content_id, page.title, page.icon_name);
-        settings_item.show_all();
-        sidebar.add(settings_item);
+			this.sidebar_map[page.content_id] = settings_item;
+			this.page_map[page.content_id] = page;
 
-        page.bind_property("title", settings_item, "label", BindingFlags.DEFAULT);
-        page.bind_property("display-weight", settings_item, "display-weight", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
+			if (page.want_scroll) {
+				var scroll = new Gtk.ScrolledWindow(null, null);
+				scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+				scroll.add(page);
+				scroll.show();
+				content.add_named(scroll, page.content_id);
+			} else {
+				page.show();
+				content.add_named(page, page.content_id);
+			}
+			this.sidebar.invalidate_sort();
+			this.sidebar.invalidate_headers();
+		}
 
-        this.sidebar_map[page.content_id] = settings_item;
-        this.page_map[page.content_id] = page;
+		/**
+		* Remove a page from the sidebar and content stack
+		*/
+		void remove_page(string content_id) {
+			Budgie.SettingsPage? page = this.page_map.lookup(content_id);
+			Budgie.SettingsItem? item = this.sidebar_map.lookup(content_id);
 
-        if (page.want_scroll) {
-            var scroll = new Gtk.ScrolledWindow(null, null);
-            scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-            scroll.add(page);
-            scroll.show();
-            content.add_named(scroll, page.content_id);
-        } else {
-            page.show();
-            content.add_named(page, page.content_id);
-        }
-        this.sidebar.invalidate_sort();
-        this.sidebar.invalidate_headers();
-    }
+			/* Remove from listbox */
+			if (item != null) {
+				item.get_parent().destroy();
+			}
 
-    /**
-     * Remove a page from the sidebar and content stack
-     */
-    void remove_page(string content_id)
-    {
-        Budgie.SettingsPage? page = this.page_map.lookup(content_id);
-        Budgie.SettingsItem? item = this.sidebar_map.lookup(content_id);
+			/* Remove from content view */
+			if (page != null) {
+				page.destroy();
+			}
+			this.sidebar.invalidate_sort();
+			this.sidebar.invalidate_headers();
+		}
 
-        /* Remove from listbox */
-        if (item != null) {
-            item.get_parent().destroy();
-        }
+		/**
+		* Provide categorisation for our sidebar items
+		*/
+		void do_headers(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after) {
+			SettingsItem? child = null;
+			string? prev = null;
+			string? next = null;
 
-        /* Remove from content view */
-        if (page != null) {
-            page.destroy();
-        }
-        this.sidebar.invalidate_sort();
-        this.sidebar.invalidate_headers();
-    }
+			if (before != null) {
+				child = before.get_child() as SettingsItem;
+				prev = child.group;
+			}
 
-    /**
-     * Provide categorisation for our sidebar items
-     */
-    void do_headers(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
-    {
-        SettingsItem? child = null;
-        string? prev = null;
-        string? next = null;
+			if (after != null) {
+				child = after.get_child() as SettingsItem;
+				next = child.group;
+			}
 
-        if (before != null) {
-            child = before.get_child() as SettingsItem;
-            prev = child.group;
-        }
+			if (after == null || prev != next) {
+				string? title = group_map.lookup(prev);
+				Gtk.Label label = new Gtk.Label(title);
+				label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
+				label.halign = Gtk.Align.START;
+				label.use_markup = true;
+				label.margin_top = 8;
+				label.margin_bottom = 8;
+				label.margin_start = 12;
+				before.set_header(label);
+			} else {
+				before.set_header(null);
+			}
+		}
 
-        if (after != null) {
-            child = after.get_child() as SettingsItem;
-            next = child.group;
-        }
+		/**
+		* Sort the sidebar items, enforcing clustering of the same groups
+		*/
+		int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after) {
+			SettingsItem? child_before = null;
+			SettingsItem? child_after = null;
 
-        if (after == null || prev != next) {
-            string? title = group_map.lookup(prev);
-            Gtk.Label label = new Gtk.Label(title);
-            label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
-            label.halign = Gtk.Align.START;
-            label.use_markup = true;
-            label.margin_top = 8;
-            label.margin_bottom = 8;
-            label.margin_start = 12;
-            before.set_header(label);
-        } else {
-            before.set_header(null);
-        }
-    }
+			child_before = before.get_child() as SettingsItem;
+			child_after = after.get_child() as SettingsItem;
 
-    /**
-     * Sort the sidebar items, enforcing clustering of the same groups
-     */
-    int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after)
-    {
-        SettingsItem? child_before = null;
-        SettingsItem? child_after = null;
+			/* Match untranslated group string only */
+			if (child_before.group != child_after.group) {
+				return strcmp(child_before.group, child_after.group);
+			}
 
-        child_before = before.get_child() as SettingsItem;
-        child_after = after.get_child() as SettingsItem;
+			/* Always ensure the "new panel" button is last, at the tail of panels group */
+			if (child_after == this.item_add_panel) {
+				return -1;
+			} else if (child_before == this.item_add_panel) {
+				return 1;
+			}
 
-        /* Match untranslated group string only */
-        if (child_before.group != child_after.group) {
-            return strcmp(child_before.group, child_after.group);
-        }
+			if (child_before.display_weight > child_after.display_weight) {
+				return 1;
+			} else if (child_before.display_weight < child_after.display_weight) {
+				return -1;
+			}
+			return 0;
+		}
 
-        /* Always ensure the "new panel" button is last, at the tail of panels group */
-        if (child_after == this.item_add_panel) {
-            return -1;
-        } else if (child_before == this.item_add_panel) {
-            return 1;
-        }
+		/**
+		* Emulate sidebar activation for the user
+		*/
+		void force_select_page(string content_id) {
+			Idle.add(()=> {
+				Gtk.ListBoxRow? row = this.sidebar_map[content_id].get_parent() as Gtk.ListBoxRow;
+				sidebar.select_row(row);
+				row.grab_focus();
+				content.set_visible_child_name(content_id);
+				return false;
+			});
+		}
 
-        if (child_before.display_weight > child_after.display_weight) {
-            return 1;
-        } else if (child_before.display_weight < child_after.display_weight) {
-            return -1;
-        }
-        return 0;
-    }
+		/**
+		* New panel added, let's make a page for it
+		*/
+		private void on_panel_added(string uuid, Budgie.Toplevel? toplevel) {
+			string content_id = "panel-" + uuid;
+			if (content_id in this.page_map) {
+				return;
+			}
+			this.add_page(new PanelPage(this.manager, toplevel));
+			if (new_panel_requested) {
+				this.force_select_page(content_id);
+			}
+		}
 
-    /**
-     * Emulate sidebar activation for the user
-     */
-    void force_select_page(string content_id)
-    {
-        Idle.add(()=> {
-            Gtk.ListBoxRow? row = this.sidebar_map[content_id].get_parent() as Gtk.ListBoxRow;
-            sidebar.select_row(row);
-            row.grab_focus();
-            content.set_visible_child_name(content_id);
-            return false;
-        });
-    }
+		/**
+		* A panel was destroyed, remove our knowledge of it
+		*/
+		private void on_panel_deleted(string uuid) {
+			string content_id = "panel-" + uuid;
 
-    /**
-     * New panel added, let's make a page for it
-     */
-    private void on_panel_added(string uuid, Budgie.Toplevel? toplevel)
-    {
-        string content_id = "panel-" + uuid;
-        if (content_id in this.page_map) {
-            return;
-        }
-        this.add_page(new PanelPage(this.manager, toplevel));
-        if (new_panel_requested) {
-            this.force_select_page(content_id);
-        }
-    }
+			/* TODO: Set the visible name to another panel that isn't the
+			* one being deleted, only when already looking at the panel.
+			*/
+			if (this.content.get_visible_child_name() == content_id) {
+				this.force_select_page("style");
+			}
 
-    /**
-     * A panel was destroyed, remove our knowledge of it
-     */
-    private void on_panel_deleted(string uuid)
-    {
-        string content_id = "panel-" + uuid;
-
-        /* TODO: Set the visible name to another panel that isn't the
-         * one being deleted, only when already looking at the panel.
-         */
-        if (this.content.get_visible_child_name() == content_id) {
-            this.force_select_page("style");
-        }
-
-        /* Nuke from orbit */
-        this.remove_page("panel-" + uuid);
-    }
-} /* End SettingsWindow */
-
-
-} /* End namespace Budgie */
+			/* Nuke from orbit */
+			this.remove_page("panel-" + uuid);
+		}
+	}
+}

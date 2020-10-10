@@ -23,7 +23,7 @@ typedef struct _CarbonChild {
 	int preferredHeight;
 	Window iconWindow;
 
-	char *wmclass;
+	char* wmclass;
 
 	bool parentRelativeBg;
 	bool isComposited;
@@ -37,7 +37,7 @@ typedef struct _CarbonChildClass {
 
 #define CARBON_TYPE_CHILD (carbon_child_get_type())
 #define CARBON_CHILD(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), CARBON_TYPE_CHILD, CarbonChild))
-#define CARBON_IS_CHILD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CARBON_TYPE_CHILD))
+#define CARBON_IS_CHILD(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), CARBON_TYPE_CHILD))
 
 
 

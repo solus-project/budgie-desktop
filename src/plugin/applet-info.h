@@ -25,20 +25,17 @@ typedef struct _BudgieAppletInfo BudgieAppletInfo;
 typedef struct _BudgieAppletInfoClass BudgieAppletInfoClass;
 
 #define BUDGIE_TYPE_APPLET_INFO budgie_applet_info_get_type()
-#define BUDGIE_APPLET_INFO(o)                                                                      \
-        (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfo))
+#define BUDGIE_APPLET_INFO(o) (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfo))
 #define BUDGIE_IS_APPLET_INFO(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_APPLET_INFO))
-#define BUDGIE_APPLET_INFO_CLASS(o)                                                                \
-        (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfoClass))
+#define BUDGIE_APPLET_INFO_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfoClass))
 #define BUDGIE_IS_APPLET_INFO_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_APPLET_INFO))
-#define BUDGIE_APPLET_INFO_GET_CLASS(o)                                                            \
-        (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfoClass))
+#define BUDGIE_APPLET_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_APPLET_INFO, BudgieAppletInfoClass))
 
 /**
  * BudgieAppletInfoClass
  */
 struct _BudgieAppletInfoClass {
-        GObjectClass parent_class;
+	GObjectClass parent_class;
 };
 
 /**
@@ -48,12 +45,11 @@ struct _BudgieAppletInfoClass {
  * and control each applet instance.
  */
 struct _BudgieAppletInfo {
-        GObject parent_instance;
-        BudgieAppletInfoPrivate *priv;
+	GObject parent_instance;
+	BudgieAppletInfoPrivate* priv;
 };
 
-BudgieAppletInfo *budgie_applet_info_new(PeasPluginInfo *plugin_info, const char *uuid,
-                                         BudgieApplet *applet, GSettings *settings);
+BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char* uuid, BudgieApplet* applet, GSettings* settings);
 
 GType budgie_applet_info_get_type(void);
 

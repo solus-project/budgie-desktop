@@ -21,4 +21,4 @@
  *
  * @return a Newly allocated string
  */
-gchar *budgie_form_theme_path(const gchar *suffix);
+gchar* budgie_form_theme_path(const gchar* suffix);

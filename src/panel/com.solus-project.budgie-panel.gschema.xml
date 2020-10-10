@@ -123,12 +123,6 @@
       <description>Notifications send by apps of these categories will not be displayed in Raven.</description>
     </key>
 
-    <key type="b" name="confirm-remove-panel">
-      <default>true</default>
-      <summary>Require confirmation to remove panels</summary>
-      <description>Request panel removal permission from the user first</description>
-    </key>
-
     <key type="b" name="confirm-remove-applet">
       <default>true</default>
       <summary>Require confirmation to remove applets</summary>

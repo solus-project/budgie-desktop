@@ -1,13 +1,10 @@
 // Non mini-object
 ActorBox struct
 Color struct
-Fog struct
-Geometry struct
 Knot struct
 PathNode struct
 Perspective struct
 Units struct
-Vertex struct
 
 *.ref unowned
 
@@ -17,7 +14,6 @@ init_with_args
 Actor
 	.apply_transform.matrix ref
 	.get_abs_allocation_vertices.verts out=false
-	.get_allocation_vertices.verts out=false
 Canvas
 	.new symbol_type="constructor"
 Event.type#method name="get_type"
@@ -54,7 +50,6 @@ Container
 	.lower virtual
 	.raise virtual
 	.*_child_meta#virtual_method virtual
-	.foreach_with_internals#virtual_method virtual
 
 // Default values
 Container
@@ -75,21 +70,15 @@ LayoutManager
 	.create_child_meta skip=false
 
 // Variadic arguments
-Actor
-	.animate skip=false
-	.animate_with_alpha skip=false
-	.animate_with_timeline skip=false
 Box
 	.pack skip=false
 	.pack_after skip=false
 	.pack_at skip=false
 	.pack_before skip=false
 Container
-	.add_valist skip=false
 	.child_get skip=false
 	.child_set skip=false
 	.remove skip=false
-	.remove_valist skip=false
 Interval
 	.new skip=false
 	.get_interval skip=false
@@ -107,7 +96,6 @@ Texture
 	.new_from_file throws="Clutter.TextureError"
 
 // Skipped upstream for unknown reasons
-Alpha.register_func skip=false
 Interval.register_progress_func skip=false
 get_option_group skip=false
 get_option_group_without_init skip=false
@@ -123,14 +111,12 @@ ActorBox
 Units.from_* skip
 Color
 	.new skip
-Vertex.new skip
 
 // Class methods
 container_class_find_child_property skip
 container_class_list_child_properties skip
 
 // Move symbols
-get_actor_by_gid parent="Clutter.Actor" name="get_by_gid"
 units_from_* skip
 
 // Classes marked as out but not double ptr
@@ -190,10 +176,6 @@ threads_add_timeout_full name="add_full" parent="Clutter.Threads.Timeout"
 
 // Backwards compatibility
 Color.alloc symbol_type="function"
-Point.alloc symbol_type="function"
-Rect.alloc symbol_type="function"
-Size.alloc symbol_type="function"
-Vertex.alloc symbol_type="function"
 
 BinAlignment deprecated=false deprecated_since=null
 BinAlignment.* deprecated

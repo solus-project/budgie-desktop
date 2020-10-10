@@ -13,13 +13,12 @@
 
 #define THEME_PREFIX "resource://com/solus-project/budgie/theme"
 
-gchar *budgie_form_theme_path(const gchar *suffix)
-{
-        guint minor_version = gtk_get_minor_version();
+gchar* budgie_form_theme_path(const gchar* suffix) {
+	guint minor_version = gtk_get_minor_version();
 
-        switch (minor_version) {
-        case 20:
-        default:
-                return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
-        }
+	switch (minor_version) {
+		case 20:
+		default:
+			return g_strdup_printf("%s/%s_3.20.css", THEME_PREFIX, suffix);
+	}
 }

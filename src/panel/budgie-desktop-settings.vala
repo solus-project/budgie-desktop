@@ -9,21 +9,19 @@
  * (at your option) any later version.
  */
 
-public const string PANEL_DBUS_NAME        = "org.budgie_desktop.Panel";
+public const string PANEL_DBUS_NAME		   = "org.budgie_desktop.Panel";
 public const string PANEL_DBUS_OBJECT_PATH = "/org/budgie_desktop/Panel";
 
 [DBus (name = "org.budgie_desktop.Panel")]
-public interface PanelRemote : Object
-{
-    public abstract void OpenSettings() throws Error;
+public interface PanelRemote : Object {
+	public abstract void OpenSettings() throws Error;
 }
 
-public static void main(string[] args)
-{
-    try {
-        PanelRemote? proxy = Bus.get_proxy_sync<PanelRemote>(BusType.SESSION, PANEL_DBUS_NAME, PANEL_DBUS_OBJECT_PATH, 0, null);
-        proxy.OpenSettings();
-    } catch (Error e) {
-        warning("Failed to launch settings UI: %s", e.message);
-    }
+public static void main(string[] args) {
+	try {
+		PanelRemote? proxy = Bus.get_proxy_sync<PanelRemote>(BusType.SESSION, PANEL_DBUS_NAME, PANEL_DBUS_OBJECT_PATH, 0, null);
+		proxy.OpenSettings();
+	} catch (Error e) {
+		warning("Failed to launch settings UI: %s", e.message);
+	}
 }

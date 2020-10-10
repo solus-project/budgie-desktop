@@ -19,30 +19,14 @@ typedef struct _BudgieThemeManager BudgieThemeManager;
 typedef struct _BudgieThemeManagerClass BudgieThemeManagerClass;
 
 #define BUDGIE_TYPE_THEME_MANAGER budgie_theme_manager_get_type()
-#define BUDGIE_THEME_MANAGER(o)                                                                    \
-        (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManager))
+#define BUDGIE_THEME_MANAGER(o) (G_TYPE_CHECK_INSTANCE_CAST((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManager))
 #define BUDGIE_IS_THEME_MANAGER(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), BUDGIE_TYPE_THEME_MANAGER))
-#define BUDGIE_THEME_MANAGER_CLASS(o)                                                              \
-        (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
+#define BUDGIE_THEME_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 #define BUDGIE_IS_THEME_MANAGER_CLASS(o) (G_TYPE_CHECK_CLASS_TYPE((o), BUDGIE_TYPE_THEME_MANAGER))
-#define BUDGIE_THEME_MANAGER_GET_CLASS(o)                                                          \
-        (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
+#define BUDGIE_THEME_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 
-BudgieThemeManager *budgie_theme_manager_new(void);
+BudgieThemeManager* budgie_theme_manager_new(void);
 
 GType budgie_theme_manager_get_type(void);
 
 G_END_DECLS
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 8
- * tab-width: 8
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=8 tabstop=8 expandtab:
- * :indentSize=8:tabSize=8:noTabs=true:
- */

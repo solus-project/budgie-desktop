@@ -11,60 +11,63 @@
 
 const int icon_size = 32;
 
-public class TasklistPlugin : Budgie.Plugin, Peas.ExtensionBase
-{
-    public Budgie.Applet get_panel_widget(string uuid)
-    {
-        return new TasklistApplet();
-    }
+public class TasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
+	public Budgie.Applet get_panel_widget(string uuid) {
+		return new TasklistApplet();
+	}
 }
 
-public class TasklistApplet : Budgie.Applet
-{
+public class TasklistApplet : Budgie.Applet {
+	Gtk.ScrolledWindow? scroller;
+	Wnck.Tasklist? tlist;
 
-    Wnck.Tasklist? tlist;
+	public TasklistApplet() {
+		scroller = new Gtk.ScrolledWindow(null, null);
+		tlist = new Wnck.Tasklist();
 
-    public TasklistApplet()
-    {
-        tlist = new Wnck.Tasklist();
-        add(tlist);
+		scroller.overlay_scrolling = true;
+		scroller.propagate_natural_height = true;
+		scroller.propagate_natural_width = true;
+		scroller.shadow_type = Gtk.ShadowType.NONE;
+		scroller.hscrollbar_policy = Gtk.PolicyType.EXTERNAL;
+		scroller.vscrollbar_policy = Gtk.PolicyType.NEVER;
 
-        tlist.set_grouping(Wnck.TasklistGroupingType.AUTO_GROUP);
+		tlist.set_scroll_enabled(false);
 
-        show_all();
-    }
+		scroller.add(tlist);
+		add(scroller);
 
-    /**
-     * Update the tasklist orientation to match the panel direction
-     */
-    public override void panel_position_changed(Budgie.PanelPosition position)
-    {
-        Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
-        if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-            orientation = Gtk.Orientation.VERTICAL;
-        }
-        tlist.set_orientation(orientation);
-    }
+		tlist.set_grouping(Wnck.TasklistGroupingType.AUTO_GROUP);
+
+		add_events(Gdk.EventMask.SCROLL_MASK);
+		show_all();
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		if (event.direction == Gdk.ScrollDirection.UP) { // Scrolling up
+			scroller.hadjustment.value-=50;
+		} else { // Scrolling down
+			scroller.hadjustment.value+=50; // Always increment by 50
+		}
+
+		return Gdk.EVENT_STOP;
+	}
+
+	/**
+	 * Update the tasklist orientation to match the panel direction
+	 */
+	public override void panel_position_changed(Budgie.PanelPosition position) {
+		Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
+			orientation = Gtk.Orientation.VERTICAL;
+		}
+		tlist.set_orientation(orientation);
+	}
 }
-
 
 [ModuleInit]
-public void peas_register_types(TypeModule module)
-{
-    // boilerplate - all modules need this
-    var objmodule = module as Peas.ObjectModule;
-    objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(TasklistPlugin));
+public void peas_register_types(TypeModule module) {
+	// boilerplate - all modules need this
+	var objmodule = module as Peas.ObjectModule;
+	objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(TasklistPlugin));
 }
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */

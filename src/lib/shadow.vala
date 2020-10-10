@@ -9,116 +9,92 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-namespace Budgie
-{
+namespace Budgie {
+	/**
+	* Alternative to a separator, gives a shadow effect
+	*/
+	public class ShadowBlock : Gtk.EventBox {
+		private PanelPosition pos;
+		private bool horizontal = false;
+		int rm = 0;
 
-/**
- * Alternative to a separator, gives a shadow effect
- */
-public class ShadowBlock : Gtk.EventBox
-{
+		public PanelPosition position {
+			public set {
+				var old = pos;
+				pos = value;
+				update_position(old);
+			}
+			public get {
+				return pos;
+			}
+		}
 
-    private PanelPosition pos;
-    private bool horizontal = false;
-    int rm = 0;
+		private bool _active = true;
 
-    public PanelPosition position {
-        public set {
-            var old = pos;
-            pos = value;
-            update_position(old);
-        }
-        public get {
-            return pos;
-        }
-    }
-
-    private bool _active = true;
-
-    // Allow making the shadow disappear but still use space
-    public bool active {
-        public set {
-            this._active = value;
-            if (this._active) {
-                get_style_context().add_class("shadow-block");
-                get_style_context().remove_class("budgie-container");
-            } else {
-                get_style_context().remove_class("shadow-block");
-                get_style_context().add_class("budgie-container");
-            }
-        }
-        public get {
-            return this._active;
-        }
-    }
+		// Allow making the shadow disappear but still use space
+		public bool active {
+			public set {
+				this._active = value;
+				if (this._active) {
+					get_style_context().add_class("shadow-block");
+					get_style_context().remove_class("budgie-container");
+				} else {
+					get_style_context().remove_class("shadow-block");
+					get_style_context().add_class("budgie-container");
+				}
+			}
+			public get {
+				return this._active;
+			}
+		}
 
 
-    void update_position(PanelPosition? old)
-    {
-        if (pos == PanelPosition.TOP || pos == PanelPosition.BOTTOM) {
-            horizontal = true;
-        } else {
-            horizontal = false;
-        }
-        queue_resize();
-    }
+		void update_position(PanelPosition? old) {
+			if (pos == PanelPosition.TOP || pos == PanelPosition.BOTTOM) {
+				horizontal = true;
+			} else {
+				horizontal = false;
+			}
+			queue_resize();
+		}
 
-    public ShadowBlock(PanelPosition position)
-    {
-        this.active = true;
-        this.position = position;
-    }
+		public ShadowBlock(PanelPosition position) {
+			this.active = true;
+			this.position = position;
+		}
 
-    public override void get_preferred_height(out int min, out int nat)
-    {
-        if (horizontal) {
-            min = 5;
-            nat = 5;
-            return;
-        };
-        min = nat = rm;
-    }
+		public override void get_preferred_height(out int min, out int nat) {
+			if (horizontal) {
+				min = 5;
+				nat = 5;
+				return;
+			};
+			min = nat = rm;
+		}
 
-    public override void get_preferred_height_for_width(int width, out int min, out int nat)
-    {
-        if (horizontal) {
-            min = 5;
-            nat = 5;
-            return;
-        }
-        min = nat =  rm;
-    }
+		public override void get_preferred_height_for_width(int width, out int min, out int nat) {
+			if (horizontal) {
+				min = 5;
+				nat = 5;
+				return;
+			}
+			min = nat =	 rm;
+		}
 
-    public override void get_preferred_width(out int min, out int nat)
-    {
-        if (horizontal) {
-            min = nat = rm;
-            return;
-        }
-        min = nat = 5;
-    }
+		public override void get_preferred_width(out int min, out int nat) {
+			if (horizontal) {
+				min = nat = rm;
+				return;
+			}
+			min = nat = 5;
+		}
 
-    public override void get_preferred_width_for_height(int height, out int min, out int nat)
-    {
-        if (horizontal) {
-            min = nat = rm;
-            return;
-        }
-        min = nat = 5;
-    }
+		public override void get_preferred_width_for_height(int height, out int min, out int nat) {
+			if (horizontal) {
+				min = nat = rm;
+				return;
+			}
+			min = nat = 5;
+		}
+	}
 }
-
-}
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */

@@ -10,46 +10,32 @@
  */
 
 
-public static int main(string[] args)
-{
-    unowned OptionContext? ctx = null;
-    Budgie.BudgieWM.old_args = args;
+public static int main(string[] args) {
+	unowned OptionContext? ctx = null;
+	Budgie.BudgieWM.old_args = args;
 
-    ctx = Meta.get_option_context();
+	ctx = Meta.get_option_context();
 
-    try {
-        if (!ctx.parse(ref args)) {
-            return Meta.ExitCode.ERROR;
-        }
-    } catch (OptionError e) {
-        message("Unknown option: %s", e.message);
-        return Meta.ExitCode.ERROR;
-    }
+	try {
+		if (!ctx.parse(ref args)) {
+			return Meta.ExitCode.ERROR;
+		}
+	} catch (OptionError e) {
+		message("Unknown option: %s", e.message);
+		return Meta.ExitCode.ERROR;
+	}
 
-    /* Set plugin type here */
-    Meta.Plugin.manager_set_plugin_type(typeof(Budgie.BudgieWM));
-    Meta.set_gnome_wm_keybindings("Mutter,GNOME Shell");
-    Meta.set_wm_name("Mutter(Budgie)");
+	/* Set plugin type here */
+	Meta.Plugin.manager_set_plugin_type(typeof(Budgie.BudgieWM));
+	Meta.set_gnome_wm_keybindings("Mutter,GNOME Shell");
+	Meta.set_wm_name("Mutter(Budgie)");
 
-    Environment.set_variable("NO_GAIL", "1", true);
-    Environment.set_variable("NO_AT_BRIDGE", "1", true);
+	Environment.set_variable("NO_GAIL", "1", true);
+	Environment.set_variable("NO_AT_BRIDGE", "1", true);
 
-    Meta.init();
+	Meta.init();
 
-    Meta.register_with_session();
+	Meta.register_with_session();
 
-    return Meta.run();
+	return Meta.run();
 }
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */
