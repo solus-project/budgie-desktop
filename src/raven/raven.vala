@@ -37,7 +37,7 @@ namespace Budgie {
 			}
 		}
 
-		public void ClearNotifications() {
+		public void ClearNotifications() throws DBusError, IOError {
 			notifications = 0; // Set our notifications to zero
 			this.ReadNotifications(); // Call our ReadNotifications signal
 			this.ClearAllNotifications(); // Call our ClearAllNotifications signal
@@ -46,19 +46,19 @@ namespace Budgie {
 		public signal void ExpansionChanged(bool expanded);
 		public signal void AnchorChanged(bool anchored);
 
-		public bool GetExpanded() {
+		public bool GetExpanded() throws DBusError, IOError {
 			return this.is_expanded;
 		}
 
-		public bool GetLeftAnchored() {
+		public bool GetLeftAnchored() throws DBusError, IOError {
 			return parent.screen_edge == Gtk.PositionType.LEFT;
 		}
 
-		public void SetExpanded(bool b) {
+		public void SetExpanded(bool b) throws DBusError, IOError {
 			this.is_expanded = b;
 		}
 
-		public void Toggle() {
+		public void Toggle() throws DBusError, IOError {
 			this.is_expanded = !this.is_expanded;
 
 			if (this.is_expanded) {
@@ -74,7 +74,7 @@ namespace Budgie {
 		/**
 		* Toggle Raven, opening only the "main" applet view
 		*/
-		public void ToggleAppletView() {
+		public void ToggleAppletView() throws DBusError, IOError {
 			if (this.is_expanded) {
 				this.is_expanded = !this.is_expanded;
 				return;
@@ -86,7 +86,7 @@ namespace Budgie {
 		/**
 		* Toggle Raven, opening only the "main" applet view
 		*/
-		public void ToggleNotificationsView() {
+		public void ToggleNotificationsView() throws DBusError, IOError {
 			if (this.is_expanded) {
 				this.is_expanded = !this.is_expanded;
 				return;
@@ -95,7 +95,7 @@ namespace Budgie {
 			this.is_expanded = !this.is_expanded;
 		}
 
-		public void Dismiss() {
+		public void Dismiss() throws DBusError, IOError {
 			if (this.is_expanded) {
 				this.is_expanded = !this.is_expanded;
 			}
@@ -104,7 +104,7 @@ namespace Budgie {
 
 		public signal void NotificationsChanged();
 
-		public uint GetNotificationCount() {
+		public uint GetNotificationCount() throws DBusError, IOError {
 			return this.notifications;
 		}
 
@@ -112,7 +112,7 @@ namespace Budgie {
 		public signal void UnreadNotifications();
 		public signal void ReadNotifications();
 
-		public string get_version() {
+		public string get_version() throws DBusError, IOError {
 			return "1";
 		}
 
@@ -121,19 +121,17 @@ namespace Budgie {
 		*/
 		public signal void DoNotDisturbChanged(bool active);
 
-		public bool GetDoNotDisturbState() {
+		public bool GetDoNotDisturbState() throws DBusError, IOError {
 			return this.dnd_enabled;
 		}
 
-		public void SetDoNotDisturb(bool enable) {
+		public void SetDoNotDisturb(bool enable) throws DBusError, IOError {
 			this.dnd_enabled = enable;
 			this.DoNotDisturbChanged(this.dnd_enabled);
 		}
 	}
 
 	public class Raven : Gtk.Window {
-		/* Use 15% of screen estate */
-		private double intended_size = 0.15;
 		private static Raven? _instance = null;
 
 		private Gtk.PositionType _screen_edge = Gtk.PositionType.RIGHT;
@@ -234,7 +232,11 @@ namespace Budgie {
 		}
 
 		public void set_dnd_state(bool active) {
-			this.iface.SetDoNotDisturb(active); // Set the active state of our RavenIFace DND
+			try {
+				this.iface.SetDoNotDisturb(active); // Set the active state of our RavenIFace DND
+			} catch (Error e) {
+				warning("Error in Raven | Failed to set Do Not Disturb state: %s", e.message);
+			}
 		}
 
 		public void set_notification_count(uint count) {
@@ -261,7 +263,7 @@ namespace Budgie {
 				/* X11 specific. */
 				Gdk.Display? display = screen.get_display();
 				if (display is Gdk.X11.Display) {
-					window.focus((display as Gdk.X11.Display).get_user_time());
+					window.focus(((Gdk.X11.Display) display).get_user_time());
 				} else {
 					window.focus(Gtk.get_current_event_time());
 				}
@@ -271,8 +273,6 @@ namespace Budgie {
 		public Raven(Budgie.DesktopManager? manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
 			get_style_context().add_class("budgie-container");
-
-			set_wmclass("raven", "raven");
 
 			settings = new Settings("com.solus-project.budgie-raven");
 			settings.changed.connect(this.on_raven_settings_changed);
@@ -514,11 +514,14 @@ namespace Budgie {
 			};
 
 			anim.start((a) => {
-				if ((a.widget as Budgie.Raven).nscale == 0.0) {
-					a.widget.hide();
-				} else {
-					(a.widget as Gtk.Window).present();
-					(a.widget as Gtk.Window).grab_focus();
+				Budgie.Raven? r = a.widget as Budgie.Raven;
+				Gtk.Window? w = a.widget as Gtk.Window;
+
+				if (r != null && r.nscale == 0.0) {
+					r.hide();
+				} else if (w != null) {
+					w.present();
+					w.grab_focus();
 					this.steal_focus();
 					steal_focus();
 				}

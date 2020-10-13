@@ -53,7 +53,7 @@ namespace Budgie {
 	* The toplevel window for a panel
 	*/
 	public class Panel : Budgie.Toplevel {
-		Gtk.Box layout;
+		MainPanel layout;
 		Gtk.Box main_layout;
 		Gdk.Rectangle orig_scr;
 
@@ -189,7 +189,7 @@ namespace Budgie {
 		}
 
 		public void set_transparent(bool transparent) {
-			(layout as MainPanel).set_transparent(transparent);
+			layout.set_transparent(transparent);
 			this.update_dock_behavior();
 		}
 
@@ -577,7 +577,7 @@ namespace Budgie {
 			}
 
 			uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
-			info = new AppletInfo(null, uuid, null, null);
+			info = new AppletInfo.from_uuid(uuid);
 			info.alignment = align;
 
 			/* Safety clamp */
@@ -641,7 +641,7 @@ namespace Budgie {
 						continue;
 					}
 
-					info = new AppletInfo(null, uuid, null, null);
+					info = new AppletInfo.from_uuid(uuid);
 					if (config.has_key(appl, "Alignment")) {
 						alignment = config.get_string(appl, "Alignment").strip();
 					}
@@ -935,7 +935,7 @@ namespace Budgie {
 		* we're in dock mode or not
 		*/
 		void update_dock_mode() {
-			(this.layout as MainPanel).set_dock_mode(this.dock_mode);
+			layout.set_dock_mode(this.dock_mode);
 			this.placement();
 		}
 

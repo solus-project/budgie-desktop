@@ -67,7 +67,7 @@ namespace Budgie {
 			proxy = null;
 		}
 
-		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) {
+		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {
 			if (proxy == null) {
 				return;
 			}
@@ -78,7 +78,7 @@ namespace Budgie {
 			}
 		}
 
-		public void Close() {
+		public void Close() throws DBusError, IOError {
 			if (proxy == null) {
 				try {
 					proxy.Close();
@@ -100,9 +100,9 @@ namespace Budgie {
 		public signal void Canceled();
 		public signal void Closed();
 
-		public abstract void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws Error;
+		public abstract void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError;
 
-		public abstract void Close() throws Error;
+		public abstract void Close() throws DBusError, IOError;
 	}
 
 	/**
@@ -119,7 +119,7 @@ namespace Budgie {
 		*   level: int32
 		*   monitor: int32
 		*/
-		public abstract async void ShowOSD(HashTable<string,Variant> params) throws Error;
+		public abstract async void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError;
 	}
 
 	[DBus (name="org.gnome.Shell")]
@@ -239,19 +239,19 @@ namespace Budgie {
 				on_bus_acquired, null, null);
 		}
 
-		public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags) {
+		public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags) throws DBusError, IOError {
 			return grab_accelerator(accelerator, grab_flags);
 		}
 
-		public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators) {
+		public uint[] GrabAccelerators(BusName sender, GsdAccel[] accelerators) throws DBusError, IOError {
 			return grab_accelerators(accelerators);
 		}
 
-		public bool UngrabAccelerator(BusName sender, uint action) {
+		public bool UngrabAccelerator(BusName sender, uint action) throws DBusError, IOError {
 			return ungrab_accelerator(action);
 		}
 
-		public bool UngrabAccelerators(BusName sender, uint[] actions) {
+		public bool UngrabAccelerators(BusName sender, uint[] actions) throws DBusError, IOError {
 			foreach (uint action in actions) {
 				ungrab_accelerator(action);
 			}
@@ -261,7 +261,7 @@ namespace Budgie {
 		/**
 		* Show the OSD when requested.
 		*/
-		public void ShowOSD(HashTable<string,Variant> params) {
+		public void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError {
 			if (osd_proxy != null) {
 				osd_proxy.ShowOSD.begin(params);
 			}

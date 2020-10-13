@@ -121,7 +121,14 @@ public class RavenTriggerApplet : Budgie.Applet {
 	// Horrific work around to stop us getting caught up in our own dbus
 	// spam
 	private void* update_anchors() {
-		bool b = raven_proxy.GetLeftAnchored();
+		bool b;
+		try {
+			b = raven_proxy.GetLeftAnchored();
+		} catch (Error e) {
+			warning("Failed to get left anchored status of raven trigger for update: %s", e.message);
+			return null;
+		}
+
 		Gdk.threads_enter();
 		this.on_anchor_changed(b);
 		Gdk.threads_leave();

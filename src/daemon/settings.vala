@@ -106,8 +106,8 @@ namespace Budgie {
 		private void caffeine_settings_sync() {
 			gnome_session_settings.apply();
 			gnome_power_settings.apply();
-			gnome_session_settings.sync(); // Ensure write operations are complete for session
-			gnome_power_settings.sync(); // Ensure write operations are complete for power
+			Settings.sync(); // Ensure write operations are complete for session
+			Settings.sync(); // Ensure write operations are complete for power
 		}
 
 		/**
@@ -129,7 +129,7 @@ namespace Budgie {
 		private bool do_disable() {
 			if (get_caffeine_mode()) { // Is still disabled by the time our timer gets triggered
 				wm_settings.set_boolean("caffeine-mode", false);
-				wm_settings.sync();
+				Settings.sync();
 				reset_values(); // Immediately reset values
 			}
 
@@ -142,7 +142,7 @@ namespace Budgie {
 		public void do_disable_quietly() {
 			temporary_notification_disabled = true;
 			wm_settings.set_boolean("caffeine-mode", false);
-			wm_settings.sync();
+			Settings.sync();
 			reset_values(); // Immediately reset values
 		}
 
@@ -168,7 +168,7 @@ namespace Budgie {
 
 				temporary_notification_disabled = true;
 				wm_settings.set_boolean("caffeine-mode", false); // Ensure Caffeine Mode is disabled by default
-				wm_settings.sync();
+				Settings.sync();
 			}
 
 			get_power_defaults(); // Get our sleep ac and battery timeout defaults

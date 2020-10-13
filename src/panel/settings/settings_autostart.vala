@@ -236,7 +236,7 @@ namespace Budgie {
 		}
 
 		private bool search_filter(Gtk.ListBoxRow row) {
-			AutostartItem item = (row as AutostartItemWidget).autostart_item;
+			AutostartItem item = ((AutostartItemWidget) row).autostart_item;
 			if (AutostartPage.autostart_files.contains(item.id)) {
 				return false;
 			}
@@ -280,7 +280,7 @@ namespace Budgie {
 
 			this.button_ok.set_sensitive(true);
 
-			this.selected_item = (row as AutostartItemWidget).autostart_item;
+			this.selected_item = ((AutostartItemWidget) row).autostart_item;
 		}
 
 		private void row_activated(Gtk.ListBoxRow? row) {

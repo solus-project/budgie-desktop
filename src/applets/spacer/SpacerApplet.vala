@@ -74,6 +74,8 @@ public class SpacerApplet : Budgie.Applet {
 	}
 
 	public override void get_preferred_width(out int min, out int nat) {
+		min = -1;
+		nat = -1;
 		if (this.panel_position == Budgie.PanelPosition.TOP ||
 			this.panel_position == Budgie.PanelPosition.BOTTOM) {
 				min = nat = space_size;
@@ -81,6 +83,8 @@ public class SpacerApplet : Budgie.Applet {
 	}
 
 	public override void get_preferred_width_for_height(int h, out int min, out int nat) {
+		min = -1;
+		nat = -1;
 		if (this.panel_position == Budgie.PanelPosition.TOP ||
 			this.panel_position == Budgie.PanelPosition.BOTTOM) {
 				min = nat = space_size;
@@ -88,6 +92,8 @@ public class SpacerApplet : Budgie.Applet {
 	}
 
 	public override void get_preferred_height(out int min, out int nat) {
+		min = -1;
+		nat = -1;
 		if (this.panel_position == Budgie.PanelPosition.LEFT ||
 			this.panel_position == Budgie.PanelPosition.RIGHT) {
 				min = nat = space_size;
@@ -95,6 +101,8 @@ public class SpacerApplet : Budgie.Applet {
 	}
 
 	public override void get_preferred_height_for_width(int h, out int min, out int nat) {
+		min = -1;
+		nat = -1;
 		if (this.panel_position == Budgie.PanelPosition.LEFT ||
 			this.panel_position == Budgie.PanelPosition.RIGHT) {
 				min = nat = space_size;

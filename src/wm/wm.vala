@@ -407,12 +407,12 @@ namespace Budgie {
 			Pid pid = Meta.Util.show_dialog("--question",
 							"Does the display look OK?",
 							"20",
-							null,
+							"",
 							"_Keep This Configuration",
 							"_Restore Previous Configuration",
 							"preferences-desktop-display",
 							0,
-							null, null);
+							new SList<void*>(), new SList<void*>());
 
 			ChildWatch.add(pid, on_dialog_closed);
 		}
@@ -666,11 +666,6 @@ namespace Budgie {
 
 		void map_done(Clutter.Actor? actor) {
 			SignalHandler.disconnect_by_func(actor, (void*)map_done, this);
-			finalize_animations(actor as Meta.WindowActor);
-		}
-
-		void notification_map_done(Clutter.Actor? actor) {
-			SignalHandler.disconnect_by_func(actor, (void*)notification_map_done, this);
 			finalize_animations(actor as Meta.WindowActor);
 		}
 
@@ -997,6 +992,7 @@ namespace Budgie {
 			}
 			return 0;
 		}
+
 		static int tab_sort_reverse(Meta.Window a, Meta.Window b) {
 			uint32 at;
 			uint32 bt;
@@ -1230,7 +1226,7 @@ namespace Budgie {
 
 			if (use_animations) { // If animations are enabled
 				foreach (var actor in Meta.Compositor.get_window_actors(display)) {
-					var window = (actor as Meta.WindowActor).get_meta_window();
+					var window = ((Meta.WindowActor) actor).get_meta_window();
 
 					if (!window.showing_on_its_workspace() || window.is_on_all_workspaces()) {
 						continue;
@@ -1332,15 +1328,15 @@ namespace Budgie {
 				on_bus_acquired, null, null);
 		}
 
-		public void store_focused() {
+		public void store_focused() throws DBusError, IOError {
 			this.wm.store_focused();
 		}
 
-		public void restore_focused() {
+		public void restore_focused() throws DBusError, IOError {
 			this.wm.restore_focused();
 		}
 
-		public void RemoveWorkspaceByIndex(int index, uint32 time) {
+		public void RemoveWorkspaceByIndex(int index, uint32 time) throws DBusError, IOError {
 			unowned Meta.WorkspaceManager wsm = this.wm.get_display().get_workspace_manager();
 			unowned Meta.Workspace? workspace = wsm.get_workspace_by_index(index);
 			if (workspace == null) {
@@ -1349,7 +1345,7 @@ namespace Budgie {
 			wsm.remove_workspace(workspace, time);
 		}
 
-		public int AppendNewWorkspace(uint32 time) {
+		public int AppendNewWorkspace(uint32 time) throws DBusError, IOError {
 			unowned Meta.WorkspaceManager wsm = this.wm.get_display().get_workspace_manager();
 			int current_count = wsm.get_n_workspaces(); // Get the current count
 

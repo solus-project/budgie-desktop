@@ -15,7 +15,6 @@ namespace Budgie {
 	* removed
 	*/
 	public class RemovePanelDialog : Gtk.Dialog {
-		Gtk.CheckButton check_confirm;
 		Gtk.Label confirm_label;
 		Gtk.Image confirm_image;
 

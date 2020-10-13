@@ -391,22 +391,22 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 			val.get_child(i, "(ss)", out id, out type);
 
-			if (id == "xkb") {
-				string[] spl = type.split("+");
-				string? variant = "";
-				if (spl.length > 1) {
-					variant = spl[1];
-				}
-				string desc = this.get_xkb_description(type);
-				source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, desc, true);
-				sources.append_val(source);
-			} else {
-				try {
+			try {
+				if (id == "xkb") {
+					string[] spl = type.split("+");
+					string? variant = "";
+					if (spl.length > 1) {
+						variant = spl[1];
+					}
+					string desc = this.get_xkb_description(type);
+					source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, desc, true);
+					sources.append_val(source);
+				} else {
 					source = new InputSource(this.ibus_manager, type, (uint)i, null, null, null, false);
 					sources.append_val(source);
-				} catch (Error e) {
-					message("Error adding source %s|%s: %s", id, type, e.message);
 				}
+			} catch (Error e) {
+				message("Error adding source %s|%s: %s", id, type, e.message);
 			}
 		}
 
@@ -445,10 +445,14 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 			Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 		}
 
-		if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
-			fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, display_name, true);
-		} else {
-			fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);
+		try {
+			if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
+				fallback = new InputSource(this.ibus_manager, id, 0, xkb_layout, xkb_variant, display_name, true);
+			} else {
+				fallback = new InputSource(this.ibus_manager, id, 0, DEFAULT_LAYOUT, DEFAULT_VARIANT, null, true);
+			}
+		} catch (Error e) {
+			message("Error updating fallback source %s: %s", id, e.message);
 		}
 	}
 

@@ -113,15 +113,15 @@ namespace Budgie {
 			this.manager = manager;
 		}
 
-		public string get_version() {
+		public string get_version() throws DBusError, IOError {
 			return Budgie.VERSION;
 		}
 
-		public void ActivateAction(int action) {
+		public void ActivateAction(int action) throws DBusError, IOError {
 			this.manager.activate_action(action);
 		}
 
-		public void OpenSettings() {
+		public void OpenSettings() throws DBusError, IOError {
 			this.manager.open_settings();
 		}
 	}
@@ -420,7 +420,7 @@ namespace Budgie {
 				return;
 			}
 			string path = settings.path;
-			settings.sync();
+			Settings.sync();
 			if (settings.path == null) {
 				return;
 			}
@@ -431,7 +431,7 @@ namespace Budgie {
 			} catch (Error e) {
 				warning("Failed to reset dconf path %s: %s", path, e.message);
 			}
-			settings.sync();
+			Settings.sync();
 		}
 
 		public Budgie.AppletInfo? get_applet(string key) {
@@ -616,8 +616,8 @@ namespace Budgie {
 		* finding a migratable panel and calling its migratory function
 		*/
 		private void perform_migration(int current_migration_level) {
-			Budgie.Toplevel? top = null;
-			Budgie.Toplevel? last = null;
+			Budgie.Panel? top = null;
+			Budgie.Panel? last = null;
 
 			/* Minimum migration level met, proceed as normal. */
 			if (current_migration_level >= BUDGIE_MIGRATION_LEVEL) {
@@ -634,7 +634,6 @@ namespace Budgie {
 
 			string? key = null;
 			Budgie.Panel? val = null;
-			Screen? area = screens.lookup(primary_monitor);
 			var iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(out key, out val)) {
 				if (val.position == Budgie.PanelPosition.TOP) {
@@ -649,7 +648,7 @@ namespace Budgie {
 			}
 
 			/* Ask this panel to perform migratory tasks(add applets) */
-			(last as Budgie.Panel).perform_migration(current_migration_level);
+			((Budgie.Panel) last).perform_migration(current_migration_level);
 		}
 
 		/**
@@ -797,10 +796,8 @@ namespace Budgie {
 				return null;
 			}
 			name = null;
-			Budgie.Applet applet = (extension as Budgie.Plugin).get_panel_widget(uuid);
-			var info = new Budgie.AppletInfo(pinfo, uuid, applet, settings);
-
-			return info;
+			Budgie.Applet applet = ((Budgie.Plugin) extension).get_panel_widget(uuid);
+			return new Budgie.AppletInfo(pinfo, uuid, applet, settings);
 		}
 
 		/**
@@ -823,7 +820,6 @@ namespace Budgie {
 		public PanelPosition get_first_position(int monitor) {
 			if (!screens.contains(monitor)) {
 				error("No screen for monitor: %d - This should never happen!", monitor);
-				return PanelPosition.NONE;
 			}
 			Screen? screen = screens.lookup(monitor);
 
@@ -886,21 +882,6 @@ namespace Budgie {
 			size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			panel.intended_size = (int)size;
 			this.show_panel(uuid, position, transparency);
-		}
-
-		static string? pos_text(PanelPosition pos) {
-			switch (pos) {
-				case PanelPosition.TOP:
-					return "top";
-				case PanelPosition.BOTTOM:
-					return "bottom";
-				case PanelPosition.LEFT:
-					return "left";
-				case PanelPosition.RIGHT:
-					return "right";
-				default:
-					return "none";
-			}
 		}
 
 		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency) {

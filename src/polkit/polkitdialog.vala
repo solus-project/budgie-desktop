@@ -208,10 +208,10 @@ namespace Budgie {
 				string? name = null;
 
 				if (ident is Polkit.UnixUser) {
-					unowned Posix.Passwd? pwd = Posix.getpwuid((ident as Polkit.UnixUser).get_uid());
+					unowned Posix.Passwd? pwd = Posix.getpwuid(((Polkit.UnixUser) ident).get_uid());
 					name = "%s".printf(pwd.pw_name);
 				} else if (ident is Polkit.UnixGroup) {
-					unowned Posix.Group? gwd = Posix.getgrgid((ident as Polkit.UnixGroup).get_gid());
+					unowned Posix.Group? gwd = Posix.getgrgid(((Polkit.UnixGroup) ident).get_gid());
 					name = "%s: %s".printf(_("Group:"), gwd.gr_name);
 				} else {
 					name = ident.to_string();

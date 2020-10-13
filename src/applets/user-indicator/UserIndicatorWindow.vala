@@ -32,8 +32,6 @@ public class UserIndicatorWindow : Budgie.Popover {
 	private IndicatorItem? user_item = null;
 
 	async void setup_dbus() {
-		var path = Environment.get_variable("XDG_SEAT_PATH");
-
 		try {
 			user_manager = yield Bus.get_proxy(BusType.SYSTEM, ACCOUNTSSERVICE_ACC, "/org/freedesktop/Accounts");
 

@@ -275,14 +275,14 @@ namespace Budgie {
 		* id: uint32 xid of the item
 		* title: string title of the window
 		*/
-		public void PassItem(uint32 id, uint32 usertime) {
+		public void PassItem(uint32 id, uint32 usertime) throws DBusError, IOError {
 			switcher_window.add_window(id, usertime);
 		}
 		/**
 		* Show the SWITCHER on screen with the given parameters:
 		* curr_xid: uint32 xid of the item to select
 		*/
-		public void ShowSwitcher(uint32 curr_xid) {
+		public void ShowSwitcher(uint32 curr_xid) throws DBusError, IOError {
 			this.add_mod_key_watcher();
 
 			switcher_window.move_switcher();
@@ -290,7 +290,7 @@ namespace Budgie {
 			switcher_window.focus_item(curr_xid);
 		}
 
-		public void StopSwitcher() {
+		public void StopSwitcher() throws DBusError, IOError {
 			switcher_window.stop_switching();
 		}
 

@@ -172,12 +172,9 @@ namespace Budgie {
 		private Gtk.Label? label_body = null;
 
 		[GtkChild]
-		private Gtk.Button? button_close = null;
-
-		[GtkChild]
 		private Gtk.ButtonBox? box_actions = null;
 
-		public string? title;
+		public new string? title;
 		public string? body;
 		public Gdk.Pixbuf? pixbuf = null;
 		public int64 timestamp;
@@ -298,7 +295,6 @@ namespace Budgie {
 			int rowstride = img.get_child_value(2).get_int32();
 			bool has_alpha = img.get_child_value(3).get_boolean();
 			int bits_per_sample = img.get_child_value(4).get_int32();
-			int n_channels = img.get_child_value(5).get_int32();
 			// read the raw data
 			unowned uint8[] raw = (uint8[]) img.get_child_value(6).get_data();
 
@@ -528,11 +524,11 @@ namespace Budgie {
 		/* Obviously we'll change this.. */
 		private HashTable<uint32,NotificationWindow?> notifications;
 
-		public async string[] get_capabilities() {
+		public async string[] get_capabilities() throws DBusError, IOError {
 			return caps;
 		}
 
-		public void CloseNotification(uint32 id) {
+		public void CloseNotification(uint32 id) throws DBusError, IOError {
 			if (remove_notification(id)) {
 				this.NotificationClosed(id, NotificationCloseReason.CLOSED);
 			}
@@ -662,7 +658,7 @@ namespace Budgie {
 
 		public uint32 Notify(string app_name, uint32 replaces_id, string app_icon,
 							string summary, string body, string[] actions,
-							HashTable<string,Variant> hints, int32 expire_timeout) {
+							HashTable<string,Variant> hints, int32 expire_timeout) throws DBusError, IOError {
 			++notif_id;
 
 			/**
@@ -828,7 +824,7 @@ namespace Budgie {
 		public signal void ActionInvoked(uint32 id, string action_key);
 
 		public void GetServerInformation(out string name, out string vendor,
-										out string version, out string spec_version)  {
+										out string version, out string spec_version) throws DBusError, IOError {
 			name = "Raven";
 			vendor = "Budgie Desktop Developers";
 			version = Budgie.VERSION;

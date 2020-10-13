@@ -14,8 +14,8 @@ namespace Budgie {
 	* We need to probe the dbus daemon directly, hence this interface
 	*/
 	[DBus (name="org.freedesktop.DBus")]
-	public interface DBusImpl : GLib.Object {
-		public abstract async string[] list_names() throws IOError;
+	public interface DBusImpl : Object {
+		public abstract async string[] list_names() throws DBusError, IOError;
 		public signal void name_owner_changed(string name, string old_owner, string new_owner);
 	}
 
@@ -163,7 +163,7 @@ namespace Budgie {
 		* Handle click/<enter> activation on the main list
 		*/
 		void on_row_activate(Gtk.ListBoxRow row) {
-			var child = (row as Gtk.Bin).get_child() as AppLauncherButton;
+			var child = ((Gtk.Bin) row).get_child() as AppLauncherButton;
 			this.launch_button(child);
 		}
 
@@ -174,7 +174,7 @@ namespace Budgie {
 			AppLauncherButton? act = null;
 			foreach (var row in app_box.get_children()) {
 				if (row.get_visible() && row.get_child_visible()) {
-					act = (row as Gtk.Bin).get_child() as AppLauncherButton;
+					act = ((Gtk.Bin) row).get_child() as AppLauncherButton;
 					break;
 				}
 			}

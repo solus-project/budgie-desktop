@@ -32,7 +32,7 @@ public class LockKeysApplet : Budgie.Applet {
 		widget.pack_start(caps, false, false, 0);
 		widget.pack_start(num, false, false, 0);
 
-		map = Gdk.Keymap.get_default();
+		map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
 		map.state_changed.connect(on_state_changed);
 
 		on_state_changed();

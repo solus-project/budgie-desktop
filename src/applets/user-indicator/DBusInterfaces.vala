@@ -10,8 +10,8 @@
  */
 
 [DBus (name="org.freedesktop.Accounts")]
-interface AccountsInterface : GLib.Object {
-	public abstract string find_user_by_name(string username) throws IOError;
+interface AccountsInterface : Object {
+	public abstract string find_user_by_name(string username) throws DBusError, IOError;
 }
 
 [DBus (name="org.freedesktop.Accounts.User")]
@@ -20,21 +20,21 @@ interface AccountUserInterface : GLib.Object {
 }
 
 [DBus (name="org.freedesktop.DBus.Properties")]
-interface PropertiesInterface : GLib.Object {
-	public abstract Variant get(string interface, string property) throws IOError;
+interface PropertiesInterface : Object {
+	public abstract Variant get(string interface, string property) throws DBusError, IOError;
 	public signal void properties_changed();
 }
 
 /* logind */
 [DBus (name="org.freedesktop.login1.Manager")]
-public interface LogindInterface : GLib.Object {
-	public abstract void suspend(bool interactive) throws IOError;
-	public abstract void hibernate(bool interactive) throws IOError;
+public interface LogindInterface : Object {
+	public abstract void suspend(bool interactive) throws DBusError, IOError;
+	public abstract void hibernate(bool interactive) throws DBusError, IOError;
 }
 
 [DBus (name="org.gnome.SessionManager")]
-public interface SessionManager : GLib.Object {
-	public abstract void Logout(uint mode) throws IOError;
+public interface SessionManager : Object {
+	public abstract void Logout(uint mode) throws DBusError, IOError;
 	public abstract async void Reboot() throws Error;
 	public abstract async void Shutdown() throws Error;
 }

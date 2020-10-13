@@ -130,7 +130,7 @@ namespace Budgie {
 		* We've been asked to display the root menu for the desktop itself,
 		* which contains actions for launching the settings, etc.
 		*/
-		public void ShowDesktopMenu(uint button, uint32 timestamp) {
+		public void ShowDesktopMenu(uint button, uint32 timestamp) throws DBusError, IOError {
 			Idle.add(() => {
 				if (desktop_menu.get_visible()) {
 					desktop_menu.hide();
@@ -144,7 +144,7 @@ namespace Budgie {
 		/**
 		* Show a window menu for the given window ID
 		*/
-		public void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) {
+		public void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws DBusError, IOError {
 			active_window = Wnck.Window.get(xid);
 			if (active_window == null) {
 				return;
