@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2016-2019 Budgie Desktop Developers
+ * Copyright © 2016-2020 Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,9 +22,7 @@
  *
  * This provides a quick useful macro to wrap around the inclusion of GTK/GLib header files
  */
-#define _BUDGIE_BEGIN_PEDANTIC(COMP)                                                               \
-        _Pragma(_STRINGIFY(COMP diagnostic push))                                                  \
-            _Pragma(_STRINGIFY(COMP diagnostic ignored "-Wpedantic"))
+#define _BUDGIE_BEGIN_PEDANTIC(COMP) _Pragma(_STRINGIFY(COMP diagnostic push)) _Pragma(_STRINGIFY(COMP diagnostic ignored "-Wpedantic"))
 
 /**
  * End the includes block, i.e. by popping the diagnostic once more
@@ -65,16 +63,3 @@
  * Useful during development to silence compiler warnings
  */
 #define __budgie_unused__ __attribute__((unused))
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 8
- * tab-width: 8
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=8 tabstop=8 expandtab:
- * :indentSize=8:tabSize=8:noTabs=true:
- */

@@ -9,7 +9,7 @@
  * (at your option) any later version.
  *
  * This file's contents largely use xfce4-panel as a reference, which is licensed under the terms of the GNU GPL v2.
- * Additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop 
+ * Additional notes were taken from na-tray, the previous system tray for Budgie, which is part of MATE Desktop
  * and licensed under the terms of the GNU GPL v2.
  */
 
@@ -21,8 +21,8 @@
 
 // global declarations
 
-#define TRAY_REQUEST_DOCK   0
-#define TRAY_BEGIN_MESSAGE  1
+#define TRAY_REQUEST_DOCK 0
+#define TRAY_BEGIN_MESSAGE 1
 #define TRAY_CANCEL_MESSAGE 2
 
 static unsigned int message_sent_signal;
@@ -60,7 +60,7 @@ G_DEFINE_TYPE(CarbonTray, carbon_tray, G_TYPE_OBJECT)
 // public methods
 
 CarbonTray* carbon_tray_new(GtkOrientation orientation, int iconSize, int spacing) {
-	CarbonTray *self = g_object_new(CARBON_TYPE_TRAY, NULL);
+	CarbonTray* self = g_object_new(CARBON_TYPE_TRAY, NULL);
 	self->iconSize = iconSize;
 
 	self->box = gtk_box_new(orientation, spacing);
@@ -73,34 +73,30 @@ CarbonTray* carbon_tray_new(GtkOrientation orientation, int iconSize, int spacin
 		gtk_widget_set_valign(self->box, GTK_ALIGN_START);
 	}
 
-	gtk_widget_set_hexpand(self->box, FALSE);
-	gtk_widget_set_vexpand(self->box, FALSE);
-	gtk_widget_set_size_request(self->box, -1, -1);
-
 	return self;
 }
 
-void carbon_tray_add_to_container(CarbonTray *tray, GtkContainer *container) {
+void carbon_tray_add_to_container(CarbonTray* tray, GtkContainer* container) {
 	gtk_container_add(container, tray->box);
 }
 
-void carbon_tray_remove_from_container(CarbonTray *tray, GtkContainer *container) {
+void carbon_tray_remove_from_container(CarbonTray* tray, GtkContainer* container) {
 	gtk_container_remove(container, tray->box);
 }
 
-bool carbon_tray_register(CarbonTray *tray, GdkScreen *screen) {
+bool carbon_tray_register(CarbonTray* tray, GdkScreen* screen) {
 	g_signal_connect(G_OBJECT(tray->box), "draw", G_CALLBACK(carbon_tray_draw), NULL);
 
-	GtkWidget *invisible = gtk_invisible_new_for_screen(screen);
+	GtkWidget* invisible = gtk_invisible_new_for_screen(screen);
 	gtk_widget_realize(invisible);
 	gtk_widget_add_events(invisible, GDK_PROPERTY_CHANGE_MASK | GDK_STRUCTURE_MASK);
 
-	int screen_number = gdk_screen_get_number(screen);
-	char *selection_name = g_strdup_printf("_NET_SYSTEM_TRAY_S%d", screen_number);
+	int screen_number = XScreenNumberOfScreen(gdk_x11_screen_get_xscreen(screen));
+	char* selection_name = g_strdup_printf("_NET_SYSTEM_TRAY_S%d", screen_number);
 	tray->selectionAtom = gdk_atom_intern(selection_name, FALSE);
 	g_free(selection_name);
 
-	GdkDisplay *display = gdk_screen_get_display(screen);
+	GdkDisplay* display = gdk_screen_get_display(screen);
 
 	tray->invisible = GTK_WIDGET(g_object_ref(G_OBJECT(invisible)));
 	set_xproperties(tray);
@@ -125,7 +121,7 @@ bool carbon_tray_register(CarbonTray *tray, GdkScreen *screen) {
 		xevent.data.l[3] = 0;
 		xevent.data.l[4] = 0;
 
-		XSendEvent(GDK_DISPLAY_XDISPLAY(display), root_window, False, StructureNotifyMask,(XEvent*) &xevent);
+		XSendEvent(GDK_DISPLAY_XDISPLAY(display), root_window, False, StructureNotifyMask, (XEvent*) &xevent);
 
 		gdk_window_add_filter(gtk_widget_get_window(invisible), window_filter, tray);
 
@@ -135,35 +131,36 @@ bool carbon_tray_register(CarbonTray *tray, GdkScreen *screen) {
 		GdkAtom data_atom = gdk_atom_intern("_NET_SYSTEM_TRAY_MESSAGE_DATA", FALSE);
 		tray->dataAtom = gdk_x11_atom_to_xatom_for_display(display, data_atom);
 	} else {
-	  	g_object_unref(G_OBJECT(tray->invisible));
-	  	tray->invisible = NULL;
+		g_object_unref(G_OBJECT(tray->invisible));
+		tray->invisible = NULL;
 		gtk_widget_destroy(invisible);
 	}
 
-  	return succeed;
+	return succeed;
 }
 
-void carbon_tray_unregister(CarbonTray *tray) {
+void carbon_tray_unregister(CarbonTray* tray) {
 	if (GTK_IS_WIDGET(tray->invisible) == FALSE) {
 		return;
 	}
 
-	GtkWidget *invisible = tray->invisible;
-	GdkDisplay *display = gtk_widget_get_display(invisible);
-	GdkWindow *owner = gdk_selection_owner_get_for_display(display, tray->selectionAtom);
+	GtkWidget* invisible = tray->invisible;
+	GdkWindow* invisibleWindow = gtk_widget_get_window(invisible);
+	GdkDisplay* display = gtk_widget_get_display(invisible);
+	GdkWindow* owner = gdk_selection_owner_get_for_display(display, tray->selectionAtom);
 
 	if (owner == gtk_widget_get_window(invisible)) {
-      	gdk_selection_owner_set_for_display(display, NULL, tray->selectionAtom, gdk_x11_get_server_time(gtk_widget_get_window(invisible)), TRUE);
-    }
+		gdk_selection_owner_set_for_display(display, NULL, tray->selectionAtom, gdk_x11_get_server_time(invisibleWindow), TRUE);
+	}
 
-	gdk_window_remove_filter(gtk_widget_get_window(invisible), window_filter, tray);
+	gdk_window_remove_filter(invisibleWindow, window_filter, tray);
 
 	tray->invisible = NULL;
 	gtk_widget_destroy(invisible);
 	g_object_unref(G_OBJECT(invisible));
 }
 
-void carbon_tray_set_spacing(CarbonTray *tray, int spacing) {
+void carbon_tray_set_spacing(CarbonTray* tray, int spacing) {
 	gtk_box_set_spacing(GTK_BOX(tray->box), spacing);
 }
 
@@ -181,39 +178,38 @@ static void carbon_tray_init(CarbonTray* self) {
 	self->messages = NULL;
 }
 
-static void carbon_tray_class_init(CarbonTrayClass *klass) {
-	GObjectClass *gobjectClass = G_OBJECT_CLASS(klass);
+static void carbon_tray_class_init(CarbonTrayClass* klass) {
+	GObjectClass* gobjectClass = G_OBJECT_CLASS(klass);
 	gobjectClass->dispose = carbon_tray_dispose;
 	gobjectClass->finalize = carbon_tray_finalize;
 
-	g_signal_new("message-sent", G_OBJECT_CLASS_TYPE(klass), G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(CarbonTrayClass, message_sent), NULL, NULL,
-		  g_cclosure_user_marshal_VOID__OBJECT_STRING_LONG_LONG,
-		  G_TYPE_NONE, 4,
-		  GTK_TYPE_SOCKET,
-		  G_TYPE_STRING,
-		  G_TYPE_LONG,
-		  G_TYPE_LONG);
+	g_signal_new(
+		"message-sent",
+		G_OBJECT_CLASS_TYPE(klass),
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET(CarbonTrayClass, message_sent),
+		NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_STRING_LONG_LONG,
+		G_TYPE_NONE, 4, GTK_TYPE_SOCKET, G_TYPE_STRING, G_TYPE_LONG, G_TYPE_LONG);
 }
 
-static void carbon_tray_dispose(GObject *object) {
+static void carbon_tray_dispose(GObject* object) {
 	carbon_tray_unregister(CARBON_TRAY(object));
 }
 
-static void carbon_tray_finalize(GObject *object) {
-	CarbonTray *tray = CARBON_TRAY(object);
+static void carbon_tray_finalize(GObject* object) {
+	CarbonTray* tray = CARBON_TRAY(object);
 
 	g_hash_table_destroy(tray->socketTable);
 
 	if (tray->messages) {
-		g_slist_foreach(tray->messages,(GFunc)(void(*)(void)) free_message, NULL);
+		g_slist_foreach(tray->messages, (GFunc)(void (*)(void)) free_message, NULL);
 		g_slist_free(tray->messages);
 	}
 
 	G_OBJECT_CLASS(carbon_tray_parent_class)->finalize(object);
 }
 
-static int carbon_tray_draw(GtkWidget *widget, cairo_t *cr) {
+static int carbon_tray_draw(GtkWidget* widget, cairo_t* cr) {
 	CarbonDrawData data;
 	data.box = widget;
 	data.cr = cr;
@@ -223,22 +219,22 @@ static int carbon_tray_draw(GtkWidget *widget, cairo_t *cr) {
 	return TRUE;
 }
 
-static GdkFilterReturn window_filter(GdkXEvent *xev, GdkEvent *event, void *userData) {
+static GdkFilterReturn window_filter(GdkXEvent* xev, GdkEvent* event, void* userData) {
 	// event goes unused
 	(void) event;
 
-	XEvent *xevent = (XEvent*) xev;
-	CarbonTray *tray = (CarbonTray*) userData;
+	XEvent* xevent = (XEvent*) xev;
+	CarbonTray* tray = (CarbonTray*) userData;
 
 	if (GTK_IS_WIDGET(tray->invisible) == FALSE) {
 		return GDK_FILTER_CONTINUE;
 	}
 
 	if (xevent->type == ClientMessage) {
-		XClientMessageEvent *xclient = (XClientMessageEvent*) xevent;
+		XClientMessageEvent* xclient = (XClientMessageEvent*) xevent;
 
 		if (xclient->message_type == tray->opcodeAtom) {
-			switch(xclient->data.l[1]) {
+			switch (xclient->data.l[1]) {
 				case TRAY_REQUEST_DOCK:
 					handle_dock_request(tray, xclient);
 					return GDK_FILTER_REMOVE;
@@ -260,7 +256,7 @@ static GdkFilterReturn window_filter(GdkXEvent *xev, GdkEvent *event, void *user
 	return GDK_FILTER_CONTINUE;
 }
 
-static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
+static void handle_dock_request(CarbonTray* tray, XClientMessageEvent* xevent) {
 	Window window = (Window) xevent->data.l[2];
 
 	/* check if we already have this window. if we do, we might as well re-dock it at the application's request */
@@ -269,12 +265,12 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 	}
 
 	/* create the socket */
-	CarbonChild *child = carbon_child_new(tray->iconSize, gtk_widget_get_screen(tray->invisible), window);
+	CarbonChild* child = carbon_child_new(tray->iconSize, gtk_widget_get_screen(tray->invisible), window);
 	if (child == NULL) {
 		return;
 	}
 
-	GtkWidget *socket = GTK_WIDGET(child);
+	GtkWidget* socket = GTK_WIDGET(child);
 
 	// networkmanager applet should be packed at the end
 	if (child->wmclass != NULL && strcmp(child->wmclass, "Nm-applet") == 0) {
@@ -302,8 +298,8 @@ static void handle_dock_request(CarbonTray *tray, XClientMessageEvent *xevent) {
 	}
 }
 
-static bool handle_undock_request(GtkSocket *socket, void *userData) {
-	CarbonTray *tray = CARBON_TRAY(userData);
+static bool handle_undock_request(GtkSocket* socket, void* userData) {
+	CarbonTray* tray = CARBON_TRAY(userData);
 	Window window = CARBON_CHILD(socket)->iconWindow;
 
 	gtk_container_remove(GTK_CONTAINER(tray->box), GTK_WIDGET(socket));
@@ -313,10 +309,11 @@ static bool handle_undock_request(GtkSocket *socket, void *userData) {
 	return FALSE;
 }
 
-static void handle_message_begin(CarbonTray *tray, XClientMessageEvent *xevent) {
-	GtkSocket *socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(xevent->window));
-	if (socket == NULL)
+static void handle_message_begin(CarbonTray* tray, XClientMessageEvent* xevent) {
+	GtkSocket* socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(xevent->window));
+	if (socket == NULL) {
 		return;
+	}
 
 	remove_message(tray, xevent);
 
@@ -327,34 +324,33 @@ static void handle_message_begin(CarbonTray *tray, XClientMessageEvent *xevent) 
 	if (length == 0) {
 		g_signal_emit(tray, message_sent_signal, 0, socket, "", id, timeout);
 	} else {
-		CarbonMessage *message = &(CarbonMessage) {
+		CarbonMessage* message = &(CarbonMessage){
 			.window = xevent->window,
 			.timeout = timeout,
 			.length = length,
 			.id = id,
 			.remainingLength = length,
-			.string = g_malloc((unsigned long) length + 1)
-		};
+			.string = g_malloc((unsigned long) length + 1)};
 		message->string[length] = '\0'; // always remember to null terminate
 
 		tray->messages = g_slist_prepend(tray->messages, message);
 	}
 }
 
-static void handle_message_data(CarbonTray *tray, XClientMessageEvent *xevent) {
-	CarbonMessage *message;
-	GSList *it;
+static void handle_message_data(CarbonTray* tray, XClientMessageEvent* xevent) {
+	CarbonMessage* message;
+	GSList* it;
 
-	for(it = tray->messages; it != NULL; it = it->next) {
-		message = it -> data;
+	for (it = tray->messages; it != NULL; it = it->next) {
+		message = it->data;
 
 		if (xevent->window == message->window) {
 			long length = MIN(message->remainingLength, 20);
-			memcpy((message->string + message->length - message->remainingLength), &xevent->data,(unsigned long) length);
+			memcpy((message->string + message->length - message->remainingLength), &xevent->data, (unsigned long) length);
 			message->remainingLength -= length;
 
 			if (message->remainingLength == 0) {
-				GtkSocket *socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(message->window));
+				GtkSocket* socket = g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(message->window));
 
 				if (socket != NULL) {
 					g_signal_emit(tray, message_sent_signal, 0, socket, message->string, message->id, message->timeout);
@@ -367,14 +363,14 @@ static void handle_message_data(CarbonTray *tray, XClientMessageEvent *xevent) {
 	}
 }
 
-static void handle_message_cancel(CarbonTray *tray, XClientMessageEvent *xevent) {
+static void handle_message_cancel(CarbonTray* tray, XClientMessageEvent* xevent) {
 	remove_message(tray, xevent);
 }
 
-static void remove_message(CarbonTray *tray, XClientMessageEvent *xevent) {
-	CarbonMessage *message;
-	GSList *it;
-	for(it = tray->messages; it != NULL; it = it->next) {
+static void remove_message(CarbonTray* tray, XClientMessageEvent* xevent) {
+	CarbonMessage* message;
+	GSList* it;
+	for (it = tray->messages; it != NULL; it = it->next) {
 		message = it->data;
 
 		if (xevent->window == message->window && xevent->data.l[4] == message->id) {
@@ -385,60 +381,51 @@ static void remove_message(CarbonTray *tray, XClientMessageEvent *xevent) {
 	}
 }
 
-static void free_message(CarbonMessage *message) {
+static void free_message(CarbonMessage* message) {
 	g_free(message->string);
 	g_slice_free(CarbonMessage, message);
 }
 
-static void set_xproperties(CarbonTray *tray) {
-	GdkDisplay *display = gtk_widget_get_display(tray->invisible);
-	GdkScreen *screen = gtk_invisible_get_screen(GTK_INVISIBLE(tray->invisible));	
+static void set_xproperties(CarbonTray* tray) {
+	GdkDisplay* display = gtk_widget_get_display(tray->invisible);
+	GdkScreen* screen = gtk_invisible_get_screen(GTK_INVISIBLE(tray->invisible));
 
 	// set the visual
 
-	GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+	GdkVisual* visual = gdk_screen_get_rgba_visual(screen);
 
-	Visual *xvisual;
+	Visual* xvisual;
 	if (visual != NULL) {
 		xvisual = GDK_VISUAL_XVISUAL(visual);
 	} else {
 		xvisual = GDK_VISUAL_XVISUAL(gdk_screen_get_system_visual(screen));
 	}
 
-	unsigned long data[1] = { XVisualIDFromVisual(xvisual) };
+	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+	Window xwindow = GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible));
+
+	// set the RGBA visual
+
+	unsigned long data[1] = {XVisualIDFromVisual(xvisual)};
+	unsigned char* dataPtr = (unsigned char*) &data;
 	Atom atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_VISUAL");
-	XChangeProperty(GDK_DISPLAY_XDISPLAY(display),
-					GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-					atom,
-					XA_VISUALID, 32,
-					PropModeReplace,
-					(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 
 	// set the icon size
 
 	data[0] = (unsigned int) tray->iconSize;
 	atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_ICON_SIZE");
-	XChangeProperty(GDK_DISPLAY_XDISPLAY(display),
-                   	GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-                   	atom,
-                   	XA_CARDINAL, 32,
-                   	PropModeReplace,
-                   	(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 
-	// set orientation
+	// set the orientation
 
 	data[0] = (unsigned int) gtk_orientable_get_orientation(GTK_ORIENTABLE(tray->box)) == GTK_ORIENTATION_HORIZONTAL ? 0 : 1;
 	atom = gdk_x11_get_xatom_by_name_for_display(display, "_NET_SYSTEM_TRAY_ORIENTATION");
-	XChangeProperty(GDK_DISPLAY_XDISPLAY(display),
-					GDK_WINDOW_XID(gtk_widget_get_window(tray->invisible)),
-					atom,
-					XA_CARDINAL, 32,
-					PropModeReplace,
-					(guchar*) &data, 1);
+	XChangeProperty(xdisplay, xwindow, atom, XA_VISUALID, 32, PropModeReplace, dataPtr, 1);
 }
 
-static void draw_child(GtkWidget *widget, void *data) {
-	CarbonDrawData *dt = (CarbonDrawData*) data;
-	CarbonChild *child = CARBON_CHILD(widget);
+static void draw_child(GtkWidget* widget, void* data) {
+	CarbonDrawData* dt = (CarbonDrawData*) data;
+	CarbonChild* child = CARBON_CHILD(widget);
 	carbon_child_draw_on_tray(child, GTK_WIDGET(dt->box), dt->cr);
 }

@@ -19,13 +19,17 @@ namespace GLib {
 		public bool get_is_hidden ();
 		[CCode (array_length = false, array_null_terminated = true)]
 		public unowned string[] get_keywords ();
+		public string? get_locale_string (string key);
 		public bool get_nodisplay ();
 		public bool get_show_in (string desktop_env);
 		public unowned string get_startup_wm_class ();
-		public unowned string get_string (string key);
+		public string get_string (string key);
+		[CCode (array_length_type = "gsize")]
+		public string[] get_string_list (string key);
 		public bool has_key (string key);
 		public void launch_action (string action_name, GLib.AppLaunchContext launch_context);
 		public bool launch_uris_as_manager (GLib.List<string> uris, GLib.AppLaunchContext? launch_context, GLib.SpawnFlags spawn_flags, GLib.SpawnChildSetupFunc? user_setup = null, GLib.DesktopAppLaunchCallback? pid_callback = null) throws GLib.Error;
+		public bool launch_uris_as_manager_with_fds (GLib.List<string> uris, GLib.AppLaunchContext? launch_context, GLib.SpawnFlags spawn_flags, GLib.SpawnChildSetupFunc? user_setup = null, GLib.DesktopAppLaunchCallback? pid_callback = null, int stdin_fd = -1, int stdout_fd = -1, int stderr_fd = -1) throws GLib.Error;
 		[CCode (array_length = false, array_null_terminated = true)]
 		public unowned string[] list_actions ();
 		[CCode (array_length = false, array_null_terminated = true)]
@@ -60,7 +64,7 @@ namespace GLib {
 		public UnixFDMessage ();
 		public bool append_fd (int fd) throws GLib.Error;
 		public unowned GLib.UnixFDList get_fd_list ();
-		public int steal_fds (int length);
+		public int[] steal_fds ();
 		[CCode (has_construct_function = false, type = "GSocketControlMessage*")]
 		public UnixFDMessage.with_fd_list (GLib.UnixFDList fd_list);
 		public GLib.UnixFDList fd_list { get; construct; }
@@ -80,14 +84,18 @@ namespace GLib {
 		[CCode (cname = "g_unix_mount_at")]
 		public UnixMountEntry (string mount_path, out uint64 time_read = null);
 		public int compare (GLib.UnixMountEntry mount);
-		[CCode (cname = "g_unix_mounts_for")]
+		[CCode (cname = "g_unix_mount_for")]
 		[Version (since = "2.52")]
-		public static GLib.List<GLib.UnixMountEntry> @for (string file_path, out uint64 time_read = null);
+		public UnixMountEntry.@for (string file_path, out uint64 time_read = null);
 		[CCode (cname = "g_unix_mounts_get")]
 		public static GLib.List<GLib.UnixMountEntry> @get (out uint64 time_read = null);
 		public unowned string get_device_path ();
 		public unowned string get_fs_type ();
 		public unowned string get_mount_path ();
+		[Version (since = "2.58")]
+		public unowned string get_options ();
+		[Version (since = "2.60")]
+		public unowned string get_root_path ();
 		public bool guess_can_eject ();
 		public GLib.Icon guess_icon ();
 		public string guess_name ();
@@ -156,20 +164,24 @@ namespace GLib {
 		[NoAccessorMethod]
 		public GLib.ByteArray path_as_array { owned get; construct; }
 	}
-	[CCode (cheader_filename = "gio/gunixmounts.h")]
+	[CCode (cheader_filename = "gio/gdesktopappinfo.h")]
 	public interface DesktopAppInfoLookup : GLib.Object {
-		public abstract unowned GLib.AppInfo get_default_for_uri_scheme (string uri_scheme);
+		public abstract GLib.AppInfo get_default_for_uri_scheme (string uri_scheme);
 	}
 	[CCode (cheader_filename = "gio/gfiledescriptorbased.h")]
 	public interface FileDescriptorBased : GLib.Object {
 		public abstract int get_fd ();
 	}
-	[CCode (cheader_filename = "gio/gunixmounts.h")]
+	[CCode (cheader_filename = "gio/gdesktopappinfo.h")]
 	public delegate void DesktopAppLaunchCallback (GLib.DesktopAppInfo appinfo, GLib.Pid pid);
-	[CCode (cheader_filename = "gio/gunixmounts.h")]
+	[CCode (cheader_filename = "gio/gdesktopappinfo.h")]
 	public const string DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME;
 	[CCode (cheader_filename = "gio/gunixmounts.h", cname = "g_unix_is_mount_path_system_internal")]
 	public static bool is_mount_path_system_internal (string mount_path);
+	[CCode (cheader_filename = "gio/gunixmounts.h", cname = "g_unix_is_system_device_path")]
+	public static bool is_system_device_path (string device_path);
+	[CCode (cheader_filename = "gio/gunixmounts.h", cname = "g_unix_is_system_fs_type")]
+	public static bool is_system_fs_type (string fs_type);
 	[CCode (cheader_filename = "gio/gunixmounts.h", cname = "g_unix_mount_points_changed_since")]
 	public static bool mount_points_changed_since (uint64 time);
 	[CCode (cheader_filename = "gio/gunixmounts.h", cname = "g_unix_mounts_changed_since")]

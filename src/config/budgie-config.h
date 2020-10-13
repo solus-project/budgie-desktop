@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2019 Budgie Desktop Developers
+ * Copyright © 2015-2020 Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,23 +13,23 @@
 #define _BUDGIE_CONFIG_H_
 
 /* i.e. /usr/lib/budgie-desktop */
-extern const char *BUDGIE_MODULE_DIRECTORY;
+extern const char* BUDGIE_MODULE_DIRECTORY;
 
 /* i.e. /usr/share/budgie-desktop/plugins */
-extern const char *BUDGIE_MODULE_DATA_DIRECTORY;
+extern const char* BUDGIE_MODULE_DATA_DIRECTORY;
 
 /* i.e. /usr/share/ */
-extern const char *BUDGIE_DATADIR;
+extern const char* BUDGIE_DATADIR;
 
-extern const char *BUDGIE_VERSION;
+extern const char* BUDGIE_VERSION;
 
-extern const char *BUDGIE_WEBSITE;
+extern const char* BUDGIE_WEBSITE;
 
-extern const char *BUDGIE_LOCALEDIR;
+extern const char* BUDGIE_LOCALEDIR;
 
-extern const char *BUDGIE_GETTEXT_PACKAGE;
+extern const char* BUDGIE_GETTEXT_PACKAGE;
 
 /* sysconfdir */
-extern const char *BUDGIE_CONFDIR;
+extern const char* BUDGIE_CONFDIR;
 
 #endif

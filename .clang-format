@@ -1,84 +1,62 @@
 ---
+Language: Cpp
 AccessModifierOffset: 0
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
-#uncomment for clang 3.9
-#AlignConsecutiveDeclarations: false
 AlignEscapedNewlinesLeft: false
 AlignOperands: true
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-# AlwaysBreakAfterDefinitionReturnType: None
-#uncomment for clang 3.9
-#AlwaysBreakAfterReturnType: None
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: false
-BinPackArguments: false
+BinPackArguments: true
 BinPackParameters: true
-# BraceWrapping: (not set since BreakBeforeBraces is not Custom)
 BreakBeforeBinaryOperators: None
-# BreakAfterJavaFieldAnnotations: (not java)
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Linux
+BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: false
-#uncomment for clang 3.9
-#BreakStringLiterals: false
-ColumnLimit: 100
+ColumnLimit: 0
 CommentPragmas:  '\*\<'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
-Cpp11BracedListStyle: false
+Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: false
 ForEachMacros: [ ]
-#Uncomment for clang 3.9
-#IncludeCategories:
-#  - Regex: '^"'
-#    Priority: 1
-# IncludeIsMainRegex: (project doesn't use a main includes that can add other includes via regex)
-IndentCaseLabels: false
-IndentWidth: 8
+IndentCaseLabels: true
+IndentWidth: 4
 IndentWrappedFunctionNames: false
-# JavaScriptQuotes: (not javascript)
 KeepEmptyLinesAtTheStartOfBlocks: false
-Language: Cpp
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
-MaxEmptyLinesToKeep: 1
+MaxEmptyLinesToKeep: 3
 NamespaceIndentation: None
-# ObjCBlockIndentWidth: (not objc)
-# ObjCSpaceAfterProperty: (not objc)
-# ObjCSpaceBeforeProtocolList: (not objc)
 PenaltyBreakBeforeFirstCallParameter: 400
 PenaltyBreakComment: 0
-# PenaltyBreakFirstLessLess: (not cpp)
 PenaltyBreakString: 500
 PenaltyExcessCharacter: 10000
 PenaltyReturnTypeOnItsOwnLine: 600
-PointerAlignment: Right
-#uncomment for clang 3.9
-#ReflowComments: true
-#uncomment for clang 3.9
-#SortIncludes: true
-SpaceAfterCStyleCast: false
+PointerAlignment: Left
+SpaceAfterCStyleCast: true
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
-# SpacesInContainerLiterals: (not objc or javascript)
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Cpp11
-TabWidth:        8
-UseTab:          Never
+TabWidth:        4
+UseTab:          Always
 ...

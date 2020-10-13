@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2018-2019 Budgie Desktop Developers
+ * Copyright © 2018-2020 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,17 +10,16 @@
  */
 
 public class RavenWidget : Gtk.Box {
+	/**
+	 * set_show will set our show / hide to specified state
+	 */
+	public void set_show(bool show) {
+		if (show) {
+			show_all();
+		} else {
+			hide();
+		}
 
-    /**
-     * set_show will set our show / hide to specified state
-     */
-    public void set_show(bool show) {
-        if (show) {
-            show_all();
-        } else {
-            hide();
-        }
-
-        queue_draw();
-    }
+		queue_draw();
+	}
 }
