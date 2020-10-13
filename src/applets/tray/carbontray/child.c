@@ -138,17 +138,18 @@ static void carbon_child_realize(GtkWidget* widget) {
 	GTK_WIDGET_CLASS(carbon_child_parent_class)->realize(widget);
 
 	GdkWindow* window = gtk_widget_get_window(widget);
+	Display* xdisplay = GDK_WINDOW_XDISPLAY(window);
+	Window xwindow = GDK_WINDOW_XID(window);
 
 	if (self->isComposited) {
-		GdkRGBA transparent;
-		gdk_window_set_background_rgba(window, &transparent);
+		XSetWindowBackground(xdisplay, xwindow, 0);
+		XCompositeRedirectWindow(xdisplay, xwindow, CompositeRedirectManual);
 	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
-		gdk_window_set_background_pattern(window, NULL);
+		XSetWindowBackgroundPixmap(xdisplay, xwindow, None);
 	} else {
 		self->parentRelativeBg = FALSE;
 	}
 
-	gdk_window_set_composited(window, self->isComposited);
 	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
 }
 
