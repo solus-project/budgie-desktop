@@ -30,6 +30,12 @@ public class UserIndicatorWindow : Budgie.Popover {
 	private PropertiesInterface? current_user_props = null;
 
 	private IndicatorItem? user_item = null;
+	private IndicatorItem? lock_menu = null;
+	private IndicatorItem? suspend_menu = null;
+	private IndicatorItem? hibernate_menu = null;
+	private IndicatorItem? reboot_menu = null;
+	private IndicatorItem? shutdown_menu = null;
+	private IndicatorItem? logout_menu = null;
 
 	async void setup_dbus() {
 		try {
@@ -96,11 +102,11 @@ public class UserIndicatorWindow : Budgie.Popover {
 		// The rest
 		Gtk.Separator separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 
-		IndicatorItem lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
-		IndicatorItem suspend_menu = new IndicatorItem(_("Suspend"), "system-suspend-symbolic", false);
-		IndicatorItem hibernate_menu = new IndicatorItem(_("Hibernate"), "system-hibernate-symbolic", false);
-		IndicatorItem reboot_menu = new IndicatorItem(_("Restart"), "system-restart-symbolic", false);
-		IndicatorItem shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
+		lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
+		suspend_menu = new IndicatorItem(_("Suspend"), "system-suspend-symbolic", false);
+		hibernate_menu = new IndicatorItem(_("Hibernate"), "system-hibernate-symbolic", false);
+		reboot_menu = new IndicatorItem(_("Restart"), "system-restart-symbolic", false);
+		shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 
 		// Adding stuff
 		items.add(user_item);
@@ -170,12 +176,36 @@ public class UserIndicatorWindow : Budgie.Popover {
 		this.unmap.connect(hide_usersection); // Ensure User Section is hidden.
 	}
 
+	// hide will override so we can unfocus items
+	public override void hide() {
+		Gtk.Button[] buttons = {
+			user_item,
+			logout_menu,
+			lock_menu,
+			suspend_menu,
+			reboot_menu,
+			hibernate_menu,
+			shutdown_menu
+		};
+
+		for (var i  = 0; i < buttons.length; i++) {
+			Gtk.Button button = buttons[0];
+
+			if (button == null) { // Button doesn't exist
+				continue;
+			}
+
+			button.has_focus = false;
+			button.is_focus = false;
+		}
+
+		base.hide();
+	}
+
 	private Gtk.Revealer create_usersection() {
 		Gtk.Revealer user_section = new Gtk.Revealer();
 		Gtk.Box user_section_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		//IndicatorItem switch_user_menu = new IndicatorItem(_("Switch User"), "network-transmit-receive-symbolic", false);
-		IndicatorItem logout_menu = new IndicatorItem(_("Logout"), "system-log-out-symbolic", false);
-		//user_section_box.pack_start(switch_user_menu, false, false, 0); // Add the Switch User item
+		logout_menu = new IndicatorItem(_("Logout"), "system-log-out-symbolic", false);
 		user_section_box.pack_start(logout_menu, false, false, 0); // Add the Logout item
 		user_section.add(user_section_box); // Add the User Section box
 
