@@ -115,12 +115,12 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 
 	public override void closed() {
 		foreach (Gtk.Widget item in mounts_listbox.get_children()) {
-			ListItem list_item = (ListItem) (item as Gtk.ListBoxRow).get_child();
+			ListItem list_item = (ListItem) ((Gtk.ListBoxRow) item).get_child();
 			list_item.cancel_operation();
 		}
 
 		foreach (Gtk.Widget item in networks_listbox.get_children()) {
-			ListItem list_item = (ListItem) (item as Gtk.ListBoxRow).get_child();
+			ListItem list_item = (ListItem) ((Gtk.ListBoxRow) item).get_child();
 			list_item.cancel_operation();
 		}
 

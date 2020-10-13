@@ -221,7 +221,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		}
 
 		/* Activate the source_widget category */
-		(source_widget as Gtk.ToggleButton).set_active(true);
+		b.set_active(true);
 		return Gdk.EVENT_PROPAGATE;
 	}
 
@@ -527,7 +527,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 			return true;
 		}
 
-		var keywords = (info as DesktopAppInfo).get_keywords();
+		var keywords = ((DesktopAppInfo) info).get_keywords();
 		if (keywords == null || keywords.length < 1) {
 			return false;
 		}

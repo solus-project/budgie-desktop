@@ -25,8 +25,8 @@ public class MprisClient : GLib.Object {
  * We need to probe the dbus daemon directly, hence this interface
  */
 [DBus (name="org.freedesktop.DBus")]
-public interface DBusImpl : GLib.Object {
-	public abstract async string[] list_names() throws IOError;
+public interface DBusImpl : Object {
+	public abstract async string[] list_names() throws DBusError, IOError;
 	public signal void name_owner_changed(string name, string old_owner, string new_owner);
 	public signal void name_acquired(string name);
 }

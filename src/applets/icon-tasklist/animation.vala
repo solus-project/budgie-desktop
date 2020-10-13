@@ -39,7 +39,7 @@ namespace BudgieTaskList {
 		public bool can_anim; /**<Whether we can animate ?*/
 		public int64 elapsed; /**<Elapsed time */
 		public bool no_reset; /**<Used sometimes for switching an animation*/
-		private AnimCompletionFunc compl;
+		private unowned AnimCompletionFunc compl;
 
 		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock frame) {
 			int64 time = frame.get_frame_time();

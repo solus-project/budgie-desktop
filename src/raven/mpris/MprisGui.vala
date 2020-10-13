@@ -250,17 +250,17 @@ public class ClientWidget : Gtk.Box {
 			case "Playing":
 				header.icon_name = "media-playback-start-symbolic";
 				header.text = "%s - Playing".printf(client.player.identity);
-				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			case "Paused":
 				header.icon_name = "media-playback-pause-symbolic";
 				header.text = "%s - Paused".printf(client.player.identity);
-				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			default:
 				header.text = client.player.identity;
 				header.icon_name = "media-playback-stop-symbolic";
-				(play_btn.get_image() as Gtk.Image).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 		}
 	}

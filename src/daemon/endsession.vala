@@ -138,7 +138,7 @@ namespace Budgie {
 			});
 		}
 
-		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) {
+		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {
 			Opened(); // Indicate that we've opened the EndSession dialog
 			/* Right now we ignore type, time and inhibitors. Shush */
 			unowned Gtk.Widget? main_show = null;
@@ -186,12 +186,12 @@ namespace Budgie {
 					w.hide();
 				}
 				main_show.show();
-				(main_show as Gtk.Bin).get_child().show();
+				((Gtk.Bin) main_show).get_child().show();
 			} else {
 				for (int i = 0; i < all_widgets.length; i++) {
 					unowned Gtk.Widget? w = all_widgets[i];
 					w.show();
-					(w as Gtk.Bin).get_child().show();
+					((Gtk.Bin) w).get_child().show();
 				}
 			}
 
@@ -206,14 +206,14 @@ namespace Budgie {
 				Gdk.Display? display = screen.get_display();
 
 				if (display is Gdk.X11.Display) {
-					win.focus((display as Gdk.X11.Display).get_user_time());
+					win.focus(((Gdk.X11.Display) display).get_user_time());
 				} else {
 					win.focus(Gtk.get_current_event_time());
 				}
 			}
 		}
 
-		public void Close() {
+		public void Close() throws DBusError, IOError {
 			hide();
 			Closed();
 		}

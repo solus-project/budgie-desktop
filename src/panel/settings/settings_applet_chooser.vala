@@ -115,8 +115,8 @@ namespace Budgie {
 		* Super simple sorting of applets in alphabetical listing
 		*/
 		int sort_applets(Gtk.ListBoxRow? a, Gtk.ListBoxRow? b) {
-			Peas.PluginInfo? infoA = (a.get_child() as PluginItem).plugin;
-			Peas.PluginInfo? infoB = (b.get_child() as PluginItem).plugin;
+			Peas.PluginInfo? infoA = ((PluginItem) a.get_child()).plugin;
+			Peas.PluginInfo? infoB = ((PluginItem) b.get_child()).plugin;
 
 			return strcmp(infoA.get_name().down(), infoB.get_name().down());
 		}
@@ -134,7 +134,7 @@ namespace Budgie {
 			this.button_ok.set_sensitive(true);
 
 			/* TODO: Switch name -> module_name */
-			this.applet_id = (row.get_child() as PluginItem).plugin.get_name();
+			this.applet_id = ((PluginItem) row.get_child()).plugin.get_name();
 		}
 
 		/**

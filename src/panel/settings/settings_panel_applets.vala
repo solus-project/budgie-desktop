@@ -146,7 +146,7 @@ namespace Budgie {
 			Budgie.AppletInfo? info = null;
 
 			if (row != null) {
-				info = (row.get_child() as AppletItem).applet;
+				info = ((AppletItem) row.get_child()).applet;
 			}
 
 			/* Require applet info to be useful. */
@@ -343,10 +343,21 @@ namespace Budgie {
 		* Sort the list in accordance with alignment and actual position
 		*/
 		int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after) {
-			unowned Budgie.AppletInfo? before_info = (before.get_child() as AppletItem).applet;
-			unowned Budgie.AppletInfo? after_info = (after.get_child() as AppletItem).applet;
+			AppletItem? before_child = before.get_child() as AppletItem;
+			AppletItem? after_child = after.get_child() as AppletItem;
 
-			if (before_info != null && after_info != null && before_info.alignment != after_info.alignment) {
+			if (before_child == null || after_child == null) {
+				return 0;
+			}
+
+			unowned Budgie.AppletInfo? before_info = before_child.applet;
+			unowned Budgie.AppletInfo? after_info = after_child.applet;
+
+			if (before_info == null || after_info == null) {
+				return 0;
+			}
+
+			if (before_info.alignment != after_info.alignment) {
 				int bi = align_to_int(before_info.alignment);
 				int ai = align_to_int(after_info.alignment);
 
@@ -355,13 +366,7 @@ namespace Budgie {
 				} else {
 					return 1;
 				}
-			}
-
-			if (after_info == null) {
-				return 0;
-			}
-
-			if (before_info.position < after_info.position) {
+			} else if (before_info.position < after_info.position) {
 				return -1;
 			} else if (before_info.position > after_info.position) {
 				return 1;
@@ -380,12 +385,12 @@ namespace Budgie {
 			unowned Budgie.AppletInfo? after_info = null;
 
 			if (before != null) {
-				before_info = (before.get_child() as AppletItem).applet;
+				before_info = ((AppletItem) before.get_child()).applet;
 				prev = before_info.alignment;
 			}
 
 			if (after != null) {
-				after_info = (after.get_child() as AppletItem).applet;
+				after_info = ((AppletItem) after.get_child()).applet;
 				next = after_info.alignment;
 			}
 

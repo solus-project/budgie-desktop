@@ -129,12 +129,16 @@ namespace Workspaces {
 			add_button.drag_data_received.connect(on_add_button_drag_data_received);
 
 			add_button.button_release_event.connect((event) => {
-				int new_index = wm_proxy.AppendNewWorkspace(event.time);
+				try {
+					int new_index = wm_proxy.AppendNewWorkspace(event.time);
 
-				if (new_index != -1) {
-					set_current_workspace();
-				} else if (!below_max_workspace_count()) { // Last workspace
-					add_button_revealer.set_reveal_child(false); // Hide add button
+					if (new_index != -1) {
+						set_current_workspace();
+					} else if (!below_max_workspace_count()) { // Last workspace
+						add_button_revealer.set_reveal_child(false); // Hide add button
+					}
+				} catch (Error e) {
+					warning("Failed to append new workspace: %s", e.message);
 				}
 
 				return false;
@@ -143,7 +147,7 @@ namespace Workspaces {
 			Idle.add(() => {
 				Timeout.add(500, () => {
 					startup = false;
-					update_workspaces();
+					update_workspaces.begin();
 					return false;
 				});
 				return false;
@@ -333,7 +337,7 @@ namespace Workspaces {
 				window_connections.remove(window);
 			}
 
-			update_workspaces();
+			update_workspaces.begin();
 		}
 
 		private bool on_add_button_drag_drop(Gtk.Widget widget, Gdk.DragContext context, int x, int y, uint time) {
@@ -357,18 +361,23 @@ namespace Workspaces {
 		private void on_add_button_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint target_type, uint time) {
 			bool dnd_success = false;
 			if (selection_data != null && selection_data.get_length() >= 0) {
-				ulong* data = (ulong*)selection_data.get_data();
+				ulong* data = (ulong*) selection_data.get_data();
 				if (data != null) {
 					Wnck.Window window = Wnck.Window.@get(*data);
-					int index = wm_proxy.AppendNewWorkspace(time);
 
-					if (index != -1) { // Successfully added workspace
-						dynamically_created_workspaces.append(index);
-						Timeout.add(50, () => {
-							window.move_to_workspace(wnck_screen.get_workspace(index));
-							return false;
-						});
-						dnd_success = true;
+					try {
+						int index = wm_proxy.AppendNewWorkspace(time);
+
+						if (index != -1) { // Successfully added workspace
+							dynamically_created_workspaces.append(index);
+							Timeout.add(50, () => {
+								window.move_to_workspace(wnck_screen.get_workspace(index));
+								return false;
+							});
+							dnd_success = true;
+						}
+					} catch (Error e) {
+						warning("Failed to append new workspace: %s", e.message);
 					}
 				}
 			}
@@ -388,7 +397,7 @@ namespace Workspaces {
 
 			size_change++;
 			if (size_change == 2) {
-				update_workspaces();
+				update_workspaces.begin();
 				size_change = 0;
 			}
 		}
@@ -414,7 +423,7 @@ namespace Workspaces {
 
 			if (!startup) {
 				Timeout.add(500, () => {
-					update_workspaces();
+					update_workspaces.begin();
 					return false;
 				});
 			}
@@ -427,12 +436,16 @@ namespace Workspaces {
 
 			var workspace = wnck_screen.get_workspace(index);
 
-			wm_proxy.RemoveWorkspaceByIndex(index, time);
+			try {
+				wm_proxy.RemoveWorkspaceByIndex(index, time);
 
-			var _workspace = wnck_screen.get_active_workspace();
-			if (_workspace != null && _workspace == workspace) {
-				var previous = wnck_screen.get_workspace((index == 0) ? index : index - 1);
-				previous.activate(time);
+				var _workspace = wnck_screen.get_active_workspace();
+				if (_workspace != null && _workspace == workspace) {
+					var previous = wnck_screen.get_workspace((index == 0) ? index : index - 1);
+					previous.activate(time);
+				}
+			} catch (Error e) {
+				warning("Failed to remove workspace at index %i: %s", index, e.message);
 			}
 		}
 
@@ -477,7 +490,12 @@ namespace Workspaces {
 					dyn = dynamically_created_workspaces.find(index+1);
 					if (dyn == null) {
 						Timeout.add(200, () => {
-							wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
+							try {
+								wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
+							} catch (Error e) {
+								warning("Failed to remove workspace at index %i: %s", index, e.message);
+							}
+
 							return false;
 						});
 					}

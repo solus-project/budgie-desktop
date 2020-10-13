@@ -14,7 +14,7 @@ namespace Budgie {
 	* Simple expander button for the header widget
 	*/
 	public class HeaderExpander : Gtk.Button {
-		private Gtk.Image? image;
+		private new Gtk.Image? image;
 
 		private bool _expanded = false;
 		private unowned HeaderWidget? owner = null;

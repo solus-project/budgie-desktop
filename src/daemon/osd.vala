@@ -226,7 +226,7 @@ namespace Budgie {
 		* level: Progress-level to display in the OSD (double or int32 depending on gsd release)
 		* monitor: int32 The monitor to display the OSD on (currently ignored)
 		*/
-		public void ShowOSD(HashTable<string,Variant> params) {
+		public void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError {
 			string? icon_name = null;
 			string? label = null;
 

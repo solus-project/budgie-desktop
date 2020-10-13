@@ -48,7 +48,7 @@ public class DesktopHelper : GLib.Object {
 	public void update_pinned() {
 		string[] buttons = {};
 		foreach (Gtk.Widget widget in icon_layout.get_children()) {
-			IconButton button = (widget as ButtonWrapper).button;
+			IconButton button = ((ButtonWrapper) widget).button;
 
 			if (button.is_pinned()) {
 				if (button.get_appinfo() != null) {

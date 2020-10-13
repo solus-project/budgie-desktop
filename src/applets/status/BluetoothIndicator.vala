@@ -115,7 +115,8 @@ public class BluetoothIndicator : Gtk.Bin {
 		}
 	}
 
-	bool get_default_adapter(out Gtk.TreeIter adapter) {
+	bool get_default_adapter(out Gtk.TreeIter? adapter) {
+		adapter = null;
 		Gtk.TreeIter iter;
 
 		if (!model.get_iter_first(out iter)) {

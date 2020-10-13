@@ -236,8 +236,8 @@ public class IconTasklistApplet : Budgie.Applet {
 				visible = button.is_pinned();
 			}
 
-			(button.get_parent() as ButtonWrapper).orient = this.get_orientation();
-			(button.get_parent() as Gtk.Revealer).set_reveal_child(visible);
+			((ButtonWrapper) button.get_parent()).orient = this.get_orientation();
+			((Gtk.Revealer) button.get_parent()).set_reveal_child(visible);
 			button.update();
 		});
 	}
@@ -412,7 +412,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		main_layout.add(wrapper);
 		this.show_all();
-		(wrapper as Gtk.Revealer).set_reveal_child(false); // Default to not showing
+		((Gtk.Revealer) wrapper).set_reveal_child(false); // Default to not showing
 		this.update_buttons(); // Ensure we update the buttons at launch, determines immediately whether to show
 	}
 

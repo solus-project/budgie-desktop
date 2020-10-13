@@ -236,7 +236,7 @@ namespace Budgie {
 			uint8[]? data = null;
 			Gdk.Atom a_type;
 			int a_f;
-			var display = Gdk.Display.get_default();
+			Gdk.X11.Display display = (Gdk.X11.Display) Gdk.Display.get_default();
 
 			Gdk.Atom req_type;
 			if (utf8) {
@@ -248,7 +248,7 @@ namespace Budgie {
 			/**
 			* Attempt to gain foreign window connection
 			*/
-			Gdk.Window? foreign = Gdk.X11Window.foreign_new_for_display(display, xid);
+			Gdk.Window? foreign = new Gdk.X11.Window.foreign_for_display(display, xid);
 			if (foreign == null) {
 				/* No window, bail */
 				return null;
