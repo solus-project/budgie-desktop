@@ -143,13 +143,13 @@ static void carbon_child_realize(GtkWidget* widget) {
 
 	if (self->isComposited) {
 		XSetWindowBackground(xdisplay, xwindow, 0);
-		XCompositeRedirectWindow(xdisplay, xwindow, CompositeRedirectManual);
 	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
 		XSetWindowBackgroundPixmap(xdisplay, xwindow, None);
 	} else {
 		self->parentRelativeBg = FALSE;
 	}
 
+	gdk_window_set_composited(window, self->isComposited);
 	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
 }
 

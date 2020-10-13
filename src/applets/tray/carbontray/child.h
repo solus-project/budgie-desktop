@@ -12,9 +12,9 @@
 #ifndef __CARBON_CHILD_H__
 #define __CARBON_CHILD_H__
 
+#include <X11/extensions/Xcomposite.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
-#include <X11/extensions/Xcomposite.h>
 #include <stdbool.h>
 
 typedef struct _CarbonChild {

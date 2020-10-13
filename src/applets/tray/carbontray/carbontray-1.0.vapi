@@ -1,7 +1,7 @@
 namespace Carbon {
     [Compact]
     [CCode (cheader_filename="tray.h")]
-	public class Tray : GLib.Object {
+	public class Tray : Object {
         [CCode (has_construct_function=false, type = "GtkWidget*")]
         public Tray(Gtk.Orientation orientation, int iconSize, int spacing);
 
