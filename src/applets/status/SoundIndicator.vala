@@ -29,7 +29,12 @@ public class SoundIndicator : Gtk.Bin {
 	/** GtkPopover in which to show a volume control */
 	public Budgie.Popover popover;
 
-	/** Display scale for le volume controls */
+	private Gtk.ButtonBox buttons;
+	private Gtk.Button settings_button;
+	private Gtk.Button mute_button;
+	private Gtk.Button volume_down;
+	private Gtk.Button volume_up;
+
 	private Gtk.Scale volume_scale;
 
 	private double step_size;
@@ -68,19 +73,7 @@ public class SoundIndicator : Gtk.Bin {
 
 	private bool on_button_release_event(Gdk.EventButton e) {
 		if (e.button == Gdk.BUTTON_MIDDLE) { // Middle click
-			/**
-			 * You're probably wonder "hey, why aren't you using set_is_muted and get_is_muted"?
-			 * Great question. It doesn't work for toggling these values. Simple.
-			 */
-			bool is_muted = stream.get_volume() == 0;
-
-			if (is_muted) { // If we're muted
-				stream.set_volume(unmuted_volume_val); // Used our old value
-			} else {
-				stream.set_volume(0); // Set to 0
-			}
-
-			Gvc.push_volume(stream);
+			toggle_mute_state();
 		} else {
 			return Gdk.EVENT_PROPAGATE;
 		}
@@ -94,56 +87,67 @@ public class SoundIndicator : Gtk.Bin {
 	 */
 	private void create_sound_popover() {
 		popover = new Budgie.Popover(ebox);
+
 		Gtk.Box? main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		main_box.border_width = 6;
-		Gtk.Box? popover_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		main_box.pack_start(popover_box, false, false, 0);
-		popover.add(main_box);
-		Gtk.Button? sub_button = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
-		Gtk.Button? plus_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
 
-		/* - button */
-		popover_box.pack_start(sub_button, false, false, 1);
-		sub_button.clicked.connect(() => {
+		Gtk.Box? direct_volume_controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+		// Construct all the controls
+
+		volume_scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+		volume_scale.set_draw_value(false);
+		volume_scale.set_can_focus(false);
+		volume_scale.set_inverted(false);
+		volume_scale.set_size_request(140, -1);
+
+		settings_button = new Gtk.Button.from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON);
+		mute_button = new Gtk.Button.from_icon_name("audio-volume-high-symbolic", Gtk.IconSize.BUTTON); // Default to high, this gets changed via update_volume
+		volume_down = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
+		volume_up = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+
+		Gtk.Button[] b_list = { settings_button, mute_button, volume_down, volume_up }; 
+		for (var i = 0; i < b_list.length; i++) { // Iterate on all the buttons
+			Gtk.Button button = b_list[i]; // Get the button
+			button.set_can_focus(false); // Don't allow focus
+			button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT); // Add flat class
+			button.get_style_context().add_class("image-button"); // Set as image-button
+		}
+
+		buttons = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL); // Set as horizontal
+		buttons.set_layout(Gtk.ButtonBoxStyle.EXPAND); // Expand the buttons
+
+		// Pack all the things
+
+		buttons.add(mute_button); // Mute button
+		buttons.add(settings_button); // Settings button
+
+		direct_volume_controls.pack_start(volume_down, false, false, 1);
+		direct_volume_controls.pack_start(volume_scale, false, false, 0);
+		direct_volume_controls.pack_start(volume_up, false, false, 1);
+
+		main_box.pack_start(direct_volume_controls, false, false, 0);
+		main_box.pack_start(buttons, false, false, 0);
+
+		popover.add(main_box);
+
+		// Set up event bindings
+
+		scale_id = volume_scale.value_changed.connect(on_scale_changed);
+
+		mute_button.clicked.connect(toggle_mute_state);
+
+		settings_button.clicked.connect(open_sound_settings);
+
+		volume_down.clicked.connect(() => {
 			adjust_volume_increment(-step_size);
 		});
 
-		volume_scale = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1);
-		popover_box.pack_start(volume_scale, false, false, 0);
-
-		/* Hook up the value_changed event */
-		scale_id = volume_scale.value_changed.connect(on_scale_changed);
-
-		/* + button */
-		popover_box.pack_start(plus_button, false, false, 1);
-		plus_button.clicked.connect(() => {
+		volume_up.clicked.connect(() => {
 			adjust_volume_increment(+step_size);
 		});
 
-		/* Refine visual appearance of the scale.. */
-		volume_scale.set_draw_value(false);
-		volume_scale.set_size_request(140, -1);
-
-		/* Flat buttons only pls :) */
-		sub_button.get_style_context().add_class("flat");
-		sub_button.get_style_context().add_class("image-button");
-		plus_button.get_style_context().add_class("flat");
-		plus_button.get_style_context().add_class("image-button");
-
-		/* Focus ring is ugly and unnecessary */
-		sub_button.set_can_focus(false);
-		plus_button.set_can_focus(false);
-		volume_scale.set_can_focus(false);
-		volume_scale.set_inverted(false);
-
-		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		main_box.pack_start(sep, false, false, 1);
-
-		var button = new Gtk.Button.with_label(_("Sound settings"));
-		button.get_child().set_halign(Gtk.Align.START);
-		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		button.clicked.connect(open_sound_settings);
-		main_box.pack_start(button, false, false, 0);
+		// Show the things
 
 		popover.get_child().show_all();
 	}
@@ -228,6 +232,23 @@ public class SoundIndicator : Gtk.Bin {
 		return true;
 	}
 
+	// toggle_mute_state will toggle the volume between muted and unmuted
+	private void toggle_mute_state() {
+		/**
+		 * You're probably wonder "hey, why aren't you using set_is_muted and get_is_muted"?
+		 * Great question. It doesn't work for toggling these values. Simple.
+		 */
+		bool is_muted = stream.get_volume() == 0;
+
+		if (is_muted) { // If we're muted
+			stream.set_volume(unmuted_volume_val); // Used our old value
+		} else {
+			stream.set_volume(0); // Set to 0
+		}
+
+		Gvc.push_volume(stream);
+	}
+
 	/**
 	 * Update our icon when something changed (volume/mute)
 	 */
@@ -257,6 +278,12 @@ public class SoundIndicator : Gtk.Bin {
 			}
 		}
 		widget.set_from_icon_name(image_name, Gtk.IconSize.MENU);
+
+		Gtk.Image? mute_button_image = (Gtk.Image) mute_button.get_image();
+
+		if (mute_button_image != null) {
+			mute_button_image.set_from_icon_name(image_name, Gtk.IconSize.BUTTON); // Also update our mute button
+		}
 
 		var vol_max = mixer.get_vol_max_amplified();
 
