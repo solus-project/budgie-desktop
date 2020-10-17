@@ -677,7 +677,7 @@ namespace Budgie {
 
 				if (region.get_children().length() > 0) { // If this has a child
 					if (!region.get_visible()) { // Not already visible
-						region.show_all(); // Ensure we show this
+						region.show(); // Ensure we show the panel specifically. Using show_all results in hidden widgets of children being shown, like Budgie Menu label. Only happens in weird cases like reset.
 						region.queue_draw(); // Ensure we queue a draw
 					}
 				} else {
