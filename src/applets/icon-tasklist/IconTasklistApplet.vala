@@ -224,16 +224,19 @@ public class IconTasklistApplet : Budgie.Applet {
 		buttons.foreach((id, button) => {
 			bool visible = true;
 
-			if (this.restrict_to_workspace) {
+			if (this.restrict_to_workspace) { // Only show apps on this workspace
 				var workspace = this.wnck_screen.get_active_workspace();
 				if (workspace == null) {
 					return;
 				}
-				visible = button.has_window_on_workspace(workspace);
-			}
 
-			if (this.only_show_pinned) {
-				visible = button.is_pinned();
+				visible = button.has_window_on_workspace(workspace); // Set if the button is pinned and on workspace
+
+				if (this.only_show_pinned) { // Only show pinned on this workspace
+					visible = visible && button.is_pinned(); // Is on workspace and pinned
+				}
+			} else { // Not restrict to workspace
+				visible = (this.only_show_pinned) ? button.is_pinned() : visible; // If only pinned, get pinned value, otherwise use prior value
 			}
 
 			((ButtonWrapper) button.get_parent()).orient = this.get_orientation();
