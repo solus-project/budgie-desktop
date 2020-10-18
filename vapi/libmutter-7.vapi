@@ -156,6 +156,7 @@ namespace Meta {
 		public static unowned Meta.Backend get_backend ();
 		public unowned Meta.Dnd get_dnd ();
 		public unowned Meta.RemoteAccessController get_remote_access_controller ();
+		public unowned Meta.Settings get_settings ();
 		public unowned Clutter.Actor get_stage ();
 		public bool is_rendering_hardware_accelerated ();
 		public void lock_layout_group (uint idx);
