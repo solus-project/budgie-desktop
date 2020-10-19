@@ -1233,6 +1233,11 @@ namespace Budgie {
 			load_panel(uuid, false);
 
 			set_panels();
+
+			string path = this.create_panel_path(uuid);
+			var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
+			transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
+
 			show_panel(uuid, position, transparency);
 
 			if (new_defaults == null || name == null) {
