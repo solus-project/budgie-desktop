@@ -231,13 +231,13 @@ public class IconTasklistApplet : Budgie.Applet {
 				}
 
 				visible = button.has_window_on_workspace(workspace); // Set if the button is pinned and on workspace
-
-				if (this.only_show_pinned) { // Only show pinned on this workspace
-					visible = visible && button.is_pinned(); // Is on workspace and pinned
-				}
-			} else { // Not restrict to workspace
-				visible = (this.only_show_pinned) ? button.is_pinned() : visible; // If only pinned, get pinned value, otherwise use prior value
 			}
+
+			if (this.only_show_pinned) {
+				visible = button.is_pinned();
+			}
+
+			visible = visible || button.is_pinned();
 
 			((ButtonWrapper) button.get_parent()).orient = this.get_orientation();
 			((Gtk.Revealer) button.get_parent()).set_reveal_child(visible);
