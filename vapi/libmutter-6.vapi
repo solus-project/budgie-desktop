@@ -154,6 +154,7 @@ namespace Meta {
 		public static unowned Meta.Backend get_backend ();
 		public unowned Meta.Dnd get_dnd ();
 		public unowned Meta.RemoteAccessController get_remote_access_controller ();
+		public unowned Meta.Settings get_settings ();
 		public unowned Clutter.Actor get_stage ();
 		public void lock_layout_group (uint idx);
 		public void set_keymap (string layouts, string variants, string options);

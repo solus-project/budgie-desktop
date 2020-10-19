@@ -102,14 +102,14 @@ namespace Budgie {
 	}
 
 	public class MinimizeData {
-		public double scale_x;
-		public double scale_y;
-		public double place_x;
-		public double place_y;
-		public double old_x;
-		public double old_y;
+		public float scale_x;
+		public float scale_y;
+		public float place_x;
+		public float place_y;
+		public float old_x;
+		public float old_y;
 
-		public MinimizeData(double sx, double sy, double px, double py, double ox, double oy) {
+		public MinimizeData(float sx, float sy, float px, float py, float ox, float oy) {
 			scale_x = sx;
 			scale_y = sy;
 			place_x = px;
@@ -763,7 +763,7 @@ namespace Budgie {
 			finalize_animations(actor as Meta.WindowActor);
 		}
 
-		const int MINIMIZE_TIMEOUT = 195;
+		const int MINIMIZE_TIMEOUT = 225;
 
 		public override void minimize(Meta.WindowActor actor) {
 			if (!this.use_animations) {
@@ -793,19 +793,23 @@ namespace Budgie {
 			actor.transitions_completed.connect(minimize_done);
 
 			/* Save the minimize state for later restoration */
-			var scale_x = (double)(icon.width / actor.width);
-			var scale_y = (double)(icon.height / actor.height);
-			var place_x = (double)icon.x;
-			var place_y = (double)icon.y;
-			var old_x = actor.x;
-			var old_y = actor.y;
+			var scale_factor = Meta.Backend.get_backend ().get_settings ().get_ui_scaling_factor ();
+			var scale_x = (float)((icon.width * scale_factor) / actor.width);
+			var scale_y = (float)((icon.height * scale_factor) / actor.height);
+			var place_x = (float)icon.x * scale_factor;
+			var place_y = (float)icon.y * scale_factor;
+			var old_x = (float)actor.x;
+			var old_y = (float)actor.y;
 
 			MinimizeData d = new MinimizeData(scale_x, scale_y, place_x, place_y, old_x, old_y);
 
 			actor.set_data("_minimize_data", d);
-			actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
-					"x", d.place_x, "y", d.place_y, "scale-x",
-					d.scale_x, "scale-y", d.scale_y);
+			actor.set_scale(d.scale_x, d.scale_y);
+			actor.set_x(d.place_x);
+			actor.set_y(d.place_y);
+			actor.opacity = 0U;
+			actor.set_content_gravity(Clutter.ContentGravity.TOP_LEFT);
+			actor.set_pivot_point(0f, 0f);
 			actor.restore_easing_state();
 		}
 
@@ -817,7 +821,7 @@ namespace Budgie {
 			finalize_animations(actor as Meta.WindowActor);
 		}
 
-		const int UNMINIMIZE_TIMEOUT = 170;
+		const int UNMINIMIZE_TIMEOUT = 200;
 
 		/**
 		* Handle unminimize animation
@@ -836,9 +840,11 @@ namespace Budgie {
 
 			finalize_animations(actor);
 
-			actor.set("opacity", 0U, "scale-gravity", Clutter.Gravity.NORTH_WEST,
-					"x", d.place_x, "y", d.place_y, "scale-x",
-					d.scale_x, "scale-y", d.scale_y);
+			actor.set_pivot_point(0f, 0f);
+			actor.set_scale (d.scale_x, d.scale_y);
+			actor.set_x(d.place_x);
+			actor.set_y(d.place_y);
+			actor.opacity = 0U;
 
 			actor.show();
 
@@ -846,8 +852,10 @@ namespace Budgie {
 			actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
 			actor.set_easing_duration(UNMINIMIZE_TIMEOUT);
 
-			actor.set("scale-x", 1.0, "scale-y", 1.0, "opacity", 255U,
-					"x", d.old_x, "y", d.old_y);
+			actor.set_scale (1.0f, 1.0f);
+			actor.opacity = 255U;
+			actor.set_x(d.old_x);
+			actor.set_y(d.old_y);
 
 			actor.transitions_completed.connect(unminimize_done);
 			state_map.insert(actor, AnimationState.UNMINIMIZE);
