@@ -20,7 +20,7 @@ const int INACTIVE_INDICATOR_SPACING = 2;
  * and rendering of "dots" for the renderable windows.
  */
 public class IconButton : Gtk.ToggleButton {
-	private Budgie.AbominationRunningApp? first_app = null;
+	public Budgie.AbominationRunningApp? first_app = null;
 	private Budgie.IconPopover? popover = null;
 	private Wnck.Screen? screen = null;
 	private Settings? settings = null;

@@ -379,7 +379,11 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		Budgie.AbominationRunningApp first_app = running_apps.index(0);
 
-		if (running_apps == null) {
+		if (first_app == null) {
+			return;
+		}
+
+		if ((first_app.window != null) && (first_app.window.get_state() == Wnck.WindowState.SKIP_TASKLIST)) {
 			return;
 		}
 

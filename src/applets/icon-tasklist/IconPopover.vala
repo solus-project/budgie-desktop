@@ -10,6 +10,15 @@
  */
 
 namespace Budgie {
+
+	public const string SETTINGS_DBUS_NAME = "org.budgie_desktop.Settings";
+	public const string SETTINGS_DBUS_PATH = "/org/budgie_desktop/Settings";
+
+	[DBus (name="org.budgie_desktop.Settings")]
+	public interface SettingsRemote : GLib.Object {
+		public abstract async void Close() throws Error;
+	}
+
 	public class IconPopover : Budgie.Popover {
 		/**
 		 * Data / Logic
@@ -28,6 +37,8 @@ namespace Budgie {
 		private Gtk.Image non_starred_image = null;
 		private Gtk.Image starred_image = null;
 
+		private SettingsRemote? settings_remote = null;
+
 		/**
 		 * Widgets
 		 */
@@ -35,6 +46,7 @@ namespace Budgie {
 		public Gtk.Box? primary_view = null;
 		public Gtk.Box? actions_view = null;
 		public Gtk.Box? actions_list = null;
+		public Gtk.Grid? actions_view_buttons = null;
 		public Gtk.Box? windows_list = null;
 		public Gtk.Separator? windows_sep = null;
 		public Gtk.Grid? quick_actions = null; // (Un)Pin and Close All buttons
@@ -109,7 +121,7 @@ namespace Budgie {
 			this.back_button = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			this.back_button.width_request = 100;
 
-			Gtk.Grid actions_view_buttons = new Gtk.Grid();
+			actions_view_buttons = new Gtk.Grid();
 			actions_view_buttons.attach(this.back_button, 0, 0, 1, 1);
 
 			this.actions_view.pack_start(this.always_on_top_button, false, true, 0);
@@ -121,6 +133,10 @@ namespace Budgie {
 
 			if (app_info != null) {
 				is_budgie_desktop_settings = app_info.get_startup_wm_class() == "budgie-desktop-settings";
+
+				if (is_budgie_desktop_settings) {
+					acquire_settings_remote();
+				}
 
 				this.quick_actions.attach(this.pin_button, 0, 0, 1, 1);
 				this.quick_actions.attach(this.launch_new_instance_button, 1, 0, 1, 1);
@@ -198,6 +214,18 @@ namespace Budgie {
 					return;
 				}
 
+				if (
+					(window.get_window_type() == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+					(window.get_window_type() == Wnck.WindowType.DOCK) // Like Budgie Panel
+				) {
+					return;
+				}
+
+				if (window.get_class_instance_name() == "budgie-panel") { // Likely a NORMAL type window of budgie-panel, which is Budgie Desktop Settings
+					is_budgie_desktop_settings = true;
+					acquire_settings_remote();
+				}
+
 				Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(name, xid, longest_label_length);
 
 				item.actionable_label.clicked.connect(() => { // When we click on the window
@@ -217,10 +245,6 @@ namespace Budgie {
 
 				window_id_to_name.insert(xid, name);
 				window_id_to_controls.insert(xid, item);
-
-				if (is_budgie_desktop_settings) { // Now have an instance of Budgie Desktop Settings
-					this.launch_new_instance_button.sensitive = false;
-				}
 
 				this.windows_list.pack_end(item, true, false, 0);
 				this.render();
@@ -243,6 +267,14 @@ namespace Budgie {
 			back_button.get_style_context().remove_class("button");
 		}
 
+		public void acquire_settings_remote() {
+			if (settings_remote != null) {
+				return;
+			}
+
+			Bus.get_proxy.begin<SettingsRemote>(BusType.SESSION, SETTINGS_DBUS_NAME, SETTINGS_DBUS_PATH, 0, null, on_settings_get);
+		}
+
 		public void close_all_windows() {
 			if (window_id_to_name.length != 0) { // If there are windows to close
 				window_id_to_name.foreach((xid, name) => {
@@ -258,7 +290,13 @@ namespace Budgie {
 			var selected_window = Wnck.Window.@get(xid);
 
 			if (selected_window != null) {
-				selected_window.close(Gtk.get_current_event_time());
+				if (is_budgie_desktop_settings) {
+					settings_remote.Close.begin(on_settings_closed);
+				} else {
+					selected_window.close(Gtk.get_current_event_time());
+				}
+			} else {
+				warning("Failed to get window during close.");
 			}
 		}
 
@@ -284,6 +322,26 @@ namespace Budgie {
 				update_actions_view();
 				return false;
 			});
+		}
+
+		public void on_settings_get(Object? o, AsyncResult? res) {
+			try {
+				settings_remote = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get SettingsRemote proxy: %s", e.message);
+			}
+		}
+
+		public void on_settings_closed(Object? o, AsyncResult? res) {
+			try {
+				if (settings_remote == null) {
+					return;
+				}
+
+				settings_remote.Close.end(res);
+			} catch (Error e) {
+				warning("Failed to close Settings: %s", e.message);
+			}
 		}
 
 		/**
@@ -361,6 +419,15 @@ namespace Budgie {
 			this.actions_view.hide();
 			this.primary_view.show_all();
 			this.stack.set_visible_child_name("primary");
+
+			if (is_budgie_desktop_settings) { // Budgie Desktop Settings
+				pin_button.hide(); // Hide pin button
+				launch_new_instance_button.hide(); // Hide launch new instance
+			} else {
+				pin_button.show();
+				launch_new_instance_button.show();
+			}
+
 			this.stack.show();
 		}
 

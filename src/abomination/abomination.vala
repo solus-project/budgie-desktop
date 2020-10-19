@@ -91,7 +91,10 @@ namespace Budgie {
 		 * add_app will add a running application based on the provided window
 		 */
 		public void add_app(Wnck.Window window) {
-			if (window.get_window_type() == Wnck.WindowType.DESKTOP) { // Desktop-mode (like Nautilus' Desktop Icons)
+			if (
+				(window.get_window_type() == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+				(window.get_window_type() == Wnck.WindowType.DOCK) // Like Budgie Panel
+			) {
 				return;
 			}
 
@@ -109,7 +112,8 @@ namespace Budgie {
 				return;
 			}
 
-			Array<AbominationRunningApp> group_apps = this.running_apps.get(app.group);
+			Array<AbominationRunningApp>? group_apps = this.running_apps.get(app.group);
+
 			bool no_group_yet = false;
 
 			if (group_apps == null) { // Not defined group apps

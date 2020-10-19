@@ -10,7 +10,28 @@
  */
 
 namespace Budgie {
+	public const string SETTINGS_DBUS_NAME = "org.budgie_desktop.Settings";
+	public const string SETTINGS_DBUS_PATH = "/org/budgie_desktop/Settings";
+
+	[DBus (name="org.budgie_desktop.Settings")]
+	public class SettingsIface {
+		private Budgie.SettingsWindow? settings_window = null;
+
+		[DBus (visible=false)]
+		public SettingsIface(Budgie.SettingsWindow? win) {
+			this.settings_window = win;
+		}
+
+		public void Close() throws DBusError, IOError {
+			this.settings_window.requested_close();
+		}
+	}
+
 	public class SettingsWindow : Gtk.Window {
+		private SettingsIface? iface;
+		private DBusConnection? conn;
+		private uint? register_id;
+
 		Gtk.HeaderBar header;
 		Gtk.ListBox sidebar;
 		Gtk.Stack content;
@@ -86,6 +107,14 @@ namespace Budgie {
 
 			this.on_panels_changed();
 
+			Bus.own_name(BusType.SESSION, Budgie.SETTINGS_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT, on_bus_acquired, on_name_acquired, on_name_lost);
+
+			unrealize.connect(() => { // When the window is about to be destroyed
+				if (conn != null) {
+					conn.unregister_object(register_id); // Ensure we unregister our connection
+				}
+			});
+
 			layout.show_all();
 			header.show_all();
 		}
@@ -106,6 +135,29 @@ namespace Budgie {
 			this.add_page(new Budgie.WindowsPage());
 			this.add_page(new Budgie.AutostartPage());
 			this.add_page(new Budgie.RavenPage());
+		}
+
+		public void requested_close() throws DBusError, IOError {
+			this.destroy();
+			this.close();
+		}
+
+		private void on_bus_acquired(DBusConnection c) {
+			try {
+				iface = new SettingsIface(this);
+				conn = c;
+				register_id = conn.register_object(Budgie.SETTINGS_DBUS_PATH, iface);
+			} catch (Error e) {
+				stderr.printf("Error registering SettingsIface: %s\n", e.message);
+			}
+		}
+
+		public void on_name_acquired(DBusConnection c, string name) {
+			message("Acquired %s DBus connection", name);
+		}
+
+		public void on_name_lost(DBusConnection c, string name) {
+			message("Lost or replaced DBus connection");
 		}
 
 		/**
