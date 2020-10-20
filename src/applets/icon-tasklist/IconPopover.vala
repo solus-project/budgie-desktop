@@ -214,13 +214,6 @@ namespace Budgie {
 					return;
 				}
 
-				if (
-					(window.get_window_type() == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
-					(window.get_window_type() == Wnck.WindowType.DOCK) // Like Budgie Panel
-				) {
-					return;
-				}
-
 				if (window.get_class_instance_name() == "budgie-panel") { // Likely a NORMAL type window of budgie-panel, which is Budgie Desktop Settings
 					is_budgie_desktop_settings = true;
 					acquire_settings_remote();

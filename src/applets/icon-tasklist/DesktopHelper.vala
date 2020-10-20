@@ -70,7 +70,7 @@ public class DesktopHelper : GLib.Object {
 	public List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group) {
 		List<unowned Wnck.Window> list = new List<unowned Wnck.Window>();
 		screen.get_windows_stacked().foreach((window) => {
-			if (window.get_class_group() == class_group && !window.is_skip_tasklist()) {
+			if (window.get_class_group() == class_group && !window.is_skip_pager() && !window.is_skip_tasklist()) {
 				var workspace = window.get_workspace();
 				if (workspace == null) {
 					return;

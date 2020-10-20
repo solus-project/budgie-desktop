@@ -91,14 +91,11 @@ namespace Budgie {
 		 * add_app will add a running application based on the provided window
 		 */
 		public void add_app(Wnck.Window window) {
-			if (
-				(window.get_window_type() == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
-				(window.get_window_type() == Wnck.WindowType.DOCK) // Like Budgie Panel
-			) {
+			if (is_disallowed_window_type(window)) { // Disallowed type
 				return;
 			}
 
-			if (window.is_skip_tasklist()) {
+			if (window.is_skip_pager() || window.is_skip_tasklist()) { // Skip pager or tasklist
 				return;
 			}
 
@@ -146,6 +143,23 @@ namespace Budgie {
 				}
 			});
 		}
+
+	// is_disallowed_window_type will check if this specified window is a disallowed type
+	public bool is_disallowed_window_type(Wnck.Window window) {
+		Wnck.WindowType win_type = window.get_window_type(); // Get the window type
+
+		if (
+			(win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+			(win_type == Wnck.WindowType.DIALOG) || // Dialogs
+			(win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
+			(win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
+			(win_type == Wnck.WindowType.UTILITY) // Utility like a control on an emulator
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 		/**
 		 * remove_app will remove a running application based on the provided window
