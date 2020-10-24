@@ -17,15 +17,14 @@ namespace Budgie {
 		private Settings wm_pref_settings;
 		private Gtk.SpinButton? workspace_count;
 
-	#if HAVE_NAUTILUS
-		private Settings bg_settings;
-		private Settings nautilus_settings;
-		private Gtk.Switch switch_icons;
-		private Gtk.Switch switch_home;
-		private Gtk.Switch switch_network;
-		private Gtk.Switch switch_trash;
-		private Gtk.Switch switch_mounts;
-	#endif
+#if HAVE_BUDGIE_DESKTOP_VIEW
+		private Settings view_settings;
+		private Gtk.Switch? show_switch;
+		private Gtk.Switch? show_mounts;
+		private Gtk.Switch? show_home;
+		private Gtk.Switch? show_trash;
+		private Gtk.ComboBox? icon_size;
+#endif
 
 		public DesktopPage() {
 			Object(group: SETTINGS_GROUP_APPEARANCE,
@@ -37,53 +36,69 @@ namespace Budgie {
 			var grid = new SettingsGrid();
 			this.add(grid);
 
-			wm_pref_settings = new Settings("org.gnome.desktop.wm.preferences"); // Set up our wm preferences Settings
-
-	#if HAVE_NAUTILUS
-			/* Allow icons */
-			switch_icons = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_icons,
+#if HAVE_BUDGIE_DESKTOP_VIEW
+			show_switch = new Gtk.Switch(); // Switcher to show or hide desktop icons
+			grid.add_row(new SettingsRow(show_switch,
 				_("Desktop Icons"),
-				_("Control whether to allow launchers and icons on the desktop.")));
+				_("Control whether to allow icons on the desktop.")
+			));
 
-			/* Hook up settings */
-			bg_settings = new Settings("org.gnome.desktop.background");
-			bg_settings.bind("show-desktop-icons", switch_icons, "active", SettingsBindFlags.DEFAULT);
-			bg_settings.changed["show-desktop-icons"].connect(this.update_switches);
+			show_mounts = new Gtk.Switch(); // Switcher to show or hide active mounts
+			grid.add_row(new SettingsRow(show_mounts,
+				_("Active Mounts"),
+				_("Show all active mounts on the desktop.")
+			));
 
-			/* Show home */
-			switch_home = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_home,
+			show_home = new Gtk.Switch(); // Switcher to show or hide our Home folder
+			grid.add_row(new SettingsRow(show_home,
 				_("Home directory"),
-				_("Add a shortcut to your home directory on the desktop.")));
+				_("Add a shortcut to your home directory on the desktop.")
+			));
 
-			/* Show network */
-			switch_network = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_network,
-				_("Network servers"),
-				_("Add a shortcut to your local network servers on the desktop.")));
-
-			/* Show trash */
-			switch_trash = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_trash,
+			show_trash = new Gtk.Switch(); // Switcher to show or hide a shortcut to Trash
+			grid.add_row(new SettingsRow(show_trash,
 				_("Trash"),
-				_("Add a shortcut to the Trash directory on the desktop.")));
+				_("Add a shortcut to the Trash directory on the desktop.")
+			));
 
-			/* Show volumes */
-			switch_mounts = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_mounts,
-				_("Mounted volumes"),
-				_("Mounted volumes & drives will appear on the desktop.")));
+			icon_size = new Gtk.ComboBox(); // Icon Size combo box
+			grid.add_row(new SettingsRow(icon_size,
+				_("Icon Size"),
+				_("Set the desired size of icons on the desktop.")
+			));
 
+			view_settings = new Settings("us.getsol.budgie-desktop-view"); // Get our budgie-desktop-view settings
 
-			nautilus_settings = new Settings("org.gnome.nautilus.desktop");
-			nautilus_settings.bind("home-icon-visible", switch_home, "active", SettingsBindFlags.DEFAULT);
-			nautilus_settings.bind("network-icon-visible", switch_network, "active", SettingsBindFlags.DEFAULT);
-			nautilus_settings.bind("trash-icon-visible", switch_trash, "active", SettingsBindFlags.DEFAULT);
-			nautilus_settings.bind("volumes-visible", switch_mounts, "active", SettingsBindFlags.DEFAULT);
+			//var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.DesktopItemSize));
+			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(string));
+
+			Gtk.TreeIter iter;
+			const string[] z = { "small", "normal", "large", "massive"};
+
+			foreach (var s in z) {
+				model.append(out iter);
+				model.set(iter, 0, s, 1, icon_size_to_label(s), 2, s, -1);
+			}
+
+			icon_size.set_model(model); // Set the icon size model
+			icon_size.set_id_column(0);
+
+			var render = new Gtk.CellRendererText();
+			icon_size.pack_start(render, true);
+			icon_size.add_attribute(render, "text", 1);
+			//icon_size.set_active(view_settings.get_enum("icon-size"));
+
+			view_settings.bind("show", show_switch, "active", SettingsBindFlags.DEFAULT);
+			view_settings.bind("show-active-mounts", show_mounts, "active", SettingsBindFlags.DEFAULT);
+			view_settings.bind("show-home-folder", show_home, "active", SettingsBindFlags.DEFAULT);
+			view_settings.bind("show-trash-folder", show_trash, "active", SettingsBindFlags.DEFAULT);
+			view_settings.bind("icon-size", icon_size, "active-id", SettingsBindFlags.DEFAULT);
 
 			update_switches();
-	#endif
+			view_settings.changed.connect(update_switches); // Update our switches when settings get changed. useful for dynamic sensitive changing
+#endif
+
+			wm_pref_settings = new Settings("org.gnome.desktop.wm.preferences"); // Set up our wm preferences Settings
 
 			workspace_count = new Gtk.SpinButton.with_range(1, 8, 1); // Create our button, with a minimum of 1 workspace and max of 8
 			workspace_count.set_value((double) wm_pref_settings.get_int("num-workspaces")); // Set our default value
@@ -108,15 +123,28 @@ namespace Budgie {
 			));
 		}
 
-	#if HAVE_NAUTILUS
-		void update_switches() {
-			bool b = bg_settings.get_boolean("show-desktop-icons");
-			switch_home.sensitive = b;
-			switch_network.sensitive = b;
-			switch_trash.sensitive = b;
-			switch_mounts.sensitive = b;
+#if HAVE_BUDGIE_DESKTOP_VIEW
+		// Get the text for each desktop icon size
+		public string icon_size_to_label(string size) {
+			switch (size) {
+				case "small":
+					return _("Small");
+				case "large":
+					return _("Large");
+				case "massive":
+					return _("Massive");
+				default:
+					return _("Normal");
+			}
 		}
-	#endif
 
+		void update_switches() {
+			bool b = view_settings.get_boolean("show");
+			show_mounts.sensitive = b;
+			show_home.sensitive = b;
+			show_trash.sensitive = b;
+			icon_size.sensitive = b;
+		}
+#endif
 	}
 }

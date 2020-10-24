@@ -2,6 +2,7 @@
 Type=Application
 _Name=Budgie Panel
 _Comment=Launch other applications and provide various utilities to manage windows, show the time, etc.
+Icon=preferences-desktop
 Exec=budgie-panel
 Terminal=false
 Categories=GNOME;GTK;System;Core;

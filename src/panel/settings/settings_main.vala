@@ -47,7 +47,7 @@ namespace Budgie {
 		bool new_panel_requested = false;
 
 		public SettingsWindow(Budgie.DesktopManager? manager) {
-			Object(type: Gtk.WindowType.TOPLEVEL, manager: manager);
+			Object(type: Gtk.WindowType.TOPLEVEL, icon_name: "preferences-desktop", manager: manager);
 
 			header = new Gtk.HeaderBar();
 			header.set_show_close_button(true);
@@ -124,13 +124,7 @@ namespace Budgie {
 		*/
 		void build_content() {
 			this.add_page(new Budgie.StylePage());
-
-	#if HAVE_NAUTILUS
-			if (Environment.find_program_in_path("nautilus") != null) {
-				this.add_page(new Budgie.DesktopPage());
-			}
-	#endif
-
+			this.add_page(new Budgie.DesktopPage());
 			this.add_page(new Budgie.FontPage());
 			this.add_page(new Budgie.WindowsPage());
 			this.add_page(new Budgie.AutostartPage());

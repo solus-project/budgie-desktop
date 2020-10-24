@@ -100,9 +100,11 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
 
-with_desktop_icons = get_option('with-desktop-icons')
-if with_desktop_icons ==  'nautilus'
-    warning('You must have Nautilus 3.26 or older for desktop icons with Budgie')
+budgie_desktop_view = find_program('budgie-desktop-view', required: false)
+budgie_desktop_view_found = budgie_desktop_view.found()
+
+if budgie_desktop_view_found == false
+    warning('Budgie Desktop View not found. Desktop Icons may not be supported on this build.')
 endif
 
 with_stateless = get_option('with-stateless')
@@ -177,9 +179,9 @@ report = [
     '    Extra options:',
     '    ==============',
     '',
-    '    gtk-doc:                                @0@'.format(with_gtk_doc),
-    '    desktop icons:                          @0@'.format(with_desktop_icons),
-    '    stateless:                              @0@'.format(with_stateless),
+    '    gtk-doc:                                                                     @0@'.format(with_gtk_doc),
+    '    enable desktop icons with budgie desktop view:                               @0@'.format(budgie_desktop_view_found),
+    '    stateless:                                                                   @0@'.format(with_stateless),
 ]
 
 
