@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="budgie-desktop">
 
+  <enum id="com.solus-project.budgie-raven.RavenPosition">
+    <value nick="BUDGIE_RAVEN_POSITION_AUTOMATIC" value="1" />
+    <value nick="BUDGIE_RAVEN_POSITION_LEFT" value="2" />
+    <value nick="BUDGIE_RAVEN_POSITION_RIGHT" value="3" />
+  </enum>
+
   <schema path="/com/solus-project/budgie-raven/" id="com.solus-project.budgie-raven">
+    <key enum="com.solus-project.budgie-raven.RavenPosition" name="raven-position">
+      <default>'BUDGIE_RAVEN_POSITION_AUTOMATIC'</default>
+      <summary>Set Raven position</summary>
+      <description>Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is.</description>
+    </key>
+
     <key type="b" name="allow-volume-overdrive">
       <default>false</default>
       <summary>Allow raising volume above 100%</summary>

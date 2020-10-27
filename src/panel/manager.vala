@@ -61,6 +61,11 @@ namespace Budgie {
 	public const string APPLET_PREFIX = "/com/solus-project/budgie-panel/applets";
 
 	/**
+	* Schema ID for Raven settings
+	*/
+	public const string RAVEN_SCHEMA = "com.solus-project.budgie-raven";
+
+	/**
 	* Known panels
 	*/
 	public const string ROOT_KEY_PANELS = "panels";
@@ -97,6 +102,9 @@ namespace Budgie {
 
 	/** Layout to select when reset/init for the first time */
 	public const string PANEL_KEY_LAYOUT = "layout";
+
+	/** Position that Raven should have when opening */
+	public const string RAVEN_KEY_POSITION = "raven-position";
 
 	/**
 	* The current migration level of Budgie, or format change, if you will.
@@ -139,12 +147,14 @@ namespace Budgie {
 
 		int primary_monitor = 0;
 		Settings settings;
+		Settings raven_settings;
 		Peas.Engine engine;
 		Peas.ExtensionSet extensions;
 
 		HashTable<string,Peas.PluginInfo?> plugins;
 
 		private Budgie.Raven? raven = null;
+		RavenPosition raven_position;
 
 		private Budgie.ThemeManager theme_manager;
 
@@ -573,6 +583,20 @@ namespace Budgie {
 			scr.size_changed.connect(this.on_monitors_changed);
 
 			settings = new Settings(Budgie.ROOT_SCHEMA);
+
+			// Listen to the Raven position setting for changes
+			raven_settings = new Settings(RAVEN_SCHEMA);
+			raven_position = (RavenPosition)raven_settings.get_enum(RAVEN_KEY_POSITION);
+			raven_settings.changed[RAVEN_KEY_POSITION].connect(() => {
+				RavenPosition new_position = (RavenPosition)raven_settings.get_enum(RAVEN_KEY_POSITION);
+				if (new_position != raven_position) {
+					raven_position = new_position;
+
+					// Raven needs to know about its new position
+					update_screen();
+				}
+			});
+			
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
 			raven = new Budgie.Raven(this);
@@ -1085,7 +1109,54 @@ namespace Budgie {
 				raven_screen.height -= bottom.intended_size - 5;
 			}
 
-			if (left != null & right == null) {
+			// Set which side of the screen Raven should appear on
+			switch (raven_position) {
+				case RavenPosition.LEFT:
+					/* Stick/maybe hug left */
+					raven.screen_edge = Gtk.PositionType.LEFT;
+					if (left != null) {
+						raven_screen.x += left.intended_size;
+					}
+					break;
+				case RavenPosition.RIGHT:
+					/* Stick/maybe hug right */
+					raven.screen_edge = Gtk.PositionType.RIGHT;
+					if (right != null) {
+						raven_screen.width -= (right.intended_size);
+					}
+					break;
+				case RavenPosition.AUTOMATIC:
+				default:
+					set_raven_position(left, right, ref raven_screen);
+					break;
+			}
+
+			/* Let Raven update itself accordingly */
+			raven.update_geometry(raven_screen);
+			this.panels_changed();
+		}
+
+		bool is_panel_huggable(Budgie.Toplevel? panel) {
+			if (panel == null) {
+				return false;
+			}
+			if (panel.autohide != AutohidePolicy.NONE) {
+				return false;
+			}
+			if (panel.dock_mode) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * Use the current panel layouts to figure out Raven's position.
+		 *
+		 * This function sets which side of the screen Raven should be on,
+		 * as well as Raven's position or width (if it's on the right side).
+		 */
+		void set_raven_position(Toplevel? left, Toplevel? right, ref Gdk.Rectangle raven_screen) {
+			if (left != null && right == null) {
 				if (this.is_panel_huggable(left)) {
 					/* Hug left */
 					raven.screen_edge = Gtk.PositionType.LEFT;
@@ -1118,23 +1189,6 @@ namespace Budgie {
 					raven_screen.width -= (right.intended_size);
 				}
 			}
-
-			/* Let Raven update itself accordingly */
-			raven.update_geometry(raven_screen);
-			this.panels_changed();
-		}
-
-		bool is_panel_huggable(Budgie.Toplevel? panel) {
-			if (panel == null) {
-				return false;
-			}
-			if (panel.autohide != AutohidePolicy.NONE) {
-				return false;
-			}
-			if (panel.dock_mode) {
-				return false;
-			}
-			return true;
 		}
 
 		/**
