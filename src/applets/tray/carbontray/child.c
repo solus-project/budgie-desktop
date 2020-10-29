@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2020 Budgie Desktop Developers
+ * Copyright © 2020 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 // static method header
 
 static void carbon_child_init(CarbonChild*);
-static void carbon_child_realize(GtkWidget*);
 static void carbon_child_get_preferred_size(GtkWidget*, int*, int*);
 static bool set_wmclass(CarbonChild*, Display*);
 
@@ -33,7 +32,7 @@ G_DEFINE_TYPE(CarbonChild, carbon_child, GTK_TYPE_SOCKET)
 
 // public method implementations
 
-CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
+CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen, Window iconWindow) {
 	if (GDK_IS_SCREEN(screen) == FALSE) {
 		g_warning("No screen to place tray icon onto");
 		return NULL;
@@ -73,10 +72,7 @@ CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
 	self->isComposited = FALSE;
 	gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
-	int eventBaseReturn, errorBaseReturn; // unused, we only need to know if composite is supported at all
-	bool supportsComposite = XCompositeQueryExtension(xdisplay, &eventBaseReturn, &errorBaseReturn);
-
-	if (supportsComposite) {
+	if (shouldComposite) {
 		// check if there is an alpha channel in the visual. if there is, we can composite it
 		int red_prec, green_prec, blue_prec;
 		gdk_visual_get_red_pixel_details(visual, NULL, NULL, &red_prec);
@@ -95,6 +91,33 @@ CarbonChild* carbon_child_new(int size, GdkScreen* screen, Window iconWindow) {
 	}
 
 	return self;
+}
+
+bool carbon_child_realize(CarbonChild* self) {
+	GtkWidget* widget = GTK_WIDGET(self);
+	GdkWindow* window = gtk_widget_get_window(widget);
+
+	GdkDisplay* display = gtk_widget_get_display(widget);
+	gdk_x11_display_error_trap_push(display);
+
+	if (self->isComposited) {
+		XSetWindowBackground(GDK_DISPLAY_XDISPLAY(display), self->iconWindow, 0);
+	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
+		XSetWindowBackgroundPixmap(GDK_DISPLAY_XDISPLAY(display), self->iconWindow, None);
+	} else {
+		self->parentRelativeBg = FALSE;
+	}
+
+	int error = gdk_x11_display_error_trap_pop(display);
+	if (error != 0) {
+		g_warning("Encountered X error %d when setting background for tray icon", error);
+		return false;
+	}
+
+	gdk_window_set_composited(window, self->isComposited);
+	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
+	gtk_widget_set_size_request(widget, self->preferredSize, self->preferredSize);
+	return true;
 }
 
 void carbon_child_draw_on_tray(CarbonChild* self, GtkWidget* parent, cairo_t* cr) {
@@ -131,28 +154,6 @@ static void carbon_child_init(CarbonChild* self) {
 	gtk_widget_set_valign(widget, GTK_ALIGN_CENTER);
 }
 
-static void carbon_child_realize(GtkWidget* widget) {
-	CarbonChild* self = CARBON_CHILD(widget);
-
-	gtk_widget_set_size_request(widget, self->preferredSize, self->preferredSize);
-	GTK_WIDGET_CLASS(carbon_child_parent_class)->realize(widget);
-
-	GdkWindow* window = gtk_widget_get_window(widget);
-	Display* xdisplay = GDK_WINDOW_XDISPLAY(window);
-	Window xwindow = GDK_WINDOW_XID(window);
-
-	if (self->isComposited) {
-		XSetWindowBackground(xdisplay, xwindow, 0);
-	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
-		XSetWindowBackgroundPixmap(xdisplay, xwindow, None);
-	} else {
-		self->parentRelativeBg = FALSE;
-	}
-
-	gdk_window_set_composited(window, self->isComposited);
-	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
-}
-
 static void carbon_child_get_preferred_size(GtkWidget* base, int* minimum_size, int* natural_size) {
 	int preferredSize = CARBON_CHILD(base)->preferredSize;
 	*minimum_size = preferredSize;
@@ -164,7 +165,6 @@ static void carbon_child_class_init(CarbonChildClass* klass) {
 
 	widget_class->get_preferred_width = carbon_child_get_preferred_size;
 	widget_class->get_preferred_height = carbon_child_get_preferred_size;
-	widget_class->realize = carbon_child_realize;
 }
 
 static bool set_wmclass(CarbonChild* self, Display* xdisplay) {

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2020 Budgie Desktop Developers
+ * Copyright © 2020 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,9 @@ typedef struct _CarbonChildClass {
 
 GType carbon_child_get_type(void);
 
-CarbonChild* carbon_child_new(int, GdkScreen*, Window);
+CarbonChild* carbon_child_new(int, bool, GdkScreen*, Window);
+
+bool carbon_child_realize(CarbonChild*);
 
 void carbon_child_draw_on_tray(CarbonChild*, GtkWidget*, cairo_t*);
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2020 Budgie Desktop Developers
+ * Copyright © 2020 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,13 +96,14 @@ bool carbon_tray_register(CarbonTray* tray, GdkScreen* screen) {
 	tray->selectionAtom = gdk_atom_intern(selection_name, FALSE);
 	g_free(selection_name);
 
-	GdkDisplay* display = gdk_screen_get_display(screen);
-
 	tray->invisible = GTK_WIDGET(g_object_ref(G_OBJECT(invisible)));
 	set_xproperties(tray);
 
-	unsigned int timestamp = gdk_x11_get_server_time(gtk_widget_get_window(invisible));
+	int eventBaseReturn, errorBaseReturn; // unused, we only need to know if composite is supported at all
+	tray->supportsComposite = XCompositeQueryExtension(GDK_SCREEN_XDISPLAY(screen), &eventBaseReturn, &errorBaseReturn);
 
+	unsigned int timestamp = gdk_x11_get_server_time(gtk_widget_get_window(invisible));
+	GdkDisplay* display = gdk_screen_get_display(screen);
 	bool succeed = gdk_selection_owner_set_for_display(display, gtk_widget_get_window(invisible), tray->selectionAtom, timestamp, TRUE);
 
 	if (succeed) {
@@ -265,7 +266,7 @@ static void handle_dock_request(CarbonTray* tray, XClientMessageEvent* xevent) {
 	}
 
 	/* create the socket */
-	CarbonChild* child = carbon_child_new(tray->iconSize, gtk_widget_get_screen(tray->invisible), window);
+	CarbonChild* child = carbon_child_new(tray->iconSize, tray->supportsComposite, gtk_widget_get_screen(tray->invisible), window);
 	if (child == NULL) {
 		return;
 	}
@@ -278,6 +279,12 @@ static void handle_dock_request(CarbonTray* tray, XClientMessageEvent* xevent) {
 	} else {
 		gtk_box_pack_start(GTK_BOX(tray->box), socket, FALSE, FALSE, 0);
 		gtk_box_reorder_child(GTK_BOX(tray->box), socket, 0);
+	}
+
+	// manually realize with custom method, as sometimes X can throw an error here
+	bool realized = carbon_child_realize(child);
+	if (!realized) {
+		return;
 	}
 
 	if (GTK_IS_WINDOW(gtk_widget_get_toplevel(socket))) {
