@@ -100,13 +100,6 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
 
-budgie_desktop_view = find_program('budgie-desktop-view', required: false)
-budgie_desktop_view_found = budgie_desktop_view.found()
-
-if budgie_desktop_view_found == false
-    warning('Budgie Desktop View not found. Desktop Icons may not be supported on this build.')
-endif
-
 with_stateless = get_option('with-stateless')
 if with_stateless == true
     warning('Only use stateless option with a supported OS like Solus')
@@ -180,7 +173,6 @@ report = [
     '    ==============',
     '',
     '    gtk-doc:                                                                     @0@'.format(with_gtk_doc),
-    '    enable desktop icons with budgie desktop view:                               @0@'.format(budgie_desktop_view_found),
     '    stateless:                                                                   @0@'.format(with_stateless),
 ]
 

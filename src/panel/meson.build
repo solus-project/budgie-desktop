@@ -72,10 +72,6 @@ budgie_panel_vala_args = [
         '--gresources=' + gresource,
 ]
 
-if budgie_desktop_view_found == true
-    budgie_panel_vala_args += ['-D', 'HAVE_BUDGIE_DESKTOP_VIEW']
-endif
-
 budgie_panel_c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
