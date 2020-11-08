@@ -102,6 +102,12 @@ namespace Budgie {
 		* on_raven_settings_changed will handle when the settings for Raven widgets have changed
 		*/
 		void on_raven_settings_changed(string key) {
+			// This key is handled by the panel manager instead of Raven directly.
+			// Moreover, it isn't a boolean so it logs a Critical message on the get_boolean() below.
+			if (key == "raven-position") {
+				return;
+			}
+
 			bool show_widget = raven_settings.get_boolean(key);
 
 			/**
