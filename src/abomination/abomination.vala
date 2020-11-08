@@ -132,14 +132,14 @@ namespace Budgie {
 			});
 
 			app.window.state_changed.connect((changed, new_state) => {
-				bool now_fullscreen = window.is_fullscreen();
-
-				if (now_fullscreen) {
-					fullscreen_windows.insert(window.get_name(), window); // Add to fullscreen_windows
-					toggle_night_light(false); // Toggle the night light off if possible
-				} else {
-					fullscreen_windows.steal(window.get_name()); // Remove from fullscreen_windows
-					toggle_night_light(true); // Toggle the night light back on if possible
+				if (Wnck.WindowState.FULLSCREEN in changed) {
+					if (new_state == Wnck.WindowState.FULLSCREEN) {
+						fullscreen_windows.insert(window.get_name(), window); // Add to fullscreen_windows
+						toggle_night_light(false); // Toggle the night light off if possible
+					} else {
+						fullscreen_windows.steal(window.get_name()); // Remove from fullscreen_windows
+						toggle_night_light(true); // Toggle the night light back on if possible
+					}
 				}
 			});
 		}
