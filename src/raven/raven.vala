@@ -13,6 +13,33 @@ namespace Budgie {
 	public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 	public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
+	/**
+	 * Possible positions for Raven to be in.
+	 *
+	 * Automatic positioning will make Raven open on whichever side
+	 * of the screen that the Raven toggle button is on.
+	 */
+	public enum RavenPosition {
+		AUTOMATIC = 1,
+		LEFT = 2,
+		RIGHT = 3;
+
+		/**
+		 * Get a user-friendly localized name for the position.
+		 */
+		public string get_display_name() {
+			switch (this) {
+			case RavenPosition.LEFT:
+				return _("Left");
+			case RavenPosition.RIGHT:
+				return _("Right");
+			case RavenPosition.AUTOMATIC:
+			default:
+				return _("Automatic");
+			}
+		}
+	}
+
 	[DBus (name="org.budgie_desktop.Raven")]
 	public class RavenIface {
 		private Raven? parent = null;
