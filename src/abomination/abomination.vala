@@ -135,10 +135,13 @@ namespace Budgie {
 				if (Wnck.WindowState.FULLSCREEN in changed) {
 					if (new_state == Wnck.WindowState.FULLSCREEN) {
 						fullscreen_windows.insert(window.get_name(), window); // Add to fullscreen_windows
-						toggle_night_light(false); // Toggle the night light off if possible
 					} else {
 						fullscreen_windows.steal(window.get_name()); // Remove from fullscreen_windows
-						toggle_night_light(true); // Toggle the night light back on if possible
+					}
+
+					// only toggle the nightlight if there's zero or one fullscreen window
+					if (fullscreen_windows.size() <= 1) {
+						toggle_night_light(fullscreen_windows.size() == 0); // if zero, enable. if one, disable
 					}
 				}
 			});
@@ -169,6 +172,11 @@ namespace Budgie {
 			AbominationRunningApp app = running_apps_id.get(id); // Get the running app
 
 			running_apps_id.steal(id); // Remove from running_apps_id
+
+			fullscreen_windows.steal(window.get_name()); // Remove from fullscreen windows list
+			if (fullscreen_windows.size() <= 1) {
+				toggle_night_light(fullscreen_windows.size() == 0); // if zero, enable. if one, disable
+			}
 
 			if (app != null) { // App is defined
 				Array<AbominationRunningApp> group_apps = running_apps.get(app.group); // Get apps based on group name
