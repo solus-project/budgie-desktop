@@ -24,6 +24,8 @@ namespace Budgie {
 		public HashTable<ulong?,AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
 		private Wnck.Screen screen = null;
 
+		private ulong color_id = 0;
+
 		/**
 		 * Signals
 		 */
@@ -44,12 +46,7 @@ namespace Budgie {
 
 			if (color_settings != null) { // gsd colors plugin schema defined
 				update_night_light_value();
-
-				color_settings.changed["night-light-enabled"].connect(() => {
-					if (fullscreen_windows.size() == 0) { // If we have no currently fullscreen windows
-						update_night_light_value(); // Update. We do this to ignore false positives.
-					}
-				});
+				color_id = color_settings.changed["night-light-enabled"].connect(update_night_light_value);
 			}
 
 			if (wm_settings != null) {
@@ -133,13 +130,13 @@ namespace Budgie {
 
 			app.window.state_changed.connect((changed, new_state) => {
 				if (Wnck.WindowState.FULLSCREEN in changed) {
-					if (new_state == Wnck.WindowState.FULLSCREEN) {
-						fullscreen_windows.insert(window.get_name(), window); // Add to fullscreen_windows
-						toggle_night_light(false); // Toggle the night light off if possible
+					if (Wnck.WindowState.FULLSCREEN in new_state) {
+						fullscreen_windows.insert(app.window.get_name(), app.window); // Add to fullscreen_windows
 					} else {
-						fullscreen_windows.steal(window.get_name()); // Remove from fullscreen_windows
-						toggle_night_light(true); // Toggle the night light back on if possible
+						fullscreen_windows.steal(app.window.get_name()); // Remove from fullscreen_windows
 					}
+
+					toggle_night_light(); // Ensure we toggle Night Light if needed
 				}
 			});
 		}
@@ -169,6 +166,11 @@ namespace Budgie {
 			AbominationRunningApp app = running_apps_id.get(id); // Get the running app
 
 			running_apps_id.steal(id); // Remove from running_apps_id
+
+			if (fullscreen_windows.contains(window.get_name())) { // Window was fullscreened at some point
+				fullscreen_windows.steal(window.get_name()); // Remove from fullscreen window if it was there in the first place
+				toggle_night_light(); // Toggle night light if necessary
+			}
 
 			if (app != null) { // App is defined
 				Array<AbominationRunningApp> group_apps = running_apps.get(app.group); // Get apps based on group name
@@ -246,17 +248,17 @@ namespace Budgie {
 		 * toggle_night_light will toggle the state of the night light depending on requested state
 		 * If we're disabling, we'll check if there is any items in fullscreen_windows first
 		 */
-		private void toggle_night_light(bool on_state) {
+		private void toggle_night_light() {
 			if (should_disable_on_fullscreen) {
-				if (on_state) { // Attempting to toggle on
-					if (fullscreen_windows.size() == 0) { // If we should be turning it on in the first place and there are no fullscreen windows
-						color_settings.set_boolean("night-light-enabled", original_night_light_setting); // Revert to original state
-					}
-				} else { // Attempting to toggle off
-					if (fullscreen_windows.size() > 0) { // Fullscreen windows
-						color_settings.set_boolean("night-light-enabled", false);
-					}
+				SignalHandler.block(color_settings, color_id);
+
+				if (fullscreen_windows.size() >= 1) { // Has fullscreen windows
+					color_settings.set_boolean("night-light-enabled", false);
+				} else { // Has no fullscreen windows
+					color_settings.set_boolean("night-light-enabled", original_night_light_setting); // Set back to our original
 				}
+
+				SignalHandler.unblock(color_settings, color_id);
 			}
 		}
 
