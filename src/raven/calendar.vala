@@ -61,11 +61,7 @@ public class CalendarWidget : RavenWidget {
 		bool show = false;
 
 		if (this.settings != null) {
-			try {
-				show = this.settings.get_boolean(ENABLE_WEEK_NUM);
-			} catch (Error e) {
-				warning("Failed to get value for %s: ", ENABLE_WEEK_NUM);
-			}
+			show = this.settings.get_boolean(ENABLE_WEEK_NUM);
 		}
 
 		this.cal.show_week_numbers = show;

@@ -302,7 +302,7 @@ namespace Budgie {
 			get_style_context().add_class("budgie-container");
 
 			settings = new Settings("com.solus-project.budgie-raven");
-			settings.changed.connect(this.on_raven_settings_changed);
+			settings.changed["show-power-strip"].connect(on_power_strip_change);
 
 			Raven._instance = this;
 
@@ -368,25 +368,19 @@ namespace Budgie {
 
 			this.screen_edge = Gtk.PositionType.LEFT;
 
-			on_raven_settings_changed("show-power-strip");
+			on_power_strip_change(); // Trigger our power strip change func immediately
 		}
 
 		/**
-		* on_raven_settings_changed will handle when the settings for Raven have changed
+		* on_power_strip_change will handle when the settings for Raven's Power Strip has changed
 		*/
-		private void on_raven_settings_changed(string key) {
-			if (key == "show-power-strip") {
-				try {
-					bool show_strip = settings.get_boolean(key);
+		private void on_power_strip_change() {
+			bool show_strip = settings.get_boolean("show-power-strip");
 
-					if (show_strip) { // If we should show the strip
-						strip.show_all();
-					} else { // If we should hide the strip
-						strip.hide();
-					}
-				} catch (Error e) {
-					strip.show_all(); // Default to showing
-				}
+			if (show_strip) { // If we should show the strip
+				strip.show_all();
+			} else { // If we should hide the strip
+				strip.hide();
 			}
 		}
 

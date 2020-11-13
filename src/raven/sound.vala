@@ -457,11 +457,7 @@ namespace Budgie {
 				Gtk.ListBoxRow row = apps.get(id);
 
 				if (row != null) { // If this row exists
-					try {
-						apps_listbox.remove(row); // Remove row from listbox
-					} catch (Error e) {
-						warning("Issue during row destroy: %s", e.message);
-					}
+					apps_listbox.remove(row); // Remove row from listbox
 				}
 
 				apps.steal(id); // Remove the apps

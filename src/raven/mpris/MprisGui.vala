@@ -131,11 +131,17 @@ public class ClientWidget : Gtk.Box {
 		prev_btn = btn;
 		btn.clicked.connect(() => {
 			if (client.player.can_go_previous) {
-				try {
-					client.player.previous.begin();
-				} catch (Error e) {
-					warning("Could not go to previous track: %s", e.message);
-				}
+				client.player.previous.begin((obj, res) => {
+					try {
+						try {
+							client.player.previous.end(res);
+						} catch (IOError e) {
+							warning("Error going to the previous track %s: %s", client.player.identity, e.message);
+						}
+					} catch (DBusError e) {
+						warning("Error going to the previous track %s: %s", client.player.identity, e.message);
+					}
+				});
 			}
 		});
 		btn.get_style_context().add_class("flat");
@@ -145,11 +151,17 @@ public class ClientWidget : Gtk.Box {
 		play_btn = btn;
 		btn.set_can_focus(false);
 		btn.clicked.connect(() => {
-			try {
-				client.player.play_pause.begin();
-			} catch (Error e) {
-				warning("Could not play/pause: %s", e.message);
-			}
+			client.player.play_pause.begin((obj, res) => {
+				try {
+					try {
+						client.player.play_pause.end(res);
+					} catch (IOError e) {
+						warning("Error toggling play state %s: %s", client.player.identity, e.message);
+					}
+				} catch (DBusError e) {
+					warning("Error toggling the play state %s: %s", client.player.identity, e.message);
+				}
+			});
 		});
 		btn.get_style_context().add_class("flat");
 		controls.pack_start(btn, false, false, 0);
@@ -160,11 +172,17 @@ public class ClientWidget : Gtk.Box {
 		next_btn = btn;
 		btn.clicked.connect(() => {
 			if (client.player.can_go_next) {
-				try {
-					client.player.next.begin();
-				} catch (Error e) {
-					warning("Could not go to next track: %s", e.message);
-				}
+				client.player.next.begin((obj, res) => {
+					try {
+						try {
+							client.player.next.end(res);
+						} catch (IOError e) {
+							warning("Error going to the next track %s: %s", client.player.identity, e.message);
+						}
+					} catch (DBusError e) {
+						warning("Error going to the next track %s: %s", client.player.identity, e.message);
+					}
+				});
 			}
 		});
 		btn.get_style_context().add_class("flat");
@@ -234,11 +252,19 @@ public class ClientWidget : Gtk.Box {
 		if (client == null || !client.player.can_raise) {
 			return Gdk.EVENT_PROPAGATE;
 		}
-		try {
-			client.player.raise.begin();
-		} catch (Error e) {
-			message(e.message);
-		}
+
+		client.player.raise.begin((obj, res) => {
+			try {
+				try {
+					client.player.raise.end(res);
+				} catch (IOError e) {
+					warning("Error raising the client for %s: %s", client.player.identity, e.message);
+				}
+			} catch (DBusError e) {
+				warning("Error raising the client for %s: %s", client.player.identity, e.message);
+			}
+		});
+
 		return Gdk.EVENT_STOP;
 	}
 

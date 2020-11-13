@@ -43,13 +43,13 @@ namespace Budgie {
 		* check_music_support will check if we have an application that supports vorbis.
 		* We're checking for vorbis since it's more likely the end user has open source vorbis support than alternative codecs like MP3
 		*/
-		public void check_music_support() {
+		private void check_music_support() {
 			music_app = AppInfo.get_default_for_type("audio/vorbis", false);
 			has_music_player = (music_app != null);
 			start_listening.set_visible(has_music_player); // Set the visibility of the button based on if we have a music player
 		}
 
-		public void launch_music_player() {
+		private void launch_music_player() {
 			if (music_app == null) {
 				return;
 			}

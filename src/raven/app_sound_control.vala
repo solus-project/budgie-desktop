@@ -145,7 +145,7 @@ namespace Budgie {
 		/**
 		 * get_base_volume will get the recommended base volume based on the stream and primary device stream
 		 */
-		public uint32 get_base_volume() {
+		private uint32 get_base_volume() {
 			var base_vol = stream.get_volume();
 			var primary_stream_vol = primary_stream.get_base_volume();
 			return (base_vol < primary_stream_vol) ? primary_stream_vol : base_vol;
@@ -154,7 +154,7 @@ namespace Budgie {
 		/**
 		 * on_slider_change will handle when our volume_slider scale changes
 		 */
-		public void on_slider_change() {
+		 private void on_slider_change() {
 			var slider_value = volume_slider.get_value();
 
 			SignalHandler.block(volume_slider, scale_id);
@@ -208,7 +208,7 @@ namespace Budgie {
 		/**
 		 * set_mute_ui will set the image for the app_mute_button and change dim state of the input
 		 */
-		public void set_mute_ui() {
+		private void set_mute_ui() {
 			if (manually_toggled_mute || is_pre_muted) { // Muted
 				app_mute_button.set_image(audio_muted);
 			} else { // Not Muted
@@ -220,7 +220,7 @@ namespace Budgie {
 		 * toggle_mute_state will toggle the volume and internal muted state
 		 * This is done because gvc muted value change and tracking is fundamentally broken for apps
 		 */
-		public void toggle_mute_state() {
+		private void toggle_mute_state() {
 			manually_toggled_mute = !manually_toggled_mute; // Invert muted state
 
 			SignalHandler.block(volume_slider, scale_id);
@@ -240,7 +240,7 @@ namespace Budgie {
 		/**
 		 * volume_at_mute_threadshold will return if the stream volume is at a threshold that it should indicate it is muted
 		 */
-		public bool volume_at_mute_threshold() {
+		private bool volume_at_mute_threshold() {
 			var base_vol = this.get_base_volume();
 			var stream_volume = this.stream.get_volume();
 			return (stream_volume <= (base_vol / 20));

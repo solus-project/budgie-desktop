@@ -356,17 +356,22 @@ namespace Budgie {
 				} else {
 					/* Use the .desktop icon if we can */
 					if (has_desktop) {
-						try {
-							string? did = this.app_name;
-							if (!did.has_suffix(".desktop")) {
-								did = "%s.desktop".printf(did);
-							}
-							var app_info = new DesktopAppInfo(did);
+						string? did = this.app_name;
+						if (!did.has_suffix(".desktop")) {
+							did = "%s.desktop".printf(did);
+						}
 
+						bool set_icon = false;
+						var app_info = new DesktopAppInfo(did);
+
+						if (app_info != null) { // If we got the DesktopAppInfo
 							if (app_info.has_key("Icon")) {
 								image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+								set_icon = true;
 							}
-						} catch (Error e) {
+						}
+
+						if (!set_icon) { // Didn't set the icon from a DesktopAppInfo
 							image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
 							this.icon_name = "mail-unread-symbolic";
 						}
@@ -374,6 +379,7 @@ namespace Budgie {
 						image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
 						this.icon_name = "mail-unread-symbolic";
 					}
+
 					image_icon.pixel_size = 48;
 				}
 			}
@@ -560,18 +566,14 @@ namespace Budgie {
 						app_icon = "applications-internet";
 					}
 
-					try {
-						DesktopAppInfo app_info = new DesktopAppInfo(app_name + ".desktop");
+					DesktopAppInfo app_info = new DesktopAppInfo(app_name + ".desktop");
 
-						if (app_info != null) {
-							app_name = app_info.get_string("Name");
+					if (app_info != null) {
+						app_name = app_info.get_string("Name");
 
-							if (app_info.has_key("Icon")) {
-								app_icon = app_info.get_string("Icon");
-							}
+						if (app_info.has_key("Icon")) {
+							app_icon = app_info.get_string("Icon");
 						}
-					} catch (Error e) {
-						stdout.printf("Failed to get desktop info for: %s", app_name);
 					}
 
 					var notifications_group = notifications_list.lookup(app_name);
