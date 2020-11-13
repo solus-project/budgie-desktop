@@ -154,7 +154,7 @@ namespace Budgie {
 		/**
 		 * on_slider_change will handle when our volume_slider scale changes
 		 */
-		 private void on_slider_change() {
+		private void on_slider_change() {
 			var slider_value = volume_slider.get_value();
 
 			SignalHandler.block(volume_slider, scale_id);
