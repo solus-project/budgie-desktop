@@ -960,13 +960,14 @@ public class IconButton : Gtk.ToggleButton {
 				this.window.activate(event.time);
 			}
 		} else if (class_group != null) {
-			bool one_active = false;
+			bool one_active = false; // Determine if one of our windows is active so we know if we should show all or hide all if that setting is enabled
 
 			GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
 
 			foreach (Wnck.Window win in list) {
-				if (win.is_active()) {
+				if (win.is_active()) { // if the window is active
 					one_active = true;
+					break;
 				}
 			}
 
@@ -979,13 +980,13 @@ public class IconButton : Gtk.ToggleButton {
 			}
 
 			if ((len == 1) || (len > 1 && !show_all_windows_on_click)) { // Only one window or multiple but show all not enabled
-				toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the window
+				toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the first window in the class group
 			} else if (len > 1 && show_all_windows_on_click) { // Multiple windows
-				list.foreach((w) => {
-					if (one_active) {
-						w.minimize();
-					} else {
-						w.unminimize(event.time); // Ensure we unminimize it
+				list.foreach((w) => { // Cycle through the apps
+					if (one_active) { // One of them is active
+						w.minimize(); // Hide all
+					} else { // None of them are active
+						w.unminimize(event.time);
 						w.activate(event.time);
 					}
 				});
