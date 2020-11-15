@@ -979,7 +979,7 @@ public class IconButton : Gtk.ToggleButton {
 			}
 
 			if ((len == 1) || (len > 1 && !show_all_windows_on_click)) { // Only one window or multiple but show all not enabled
-				toggle_window_minstate(event.time, last_active_window); // Toggle the minimize / unminimize state of the window
+				toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the window
 			} else if (len > 1 && show_all_windows_on_click) { // Multiple windows
 				list.foreach((w) => {
 					if (one_active) {
@@ -1103,9 +1103,12 @@ public class IconButton : Gtk.ToggleButton {
 
 	// toggle_window_minstate will toggle the minimize / unminimize window state for the provided window
 	private void toggle_window_minstate(uint32 time, Wnck.Window win) {
-		if (win.is_minimized()) { // Is the window minimized
-			win.unminimize(time); // Ensure we unminimize it
+		Wnck.Window? current_active_window = win.get_screen().get_active_window();
+		bool is_current_active_window = (win.get_xid() == ((current_active_window != null) ? current_active_window.get_xid() : 0));
+
+		if (win.is_minimized() || !is_current_active_window) { // Is the window minimized or isn't the current active window
 			win.activate(time);
+			win.unminimize(time); // Ensure we unminimize it
 		} else { // Window is not minimized
 			win.minimize();
 		}
