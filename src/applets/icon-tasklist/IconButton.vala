@@ -950,6 +950,8 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	private void handle_launch_clicks(Gdk.EventButton event, bool was_double_click) {
+		bool should_launch_app = false;
+
 		if (this.window != null) {
 			if (this.window.is_active()) {
 				this.window.minimize();
@@ -958,44 +960,43 @@ public class IconButton : Gtk.ToggleButton {
 				this.window.activate(event.time);
 			}
 		} else if (class_group != null) {
-			bool all_unminimized = true;
 			bool one_active = false;
-			int num = 0;
 
 			GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
 
 			foreach (Wnck.Window win in list) {
-				if (win.is_minimized()) {
-					all_unminimized = false;
-				}
 				if (win.is_active()) {
 					one_active = true;
 				}
-				num++;
 			}
 
-			if (num > 0) { // we have windows on this workspace
-				bool show_all_windows_on_click = false;
+			uint len = list.length();
 
-				if (this.settings != null) { // Settings defined
-					show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
-				}
+			bool show_all_windows_on_click = false;
 
+			if (this.settings != null) { // Settings defined
+				show_all_windows_on_click = this.settings.get_boolean("show-all-windows-on-click");
+			}
+
+			if ((len == 1) || (len > 1 && !show_all_windows_on_click)) { // Only one window or multiple but show all not enabled
+				toggle_window_minstate(event.time, last_active_window); // Toggle the minimize / unminimize state of the window
+			} else if (len > 1 && show_all_windows_on_click) { // Multiple windows
 				list.foreach((w) => {
 					if (one_active) {
 						w.minimize();
 					} else {
-						if (show_all_windows_on_click) { // Show all windows
-							w.activate(event.time);
-						} else { // Only show last active window
-							last_active_window.activate(event.time);
-						}
+						w.unminimize(event.time); // Ensure we unminimize it
+						w.activate(event.time);
 					}
 				});
-			} else {
-				last_active_window.activate(event.time);
+			} else { // No windows
+				should_launch_app = true;
 			}
 		} else {
+			should_launch_app = true;
+		}
+
+		if (should_launch_app) { // If we should be launching the app
 			bool require_double_click = this.settings.get_boolean("require-double-click-to-launch");
 
 			if ((was_double_click && require_double_click) || !require_double_click) { // Used double click when enabled, or don't require double click
@@ -1098,6 +1099,16 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		return Gdk.EVENT_STOP;
+	}
+
+	// toggle_window_minstate will toggle the minimize / unminimize window state for the provided window
+	private void toggle_window_minstate(uint32 time, Wnck.Window win) {
+		if (win.is_minimized()) { // Is the window minimized
+			win.unminimize(time); // Ensure we unminimize it
+			win.activate(time);
+		} else { // Window is not minimized
+			win.minimize();
+		}
 	}
 
 	public DesktopAppInfo? get_appinfo() {
