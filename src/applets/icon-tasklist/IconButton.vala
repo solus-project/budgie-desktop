@@ -961,8 +961,20 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		} else if (class_group != null) {
 			bool one_active = false; // Determine if one of our windows is active so we know if we should show all or hide all if that setting is enabled
+			Wnck.Workspace active_workspace = screen.get_active_workspace(); // Get the active workspace
 
-			GLib.List<unowned Wnck.Window> list = this.desktop_helper.get_stacked_for_classgroup(this.class_group);
+			GLib.List<unowned Wnck.Window> list = new List<unowned Wnck.Window>();
+			List<weak ulong?> win_ids = this.popover.window_id_to_name.get_keys(); // Get all the window ids regardless of workspace state
+
+			foreach (ulong id in win_ids) { // For each window ID
+				Wnck.Window? win = Wnck.Window.@get(id); // Get the window
+
+				if (win == null) { // Window doesn't exist
+					continue; // Skip it
+				}
+
+				list.append(win); // Add to our list
+			}
 
 			foreach (Wnck.Window win in list) {
 				if (win.is_active()) { // if the window is active
@@ -980,7 +992,16 @@ public class IconButton : Gtk.ToggleButton {
 			}
 
 			if ((len == 1) || (len > 1 && !show_all_windows_on_click)) { // Only one window or multiple but show all not enabled
-				toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the first window in the class group
+				Wnck.Window only_window = list.nth_data(0); // Get the window
+
+				if (!only_window.is_on_workspace(active_workspace)) { // If the window is not on this workspace
+					Wnck.Workspace winspace = only_window.get_workspace(); // Get the window's workspace
+					winspace.activate(event.time); // Make this the active workspace
+					only_window.activate(event.time); // Activate the window
+					only_window.unminimize(event.time); // Ensure we unminimize it
+				} else { // Window is on this workspace, allow toggling it
+					toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the first window in the class group
+				}
 			} else if (len > 1 && show_all_windows_on_click) { // Multiple windows
 				list.foreach((w) => { // Cycle through the apps
 					if (one_active) { // One of them is active
