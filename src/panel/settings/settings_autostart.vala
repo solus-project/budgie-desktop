@@ -503,9 +503,9 @@ namespace Budgie {
 
 		private Gtk.Menu create_menu() {
 			Gtk.Menu menu = new Gtk.Menu();
-			Gtk.MenuItem item_new_app = new Gtk.MenuItem.with_label("Add application");
+			Gtk.MenuItem item_new_app = new Gtk.MenuItem.with_label(_("Add Application"));
 			menu.add(item_new_app);
-			Gtk.MenuItem item_new_command = new Gtk.MenuItem.with_label("Add command");
+			Gtk.MenuItem item_new_command = new Gtk.MenuItem.with_label(_("Add Command"));
 			menu.add(item_new_command);
 
 			item_new_app.activate.connect(on_add_app);
