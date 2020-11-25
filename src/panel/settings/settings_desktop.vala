@@ -193,10 +193,23 @@ namespace Budgie {
 			} else if (use_desktop_type == DesktopType.DESKTOPFOLDER) { // Desktop Folder
 				return desktop_folder_settings.get_boolean("show-desktopfolder");
 			} else if (use_desktop_type == DesktopType.NEMO) { // Nemo
-				// TODO: They're special and have a string which is a format of "bool::bool" for primary and remaining monitors
+				return nemo_settings.get_string("desktop-layout").has_prefix("true::");
 			}
 
 			return false;
+		}
+
+		// nemo_value_mapping will convert its string value into a boolean for the switch
+		private bool nemo_value_mapping(Value val, Variant variant, void* user_data) {
+			unowned string setting = variant.get_string(); // Get as a string
+			val.set_boolean(setting.has_prefix("true::")); // Only supporting primary monitor at this time
+			return true;
+		}
+
+		// nemo_to_value_mapping will convert its boolean value into a string for nemo's settings
+		private Variant nemo_to_value_mapping(Value val, VariantType t, void* user_data) {
+			bool switch_enabled = val.get_boolean();
+			return new Variant.string(switch_enabled ? "true::false" : "false::false"); // If the switch is enabled, set true for primary monitor, otherwise false
 		}
 
 		// setup_show_binding will set up the show binding
@@ -206,7 +219,7 @@ namespace Budgie {
 			} else if (use_desktop_type == DesktopType.DESKTOPFOLDER) { // Desktop Folder
 				desktop_folder_settings.bind("show-desktopfolder", show_switch, "active", SettingsBindFlags.DEFAULT);
 			} else if (use_desktop_type == DesktopType.NEMO) { // Nemo
-				// TODO: They're special and have a string which is a format of "bool::bool" for primary and remaining monitors
+				nemo_settings.bind_with_mapping("desktop-layout", show_switch, "active", SettingsBindFlags.DEFAULT, (SettingsBindGetMappingShared) nemo_value_mapping, (SettingsBindSetMappingShared) nemo_to_value_mapping, null, null);
 			}
 		}
 
