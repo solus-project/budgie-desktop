@@ -43,21 +43,12 @@ namespace Budgie {
 		private void init_desktop_menu() {
 			desktop_menu = new Gtk.Menu();
 			desktop_menu.show();
-			var item = new Gtk.MenuItem.with_label(_("Change background"));
-			item.activate.connect(background_activate);
+			var item = new Gtk.MenuItem.with_label(_("Budgie Desktop Settings"));
+			item.activate.connect(budgie_activate);
 			item.show();
 			desktop_menu.append(item);
 
-			item = new Gtk.MenuItem.with_label(_("Displays"));
-			item.activate.connect(display_activate);
-			item.show();
-			desktop_menu.append(item);
-
-			var sep = new Gtk.SeparatorMenuItem();
-			sep.show();
-			desktop_menu.append(sep);
-
-			item = new Gtk.MenuItem.with_label(_("Settings"));
+			item = new Gtk.MenuItem.with_label(_("System Settings"));
 			item.activate.connect(settings_activate);
 			item.show();
 			desktop_menu.append(item);
@@ -81,17 +72,10 @@ namespace Budgie {
 		}
 
 		/**
-		* Launch the Background (wallpaper) settings
+		* Launch Budgie Desktop Settings
 		*/
-		private void background_activate() {
-			launch_desktop_name("gnome-background-panel.desktop");
-		}
-
-		/**
-		* Launch display settings (gnome control center: Display)
-		*/
-		private void display_activate() {
-			launch_desktop_name("gnome-display-panel.desktop");
+		private void budgie_activate() {
+			launch_desktop_name("budgie-desktop-settings.desktop");
 		}
 
 		/**
