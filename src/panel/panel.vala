@@ -331,6 +331,7 @@ namespace Budgie {
 			this.settings.bind(Budgie.PANEL_KEY_DOCK_MODE, this, "dock-mode", SettingsBindFlags.DEFAULT);
 
 			this.notify["dock-mode"].connect(this.update_dock_mode);
+			layout.set_dock_mode(this.dock_mode);
 
 			shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
 			this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
