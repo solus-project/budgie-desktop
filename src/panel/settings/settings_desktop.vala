@@ -9,10 +9,6 @@
  * (at your option) any later version.
  */
 
-// Super duper important implementation note: Nemo support is currently "speculative".
-// This note should be removed when a downstream that *uses* Nemo validates and provides additional patches to support.
-// Should this not be done within a timely manner, this speculative support may be removed.
-
 namespace Budgie {
 
 	public enum DesktopType {
@@ -154,7 +150,7 @@ namespace Budgie {
 				case DesktopType.DESKTOPFOLDER:
 					return "com.github.spheras.desktopfolder";
 				case DesktopType.NEMO:
-					return "nemo";
+					return "nemo-desktop";
 				default:
 					return "none";
 			}
@@ -193,23 +189,10 @@ namespace Budgie {
 			} else if (use_desktop_type == DesktopType.DESKTOPFOLDER) { // Desktop Folder
 				return desktop_folder_settings.get_boolean("show-desktopfolder");
 			} else if (use_desktop_type == DesktopType.NEMO) { // Nemo
-				return nemo_settings.get_string("desktop-layout").has_prefix("true::");
+				return nemo_settings.get_boolean("show-desktop-icons");
 			}
 
 			return false;
-		}
-
-		// nemo_value_mapping will convert its string value into a boolean for the switch
-		private bool nemo_value_mapping(Value val, Variant variant, void* user_data) {
-			unowned string setting = variant.get_string(); // Get as a string
-			val.set_boolean(setting.has_prefix("true::")); // Only supporting primary monitor at this time
-			return true;
-		}
-
-		// nemo_to_value_mapping will convert its boolean value into a string for nemo's settings
-		private Variant nemo_to_value_mapping(Value val, VariantType t, void* user_data) {
-			bool switch_enabled = val.get_boolean();
-			return new Variant.string(switch_enabled ? "true::false" : "false::false"); // If the switch is enabled, set true for primary monitor, otherwise false
 		}
 
 		// setup_show_binding will set up the show binding
@@ -219,7 +202,7 @@ namespace Budgie {
 			} else if (use_desktop_type == DesktopType.DESKTOPFOLDER) { // Desktop Folder
 				desktop_folder_settings.bind("show-desktopfolder", show_switch, "active", SettingsBindFlags.DEFAULT);
 			} else if (use_desktop_type == DesktopType.NEMO) { // Nemo
-				nemo_settings.bind_with_mapping("desktop-layout", show_switch, "active", SettingsBindFlags.DEFAULT, (SettingsBindGetMappingShared) nemo_value_mapping, (SettingsBindSetMappingShared) nemo_to_value_mapping, null, null);
+				nemo_settings.bind("show-desktop-icons", show_switch, "active", SettingsBindFlags.DEFAULT);
 			}
 		}
 
@@ -246,7 +229,7 @@ namespace Budgie {
 			if (use_desktop_type == DesktopType.BUDGIE) { // Budgie native
 				budgie_desktop_view_settings.bind("show-trash-folder", show_trash, "active", SettingsBindFlags.DEFAULT);
 			} else if (use_desktop_type == DesktopType.NEMO) { // NEMO
-				nemo_settings.bind("trash-icon-visible", show_home, "active", SettingsBindFlags.DEFAULT);
+				nemo_settings.bind("trash-icon-visible", show_trash, "active", SettingsBindFlags.DEFAULT);
 			}
 		}
 
