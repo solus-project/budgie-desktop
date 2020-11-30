@@ -11,6 +11,10 @@
 
 namespace Budgie {
 
+	// Long implementation note:
+	// Caja is intentionally missing. While there is no doubt it is a fantastic file browser and well suited for the MATE Desktop, unfortunately Caja forces the drawing of the user background and as such it would make it cumbersome to support.
+	// This support would require us to ensure whenever we update the background value in the GNOME schemas, we do the same for caja, and handle any added usecases where the schema doesn't exist.
+	// Additionally, Caja's Desktop implementation sets itself to 0,0 and spans the entire XScreen, with no configuration for at least setting the beginning position / monitor for icons, or setting it not to span.
 	public enum DesktopType {
 		NONE = 0,
 		BUDGIE = 1,
