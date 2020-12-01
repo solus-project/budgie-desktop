@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
- namespace Budgie {
+namespace Budgie {
 
 	// Long implementation note:
 	// Caja is intentionally missing. While there is no doubt it is a fantastic file browser and well suited for the MATE Desktop, unfortunately Caja forces the drawing of the user background and as such it would make it cumbersome to support.
