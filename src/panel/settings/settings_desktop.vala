@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Budgie {
+ namespace Budgie {
 
 	// Long implementation note:
 	// Caja is intentionally missing. While there is no doubt it is a fantastic file browser and well suited for the MATE Desktop, unfortunately Caja forces the drawing of the user background and as such it would make it cumbersome to support.
@@ -40,6 +40,7 @@ namespace Budgie {
 		private Gtk.Switch? show_home;
 		private Gtk.Switch? show_trash;
 		private Gtk.ComboBox? icon_size;
+		private Gtk.ComboBox? click_policy;
 
 		// use_desktop_type indicates what type of desktop settings we should use. By default it is none, but allow it to be overridden if the system has multiple "solutions".
 		// This also allows for the user to decide whether to go with the vendor's shipped solution or another.
@@ -107,6 +108,9 @@ namespace Budgie {
 				}
 
 				if (use_desktop_type == DesktopType.BUDGIE) { // DesktopType doesn't support icon size changing. Nemo might but needs validation.
+					click_policy = new Gtk.ComboBox(); // Click Policy combo box
+					setup_click_policy();
+
 					icon_size = new Gtk.ComboBox(); // Icon Size combo box
 					grid.add_row(new SettingsRow(icon_size,
 						_("Icon Size"),
@@ -199,6 +203,42 @@ namespace Budgie {
 			return false;
 		}
 
+		// setup_click_policy will set the up click_policy binding
+		private void setup_click_policy()  {
+			if (use_desktop_type == DesktopType.BUDGIE) { // Budgie native
+				var render = new Gtk.CellRendererText();
+				var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(string));
+
+				Gtk.TreeIter iter;
+				const string[] policies = { "single", "double" };
+
+				foreach (var pol in policies) {
+					model.append(out iter);
+					string label_name = _("Single");
+
+					if (pol == "double") {
+						// If the click policy is to double click
+						label_name = _("Double");
+					}
+
+					model.set(iter, 0, pol, 1, label_name, 2, pol, -1);
+				}
+
+				click_policy.set_model(model);
+				click_policy.set_id_column(0);
+
+				click_policy.pack_start(render, true);
+				click_policy.add_attribute(render, "text", 1);
+
+				budgie_desktop_view_settings.bind("click-policy", click_policy, "active-id", SettingsBindFlags.DEFAULT);
+
+				grid.add_row(new SettingsRow(click_policy,
+					_("Click Policy"),
+					_("Click Policy determines if we should open items on a single or double click.")
+				));
+			}
+		}
+
 		// setup_show_binding will set up the show binding
 		private void setup_show_binding() {
 			if (use_desktop_type == DesktopType.BUDGIE) { // Budgie native
@@ -242,9 +282,9 @@ namespace Budgie {
 			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(string));
 
 			Gtk.TreeIter iter;
-			const string[] z = { "small", "normal", "large", "massive"};
+			const string[] icon_sizes = { "small", "normal", "large", "massive"};
 
-			foreach (var s in z) {
+			foreach (var s in icon_sizes) {
 				model.append(out iter);
 				string label_name = _("Normal");
 
