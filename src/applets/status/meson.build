@@ -21,7 +21,7 @@ applet_status_deps = [
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
-    dependency('gnome-bluetooth-1.0', version: gnome_minimum_version),
+    dependency('gnome-bluetooth-1.0', version: '>= 3.34.0'),
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libplugin,
     gvc.get_variable('libgvc_dep'),
