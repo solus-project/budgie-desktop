@@ -168,7 +168,7 @@ static void carbon_child_class_init(CarbonChildClass* klass) {
 }
 
 static bool set_wmclass(CarbonChild* self, Display* xdisplay) {
-	XClassHint ch;
+	XClassHint ch = {};
 
 	GdkDisplay* display = gdk_display_get_default();
 	gdk_x11_display_error_trap_push(display);
