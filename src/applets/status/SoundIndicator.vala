@@ -18,8 +18,6 @@ public class SoundIndicator : Gtk.Bin {
 	/** Our mixer */
 	public Gvc.MixerControl mixer { protected set ; public get ; }
 
-	public uint32 unmuted_volume_val = 0;
-
 	/** Default stream */
 	private Gvc.MixerStream? stream;
 
@@ -234,19 +232,7 @@ public class SoundIndicator : Gtk.Bin {
 
 	// toggle_mute_state will toggle the volume between muted and unmuted
 	private void toggle_mute_state() {
-		/**
-		 * You're probably wonder "hey, why aren't you using set_is_muted and get_is_muted"?
-		 * Great question. It doesn't work for toggling these values. Simple.
-		 */
-		bool is_muted = stream.get_volume() == 0;
-
-		if (is_muted) { // If we're muted
-			stream.set_volume(unmuted_volume_val); // Used our old value
-		} else {
-			stream.set_volume(0); // Set to 0
-		}
-
-		Gvc.push_volume(stream);
+		stream.change_is_muted(!stream.get_is_muted());
 	}
 
 	/**
@@ -308,10 +294,6 @@ public class SoundIndicator : Gtk.Bin {
 
 		show_all();
 		queue_draw();
-
-		if (stream.get_volume() != 0) { // If we haven't muted
-			unmuted_volume_val = stream.get_volume(); // Get our new volume
-		}
 	}
 
 	/**
