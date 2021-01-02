@@ -3,6 +3,6 @@ Module=nightlightapplet.so
 Name=Night Light
 _Description=Night Light
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2017-2020 Budgie Desktop Developers
+Copyright=Copyright © 2017-2021 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=weather-clear-night-symbolic

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop.
  *
- * Copyright © 2016-2020 Budgie Desktop Developers
+ * Copyright © 2016-2021 Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -3,6 +3,6 @@ Module=icontasklistapplet.so
 Name=Icon Task List
 _Description=Icon Task List
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2020 Budgie Desktop Developers
+Copyright=Copyright © 2015-2021 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=icon-task-list-symbolic

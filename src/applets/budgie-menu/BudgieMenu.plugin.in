@@ -3,6 +3,6 @@ Module=budgiemenuapplet.so
 Name=Budgie Menu
 _Description=Budgie Menu
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2014-2020 Budgie Desktop Developers
+Copyright=Copyright © 2014-2021 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=view-grid-symbolic

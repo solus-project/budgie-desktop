@@ -4,7 +4,7 @@ BUDGIE_VERSION="@PACKAGE_VERSION@"
 
 if [ "$1" = "--version" ]; then
     echo "budgie-desktop $BUDGIE_VERSION"
-    echo "Copyright © 2014-2020 Budgie Desktop Developers"
+    echo "Copyright © 2014-2021 Budgie Desktop Developers"
     exit 0
 fi
 

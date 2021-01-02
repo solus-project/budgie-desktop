@@ -102,6 +102,6 @@ The remainder of the project (i.e. installed binaries) is available under the te
 
 ## Authors
 
-Copyright © 2014-2020 Budgie Desktop Developers
+Copyright © 2014-2021 Budgie Desktop Developers
 
 See our [contributors graph](https://github.com/solus-project/budgie-desktop/graphs/contributors)!

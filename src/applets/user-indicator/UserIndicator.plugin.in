@@ -3,6 +3,6 @@ Module=libuserindicator.so
 Name=User Indicator
 _Description=User Indicator
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2016-2020 Budgie Desktop Developers
+Copyright=Copyright © 2016-2021 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=system-users-symbolic

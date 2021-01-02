@@ -3,6 +3,6 @@ Module=raventriggerapplet.so
 Name=Raven Trigger
 _Description=Raven Sidebar Control
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2016-2020 Budgie Desktop Developers
+Copyright=Copyright © 2016-2021 Budgie Desktop Developers
 Website=https://budgie-desktop.org
 Icon=pane-show-symbolic
