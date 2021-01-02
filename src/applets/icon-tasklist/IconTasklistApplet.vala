@@ -268,6 +268,10 @@ public class IconTasklistApplet : Budgie.Applet {
 				return;
 			}
 
+			if (info.get_startup_wm_class() == "budgie-desktop-settings") { // Is Budgie Desktop Settings
+				return; // Don't allow drag & drop
+			}
+
 			app_id = info.get_filename();
 
 			if (buttons.contains(app_id)) {
