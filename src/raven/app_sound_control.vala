@@ -19,8 +19,6 @@ namespace Budgie {
 		private Gtk.Label? app_label = null;
 		private Gtk.Button? app_mute_button = null;
 		private Gtk.Scale? volume_slider = null;
-		private bool manually_toggled_mute = false;
-		private bool is_pre_muted = false;
 		private uint32? volume;
 
 		private Gtk.Image? audio_not_muted = null;
@@ -45,8 +43,6 @@ namespace Budgie {
 			primary_stream = c_primary;
 			stream = c_stream;
 			app_name = c_name;
-
-			is_pre_muted = volume_at_mute_threshold();
 
 			/**
 			 * App Desktop Logic
@@ -102,12 +98,6 @@ namespace Budgie {
 
 			app_mute_button = new Gtk.Button();
 
-			if (is_pre_muted) { // If this app is already in a muted state
-				if (stream.set_volume(0)) { // If we're technically at the threshold but may not be 0, set it to 0
-					Gvc.push_volume(stream);
-				}
-			}
-
 			set_mute_ui();
 
 			app_mute_button.get_style_context().add_class("flat");
@@ -162,15 +152,8 @@ namespace Budgie {
 
 			volume = stream_vol;
 
-			if (!manually_toggled_mute) { // If we haven't manually toggled mute
-				if (stream.set_volume(stream_vol)) {
-					Gvc.push_volume(stream);
-
-					if (is_pre_muted) { // is_pre_muted at the time of sliding
-						is_pre_muted = false;
-						set_mute_ui();
-					}
-				}
+			if (stream.set_volume(stream_vol)) {
+				Gvc.push_volume(stream);
 			}
 
 			SignalHandler.unblock(volume_slider, scale_id);
@@ -201,7 +184,6 @@ namespace Budgie {
 			}
 
 			volume = vol;
-			is_pre_muted = volume_at_mute_threshold(); // Update our muted value
 			set_mute_ui(); // Ensure we have an updated mute
 		}
 
@@ -209,41 +191,19 @@ namespace Budgie {
 		 * set_mute_ui will set the image for the app_mute_button and change dim state of the input
 		 */
 		private void set_mute_ui() {
-			if (manually_toggled_mute || is_pre_muted) { // Muted
+			if (stream.get_is_muted()) {
 				app_mute_button.set_image(audio_muted);
-			} else { // Not Muted
+			} else {
 				app_mute_button.set_image(audio_not_muted);
 			}
 		}
 
-		/**
-		 * toggle_mute_state will toggle the volume and internal muted state
-		 * This is done because gvc muted value change and tracking is fundamentally broken for apps
-		 */
 		private void toggle_mute_state() {
-			manually_toggled_mute = !manually_toggled_mute; // Invert muted state
-
 			SignalHandler.block(volume_slider, scale_id);
-
-			if (manually_toggled_mute) {
-				stream.set_volume(0);
-			} else {
-				stream.set_volume(volume);
-			}
-
-			Gvc.push_volume(stream);
-			set_mute_ui(); // Update our image
-
+			stream.change_is_muted(!stream.get_is_muted());
+			stream.set_is_muted(!stream.get_is_muted());
+			set_mute_ui();
 			SignalHandler.unblock(volume_slider, scale_id);
-		}
-
-		/**
-		 * volume_at_mute_threadshold will return if the stream volume is at a threshold that it should indicate it is muted
-		 */
-		private bool volume_at_mute_threshold() {
-			var base_vol = this.get_base_volume();
-			var stream_volume = this.stream.get_volume();
-			return (stream_volume <= (base_vol / 20));
 		}
 	}
 }
