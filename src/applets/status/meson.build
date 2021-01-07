@@ -9,11 +9,21 @@ custom_target('plugin-file-status',
     install : true,
     install_dir : applet_status_dir)
 
+gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
+
+applet_status_resources = gnome.compile_resources(
+    'status-applet-resources',
+    gresource,
+    source_dir: meson.current_source_dir(),
+    c_name: 'budgie_status',
+)
+
 applet_status_sources = [
     'BluetoothIndicator.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
     'SoundIndicator.vala',
+    applet_status_resources
 ]
 
 applet_status_deps = [
@@ -46,4 +56,9 @@ shared_library(
     install: true,
     install_dir: applet_status_dir,
     install_rpath: rpath_libdir,
+)
+
+install_data(
+    'com.solus-project.status.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )

@@ -10,16 +10,31 @@
  */
 public class StatusPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
-		return new StatusApplet();
+		return new StatusApplet(uuid);
+	}
+}
+
+[GtkTemplate (ui="/com/solus-project/status/settings.ui")]
+public class StatusSettings : Gtk.Grid {
+	Settings? settings = null;
+
+	[GtkChild]
+	private Gtk.SpinButton? spinbutton_spacing;
+
+	public StatusSettings(Settings? settings) {
+		this.settings = settings;
+		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
 	}
 }
 
 public class StatusApplet : Budgie.Applet {
+	public string uuid { public set; public get; }
 	protected Gtk.Box widget;
 	protected BluetoothIndicator blue;
 	protected SoundIndicator sound;
 	protected PowerIndicator power;
 	protected Gtk.EventBox? wrap;
+	private Settings? settings;
 	private Budgie.PopoverManager? manager = null;
 
 	/**
@@ -39,12 +54,22 @@ public class StatusApplet : Budgie.Applet {
 		});
 	}
 
-	public StatusApplet() {
+	public StatusApplet(string uuid) {
+		Object(uuid: uuid);
+
 		wrap = new Gtk.EventBox();
 		add(wrap);
 
-		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		wrap.add(widget);
+
+		settings_schema = "com.solus-project.status";
+		settings_prefix = "/com/solus-project/budgie-panel/instance/status";
+
+		settings = get_applet_settings(uuid);
+		settings.changed["spacing"].connect((key) => {
+			if (widget != null) widget.set_spacing(settings.get_int("spacing"));
+		});
 
 		show_all();
 
@@ -53,7 +78,7 @@ public class StatusApplet : Budgie.Applet {
 		/* Power shows itself - we dont control that */
 
 		sound = new SoundIndicator();
-		widget.pack_start(sound, false, false, 2);
+		widget.pack_start(sound, false, false, 0);
 		sound.show_all();
 
 		/* Hook up the popovers */
@@ -61,7 +86,7 @@ public class StatusApplet : Budgie.Applet {
 		this.setup_popover(sound.ebox, sound.popover);
 
 		blue = new BluetoothIndicator();
-		widget.pack_start(blue, false, false, 2);
+		widget.pack_start(blue, false, false, 0);
 		blue.show_all();
 		this.setup_popover(blue.ebox, blue.popover);
 	}
@@ -80,6 +105,14 @@ public class StatusApplet : Budgie.Applet {
 		manager.register_popover(power.ebox, power.popover);
 		manager.register_popover(sound.ebox, sound.popover);
 		manager.register_popover(blue.ebox, blue.popover);
+	}
+
+	public override bool supports_settings() {
+		return true;
+	}
+
+	public override Gtk.Widget? get_settings_ui() {
+		return new StatusSettings(get_applet_settings(uuid));
 	}
 }
 
