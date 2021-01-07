@@ -98,17 +98,24 @@ bool carbon_child_realize(CarbonChild* self) {
 	GdkWindow* window = gtk_widget_get_window(widget);
 
 	GdkDisplay* display = gtk_widget_get_display(widget);
+	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+
+	// make X calls synchronous for background setting, so that BadWindow errors can be caught
 	gdk_x11_display_error_trap_push(display);
+	XSynchronize(xdisplay, true);
 
 	if (self->isComposited) {
-		XSetWindowBackground(GDK_DISPLAY_XDISPLAY(display), self->iconWindow, 0);
+		XSetWindowBackground(xdisplay, self->iconWindow, 0);
 	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
-		XSetWindowBackgroundPixmap(GDK_DISPLAY_XDISPLAY(display), self->iconWindow, None);
+		XSetWindowBackgroundPixmap(xdisplay, self->iconWindow, None);
 	} else {
 		self->parentRelativeBg = FALSE;
 	}
 
+	// make X calls asynchronous again, all errors have already been trapped
+	XSynchronize(xdisplay, false);
 	int error = gdk_x11_display_error_trap_pop(display);
+
 	if (error != 0) {
 		g_warning("Encountered X error %d when setting background for tray icon", error);
 		return false;
@@ -168,7 +175,7 @@ static void carbon_child_class_init(CarbonChildClass* klass) {
 }
 
 static bool set_wmclass(CarbonChild* self, Display* xdisplay) {
-	XClassHint ch = {};
+	XClassHint ch = {0};
 
 	GdkDisplay* display = gdk_display_get_default();
 	gdk_x11_display_error_trap_push(display);
