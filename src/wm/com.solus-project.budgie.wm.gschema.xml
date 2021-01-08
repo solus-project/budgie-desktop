@@ -68,6 +68,12 @@
 			<description>Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen.</description>
 		</key>
 
+		<key type="b" name="pause-notifications-on-fullscreen">
+			<default>false</default>
+			<summary>Pause notifications when windows are fullscreen</summary>
+			<description>Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen.</description>
+		</key>
+
 		<key type="b" name="experimental-enable-run-dialog-as-menu">
 			<default>false</default>
 			<summary>Enables the Budgie Run Dialog to be launched with the normal overlay key</summary>

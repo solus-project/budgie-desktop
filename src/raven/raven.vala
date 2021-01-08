@@ -156,6 +156,15 @@ namespace Budgie {
 			this.dnd_enabled = enable;
 			this.DoNotDisturbChanged(this.dnd_enabled);
 		}
+
+		/**
+		* Notification pausing on fullscreen functionality
+		*/
+		public signal void PauseNotificationsChanged(bool paused);
+
+		public void SetPauseNotifications(bool paused) throws DBusError, IOError {
+			PauseNotificationsChanged(paused);
+		}
 	}
 
 	public class Raven : Gtk.Window {
