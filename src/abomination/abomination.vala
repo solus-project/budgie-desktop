@@ -9,6 +9,14 @@
  * (at your option) any later version.
  */
 
+private const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
+private const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
+
+[DBus (name="org.budgie_desktop.Raven")]
+public interface AbominationRavenRemote : GLib.Object {
+	public async abstract void SetPauseNotifications(bool paused) throws DBusError, IOError;
+}
+
 namespace Budgie {
 	/**
 	 * Abomination is our application state tracking manager
@@ -18,11 +26,13 @@ namespace Budgie {
 		private Settings? color_settings = null;
 		private Settings? wm_settings = null;
 		private bool original_night_light_setting = false;
-		private bool should_disable_on_fullscreen = false;
+		private bool should_disable_night_light_on_fullscreen = false;
+		private bool should_pause_notifications_on_fullscreen = false;
 		public HashTable<string?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their name and respective Wnck.Window
 		public HashTable<string?,Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
 		public HashTable<ulong?,AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
 		private Wnck.Screen screen = null;
+		private AbominationRavenRemote? raven_proxy = null;
 
 		private ulong color_id = 0;
 
@@ -44,17 +54,21 @@ namespace Budgie {
 			running_apps_id = new HashTable<ulong?,AbominationRunningApp?>(int_hash, int_equal);
 			screen = Wnck.Screen.get_default();
 
+			Bus.get_proxy.begin<AbominationRavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
+
 			if (color_settings != null) { // gsd colors plugin schema defined
 				update_night_light_value();
 				color_id = color_settings.changed["night-light-enabled"].connect(update_night_light_value);
 			}
 
 			if (wm_settings != null) {
-				update_should_disable_value();
+				update_should_disable_night_light();
+				update_should_pause_notifications();
 
 				wm_settings.changed["disable-night-light-on-fullscreen"].connect(() => {
-					update_should_disable_value();
+					update_should_disable_night_light();
 				});
+				wm_settings.changed["pause-notifications-on-fullscreen"].connect(update_should_pause_notifications);
 			}
 
 			screen.class_group_closed.connect((group) => { // On group closed
@@ -82,6 +96,15 @@ namespace Budgie {
 			screen.get_windows().foreach((window) => { // Init all our current running windows
 				add_app(window);
 			});
+		}
+
+		/* Hold onto our Raven proxy ref */
+		void on_raven_get(Object? o, AsyncResult? res) {
+			try {
+				raven_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to gain Raven proxy: %s", e.message);
+			}
 		}
 
 		/**
@@ -137,6 +160,7 @@ namespace Budgie {
 					}
 
 					toggle_night_light(); // Ensure we toggle Night Light if needed
+					set_notifications_paused(); // Ensure we pause notifications if needed
 				}
 			});
 		}
@@ -249,7 +273,7 @@ namespace Budgie {
 		 * If we're disabling, we'll check if there is any items in fullscreen_windows first
 		 */
 		private void toggle_night_light() {
-			if (should_disable_on_fullscreen) {
+			if (should_disable_night_light_on_fullscreen) {
 				SignalHandler.block(color_settings, color_id);
 
 				if (fullscreen_windows.size() >= 1) { // Has fullscreen windows
@@ -262,12 +286,27 @@ namespace Budgie {
 			}
 		}
 
+		private void set_notifications_paused() {
+			if (should_pause_notifications_on_fullscreen) {
+				raven_proxy.SetPauseNotifications.begin(fullscreen_windows.size() >= 1);
+			}
+		}
+
 		/**
-		 * update_should_disable_value will update our value determininngn if we should disable night light on fullscreen
+		 * update_should_disable_night_light will update our value determining if we should disable night light on fullscreen
 		 */
-		private void update_should_disable_value() {
+		private void update_should_disable_night_light() {
 			if (wm_settings != null) {
-				should_disable_on_fullscreen = wm_settings.get_boolean("disable-night-light-on-fullscreen");
+				should_disable_night_light_on_fullscreen = wm_settings.get_boolean("disable-night-light-on-fullscreen");
+			}
+		}
+
+		/**
+		 * update_should_pause_notifications will update our value determining if we should pause notifications on fullscreen
+		 */
+		 private void update_should_pause_notifications() {
+			if (wm_settings != null) {
+				should_pause_notifications_on_fullscreen = wm_settings.get_boolean("pause-notifications-on-fullscreen");
 			}
 		}
 

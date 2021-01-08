@@ -14,6 +14,7 @@ namespace Budgie {
 	[DBus (name="org.budgie_desktop.Raven")]
 	public interface RavenRemote : GLib.Object {
 		public signal void ClearAllNotifications();
+		public signal void PauseNotificationsChanged(bool paused);
 	}
 
 	/** Spam apps */
@@ -508,6 +509,9 @@ namespace Budgie {
 			try {
 				raven_proxy = Bus.get_proxy.end(res);
 				raven_proxy.ClearAllNotifications.connect(on_clear_all);
+				raven_proxy.PauseNotificationsChanged.connect((paused) => {
+					notifications_paused = paused;
+				});
 			} catch (Error e) {
 				warning("Failed to gain Raven proxy: %s", e.message);
 			}
@@ -524,6 +528,7 @@ namespace Budgie {
 		private bool performing_clear_all = false;
 		private HeaderWidget? header = null;
 		private bool dnd_enabled = false;
+		private bool notifications_paused = false;
 
 		private Queue<NotificationWindow?> stack = null;
 
@@ -695,7 +700,7 @@ namespace Budgie {
 
 			int32 expire = expire_timeout;
 
-			if (dnd_enabled || !should_show) { // If DND is enabled or we shouldn't show notification
+			if (dnd_enabled || !should_show || notifications_paused) { // If DND is enabled or we shouldn't show notification
 				expire = 0;
 				/* Prevent pure derpery. */
 			} else if (expire_timeout < 4000 || expire_timeout > 20000) {
