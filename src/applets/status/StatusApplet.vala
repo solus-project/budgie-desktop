@@ -57,12 +57,6 @@ public class StatusApplet : Budgie.Applet {
 	public StatusApplet(string uuid) {
 		Object(uuid: uuid);
 
-		wrap = new Gtk.EventBox();
-		add(wrap);
-
-		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
-		wrap.add(widget);
-
 		settings_schema = "com.solus-project.status";
 		settings_prefix = "/com/solus-project/budgie-panel/instance/status";
 
@@ -70,6 +64,12 @@ public class StatusApplet : Budgie.Applet {
 		settings.changed["spacing"].connect((key) => {
 			if (widget != null) widget.set_spacing(settings.get_int("spacing"));
 		});
+
+		wrap = new Gtk.EventBox();
+		add(wrap);
+
+		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, settings.get_int("spacing"));
+		wrap.add(widget);
 
 		show_all();
 
