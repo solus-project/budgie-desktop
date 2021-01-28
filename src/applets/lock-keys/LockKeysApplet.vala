@@ -19,7 +19,10 @@ public class LockKeysApplet : Budgie.Applet {
 	Gtk.Box widget;
 	Gtk.Image caps;
 	Gtk.Image num;
+	Gtk.EventBox caps_box;
+	Gtk.EventBox num_box;
 	new Gdk.Keymap map;
+	const string XDOTOOL = "/usr/bin/xdotool";
 
 	public LockKeysApplet() {
 		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
@@ -29,8 +32,21 @@ public class LockKeysApplet : Budgie.Applet {
 		/* Pretty labels, probably use icons in future */
 		caps = new Gtk.Image.from_icon_name("caps-lock-symbolic", Gtk.IconSize.MENU);
 		num = new Gtk.Image.from_icon_name("num-lock-symbolic", Gtk.IconSize.MENU);
-		widget.pack_start(caps, false, false, 0);
-		widget.pack_start(num, false, false, 0);
+		caps_box = new Gtk.EventBox();
+		num_box = new Gtk.EventBox();
+		caps_box.add(caps);
+		num_box.add(num);;
+		widget.pack_start(caps_box, false, false, 0);
+		widget.pack_start(num_box, false, false, 0);
+
+		if (xdotool_installed()) {
+			caps_box.button_press_event.connect((eventbutton) => {
+				return on_panel_widget_clicked(eventbutton, "Caps_Lock");
+			});
+			num_box.button_press_event.connect((eventbutton) => {
+				return on_panel_widget_clicked(eventbutton, "Num_Lock");
+			});
+		}
 
 		map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
 		map.state_changed.connect(on_state_changed);
@@ -70,6 +86,25 @@ public class LockKeysApplet : Budgie.Applet {
 			num.set_tooltip_text(_("Num lock is not active"));
 			num.get_style_context().add_class("dim-label");
 		}
+	}
+
+	/* Returns true if xdotool is available */
+	protected bool xdotool_installed() {
+		return GLib.FileUtils.test(XDOTOOL, FileTest.IS_EXECUTABLE);
+	}
+
+	/* If xdotool is installed, handle the clicks on the panel icons */
+	protected bool on_panel_widget_clicked(Gdk.EventButton eventbutton, string button) {
+		if (eventbutton.button == 1)
+		{
+			try {
+				Process.spawn_command_line_async(string.join(" ", XDOTOOL, "key", button));
+				return Gdk.EVENT_STOP;
+			} catch (SpawnError e) {
+				return Gdk.EVENT_PROPAGATE;
+			}
+		}
+		return Gdk.EVENT_PROPAGATE;
 	}
 
 	protected void on_state_changed() {
