@@ -151,16 +151,11 @@ namespace Budgie {
 				rename_group(old_class_name, new_class); // Rename the class
 			});
 
-			app.window.state_changed.connect((changed, new_state) => {
-				if (Wnck.WindowState.FULLSCREEN in changed) {
-					if (Wnck.WindowState.FULLSCREEN in new_state) {
-						fullscreen_windows.insert(app.window.get_name(), app.window); // Add to fullscreen_windows
-					} else {
-						fullscreen_windows.steal(app.window.get_name()); // Remove from fullscreen_windows
-					}
+			track_window_fullscreen_state(app.window, app.window.get_state());
 
-					toggle_night_light(); // Ensure we toggle Night Light if needed
-					set_notifications_paused(); // Ensure we pause notifications if needed
+			app.window.state_changed.connect((changed, new_state) => {
+				if (Wnck.WindowState.FULLSCREEN in changed || Wnck.WindowState.MINIMIZED in changed) {
+					track_window_fullscreen_state(app.window, new_state);
 				}
 			});
 		}
@@ -191,10 +186,7 @@ namespace Budgie {
 
 			running_apps_id.steal(id); // Remove from running_apps_id
 
-			if (fullscreen_windows.contains(window.get_name())) { // Window was fullscreened at some point
-				fullscreen_windows.steal(window.get_name()); // Remove from fullscreen window if it was there in the first place
-				toggle_night_light(); // Toggle night light if necessary
-			}
+			track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
 
 			if (app != null) { // App is defined
 				Array<AbominationRunningApp> group_apps = running_apps.get(app.group); // Get apps based on group name
@@ -266,6 +258,24 @@ namespace Budgie {
 					});
 				}
 			}
+		}
+
+		/**
+		 * Adds and removes windows from fullscreen_windows depending on their state.
+		 * Additionally, toggles night light and notification pausing as necessary if either are enabled.
+		 */
+		public void track_window_fullscreen_state(Wnck.Window window, Wnck.WindowState? state) {
+			string window_name = window.get_name();
+
+			// only add a fullscreen window if it isn't currently minimized
+			if (state != null && Wnck.WindowState.FULLSCREEN in state && !(Wnck.WindowState.MINIMIZED in state)) {
+				fullscreen_windows.insert(window_name, window); // Add to fullscreen_windows
+			} else if (window_name in fullscreen_windows) {
+				fullscreen_windows.steal(window_name); // Remove from fullscreen_windows
+			}
+
+			toggle_night_light(); // Ensure we toggle Night Light if needed
+			set_notifications_paused(); // Ensure we pause notifications if needed
 		}
 
 		/**
