@@ -53,8 +53,9 @@ public class MenuButton : Gtk.Button {
 		var img = new Gtk.Image.from_gicon(parent.get_icon(), Gtk.IconSize.INVALID);
 		img.pixel_size = icon_size;
 		img.margin_end = 7;
-		var lab = new Gtk.Label(parent.get_display_name());
-		lab.halign = Gtk.Align.START;
+		var itemLabel = parent.get_display_name();
+		var lab = new Gtk.Label((itemLabel.length > 30) ? itemLabel.substring(0,30) + "..." : itemLabel);
+		lab.halign = Gtk.Align.CENTER;
 		lab.valign = Gtk.Align.CENTER;
 
 		const Gtk.TargetEntry[] drag_targets = { {"text/uri-list", 0, 0 }, {"application/x-desktop", 0, 0 }
@@ -65,9 +66,9 @@ public class MenuButton : Gtk.Button {
 		base.drag_end.connect(this.drag_end);
 		base.drag_data_get.connect(this.drag_data_get);
 
-		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		var layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		layout.pack_start(img, false, false, 0);
-		layout.pack_start(lab, true, true, 0);
+		layout.pack_start(lab);
 		add(layout);
 
 		this.info = parent;

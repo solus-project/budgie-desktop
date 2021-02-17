@@ -23,17 +23,29 @@ static string? searchable_string(string input) {
 	return mod.replace("\u00AD", "").ascii_down().strip();
 }
 
+
+[DBus (name="org.gnome.SessionManager")]
+public interface SessionManager : Object {
+	public abstract void Logout(uint mode) throws DBusError, IOError;
+	public abstract async void Reboot() throws Error;
+	public abstract async void Shutdown() throws Error;
+}
+
+public const string G_SESSION = "org.gnome.SessionManager";
+public const string UNABLE_CONTACT = "Unable to contact ";
+
 public class BudgieMenuWindow : Budgie.Popover {
 	protected Gtk.SearchEntry search_entry;
 	protected Gtk.Box main_layout;
 	protected Gtk.Box categories;
-	protected Gtk.ListBox content;
+	protected Gtk.Grid content;
 	private GMenu.Tree tree;
 	private GMenu.TreeDirectory other_tree;
 	private bool attempted_other_search = false;
 	protected Gtk.ScrolledWindow categories_scroll;
 	protected Gtk.ScrolledWindow content_scroll;
 	protected CategoryButton all_categories;
+	private SessionManager? session = null;
 
 	// desktop_dir_overrides is a hashtable of dirs -> preferred dirs
 	protected HashTable<string,string?> desktop_dir_overrides = null;
@@ -58,14 +70,25 @@ public class BudgieMenuWindow : Budgie.Popover {
 	// Current search term
 	protected string search_term = "";
 
-	protected int icon_size = 24;
+	protected int icon_size = 50;
 
 	public Settings settings { public get; public set; }
 
 	private bool reloading = false;
+	
+	
+	async void setup_dbus() {
+		try {
+			session = yield Bus.get_proxy(BusType.SESSION, G_SESSION, "/org/gnome/SessionManager");
+		} catch (Error e) {
+			warning(UNABLE_CONTACT + "GNOME Session: %s", e.message);
+		}
+	}
 
 	public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent) {
 		Object(settings: settings, relative_to: leparent);
+		setup_dbus.begin();
+		
 		get_style_context().add_class("budgie-menu");
 
 		main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -75,11 +98,47 @@ public class BudgieMenuWindow : Budgie.Popover {
 		category_has_items = new HashTable<string,bool?>(GLib.str_hash, GLib.str_equal);
 		menu_buttons = new HashTable<string,MenuButton?>(GLib.str_hash, GLib.str_equal);
 
-		icon_size = settings.get_int("menu-icons-size");
-
+		var top = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		main_layout.pack_start(top, false, false, 0);
+		
 		// search entry up north
 		search_entry = new Gtk.SearchEntry();
-		main_layout.pack_start(search_entry, false, false, 0);
+		var power_strip = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		var log_out = new Gtk.Button.from_icon_name("system-log-out-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		var rsrt = new Gtk.Button.from_icon_name("system-restart-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		var pwr_off = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		
+		
+		log_out.button_release_event.connect((e) => {
+			if (e.button != 1) {
+				return Gdk.EVENT_PROPAGATE;
+			}
+			logout();
+			return Gdk.EVENT_STOP;
+		});
+		
+		rsrt.button_release_event.connect((e) => {
+			if (e.button != 1) {
+				return Gdk.EVENT_PROPAGATE;
+			}
+			reboot();
+			return Gdk.EVENT_STOP;
+		});
+		
+		pwr_off.button_release_event.connect((e) => {
+			if (e.button != 1) {
+				return Gdk.EVENT_PROPAGATE;
+			}
+			shutdown();
+			return Gdk.EVENT_STOP;
+		});
+
+		power_strip.pack_start(log_out, false,false,4);
+		power_strip.pack_start(rsrt, false,false,4);
+		power_strip.pack_start(pwr_off, false,false,4);
+		
+		top.pack_start(search_entry, true, true, 0);
+		top.pack_start(power_strip, false, false, 0);
 
 		// middle holds the categories and applications
 		var middle = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -110,9 +169,11 @@ public class BudgieMenuWindow : Budgie.Popover {
 		middle.pack_start(right_layout, true, true, 0);
 
 		// holds all the applications
-		content = new Gtk.ListBox();
-		content.row_activated.connect(on_row_activate);
-		content.set_selection_mode(Gtk.SelectionMode.NONE);
+		content = new Gtk.Grid();
+		content.set_column_spacing(uint.parse("10.0"));
+		content.set_row_spacing(uint.parse("10.0"));
+		//content.row_activated.connect(on_row_activate);
+		//content.set_selection_mode(Gtk.SelectionMode.NONE);
 		content_scroll = new Gtk.ScrolledWindow(null, null);
 		content_scroll.set_overlay_scrolling(true);
 		content_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -126,7 +187,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		placeholder.show();
 		placeholder.margin = 6;
 		content.valign = Gtk.Align.START;
-		content.set_placeholder(placeholder);
+		// content.set_placeholder(placeholder);
 
 		settings.changed.connect(on_settings_changed);
 		on_settings_changed("menu-compact");
@@ -134,15 +195,13 @@ public class BudgieMenuWindow : Budgie.Popover {
 		on_settings_changed("menu-categories-hover");
 
 		// management of our listbox
-		content.set_filter_func(do_filter_list);
-		content.set_sort_func(do_sort_list);
+		// content.set_filter_func(do_filter_list);
+		// content.set_sort_func(do_sort_list);
 
 		// searching functionality :)
 		search_entry.changed.connect(()=> {
 			search_term = searchable_string(search_entry.text);
-			content.invalidate_headers();
-			content.invalidate_filter();
-			content.invalidate_sort();
+			refresh_tree();
 		});
 
 		search_entry.grab_focus();
@@ -156,13 +215,53 @@ public class BudgieMenuWindow : Budgie.Popover {
 		// load them in the background
 		Idle.add(()=> {
 			load_menus(null);
-			content.invalidate_headers();
-			content.invalidate_filter();
-			content.invalidate_sort();
+			// content.invalidate_headers();
+			// content.invalidate_filter();
+			// content.invalidate_sort();
 			queue_resize();
 			if (!get_realized()) {
 				realize();
 			}
+			return false;
+		});
+	}
+	
+	private void logout() {
+		hide();
+		if (session == null) {
+			return;
+		}
+
+		Idle.add(() => {
+			try {
+				session.Logout(0);
+			} catch (Error e) {
+				warning("Failed to logout: %s", e.message);
+			}
+			return false;
+		});
+	}
+	
+	private void reboot() {
+		hide();
+		if (session == null) {
+			return;
+		}
+
+		Idle.add(() => {
+			session.Reboot.begin();
+			return false;
+		});
+	}
+
+	private void shutdown() {
+		hide();
+		if (session == null) {
+			return;
+		}
+
+		Idle.add(() => {
+			session.Shutdown.begin();
 			return false;
 		});
 	}
@@ -196,9 +295,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		Idle.add(() => {
 			load_menus(null);
-			content.invalidate_headers();
-			content.invalidate_filter();
-			content.invalidate_sort();
+			show_all();
+			// content.invalidate_headers();
+			// content.invalidate_filter();
+			// content.invalidate_sort();
 			return false;
 		});
 
@@ -343,7 +443,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 						}
 					}
 
-					if (!menu_buttons.contains(app_id)) { // If we haven't already added this button
+					if (!menu_buttons.contains(app_id) && (!attempted_other_search || info_matches_term(appinfo, search_term))) { // If we haven't already added this button
 						var btn = new MenuButton(appinfo, use_root, icon_size);
 
 						btn.clicked.connect(() => {
@@ -352,7 +452,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 						});
 						menu_buttons.insert(app_id, btn);
 						btn.show_all();
-						content.add(btn);
+						int tcolumns = 4;
+						int left = int.parse(((menu_buttons.length - 1) % tcolumns).to_string());
+						int top = int.parse(((menu_buttons.length - 1)/ tcolumns).to_string());
+						content.attach(btn, left, top);
 
 						string desktop_file_path = use_root.get_name(); // Get the name of the category of this root
 						category_has_items.set(desktop_file_path, true); // Ensure we indicate the desktop file path as items
@@ -392,21 +495,21 @@ public class BudgieMenuWindow : Budgie.Popover {
 				categories_scroll.no_show_all = vis;
 				categories_scroll.set_visible(vis);
 				compact_mode = vis;
-				content.invalidate_headers();
-				content.invalidate_filter();
-				content.invalidate_sort();
+				// content.invalidate_headers();
+				// content.invalidate_filter();
+				// content.invalidate_sort();
 				break;
 			case "menu-headers":
 				var hed = settings.get_boolean(key);
 				headers_visible = hed;
 				if (hed) {
-					content.set_header_func(do_list_header);
+					//content.set_header_func(do_list_header);
 				} else {
-					content.set_header_func(null);
+					//content.set_header_func(null);
 				}
-				content.invalidate_headers();
-				content.invalidate_filter();
-				content.invalidate_sort();
+				// content.invalidate_headers();
+				// content.invalidate_filter();
+				// content.invalidate_sort();
 				break;
 			case "menu-categories-hover":
 				/* Category hover */
@@ -420,7 +523,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 
 	protected void on_entry_activate() {
-		Gtk.ListBoxRow? selected = null;
+		/** Gtk.ListBoxRow? selected = null;
 
 		var rows = content.get_selected_rows();
 		if (rows != null) {
@@ -438,7 +541,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		}
 
 		MenuButton btn = selected.get_child() as MenuButton;
-		launch_app(btn.info);
+		launch_app(btn.info);**/
 	}
 
 	protected void on_row_activate(Gtk.ListBoxRow? row) {
@@ -618,9 +721,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 	protected void update_category(CategoryButton btn) {
 		if (btn.active) {
 			group = btn.group;
-			content.invalidate_filter();
-			content.invalidate_headers();
-			content.invalidate_sort();
+			show_all();
+			// content.invalidate_filter();
+			// content.invalidate_headers();
+			// content.invalidate_sort();
 		}
 	}
 
@@ -673,7 +777,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		search_entry.text = "";
 		group = null;
 		all_categories.set_active(true);
-		content.select_row(null);
+		// content.select_row(null);
 		content_scroll.get_vadjustment().set_value(0);
 		categories_scroll.get_vadjustment().set_value(0);
 		categories.sensitive = true;
