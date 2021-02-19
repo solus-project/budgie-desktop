@@ -22,7 +22,6 @@ public class LockKeysApplet : Budgie.Applet {
 	Gtk.EventBox caps_box;
 	Gtk.EventBox num_box;
 	new Gdk.Keymap map;
-	string? xdotool;
 
 	public LockKeysApplet() {
 		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
@@ -88,16 +87,17 @@ public class LockKeysApplet : Budgie.Applet {
 
 	/* If xdotool is installed, handle the clicks on the panel icons */
 	protected bool on_panel_widget_clicked(Gdk.EventButton eventbutton, string button) {
-		xdotool = Environment.find_program_in_path("xdotool");
-		if (xdotool != null && eventbutton.button == 1) {
-			try {
-				Process.spawn_command_line_async(string.join(" ", xdotool, "key", button));
-				return Gdk.EVENT_STOP;
-			} catch (SpawnError e) {
-				return Gdk.EVENT_PROPAGATE;
-			}
+		string? xdotool = Environment.find_program_in_path("xdotool");
+		if ((xdotool == null) || (eventbutton.button != 1)) {
+			return Gdk.EVENT_PROPAGATE;
 		}
-		return Gdk.EVENT_PROPAGATE;
+		try {
+			Process.spawn_command_line_async(string.join(" ", xdotool, "key", button));
+		} catch (SpawnError e) {
+			warning("Failed to run xdotool: %s", e.message);
+			return Gdk.EVENT_PROPAGATE;
+		}
+		return Gdk.EVENT_STOP;
 	}
 
 	protected void on_state_changed() {
