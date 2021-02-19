@@ -154,6 +154,7 @@ namespace Budgie {
 
 		HashTable<string,Peas.PluginInfo?> plugins;
 		HashTable<string, string> plugin_names;
+		HashTable<string, Peas.PluginInfo?> maybe_uninstalled_plugins;
 
 		private Budgie.Raven? raven = null;
 		RavenPosition raven_position;
@@ -224,6 +225,7 @@ namespace Budgie {
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
 			plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
 			plugin_names = new HashTable<string, string>(str_hash, str_equal);
+			maybe_uninstalled_plugins = new HashTable<string, Peas.PluginInfo?>(str_hash, str_equal);
 		}
 
 		/**
@@ -754,21 +756,59 @@ namespace Budgie {
 		void on_files_changed(File src, File? dest, FileMonitorEvent event) {
 			switch (event) {
 				case FileMonitorEvent.CREATED: // Plugin was added, trigger a rescan
+					// Some, if not all, package managers where Budgie can be expected
+					// to be used will delete the previous changed files and move the
+					// new ones in during an update. Thus, check if our maybe uninstalled
+					// plugins collection contains this plugin, and remove it if so.
+					var name = plugin_names.get(src.get_path());
+					if (name != null) {
+						maybe_uninstalled_plugins.remove(name);
+					}
+
+					// Rescan plugins in both cases of a new plugin or a plugin update
 					engine.rescan_plugins();
 					break;
 				case FileMonitorEvent.DELETED: // Plugin was removed, unload it from panels
 					var name = plugin_names.get(src.get_path());
-					if (name != null) { // Path is in our map, try to unload it
+					if (name != null) { // Path is in our map, maybe unload it
 						var info = plugins.get(name);
 						if (info != null) {
-							engine.try_unload_plugin(info);
-							plugins.remove(info.get_name());
-							plugin_names.remove(src.get_path());
+							maybe_uninstalled_plugins.insert(name, info);
+
+							// Wait a few seconds to see if the plugin was re-added, such as
+							// during a package update
+							Timeout.add_seconds(10, () => {
+								maybe_unload_plugin(name, src.get_path());
+								return false;
+							});
 						}
 					}
 					break;
-				default: // We only care about files being moved in or removed
+				default: // We only care about files being created or deleted
 					break;
+			}
+		}
+
+		/**
+		 * Removes an applet from any panels and unloads it if it is in
+		 * our collection of applets that might be uninstalled.
+		 */
+		void maybe_unload_plugin(string name, string path) {
+			var plugin = maybe_uninstalled_plugins.get(name);
+			if (plugin != null) {
+				// Remove any loaded instances of this applet from all panels
+				foreach (var panel in panels.get_values()) {
+					foreach (unowned var applet in panel.get_applets()) {
+						if (applet.name == name) {
+							panel.remove_applet(applet);
+						}
+					}
+				}
+
+				engine.try_unload_plugin(plugin);
+				plugins.remove(name);
+				plugin_names.remove(path);
+				maybe_uninstalled_plugins.remove(name);
 			}
 		}
 
