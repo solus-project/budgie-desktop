@@ -21,7 +21,7 @@ dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
 dep_mutter = dependency('libmutter-8', version: gnome_minimum_version, required: false)
 if dep_mutter.found()
     # Assume mutter-7 compilation argument since no additional code changes required
-    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_7']
+    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_8']
     message('Using new libmutter-8 ABI from GNOME 40')
     vapi_mutter = 'libmutter-8'
 else

@@ -177,7 +177,13 @@ namespace Budgie {
 			foreach (string accelerator in grabs.get_keys()) {
 				if (grabs[accelerator] == action) {
 					var params = new HashTable<string,Variant>(null, null);
+#if HAVE_MUTTER_8
+					// NEEDS FIXING
+					// VAPI needs to have backend/backends/meta-input-device-x11.h get_device_id defined
+					//params.set("device-id", new Variant.uint32( return value of get_device_id ));
+#else
 					params.set("device-id", new Variant.uint32(dev.id));
+#endif
 					params.set("action-mode", new Variant.uint32(action));
 					params.set("device-mode", new Variant.string(dev.get_device_node()));
 					params.set("timestamp", new Variant.uint32(timestamp));
