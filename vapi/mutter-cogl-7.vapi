@@ -32,7 +32,9 @@ namespace Cogl {
 	public class Context : Cogl.Object {
 		[CCode (has_construct_function = false)]
 		protected Context ();
+		public unowned Cogl.Pipeline get_named_pipeline (Cogl.PipelineKey key);
 		public bool is_hardware_accelerated ();
+		public void set_named_pipeline (Cogl.PipelineKey key, Cogl.Pipeline? pipeline);
 	}
 	[CCode (cheader_filename = "cogl/cogl.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "cogl_frame_closure_get_gtype ()")]
 	[Compact]
@@ -269,6 +271,10 @@ namespace Cogl {
 		public void set_uniform_matrix (int uniform_location, int dimensions, int count, bool transpose, float value);
 		[Version (since = "2.0")]
 		public void set_user_program (Cogl.Handle program);
+	}
+	[CCode (cheader_filename = "cogl/cogl.h", type_id = "G_TYPE_STRING")]
+	[Compact]
+	public class PipelineKey : string {
 	}
 	[CCode (cheader_filename = "cogl/cogl.h")]
 	[Compact]

@@ -149,7 +149,7 @@ namespace Meta {
 		public static void x11_error_trap_push (Meta.X11Display x11_display);
 	}
 	[CCode (cheader_filename = "meta/meta-backend.h", type_id = "meta_backend_get_type ()")]
-	public abstract class Backend : GLib.Object, GLib.Initable {
+	public abstract class Backend : GLib.Object, GLib.Initable, GLib.Initable {
 		[CCode (has_construct_function = false)]
 		protected Backend ();
 		[CCode (cheader_filename = "meta/meta-backend.h", cname = "meta_get_backend")]
@@ -277,9 +277,8 @@ namespace Meta {
 	public class CursorTracker : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected CursorTracker ();
-		public static unowned Meta.CursorTracker get_for_display (Meta.Display display);
 		public void get_hot (out int x, out int y);
-		public void get_pointer (int x, int y, Clutter.ModifierType mods);
+		public void get_pointer (out int x, out int y, out Clutter.ModifierType mods);
 		public bool get_pointer_visible ();
 		public unowned Cogl.Texture get_sprite ();
 		public void set_pointer_visible (bool visible);
@@ -304,6 +303,8 @@ namespace Meta {
 		public int get_current_monitor ();
 		public uint32 get_current_time ();
 		public uint32 get_current_time_roundtrip ();
+		[CCode (cname = "meta_cursor_tracker_get_for_display")]
+		public unowned Meta.CursorTracker get_cursor_tracker ();
 		public unowned Meta.Window get_focus_window ();
 		public Meta.GrabOp get_grab_op ();
 		public uint get_keybinding_action (uint keycode, ulong mask);
@@ -422,10 +423,12 @@ namespace Meta {
 		public static int get_display_configuration_timeout ();
 		public bool get_is_builtin_display_on ();
 		public int get_monitor_for_connector (string connector);
+		public bool get_panel_orientation_managed ();
 		public Meta.MonitorSwitchConfigType get_switch_config ();
 		public void switch_config (Meta.MonitorSwitchConfigType config_type);
 		[NoAccessorMethod]
 		public Meta.Backend backend { owned get; construct; }
+		public bool panel_orientation_managed { get; }
 		public signal void confirm_display_change ();
 		public signal void monitors_changed ();
 		public signal void monitors_changed_internal ();
@@ -504,7 +507,7 @@ namespace Meta {
 		public bool is_recording { get; construct; }
 		public signal void stopped ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_selection_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-selection.h", type_id = "meta_selection_get_type ()")]
 	public class Selection : GLib.Object {
 		[CCode (has_construct_function = false)]
 		public Selection (Meta.Display display);
@@ -514,7 +517,7 @@ namespace Meta {
 		public void unset_owner (Meta.SelectionType selection_type, Meta.SelectionSource owner);
 		public signal void owner_changed (uint object, Meta.SelectionSource p0);
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_selection_source_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-selection.h", type_id = "meta_selection_source_get_type ()")]
 	public class SelectionSource : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected SelectionSource ();
@@ -524,7 +527,7 @@ namespace Meta {
 		public virtual signal void activated ();
 		public virtual signal void deactivated ();
 	}
-	[CCode (cheader_filename = "meta/main.h", type_id = "meta_selection_source_memory_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-selection-source-memory.h", type_id = "meta_selection_source_memory_get_type ()")]
 	public class SelectionSourceMemory : Meta.SelectionSource {
 		[CCode (has_construct_function = false, type = "MetaSelectionSource*")]
 		public SelectionSourceMemory (string mimetype, GLib.Bytes content);
@@ -768,6 +771,7 @@ namespace Meta {
 		public uint user_time { get; }
 		public Meta.WindowType window_type { get; }
 		public string wm_class { get; }
+		public signal void monitor_changed (int old_monitor);
 		public signal void position_changed ();
 		public signal void raised ();
 		public signal void shown ();
@@ -1011,6 +1015,12 @@ namespace Meta {
 		IBEAM,
 		BLANK,
 		LAST
+	}
+	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DEBUG_PAINT_", type_id = "meta_debug_paint_flag_get_type ()")]
+	[Flags]
+	public enum DebugPaintFlag {
+		NONE,
+		OPAQUE_REGION
 	}
 	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DEBUG_", type_id = "meta_debug_topic_get_type ()")]
 	[Flags]
@@ -1354,7 +1364,7 @@ namespace Meta {
 		CHECK_ALIVE_TIMEOUT;
 		public unowned string to_string ();
 	}
-	[CCode (cheader_filename = "meta/main.h", cprefix = "META_", type_id = "meta_selection_type_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-selection-source.h", cprefix = "META_", type_id = "meta_selection_type_get_type ()")]
 	public enum SelectionType {
 		SELECTION_PRIMARY,
 		SELECTION_CLIPBOARD,
@@ -1491,11 +1501,15 @@ namespace Meta {
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void add_clutter_debug_flags (Clutter.DebugFlag debug_flags, Clutter.DrawDebugFlag draw_flags, Clutter.PickDebugFlag pick_flags);
 	[CCode (cheader_filename = "meta/main.h")]
+	public static void add_debug_paint_flag (Meta.DebugPaintFlag flag);
+	[CCode (cheader_filename = "meta/main.h")]
 	public static void clutter_init ();
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void exit (Meta.ExitCode code);
 	[CCode (cheader_filename = "meta/main.h")]
 	public static string g_utf8_strndup (string src, size_t n);
+	[CCode (cheader_filename = "meta/main.h")]
+	public static Meta.DebugPaintFlag get_debug_paint_flags ();
 	[CCode (cheader_filename = "meta/main.h")]
 	public static unowned GLib.OptionContext get_option_context ();
 	[CCode (cheader_filename = "meta/main.h")]
@@ -1510,6 +1524,8 @@ namespace Meta {
 	public static void register_with_session ();
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void remove_clutter_debug_flags (Clutter.DebugFlag debug_flags, Clutter.DrawDebugFlag draw_flags, Clutter.PickDebugFlag pick_flags);
+	[CCode (cheader_filename = "meta/main.h")]
+	public static void remove_debug_paint_flag (Meta.DebugPaintFlag flag);
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void restart (string? message);
 	[CCode (cheader_filename = "meta/main.h")]
