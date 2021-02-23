@@ -147,13 +147,14 @@ namespace Meta {
 		public static void x11_error_trap_push (Meta.X11Display x11_display);
 	}
 	[CCode (cheader_filename = "meta/meta-backend.h", type_id = "meta_backend_get_type ()")]
-	public abstract class Backend : GLib.Object, GLib.Initable {
+	public abstract class Backend : GLib.Object, GLib.Initable, GLib.Initable {
 		[CCode (has_construct_function = false)]
 		protected Backend ();
 		[CCode (cheader_filename = "meta/meta-backend.h", cname = "meta_get_backend")]
 		public static unowned Meta.Backend get_backend ();
 		public unowned Meta.Dnd get_dnd ();
 		public unowned Meta.RemoteAccessController get_remote_access_controller ();
+		public unowned Meta.Settings get_settings ();
 		public unowned Clutter.Actor get_stage ();
 		public bool is_rendering_hardware_accelerated ();
 		public void lock_layout_group (uint idx);

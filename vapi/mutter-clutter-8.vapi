@@ -7145,6 +7145,7 @@ namespace Clutter {
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_container_get_type ()")]
 	[Version (since = "0.4")]
 	public interface Container : GLib.Object {
+		public void add (params Clutter.Actor[] actors);
 		[CCode (vfunc_name = "add")]
 		[Version (deprecated = true, deprecated_since = "1.10", since = "0.4")]
 		public abstract void add_actor (Clutter.Actor actor);
@@ -7162,10 +7163,14 @@ namespace Clutter {
 		public virtual void destroy_child_meta (Clutter.Actor actor);
 		[Version (since = "0.6")]
 		public unowned Clutter.Actor find_child_by_name (string child_name);
+		[CCode (cname = "clutter_container_class_find_child_property")]
+		public class unowned GLib.ParamSpec find_child_property (string property_name);
 		[Version (since = "0.8")]
 		public virtual unowned Clutter.ChildMeta get_child_meta (Clutter.Actor actor);
 		[Version (deprecated = true, deprecated_since = "1.10", since = "0.4")]
 		public GLib.List<weak Clutter.Actor> get_children ();
+		[CCode (cname = "clutter_container_class_list_child_properties")]
+		public class unowned GLib.ParamSpec[] list_child_properties ();
 		[CCode (vfunc_name = "lower")]
 		[Version (deprecated = true, deprecated_since = "1.10", since = "0.6")]
 		public virtual void lower_child (Clutter.Actor actor, Clutter.Actor? sibling = null);
@@ -7266,7 +7271,7 @@ namespace Clutter {
 		public bool prev (out unowned Clutter.Actor child);
 		public void remove ();
 	}
-	[CCode (cheader_filename = "clutter/clutter.h", has_type_id = false)]
+	[CCode (cheader_filename = "clutter/clutter.h", has_copy_function = false, has_destroy_function = false, has_type_id = false)]
 	public struct Capture {
 		public Cairo.ImageSurface image;
 		public Cairo.RectangleInt rect;
@@ -7287,7 +7292,12 @@ namespace Clutter {
 		public bool equal (Clutter.Color v2);
 		[Version (since = "0.2")]
 		public void free ();
-		[Version (since = "1.6")]
+		[CCode (cname = "clutter_color_from_hls")]
+		public Color.from_hls (float hue, float luminance, float saturation);
+		[CCode (cname = "clutter_color_from_pixel")]
+		public Color.from_pixel (uint32 pixel);
+		[CCode (cname = "clutter_color_from_string")]
+		public static bool from_string (out Clutter.Color color, string str);
 		public static unowned Clutter.Color? get_static (Clutter.StaticColor color);
 		[Version (since = "1.0")]
 		public uint hash ();
@@ -7296,6 +7306,7 @@ namespace Clutter {
 		[Version (since = "1.6")]
 		public Clutter.Color interpolate (Clutter.Color final, double progress);
 		public Clutter.Color lighten ();
+		public bool parse_string (string str);
 		public Clutter.Color shade (double factor);
 		public Clutter.Color subtract (Clutter.Color b);
 		public void to_hls (out float hue, out float luminance, out float saturation);
@@ -7388,6 +7399,20 @@ namespace Clutter {
 	public struct Units {
 		public Clutter.Units? copy ();
 		public void free ();
+		[CCode (cname = "clutter_units_from_cm")]
+		public Units.from_cm (float cm);
+		[CCode (cname = "clutter_units_from_em")]
+		public Units.from_em (float em);
+		[CCode (cname = "clutter_units_from_em_for_font")]
+		public Units.from_em_for_font (string font_name, float em);
+		[CCode (cname = "clutter_units_from_mm")]
+		public Units.from_mm (float mm);
+		[CCode (cname = "clutter_units_from_pixels")]
+		public Units.from_pixels (int px);
+		[CCode (cname = "clutter_units_from_pt")]
+		public Units.from_pt (float pt);
+		[CCode (cname = "clutter_units_from_string")]
+		public Units.from_string (string str);
 		public Clutter.UnitType get_unit_type ();
 		public float get_unit_value ();
 		public float to_pixels ();
@@ -8190,6 +8215,9 @@ namespace Clutter {
 	[CCode (cheader_filename = "clutter/clutter.h")]
 	[Version (since = "1.0")]
 	public static void cairo_set_source_color (Cairo.Context cr, Clutter.Color color);
+	[CCode (cheader_filename = "clutter/clutter.h")]
+	[Version (since = "1.6")]
+	public static unowned Clutter.Color? color_get_static (Clutter.StaticColor color);
 	[CCode (cheader_filename = "clutter/clutter.h")]
 	[Version (since = "1.14")]
 	public static void disable_accessibility ();
