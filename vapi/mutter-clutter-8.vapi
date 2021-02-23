@@ -5780,6 +5780,12 @@ namespace Clutter {
 		[Version (since = "1.16")]
 		public bool snap_to_grid { get; set; }
 	}
+	[CCode (cheader_filename = "clutter/clutter.h", has_type_id = false)]
+	[Compact]
+	public class Frame {
+		public bool has_result ();
+		public void set_result (Clutter.FrameResult result);
+	}
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_frame_clock_get_type ()")]
 	public class FrameClock : GLib.Object {
 		[CCode (has_construct_function = false)]
@@ -5787,6 +5793,7 @@ namespace Clutter {
 		public void add_timeline (Clutter.Timeline timeline);
 		public float get_refresh_rate ();
 		public void inhibit ();
+		public void notify_ready ();
 		public void remove_timeline (Clutter.Timeline timeline);
 		public void schedule_update ();
 		public void schedule_update_now ();
@@ -6602,7 +6609,7 @@ namespace Clutter {
 	public class Stage : Clutter.Actor, Atk.Implementor, Clutter.Animatable, Clutter.Container, Clutter.Scriptable {
 		[CCode (has_construct_function = false)]
 		protected Stage ();
-		public void capture_into (bool paint, Cairo.RectangleInt rect, uint8 data);
+		public void capture_into (Cairo.RectangleInt rect, uint8 data);
 		public void clear_stage_views ();
 		[CCode (cname = "clutter_stage_event")]
 		public bool emit_event (Clutter.Event event);

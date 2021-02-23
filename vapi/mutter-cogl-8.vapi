@@ -47,6 +47,7 @@ namespace Cogl {
 		protected FrameInfo ();
 		[Version (since = "1.14")]
 		public int64 get_frame_counter ();
+		public bool get_is_symbolic ();
 		[Version (since = "1.14")]
 		public int64 get_presentation_time ();
 		[Version (since = "1.14")]
@@ -171,10 +172,16 @@ namespace Cogl {
 		[Version (since = "1.10")]
 		public void translate (float x, float y, float z);
 		[NoAccessorMethod]
+		public void* driver_config { get; construct; }
+		[NoAccessorMethod]
 		public int height { get; set construct; }
 		[NoAccessorMethod]
 		public int width { get; set construct; }
 		public signal void destroy ();
+	}
+	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
+	[Compact]
+	public class FramebufferDriverConfig {
 	}
 	[CCode (cheader_filename = "cogl/cogl.h", ref_function = "cogl_handle_ref", unref_function = "cogl_handle_unref")]
 	[Compact]
@@ -255,14 +262,12 @@ namespace Cogl {
 		public Cogl.OnscreenDirtyClosure add_dirty_callback ([CCode (delegate_target_pos = 1.5)] Cogl.OnscreenDirtyCallback callback, Cogl.UserDataDestroyCallback? destroy);
 		[Version (since = "1.14")]
 		public Cogl.FrameClosure add_frame_callback ([CCode (delegate_target_pos = 1.5)] Cogl.FrameCallback callback, Cogl.UserDataDestroyCallback? destroy);
-		[Version (since = "2.0")]
-		public Cogl.OnscreenResizeClosure add_resize_callback ([CCode (delegate_target_pos = 1.5)] Cogl.OnscreenResizeCallback callback, Cogl.UserDataDestroyCallback? destroy);
+		[NoWrapper]
+		public virtual void bind ();
 		[Version (since = "1.14")]
-		public int get_buffer_age ();
+		public virtual int get_buffer_age ();
 		[Version (since = "1.14")]
 		public int64 get_frame_counter ();
-		[Version (since = "2.0")]
-		public bool get_resizable ();
 		[Version (since = "2.0")]
 		public void hide ();
 		[Version (since = "1.16")]
@@ -270,27 +275,18 @@ namespace Cogl {
 		[Version (since = "1.14")]
 		public void remove_frame_callback (Cogl.FrameClosure closure);
 		[Version (since = "2.0")]
-		public void remove_resize_callback (Cogl.OnscreenResizeClosure closure);
-		[Version (since = "2.0")]
-		public void set_resizable (bool resizable);
-		[Version (since = "2.0")]
 		public void show ();
 		[Version (since = "1.10")]
-		public void swap_buffers (Cogl.FrameInfo frame_info);
+		public void swap_buffers (Cogl.FrameInfo frame_info, void* user_data);
 		[Version (since = "1.16")]
-		public void swap_buffers_with_damage (int rectangles, int n_rectangles, Cogl.FrameInfo info);
+		public virtual void swap_buffers_with_damage (int rectangles, int n_rectangles, Cogl.FrameInfo info);
 		[Version (since = "1.10")]
-		public void swap_region (int rectangles, int n_rectangles, Cogl.FrameInfo info);
+		public virtual void swap_region (int rectangles, int n_rectangles, Cogl.FrameInfo info);
 	}
 	[CCode (cheader_filename = "cogl/cogl.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "cogl_onscreen_dirty_closure_get_gtype ()")]
 	[Compact]
 	[Version (since = "1.16")]
 	public class OnscreenDirtyClosure {
-	}
-	[CCode (cheader_filename = "cogl/cogl.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "cogl_onscreen_resize_closure_get_gtype ()")]
-	[Compact]
-	[Version (since = "2.0")]
-	public class OnscreenResizeClosure {
 	}
 	[CCode (cheader_filename = "cogl/cogl.h", copy_function = "cogl_path_copy")]
 	[Compact]
@@ -922,6 +918,12 @@ namespace Cogl {
 		SYNC_AND_COMPLETE_EVENT,
 		N_FEATURES
 	}
+	[CCode (cheader_filename = "cogl/cogl.h", cprefix = "COGL_SCANOUT_ERROR_")]
+	public errordomain ScanoutError {
+		[CCode (cname = "COGL_SCANOUT_ERROR_INHIBITED")]
+		SCANOUT_ERROR_INHIBITED;
+		public static GLib.Quark quark ();
+	}
 	[CCode (cheader_filename = "cogl/cogl.h", instance_pos = 1.9)]
 	[Version (since = "1.8")]
 	public delegate void DebugObjectForeachTypeCallback (Cogl.DebugObjectTypeInfo info);
@@ -934,9 +936,6 @@ namespace Cogl {
 	[CCode (cheader_filename = "cogl/cogl.h", instance_pos = 2.9)]
 	[Version (since = "1.16")]
 	public delegate void OnscreenDirtyCallback (Cogl.Onscreen onscreen, Cogl.OnscreenDirtyInfo info);
-	[CCode (cheader_filename = "cogl/cogl.h", instance_pos = 3.9)]
-	[Version (since = "2.0")]
-	public delegate void OnscreenResizeCallback (Cogl.Onscreen onscreen, int width, int height);
 	[CCode (cheader_filename = "cogl/cogl.h", instance_pos = 2.9)]
 	[Version (since = "2.0")]
 	public delegate bool PipelineLayerCallback (Cogl.Pipeline pipeline, int layer_index);
@@ -1089,7 +1088,4 @@ namespace Cogl {
 	[CCode (cheader_filename = "cogl/cogl.h")]
 	[Version (deprecated = true, deprecated_since = "1.18", since = "0.8")]
 	public static Cogl.Texture texture_new_with_size (uint width, uint height, Cogl.TextureFlags flags, Cogl.PixelFormat internal_format);
-	[CCode (cheader_filename = "cogl/cogl.h")]
-	[Version (since = "1.10")]
-	public static uint32 x11_onscreen_get_window_xid (Cogl.Onscreen onscreen);
 }

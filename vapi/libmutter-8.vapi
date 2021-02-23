@@ -194,6 +194,8 @@ namespace Meta {
 		public static Clutter.Content @new (Meta.Display display, int monitor);
 		public void set_background (Meta.Background background);
 		public void set_gradient (bool enabled, int height, double tone_start);
+		public void set_rounded_clip_bounds (Graphene.Rect? bounds);
+		public void set_rounded_clip_radius (float radius);
 		public void set_vignette (bool enabled, double brightness, double sharpness);
 		[NoAccessorMethod]
 		public Meta.Background background { owned get; set; }
@@ -209,6 +211,8 @@ namespace Meta {
 		public Meta.Display meta_display { owned get; construct; }
 		[NoAccessorMethod]
 		public int monitor { get; construct; }
+		[NoAccessorMethod]
+		public float rounded_clip_radius { get; set; }
 		[NoAccessorMethod]
 		public bool vignette { get; set; }
 		[NoAccessorMethod]
@@ -298,6 +302,7 @@ namespace Meta {
 		public void end_grab_op (uint32 timestamp);
 		public void focus_default_window (uint32 timestamp);
 		public void freeze_keyboard (uint32 timestamp);
+		public Clutter.ModifierType get_compositor_modifiers ();
 		public int get_current_monitor ();
 		public uint32 get_current_time ();
 		public uint32 get_current_time_roundtrip ();
@@ -335,13 +340,14 @@ namespace Meta {
 		public void ungrab_keyboard (uint32 timestamp);
 		public void unset_input_focus (uint32 timestamp);
 		public bool xserver_time_is_before (uint32 time1, uint32 time2);
+		public Clutter.ModifierType compositor_modifiers { get; }
 		public Meta.Window focus_window { get; }
 		public signal void accelerator_activated (uint object, Clutter.InputDevice p0, uint p1);
 		public signal void closing ();
 		public signal void cursor_updated ();
 		public signal void gl_video_memory_purged ();
-		public signal void grab_op_begin (Meta.Display object, Meta.Window p0, Meta.GrabOp p1);
-		public signal void grab_op_end (Meta.Display object, Meta.Window p0, Meta.GrabOp p1);
+		public signal void grab_op_begin (Meta.Window object, Meta.GrabOp p0);
+		public signal void grab_op_end (Meta.Window object, Meta.GrabOp p0);
 		public signal void in_fullscreen_changed ();
 		public signal bool init_xserver (GLib.Task object);
 		public signal bool modifiers_accelerator_activated ();
@@ -1036,7 +1042,10 @@ namespace Meta {
 		EDGE_RESISTANCE,
 		DBUS,
 		INPUT,
-		WAYLAND
+		WAYLAND,
+		KMS,
+		SCREEN_CAST,
+		REMOTE_DESKTOP
 	}
 	[CCode (cheader_filename = "meta/main.h", cprefix = "META_DIRECTION_", type_id = "meta_direction_get_type ()")]
 	[Flags]
@@ -1475,8 +1484,6 @@ namespace Meta {
 	public const int VIRTUAL_CORE_KEYBOARD_ID;
 	[CCode (cheader_filename = "meta/main.h", cname = "META_VIRTUAL_CORE_POINTER_ID")]
 	public const int VIRTUAL_CORE_POINTER_ID;
-	[CCode (cheader_filename = "meta/main.h")]
-	public static bool activate_session ();
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void add_clutter_debug_flags (Clutter.DebugFlag debug_flags, Clutter.DrawDebugFlag draw_flags, Clutter.PickDebugFlag pick_flags);
 	[CCode (cheader_filename = "meta/main.h")]
