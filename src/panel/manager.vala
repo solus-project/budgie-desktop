@@ -765,8 +765,12 @@ namespace Budgie {
 						maybe_uninstalled_plugins.remove(name);
 					}
 
-					// Rescan plugins in both cases of a new plugin or a plugin update
-					engine.rescan_plugins();
+					// Rescan plugins in both cases of a new plugin or a plugin update.
+					// We do this after a delay to ensure that they get picked up and loaded.
+					Timeout.add_seconds(5, () => {
+						engine.rescan_plugins();
+						return false;
+					});
 					break;
 				case FileMonitorEvent.DELETED: // Plugin was removed, unload it from panels
 					var name = plugin_names.get(src.get_path());
