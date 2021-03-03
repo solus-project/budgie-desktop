@@ -758,8 +758,8 @@ namespace Budgie {
 				case FileMonitorEvent.CREATED: // Plugin was added, trigger a rescan
 					// Some, if not all, package managers where Budgie can be expected
 					// to be used will delete the previous changed files and move the
-					// new ones in during an update. Thus, check if our maybe uninstalled
-					// plugins collection contains this plugin, and remove it if so.
+					// new ones in during an update. Remove the entry in our map so that
+					// it doesn't mistakingly get deleted from people's panels.
 					var name = plugin_names.get(src.get_path());
 					if (name != null) {
 						maybe_uninstalled_plugins.remove(name);
