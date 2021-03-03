@@ -39,8 +39,6 @@ Actor
 	.event#method name="emit_event"
 	.get_paint_volume#virtual_method name="get_paint_volume_vfunc"
 	.get_paint_volume#virtual_method.volume out
-	.queue_redraw#signal skip
-	.queue_redraw#virtual_method skip
 Container
 	.add_actor skip=false
 	.class_* skip
@@ -62,10 +60,6 @@ Container
 Stage.read_pixels
 	.width default=-1
 	.height default=-1
-Stage.get_capture_final_size
-	.width out
-	.height out
-	.scale out
 Stage.paint_to_buffer
     .data type="uint8[]"
 Text
@@ -157,7 +151,6 @@ IMEvent struct=false base_type="Clutter.Event"
 KeyEvent struct=false base_type="Clutter.Event"
 MotionEvent struct=false base_type="Clutter.Event"
 ScrollEvent struct=false base_type="Clutter.Event"
-StageStateEvent struct=false base_type="Clutter.Event"
 TouchEvent struct=false base_type="Clutter.Event"
 TouchpadPinchEvent struct=false base_type="Clutter.Event"
 TouchpadSwipeEvent struct=false base_type="Clutter.Event"

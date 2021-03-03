@@ -10,8 +10,6 @@ BarrierEvent cheader_filename="meta/barrier.h"
 CloseDialog cheader_filename="meta/meta-close-dialog.h"
 CursorTracker cheader_filename="meta/meta-cursor-tracker.h"
 CursorTracker.get_for_display parent="Meta.Display" symbol_type="method" instance_idx=0 name="get_cursor_tracker"
-CursorTracker.get_pointer.x out
-CursorTracker.get_pointer.y out
 CursorTracker.get_pointer.mods out
 Display cheader_filename="meta/display.h"
 Dnd cheader_filename="meta/meta-dnd.h"
@@ -53,7 +51,6 @@ x11_error_trap_pop_with_return parent="Meta.Util" cheader_filename="meta/util.h"
 external_binding_name_for_action parent="Meta.Util" cheader_filename="meta/util.h"
 get_locale_direction parent="Meta.Util" cheader_filename="meta/util.h"
 gravity_to_string parent="Meta.Util" cheader_filename="meta/util.h"
-is_debugging parent="Meta.Util" cheader_filename="meta/util.h"
 is_syncing parent="Meta.Util" cheader_filename="meta/util.h"
 is_verbose parent="Meta.Util" cheader_filename="meta/util.h"
 is_wayland_compositor parent="Meta.Util" cheader_filename="meta/util.h"
