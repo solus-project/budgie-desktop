@@ -19,6 +19,8 @@ public class LockKeysApplet : Budgie.Applet {
 	Gtk.Box widget;
 	Gtk.Image caps;
 	Gtk.Image num;
+	Gtk.EventBox caps_box;
+	Gtk.EventBox num_box;
 	new Gdk.Keymap map;
 
 	public LockKeysApplet() {
@@ -29,8 +31,19 @@ public class LockKeysApplet : Budgie.Applet {
 		/* Pretty labels, probably use icons in future */
 		caps = new Gtk.Image.from_icon_name("caps-lock-symbolic", Gtk.IconSize.MENU);
 		num = new Gtk.Image.from_icon_name("num-lock-symbolic", Gtk.IconSize.MENU);
-		widget.pack_start(caps, false, false, 0);
-		widget.pack_start(num, false, false, 0);
+		caps_box = new Gtk.EventBox();
+		num_box = new Gtk.EventBox();
+		caps_box.add(caps);
+		num_box.add(num);;
+		widget.pack_start(caps_box, false, false, 0);
+		widget.pack_start(num_box, false, false, 0);
+
+		caps_box.button_press_event.connect((eventbutton) => {
+			return on_panel_widget_clicked(eventbutton, "Caps_Lock");
+		});
+		num_box.button_press_event.connect((eventbutton) => {
+			return on_panel_widget_clicked(eventbutton, "Num_Lock");
+		});
 
 		map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
 		map.state_changed.connect(on_state_changed);
@@ -70,6 +83,21 @@ public class LockKeysApplet : Budgie.Applet {
 			num.set_tooltip_text(_("Num lock is not active"));
 			num.get_style_context().add_class("dim-label");
 		}
+	}
+
+	/* If xdotool is installed, handle the clicks on the panel icons */
+	protected bool on_panel_widget_clicked(Gdk.EventButton eventbutton, string button) {
+		string? xdotool = Environment.find_program_in_path("xdotool");
+		if ((xdotool == null) || (eventbutton.button != 1)) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		try {
+			Process.spawn_command_line_async(string.join(" ", xdotool, "key", button));
+		} catch (SpawnError e) {
+			warning("Failed to run xdotool: %s", e.message);
+			return Gdk.EVENT_PROPAGATE;
+		}
+		return Gdk.EVENT_STOP;
 	}
 
 	protected void on_state_changed() {
