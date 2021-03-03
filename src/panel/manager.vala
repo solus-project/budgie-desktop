@@ -767,7 +767,7 @@ namespace Budgie {
 
 					// Rescan plugins in both cases of a new plugin or a plugin update.
 					// We do this after a delay to ensure that they get picked up and loaded.
-					Timeout.add_seconds(5, () => {
+					Timeout.add_seconds(10, () => {
 						engine.rescan_plugins();
 						return false;
 					});
