@@ -57,12 +57,10 @@ typedef struct {
 } CarbonDrawData;
 
 
-
 #define CARBON_TYPE_TRAY carbon_tray_get_type()
 #define CARBON_TRAY(obj) G_TYPE_CHECK_INSTANCE_CAST((obj), CARBON_TYPE_TRAY, CarbonTray)
 #define CARBON_IS_TRAY(obj) G_TYPE_CHECK_INSTANCE_TYPE((obj), CARBON_TYPE_TRAY)
 #define CARBON_TRAY_CLASS(klass) G_TYPE_CHECK_CLASS_CAST((klass), CARBON_TYPE_TRAY, CarbonTrayClass))
-
 
 
 GType carbon_tray_get_type(void);
