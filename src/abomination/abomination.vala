@@ -129,6 +129,13 @@ namespace Budgie {
 				return;
 			}
 
+			//  Basically, virtualbox opens two windows that are part of the same group, but window 1 is immediately closed,
+			//  after which window 2 is openned, resulting in window 1 icon being used, which gets removed.
+			//  Or at least it seems to be something like that...
+			if (app.name == "VirtualBox" || app.name == "VirtualBoxVM") {
+				return;
+			}
+
 			Array<AbominationRunningApp>? group_apps = this.running_apps.get(app.group);
 
 			bool no_group_yet = false;
