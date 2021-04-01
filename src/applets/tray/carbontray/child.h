@@ -22,11 +22,12 @@ typedef struct _CarbonChild {
 
 	int preferredSize;
 	Window iconWindow;
+	GdkWindow* widgetWindow;
 
 	char* wmclass;
 
 	bool parentRelativeBg;
-	bool isComposited;
+	bool hasAlpha;
 } CarbonChild;
 
 typedef struct _CarbonChildClass {
@@ -34,11 +35,9 @@ typedef struct _CarbonChildClass {
 } CarbonChildClass;
 
 
-
 #define CARBON_TYPE_CHILD (carbon_child_get_type())
 #define CARBON_CHILD(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), CARBON_TYPE_CHILD, CarbonChild))
 #define CARBON_IS_CHILD(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), CARBON_TYPE_CHILD))
-
 
 
 GType carbon_child_get_type(void);

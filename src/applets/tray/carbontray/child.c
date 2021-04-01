@@ -18,10 +18,11 @@
 
 // static method header
 
-static void carbon_child_init(CarbonChild*);
-static void carbon_child_get_preferred_size(GtkWidget*, int*, int*);
-static bool set_wmclass(CarbonChild*, Display*);
-
+static void carbon_child_init(CarbonChild* child);
+static void carbon_child_get_preferred_size(GtkWidget* parent, int* minimumSize, int* naturalSize);
+static bool set_wmclass(CarbonChild* self, GdkDisplay* display, Display* xdisplay);
+static void synchronized_display_error_trap_push(GdkDisplay* display);
+static bool synchronized_display_error_trap_pop(GdkDisplay* display);
 
 
 // define our type with the macro
@@ -29,11 +30,10 @@ static bool set_wmclass(CarbonChild*, Display*);
 G_DEFINE_TYPE(CarbonChild, carbon_child, GTK_TYPE_SOCKET)
 
 
-
 // public method implementations
 
 CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen, Window iconWindow) {
-	if (GDK_IS_SCREEN(screen) == FALSE) {
+	if (!GDK_IS_SCREEN(screen)) {
 		g_warning("No screen to place tray icon onto");
 		return NULL;
 	}
@@ -46,10 +46,10 @@ CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen,
 	GdkDisplay* display = gdk_screen_get_display(screen);
 	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
 
-	gdk_x11_display_error_trap_push(display);
+	synchronized_display_error_trap_push(display);
 	XWindowAttributes attributes;
 	int result = XGetWindowAttributes(xdisplay, iconWindow, &attributes);
-	int error = gdk_x11_display_error_trap_pop(display);
+	int error = synchronized_display_error_trap_pop(display);
 
 	if (result == 0) {
 		g_info("Failed to populate icon window attributes for tray icon");
@@ -62,14 +62,17 @@ CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen,
 	}
 
 	GdkVisual* visual = gdk_x11_screen_lookup_visual(screen, attributes.visual->visualid);
-	if (visual == NULL || GDK_IS_VISUAL(visual) == FALSE) {
+	if (visual == NULL || !GDK_IS_VISUAL(visual)) {
 		return NULL;
 	}
 
 	CarbonChild* self = g_object_new(CARBON_TYPE_CHILD, NULL);
 	self->preferredSize = size;
 	self->iconWindow = iconWindow;
-	self->isComposited = FALSE;
+	self->hasAlpha = false;
+	self->parentRelativeBg = false;
+	self->wmclass = NULL;
+
 	gtk_widget_set_visual(GTK_WIDGET(self), visual);
 
 	if (shouldComposite) {
@@ -80,12 +83,11 @@ CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen,
 		gdk_visual_get_blue_pixel_details(visual, NULL, NULL, &blue_prec);
 
 		if (red_prec + blue_prec + green_prec < gdk_visual_get_depth(visual)) {
-			self->isComposited = TRUE;
+			self->hasAlpha = true;
 		}
 	}
 
-	self->wmclass = NULL;
-	if (!set_wmclass(self, xdisplay)) {
+	if (!set_wmclass(self, display, xdisplay)) {
 		// the icon window turned sour while we were getting alpha details. ignore the child
 		return NULL;
 	}
@@ -95,34 +97,31 @@ CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen,
 
 bool carbon_child_realize(CarbonChild* self) {
 	GtkWidget* widget = GTK_WIDGET(self);
-	GdkWindow* window = gtk_widget_get_window(widget);
+	self->widgetWindow = gtk_widget_get_window(widget);
 
 	GdkDisplay* display = gtk_widget_get_display(widget);
-	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
 
 	// make X calls synchronous for background setting, so that BadWindow errors can be caught
-	gdk_x11_display_error_trap_push(display);
-	XSynchronize(xdisplay, true);
+	synchronized_display_error_trap_push(display);
 
-	if (self->isComposited) {
+	Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+	if (self->hasAlpha) {
 		XSetWindowBackground(xdisplay, self->iconWindow, 0);
-	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(window))) {
+	} else if (gtk_widget_get_visual(widget) == gdk_window_get_visual(gdk_window_get_parent(self->widgetWindow))) {
 		XSetWindowBackgroundPixmap(xdisplay, self->iconWindow, None);
-	} else {
-		self->parentRelativeBg = FALSE;
+		self->parentRelativeBg = true;
 	}
 
 	// make X calls asynchronous again, all errors have already been trapped
-	XSynchronize(xdisplay, false);
-	int error = gdk_x11_display_error_trap_pop(display);
+	int error = synchronized_display_error_trap_pop(display);
 
 	if (error != 0) {
 		g_warning("Encountered X error %d when setting background for tray icon", error);
 		return false;
 	}
 
-	gdk_window_set_composited(window, self->isComposited);
-	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->isComposited);
+	gdk_window_set_composited(self->widgetWindow, self->hasAlpha);
+	gtk_widget_set_app_paintable(widget, self->parentRelativeBg || self->hasAlpha);
 	gtk_widget_set_size_request(widget, self->preferredSize, self->preferredSize);
 	return true;
 }
@@ -143,8 +142,8 @@ void carbon_child_draw_on_tray(CarbonChild* self, GtkWidget* parent, cairo_t* cr
 		allocation.y = allocation.y - parentAllocation.y;
 	}
 	cairo_save(cr);
-	GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(self));
-	gdk_cairo_set_source_window(cr, window, allocation.x, allocation.y);
+
+	gdk_cairo_set_source_window(cr, self->widgetWindow, allocation.x, allocation.y);
 	cairo_rectangle(cr, allocation.x, allocation.y, allocation.width, allocation.height);
 	cairo_clip(cr);
 	cairo_paint(cr);
@@ -174,21 +173,30 @@ static void carbon_child_class_init(CarbonChildClass* klass) {
 	widget_class->get_preferred_height = carbon_child_get_preferred_size;
 }
 
-static bool set_wmclass(CarbonChild* self, Display* xdisplay) {
+static bool set_wmclass(CarbonChild* self, GdkDisplay* display, Display* xdisplay) {
 	XClassHint ch = {0};
 
-	GdkDisplay* display = gdk_display_get_default();
-	gdk_x11_display_error_trap_push(display);
+	synchronized_display_error_trap_push(display);
 	XGetClassHint(xdisplay, self->iconWindow, &ch);
-	int error = gdk_x11_display_error_trap_pop(display);
+	int error = synchronized_display_error_trap_pop(display);
 
 	if (error != 0) {
 		g_warning("Encountered X error %d when obtaining class hint for tray icon", error);
-		return FALSE;
+		return false;
 	}
 
 	if (ch.res_name != NULL) XFree(ch.res_name);
 	if (ch.res_class != NULL) self->wmclass = ch.res_class;
 
-	return TRUE;
+	return true;
+}
+
+static void synchronized_display_error_trap_push(GdkDisplay* display) {
+	gdk_x11_display_error_trap_push(display);
+	XSynchronize(GDK_DISPLAY_XDISPLAY(display), true);
+}
+
+static bool synchronized_display_error_trap_pop(GdkDisplay* display) {
+	XSynchronize(GDK_DISPLAY_XDISPLAY(display), false);
+	return gdk_x11_display_error_trap_pop(display);
 }
