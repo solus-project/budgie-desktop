@@ -33,7 +33,7 @@ G_DEFINE_TYPE(CarbonChild, carbon_child, GTK_TYPE_SOCKET)
 // public method implementations
 
 CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen, Window iconWindow) {
-	if (GDK_IS_SCREEN(screen) == false) {
+	if (!GDK_IS_SCREEN(screen)) {
 		g_warning("No screen to place tray icon onto");
 		return NULL;
 	}
@@ -62,7 +62,7 @@ CarbonChild* carbon_child_new(int size, bool shouldComposite, GdkScreen* screen,
 	}
 
 	GdkVisual* visual = gdk_x11_screen_lookup_visual(screen, attributes.visual->visualid);
-	if (visual == NULL || GDK_IS_VISUAL(visual) == false) {
+	if (visual == NULL || !GDK_IS_VISUAL(visual)) {
 		return NULL;
 	}
 

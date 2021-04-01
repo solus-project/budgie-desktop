@@ -137,7 +137,7 @@ bool carbon_tray_register(CarbonTray* tray, GdkScreen* screen) {
 }
 
 void carbon_tray_unregister(CarbonTray* tray) {
-	if (GTK_IS_WIDGET(tray->invisible) == false) {
+	if (!GTK_IS_WIDGET(tray->invisible)) {
 		return;
 	}
 
@@ -223,7 +223,7 @@ static GdkFilterReturn window_filter(GdkXEvent* xev, GdkEvent* event, void* user
 	XEvent* xevent = (XEvent*) xev;
 	CarbonTray* tray = (CarbonTray*) userData;
 
-	if (GTK_IS_WIDGET(tray->invisible) == false) {
+	if (!GTK_IS_WIDGET(tray->invisible)) {
 		return GDK_FILTER_CONTINUE;
 	}
 
