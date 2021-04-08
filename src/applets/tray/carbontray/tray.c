@@ -41,6 +41,7 @@ static void handle_message_begin(CarbonTray*, XClientMessageEvent*);
 static void handle_message_cancel(CarbonTray*, XClientMessageEvent*);
 static void handle_dock_request(CarbonTray*, XClientMessageEvent*);
 static bool handle_undock_request(GtkSocket*, void*);
+static int handle_x_error(Display* display, XErrorEvent* event);
 
 static void remove_message(CarbonTray*, XClientMessageEvent*);
 static void free_message(CarbonMessage*);
@@ -127,6 +128,8 @@ bool carbon_tray_register(CarbonTray* tray, GdkScreen* screen) {
 
 		GdkAtom data_atom = gdk_atom_intern("_NET_SYSTEM_TRAY_MESSAGE_DATA", false);
 		tray->dataAtom = gdk_x11_atom_to_xatom_for_display(display, data_atom);
+
+		XSetErrorHandler(handle_x_error);
 	} else {
 		g_object_unref(G_OBJECT(tray->invisible));
 		tray->invisible = NULL;
@@ -155,6 +158,8 @@ void carbon_tray_unregister(CarbonTray* tray) {
 	tray->invisible = NULL;
 	gtk_widget_destroy(invisible);
 	g_object_unref(G_OBJECT(invisible));
+
+	XSetErrorHandler(NULL);
 }
 
 void carbon_tray_set_spacing(CarbonTray* tray, int spacing) {
@@ -256,9 +261,9 @@ static GdkFilterReturn window_filter(GdkXEvent* xev, GdkEvent* event, void* user
 static void handle_dock_request(CarbonTray* tray, XClientMessageEvent* xevent) {
 	Window window = (Window) xevent->data.l[2];
 
-	/* check if we already have this window. if we do, we might as well re-dock it at the application's request */
+	/* check if we already have this window. if we do, ignore this request */
 	if (g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(window)) != NULL) {
-		handle_undock_request(g_hash_table_lookup(tray->socketTable, GUINT_TO_POINTER(window)), tray);
+		return;
 	}
 
 	/* create the socket */
@@ -310,6 +315,13 @@ static bool handle_undock_request(GtkSocket* socket, void* userData) {
 
 	// destroys the socket
 	return false;
+}
+
+static int handle_x_error(Display* display, XErrorEvent* event) {
+	char errorText[512];
+	XGetErrorText(display,  event->error_code, errorText, 512);
+	g_warning("Recoverable X error in system tray: %s", errorText);
+	return 0;
 }
 
 static void handle_message_begin(CarbonTray* tray, XClientMessageEvent* xevent) {
