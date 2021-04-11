@@ -10,7 +10,7 @@
  */
 
 namespace Budgie {
-	[DBus (name="org.gnome.ScreenSaver")]
+	[DBus (name="us.getsol.budgie-screensaver")]
 	public interface ScreenSaver : GLib.Object {
 		public abstract void lock() throws Error;
 	}
@@ -29,7 +29,7 @@ namespace Budgie {
 
 		async void setup_dbus() {
 			try {
-				saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
+				saver = yield Bus.get_proxy(BusType.SESSION, "us.getsol.budgie-screensaver", "/us/getsol/budgie-screensaver");
 			} catch (Error e) {
 				warning("Unable to contact login manager: %s", e.message);
 				return;
