@@ -62,6 +62,7 @@ namespace Budgie {
 			app_image = new Gtk.Image.from_icon_name(c_app_icon, Gtk.IconSize.DND);
 			app_image.halign = Gtk.Align.START;
 			app_image.margin_end = 5;
+			app_image.set_pixel_size(32); // Really ensure it's 32x32
 
 			app_label = new Gtk.Label(app_name);
 			app_label.ellipsize = Pango.EllipsizeMode.END;
