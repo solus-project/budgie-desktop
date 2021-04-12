@@ -39,7 +39,7 @@ public interface SessionManager : Object {
 	public abstract async void Shutdown() throws Error;
 }
 
-[DBus (name="org.gnome.ScreenSaver")]
+[DBus (name="us.getsol.budgie-screensaver")]
 public interface ScreenSaver : GLib.Object {
 	public abstract void lock() throws Error;
 }
