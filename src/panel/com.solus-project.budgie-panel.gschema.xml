@@ -118,7 +118,7 @@
     </key>
 
     <key type="as" name="spam-categories">
-      <default>['device.added', 'device.removed', 'network.connected', 'network.disconnected', 'x-gnome.music']</default>
+      <default>['network.connected', 'network.disconnected', 'x-gnome.music']</default>
       <summary>Spam Categories</summary>
       <description>Notifications send by apps of these categories will not be displayed in Raven.</description>
     </key>
