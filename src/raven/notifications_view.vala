@@ -292,11 +292,14 @@ namespace Budgie {
 			// rebuild and scale the image
 			var pixbuf = new Gdk.Pixbuf.with_unowned_data(raw, Gdk.Colorspace.RGB,
 				has_alpha, bits_per_sample, width, height, rowstride, null);
-			var scaled_pixbuf = pixbuf.scale_simple(48, 48, Gdk.InterpType.BILINEAR);
+
+			if (height != 48) { // Height isn't 48
+				pixbuf = pixbuf.scale_simple(48, 48, Gdk.InterpType.BILINEAR); // Scale down (or up if it is small)
+			}
 
 			// set the image
-			if (scaled_pixbuf != null) {
-				image_icon.set_from_pixbuf(scaled_pixbuf);
+			if (pixbuf != null) {
+				image_icon.set_from_pixbuf(pixbuf);
 				return true;
 			} else {
 				return false;
@@ -337,8 +340,7 @@ namespace Budgie {
 				this.image_path = null;
 
 				if (app_icon != "") {
-					image_icon.set_from_icon_name(app_icon, Gtk.IconSize.INVALID);
-					image_icon.pixel_size = 48;
+					image_icon.set_from_icon_name(app_icon, Gtk.IconSize.DIALOG);
 					this.icon_name = app_icon;
 				} else {
 					/* Use the .desktop icon if we can */
@@ -353,17 +355,17 @@ namespace Budgie {
 
 						if (app_info != null) { // If we got the DesktopAppInfo
 							if (app_info.has_key("Icon")) {
-								image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.INVALID);
+								image_icon.set_from_gicon(app_info.get_icon(), Gtk.IconSize.DIALOG);
 								set_icon = true;
 							}
 						}
 
 						if (!set_icon) { // Didn't set the icon from a DesktopAppInfo
-							image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+							image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
 							this.icon_name = "mail-unread-symbolic";
 						}
 					} else {
-						image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.INVALID);
+						image_icon.set_from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
 						this.icon_name = "mail-unread-symbolic";
 					}
 
