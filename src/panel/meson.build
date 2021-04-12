@@ -72,6 +72,10 @@ budgie_panel_vala_args = [
         '--gresources=' + gresource,
 ]
 
+if dep_gsd.version().version_compare('>=40.0')
+    budgie_panel_vala_args += ['-D', 'HAVE_GSD_40']
+endif
+
 budgie_panel_c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
