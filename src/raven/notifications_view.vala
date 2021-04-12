@@ -124,7 +124,6 @@ namespace Budgie {
 			if (vis != null) {
 				this.set_visual(vis);
 			}
-			cancel = new Cancellable();
 
 			set_default_size(NOTIFICATION_SIZE, -1);
 
@@ -206,7 +205,6 @@ namespace Budgie {
 		private uint expire_id = 0;
 		private uint32 timeout = 0;
 
-		private Cancellable? cancel;
 		public string? category = null;
 
 		public bool did_interact = false;
@@ -238,10 +236,6 @@ namespace Budgie {
 		}
 
 		private async bool set_from_image_path(string? app_icon) {
-			if (this.cancel.is_cancelled()) {
-				return false;
-			}
-
 			/* Update the icon. */
 			string? img_path = null;
 			foreach (var img in img_search) {
@@ -272,7 +266,7 @@ namespace Budgie {
 			try {
 				var file = File.new_for_path(image_path);
 				var ins = yield file.read_async(Priority.DEFAULT, null);
-				Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, cancel);
+				Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, null);
 				this.pixbuf = pbuf;
 				image_icon.set_from_pixbuf(pbuf);
 			} catch (Error e) {
@@ -286,10 +280,6 @@ namespace Budgie {
 		* Decode a raw image (iiibiiay) sent through 'hints'
 		*/
 		private async bool set_image_from_data(Variant img) {
-			if (this.cancel.is_cancelled()) {
-				return false;
-			}
-
 			// Read the image fields
 			int width = img.get_child_value(0).get_int32();
 			int height = img.get_child_value(1).get_int32();
@@ -326,10 +316,6 @@ namespace Budgie {
 
 			stop_decay();
 
-			if (!this.cancel.is_cancelled()) {
-				this.cancel.cancel();
-			}
-			this.cancel.reset();
 			var datetime = new DateTime.now_local();
 			this.timestamp = datetime.to_unix();
 
@@ -530,7 +516,7 @@ namespace Budgie {
 		private bool dnd_enabled = false;
 		private bool notifications_paused = false;
 
-		private Queue<NotificationWindow?> stack = null;
+		private NotificationWindow? latest_notification = null;
 
 		/* Obviously we'll change this.. */
 		private HashTable<uint32,NotificationWindow?> notifications;
@@ -634,7 +620,10 @@ namespace Budgie {
 			widget.stop_decay();
 
 			notifications.remove(widget.id);
-			stack.remove(widget);
+
+			if ((latest_notification != null) && (latest_notification.id == id)) { // This is latest notification
+				latest_notification = null;
+			}
 			widget.destroy();
 			return true;
 		}
@@ -742,16 +731,15 @@ namespace Budgie {
 			int x;
 			int y;
 
-			unowned NotificationWindow? tail = stack.peek_head();
 			var screen = Gdk.Screen.get_default();
 
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
 			Gdk.Rectangle rect = mon.get_geometry();
 
 			/* Set the x, y position of the notification */
-			calculate_position(window, tail, rect, out x, out y);
+			calculate_position(window, rect, out x, out y);
+			latest_notification = window;
 
-			stack.push_head(window);
 			window.move(x, y);
 			window.show_all();
 			window.begin_decay();
@@ -761,29 +749,29 @@ namespace Budgie {
 		* Calculate the (x, y) position of a notification popup based on the setting for where on
 		* the screen notifications should appear.
 		*/
-		private void calculate_position(NotificationWindow window, NotificationWindow? tail, Gdk.Rectangle rect, out int x, out int y) {
+		private void calculate_position(NotificationWindow window, Gdk.Rectangle rect, out int x, out int y) {
 			var pos = (NotificationPosition) settings.get_enum("notification-position");
 
 			switch (pos) {
 				case NotificationPosition.TOP_LEFT:
-					if (tail != null) { // If a notification is already being displayed
+					if (latest_notification != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
-						tail.get_position(out nx, out ny);
+						latest_notification.get_position(out nx, out ny);
 						x = nx;
-						y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+						y = ny + latest_notification.get_child().get_allocated_height() + BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
 						y = rect.y + INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.BOTTOM_LEFT:
-					if (tail != null) { // If a notification is already being displayed
+					if (latest_notification != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
-						tail.get_position(out nx, out ny);
+						latest_notification.get_position(out nx, out ny);
 						x = nx;
-						y = ny - tail.get_child().get_allocated_height() - BUFFER_ZONE;
+						y = ny - latest_notification.get_child().get_allocated_height() - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
 
@@ -793,12 +781,12 @@ namespace Budgie {
 					}
 					break;
 				case NotificationPosition.BOTTOM_RIGHT:
-					if (tail != null) { // If a notification is already being displayed
+					if (latest_notification != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
-						tail.get_position(out nx, out ny);
+						latest_notification.get_position(out nx, out ny);
 						x = nx;
-						y = ny - tail.get_child().get_allocated_height() - BUFFER_ZONE;
+						y = ny - latest_notification.get_child().get_allocated_height() - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
@@ -810,12 +798,12 @@ namespace Budgie {
 					break;
 				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
 				default:
-					if (tail != null) { // If a notification is already being displayed
+					if (latest_notification != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
-						tail.get_position(out nx, out ny);
+						latest_notification.get_position(out nx, out ny);
 						x = nx;
-						y = ny + tail.get_child().get_allocated_height() + BUFFER_ZONE;
+						y = ny + latest_notification.get_child().get_allocated_height() + BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
@@ -896,7 +884,6 @@ namespace Budgie {
 
 			notifications_list = new HashTable<string,NotificationGroup>(str_hash, str_equal);
 			notifications = new HashTable<uint32,NotificationWindow?>(direct_hash, direct_equal);
-			stack = new Queue<NotificationWindow?>();
 
 			var scrolledwindow = new Gtk.ScrolledWindow(null, null);
 			scrolledwindow.get_style_context().add_class("raven-background");
