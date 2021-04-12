@@ -202,20 +202,11 @@ public class ClientWidget : Gtk.Box {
 				/* Handle mediaplayer2 iface */
 				p.foreach((k, v) => {
 					if (k == "Metadata") {
-						Idle.add(() => {
-							update_from_meta();
-							return false;
-						});
+						update_from_meta();
 					} else if (k == "PlaybackStatus") {
-						Idle.add(() => {
-							update_play_status();
-							return false;
-						});
+						update_play_status();
 					} else if (k == "CanGoNext" || k == "CanGoPrevious") {
-						Idle.add(() => {
-							update_controls();
-							return false;
-						});
+						update_controls();
 					}
 				});
 			}

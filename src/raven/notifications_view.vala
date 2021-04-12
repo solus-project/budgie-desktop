@@ -469,7 +469,7 @@ namespace Budgie {
 		}
 
 		public void begin_decay() {
-			expire_id = Timeout.add(timeout, do_expire);
+			expire_id = Timeout.add(timeout, do_expire, Priority.HIGH);
 		}
 
 		public void stop_decay() {
