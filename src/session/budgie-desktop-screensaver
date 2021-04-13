@@ -1,0 +1,3 @@
+#!/bin/sh
+pkill -f '/usr/bin/gjs /usr/share/gnome-shell/org.gnome.ScreenSaver'
+gnome-screensaver &

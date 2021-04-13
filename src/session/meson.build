@@ -129,3 +129,9 @@ custom_target('desktop-file-screensaver',
     install : true,
     install_dir : xdg_appdir,
 )
+
+# Install screensaver launcher
+install_data(
+    'budgie-desktop-screensaver',
+    install_dir: join_paths(get_option('prefix'), get_option('bindir')),
+)
