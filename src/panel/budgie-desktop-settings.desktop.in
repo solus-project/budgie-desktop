@@ -1,0 +1,11 @@
+[Desktop Entry]
+_Name=Budgie Desktop Settings
+_Comment=Change desktop appearance and behavior
+Icon=preferences-desktop
+Exec=budgie-desktop-settings
+TryExec=budgie-desktop-settings
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+OnlyShowIn=Budgie;
+StartupWMClass=budgie-desktop-settings

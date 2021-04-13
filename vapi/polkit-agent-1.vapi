@@ -6,7 +6,7 @@ namespace PolkitAgent {
 	public abstract class Listener : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Listener ();
-        public virtual async bool initiate_authentication(string action_id, string message, string icon_name, Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable);
+        public virtual async bool initiate_authentication(string action_id, string message, string icon_name, Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable) throws Polkit.Error;
         /*
         public virtual void initiate_authentication(string action_id, string message, string icon_name, Polkit.Details details, string cookie, GLib.List<Polkit.Identity?>? identities, GLib.Cancellable cancellable, GLib.AsyncReadyCallback @callback);
 		public virtual bool initiate_authentication_finish (GLib.AsyncResult res) throws GLib.Error;*/

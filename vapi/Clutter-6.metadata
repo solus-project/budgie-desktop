@@ -1,0 +1,204 @@
+// Non mini-object
+ActorBox struct
+Color struct
+Fog struct
+Geometry struct
+Knot struct
+PathNode struct
+Perspective struct
+Units struct
+Vertex struct
+
+*.ref unowned
+
+init.argv unowned
+init_with_args
+	.argv unowned
+Actor
+	.apply_transform.matrix ref
+	.get_abs_allocation_vertices.verts out=false
+	.get_allocation_vertices.verts out=false
+Canvas
+	.new symbol_type="constructor"
+Event.type#method name="get_type"
+Image
+	.new symbol_type="constructor"
+
+// ???
+Actor.has_pointer#method name="get_has_pointer"
+InitError errordomain=false
+
+// Not all backing symbols are deprecated
+Actor.pick deprecated=false
+
+// Nullable return values
+Actor
+	.get_parent nullable
+value_get_color nullable
+
+// method/virtual-method/signal don't match
+Actor
+	.event#method name="emit_event"
+	.get_paint_volume#method skip
+	.queue_redraw#signal skip
+	.queue_redraw#virtual_method skip
+Container
+	.add_actor skip=false
+Text
+	.activate#method name="try_activate"
+	.insert_text#signal skip
+TextBuffer.get_text#virtual_method name="get_text_with_length"
+
+// virtual/abstract distinction
+Container
+	.lower virtual
+	.raise virtual
+	.*_child_meta#virtual_method virtual
+	.foreach_with_internals#virtual_method virtual
+
+// Default values
+Container
+	.lower.sibling nullable default=null
+	.raise.sibling nullable default=null
+Stage.read_pixels
+	.width default=-1
+	.height default=-1
+Text
+	.position_to_coords.line_height default=null
+
+// Reparented funcs methods can't be instance methods
+feature_available skip
+feature_get_all skip
+
+// Skipped by g-i for unknown reasons
+LayoutManager
+	.create_child_meta skip=false
+
+// Variadic arguments
+Actor
+	.animate skip=false
+	.animate_with_alpha skip=false
+	.animate_with_timeline skip=false
+Box
+	.pack skip=false
+	.pack_after skip=false
+	.pack_at skip=false
+	.pack_before skip=false
+Container
+	.add_valist skip=false
+	.child_get skip=false
+	.child_set skip=false
+	.remove skip=false
+	.remove_valist skip=false
+Interval
+	.new skip=false
+	.get_interval skip=false
+	.set_final skip=false
+	.set_initial skip=false
+	.set_interval skip=false
+LayoutManager
+	.child_get skip=false
+	.child_set skip=false
+Script
+	.get_objects skip=false
+
+// Changing error domains
+Texture
+	.new_from_file throws="Clutter.TextureError"
+
+// Skipped upstream for unknown reasons
+Alpha.register_func skip=false
+Interval.register_progress_func skip=false
+get_option_group skip=false
+get_option_group_without_init skip=false
+threads_add_idle skip=false
+threads_add_idle_full skip=false
+threads_add_timeout skip=false
+threads_add_timeout_full skip=false
+
+// struct/class confusion
+ActorBox
+	.new skip
+	.from_vertices skip
+Units.from_* skip
+Color
+	.new skip
+Vertex.new skip
+
+// Class methods
+container_class_find_child_property skip
+container_class_list_child_properties skip
+
+// Move symbols
+get_actor_by_gid parent="Clutter.Actor" name="get_by_gid"
+units_from_* skip
+
+// Classes marked as out but not double ptr
+Actor
+	.get_margin.margin out=false
+DragAction
+	.get_drag_area.drag_area out=false
+InputDevice
+	.get_coords.point out=false
+Rect
+	.get_center.center out=false
+	.intersection.res out=false
+	.union.res out=false
+Timeline
+	.get_cubic_bezier_progress.c_* out=false
+ZoomAction
+	.get_focal_point.point out=false
+	.get_transformed_focal_point.point out=false
+
+// Struct return values
+color_get_static nullable
+
+// Remove for clutter-2.0
+/////////////////////////
+
+Stage
+ 	.event name="emit_event"
+
+// *Event should be compact classes derived from Clutter.Event
+Event.type skip=false
+AnyEvent struct=false base_type="Clutter.Event"
+ButtonEvent struct=false base_type="Clutter.Event"
+CrossingEvent struct=false base_type="Clutter.Event"
+KeyEvent struct=false base_type="Clutter.Event"
+MotionEvent struct=false base_type="Clutter.Event"
+ScrollEvent struct=false base_type="Clutter.Event"
+StageStateEvent struct=false base_type="Clutter.Event"
+TouchEvent struct=false base_type="Clutter.Event"
+TouchpadPinchEvent struct=false base_type="Clutter.Event"
+TouchpadSwipeEvent struct=false base_type="Clutter.Event"
+
+// Keysyms used to be CLUTTER_X instead of CLUTTER_KEY_X
+*#constant skip
+COGL skip=false
+CURRENT_TIME skip=false
+FLAVOUR skip=false
+PATH_RELATIVE skip=false
+PRIORITY_REDRAW skip=false
+
+// Clutter devs don't like us creating nested namespaces
+value_* name="value_(.+)" parent="Clutter.Value"
+threads_* name="threads_(.+)" parent="Clutter.Threads"
+threads_add_idle name="add" parent="Clutter.Threads.Idle"
+threads_add_idle_full name="add_full" parent="Clutter.Threads.Idle"
+threads_add_timeout name="add" parent="Clutter.Threads.Timeout"
+threads_add_timeout_full name="add_full" parent="Clutter.Threads.Timeout"
+
+// Backwards compatibility
+Color.alloc symbol_type="function"
+Point.alloc symbol_type="function"
+Rect.alloc symbol_type="function"
+Size.alloc symbol_type="function"
+Vertex.alloc symbol_type="function"
+
+BinAlignment deprecated=false deprecated_since=null
+BinAlignment.* deprecated
+BinAlignment.start deprecated=false
+BinLayout.new.*_align default=Clutter.BinAlignment.START
+
+// Possibly keep
+KEY_* skip=false name="KEY_(.+)" type="uint" parent="Clutter.Key"

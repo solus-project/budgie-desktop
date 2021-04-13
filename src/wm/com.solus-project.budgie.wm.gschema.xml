@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie-desktop">
+
+	<enum id="com.solus-project.budgie-wm.ButtonPosition">
+		<value nick="left" value="1" />
+		<value nick="traditional" value="2" />
+	</enum>
+
+	<enum id="com.solus-project.budgie-wm.DesktopType">
+		<value nick="none" value="0" />
+		<value nick="budgie" value="1" />
+		<value nick="desktopfolder" value="2" />
+		<value nick="nemo" value="3" />
+	</enum>
+
+	<schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
+		<key type="b" name="edge-tiling">
+			<default>true</default>
+			<summary>Enable edge tiling when dropping windows on screen edges</summary>
+			<description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+		</key>
+
+		<key type="b" name="attach-modal-dialogs">
+			<default>true</default>
+			<summary>Attach modal dialog to the parent window</summary>
+			<description>This key overrides the key in org.gnome.mutter when running Budgie.</description>
+		</key>
+
+		<key type="b" name="center-windows">
+			<default>false</default>
+			<summary>Enable automatic centering of windows on current screen.</summary>
+			<description>Enable automatic centering of a window on launch on the current screen.</description>
+		</key>
+
+		<key type="b" name="caffeine-mode">
+			<default>false</default>
+			<summary>Enable Caffeine mode for disabling lock and suspend.</summary>
+			<description>Enable Caffeine mode for disabling lock and suspend.</description>
+		</key>
+
+		<key type="b" name="caffeine-mode-notification">
+			<default>false</default>
+			<summary>Enable displaying a notification when Caffeine Mode is toggled.</summary>
+			<description>Enable displaying a notification when Caffeine Mode is toggled.</description>
+		</key>
+
+		<key type="i" name="caffeine-mode-screen-brightness">
+			<default>95</default>
+			<summary>Screen brightness when Caffeine Mode is activated.</summary>
+			<description>Screen brightness when Caffeine Mode is activated.</description>
+		</key>
+
+		<key type="i" name="caffeine-mode-timer">
+			<default>0</default>
+			<summary>Amount of minutes to keep Caffeine Mode on.</summary>
+			<description>Amount of minutes to keep Caffeine Mode on when active.</description>
+		</key>
+
+		<key type="b" name="caffeine-mode-toggle-brightness">
+			<default>false</default>
+			<summary>Toggle screen brightness on activation of Caffeine Mode.</summary>
+			<description>Control whether the screen brightness changes when Caffeine Mode is activated.</description>
+		</key>
+
+		<key type="b" name="disable-night-light-on-fullscreen">
+			<default>false</default>
+			<summary>Disable Night Light mode when windows are fullscreen</summary>
+			<description>Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen.</description>
+		</key>
+
+		<key type="b" name="pause-notifications-on-fullscreen">
+			<default>false</default>
+			<summary>Pause notifications when windows are fullscreen</summary>
+			<description>Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen.</description>
+		</key>
+
+		<key type="b" name="experimental-enable-run-dialog-as-menu">
+			<default>false</default>
+			<summary>Enables the Budgie Run Dialog to be launched with the normal overlay key</summary>
+			<description>Enables the Budgie Run Dialog to be launched with the normal overlay key.</description>
+		</key>
+
+		<key type="b" name="focus-mode">
+			<default>false</default>
+			<summary>Window focus mode to indicate how windows are activated</summary>
+			<description>This key overrides the key in org.gnome.desktop.wm.preferences when running Budgie.</description>
+		</key>
+
+		<key type="b" name="force-unredirect">
+			<default>false</default>
+			<summary>Forcibly disable screen unredirection</summary>
+			<description>Disables the screen unredirection which may improve performance with certain drivers.</description>
+		</key>
+
+		<key type="b" name="show-all-windows-tabswitcher">
+			<default>false</default>
+			<summary>Enable display of every open windows in the tab switcher</summary>
+			<description>Control whether every open windows or only the current workspace ones are displayed in the tab switcher.</description>
+		</key>
+
+		<key type="as" name="toggle-raven">
+			<default><![CDATA[['<Super>A']]]></default>
+			<summary>The binding to use to toggle Raven applets view</summary>
+			<description>The binding to use to toggle Raven applets view</description>
+		</key>
+
+		<key type="as" name="clear-notifications">
+			<default><![CDATA[['<Super>C']]]></default>
+			<summary>The binding to clear Raven notifications</summary>
+			<description>The binding to clear Raven notifications</description>
+		</key>
+
+		<key type="as" name="take-full-screenshot">
+			<default><![CDATA[['Print']]]></default>
+			<summary>Take screenshot of all displays</summary>
+			<description>Take screenshot of all displays</description>
+		</key>
+
+		<key type="s" name="full-screenshot-cmd">
+			<default>'gnome-screenshot'</default>
+			<summary>Take screenshot of all displays application</summary>
+			<description>Application that is run when taking a screenshot of all displays</description>
+		</key>
+
+		<key type="as" name="switch-input-source">
+			<default><![CDATA[['<Alt>Shift_L', '<Super>space', 'XF86Keyboard']]]></default>
+			<summary>Switch to the next input source</summary>
+			<description>Switch to the next input souce</description>
+		</key>
+
+		<key type="as" name="switch-input-source-backward">
+			<default><![CDATA[['<Super><Shift>space', '<Shift>XF86Keyboard']]]></default>
+			<summary>Switch to the previous input source</summary>
+			<description>Switch to the previous input souce</description>
+		</key>
+
+		<key type="as" name="take-region-screenshot">
+			<default><![CDATA[['<Ctrl>Print']]]></default>
+			<summary>Take screenshot of selectable region</summary>
+			<description>Take screenshot of selectable region</description>
+		</key>
+
+		<key type="s" name="take-region-screenshot-cmd">
+			<default>'gnome-screenshot -a'</default>
+			<summary>Take screenshot of selectable region application</summary>
+			<description>Application that is run when taking a screenshot of a selectable region</description>
+		</key>
+
+		<key type="as" name="take-window-screenshot">
+			<default><![CDATA[['<Alt>Print']]]></default>
+			<summary>Take screenshot of current window</summary>
+			<description>Take screenshot of current window</description>
+		</key>
+
+		<key type="s" name="take-window-screenshot-cmd">
+			<default>'gnome-screenshot -w -b'</default>
+			<summary>Take screenshot of current window application</summary>
+			<description>Application that is run when taking a screenshot of the current window</description>
+		</key>
+
+		<key type="as" name="toggle-notifications">
+			<default><![CDATA[['<Super>N']]]></default>
+			<summary>The binding to use to toggle Raven notifications</summary>
+			<description>The binding to use to toggle Raven notifications</description>
+		</key>
+
+		<key name="button-layout" type="s">
+			<default>'appmenu:minimize,maximize,close'</default>
+			<summary>Arrangement of buttons on the titlebar</summary>
+			<description>
+				Arrangement of buttons on the titlebar. The value should be a string,
+				such as  "menu:minimize,maximize,spacer,close"; the colon separates
+				the  left corner of the window from the right corner, and  the button
+				names are comma-separated. Duplicate buttons are not allowed. Unknown
+				button names are silently ignored so that buttons can be added in
+				future metacity versions  without breaking older versions. A special
+				spacer tag can be used to insert some space between
+				two adjacent buttons.
+			</description>
+		</key>
+
+		<key enum="com.solus-project.budgie-wm.ButtonPosition" name="button-style">
+			<default>'traditional'</default>
+			<summary>Button layout style</summary>
+			<description>Which layout to use for window buttons</description>
+		</key>
+
+		<key enum="com.solus-project.budgie-wm.DesktopType" name="desktop-type-override">
+			<default>'none'</default>
+			<summary>Desktop Type Override</summary>
+			<description>
+			This setting will enable the force enable the use of a specific application responsible for presenting a desktop-type window.
+			By default, Budgie will present settings via Budgie Desktop Settings for the first application it finds, in the following order: budgie-desktop-view, desktopfolder, and nemo.
+			This option, when set to none, will perform no overriding. When setting it to a specific type, we will present the settings for that application assuming it exists. It will show no settings if the app cannot be found in PATH.
+			This option does not guarantee that the application is running or will run at start-up. That is the responsible of the user, vendor, or software.
+			</description>
+		</key>
+	</schema>
+
+</schemalist>

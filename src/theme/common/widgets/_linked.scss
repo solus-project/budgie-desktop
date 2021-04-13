@@ -1,0 +1,29 @@
+@mixin widget_linked($entry,$button) {
+    %linked_middle {
+        border-radius: 0;
+        border-right-style: none;
+    }
+    %linked {
+        @extend %linked_middle;
+        &:first-child {
+            border-top-left-radius: $roundness;
+            border-bottom-left-radius: $roundness;
+        }
+        &:last-child {
+            border-top-right-radius: $roundness;
+            border-bottom-right-radius: $roundness;
+            border-right-style: solid;
+        }
+        &:only-child {
+            border-radius: $roundness;
+            border-style: solid;
+        }
+    }
+    .linked {
+        > #{$entry},
+        > #{$button} { @extend %linked; }
+
+        // linked square buttons look weird
+        #{$button}.image-button { padding: 4px 7px; }
+    }
+}

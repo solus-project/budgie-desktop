@@ -1,8 +1,0 @@
-[Plugin]
-Module=spacerapplet.so
-Name=Spacer
-_Description=Spacer
-Authors=Ikey Doherty
-Copyright=Copyright © 2015 Ikey Doherty
-Website=https://solus-project.com
-Icon=format-justify-fill-symbolic

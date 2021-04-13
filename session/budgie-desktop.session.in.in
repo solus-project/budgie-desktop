@@ -1,4 +1,0 @@
-[GNOME Session]
-_Name=Budgie Desktop
-RequiredComponents=budgie-wm;gnome-settings-daemon;budgie-daemon;budgie-panel;budgie-polkit;
-DesktopName=Budgie Desktop

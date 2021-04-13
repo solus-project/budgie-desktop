@@ -1,8 +1,0 @@
-[Plugin]
-Module=showdesktopapplet.so
-Name=Show Desktop Button
-_Description=Show Desktop Button
-Authors=Ikey Doherty
-Copyright=Copyright © 2015 Ikey Doherty
-Website=https://solus-project.com
-Icon=user-desktop-symbolic

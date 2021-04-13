@@ -1,0 +1,8 @@
+[Plugin]
+Module=workspacesapplet.so
+Name=Workspace Switcher
+_Description=Workspace Switcher
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2017-2021 Budgie Desktop Developers
+Website=https://budgie-desktop.org
+Icon=workspace-switcher-symbolic

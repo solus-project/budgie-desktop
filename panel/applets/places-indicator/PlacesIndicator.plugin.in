@@ -1,8 +1,0 @@
-[Plugin]
-Module=libplacesindicator.so
-Name=Places
-_Description=Places
-Authors=Solus Project
-Copyright=Copyright © 2016 Solus Project
-Website=https://solus-project.com
-Icon=drive-harddisk-symbolic
