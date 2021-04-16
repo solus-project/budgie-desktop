@@ -18,10 +18,6 @@ The Budgie Desktop is a feature-rich, modern desktop designed to keep out the wa
 
 ## Project Updates
 
-### Announcement for Budgie 11
-
-In our [2019: To Venture Ahead](https://getsol.us/2019/01/14/2019-to-venture-ahead/) blog post, we formally announced the return of Budgie development in April, with planned alpha and beta builds later in the year.
-
 ### Move to GTK4
 
 In our [In Full Sail](https://getsol.us/2018/10/27/in-full-sail/) blog post, we announced that Budgie 11 will be written in C and GTK4. The plan is to further support Vala for Budgie plugins.
