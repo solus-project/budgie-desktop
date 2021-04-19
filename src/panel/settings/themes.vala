@@ -50,6 +50,7 @@ public class ThemeScanner : GLib.Object {
 		"Breeze",
 		"Clearlooks",
 		"Crux",
+		"Default",
 		"Emacs",
 		"Industrial",
 		"Mist",
