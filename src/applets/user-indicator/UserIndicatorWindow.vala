@@ -69,7 +69,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 		try {
 			saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
 		} catch (Error e) {
-			warning(UNABLE_CONTACT + "gnome-screensaver: %s", e.message);
+			warning(UNABLE_CONTACT + "budgie-screensaver: %s", e.message);
 			return;
 		}
 
