@@ -28,7 +28,7 @@ namespace Budgie {
 		private bool original_night_light_setting = false;
 		private bool should_disable_night_light_on_fullscreen = false;
 		private bool should_pause_notifications_on_fullscreen = false;
-		public HashTable<string?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their name and respective Wnck.Window
+		public HashTable<ulong?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their X window ID and respective Wnck.Window
 		public HashTable<string?,Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
 		public HashTable<ulong?,AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
 		private Wnck.Screen screen = null;
@@ -49,7 +49,7 @@ namespace Budgie {
 			color_settings = new Settings("org.gnome.settings-daemon.plugins.color");
 			wm_settings = new Settings("com.solus-project.budgie-wm");
 
-			fullscreen_windows = new HashTable<string?,Wnck.Window?>(str_hash, str_equal);
+			fullscreen_windows = new HashTable<ulong?,Wnck.Window?>(int_hash, str_equal);
 			running_apps = new HashTable<string?,Array<AbominationRunningApp>?>(str_hash, str_equal);
 			running_apps_id = new HashTable<ulong?,AbominationRunningApp?>(int_hash, int_equal);
 			screen = Wnck.Screen.get_default();
@@ -161,7 +161,7 @@ namespace Budgie {
 			track_window_fullscreen_state(app.window, app.window.get_state());
 
 			app.window.state_changed.connect((changed, new_state) => {
-				if (Wnck.WindowState.FULLSCREEN in changed || Wnck.WindowState.MINIMIZED in changed) {
+				if (Wnck.WindowState.FULLSCREEN in (changed | new_state)) {
 					track_window_fullscreen_state(app.window, new_state);
 				}
 			});
@@ -272,17 +272,24 @@ namespace Budgie {
 		 * Additionally, toggles night light and notification pausing as necessary if either are enabled.
 		 */
 		public void track_window_fullscreen_state(Wnck.Window window, Wnck.WindowState? state) {
-			string window_name = window.get_name();
+			ulong window_xid = window.get_xid();
 
 			// only add a fullscreen window if it isn't currently minimized
-			if (state != null && Wnck.WindowState.FULLSCREEN in state && !(Wnck.WindowState.MINIMIZED in state)) {
-				fullscreen_windows.insert(window_name, window); // Add to fullscreen_windows
-			} else if (window_name in fullscreen_windows) {
-				fullscreen_windows.steal(window_name); // Remove from fullscreen_windows
+			if (!(window_xid in fullscreen_windows) && state_is_fullscreen(state)) {
+				fullscreen_windows.insert(window_xid, window); // Add to fullscreen_windows
+			} else if (window_xid in fullscreen_windows) {
+				fullscreen_windows.steal(window_xid); // Remove from fullscreen_windows
 			}
 
 			toggle_night_light(); // Ensure we toggle Night Light if needed
 			set_notifications_paused(); // Ensure we pause notifications if needed
+		}
+
+		private bool state_is_fullscreen(Wnck.WindowState? state) {
+			return state != null && (
+				Wnck.WindowState.FULLSCREEN in state &&
+				!(Wnck.WindowState.MINIMIZED in state || Wnck.WindowState.HIDDEN in state)
+			);
 		}
 
 		/**
