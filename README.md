@@ -98,6 +98,8 @@ budgie-desktop is available under a split license model. This enables developers
 
 The shared libraries are available under the terms of the LGPL-2.1, allowing developers to link against the API without any issue, and to use all exposed APIs without affecting their project license.
 
+The background shipped in data/backgrounds is a modified wallpaper, originally sourced from Paweł Czerwiński and licensed under [Unsplash License](https://unsplash.com/license).
+
 The remainder of the project (i.e. installed binaries) is available under the terms of the GPL 2.0 license. This is clarified in the headers of each source file.
 
 ## Authors

@@ -2,6 +2,9 @@
 edge-tiling = true
 attach-modal-dialogs = true
 
+[org.gnome.desktop.background:Budgie]
+picture-uri = 'file:///usr/share/backgrounds/budgie/default.jpg'
+
 [org.gnome.desktop.wm.preferences:Budgie]
 button-layout = 'appmenu:minimize,maximize,close'
 

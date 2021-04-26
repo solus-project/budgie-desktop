@@ -31,6 +31,10 @@ status_icons = [
     join_paths('.', 'icons', 'status', 'budgie-caffeine-cup-empty.svg'),
 ]
 
+install_data(
+    join_paths('.', 'backgrounds', 'default.jpg'),
+    install_dir: join_paths(datadir, 'backgrounds', 'budgie')
+)
 
 install_data(
     actions_icons,
