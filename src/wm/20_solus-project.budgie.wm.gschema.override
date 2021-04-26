@@ -8,3 +8,5 @@ picture-uri = 'file:///usr/share/backgrounds/budgie/default.jpg'
 [org.gnome.desktop.wm.preferences:Budgie]
 button-layout = 'appmenu:minimize,maximize,close'
 
+[org.gnome.desktop.screensaver:Budgie]
+picture-uri = 'file:///usr/share/backgrounds/budgie/default.jpg'
