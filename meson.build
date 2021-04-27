@@ -14,14 +14,6 @@ project(
 budgie_screensaver  = find_program('budgie-screensaver', required: false)
 assert(budgie_screensaver.found(), 'Budgie Screensaver is a required separate component of Budgie Desktop. Please ensure budgie-screensaver is available at configure and run time. You can find this at https://github.com/getsolus/budgie-screensaver')
 
-if budgie_screensaver.found()
-    budgie_screensaver_version_cmd = run_command('budgie-screensaver', ['--version'])
-    cmd_out = budgie_screensaver_version_cmd.stdout()
-    split_cmd = cmd_out.split(' ')
-    budgie_screensaver_version = split_cmd.get(1)
-    assert(budgie_screensaver_version.version_compare('>=4.0'), 'Budgie Screensaver must be 4.0 or higher. Found @0@'.format(budgie_screensaver_version))
-endif
-
 git = find_program('git', required: false)
 
 am_cflags = [
