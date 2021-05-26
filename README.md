@@ -5,8 +5,8 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/solus-project/budgie-desktop)
 [![Translate into your language!](https://img.shields.io/badge/help%20translate-Weblate-4AB)](https://translate.getsol.us/engage/budgie-desktop/)
 [![Translation status](https://translate.getsol.us/widgets/budgie-desktop/-/svg-badge.svg)](https://translate.getsol.us/engage/budgie-desktop/)
-![#budgie-desktop-dev on Freenode](https://img.shields.io/badge/freenode-%23budgie--desktop--dev-4AF)
-![#solus-dev on Freenode](https://img.shields.io/badge/freenode-%23solus--dev-28C) [![Support Main Developer on Patreon](https://img.shields.io/badge/-Support%20Main%20Developer%20on%20Patreon-blueviolet)](https://patreon.com/joshuastrobl)
+![#budgie-desktop-dev on Libera](https://img.shields.io/badge/libera-%23budgie--desktop--dev-4AF)
+![#solus-dev on Libera](https://img.shields.io/badge/libera-%23solus--dev-28C) [![Support Main Developer on Patreon](https://img.shields.io/badge/-Support%20Main%20Developer%20on%20Patreon-blueviolet)](https://patreon.com/joshuastrobl)
 
 The Budgie Desktop is a feature-rich, modern desktop designed to keep out the way of the user.
 
