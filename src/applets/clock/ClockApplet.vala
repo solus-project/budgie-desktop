@@ -47,36 +47,6 @@ public class ClockApplet : Budgie.Applet {
 
 	public string uuid { public set; public get; }
 
-	// Make a fancy button with a direction indicator
-	Gtk.Button new_directional_button(string label_str, Gtk.PositionType arrow_direction) {
-		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		box.halign = Gtk.Align.FILL;
-		var label = new Gtk.Label(label_str);
-		var button = new Gtk.Button();
-		var image = new Gtk.Image();
-
-		if (arrow_direction == Gtk.PositionType.RIGHT) {
-			image.set_from_icon_name("go-next-symbolic", Gtk.IconSize.MENU);
-			box.pack_start(label, true, true, 0);
-			box.pack_end(image, false, false, 1);
-			image.margin_start = 6;
-			label.margin_start = 6;
-		} else {
-			image.set_from_icon_name("go-previous-symbolic", Gtk.IconSize.MENU);
-			box.pack_start(image, false, false, 0);
-			box.pack_start(label, true, true, 0);
-			image.margin_end = 6;
-		}
-
-		label.halign = Gtk.Align.START;
-		label.margin = 0;
-		box.margin = 0;
-		box.border_width = 0;
-		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		button.add(box);
-		return button;
-	}
-
 	Gtk.Button new_plain_button(string label_str) {
 		Gtk.Button ret = new Gtk.Button.with_label(label_str);
 		ret.get_child().halign = Gtk.Align.START;
@@ -140,7 +110,7 @@ public class ClockApplet : Budgie.Applet {
 		stack.get_style_context().add_class("clock-applet-stack");
 
 		popover.add(stack);
-		stack.set_homogeneous(false);
+		stack.set_homogeneous(true);
 		stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
 
 		var menu = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
@@ -151,44 +121,10 @@ public class ClockApplet : Budgie.Applet {
 		time_button.clicked.connect(on_date_activate);
 		cal_button.clicked.connect(on_cal_activate);
 
-		// menu page 1
 		menu.pack_start(time_button, false, false, 0);
 		menu.pack_start(cal_button, false, false, 0);
-		var sub_button = this.new_directional_button(_("Preferences"), Gtk.PositionType.RIGHT);
-		sub_button.clicked.connect(() => { stack.set_visible_child_name("prefs"); });
-		menu.pack_end(sub_button, false, false, 2);
 
-		stack.add_named(menu, "root");
-
-		// page2
-		menu = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
-		menu.border_width = 6;
-
-		var check_date = new Gtk.CheckButton.with_label(_("Show date"));
-		check_date.get_child().set_property("margin-start", 8);
-
-		var check_seconds = new Gtk.CheckButton.with_label(_("Show seconds"));
-		check_seconds.get_child().set_property("margin-start", 8);
-
-
-		var clock_format = new Gtk.CheckButton.with_label(_("Use 24 hour time"));
-		clock_format.get_child().set_property("margin-start", 8);
-
-
-		// pack page2
-		sub_button = this.new_directional_button(_("Preferences"), Gtk.PositionType.LEFT);
-		sub_button.clicked.connect(() => { stack.set_visible_child_name("root"); });
-		menu.pack_start(sub_button, false, false, 0);
-		menu.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL), false, false, 2);
-		menu.pack_start(get_settings_ui(), false, false, 0);
-		stack.add_named(menu, "prefs");
-
-
-		// Always open to the root page
-		popover.closed.connect(() => {
-			stack.set_visible_child_name("root");
-		});
-
+		stack.add(menu);
 
 		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
