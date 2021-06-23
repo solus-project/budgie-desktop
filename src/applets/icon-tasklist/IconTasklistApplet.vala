@@ -272,21 +272,22 @@ public class IconTasklistApplet : Budgie.Applet {
 				return; // Don't allow drag & drop
 			}
 
-			app_id = info.get_filename();
+			string[] app_id_parts = app_id.split("/");
+			string launcher = app_id_parts[app_id_parts.length - 1]; // remove the path parts to keep only the desktop file name
 
-			if (buttons.contains(app_id)) {
-				original_button = (buttons[app_id].get_parent() as ButtonWrapper);
+			if (buttons.contains(launcher)) {
+				original_button = (buttons[launcher].get_parent() as ButtonWrapper);
 			} else {
 				IconButton button = new IconButton(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, info, true);
 				button.update();
 
-				buttons.set(app_id, button);
+				buttons.set(launcher, button);
 				original_button = new ButtonWrapper(button);
 				original_button.orient = this.get_orientation();
 
 				button.became_empty.connect(() => {
 					if (!button.pinned) {
-						buttons.remove(app_id);
+						buttons.remove(launcher);
 						original_button.gracefully_die();
 					}
 				});
