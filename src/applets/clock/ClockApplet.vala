@@ -141,13 +141,13 @@ public class ClockApplet : Budgie.Applet {
 		
 
 		// make sure every setting is ready
-		this.update_setting("clock-show-date");
-		this.update_setting("clock-show-seconds");
-		this.update_setting("clock-use-24-hour-time");
-		this.update_setting("clock-use-custom-format");
-		this.update_setting("clock-custom-format");
-		this.update_setting("clock-use-custom-timezone");
-		this.update_setting("clock-custom-timezone");
+		this.update_setting("show-date");
+		this.update_setting("show-seconds");
+		this.update_setting("use-24-hour-time");
+		this.update_setting("use-custom-format");
+		this.update_setting("custom-format");
+		this.update_setting("use-custom-timezone");
+		this.update_setting("custom-timezone");
 
 		Timeout.add_seconds_full(Priority.LOW, 1, update_clock);
 
@@ -212,29 +212,29 @@ public class ClockApplet : Budgie.Applet {
 
 	private void update_setting(string key) {
 		switch (key) {
-			case "clock-show-date":
+			case "show-date":
 				this.clock_show_date = settings.get_boolean(key);
 				this.date_label.set_visible(this.clock_show_date);
 				break;
-			case "clock-show-seconds":
+			case "show-seconds":
 				this.clock_show_seconds = settings.get_boolean(key);
 				this.seconds_label.set_visible(this.clock_show_seconds);
 				break;
-			case "clock-use-24-hour-time":
+			case "use-24-hour-time":
 				this.clock_use_24_hour_time = settings.get_boolean(key);
 				break;
-			case "clock-use-custom-format":
+			case "use-custom-format":
 				this.clock_use_custom_format = settings.get_boolean(key);
 				this.date_label.set_visible(!this.clock_use_custom_format);
 				this.seconds_label.set_visible(!this.clock_use_custom_format);
 				break;
-			case "clock-custom-format":
+			case "custom-format":
 				this.clock_custom_format = settings.get_string(key);
 				break;
-			case "clock-use-custom-timezone":
-			case "clock-custom-timezone":
-				if (settings.get_boolean("clock-use-custom-timezone")) {
-					this.clock_timezone = new TimeZone(settings.get_string("clock-custom-timezone"));
+			case "use-custom-timezone":
+			case "custom-timezone":
+				if (settings.get_boolean("use-custom-timezone")) {
+					this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
 				} else {
 					this.clock_timezone = new TimeZone.local();
 				}
@@ -380,13 +380,13 @@ public class ClockSettings : Gtk.Grid {
 	private Gtk.Entry? txtTimezone;
 
 	public ClockSettings(Settings? settings) {
-		settings.bind("clock-show-date", this.swShowDate, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-show-seconds", this.swShowSeconds, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-use-24-hour-time", this.swUse24HourTime, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-use-custom-format", this.swCustomFormat, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-custom-format", this.txtFormat, "text", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-use-custom-timezone", this.swCustomTimezone, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("clock-custom-timezone", this.txtTimezone, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("show-date", this.swShowDate, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-seconds", this.swShowSeconds, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("use-24-hour-time", this.swUse24HourTime, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("use-custom-format", this.swCustomFormat, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("custom-format", this.txtFormat, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("use-custom-timezone", this.swCustomTimezone, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("custom-timezone", this.txtTimezone, "text", SettingsBindFlags.DEFAULT);
 
 		this.swCustomFormat.notify["active"].connect(this.updateSensitve);
 		this.swCustomTimezone.notify["active"].connect(this.updateSensitve);
