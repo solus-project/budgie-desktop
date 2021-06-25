@@ -349,49 +349,49 @@ public class ClockApplet : Budgie.Applet {
 public class ClockSettings : Gtk.Grid {
 
 	[GtkChild]
-	private Gtk.Switch? swShowDate;
+	private Gtk.Switch? show_date;
 
 	[GtkChild]
-	private Gtk.Switch? swShowSeconds;
+	private Gtk.Switch? show_seconds;
 
 	[GtkChild]
-	private Gtk.Switch? swUse24HourTime;
+	private Gtk.Switch? use_24_hour_time;
 
 	[GtkChild]
-	private Gtk.Switch? swCustomFormat;
+	private Gtk.Switch? use_custom_format;
 
 	[GtkChild]
-	private Gtk.Entry? txtFormat;
+	private Gtk.Entry? custom_format;
 	
 	[GtkChild]
-	private Gtk.Switch? swCustomTimezone;
+	private Gtk.Switch? use_custom_timezone;
 
 	[GtkChild]
-	private Gtk.Entry? txtTimezone;
+	private Gtk.Entry? custom_timezone;
 
 	public ClockSettings(Settings? settings) {
-		settings.bind("show-date", this.swShowDate, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("show-seconds", this.swShowSeconds, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("use-24-hour-time", this.swUse24HourTime, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("use-custom-format", this.swCustomFormat, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("custom-format", this.txtFormat, "text", SettingsBindFlags.DEFAULT);
-		settings.bind("use-custom-timezone", this.swCustomTimezone, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("custom-timezone", this.txtTimezone, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-seconds", this.show_seconds, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("use-24-hour-time", this.use_24_hour_time, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("use-custom-format", this.use_custom_format, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("custom-format", this.custom_format, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("use-custom-timezone", this.use_custom_timezone, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("custom-timezone", this.custom_timezone, "text", SettingsBindFlags.DEFAULT);
 
-		this.swCustomFormat.notify["active"].connect(this.updateSensitve);
-		this.swCustomTimezone.notify["active"].connect(this.updateSensitve);
+		this.use_custom_format.notify["active"].connect(this.updateSensitve);
+		this.use_custom_timezone.notify["active"].connect(this.updateSensitve);
 
 		this.updateSensitve();
 	}
 
 	private void updateSensitve() {
-		var useCustomFormat = this.swCustomFormat.get_active();
-		this.swShowDate.set_sensitive(!useCustomFormat);
-		this.swShowSeconds.set_sensitive(!useCustomFormat);
-		this.swUse24HourTime.set_sensitive(!useCustomFormat);
-		this.txtFormat.set_sensitive(useCustomFormat);
+		var useCustomFormat = this.use_custom_format.get_active();
+		this.show_date.set_sensitive(!useCustomFormat);
+		this.show_seconds.set_sensitive(!useCustomFormat);
+		this.use_24_hour_time.set_sensitive(!useCustomFormat);
+		this.custom_format.set_sensitive(useCustomFormat);
 
-		this.txtTimezone.set_sensitive(this.swCustomTimezone.get_active());
+		this.custom_timezone.set_sensitive(this.use_custom_timezone.get_active());
 	}
 
 }

@@ -20,7 +20,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="swShowDate">
+      <object class="GtkSwitch" id="show_date">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
@@ -43,7 +43,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="swShowSeconds">
+      <object class="GtkSwitch" id="show_seconds">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
@@ -66,7 +66,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="swUse24HourTime">
+      <object class="GtkSwitch" id="use_24_hour_time">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
@@ -89,7 +89,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="swCustomFormat">
+      <object class="GtkSwitch" id="use_custom_format">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
@@ -100,7 +100,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="txtFormat">
+      <object class="GtkEntry" id="custom_format">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
@@ -125,7 +125,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="swCustomTimezone">
+      <object class="GtkSwitch" id="use_custom_timezone">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
@@ -136,7 +136,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="txtTimezone">
+      <object class="GtkEntry" id="custom_timezone">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
