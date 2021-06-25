@@ -24,7 +24,6 @@ public class ClockApplet : Budgie.Applet {
 	protected Gtk.Label date_label;
 	protected Gtk.Label seconds_label;
 
-
 	private DateTime time;
 
 	protected Settings settings;
@@ -36,7 +35,6 @@ public class ClockApplet : Budgie.Applet {
 	Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
 
 	private unowned Budgie.PopoverManager? manager = null;
-
 
 	private bool clock_show_date;
 	private bool clock_show_seconds;
@@ -51,7 +49,6 @@ public class ClockApplet : Budgie.Applet {
 		Gtk.Button ret = new Gtk.Button.with_label(label_str);
 		ret.get_child().halign = Gtk.Align.START;
 		ret.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-
 		return ret;
 	}
 
@@ -73,13 +70,11 @@ public class ClockApplet : Budgie.Applet {
 		settings_schema = "com.solus-project.clock";
 		settings_prefix = "/com/solus-project/clock/instance/clock";
 
-
 		this.settings = this.get_applet_settings(uuid);
 
 		widget = new Gtk.EventBox();
 		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 		widget.add(layout);
-
 
 		clock_label = new Gtk.Label("");
 		layout.pack_start(clock_label, false, false, 0);
@@ -138,8 +133,6 @@ public class ClockApplet : Budgie.Applet {
 			return Gdk.EVENT_STOP;
 		});
 
-		
-
 		// make sure every setting is ready
 		this.update_setting("show-date");
 		this.update_setting("show-seconds");
@@ -162,15 +155,12 @@ public class ClockApplet : Budgie.Applet {
 		cal_button.clicked.connect(on_cal_activate);
 
 		update_cal();
-
 		
 		add(widget);
-
 
 		popover.get_child().show_all();
 
 		show_all();
-
 	}
 
 	void update_cal() {
