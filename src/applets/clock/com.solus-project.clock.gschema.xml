@@ -11,11 +11,6 @@
       <summary>Show seconds</summary>
       <description>Whether to show seconds in the clock.</description>
     </key>
-    <key type="b" name="use-24-hour-time">
-      <default>false</default>
-      <summary>Use 24 hour time</summary>
-      <description>Whether to use the 24 hour time format.</description>
-    </key>
     <key type="b" name="use-custom-format">
       <default>false</default>
       <summary>Use custom format</summary>

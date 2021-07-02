@@ -16,6 +16,8 @@ public class ClockPlugin : Budgie.Plugin, Peas.ExtensionBase {
 }
 
 public const string CALENDAR_MIME = "text/calendar";
+private const string CLOCK_SETTINGS_SCHEMA = "com.solus-project.clock";
+private const string GNOME_SETTINGS_SCHEMA = "org.gnome.desktop.interface";
 
 public class ClockApplet : Budgie.Applet {
 	protected Gtk.EventBox widget;
@@ -27,6 +29,7 @@ public class ClockApplet : Budgie.Applet {
 	private DateTime time;
 
 	protected Settings settings;
+	protected Settings gnome_settings;
 
 	Budgie.Popover? popover = null;
 	AppInfo? calprov = null;
@@ -67,10 +70,11 @@ public class ClockApplet : Budgie.Applet {
 	public ClockApplet(string uuid) {
 		Object(uuid: uuid);
 
-		settings_schema = "com.solus-project.clock";
+		settings_schema = CLOCK_SETTINGS_SCHEMA;
 		settings_prefix = "/com/solus-project/clock/instance/clock";
 
 		this.settings = this.get_applet_settings(uuid);
+		this.gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
 
 		widget = new Gtk.EventBox();
 		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
@@ -134,17 +138,24 @@ public class ClockApplet : Budgie.Applet {
 		});
 
 		// make sure every setting is ready
-		this.update_setting("show-date");
-		this.update_setting("show-seconds");
-		this.update_setting("use-24-hour-time");
-		this.update_setting("use-custom-format");
-		this.update_setting("custom-format");
-		this.update_setting("use-custom-timezone");
-		this.update_setting("custom-timezone");
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "show-date");
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "show-seconds");
+		this.update_setting(GNOME_SETTINGS_SCHEMA, "clock-format"); // clock format comes from gnome desktop settings (24 or 12 hour format)
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "use-custom-format");
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "custom-format");
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "use-custom-timezone");
+		this.update_setting(CLOCK_SETTINGS_SCHEMA, "custom-timezone");
 
 		Timeout.add_seconds_full(Priority.LOW, 1, update_clock);
 
-		settings.changed.connect(on_settings_change);
+		settings.changed.connect((key) => {
+			update_setting(CLOCK_SETTINGS_SCHEMA, key);
+			update_clock();
+		});
+		gnome_settings.changed.connect((key) => {
+			update_setting(GNOME_SETTINGS_SCHEMA, key);
+			update_clock();
+		});
 
 		calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
 
@@ -200,41 +211,44 @@ public class ClockApplet : Budgie.Applet {
 		manager.register_popover(widget, popover);
 	}
 
-	private void update_setting(string key) {
-		switch (key) {
-			case "show-date":
-				this.clock_show_date = settings.get_boolean(key);
-				this.date_label.set_visible(this.clock_show_date);
+	private void update_setting(string schema, string key) {
+		switch (schema) {
+			case CLOCK_SETTINGS_SCHEMA:
+				switch (key) {
+					case "show-date":
+						this.clock_show_date = settings.get_boolean(key);
+						this.date_label.set_visible(this.clock_show_date);
+						break;
+					case "show-seconds":
+						this.clock_show_seconds = settings.get_boolean(key);
+						this.seconds_label.set_visible(this.clock_show_seconds);
+						break;
+					case "use-custom-format":
+						this.clock_use_custom_format = settings.get_boolean(key);
+						this.date_label.set_visible(!this.clock_use_custom_format);
+						this.seconds_label.set_visible(!this.clock_use_custom_format);
+						break;
+					case "custom-format":
+						this.clock_custom_format = settings.get_string(key);
+						break;
+					case "use-custom-timezone":
+					case "custom-timezone":
+						if (settings.get_boolean("use-custom-timezone")) {
+							this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
+						} else {
+							this.clock_timezone = new TimeZone.local();
+						}
+						break;
+				}
 				break;
-			case "show-seconds":
-				this.clock_show_seconds = settings.get_boolean(key);
-				this.seconds_label.set_visible(this.clock_show_seconds);
-				break;
-			case "use-24-hour-time":
-				this.clock_use_24_hour_time = settings.get_boolean(key);
-				break;
-			case "use-custom-format":
-				this.clock_use_custom_format = settings.get_boolean(key);
-				this.date_label.set_visible(!this.clock_use_custom_format);
-				this.seconds_label.set_visible(!this.clock_use_custom_format);
-				break;
-			case "custom-format":
-				this.clock_custom_format = settings.get_string(key);
-				break;
-			case "use-custom-timezone":
-			case "custom-timezone":
-				if (settings.get_boolean("use-custom-timezone")) {
-					this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
-				} else {
-					this.clock_timezone = new TimeZone.local();
+			case GNOME_SETTINGS_SCHEMA:
+				switch (key) {
+					case "clock-format": // gnome-settings
+						this.clock_use_24_hour_time = (gnome_settings.get_string("clock-format") == "24h");
+						break;
 				}
 				break;
 		}
-	}
-
-	protected void on_settings_change(string key) {
-		update_setting(key);
-		update_clock();
 	}
 
 
@@ -340,7 +354,7 @@ public class ClockApplet : Budgie.Applet {
 	}
 
 	public override Gtk.Widget? get_settings_ui() {
-		return new ClockSettings(this.get_applet_settings(uuid));
+		return new ClockSettings(this.get_applet_settings(uuid), new Settings(GNOME_SETTINGS_SCHEMA));
 	}
 }
 
@@ -369,10 +383,18 @@ public class ClockSettings : Gtk.Grid {
 	[GtkChild]
 	private Gtk.Entry? custom_timezone;
 
-	public ClockSettings(Settings? settings) {
+	public ClockSettings(Settings? settings, Settings? gnome_settings) {
 		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("show-seconds", this.show_seconds, "active", SettingsBindFlags.DEFAULT);
-		settings.bind("use-24-hour-time", this.use_24_hour_time, "active", SettingsBindFlags.DEFAULT);
+		gnome_settings.bind_with_mapping("clock-format", this.use_24_hour_time, "active", SettingsBindFlags.DEFAULT, (value, variant, user_data) => {
+			value.set_boolean((variant.get_string() == "24h"));
+			return true;
+		}, (value, expected_type, user_data) => {
+			if (value.get_boolean()) {
+				return new Variant("s", "24h");
+			}
+			return new Variant("s", "12h");
+		}, null, null);
 		settings.bind("use-custom-format", this.use_custom_format, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("custom-format", this.custom_format, "text", SettingsBindFlags.DEFAULT);
 		settings.bind("use-custom-timezone", this.use_custom_timezone, "active", SettingsBindFlags.DEFAULT);
