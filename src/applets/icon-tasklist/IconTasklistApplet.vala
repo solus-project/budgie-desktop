@@ -482,6 +482,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (grouping) {
 			if (button == null) {
 				on_class_group_opened(app.group);
+			} else {
+				// Some apps (Google Chrome) don't have their wnck groups set as expected,
+				// causing the windows to not group correctly when using the profile selection
+				// screen.
+				button.set_class_group(app.window.get_class_group());
 			}
 			return;
 		}
@@ -514,10 +519,12 @@ public class IconTasklistApplet : Budgie.Applet {
 		string? app_id = id_map.get("%lu".printf(win_id));
 		app_id = (app_id == null) ? "%lu".printf(win_id) : app_id;
 		IconButton? button = buttons.get(app_id);
-		if (button != null) {
+
+		if (button != null) { // Window was not part of a group
+			// Since this was not in a group, unset the window and update the button.
 			button.set_wnck_window(null);
 			button.update();
-		} else {
+		} else { // Window was in a group; split the group name and id
 			app_id = app_id.split("|")[0];
 			button = buttons.get(app_id);
 		}
