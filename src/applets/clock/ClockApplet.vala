@@ -212,42 +212,42 @@ public class ClockApplet : Budgie.Applet {
 	}
 
 	private void update_setting(string schema, string key) {
-		switch (schema) {
-			case CLOCK_SETTINGS_SCHEMA:
-				switch (key) {
-					case "show-date":
-						this.clock_show_date = settings.get_boolean(key);
-						this.date_label.set_visible(this.clock_show_date);
-						break;
-					case "show-seconds":
-						this.clock_show_seconds = settings.get_boolean(key);
-						this.seconds_label.set_visible(this.clock_show_seconds);
-						break;
-					case "use-custom-format":
-						this.clock_use_custom_format = settings.get_boolean(key);
-						this.date_label.set_visible(!this.clock_use_custom_format);
-						this.seconds_label.set_visible(!this.clock_use_custom_format);
-						break;
-					case "custom-format":
-						this.clock_custom_format = settings.get_string(key);
-						break;
-					case "use-custom-timezone":
-					case "custom-timezone":
-						if (settings.get_boolean("use-custom-timezone")) {
-							this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
-						} else {
-							this.clock_timezone = new TimeZone.local();
-						}
-						break;
-				}
-				break;
-			case GNOME_SETTINGS_SCHEMA:
-				switch (key) {
-					case "clock-format": // gnome-settings
-						this.clock_use_24_hour_time = (gnome_settings.get_string("clock-format") == "24h");
-						break;
-				}
-				break;
+		if (schema == CLOCK_SETTINGS_SCHEMA) {
+			switch (key) {
+				case "show-date":
+					this.clock_show_date = settings.get_boolean(key);
+					this.date_label.set_visible(this.clock_show_date);
+					break;
+				case "show-seconds":
+					this.clock_show_seconds = settings.get_boolean(key);
+					this.seconds_label.set_visible(this.clock_show_seconds);
+					break;
+				case "use-custom-format":
+					this.clock_use_custom_format = settings.get_boolean(key);
+					this.date_label.set_visible(!this.clock_use_custom_format);
+					this.seconds_label.set_visible(!this.clock_use_custom_format);
+					break;
+				case "custom-format":
+					this.clock_custom_format = settings.get_string(key);
+					break;
+				case "use-custom-timezone":
+				case "custom-timezone":
+					if (settings.get_boolean("use-custom-timezone")) {
+						this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
+					} else {
+						this.clock_timezone = new TimeZone.local();
+					}
+					break;
+			}
+			return;
+		}
+		if (schema == GNOME_SETTINGS_SCHEMA) {
+			switch (key) {
+				case "clock-format": // gnome-settings
+					this.clock_use_24_hour_time = (gnome_settings.get_string("clock-format") == "24h");
+					break;
+			}
+			return;
 		}
 	}
 
@@ -307,16 +307,10 @@ public class ClockApplet : Budgie.Applet {
 		
 		string format;
 		if (!this.clock_use_custom_format) {
-			if (!this.clock_use_24_hour_time) {
-				format = "%l:%M";
-			} else {
-				format = "%H:%M";
-			}
+			format = (this.clock_use_24_hour_time) ? "%H:%M" : "%l:%M";
 
-			if (orient == Gtk.Orientation.HORIZONTAL) {
-				if (this.clock_show_seconds) {
-					format += ":%S";
-				}
+			if (orient == Gtk.Orientation.HORIZONTAL && this.clock_show_seconds) {
+				format += ":%S";
 			}
 
 			if (!this.clock_use_24_hour_time) {
