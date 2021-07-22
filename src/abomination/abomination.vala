@@ -28,9 +28,13 @@ namespace Budgie {
 		private bool original_night_light_setting = false;
 		private bool should_disable_night_light_on_fullscreen = false;
 		private bool should_pause_notifications_on_fullscreen = false;
+
 		public HashTable<ulong?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their X window ID and respective Wnck.Window
+		// FIXME: Deprecate with running_app_groups
 		public HashTable<string?,Array<AbominationRunningApp>?> running_apps; // running_apps is a list of running apps based on the group name and AbominationRunningApp
 		public HashTable<ulong?,AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
+		public HashTable<string?,AbominationAppGroup?> running_app_groups; // running_app_groups is a list of app groups based on the group name
+
 		private Wnck.Screen screen = null;
 		private AbominationRavenRemote? raven_proxy = null;
 
@@ -39,59 +43,39 @@ namespace Budgie {
 		/**
 		 * Signals
 		 */
-		public signal void added_group(string group);
-		public signal void removed_group(string group);
 		public signal void added_app(string group, AbominationRunningApp app);
 		public signal void removed_app(string group, AbominationRunningApp app);
+		public signal void update_group(AbominationAppGroup group);
 
 		public Abomination() {
-			app_system = new Budgie.AppSystem();
-			color_settings = new Settings("org.gnome.settings-daemon.plugins.color");
-			wm_settings = new Settings("com.solus-project.budgie-wm");
+			this.app_system = new Budgie.AppSystem();
+			this.color_settings = new Settings("org.gnome.settings-daemon.plugins.color");
+			this.wm_settings = new Settings("com.solus-project.budgie-wm");
 
-			fullscreen_windows = new HashTable<ulong?,Wnck.Window?>(int_hash, str_equal);
-			running_apps = new HashTable<string?,Array<AbominationRunningApp>?>(str_hash, str_equal);
-			running_apps_id = new HashTable<ulong?,AbominationRunningApp?>(int_hash, int_equal);
-			screen = Wnck.Screen.get_default();
+			this.fullscreen_windows = new HashTable<ulong?,Wnck.Window?>(int_hash, str_equal);
+			this.running_apps = new HashTable<string?,Array<AbominationRunningApp>?>(str_hash, str_equal);
+			this.running_apps_id = new HashTable<ulong?,AbominationRunningApp?>(int_hash, int_equal);
+			this.running_app_groups = new HashTable<string?,AbominationAppGroup?>(str_hash, str_equal);
+
+			this.screen = Wnck.Screen.get_default();
 
 			Bus.get_proxy.begin<AbominationRavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 
-			if (color_settings != null) { // gsd colors plugin schema defined
-				update_night_light_value();
-				color_id = color_settings.changed["night-light-enabled"].connect(update_night_light_value);
+			if (this.color_settings != null) { // gsd colors plugin schema defined
+				this.update_night_light_value();
+				this.color_id = color_settings.changed["night-light-enabled"].connect(update_night_light_value);
 			}
 
-			if (wm_settings != null) {
-				update_should_disable_night_light();
-				update_should_pause_notifications();
+			if (this.wm_settings != null) {
+				this.update_should_disable_night_light();
+				this.update_should_pause_notifications();
 
-				wm_settings.changed["disable-night-light-on-fullscreen"].connect(() => {
-					update_should_disable_night_light();
-				});
-				wm_settings.changed["pause-notifications-on-fullscreen"].connect(update_should_pause_notifications);
+				this.wm_settings.changed["disable-night-light-on-fullscreen"].connect(update_should_disable_night_light);
+				this.wm_settings.changed["pause-notifications-on-fullscreen"].connect(update_should_pause_notifications);
 			}
 
-			screen.class_group_closed.connect((group) => { // On group closed
-				string group_name = group.get_name(); // Get the class name
-
-				if (group_name != null) {
-					group_name = group_name.down();
-
-					Array<AbominationRunningApp> group_apps = running_apps.get(group_name); // Get the apps associated with the group name
-
-					if ((group_apps != null) && (group_apps.length > 0)) { // If there are apps (and this exists)
-						for (int i = 0; i < group_apps.length; i++) {
-							AbominationRunningApp app = group_apps.index(i);
-							running_apps_id.steal(app.id); // Remove from running_apps_id
-						}
-
-						running_apps.steal(group_name); // Remove group from running_apps
-					}
-				}
-			});
-
-			screen.window_opened.connect(this.add_app);
-			screen.window_closed.connect(this.remove_app);
+			this.screen.window_opened.connect(this.add_app);
+			this.screen.window_closed.connect(this.remove_app);
 
 			screen.get_windows().foreach((window) => { // Init all our current running windows
 				add_app(window);
@@ -108,10 +92,63 @@ namespace Budgie {
 		}
 
 		/**
+		 * is_disallowed_window_type will check if this specified window is a disallowed type
+		 */
+		public bool is_disallowed_window_type(Wnck.Window window) {
+			Wnck.WindowType win_type = window.get_window_type(); // Get the window type
+
+			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+				   (win_type == Wnck.WindowType.DIALOG) || // Dialogs
+				   (win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
+				   (win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
+				   (win_type == Wnck.WindowType.UTILITY); // Utility like a control on an emulator
+		}
+
+		/**
+		 * Get the first running app of an app group identified by its name.
+		 */
+		public AbominationRunningApp? get_first_app_of_group(string group) {
+			Array<Budgie.AbominationRunningApp> group_apps = this.running_apps.get(group);
+			if (group_apps == null) {
+				return null;
+			}
+
+			Budgie.AbominationRunningApp first_app = group_apps.index(0);
+			if (first_app == null) {
+				return null;
+			}
+
+			if ((first_app.window != null) && (first_app.window.get_state() == Wnck.WindowState.SKIP_TASKLIST)) {
+				return null;
+			}
+
+			return first_app;
+		}
+
+		public AbominationAppGroup? get_window_group(Wnck.Window window) {
+			string group_name = this.get_group_name(window);
+			if (!this.running_app_groups.contains(group_name)) {
+				return null;
+			}
+			return this.running_app_groups.get(group_name);
+		}
+
+		/**
 		 * add_app will add a running application based on the provided window
 		 */
-		public void add_app(Wnck.Window window) {
-			if (is_disallowed_window_type(window)) { // Disallowed type
+		private void add_app(Wnck.Window window) {
+			// Could use group name to determine if apps can be grouped together
+			//  warning("Opened in Group: %s (App Name: %s / %s)", window.get_class_group_name(), window.get_name(), window.get_class_instance_name());
+			// So far, here are the apps without a groupname:
+			//  - Android studio emulator (null)
+			//  - GTK4 demos (empty string) -> how to make it so that grouping works? (only application class cuz it's another windows with controls)
+			//  - LibreOffice (first open null, then open the app, but icon isn't here)
+			//  - Chrome with multi profiles (get_class_instance_name is still null...) will have to do an hard check on this one cuz it's impossible otherwise...
+
+			// LibreOffice have different behavior depending on how it was started
+			// Test grouping of chrome canary / dev / snap / flatpak too (works)
+
+			if (this.is_disallowed_window_type(window)) { // Disallowed type
 				return;
 			}
 
@@ -119,84 +156,73 @@ namespace Budgie {
 				return;
 			}
 
-			AbominationRunningApp app = new AbominationRunningApp(app_system, window); // Create an abomination app
-
-			if (app == null) { // Shouldn't be the case, fail immediately
-				return;
+			AbominationAppGroup group = this.get_window_group(window);
+			if (group == null) {
+				group = new AbominationAppGroup(window);
+				this.running_app_groups.insert(group.get_name(), group);
 			}
 
-			if (app.group == null) { // We should safely fall back to the app name, but have this type check just in case.
-				return;
-			}
+			group.add_window(window);
 
-			//  Basically, virtualbox opens two windows that are part of the same group, but window 1 is immediately closed,
-			//  after which window 2 is openned, resulting in window 1 icon being used, which gets removed.
-			//  Or at least it seems to be something like that...
-			if (app.name == "VirtualBox" || app.name == "VirtualBoxVM") {
+			AbominationRunningApp app = new AbominationRunningApp(this.app_system, window, group); // Create an abomination app
+			if (app == null || app.group == null) { // Shouldn't be the case, fail immediately
 				return;
 			}
 
 			Array<AbominationRunningApp>? group_apps = this.running_apps.get(app.group);
-
-			bool no_group_yet = false;
-
 			if (group_apps == null) { // Not defined group apps
 				group_apps = new Array<AbominationRunningApp>();
-				running_apps.insert(app.group, group_apps);
-				no_group_yet = true;
+				this.running_apps.insert(app.group, group_apps);
 			}
 
 			group_apps.append_val(app); // Append the app
-			running_apps_id.insert(app.id, app); // Append the app based on id
-			added_app(app.group, app);
 
-			if (no_group_yet) {
-				added_group(app.group); // Call that we added the group
-			}
+			this.running_apps_id.insert(app.id, app); // Append the app based on id
+			this.added_app(app.group, app); // notify that the app was added
+
+			this.track_window_fullscreen_state(app.window, app.window.get_state());
 
 			app.class_changed.connect((old_class_name, new_class) => {
-				rename_group(old_class_name, new_class); // Rename the class
+				this.rename_group(old_class_name, new_class); // Rename the class
 			});
-
-			track_window_fullscreen_state(app.window, app.window.get_state());
 
 			app.window.state_changed.connect((changed, new_state) => {
 				if (Wnck.WindowState.FULLSCREEN in (changed | new_state)) {
-					track_window_fullscreen_state(app.window, new_state);
+					this.track_window_fullscreen_state(app.window, new_state);
 				}
 			});
-		}
 
-	// is_disallowed_window_type will check if this specified window is a disallowed type
-	public bool is_disallowed_window_type(Wnck.Window window) {
-		Wnck.WindowType win_type = window.get_window_type(); // Get the window type
-
-		if (
-			(win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
-			(win_type == Wnck.WindowType.DIALOG) || // Dialogs
-			(win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
-			(win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
-			(win_type == Wnck.WindowType.UTILITY) // Utility like a control on an emulator
-		) {
-			return true;
-		} else {
-			return false;
+			// FIXME: GTK4 demo, try opening multiple instances as well as multiples instances of Application class, number of window shown is incorrect
+			// FIXME: Android studio, cannot switch between windows (only after having closed an reopened the second window), same for VirtualBox VMs (basically same for all the non-pinned apps)
 		}
-	}
 
 		/**
 		 * remove_app will remove a running application based on the provided window
+		 *
+		 * FIXME: sometime closing one instance of a grouped app will remove all..
 		 */
-		public void remove_app(Wnck.Window window) {
+		private void remove_app(Wnck.Window window) {
+			AbominationAppGroup group = this.get_window_group(window);
+			if (group == null) { // shouldn't happen
+				return;
+			}
+
+			group.remove_window(window);
+
+			if (group.get_windows().length() == 0) { // remove empty group
+				this.running_app_groups.remove(group.get_name());
+				warning("Removed group: %s", group.get_name());
+			}
+
 			ulong id = window.get_xid();
-			AbominationRunningApp app = running_apps_id.get(id); // Get the running app
+			AbominationRunningApp app = this.running_apps_id.get(id); // Get the running app
 
-			running_apps_id.steal(id); // Remove from running_apps_id
+			this.running_apps_id.steal(id); // Remove from running_apps_id
 
-			track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
+			this.track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
 
 			if (app != null) { // App is defined
-				Array<AbominationRunningApp> group_apps = running_apps.get(app.group); // Get apps based on group name
+				Array<AbominationRunningApp> group_apps = this.running_apps.get(app.group); // Get apps based on group name
 
 				if (group_apps != null) { // Failed to get the app based on group
 					for (int i = 0; i < group_apps.length; i++) {
@@ -209,16 +235,14 @@ namespace Budgie {
 					}
 				}
 
-				removed_app(app.group, app); // Notify that we called remove
+				this.removed_app(app.group, app); // Notify that we called remove
 
 				if (group_apps != null) {
 					if (group_apps.length == 0) {
-						running_apps.steal(app.group); // Dropkick from running apps
-						removed_group(app.group); // Removed the group
+						this.running_apps.steal(app.group); // Dropkick from running apps
 					}
 				} else {
-					running_apps.steal(app.group); // Dropkick from running apps
-					removed_group(app.group); // Removed the group
+					this.running_apps.steal(app.group); // Dropkick from running apps
 				}
 			}
 		}
@@ -227,51 +251,47 @@ namespace Budgie {
 		 * rename_group will rename any associated group based on the old group name
 		 * The old group name is determined by current windows associated with the group
 		 */
-		public void rename_group(string old_group_name, Wnck.ClassGroup group) {
-			string group_name = group.get_name();
-			unowned List<Wnck.Window> windows = group.get_windows();
-
-			// #region Because LibreOffice hates me
-
-			if ((old_group_name.has_prefix("libreoffice-") && !group_name.has_prefix("libreoffice-")) || // libreoffice- change
-				(old_group_name.has_prefix("chrome-") && !group_name.has_prefix("chrome-")) // chrome- change
-			) {
+		private void rename_group(string old_group_name, AbominationAppGroup group) {
+			List<weak Wnck.Window> windows = group.get_windows();
+			if (windows.length() == 0) {
 				return;
 			}
 
-			// #endregion
+			// FIXME: Apps are in the same group, yet they are not grouped together - why? (only apply to libre-office)
+			// Because soffice, then libre-office...
 
-			if (windows.length() > 0) { // Has windows
-				Array<AbominationRunningApp> apps_associated_with_group = running_apps.get(old_group_name);
+			string new_group_name = this.get_group_name(windows.nth_data(0));
+			AbominationAppGroup new_group = new AbominationAppGroup(windows.nth_data(0));
+			foreach (var window in group.get_windows()) { // add existing windows to new group
+				new_group.add_window(window);
 
-				if ((apps_associated_with_group != null) && (apps_associated_with_group.length > 0)){ // If there are items
-					for (int i = 0; i < apps_associated_with_group.length; i++) {
-						AbominationRunningApp app = apps_associated_with_group.index(i);
-
-						if (app.group.has_prefix("libreoffice-")) { // May initially report as soffice or LibreOffice V.v (eg. 6.1)
-							group_name = app.group; // Update parent, because it's wrong
-						} else {
-							app.group = group_name; // Update app
-						}
-					}
-
-					running_apps.steal(old_group_name); // Remove for "rename"
-					removed_group(old_group_name); // Remove the possible old group
-					running_apps.insert(group_name, apps_associated_with_group); // Re-add for "rename"
-					added_group(group_name);
-				} else { // Not added yet
-					windows.foreach((window) => { // For each window
-						add_app(window); // Add the app (including group)
-					});
+				AbominationRunningApp app = this.running_apps_id.get(window.get_xid());
+				if (app == null) { // shouldn't happen if we do our job correctly, yet better safe than sorry
+					continue;
 				}
+
+				app.group = new_group_name;
+				app.group_object = new_group;
 			}
+
+			this.running_app_groups.insert(new_group_name, new_group); // add the new group
+			this.running_app_groups.remove(group.get_name()); // remove old group
+
+			// FIXME: probably this.running_apps doesn't contains all the windows...
+			// FIXME: libre office is doing shit with the popover, etc, what a shitty app
+			Array<AbominationRunningApp> apps_associated_with_old_group = this.running_apps.get(old_group_name);
+
+			this.running_apps.steal(old_group_name); // Remove for "rename"
+			this.running_apps.insert(new_group_name, apps_associated_with_old_group); // Re-add for "rename"
+
+			this.update_group(new_group); // Should always be invoked last
 		}
 
 		/**
 		 * Adds and removes windows from fullscreen_windows depending on their state.
 		 * Additionally, toggles night light and notification pausing as necessary if either are enabled.
 		 */
-		public void track_window_fullscreen_state(Wnck.Window window, Wnck.WindowState? state) {
+		private void track_window_fullscreen_state(Wnck.Window window, Wnck.WindowState? state) {
 			ulong window_xid = window.get_xid();
 
 			// only add a fullscreen window if it isn't currently minimized
@@ -328,7 +348,7 @@ namespace Budgie {
 		/**
 		 * update_should_pause_notifications will update our value determining if we should pause notifications on fullscreen
 		 */
-		 private void update_should_pause_notifications() {
+		private void update_should_pause_notifications() {
 			if (wm_settings != null) {
 				should_pause_notifications_on_fullscreen = wm_settings.get_boolean("pause-notifications-on-fullscreen");
 			}
@@ -342,36 +362,66 @@ namespace Budgie {
 				original_night_light_setting = color_settings.get_boolean("night-light-enabled");
 			}
 		}
+
+		private string get_group_name(Wnck.Window window) {
+			// Try to use class group name from WM_CLASS as it's the most precise.
+			string name = window.get_class_group_name();
+
+			// Fallback to using class instance name (still from WM_CLASS),
+			// less precise, if app is part of a "family", like libreoffice,
+			// instance will always be libreoffice.
+			if (name == null) {
+				name = window.get_class_instance_name();
+			}
+
+			// Fallback to using name (when WM_CLASS isn't set).
+			// i.e. Chrome profile launcher, android studio emulator
+			if (name == null) {
+				name = window.get_name();
+			}
+
+			if (name != null) {
+				name = name.down();
+			}
+
+			// Chrome profile launcher doesn't have WM_CLASS, so name is used
+			// instead and is not the same as the group of the window opened afterward.
+			if (name == "google chrome") {
+				name = "google-chrome";
+			}
+
+			return name;
+		}
 	}
 
 	public class AbominationRunningApp : GLib.Object {
 		public DesktopAppInfo? app = null;
 		public string group; // Group assigned to the app
-		public Wnck.ClassGroup group_object; // Actual Wnck.ClassGroup object
+		public AbominationAppGroup group_object; // Actual AbominationAppGroup object
 		public string icon; // Icon associated with this app
 		public string name; // App name
 		public ulong id; // Window id
 		public Wnck.Window window; // Window of app
 
-		private Budgie.AppSystem? appsys = null;
+		private Budgie.AppSystem? app_system = null;
 
 		/**
 		 * Signals
 		 */
-		public signal void class_changed(string old_class_name, Wnck.ClassGroup class);
+		public signal void class_changed(string old_class_name, AbominationAppGroup class);
 		public signal void icon_changed(string icon_name);
 		public signal void name_changed(string name);
 
-		public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window) {
+		public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window, AbominationAppGroup group) {
 			set_window(window);
 
 			if (this.window != null) {
 				this.id = this.window.get_xid();
 				this.name = this.window.get_name();
-				this.group_object = this.window.get_class_group();
+				this.group_object = group;
 			}
 
-			this.appsys = app_system;
+			this.app_system = app_system;
 
 			update_group();
 		}
@@ -389,7 +439,7 @@ namespace Budgie {
 				this.window = null; // Set to null
 
 				bool found_new_window = false;
-				unowned List<Wnck.Window> class_windows = this.group_object.get_windows();
+				List<weak Wnck.Window> class_windows = this.group_object.get_windows();
 
 				if (class_windows.length() > 0) { // If we have windows
 					class_windows.foreach((other_window) => {
@@ -463,31 +513,36 @@ namespace Budgie {
 				return;
 			}
 
-			this.app = this.appsys.query_window(this.window);
+			this.app = this.app_system.query_window(this.window);
+			// FIXME: dedup the logic
+			this.group = this.window.get_class_instance_name();
 
-			if (this.app != null) { // Successfully got desktop app info
-				this.group = this.app.get_id();
-			} else { // Failed to get desktop app info
-				if (this.group_object != null) {
-					this.group = this.group_object.get_name();
-
-					if (this.group != null) { // Safely got name
-						this.group = this.group.down();
-					}
-				} else {
-					this.group = this.name; // Fallback to using name
-				}
+			if (this.group == null) { // Fallback to using class group name
+				this.group = this.window.get_class_group_name();
 			}
+
+			if (this.group == null) { // Fallback to using name
+				this.group = this.name;
+			}
+
+			if (this.group != null) {
+				this.group = this.group.down();
+			}
+
+			if (this.group == "google chrome") { // google chrome profile launcher doesn't have WM_CLASS, so its name is used instead
+				this.group = "google-chrome";
+			}
+
+			//  warning("App group: %s", this.group);
+			//  warning("Number of window: %u", this.group_object.get_windows().length());
 		}
 
 		/**
 		 * update_icon will update our icon
 		 */
 		private void update_icon() {
-			if (this.app != null) {
-				if (this.app.has_key("Icon")) { // Got app info
-					this.icon = this.app.get_string("Icon");
-				}
+			if (this.app != null && this.app.has_key("Icon")) { // Got app info
+				this.icon = this.app.get_string("Icon");
 			}
 		}
 
@@ -504,6 +559,97 @@ namespace Budgie {
 					name_changed(this.name);
 				}
 			}
+		}
+	}
+
+	/**
+	 * A replacement for Wnck.ClassGroup as Wnck.ClassGroup relies on the sometime
+	 * missing, sometime incoherent WM_CLASS property to group windows together.
+	 */
+	public class AbominationAppGroup : GLib.Object {
+		private string name;
+		private HashTable<ulong?,Wnck.Window?> windows;
+
+		/**
+		 * Signals
+		 */
+		public signal void icon_changed();
+		public signal void added_window(Wnck.Window window);
+		public signal void removed_window(Wnck.Window window);
+
+		/**
+		 * Create a new group from a window instance
+		 */
+		public AbominationAppGroup(Wnck.Window window) {
+			this.windows = new HashTable<ulong?,Wnck.Window?>(int_hash, int_equal);
+
+			// Try to use class group name from WM_CLASS as it's the most precise.
+			string name = window.get_class_group_name();
+
+			// Fallback to using class instance name (still from WM_CLASS),
+			// less precise, if app is part of a "family", like libreoffice,
+			// instance will always be libreoffice.
+			if (name == null) {
+				name = window.get_class_instance_name();
+			}
+
+			// Fallback to using name (when WM_CLASS isn't set).
+			// i.e. Chrome profile launcher, android studio emulator
+			if (name == null) {
+				name = window.get_name();
+			}
+
+			name = name.down();
+
+			// Chrome profile launcher doesn't have WM_CLASS, so name is used
+			// instead and is not the same as the group of the window opened afterward.
+			if (name == "google chrome") {
+				name = "google-chrome";
+			}
+
+			this.name = name;
+
+			warning("Created group: %s", this.name);
+
+			// FIXME: error: Signal `Budgie.AbominationAppGroup.icon_changed' requires emitter in this context
+			//  window.icon_changed.connect(this.icon_changed); // pass signal to whoever is listening
+		}
+
+		public void add_window(Wnck.Window window) {
+			if (this.windows.contains(window.get_xid())) {
+				return;
+			}
+
+			this.windows.insert(window.get_xid(), window);
+
+			warning("Number of window: %u (group: %s)", this.get_windows().length(), this.name);
+
+			this.added_window(window);
+		}
+
+		public void remove_window(Wnck.Window window) {
+			if (!this.windows.contains(window.get_xid())) {
+				return;
+			}
+
+			this.windows.remove(window.get_xid());
+
+			warning("Number of window: %u (group: %s)", this.get_windows().length(), this.name);
+
+			this.removed_window(window);
+		}
+
+		public List<weak Wnck.Window> get_windows() {
+			return this.windows.get_values();
+		}
+
+		public string get_name() {
+			return this.name;
+		}
+
+		public Gdk.Pixbuf? get_icon() {
+			// FIXME: should probably be the window that has WM_CLASS defined
+			return this.get_windows().nth_data(0).get_class_group().get_icon();
 		}
 	}
 }

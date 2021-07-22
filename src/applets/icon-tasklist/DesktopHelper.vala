@@ -38,7 +38,10 @@ public class DesktopHelper : GLib.Object {
 		this.screen = Wnck.Screen.get_default();
 	}
 
-	public const Gtk.TargetEntry[] targets = { { "application/x-icon-tasklist-launcher-id", 0, 0 }, { "text/uri-list", 0, 0 }, { "application/x-desktop", 0, 0 }
+	public const Gtk.TargetEntry[] targets = {
+		{ "application/x-icon-tasklist-launcher-id", 0, 0 },
+		{ "text/uri-list", 0, 0 },
+		{ "application/x-desktop", 0, 0 },
 	};
 
 	/**
@@ -62,26 +65,6 @@ public class DesktopHelper : GLib.Object {
 		}
 
 		settings.set_strv("pinned-launchers", buttons); // Keeping with pinned- internally for compatibility.
-	}
-
-	/**
-	 * Grab the list of windows stacked for the given class_group
-	 */
-	public List<unowned Wnck.Window> get_stacked_for_classgroup(Wnck.ClassGroup class_group) {
-		List<unowned Wnck.Window> list = new List<unowned Wnck.Window>();
-		screen.get_windows_stacked().foreach((window) => {
-			if (window.get_class_group() == class_group && !window.is_skip_pager() && !window.is_skip_tasklist()) {
-				var workspace = window.get_workspace();
-				if (workspace == null) {
-					return;
-				}
-				if (workspace == get_active_workspace()) {
-					list.append(window);
-				}
-			}
-		});
-
-		return list.copy();
 	}
 
 	/**
