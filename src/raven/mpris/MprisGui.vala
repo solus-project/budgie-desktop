@@ -220,7 +220,7 @@ public class ClientWidget : Gtk.Box {
 		 */
 		if ((client.player.desktop_entry != null) && (client.player.desktop_entry != "")) { // If a desktop entry is set
 			get_style_context().add_class(client.player.desktop_entry); // Add our desktop entry, such as "spotify" to player_box
-		} else { // If no desktop entry is set, use identity
+		} else if (client.player.identity != null) { // If no desktop entry is set, use identity
 			get_style_context().add_class(client.player.identity.down()); // Lowercase identity
 		}
 
@@ -380,6 +380,10 @@ public class ClientWidget : Gtk.Box {
 	 * Update display info such as artist, the background image, etc.
 	 */
 	protected void update_from_meta() {
+		if (client.player.metadata == null) { // Gnome MPV metadata are null when opened
+			return;
+		}
+
 		if ("mpris:artUrl" in client.player.metadata) {
 			var url = client.player.metadata["mpris:artUrl"].get_string();
 			update_art(url);
