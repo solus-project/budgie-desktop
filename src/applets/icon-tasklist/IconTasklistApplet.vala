@@ -358,12 +358,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.id_map.insert(app.id.to_string(), app.id.to_string()); // keep track of opened window by their X ID
 
 		IconButton button = null;
-		if (this.grouping) {
+		if (this.grouping) { // try to get existing button if any
 			button = this.buttons.get(first_app_id);
-			if (button != null) { // update button to show that we have multiple instances running
-				button.set_class_group(app.group_object); // FIXME: group_object is incorrect for GTK4 demo, it's the same between the main app and the sub apps (fix in Abomination)
-				button.update();
-			}
 		}
 
 		if (button == null) { // create a new button
@@ -371,6 +367,10 @@ public class IconTasklistApplet : Budgie.Applet {
 			this.add_icon_button(app.id.to_string(), button);
 		}
 
+		if (this.grouping) { // update button to show that we have multiple instances running
+			button.set_class_group(app.group_object);
+			button.update();
+		}
 
 		this.buttons.insert(app.id.to_string(), button); // map app to it's button so that we can update it later on
 	}

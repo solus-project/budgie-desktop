@@ -126,7 +126,7 @@ namespace Budgie {
 		}
 
 		public AbominationAppGroup? get_window_group(Wnck.Window window) {
-			string group_name = this.get_group_name(window);
+			string group_name = get_group_name(window);
 			if (!this.running_app_groups.contains(group_name)) {
 				return null;
 			}
@@ -260,7 +260,7 @@ namespace Budgie {
 			// FIXME: Apps are in the same group, yet they are not grouped together - why? (only apply to libre-office)
 			// Because soffice, then libre-office...
 
-			string new_group_name = this.get_group_name(windows.nth_data(0));
+			string new_group_name = get_group_name(windows.nth_data(0));
 			AbominationAppGroup new_group = new AbominationAppGroup(windows.nth_data(0));
 			foreach (var window in group.get_windows()) { // add existing windows to new group
 				new_group.add_window(window);
@@ -362,36 +362,6 @@ namespace Budgie {
 				original_night_light_setting = color_settings.get_boolean("night-light-enabled");
 			}
 		}
-
-		private string get_group_name(Wnck.Window window) {
-			// Try to use class group name from WM_CLASS as it's the most precise.
-			string name = window.get_class_group_name();
-
-			// Fallback to using class instance name (still from WM_CLASS),
-			// less precise, if app is part of a "family", like libreoffice,
-			// instance will always be libreoffice.
-			if (name == null) {
-				name = window.get_class_instance_name();
-			}
-
-			// Fallback to using name (when WM_CLASS isn't set).
-			// i.e. Chrome profile launcher, android studio emulator
-			if (name == null) {
-				name = window.get_name();
-			}
-
-			if (name != null) {
-				name = name.down();
-			}
-
-			// Chrome profile launcher doesn't have WM_CLASS, so name is used
-			// instead and is not the same as the group of the window opened afterward.
-			if (name == "google chrome") {
-				name = "google-chrome";
-			}
-
-			return name;
-		}
 	}
 
 	public class AbominationRunningApp : GLib.Object {
@@ -479,10 +449,6 @@ namespace Budgie {
 				update_name();
 
 				if (this.group != old_group) { // Actually changed
-					if (this.group.has_prefix("chrome-")) {
-						return;
-					}
-
 					class_changed(old_group, this.group_object); // Signal that the class changed
 				}
 			});
@@ -514,27 +480,7 @@ namespace Budgie {
 			}
 
 			this.app = this.app_system.query_window(this.window);
-			// FIXME: dedup the logic
-			this.group = this.window.get_class_instance_name();
-
-			if (this.group == null) { // Fallback to using class group name
-				this.group = this.window.get_class_group_name();
-			}
-
-			if (this.group == null) { // Fallback to using name
-				this.group = this.name;
-			}
-
-			if (this.group != null) {
-				this.group = this.group.down();
-			}
-
-			if (this.group == "google chrome") { // google chrome profile launcher doesn't have WM_CLASS, so its name is used instead
-				this.group = "google-chrome";
-			}
-
-			//  warning("App group: %s", this.group);
-			//  warning("Number of window: %u", this.group_object.get_windows().length());
+			this.group = get_group_name(this.window);
 		}
 
 		/**
@@ -582,32 +528,7 @@ namespace Budgie {
 		 */
 		public AbominationAppGroup(Wnck.Window window) {
 			this.windows = new HashTable<ulong?,Wnck.Window?>(int_hash, int_equal);
-
-			// Try to use class group name from WM_CLASS as it's the most precise.
-			string name = window.get_class_group_name();
-
-			// Fallback to using class instance name (still from WM_CLASS),
-			// less precise, if app is part of a "family", like libreoffice,
-			// instance will always be libreoffice.
-			if (name == null) {
-				name = window.get_class_instance_name();
-			}
-
-			// Fallback to using name (when WM_CLASS isn't set).
-			// i.e. Chrome profile launcher, android studio emulator
-			if (name == null) {
-				name = window.get_name();
-			}
-
-			name = name.down();
-
-			// Chrome profile launcher doesn't have WM_CLASS, so name is used
-			// instead and is not the same as the group of the window opened afterward.
-			if (name == "google chrome") {
-				name = "google-chrome";
-			}
-
-			this.name = name;
+			this.name = get_group_name(window);
 
 			warning("Created group: %s", this.name);
 
@@ -651,5 +572,35 @@ namespace Budgie {
 			// FIXME: should probably be the window that has WM_CLASS defined
 			return this.get_windows().nth_data(0).get_class_group().get_icon();
 		}
+	}
+
+	string get_group_name(Wnck.Window window) {
+		// Try to use class group name from WM_CLASS as it's the most precise.
+		string name = window.get_class_group_name();
+
+		// Fallback to using class instance name (still from WM_CLASS),
+		// less precise, if app is part of a "family", like libreoffice,
+		// instance will always be libreoffice.
+		if (name == null || name == "") {
+			name = window.get_class_instance_name();
+		}
+
+		// Fallback to using name (when WM_CLASS isn't set).
+		// i.e. Chrome profile launcher, android studio emulator
+		if (name == null || name == "") {
+			name = window.get_name();
+		}
+
+		if (name != null) {
+			name = name.down();
+		}
+
+		// Chrome profile launcher doesn't have WM_CLASS, so name is used
+		// instead and is not the same as the group of the window opened afterward.
+		if (name == "google chrome") {
+			name = "google-chrome";
+		}
+
+		return name;
 	}
 }

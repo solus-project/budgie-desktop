@@ -287,7 +287,6 @@ public class IconButton : Gtk.ToggleButton {
 		});
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
-
 			warning("Removed window: %s", old_window.get_name());
 
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
@@ -359,7 +358,6 @@ public class IconButton : Gtk.ToggleButton {
 		if (should_try_name_match) { // If we were doing class name check
 			add = is_matching_class_name; // should_add_window based on if class name matches
 		} else { // If we weren't doing class name check
-			Wnck.ClassGroup window_class_group = new_window.get_class_group();
 			Wnck.Window old_window = this.class_group.get_windows().nth_data(0);
 			add = new_window.get_class_instance_name() == old_window.get_class_instance_name();
 		}
