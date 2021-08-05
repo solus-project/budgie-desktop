@@ -1,7 +1,10 @@
 # libabomination
 
 libabomination_sources = [
-    'abomination.vala',
+    'Abomination.vala',
+    'AbominationRunningApp.vala',
+    'AbominationAppGroup.vala',
+    'utils.vala',
 ]
 
 libabomination_deps = [

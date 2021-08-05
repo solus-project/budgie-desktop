@@ -55,55 +55,82 @@ public class IconButton : Gtk.ToggleButton {
 		this.app_info = info;
 		this.pinned = pinned;
 		this.originally_pinned = pinned;
-		gobject_constructors_suck();
-		create_popover(); // Create our popover
+		this.gobject_constructors_suck();
+		this.create_popover(); // Create our popover
 
-		update_icon();
+		this.update_icon();
 
-		if (has_valid_windows(null)) {
+		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
 		}
 	}
 
-	public IconButton.from_window(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Wnck.Window window, DesktopAppInfo? info, bool pinned = false) {
+	public IconButton.from_app(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.AbominationRunningApp app, bool pinned = false) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
-		this.app_info = info;
-		this.is_from_window = true;
 		this.pinned = pinned;
 		this.originally_pinned = pinned;
-		this.first_app = new Budgie.AbominationRunningApp(app_system, window, abomination.get_window_group(window));
+		this.first_app = abomination.get_app_from_window_id(app.get_window().get_xid());
 
-		if (this.first_app != null && this.first_app.app != null && this.app_info == null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
-			this.app_info = this.first_app.app;
+		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
+			this.app_info = this.first_app.app_info;
 		}
 
-		this.first_app.name_changed.connect(() => { // When the name of the app has changed
-			set_tooltip(); // Update our tooltip
-		});
+		this.gobject_constructors_suck();
+		this.update_icon();
+		this.create_popover();
 
-		gobject_constructors_suck();
+		if (this.has_valid_windows(null)) {
+			this.get_style_context().add_class("running");
+		}
 
-		window.state_changed.connect_after(() => {
-			if (window.needs_attention()) {
+		if (this.first_app != null) {
+			this.first_app.name_changed.connect(() => { // When the name of the app has changed
+				set_tooltip(); // Update our tooltip
+			});
+		}
+
+		app.get_window().state_changed.connect_after(() => {
+			if (app.get_window().needs_attention()) {
 				attention();
 			}
 		});
 
-		update_icon();
+		this.set_wnck_window(app.get_window());
+	}
 
-		if (has_valid_windows(null)) {
+	public IconButton.from_group(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.AbominationAppGroup group, bool pinned = false) {
+		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
+		this.settings = c_settings;
+		this.pinned = pinned;
+		this.originally_pinned = pinned;
+		this.first_app = abomination.get_first_app_of_group(group.get_name());
+
+		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
+			this.app_info = this.first_app.app_info;
+		}
+
+		this.gobject_constructors_suck();
+		this.update_icon();
+		this.create_popover();
+
+		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
 		}
 
-		create_popover(); // Create our popover
-		this.set_wnck_window(window);
+		if (this.first_app != null) {
+			this.first_app.name_changed.connect(() => { // When the name of the app has changed
+				this.set_tooltip(); // Update our tooltip
+			});
+		}
 	}
 
 	/**
 	 * We have race conditions in glib between the desired properties..
 	 */
 	private void gobject_constructors_suck() {
+		this.window_count = 1;
+
 		icon = new Icon();
 		icon.get_style_context().add_class("icon");
 		this.add(icon);
@@ -162,14 +189,14 @@ public class IconButton : Gtk.ToggleButton {
 					if (this.app_info != null && this.first_app != null) {
 						id = "%s|%lu".printf(this.app_info.get_id(), this.first_app.id);
 					} else if (this.app_info == null && this.first_app != null) {
-						id = "%s|%lu".printf(this.first_app.group, this.first_app.id);
+						id = "%s|%lu".printf(this.first_app.get_group_name(), this.first_app.id);
 					}
 				}
 			} else { // If this is from a group
 				if (this.app_info != null) {
 					id = this.app_info.get_id();
 				} else if (this.first_app != null) {
-					id = this.first_app.group;
+					id = this.first_app.get_group_name();
 				}
 			}
 
@@ -203,26 +230,12 @@ public class IconButton : Gtk.ToggleButton {
 			launch_app(Gtk.get_current_event_time());
 		});
 
-		this.popover.added_window.connect(() => { // If we added a window
-			this.window_count++;
-		});
-
-		this.popover.closed_all.connect(() => { // If we closed all windows
-			this.window_count = 0;
-			this.popover.hide(); // Hide
-			became_empty(); // Call our became empty function
-		});
-
-		this.popover.closed_window.connect(() => { // If we closed a window related to this popover
-			this.window_count--;
-		});
-
 		this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
 			this.pinned = new_pinned_state;
 			this.desktop_helper.update_pinned(); // Update via desktop helper
 
-			if (!has_valid_windows(null)) { // Does not have any windows open and no longer pinned
-				became_empty(); // Trigger our became_empty event (for removal)
+			if (!this.has_valid_windows(null)) { // Does not have any windows open and no longer pinned
+				this.became_empty(); // Trigger our became_empty event (for removal)
 			}
 		});
 
@@ -275,8 +288,6 @@ public class IconButton : Gtk.ToggleButton {
 				return;
 			}
 
-			warning("Added window: %s", new_window.get_name());
-
 			ulong xid = new_window.get_xid();
 			string name = new_window.get_name() ?? "Loading...";
 
@@ -284,15 +295,21 @@ public class IconButton : Gtk.ToggleButton {
 			new_window.name_changed.connect(() => { // When this window is renamed
 				this.popover.rename_window(xid); // Rename its entry in the popover
 			});
+
+			this.window_count++;
 		});
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
-			warning("Removed window: %s", old_window.get_name());
-
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
-
 			if (this.first_app != null) { // If we have an AbominationRunningApp associated with this
 				this.first_app.invalidate_window(old_window); // See if we need to invalidate this window and update our new one (if any)
+			}
+
+			this.window_count--;
+
+			if (this.window_count == 0) {
+				this.popover.hide(); // Hide
+				became_empty(); // Call our became empty function)
 			}
 		});
 
@@ -316,7 +333,7 @@ public class IconButton : Gtk.ToggleButton {
 		});
 
 		window.name_changed.connect_after(() => { // On window rename
-			popover.rename_window(this.window.get_xid());
+			popover.rename_window(window.get_xid());
 		});
 
 		window.state_changed.connect_after(() => {
@@ -345,13 +362,13 @@ public class IconButton : Gtk.ToggleButton {
 		bool is_matching_class_name = false; // is_matching_class_name is for matching derpy window class names
 
 		if (this.first_app != null) { // If we have an app defined
-			Budgie.AbominationRunningApp app = new Budgie.AbominationRunningApp(app_system, new_window, abomination.get_window_group(new_window)); // Create an abomination app
-			if (this.first_app.group.has_prefix("chrome-") || this.first_app.group.has_prefix("google-chrome")) { // Is a Chrome or Chrome app
+			Budgie.AbominationRunningApp app = this.abomination.get_app_from_window_id(new_window.get_xid());
+			if (this.first_app.get_group_name().has_prefix("chrome-") || this.first_app.get_group_name().has_prefix("google-chrome")) { // Is a Chrome or Chrome app
 				should_try_name_match = true;
-				is_matching_class_name = (this.first_app.group == app.group);
-			} else if (this.first_app.group.has_prefix("libreoffice")) { // Is a LibreOffice window
+				is_matching_class_name = (this.first_app.get_group_name() == app.get_group_name());
+			} else if (this.first_app.get_group_name().has_prefix("libreoffice")) { // Is a LibreOffice window
 				should_try_name_match = true;
-				is_matching_class_name = (this.first_app.group == app.group);
+				is_matching_class_name = (this.first_app.get_group_name() == app.get_group_name());
 			}
 		}
 
@@ -366,7 +383,7 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public void update_icon() {
-		if (has_valid_windows(null)) {
+		if (this.has_valid_windows(null)) {
 			this.icon.waiting = false;
 		} else if (!this.pinned) {
 			became_empty();
@@ -397,10 +414,10 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public void update() {
-		if (!has_valid_windows(null)) {
+		if (!this.has_valid_windows(null)) {
 			this.get_style_context().remove_class("running");
 			if (!this.pinned || this.is_from_window) {
-				became_empty();
+				this.became_empty();
 				return;
 			} else {
 				this.class_group = null;
@@ -410,10 +427,10 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		bool has_active = false;
-		if (this.window != null) {
-			has_active = this.window.is_active();
-		} else if (this.class_group != null) {
+		if (this.class_group != null) {
 			has_active = (this.class_group.get_windows().find(this.desktop_helper.get_active_window()) != null);
+		} else if (this.window != null) {
+			has_active = this.window.is_active();
 		}
 		this.set_active(has_active);
 
@@ -458,14 +475,14 @@ public class IconButton : Gtk.ToggleButton {
 			return false;
 		}
 
-		if (this.window != null) {
-			return (!this.window.is_skip_tasklist() && this.window.is_on_workspace(workspace));
-		} else if (this.class_group != null) {
+		if (this.class_group != null) {
 			foreach (Wnck.Window win in this.class_group.get_windows()) {
 				if (!win.is_skip_pager() && !win.is_skip_tasklist() && win.is_on_workspace(workspace)) {
 					return true;
 				}
 			}
+		} else if (this.window != null) {
+			return (!this.window.is_skip_tasklist() && this.window.is_on_workspace(workspace));
 		}
 
 		return false;
@@ -570,11 +587,9 @@ public class IconButton : Gtk.ToggleButton {
 		List<unowned Wnck.Window> windows;
 
 		if (this.class_group != null) {
-			windows = this.class_group.get_windows().copy();
+			windows = this.class_group.get_windows();
 		} else {
 			windows = new List<unowned Wnck.Window>();
-			windows.insert(this.window, 0);
-
 			// FIXME: When grouping is disabled while it was enabled before, this.window won't be set (and probably this.class_group won't be unset)
 		}
 
@@ -639,7 +654,7 @@ public class IconButton : Gtk.ToggleButton {
 		List<unowned Wnck.Window> windows;
 
 		if (this.class_group != null) {
-			windows = this.class_group.get_windows().copy();
+			windows = this.class_group.get_windows();
 		} else {
 			windows = new List<unowned Wnck.Window>();
 			windows.insert(this.window, 0);
@@ -783,12 +798,12 @@ public class IconButton : Gtk.ToggleButton {
 		translate_coordinates(toplevel, 0, 0, out x, out y);
 		toplevel.get_window().get_root_coords(x, y, out x, out y);
 
-		if (this.window != null) {
-			this.window.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
-		} else if (this.class_group != null) {
+		if (this.class_group != null) {
 			foreach (Wnck.Window win in this.class_group.get_windows()) {
 				win.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
 			}
+		} else if (this.window != null) {
+			this.window.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
 		}
 	}
 
@@ -803,14 +818,14 @@ public class IconButton : Gtk.ToggleButton {
 				Wnck.Window first_window = class_windows.nth_data(0);
 
 				if (first_window != null) {
-					this.first_app = new Budgie.AbominationRunningApp(app_system, first_window, abomination.get_window_group(first_window));
+					this.first_app = abomination.get_app_from_window_id(first_window.get_xid());
 
 					this.first_app.name_changed.connect(() => { // When the name of the app has changed
 						set_tooltip(); // Update our tooltip
 					});
 
 					if (this.app_info == null) { // If app_info hasn't been set yet
-						this.app_info = this.first_app.app; // Set to our first_app's DesktopAppInfo
+						this.app_info = this.first_app.app_info; // Set to our first_app's DesktopAppInfo
 					}
 				}
 			}
@@ -905,7 +920,7 @@ public class IconButton : Gtk.ToggleButton {
 
 			if (middle_click_create_new_instance) {
 				if (this.class_group != null) {
-					windows = this.class_group.get_windows().copy();
+					windows = this.class_group.get_windows();
 				} else {
 					windows = new List<unowned Wnck.Window>();
 				}
@@ -932,14 +947,7 @@ public class IconButton : Gtk.ToggleButton {
 	private void handle_launch_clicks(Gdk.EventButton event, bool was_double_click) {
 		bool should_launch_app = false;
 
-		if (this.window != null) {
-			if (this.window.is_active()) {
-				this.window.minimize();
-			} else {
-				this.window.unminimize(event.time);
-				this.window.activate(event.time);
-			}
-		} else if (this.class_group != null) {
+		if (this.class_group != null) {
 			bool one_active = false; // Determine if one of our windows is active so we know if we should show all or hide all if that setting is enabled
 			Wnck.Workspace active_workspace = screen.get_active_workspace(); // Get the active workspace
 
@@ -994,6 +1002,13 @@ public class IconButton : Gtk.ToggleButton {
 			} else { // No windows
 				should_launch_app = true;
 			}
+		} else if (this.window != null) {
+			if (this.window.is_active()) {
+				this.window.minimize();
+			} else {
+				this.window.unminimize(event.time);
+				this.window.activate(event.time);
+			}
 		} else {
 			should_launch_app = true;
 		}
@@ -1008,97 +1023,62 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
-		if (this.window != null) {
-			this.window.unminimize(event.time);
-			this.window.activate(event.time);
-			return Gdk.EVENT_STOP;
-		}
-
-		if (this.class_group == null) {
-			return Gdk.EVENT_STOP;
-		}
-
-		if (event.direction >= 4) {
-			return Gdk.EVENT_STOP;
-		}
-
-		if (get_monotonic_time() - last_scroll_time < 300000) {
+		if (event.direction >= 4 || get_monotonic_time() - last_scroll_time < 300000) {
 			return Gdk.EVENT_STOP;
 		}
 
 		Wnck.Window? target_window = null;
 
-		var current_window = this.desktop_helper.get_active_window();
+		Wnck.Window current_window = this.desktop_helper.get_active_window();
 		bool have_current_window = (current_window != null);
 
-		bool go_next = (event.direction == Gdk.ScrollDirection.UP);
+		if (this.class_group != null) { // grouping is enabled
+			List<weak Wnck.Window> windows = this.class_group.get_windows();
+			var windows_length = windows.length();
 
-		var ids = popover.window_id_to_name.get_keys();
-		var ids_length = ids.length();
+			if (windows_length > 1) {
+				if (event.direction != Gdk.ScrollDirection.UP) { // Go to previous window
+					windows.reverse(); // Reverse our list before doing operations
+				}
 
-		if (ids_length > 1) { // Has more than one item and current window is valid
-			if (!go_next) { // Go to previous window
-				ids.reverse(); // Reverse our list before doing operations
-			}
+				var win_id = (have_current_window) ? current_window.get_xid() : 0;
+				var current_window_position = 0;
 
-			var win_id = (have_current_window) ? current_window.get_xid() : 0;
-
-			var current_window_position = 0;
-
-			if (have_current_window) {
-				for (var current_id_index = 0; current_id_index < ids.length(); current_id_index++) {
-					var id = ids.nth_data(current_id_index);
-
-					if (win_id == id) { // Matching id
-						current_window_position = current_id_index;
-						break;
+				if (have_current_window) { // try to find the next window to active based on position of the current active one
+					for (var current_id_index = 0; current_id_index < windows_length; current_id_index++) {
+						var window = windows.nth_data(current_id_index);
+						if (win_id == window.get_xid()) { // Matching id
+							current_window_position = current_id_index;
+							break;
+						}
 					}
 				}
-			}
 
-			var incr_index = (have_current_window) ? (current_window_position + 1) : 0; // Set our incremented index
-
-			if (incr_index == ids_length) { // If we're on last item
-				incr_index = 0; // Reset back to 0
-			}
-
-			var new_window_id = ids.nth_data(incr_index); // Get our next window id
-
-			if (new_window_id != null) {
-				Wnck.Window window = Wnck.Window.@get(new_window_id); // Get the window
-
-				if (window != null) {
-					target_window = window;
-				}
-			}
-
-			if (target_window != null) {
-				target_window.activate(event.time);
-
-				if (target_window.is_minimized()) { // If the window is minimized
-					target_window.unminimize(event.time);
+				var incr_index = (have_current_window) ? (current_window_position + 1) : 0; // Set our incremented index
+				if (incr_index == windows_length) { // If we're on last item, reset back to 0
+					incr_index = 0;
 				}
 
-				last_scroll_time = get_monotonic_time();
-			}
-		} else if (ids_length == 1) { // Only has one window and scrolling up
-			var id = ids.nth_data(0); // Get id at 0
-			target_window = Wnck.Window.@get(id);
-
-			if (target_window != null) {
-				if (go_next) { // Activate / ensure is in focus
-					target_window.activate(event.time);
-
-					if (target_window.is_minimized()) { // If the window is minimized
-						target_window.unminimize(event.time);
-					}
-				} else { // Effectively minimize
-					target_window.minimize();
+				var new_window_id = windows.nth_data(incr_index).get_xid();
+				if (new_window_id >= 0) {
+					target_window = Wnck.Window.@get(new_window_id);
 				}
-
-				last_scroll_time = get_monotonic_time();
+			} else if (windows_length == 1) { // Only has one window and scrolling up
+				var id = windows.nth_data(0).get_xid();
+				target_window = Wnck.Window.@get(id);
 			}
+		} else if (this.window != null) { // probably grouping isn't enabled, or shit happened
+			target_window = this.window;
 		}
+
+		if ((this.class_group == null || this.class_group.get_windows().length() == 1) && have_current_window && event.direction != Gdk.ScrollDirection.UP) {
+			target_window.minimize();
+		} else if (target_window != null) {
+			target_window.activate(event.time);
+			target_window.unminimize(event.time);
+		}
+
+		last_scroll_time = get_monotonic_time();
 
 		return Gdk.EVENT_STOP;
 	}
