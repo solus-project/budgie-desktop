@@ -82,6 +82,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		return true;
 	}
 
+	// FIXME: unfav an app doesn't remove the icon...
+	// FIXME: closing a window with popover makes Budgie segfault
 	public IconTasklistApplet(string uuid) {
 		Object(uuid: uuid);
 
@@ -358,7 +360,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_opened(Budgie.AbominationRunningApp app) {
 		// FIXME: all this logic only work if grouping is enabled
-		// FIXME: Opening a second instance of an app (e.g. android studio and virtual device manager) won't focus the new window and we're unable to switch between the instances using the wheel
+		// FIXME: LibreOffice is still fucking bugged, opening once, then closing, then reopening, and the icon won't appear at all...
 
 		Budgie.AbominationRunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 		if (first_app == null) {
@@ -390,7 +392,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		if (button == null) { // create a new button
-			// FIXME: should work properly, yet doesn't, we shouldn't have window & group in IconButton, or it creates issues
 			if (!this.grouping) {
 				button = new IconButton.from_app(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app, false);
 			} else {
@@ -407,7 +408,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_app_closed(Budgie.AbominationRunningApp app) {
-		// FIXME: At this point app.get_window() shouldn't be null, adding a check against null window make that the buttons aren't properly removed from the Hashmap
 		if (app.get_window().is_skip_pager() || app.get_window().is_skip_tasklist()) { // window not managed in the first place
 			return;
 		}

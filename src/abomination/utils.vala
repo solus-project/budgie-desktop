@@ -14,7 +14,8 @@
  * the app name when WM_CLASS isn't set (e.g. LibreOffice, Google Chrome, Android Studio emulator, maybe others)
  */
 string get_group_name(Wnck.Window window) {
-	// Try to use class group name from WM_CLASS as it's the most precise.
+	// Try to use class group name from WM_CLASS as it's the most precise
+	// (Firefox Beta is a known offender, its class group will be the same as standard Firefox).
 	string name = window.get_class_group_name();
 
 	// Fallback to using class instance name (still from WM_CLASS),
@@ -37,6 +38,8 @@ string get_group_name(Wnck.Window window) {
 
 	// Chrome profile launcher doesn't have WM_CLASS, so name is used
 	// instead and is not the same as the group of the window opened afterward.
+	// Unfortunately there will still be a bit of clusterfuck when using Chrome
+	// simultaneously with Chrome Beta or Canary as they have the same WM_NAME: "google chrome"
 	if (name == "google chrome") {
 		name = "google-chrome";
 	}

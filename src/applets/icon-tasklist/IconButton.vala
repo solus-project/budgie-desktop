@@ -301,10 +301,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
-			if (this.first_app != null) { // If we have an AbominationRunningApp associated with this
-				this.first_app.invalidate_window(old_window); // See if we need to invalidate this window and update our new one (if any)
-			}
-
 			this.window_count--;
 
 			if (this.window_count == 0) {

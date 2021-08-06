@@ -32,50 +32,14 @@ namespace Budgie {
 		public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window, AbominationAppGroup group) {
 			this.set_window(window);
 
-			if (this.window != null) {
-				this.id = this.window.get_xid();
-				this.name = this.window.get_name();
-				this.group_object = group;
-			}
+			this.id = this.window.get_xid();
+			this.name = this.window.get_name();
+			this.group_object = group;
 
 			this.app_system = app_system;
+			this.update_app_info();
 
 			debug("Created app: %s", this.name);
-
-			this.update_group();
-		}
-
-		/**
-		 * invalid_window will check if the provided window is our current window
-		 * If the provided window is our current window, update to any new window in the class group, update our name, etc.
-		 */
-		public void invalidate_window(Wnck.Window window) {
-			if (this.window == null || window == null) {
-				return;
-			}
-
-			if (window.get_xid() == this.window.get_xid()) { // The window provided matches ours
-				this.window = null; // Set to null
-
-				bool found_new_window = false;
-				List<weak Wnck.Window> class_windows = this.group_object.get_windows();
-
-				if (class_windows.length() > 0) { // If we have windows
-					class_windows.foreach((other_window) => {
-						if (other_window.get_state() != Wnck.WindowState.SKIP_TASKLIST) { // If this window shouldn't be skipped
-							this.window = other_window;
-							found_new_window = true;
-							return;
-						}
-					});
-				}
-
-				if (found_new_window && this.window != null) { // If we found a new window replacement
-					this.set_window(this.window); // Set our bindings
-				} else if (!found_new_window && this.app_info != null) { // If we didn't find the new window but we at least have the DesktopAppInfo
-					this.name = this.app_info.get_display_name(); // Just fallback to the DesktopAppInfo display name
-				}
-			}
 		}
 
 		public string get_group_name() {
@@ -99,7 +63,7 @@ namespace Budgie {
 			this.update_name();
 
 			this.window.class_changed.connect(() => {
-				this.update_group();
+				this.update_app_info();
 				this.update_icon();
 				this.update_name();
 			});
@@ -113,23 +77,15 @@ namespace Budgie {
 				}
 			});
 
-			this.window.name_changed.connect(() => {
-				this.update_name();
-			});
-
-			this.window.state_changed.connect(() => {
-				this.update_name();
-			});
+			this.window.name_changed.connect(() => this.update_name());
+			this.window.state_changed.connect(() => this.update_name());
 		}
 
 		/**
-		 * update_group will update our group
+		 * update_app_info will update our app information based on the window
+		 * associated with the app.
 		 */
-		private void update_group() {
-			if (this.window == null) { // Window no longer valid
-				return;
-			}
-
+		private void update_app_info() {
 			this.app_info = this.app_system.query_window(this.window);
 		}
 

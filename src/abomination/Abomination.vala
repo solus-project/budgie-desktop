@@ -147,16 +147,6 @@ namespace Budgie {
 		 * add_app will add a running application based on the provided window
 		 */
 		private void add_app(Wnck.Window window) {
-			// Could use group name to determine if apps can be grouped together
-			// So far, here are the apps without a groupname:
-			//  - Android studio emulator (null)
-			//  - GTK4 demos (empty string) -> how to make it so that grouping works? (only application class cuz it's another windows with controls)
-			//  - LibreOffice (first open null, then open the app, but icon isn't here)
-			//  - Chrome with multi profiles (get_class_instance_name is still null...) will have to do an hard check on this one cuz it's impossible otherwise...
-
-			// LibreOffice have different behavior depending on how it was started
-			// Test grouping of chrome canary / dev / snap / flatpak too (works)
-
 			if (this.is_disallowed_window_type(window)) { // Disallowed type
 				return;
 			}
@@ -196,8 +186,6 @@ namespace Budgie {
 
 		/**
 		 * remove_app will remove a running application based on the provided window
-		 *
-		 * FIXME: sometime closing one instance of a grouped app will remove all (only gnome MPV so far)
 		 */
 		private void remove_app(Wnck.Window window) {
 			AbominationAppGroup group = this.get_window_group(window);
@@ -215,11 +203,9 @@ namespace Budgie {
 			ulong id = window.get_xid();
 			AbominationRunningApp app = this.running_apps_id.get(id); // Get the running app
 
-			this.running_apps_id.steal(id); // Remove from running_apps_id
+			this.running_apps_id.remove(id); // Remove from running_apps_id
 
 			this.track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
-
-			// FIXME: app.get_window() is null at this point, but shouldn't be...
 			if (app != null) { // App is defined
 				this.removed_app(app.get_group_name(), app); // Notify that we called remove
 			}
@@ -230,10 +216,6 @@ namespace Budgie {
 		 * The old group name is determined by current windows associated with the group
 		 */
 		private void rename_group(string old_group_name, string new_group_name) {
-			// FIXME: Apps are in the same group, yet they are not grouped together - why? (only apply to libre-office)
-			// maybe the renaming is causing some issue with icon tasklist?
-			// FIXME: libre office is doing shit with the popover, etc, what a shitty app
-
 			AbominationAppGroup group = this.running_app_groups.get(old_group_name);
 
 			this.running_app_groups.remove(old_group_name); // remove old group
@@ -250,14 +232,14 @@ namespace Budgie {
 			ulong window_xid = window.get_xid();
 
 			// only add a fullscreen window if it isn't currently minimized
-			if (!(window_xid in fullscreen_windows) && state_is_fullscreen(state)) {
-				fullscreen_windows.insert(window_xid, window); // Add to fullscreen_windows
-			} else if (window_xid in fullscreen_windows) {
-				fullscreen_windows.steal(window_xid); // Remove from fullscreen_windows
+			if (!(window_xid in this.fullscreen_windows) && this.state_is_fullscreen(state)) {
+				this.fullscreen_windows.insert(window_xid, window); // Add to fullscreen_windows
+			} else if (window_xid in this.fullscreen_windows) {
+				this.fullscreen_windows.steal(window_xid); // Remove from fullscreen_windows
 			}
 
-			toggle_night_light(); // Ensure we toggle Night Light if needed
-			set_notifications_paused(); // Ensure we pause notifications if needed
+			this.toggle_night_light(); // Ensure we toggle Night Light if needed
+			this.set_notifications_paused(); // Ensure we pause notifications if needed
 		}
 
 		private bool state_is_fullscreen(Wnck.WindowState? state) {
@@ -272,22 +254,22 @@ namespace Budgie {
 		 * If we're disabling, we'll check if there is any items in fullscreen_windows first
 		 */
 		private void toggle_night_light() {
-			if (should_disable_night_light_on_fullscreen) {
-				SignalHandler.block(color_settings, color_id);
+			if (this.should_disable_night_light_on_fullscreen) {
+				SignalHandler.block(this.color_settings, this.color_id);
 
-				if (fullscreen_windows.size() >= 1) { // Has fullscreen windows
-					color_settings.set_boolean("night-light-enabled", false);
+				if (this.fullscreen_windows.size() >= 1) { // Has fullscreen windows
+					this.color_settings.set_boolean("night-light-enabled", false);
 				} else { // Has no fullscreen windows
-					color_settings.set_boolean("night-light-enabled", original_night_light_setting); // Set back to our original
+					this.color_settings.set_boolean("night-light-enabled", this.original_night_light_setting); // Set back to our original
 				}
 
-				SignalHandler.unblock(color_settings, color_id);
+				SignalHandler.unblock(this.color_settings, this.color_id);
 			}
 		}
 
 		private void set_notifications_paused() {
-			if (should_pause_notifications_on_fullscreen) {
-				raven_proxy.SetPauseNotifications.begin(fullscreen_windows.size() >= 1);
+			if (this.should_pause_notifications_on_fullscreen) {
+				raven_proxy.SetPauseNotifications.begin(this.fullscreen_windows.size() >= 1);
 			}
 		}
 
@@ -295,8 +277,8 @@ namespace Budgie {
 		 * update_should_disable_night_light will update our value determining if we should disable night light on fullscreen
 		 */
 		private void update_should_disable_night_light() {
-			if (wm_settings != null) {
-				should_disable_night_light_on_fullscreen = wm_settings.get_boolean("disable-night-light-on-fullscreen");
+			if (this.wm_settings != null) {
+				this.should_disable_night_light_on_fullscreen = this.wm_settings.get_boolean("disable-night-light-on-fullscreen");
 			}
 		}
 
@@ -304,8 +286,8 @@ namespace Budgie {
 		 * update_should_pause_notifications will update our value determining if we should pause notifications on fullscreen
 		 */
 		private void update_should_pause_notifications() {
-			if (wm_settings != null) {
-				should_pause_notifications_on_fullscreen = wm_settings.get_boolean("pause-notifications-on-fullscreen");
+			if (this.wm_settings != null) {
+				this.should_pause_notifications_on_fullscreen = this.wm_settings.get_boolean("pause-notifications-on-fullscreen");
 			}
 		}
 
@@ -313,8 +295,8 @@ namespace Budgie {
 		 * update_night_light_value will update our copy / original night light enabled value
 		 */
 		private void update_night_light_value() {
-			if (color_settings != null) {
-				original_night_light_setting = color_settings.get_boolean("night-light-enabled");
+			if (this.color_settings != null) {
+				this.original_night_light_setting = this.color_settings.get_boolean("night-light-enabled");
 			}
 		}
 	}

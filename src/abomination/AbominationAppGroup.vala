@@ -68,8 +68,6 @@ namespace Budgie {
 
 			this.windows.remove(window.get_xid());
 
-			// FIXME: Opening 3 instances of Gnome MPV and closing the last two will result in the last one being closed too
-
 			debug("Number of window: %u (group: %s)", this.get_windows().length(), this.name);
 
 			this.removed_window(window);
