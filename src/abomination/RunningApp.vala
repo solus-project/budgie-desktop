@@ -9,16 +9,17 @@
  * (at your option) any later version.
  */
 
-namespace Budgie {
+namespace Budgie.Abomination {
 	/**
-	 * FIXME: we shouldn't be able to create an app from outside of Abomination
+	 * RunningApp is our wrapper for Wnck.Window with information
+	 * needed by Budgie components.
 	 */
-	public class AbominationRunningApp : GLib.Object {
+	public class RunningApp : GLib.Object {
 		public ulong id { get; private set; } // Window id
 		public string name { get; private set; } // App name
 		public DesktopAppInfo? app_info { get; private set; default = null; }
 		public string icon { get; private set; } // Icon associated with this app
-		public unowned AbominationAppGroup group_object { get; private set; } // Actual AbominationAppGroup object
+		public unowned AppGroup group_object { get; private set; } // Actual AppGroup object
 
 		private Wnck.Window window; // Window of app
 		private Budgie.AppSystem? app_system = null;
@@ -29,7 +30,7 @@ namespace Budgie {
 		public signal void icon_changed(string icon_name);
 		public signal void name_changed(string name);
 
-		public AbominationRunningApp(Budgie.AppSystem app_system, Wnck.Window window, AbominationAppGroup group) {
+		internal RunningApp(Budgie.AppSystem app_system, Wnck.Window window, AppGroup group) {
 			this.set_window(window);
 
 			this.id = this.window.get_xid();

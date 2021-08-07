@@ -17,7 +17,7 @@ public interface AbominationRavenRemote : GLib.Object {
 	public async abstract void SetPauseNotifications(bool paused) throws DBusError, IOError;
 }
 
-namespace Budgie {
+namespace Budgie.Abomination {
 	/**
 	 * Abomination is our application state tracking manager
 	 */
@@ -30,8 +30,8 @@ namespace Budgie {
 		private bool should_pause_notifications_on_fullscreen = false;
 
 		private HashTable<ulong?,Wnck.Window?> fullscreen_windows; // fullscreen_windows is a list of fullscreen windows based on their X window ID and respective Wnck.Window
-		private HashTable<ulong?, unowned AbominationRunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and AbominationRunningApp
-		private HashTable<string?, unowned AbominationAppGroup?> running_app_groups; // running_app_groups is a list of app groups based on the group name
+		private HashTable<ulong?, unowned RunningApp?> running_apps_id; // running_apps_ids is a list of apps based on the window id and RunningApp
+		private HashTable<string?, unowned AppGroup?> running_app_groups; // running_app_groups is a list of app groups based on the group name
 
 		private Wnck.Screen screen = null;
 		private AbominationRavenRemote? raven_proxy = null;
@@ -41,9 +41,9 @@ namespace Budgie {
 		/**
 		 * Signals
 		 */
-		public signal void added_app(string group, AbominationRunningApp app);
-		public signal void removed_app(string group, AbominationRunningApp app);
-		public signal void updated_group(AbominationAppGroup group);
+		public signal void added_app(string group, RunningApp app);
+		public signal void removed_app(string group, RunningApp app);
+		public signal void updated_group(AppGroup group);
 
 		public Abomination() {
 			this.app_system = new Budgie.AppSystem();
@@ -51,8 +51,8 @@ namespace Budgie {
 			this.wm_settings = new Settings("com.solus-project.budgie-wm");
 
 			this.fullscreen_windows = new HashTable<ulong?,Wnck.Window?>(int_hash, str_equal);
-			this.running_apps_id = new HashTable<ulong?, unowned AbominationRunningApp?>(int_hash, int_equal);
-			this.running_app_groups = new HashTable<string?, unowned AbominationAppGroup?>(str_hash, str_equal);
+			this.running_apps_id = new HashTable<ulong?, unowned RunningApp?>(int_hash, int_equal);
+			this.running_app_groups = new HashTable<string?, unowned AppGroup?>(str_hash, str_equal);
 
 			this.screen = Wnck.Screen.get_default();
 
@@ -101,19 +101,19 @@ namespace Budgie {
 				   (win_type == Wnck.WindowType.UTILITY); // Utility like a control on an emulator
 		}
 
-		public AbominationRunningApp? get_app_from_window_id(ulong window_id) {
+		public RunningApp? get_app_from_window_id(ulong window_id) {
 			return this.running_apps_id.get(window_id);
 		}
 
-		public List<weak AbominationRunningApp> get_running_apps() {
+		public List<weak RunningApp> get_running_apps() {
 			return this.running_apps_id.get_values();
 		}
 
 		/**
 		 * Get the first running app of an app group identified by its name.
 		 */
-		public AbominationRunningApp? get_first_app_of_group(string group) {
-			AbominationAppGroup app_group = this.running_app_groups.get(group);
+		public RunningApp? get_first_app_of_group(string group) {
+			AppGroup app_group = this.running_app_groups.get(group);
 			if (app_group == null) {
 				return null;
 			}
@@ -123,7 +123,7 @@ namespace Budgie {
 				return null;
 			}
 
-			Budgie.AbominationRunningApp first_app = this.running_apps_id.get(window.get_xid());
+			RunningApp first_app = this.running_apps_id.get(window.get_xid());
 			if (first_app == null) {
 				return null;
 			}
@@ -135,7 +135,7 @@ namespace Budgie {
 			return first_app;
 		}
 
-		private AbominationAppGroup? get_window_group(Wnck.Window window) {
+		private AppGroup? get_window_group(Wnck.Window window) {
 			string group_name = get_group_name(window);
 			if (!this.running_app_groups.contains(group_name)) {
 				return null;
@@ -155,9 +155,9 @@ namespace Budgie {
 				return;
 			}
 
-			AbominationAppGroup group = this.get_window_group(window);
+			AppGroup group = this.get_window_group(window);
 			if (group == null) {
-				group = new AbominationAppGroup(window);
+				group = new AppGroup(window);
 				this.running_app_groups.insert(group.get_name(), group);
 
 				group.renamed_group.connect((new_group_name, old_group_name) => {
@@ -165,7 +165,7 @@ namespace Budgie {
 				});
 			}
 
-			AbominationRunningApp app = new AbominationRunningApp(this.app_system, window, group); // Create an abomination app
+			RunningApp app = new RunningApp(this.app_system, window, group); // Create an abomination app
 			if (app == null || app.get_group_name() == null) { // Shouldn't be the case, fail immediately
 				return;
 			}
@@ -188,7 +188,7 @@ namespace Budgie {
 		 * remove_app will remove a running application based on the provided window
 		 */
 		private void remove_app(Wnck.Window window) {
-			AbominationAppGroup group = this.get_window_group(window);
+			AppGroup group = this.get_window_group(window);
 			if (group == null) {
 				return;
 			}
@@ -201,7 +201,7 @@ namespace Budgie {
 			}
 
 			ulong id = window.get_xid();
-			AbominationRunningApp app = this.running_apps_id.get(id); // Get the running app
+			RunningApp app = this.running_apps_id.get(id); // Get the running app
 
 			this.running_apps_id.remove(id); // Remove from running_apps_id
 
@@ -216,7 +216,7 @@ namespace Budgie {
 		 * The old group name is determined by current windows associated with the group
 		 */
 		private void rename_group(string old_group_name, string new_group_name) {
-			AbominationAppGroup group = this.running_app_groups.get(old_group_name);
+			AppGroup group = this.running_app_groups.get(old_group_name);
 
 			this.running_app_groups.remove(old_group_name); // remove old group
 			this.running_app_groups.insert(new_group_name, group); // add the new group

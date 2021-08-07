@@ -2,8 +2,8 @@
 
 libabomination_sources = [
     'Abomination.vala',
-    'AbominationRunningApp.vala',
-    'AbominationAppGroup.vala',
+    'RunningApp.vala',
+    'AppGroup.vala',
     'utils.vala',
 ]
 

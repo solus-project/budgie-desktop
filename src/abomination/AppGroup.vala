@@ -9,14 +9,12 @@
  * (at your option) any later version.
  */
 
-namespace Budgie {
+namespace Budgie.Abomination {
 	/**
 	 * A replacement for Wnck.ClassGroup as Wnck.ClassGroup relies on the sometime
 	 * missing, sometime incoherent WM_CLASS property to group windows together.
-	 *
-	 * FIXME: we shouldn't be able to create a group from outside of Abomination
 	 */
-	public class AbominationAppGroup : GLib.Object {
+	public class AppGroup : GLib.Object {
 		private string name;
 		private HashTable<ulong?,Wnck.Window?> windows;
 
@@ -31,7 +29,7 @@ namespace Budgie {
 		/**
 		 * Create a new group from a window instance
 		 */
-		public AbominationAppGroup(Wnck.Window window) {
+		internal AppGroup(Wnck.Window window) {
 			this.windows = new HashTable<ulong?,Wnck.Window?>(int_hash, int_equal);
 
 			this.name = get_group_name(window);
@@ -39,7 +37,7 @@ namespace Budgie {
 
 			debug("Created group: %s", this.name);
 
-			// FIXME: error: Signal `Budgie.AbominationAppGroup.icon_changed' requires emitter in this context
+			// FIXME: error: Signal `Budgie.Abomination.AppGroup.icon_changed' requires emitter in this context
 			//  window.icon_changed.connect(this.icon_changed); // pass signal to whoever is listening
 		}
 

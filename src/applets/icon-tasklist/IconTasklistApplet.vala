@@ -53,7 +53,7 @@ public class IconTasklistSettings : Gtk.Grid {
 }
 
 public class IconTasklistApplet : Budgie.Applet {
-	private Budgie.Abomination? abomination = null;
+	private Budgie.Abomination.Abomination? abomination = null;
 	private Wnck.Screen? wnck_screen = null;
 	private Settings? settings = null;
 	private Gtk.Box? main_layout = null;
@@ -99,7 +99,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		/* Initial bootstrap of helpers */
 		this.desktop_helper = new DesktopHelper(this.settings, this.main_layout);
 		this.wnck_screen = Wnck.Screen.get_default();
-		this.abomination = new Budgie.Abomination();
+		this.abomination = new Budgie.Abomination.Abomination();
 		this.app_system = new Budgie.AppSystem();
 
 		/* Now hook up settings */
@@ -180,7 +180,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				return;
 			}
 
-			Budgie.AbominationRunningApp app = this.abomination.get_app_from_window_id(window.get_xid());
+			Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(window.get_xid());
 			if (app == null) {
 				return;
 			}
@@ -358,11 +358,11 @@ public class IconTasklistApplet : Budgie.Applet {
 	/**
 	 * on_app_opened handles when we open a new app
 	 */
-	private void on_app_opened(Budgie.AbominationRunningApp app) {
+	private void on_app_opened(Budgie.Abomination.RunningApp app) {
 		// FIXME: all this logic only work if grouping is enabled
 		// FIXME: LibreOffice is still fucking bugged, opening once, then closing, then reopening, and the icon won't appear at all...
 
-		Budgie.AbominationRunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
+		Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 		if (first_app == null) {
 			return;
 		}
@@ -407,7 +407,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		button.update();
 	}
 
-	private void on_app_closed(Budgie.AbominationRunningApp app) {
+	private void on_app_closed(Budgie.Abomination.RunningApp app) {
 		if (app.get_window().is_skip_pager() || app.get_window().is_skip_tasklist()) { // window not managed in the first place
 			return;
 		}

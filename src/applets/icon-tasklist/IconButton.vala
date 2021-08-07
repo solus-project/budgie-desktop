@@ -20,7 +20,7 @@ const int INACTIVE_INDICATOR_SPACING = 2;
  * and rendering of "dots" for the renderable windows.
  */
 public class IconButton : Gtk.ToggleButton {
-	public Budgie.AbominationRunningApp? first_app = null;
+	public Budgie.Abomination.RunningApp? first_app = null;
 	public Icon icon;
 	public bool pinned = false;
 	public Wnck.Window? last_active_window = null;
@@ -29,7 +29,7 @@ public class IconButton : Gtk.ToggleButton {
 	private Wnck.Screen? screen = null;
 	private Settings? settings = null;
 	private Wnck.Window? window = null; // This will always be null if grouping is enabled
-	private Budgie.AbominationAppGroup? class_group = null; // This will always be null if grouping is disabled
+	private Budgie.Abomination.AppGroup? class_group = null; // This will always be null if grouping is disabled
 	private DesktopAppInfo? app_info = null;
 	private int window_count = 0;
 	private Gtk.Allocation definite_allocation;
@@ -39,7 +39,7 @@ public class IconButton : Gtk.ToggleButton {
 	private int64 last_scroll_time = 0;
 	private bool needs_attention = false;
 
-	public unowned Budgie.Abomination? abomination { public set; public get; default = null; }
+	public unowned Budgie.Abomination.Abomination? abomination { public set; public get; default = null; }
 	public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
 	public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
 	public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
@@ -49,7 +49,7 @@ public class IconButton : Gtk.ToggleButton {
 	 */
 	public signal void became_empty();
 
-	public IconButton(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
+	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.app_info = info;
@@ -65,14 +65,14 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
-	public IconButton.from_app(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.AbominationRunningApp app, bool pinned = false) {
+	public IconButton.from_app(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.RunningApp app, bool pinned = false) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.pinned = pinned;
 		this.originally_pinned = pinned;
 		this.first_app = abomination.get_app_from_window_id(app.get_window().get_xid());
 
-		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
+		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from RunningApp
 			this.app_info = this.first_app.app_info;
 		}
 
@@ -99,14 +99,14 @@ public class IconButton : Gtk.ToggleButton {
 		this.set_wnck_window(app.get_window());
 	}
 
-	public IconButton.from_group(Budgie.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.AbominationAppGroup group, bool pinned = false) {
+	public IconButton.from_group(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.AppGroup group, bool pinned = false) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.pinned = pinned;
 		this.originally_pinned = pinned;
 		this.first_app = abomination.get_first_app_of_group(group.get_name());
 
-		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from AbominationRunningApp
+		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from RunningApp
 			this.app_info = this.first_app.app_info;
 		}
 
@@ -272,7 +272,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.popover_manager.register_popover(this, this.popover); // Register
 	}
 
-	public void set_class_group(Budgie.AbominationAppGroup? class_group) {
+	public void set_class_group(Budgie.Abomination.AppGroup? class_group) {
 		this.class_group = class_group;
 
 		if (this.class_group == null) {
@@ -358,7 +358,7 @@ public class IconButton : Gtk.ToggleButton {
 		bool is_matching_class_name = false; // is_matching_class_name is for matching derpy window class names
 
 		if (this.first_app != null) { // If we have an app defined
-			Budgie.AbominationRunningApp app = this.abomination.get_app_from_window_id(new_window.get_xid());
+			Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(new_window.get_xid());
 			if (this.first_app.get_group_name().has_prefix("chrome-") || this.first_app.get_group_name().has_prefix("google-chrome")) { // Is a Chrome or Chrome app
 				should_try_name_match = true;
 				is_matching_class_name = (this.first_app.get_group_name() == app.get_group_name());
@@ -1096,7 +1096,7 @@ public class IconButton : Gtk.ToggleButton {
 		return this.app_info;
 	}
 
-	public unowned Budgie.AbominationAppGroup? get_class_group() {
+	public unowned Budgie.Abomination.AppGroup? get_class_group() {
 		return this.class_group;
 	}
 }
