@@ -56,33 +56,33 @@ namespace Budgie.Abomination {
 
 			this.screen = Wnck.Screen.get_default();
 
-			Bus.get_proxy.begin<AbominationRavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
+			Bus.get_proxy.begin<AbominationRavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, this.on_raven_get);
 
 			if (this.color_settings != null) { // gsd colors plugin schema defined
 				this.update_night_light_value();
-				this.color_id = color_settings.changed["night-light-enabled"].connect(update_night_light_value);
+				this.color_id = color_settings.changed["night-light-enabled"].connect(this.update_night_light_value);
 			}
 
 			if (this.wm_settings != null) {
 				this.update_should_disable_night_light();
 				this.update_should_pause_notifications();
 
-				this.wm_settings.changed["disable-night-light-on-fullscreen"].connect(update_should_disable_night_light);
-				this.wm_settings.changed["pause-notifications-on-fullscreen"].connect(update_should_pause_notifications);
+				this.wm_settings.changed["disable-night-light-on-fullscreen"].connect(this.update_should_disable_night_light);
+				this.wm_settings.changed["pause-notifications-on-fullscreen"].connect(this.update_should_pause_notifications);
 			}
 
 			this.screen.window_opened.connect(this.add_app);
 			this.screen.window_closed.connect(this.remove_app);
 
-			screen.get_windows().foreach((window) => { // Init all our current running windows
-				add_app(window);
+			this.screen.get_windows().foreach((window) => { // Init all our current running windows
+				this.add_app(window);
 			});
 		}
 
 		/* Hold onto our Raven proxy ref */
 		public void on_raven_get(Object? o, AsyncResult? res) {
 			try {
-				raven_proxy = Bus.get_proxy.end(res);
+				this.raven_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
 				warning("Failed to gain Raven proxy: %s", e.message);
 			}
