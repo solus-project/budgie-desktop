@@ -48,6 +48,7 @@ public class IconButton : Gtk.ToggleButton {
 	 * Signals
 	 */
 	public signal void became_empty();
+	public signal void pinned_changed();
 
 	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
@@ -245,6 +246,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
 			this.pinned = new_pinned_state;
 			this.desktop_helper.update_pinned(); // Update via desktop helper
+			this.pinned_changed();
 
 			if (!this.has_valid_windows(null)) { // Does not have any windows open and no longer pinned
 				this.became_empty(); // Trigger our became_empty event (for removal)

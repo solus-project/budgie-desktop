@@ -359,7 +359,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
 		// FIXME: all this logic only work if grouping is enabled
-		// FIXME: LibreOffice: pin the app (by popover), click to open, window isn't grouped (but works when pinned using drag and drop)
 
 		Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 		if (first_app == null) {
@@ -470,6 +469,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = this.get_orientation();
 
+		// Kill button when there are no window left and its not pinned
 		button.became_empty.connect(() => {
 			if (!button.pinned) {
 				if (wrapper != null) {
@@ -477,6 +477,23 @@ public class IconTasklistApplet : Budgie.Applet {
 				}
 
 				this.remove_button(app_id);
+			}
+		});
+
+		// when button become pinned, make sure we identify it by its launcher instead of xid or grouping will fail
+		button.pinned_changed.connect(() => {
+			if (button.first_app == null) {
+				return;
+			}
+
+			string[] parts = button.first_app.app_info.get_filename().split("/");
+			string launcher = parts[parts.length - 1];
+			if (button.pinned) {
+				this.add_button(launcher, button);
+				this.remove_button(button.first_app.id.to_string());
+			} else {
+				this.add_button(button.first_app.id.to_string(), button);
+				this.remove_button(launcher);
 			}
 		});
 
