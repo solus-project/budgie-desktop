@@ -87,13 +87,13 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (this.first_app != null) {
 			this.first_app.name_changed.connect(() => { // When the name of the app has changed
-				set_tooltip(); // Update our tooltip
+				this.set_tooltip(); // Update our tooltip
 			});
 		}
 
 		app.get_window().state_changed.connect_after(() => {
 			if (app.get_window().needs_attention()) {
-				attention();
+				this.attention();
 			}
 		});
 
@@ -146,8 +146,8 @@ public class IconButton : Gtk.ToggleButton {
 			return false;
 		});
 
-		definite_allocation.width = 0;
-		definite_allocation.height = 0;
+		this.definite_allocation.width = 0;
+		this.definite_allocation.height = 0;
 
 		this.launch_context = this.get_display().get_app_launch_context();
 		this.add_events(Gdk.EventMask.SCROLL_MASK);
@@ -212,9 +212,9 @@ public class IconButton : Gtk.ToggleButton {
 		st.add_class("launcher");
 		this.relief = Gtk.ReliefStyle.NONE;
 
-		size_allocate.connect(this.on_size_allocate);
-		launch_context.launched.connect(this.on_launched);
-		launch_context.launch_failed.connect(this.on_launch_failed);
+		this.size_allocate.connect(this.on_size_allocate);
+		this.launch_context.launched.connect(this.on_launched);
+		this.launch_context.launch_failed.connect(this.on_launch_failed);
 	}
 
 	/**
@@ -222,11 +222,11 @@ public class IconButton : Gtk.ToggleButton {
 	 */
 	public void create_popover() {
 		this.screen = Wnck.Screen.get_default(); // Get the default screen
-		this.popover = new Budgie.IconPopover(this, this.app_info, screen.get_workspace_count());
+		this.popover = new Budgie.IconPopover(this, this.app_info, this.screen.get_workspace_count());
 		this.popover.set_pinned_state(this.pinned); // Set our pinned state
 
 		this.popover.launch_new_instance.connect(() => { // If we're going to launch a new instance
-			launch_app(Gtk.get_current_event_time());
+			this.launch_app(Gtk.get_current_event_time());
 		});
 
 		this.popover.added_window.connect(() => { // If we added a window
@@ -264,10 +264,10 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.popover.perform_action.connect((action) => {
 			if (this.app_info != null) {
-				launch_context.set_screen(get_screen());
-				launch_context.set_timestamp(Gdk.CURRENT_TIME);
+				this.launch_context.set_screen(get_screen());
+				this.launch_context.set_timestamp(Gdk.CURRENT_TIME);
 				this.app_info.launch_action(action, launch_context);
-				popover.render(); // Re-render
+				this.popover.render(); // Re-render
 			}
 		});
 
@@ -276,11 +276,11 @@ public class IconButton : Gtk.ToggleButton {
 		 */
 
 		this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
-			this.popover.set_workspace_count(screen.get_workspace_count());
+			this.popover.set_workspace_count(this.screen.get_workspace_count());
 		});
 
 		this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
-			this.popover.set_workspace_count(screen.get_workspace_count());
+			this.popover.set_workspace_count(this.screen.get_workspace_count());
 		});
 
 		this.popover_manager.register_popover(this, this.popover); // Register
@@ -330,7 +330,7 @@ public class IconButton : Gtk.ToggleButton {
 			return;
 		}
 
-		if (abomination.is_disallowed_window_type(window)) {
+		if (this.abomination.is_disallowed_window_type(window)) {
 			return;
 		}
 
@@ -409,14 +409,14 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		if (app_icon != null) {
-			icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
+			this.icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
-			icon.set_from_pixbuf(pixbuf_icon);
+			this.icon.set_from_pixbuf(pixbuf_icon);
 		} else {
-			icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
+			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		icon.pixel_size = this.desktop_helper.icon_size;
+		this.icon.pixel_size = this.desktop_helper.icon_size;
 	}
 
 	public void update() {
@@ -439,11 +439,11 @@ public class IconButton : Gtk.ToggleButton {
 		}
 		this.set_active(has_active);
 
-		set_tooltip(); // Update our tooltip text
+		this.set_tooltip(); // Update our tooltip text
 
 		this.set_draggable(!this.desktop_helper.lock_icons);
 
-		update_icon();
+		this.update_icon();
 		this.queue_resize();
 		this.queue_draw();
 	}
@@ -494,19 +494,19 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	private void launch_app(uint32 time) {
-		if (app_info == null) {
+		if (this.app_info == null) {
 			return;
 		}
 
-		launch_context.set_screen(this.get_screen());
-		launch_context.set_timestamp(time);
+		this.launch_context.set_screen(this.get_screen());
+		this.launch_context.set_timestamp(time);
 
 		this.icon.animate_launch(this.desktop_helper.panel_position);
 		this.icon.waiting = true;
 		this.icon.animate_wait();
 
 		try {
-			app_info.launch(null, launch_context);
+			this.app_info.launch(null, launch_context);
 		} catch (Error e) {
 			warning(e.message);
 		}
@@ -585,10 +585,10 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public void draw_inactive(Cairo.Context cr, Gdk.RGBA col) {
-		int x = definite_allocation.x;
-		int y = definite_allocation.y;
-		int width = definite_allocation.width;
-		int height = definite_allocation.height;
+		int x = this.definite_allocation.x;
+		int y = this.definite_allocation.y;
+		int width = this.definite_allocation.width;
+		int height = this.definite_allocation.height;
 		List<unowned Wnck.Window> windows;
 
 		if (this.class_group != null) {
@@ -651,10 +651,10 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public override bool draw(Cairo.Context cr) {
-		int x = definite_allocation.x;
-		int y = definite_allocation.y;
-		int width = definite_allocation.width;
-		int height = definite_allocation.height;
+		int x = this.definite_allocation.x;
+		int y = this.definite_allocation.y;
+		int width = this.definite_allocation.width;
+		int height = this.definite_allocation.height;
 		List<unowned Wnck.Window> windows;
 
 		if (this.class_group != null) {
@@ -688,7 +688,7 @@ public class IconButton : Gtk.ToggleButton {
 					col.parse("#D84E4E");
 				}
 			}
-			draw_inactive(cr, col);
+			this.draw_inactive(cr, col);
 			return base.draw(cr);
 		}
 
@@ -790,24 +790,24 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	protected void on_size_allocate(Gtk.Allocation allocation) {
-		definite_allocation = allocation;
+		this.definite_allocation = allocation;
 
 		base.size_allocate(definite_allocation);
 
 		int x, y;
-		var toplevel = get_toplevel();
+		var toplevel = this.get_toplevel();
 		if (toplevel == null || toplevel.get_window() == null) {
 			return;
 		}
-		translate_coordinates(toplevel, 0, 0, out x, out y);
+		this.translate_coordinates(toplevel, 0, 0, out x, out y);
 		toplevel.get_window().get_root_coords(x, y, out x, out y);
 
 		if (this.class_group != null) {
 			foreach (Wnck.Window win in this.class_group.get_windows()) {
-				win.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
+				win.set_icon_geometry(x, y, this.definite_allocation.width, this.definite_allocation.height);
 			}
 		} else if (this.window != null) {
-			this.window.set_icon_geometry(x, y, definite_allocation.width, definite_allocation.height);
+			this.window.set_icon_geometry(x, y, this.definite_allocation.width, this.definite_allocation.height);
 		}
 	}
 
@@ -822,10 +822,10 @@ public class IconButton : Gtk.ToggleButton {
 				Wnck.Window first_window = class_windows.nth_data(0);
 
 				if (first_window != null) {
-					this.first_app = abomination.get_app_from_window_id(first_window.get_xid());
+					this.first_app = this.abomination.get_app_from_window_id(first_window.get_xid());
 
 					this.first_app.name_changed.connect(() => { // When the name of the app has changed
-						set_tooltip(); // Update our tooltip
+						this.set_tooltip(); // Update our tooltip
 					});
 
 					if (this.app_info == null) { // If app_info hasn't been set yet
@@ -841,7 +841,7 @@ public class IconButton : Gtk.ToggleButton {
 	 */
 	private void setup_popover_with_class() {
 		if (this.first_app == null) {
-			set_app_for_class_group();
+			this.set_app_for_class_group();
 		}
 
 		foreach (unowned Wnck.Window window in this.class_group.get_windows()) {
@@ -851,15 +851,15 @@ public class IconButton : Gtk.ToggleButton {
 						ulong xid = window.get_xid();
 						string name = window.get_name();
 
-						popover.add_window(xid, name);
+						this.popover.add_window(xid, name);
 						window.name_changed.connect_after(() => {
 							ulong win_xid = window.get_xid();
-							popover.rename_window(win_xid);
+							this.popover.rename_window(win_xid);
 						});
 
 						window.state_changed.connect_after(() => {
 							if (window.needs_attention()) {
-								attention();
+								this.attention();
 							}
 						});
 					}
@@ -898,14 +898,14 @@ public class IconButton : Gtk.ToggleButton {
 			return Gdk.EVENT_PROPAGATE; // Continue propagation
 		}
 
-		handle_launch_clicks(event, true); // Got this far, meaning double left clicked
+		this.handle_launch_clicks(event, true); // Got this far, meaning double left clicked
 
 		return base.button_press_event(event);
 	}
 
 	public override bool button_release_event(Gdk.EventButton event) {
-		if (this.class_group != null && (last_active_window == null || this.class_group.get_windows().find(last_active_window) == null)) {
-			last_active_window = this.class_group.get_windows().nth_data(0);
+		if (this.class_group != null && (this.last_active_window == null || this.class_group.get_windows().find(this.last_active_window) == null)) {
+			this.last_active_window = this.class_group.get_windows().nth_data(0);
 		}
 
 		if (event.button == 3) { // Right click
@@ -913,7 +913,7 @@ public class IconButton : Gtk.ToggleButton {
 			this.popover_manager.show_popover(this); // Show the popover
 			return Gdk.EVENT_STOP;
 		} else if (event.button == 1) { // Left click
-			handle_launch_clicks(event, false);
+			this.handle_launch_clicks(event, false);
 		} else if (event.button == 2) { // Middle click
 			List<unowned Wnck.Window> windows;
 			bool middle_click_create_new_instance = false;
@@ -930,14 +930,14 @@ public class IconButton : Gtk.ToggleButton {
 				}
 
 				if (windows.length() == 0) {
-					launch_app(Gtk.get_current_event_time());
+					this.launch_app(Gtk.get_current_event_time());
 				} else if (this.app_info != null) {
-					string[] actions = app_info.list_actions();
+					string[] actions = this.app_info.list_actions();
 
 					if ("new-window" in actions) { // If we have a preferred action set
-						launch_context.set_screen(get_screen());
-						launch_context.set_timestamp(Gdk.CURRENT_TIME);
-						this.app_info.launch_action("new-window", launch_context);
+						this.launch_context.set_screen(get_screen());
+						this.launch_context.set_timestamp(Gdk.CURRENT_TIME);
+						this.app_info.launch_action("new-window", this.launch_context);
 					} else {
 						launch_app(Gtk.get_current_event_time());
 					}
@@ -953,7 +953,7 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (this.class_group != null) {
 			bool one_active = false; // Determine if one of our windows is active so we know if we should show all or hide all if that setting is enabled
-			Wnck.Workspace active_workspace = screen.get_active_workspace(); // Get the active workspace
+			Wnck.Workspace active_workspace = this.screen.get_active_workspace(); // Get the active workspace
 
 			GLib.List<unowned Wnck.Window> list = new List<unowned Wnck.Window>();
 			List<weak ulong?> win_ids = this.popover.window_id_to_name.get_keys(); // Get all the window ids regardless of workspace state
@@ -992,7 +992,7 @@ public class IconButton : Gtk.ToggleButton {
 					only_window.activate(event.time); // Activate the window
 					only_window.unminimize(event.time); // Ensure we unminimize it
 				} else { // Window is on this workspace, allow toggling it
-					toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the first window in the class group
+					this.toggle_window_minstate(event.time, list.nth_data(0)); // Toggle the minimize / unminimize state of the first window in the class group
 				}
 			} else if (len > 1 && show_all_windows_on_click) { // Multiple windows
 				list.foreach((w) => { // Cycle through the apps
@@ -1021,7 +1021,7 @@ public class IconButton : Gtk.ToggleButton {
 			bool require_double_click = this.settings.get_boolean("require-double-click-to-launch");
 
 			if ((was_double_click && require_double_click) || !require_double_click) { // Used double click when enabled, or don't require double click
-				launch_app(event.time);
+				this.launch_app(event.time);
 			}
 		}
 	}

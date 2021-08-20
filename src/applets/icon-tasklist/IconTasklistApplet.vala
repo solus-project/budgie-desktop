@@ -107,7 +107,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.add(this.main_layout);
 
 		Gtk.drag_dest_set(this.main_layout, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.COPY);
-		this.main_layout.drag_data_received.connect(on_drag_data_received);
+		this.main_layout.drag_data_received.connect(this.on_drag_data_received);
 
 		this.on_settings_changed("grouping");
 		this.on_settings_changed("restrict-to-workspace");
@@ -129,7 +129,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.desktop_helper.orientation = this.get_orientation();
 		this.main_layout.set_orientation(this.desktop_helper.orientation);
 
-		set_icons_size();
+		this.set_icons_size();
 	}
 
 	/**
@@ -163,11 +163,11 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void connect_app_signals() {
-		this.wnck_screen.active_window_changed.connect_after(on_active_window_changed);
-		this.wnck_screen.active_workspace_changed.connect_after(update_buttons);
+		this.wnck_screen.active_window_changed.connect_after(this.on_active_window_changed);
+		this.wnck_screen.active_workspace_changed.connect_after(this.update_buttons);
 
-		this.abomination.added_app.connect((group, app) => on_app_opened(app));
-		this.abomination.removed_app.connect((group, app) => on_app_closed(app));
+		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
+		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
 
 		this.abomination.updated_group.connect((group) => { // try to properly group icons
 			if (!this.grouping) {
