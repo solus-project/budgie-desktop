@@ -129,8 +129,6 @@ public class IconButton : Gtk.ToggleButton {
 	 * We have race conditions in glib between the desired properties..
 	 */
 	private void gobject_constructors_suck() {
-		this.window_count = 1;
-
 		icon = new Icon();
 		icon.get_style_context().add_class("icon");
 		this.add(icon);
@@ -230,6 +228,20 @@ public class IconButton : Gtk.ToggleButton {
 			launch_app(Gtk.get_current_event_time());
 		});
 
+		this.popover.added_window.connect(() => { // If we added a window
+			this.window_count++;
+        });
+
+        this.popover.closed_all.connect(() => { // If we closed all windows
+			this.window_count = 0;
+			this.popover.hide(); // Hide
+			this.became_empty(); // Call our became empty function
+        });
+
+        this.popover.closed_window.connect(() => { // If we closed a window related to this popover
+			this.window_count--;
+        });
+
 		this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
 			this.pinned = new_pinned_state;
 			this.desktop_helper.update_pinned(); // Update via desktop helper
@@ -295,22 +307,18 @@ public class IconButton : Gtk.ToggleButton {
 			new_window.name_changed.connect(() => { // When this window is renamed
 				this.popover.rename_window(xid); // Rename its entry in the popover
 			});
-
-			this.window_count++;
 		});
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
-			this.window_count--;
 
 			if (this.window_count == 0) {
 				this.popover.hide(); // Hide
-				became_empty(); // Call our became empty function)
 			}
 		});
 
-		set_app_for_class_group();
-		setup_popover_with_class();
+		this.set_app_for_class_group();
+		this.setup_popover_with_class();
 	}
 
 	public void set_wnck_window(Wnck.Window? window) {
@@ -324,21 +332,23 @@ public class IconButton : Gtk.ToggleButton {
 			return;
 		}
 
+		this.window_count = 1;
+
 		window.icon_changed.connect_after(() => {
-			update_icon(); // Update the icon
+			this.update_icon(); // Update the icon
 		});
 
 		window.name_changed.connect_after(() => { // On window rename
-			popover.rename_window(window.get_xid());
+			this.popover.rename_window(window.get_xid());
 		});
 
 		window.state_changed.connect_after(() => {
 			if (window.needs_attention()) {
-				attention();
+				this.attention();
 			}
 		});
 
-		popover.add_window(window.get_xid(), window.get_name());
+		this.popover.add_window(window.get_xid(), window.get_name());
 	}
 
 	public void set_draggable(bool draggable) {
@@ -381,8 +391,6 @@ public class IconButton : Gtk.ToggleButton {
 	public void update_icon() {
 		if (this.has_valid_windows(null)) {
 			this.icon.waiting = false;
-		} else if (!this.pinned) {
-			became_empty();
 		}
 
 		unowned GLib.Icon? app_icon = null;
@@ -413,7 +421,6 @@ public class IconButton : Gtk.ToggleButton {
 		if (!this.has_valid_windows(null)) {
 			this.get_style_context().remove_class("running");
 			if (!this.pinned || this.is_from_window) {
-				this.became_empty();
 				return;
 			} else {
 				this.class_group = null;
@@ -508,7 +515,7 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public bool is_pinned() {
-		return pinned;
+		return this.pinned;
 	}
 
 	public void attention(bool needs_it = true) {
@@ -586,7 +593,6 @@ public class IconButton : Gtk.ToggleButton {
 			windows = this.class_group.get_windows();
 		} else {
 			windows = new List<unowned Wnck.Window>();
-			// FIXME: When grouping is disabled while it was enabled before, this.window won't be set (and probably this.class_group won't be unset)
 		}
 
 		int count;
@@ -831,7 +837,7 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * setup_popover_with_class will set up our popover with windows from the class
 	 */
-	public void setup_popover_with_class() {
+	private void setup_popover_with_class() {
 		if (this.first_app == null) {
 			set_app_for_class_group();
 		}

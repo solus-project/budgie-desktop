@@ -57,6 +57,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	private Wnck.Screen? wnck_screen = null;
 	private Settings? settings = null;
 	private Gtk.Box? main_layout = null;
+
 	private bool grouping = true;
 	private bool restrict_to_workspace = false;
 	private bool only_show_pinned = false;
@@ -417,14 +418,11 @@ public class IconTasklistApplet : Budgie.Applet {
 			return;
 		}
 
-		if (button.is_pinned() && this.grouping && app.group_object.get_windows().length() == 0) { // when we don't have windows in the group anymore, it's safe to remove the group
+		if (button.get_class_group() != null && button.get_class_group().get_windows().length() == 0) { // when we don't have windows in the group anymore, it's safe to remove the group
 			button.set_class_group(null);
 		}
 
-		if (!button.is_pinned()) {
-			button.set_wnck_window(null);
-		}
-
+		button.set_wnck_window(null);
 		button.update();
 
 		this.remove_button(app.id.to_string());
