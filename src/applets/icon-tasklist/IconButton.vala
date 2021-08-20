@@ -292,7 +292,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		this.class_group.icon_changed.connect_after(() => {
-			update_icon(); // Update icon based on class group
+			this.update_icon(); // Update icon based on class group
 		});
 
 		this.class_group.added_window.connect((new_window) => { // When a window is opened in group

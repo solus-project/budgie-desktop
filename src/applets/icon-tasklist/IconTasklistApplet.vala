@@ -83,8 +83,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		return true;
 	}
 
-	// FIXME: unfav an app doesn't remove the icon...
-	// FIXME: closing a window with popover makes Budgie segfault
 	public IconTasklistApplet(string uuid) {
 		Object(uuid: uuid);
 
@@ -361,7 +359,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
 		// FIXME: all this logic only work if grouping is enabled
-		// FIXME: LibreOffice is still fucking bugged, opening once, then closing, then reopening, and the icon won't appear at all...
+		// FIXME: LibreOffice: pin the app (by popover), click to open, window isn't grouped (but works when pinned using drag and drop)
 
 		Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 		if (first_app == null) {

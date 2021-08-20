@@ -37,8 +37,7 @@ namespace Budgie.Abomination {
 
 			debug("Created group: %s", this.name);
 
-			// FIXME: error: Signal `Budgie.Abomination.AppGroup.icon_changed' requires emitter in this context
-			//  window.icon_changed.connect(this.icon_changed); // pass signal to whoever is listening
+			window.icon_changed.connect(() => this.icon_changed()); // pass signal to whoever is listening
 		}
 
 		public void add_window(Wnck.Window window) {
@@ -79,7 +78,6 @@ namespace Budgie.Abomination {
 			return this.name;
 		}
 
-		// FIXME: should probably use the window that has WM_CLASS defined instead of the first one
 		public Gdk.Pixbuf? get_icon() {
 			if (this.get_windows().length() == 0 || this.get_windows().nth_data(0).get_class_group() == null) {
 				return null;
