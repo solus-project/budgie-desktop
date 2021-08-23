@@ -169,11 +169,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
 		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
 
-		this.abomination.updated_group.connect((group) => { // try to properly group icons
-			if (!this.grouping) {
-				return;
-			}
+		if (!this.grouping) { // remaining logic is only needed for grouping
+			return;
+		}
 
+		this.abomination.updated_group.connect((group) => { // try to properly group icons
 			Wnck.Window window = group.get_windows().nth_data(0);
 			if (window == null) {
 				return;
@@ -205,6 +205,8 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * Remove every IconButton and add them back
 	 */
 	private void rebuild_items() {
+		warning("Rebuild icon tasklist");
+
 		foreach (Gtk.Widget widget in this.main_layout.get_children()) {
 			widget.destroy();
 		}
@@ -384,9 +386,16 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		IconButton button = null;
-		if (this.grouping && this.buttons.contains(first_app_id)) { // try to get existing button if any
+		if (this.buttons.contains(first_app_id)) { // try to get existing button if any
 			button = this.buttons.get(first_app_id);
-			this.add_button(app.id.to_string(), button); // map app to it's button so that we can update it later on
+
+			if (!this.grouping && !button.is_empty()) {
+				button = null; // pinned button is already associated with a window, we'll create a new one
+			}
+
+			if (button != null) {
+				this.add_button(app.id.to_string(), button); // map app to it's button so that we can update it later on
+			}
 		}
 
 		if (button == null) { // create a new button
@@ -398,8 +407,12 @@ public class IconTasklistApplet : Budgie.Applet {
 			this.add_icon_button(app.id.to_string(), button);
 		}
 
-		if (this.grouping && button.get_class_group() == null) { // set class group in button to properly group windows
+		if (this.grouping && button.get_class_group() == null) { // button was pinned without app opened, set class group in button to properly group windows
 			button.set_class_group(app.group_object);
+		}
+
+		if (!this.grouping && button.is_empty()) { // button was pinned without app opened
+			button.set_wnck_window(app.get_window());
 		}
 
 		button.update();

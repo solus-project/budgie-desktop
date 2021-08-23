@@ -28,8 +28,8 @@ public class IconButton : Gtk.ToggleButton {
 	private Budgie.IconPopover? popover = null;
 	private Wnck.Screen? screen = null;
 	private Settings? settings = null;
-	private Wnck.Window? window = null; // This will always be null if grouping is enabled
-	private Budgie.Abomination.AppGroup? class_group = null; // This will always be null if grouping is disabled
+	private Wnck.Window? window = null; // This will and should always be null if grouping is enabled
+	private Budgie.Abomination.AppGroup? class_group = null; // This will and should always be null if grouping is disabled
 	private DesktopAppInfo? app_info = null;
 	private int window_count = 0;
 	private Gtk.Allocation definite_allocation;
@@ -50,6 +50,10 @@ public class IconButton : Gtk.ToggleButton {
 	public signal void became_empty();
 	public signal void pinned_changed();
 
+	/**
+	 * Bootstrap a button without window nor group, as it should be for pinned
+	 * buttons without any active apps.
+	 */
 	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
@@ -66,6 +70,9 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
+	/**
+	 * Bootstrap our button to be ready to work with grouping DISABLED.
+	 */
 	public IconButton.from_app(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.RunningApp app, bool pinned = false) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
@@ -100,6 +107,9 @@ public class IconButton : Gtk.ToggleButton {
 		this.set_wnck_window(app.get_window());
 	}
 
+	/**
+	 * Bootstrap our button to be ready to work with grouping ENABLED.
+	 */
 	public IconButton.from_group(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.AppGroup group, bool pinned = false) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
@@ -293,6 +303,10 @@ public class IconButton : Gtk.ToggleButton {
 			return;
 		}
 
+		if (this.window != null) {
+			warning("Button have both a group and a window defined");
+		}
+
 		this.class_group.icon_changed.connect_after(() => {
 			this.update_icon(); // Update icon based on class group
 		});
@@ -324,17 +338,23 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public void set_wnck_window(Wnck.Window? window) {
+		if (window == null && this.window != null) { // we can safely remove the button as we're not grouped
+			this.popover.remove_window(this.window.get_xid());
+		}
+
 		this.window = window;
 
 		if (window == null) {
 			return;
 		}
 
+		if (this.class_group != null) {
+			warning("Button have both a group and a window defined");
+		}
+
 		if (this.abomination.is_disallowed_window_type(window)) {
 			return;
 		}
-
-		this.window_count = 1;
 
 		window.icon_changed.connect_after(() => {
 			this.update_icon(); // Update the icon
