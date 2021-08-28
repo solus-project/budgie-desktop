@@ -185,7 +185,13 @@ public class IconTasklistApplet : Budgie.Applet {
 			}
 
 			IconButton button = this.buttons.get(window.get_xid().to_string());
-			if (button == null) {
+
+			if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
+				string launcher = this.get_app_launcher(app.app_info.get_filename());
+				button = this.buttons.get(launcher);
+			}
+
+			if (button == null) { // we don't manage this button
 				return;
 			}
 
@@ -271,8 +277,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				return; // Don't allow drag & drop
 			}
 
-			string[] app_id_parts = app_id.split("/");
-			string launcher = app_id_parts[app_id_parts.length - 1]; // remove the path parts to keep only the desktop file name
+			string launcher = this.get_app_launcher(app_id);
 
 			if (this.buttons.contains(launcher)) {
 				original_button = (this.buttons[launcher].get_parent() as ButtonWrapper);
@@ -369,8 +374,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		string first_app_id = first_app.id.to_string();
 		if (app.app_info != null) { // properly group new apps with their pinned version
-			string[] parts = app.app_info.get_filename().split("/");
-			string launcher = parts[parts.length - 1];
+			string launcher = this.get_app_launcher(app.app_info.get_filename());
 			if (this.buttons.contains(launcher) && this.buttons.get(launcher).pinned) {
 				first_app_id = launcher;
 			}
@@ -424,7 +428,13 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		IconButton? button = this.buttons.get(app.id.to_string());
-		if (button == null) {
+
+		if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
+			string launcher = this.get_app_launcher(app.app_info.get_filename());
+			button = this.buttons.get(launcher);
+		}
+
+		if (button == null) { // we don't manage this button
 			return;
 		}
 
@@ -554,6 +564,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		lock(this.buttons) {
 			this.buttons.remove(key);
 		}
+	}
+
+	private string get_app_launcher(string app_id) {
+		string[] parts = app_id.split("/");
+		return parts[parts.length - 1];
 	}
 }
 

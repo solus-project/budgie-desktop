@@ -95,6 +95,8 @@ namespace Budgie.Abomination {
 			this.name = get_group_name(window);
 
 			if (this.name != old_name) { // send signal that group was renamed
+				debug("Renamed group %s into %s", old_name, this.name);
+
 				this.renamed_group(this.name, old_name);
 			}
 		}

@@ -74,6 +74,7 @@ namespace Budgie.Abomination {
 				this.update_icon();
 
 				if (this.icon != old_icon) { // Actually changed
+					debug("Icon changed for app %s", this.name);
 					this.icon_changed(this.icon);
 				}
 			});
@@ -109,6 +110,7 @@ namespace Budgie.Abomination {
 				this.name = this.window.get_name();
 
 				if (this.name != old_name) { // Actually changed
+					debug("Renamed app %s into %s", old_name, this.name);
 					this.name_changed(this.name);
 				}
 			}

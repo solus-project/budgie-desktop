@@ -327,10 +327,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
-
-			if (this.window_count == 0) {
-				this.popover.hide(); // Hide
-			}
 		});
 
 		this.set_app_for_class_group();
@@ -416,8 +412,8 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		unowned GLib.Icon? app_icon = null;
-		if (app_info != null) {
-			app_icon = app_info.get_icon();
+		if (this.app_info != null) {
+			app_icon = this.app_info.get_icon();
 		}
 
 		Gdk.Pixbuf? pixbuf_icon = null;
