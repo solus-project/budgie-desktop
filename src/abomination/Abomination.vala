@@ -218,8 +218,34 @@ namespace Budgie.Abomination {
 		private void rename_group(string old_group_name, string new_group_name) {
 			AppGroup group = this.running_app_groups.get(old_group_name);
 
+			if (!this.running_app_groups.contains(new_group_name)) {
+				this.running_app_groups.insert(new_group_name, group); // add the new group
+			} else { // Enter the strange apps dimension - try our best to fix the mess (so far only LibreOffice Impress)
+				// LibreOffice Impress opens as soffice and gets renamed into libreoffice-impress,
+				// but second instance does the same, resulting in previous group being replaced by new one.
+				// This is a different behavior than the one we have with other libreoffice apps, such as libreoffice-writer,
+				// where first app opens as soffice, gets renamed, but second properly opens as libreoffice-writer.
+
+				warning("Strange app mode triggered for %s", new_group_name);
+
+				AppGroup existing_group = this.running_app_groups.get(new_group_name);
+				List<weak Wnck.Window> existing_group_windows = existing_group.get_windows();
+				List<weak Wnck.Window> new_group_windows = group.get_windows();
+
+				// need to destroy our groups before recreating a single merged one
+				existing_group_windows.foreach((window) => this.remove_app(window));
+				new_group_windows.foreach((window) => this.remove_app(window));
+
+				// FIXME: When grouping enabled, new grouped button doesn't get focused in IconTasklist (only when we switched window between first and second window)
+				// FIXME: When grouping disabled, restarting panel and opening two instances of LibreOffice impress will create 3 icons
+				Timeout.add(100, () => {
+					existing_group_windows.foreach((window) => this.add_app(window));
+					new_group_windows.foreach((window) => this.add_app(window));
+					return false;
+				});
+			}
+
 			this.running_app_groups.remove(old_group_name); // remove old group
-			this.running_app_groups.insert(new_group_name, group); // add the new group
 
 			this.updated_group(group); // Should always be invoked last
 		}

@@ -211,8 +211,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * Remove every IconButton and add them back
 	 */
 	private void rebuild_items() {
-		warning("Rebuild icon tasklist");
-
 		foreach (Gtk.Widget widget in this.main_layout.get_children()) {
 			widget.destroy();
 		}
