@@ -363,8 +363,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * on_app_opened handles when we open a new app
 	 */
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
-		// FIXME: all this logic only work if grouping is enabled
-
 		Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 		if (first_app == null) {
 			return;
