@@ -611,6 +611,7 @@ public class IconButton : Gtk.ToggleButton {
 			windows = this.class_group.get_windows();
 		} else {
 			windows = new List<unowned Wnck.Window>();
+			windows.insert(this.window, 0);
 		}
 
 		int count;
@@ -801,7 +802,6 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		}
 
-
 		return base.draw(cr);
 	}
 
@@ -943,6 +943,7 @@ public class IconButton : Gtk.ToggleButton {
 					windows = this.class_group.get_windows();
 				} else {
 					windows = new List<unowned Wnck.Window>();
+					windows.insert(this.window, 0);
 				}
 
 				if (windows.length() == 0) {
