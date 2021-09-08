@@ -92,12 +92,6 @@ public class IconButton : Gtk.ToggleButton {
 			this.get_style_context().add_class("running");
 		}
 
-		if (this.first_app != null) {
-			this.first_app.name_changed.connect(() => { // When the name of the app has changed
-				this.set_tooltip(); // Update our tooltip
-			});
-		}
-
 		app.get_window().state_changed.connect_after(() => {
 			if (app.get_window().needs_attention()) {
 				this.attention();
@@ -127,12 +121,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
-		}
-
-		if (this.first_app != null) {
-			this.first_app.name_changed.connect(() => { // When the name of the app has changed
-				this.set_tooltip(); // Update our tooltip
-			});
 		}
 	}
 
@@ -225,6 +213,20 @@ public class IconButton : Gtk.ToggleButton {
 		this.size_allocate.connect(this.on_size_allocate);
 		this.launch_context.launched.connect(this.on_launched);
 		this.launch_context.launch_failed.connect(this.on_launch_failed);
+
+		if (this.first_app != null) {
+			this.first_app.name_changed.connect(() => { // When the name of the app has changed
+				this.set_tooltip(); // Update our tooltip
+			});
+
+			this.first_app.app_info_changed.connect((app_info) => {
+				this.app_info = app_info;
+			});
+
+			this.first_app.icon_changed.connect(() => { // This one is invoked after the app info are updated
+				this.update_icon(); // Update the icon
+			});
+		}
 	}
 
 	/**
@@ -351,10 +353,6 @@ public class IconButton : Gtk.ToggleButton {
 		if (this.abomination.is_disallowed_window_type(window)) {
 			return;
 		}
-
-		window.icon_changed.connect_after(() => {
-			this.update_icon(); // Update the icon
-		});
 
 		window.name_changed.connect_after(() => { // On window rename
 			this.popover.rename_window(window.get_xid());

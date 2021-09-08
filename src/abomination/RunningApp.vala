@@ -29,6 +29,7 @@ namespace Budgie.Abomination {
 		 */
 		public signal void icon_changed(string icon_name);
 		public signal void name_changed(string name);
+		public signal void app_info_changed(DesktopAppInfo? app_info);
 
 		internal RunningApp(Budgie.AppSystem app_system, Wnck.Window window, AppGroup group) {
 			this.set_window(window);
@@ -70,13 +71,7 @@ namespace Budgie.Abomination {
 			});
 
 			this.window.icon_changed.connect(() => {
-				string old_icon = this.icon;
 				this.update_icon();
-
-				if (this.icon != old_icon) { // Actually changed
-					debug("Icon changed for app %s", this.name);
-					this.icon_changed(this.icon);
-				}
 			});
 
 			this.window.name_changed.connect(() => this.update_name());
@@ -89,14 +84,23 @@ namespace Budgie.Abomination {
 		 */
 		private void update_app_info() {
 			this.app_info = this.app_system.query_window(this.window);
+			this.app_info_changed(this.app_info);
 		}
 
 		/**
-		 * update_icon will update our icon
+		 * update_icon will update our icon and notify that it changed
 		 */
 		private void update_icon() {
-			if (this.app_info != null && this.app_info.has_key("Icon")) { // Got app info
-				this.icon = this.app_info.get_string("Icon");
+			if (this.app_info == null || !this.app_info.has_key("Icon")) {
+				return;
+			}
+
+			string old_icon = this.icon;
+			this.icon = this.app_info.get_string("Icon");
+
+			if (this.icon != old_icon) { // Actually changed
+				debug("Icon changed for app %s", this.name);
+				this.icon_changed(this.icon);
 			}
 		}
 
@@ -104,15 +108,16 @@ namespace Budgie.Abomination {
 		 * update_name will update the window name
 		 */
 		private void update_name() {
+			if (this.window == null) {
+				return;
+			}
+
 			string old_name = this.name;
+			this.name = this.window.get_name();
 
-			if (this.window != null) {
-				this.name = this.window.get_name();
-
-				if (this.name != old_name) { // Actually changed
-					debug("Renamed app %s into %s", old_name, this.name);
-					this.name_changed(this.name);
-				}
+			if (this.name != old_name) { // Actually changed
+				debug("Renamed app %s into %s", old_name, this.name);
+				this.name_changed(this.name);
 			}
 		}
 	}
