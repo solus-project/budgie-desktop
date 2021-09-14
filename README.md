@@ -20,11 +20,13 @@ The Budgie Desktop is a feature-rich, modern desktop designed to keep out the wa
 
 ### Post-GTK4's Release
 
-Since the writing of the below mentioned In Full Sail article, GTK4 has been released and members of the Solus Team have been actively exploring both EFL and GTK4 for Budgie 11, as we continue to maintain, improve, and re-architect Budgie Desktop 10 series. As previously written, the *current* plan is to write Budgie 11 in GTK4, however this may change as we continue to build out new software solutions in the Solus ecosystem. Budgie 10 series will continue to be supported and iterated on until the release of Budgie 11, with considerable work being put into re-architecting and modernizing existing code to facilitate more seamless porting or code conversion (e.g. Vala to C).
+Since the writing of the below mentioned In Full Sail article, GTK4 has been released and members of the Solus Team as well as the Solus community have been actively exploring both EFL and GTK4 for Budgie 11, as we continue to maintain, improve, and re-architect Budgie Desktop 10 series. Due to numerous issues with GTK4, alongside concerns about GTK5 and GNOME's fragmentation related to theming and enabling broad, consistent, application user experiences, **Solus will be formally adopting EFL for Budgie 11**. You can read about all of this [here](https://joshuastrobl.com/2021/09/14/building-an-alternative-ecosystem/).
+
+Budgie 10 series will continue to be supported and iterated on until the release of Budgie 11, with considerable work being put into re-architecting and modernizing existing code to facilitate more seamless porting or code conversion (e.g. Vala to C).
 
 ### Move to GTK4
 
-In our [In Full Sail](https://getsol.us/2018/10/27/in-full-sail/) blog post, we announced that Budgie 11 will be written in C and GTK4. The plan is to further support Vala for Budgie plugins.
+In our [In Full Sail](https://getsol.us/2018/10/27/in-full-sail/) blog post, we announced that Budgie 11 would be written in C and GTK4. The plan at the time of its writing was to further support Vala for Budgie plugins. This original plan does not reflect current plans, which is EFL+C. For more info, see the Post-GTK4 release post.
 
 In addition to this, this repository will **not** be used for Budgie 11 or beyond, as various changes in leadership (departure of project founder) without a complete transition has resulted in this repository (and its org) not being under the complete ownership of the Solus Core Team. Future development will happen across both the Solus [Development Tracker](https://dev.getsol.us) as well as our [GetSolus](https://github.com/getsolus) organization.
 
