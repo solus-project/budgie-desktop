@@ -306,7 +306,7 @@ namespace Budgie {
 			mod_timeout = 0;
 			Gdk.ModifierType modifier;
 			Gdk.Display.get_default().get_default_seat().get_pointer().get_state(Gdk.get_default_root_window(), null, out modifier);
-			if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0 && (modifier & Gdk.ModifierType.MOD4_MASK) == 0 && (modifier & Gdk.ModifierType.CONTROL_MASK) == 0) {
+			if ((modifier & Gdk.ModifierType.MOD1_MASK) == 0 && (modifier & Gdk.ModifierType.MOD3_MASK) == 0 && (modifier & Gdk.ModifierType.MOD4_MASK) == 0 && (modifier & Gdk.ModifierType.CONTROL_MASK) == 0) {
 				switcher_window.hide();
 				return false;
 			}
