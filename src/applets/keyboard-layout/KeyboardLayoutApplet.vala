@@ -280,7 +280,24 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		listbox.set_can_focus(false);
 		listbox.set_selection_mode(Gtk.SelectionMode.NONE);
 		listbox.get_style_context().add_class("content-box");
-		popover.add(listbox);
+
+		/* (per window CheckButton) */
+		GLib.Settings perwindowsettings = new GLib.Settings("org.gnome.desktop.input-sources");
+		Gtk.Grid popovergrid = new Gtk.Grid();
+		popovergrid.attach(listbox, 0, 0, 1, 1);
+		Gtk.Grid perwindowgrid = new Gtk.Grid();
+		/* Let's add a little space above, to visually separate */
+		perwindowgrid.set_margin_top(7);
+		Gtk.CheckButton perwindowbutton = new Gtk.CheckButton.with_label(_("Change per-window"));
+		perwindowsettings.bind(
+			"per-window", perwindowbutton, "active", SettingsBindFlags.GET|SettingsBindFlags.SET
+		);
+		perwindowbutton.set_relief(Gtk.ReliefStyle.NONE);
+		perwindowbutton.set_can_focus(false);
+		perwindowgrid.attach(perwindowbutton, 0, 0, 1, 1);
+		popovergrid.attach(perwindowgrid, 0, 1, 1, 1);
+
+		popover.add(popovergrid);
 		popover.get_child().show_all();
 
 		/* Settings/init */
