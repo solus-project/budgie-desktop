@@ -13,9 +13,7 @@ namespace Budgie {
 	public struct GsdAccel {
 		string accelerator;
 		uint flags;
-	#if HAVE_GSD_SUPPORTED
 		Meta.KeyBindingFlags grab_flags;
-	#endif
 	}
 
 	[DBus (name="org.gnome.SessionManager.EndSessionDialog")]
@@ -177,11 +175,7 @@ namespace Budgie {
 			foreach (string accelerator in grabs.get_keys()) {
 				if (grabs[accelerator] == action) {
 					var params = new HashTable<string,Variant>(null, null);
-#if HAVE_MUTTER_8 || HAVE_MUTTER_9
 					params.set("device-name", new Variant.string(dev.get_device_name()));
-#else
-					params.set("device-id", new Variant.uint32(dev.id));
-#endif
 					params.set("action-mode", new Variant.uint32(action));
 					params.set("device-mode", new Variant.string(dev.get_device_node()));
 					params.set("timestamp", new Variant.uint32(timestamp));

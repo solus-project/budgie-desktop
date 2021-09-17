@@ -35,8 +35,8 @@ am_cflags = [
 add_global_arguments(am_cflags, language: 'c')
 meson.add_install_script('meson_post_install.sh')
 
-# Budgie needs a minimum 3.36 GNOME stack with GTK 3.24+
-gnome_minimum_version = '>= 3.36.0'
+# Budgie needs a minimum 41 GNOME stack with GTK 3.24+
+gnome_minimum_version = '>= 41.alpha'
 
 dep_gtk3 = dependency('gtk+-3.0', version: '>= 3.24.0')
 dep_glib = dependency('glib-2.0', version: '>= 2.64.0')
@@ -44,14 +44,14 @@ dep_giounix = dependency('gio-unix-2.0', version: '>= 2.64.0')
 dep_peas = dependency('libpeas-1.0', version: '>= 1.26.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: '>= 3.24.0')
 dep_libuuid = dependency('uuid')
-dep_vala = dependency('vapigen', version: '>= 0.48.0')
+dep_vala = dependency('vapigen', version: '>= 0.52.5')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
 dep_notify = dependency('libnotify', version: '>= 0.7')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
-dep_gsd = dependency('gnome-settings-daemon', version: '>=3.36.0')
+dep_gsd = dependency('gnome-settings-daemon', version: gnome_minimum_version)
 
 # wnck used all over the place..
 dep_wnck = dependency('libwnck-3.0', version: '>= 3.36.0')

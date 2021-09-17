@@ -25,10 +25,6 @@ namespace Budgie {
 		private Settings ui_settings;
 		private Settings wm_settings;
 
-#if !HAVE_GSD_40
-		private Settings x_settings;
-#endif
-
 		public FontPage() {
 			Object(group: SETTINGS_GROUP_APPEARANCE,
 				content_id: "fonts",
@@ -143,15 +139,8 @@ namespace Budgie {
 			ui_settings.bind("monospace-font-name", fontbutton_monospace, "font-name", SettingsBindFlags.DEFAULT);
 			wm_settings.bind("titlebar-font", fontbutton_title, "font-name", SettingsBindFlags.DEFAULT);
 			ui_settings.bind("text-scaling-factor", spinbutton_scaling, "value", SettingsBindFlags.DEFAULT);
-
-#if HAVE_GSD_40
 			ui_settings.bind("font-antialiasing", combobox_antialias, "active-id", SettingsBindFlags.DEFAULT);
 			ui_settings.bind("font-hinting", combobox_hinting, "active-id", SettingsBindFlags.DEFAULT);
-#else
-			x_settings = new Settings("org.gnome.settings-daemon.plugins.xsettings");
-			x_settings.bind("hinting", combobox_hinting, "active-id", SettingsBindFlags.DEFAULT);
-			x_settings.bind("antialiasing", combobox_antialias, "active-id", SettingsBindFlags.DEFAULT);
-#endif
 		}
 	}
 }

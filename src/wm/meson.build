@@ -18,33 +18,10 @@ budgie_wm_sources = [
 budgie_wm_status_vala_args = []
 
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_mutter = dependency('libmutter-9', version: gnome_minimum_version, required: false)
+dep_mutter = dependency('libmutter-9', version: gnome_minimum_version, required: true)
 if dep_mutter.found()
-    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_9']
     message('Using new libmutter-9 ABI from GNOME 41')
     vapi_mutter = 'libmutter-9'
-else
-    dep_mutter = dependency('libmutter-8', version: gnome_minimum_version, required: false)
-    if dep_mutter.found()
-        # Assume mutter-7 compilation argument since no additional code changes required
-        budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_8']
-        message('Using new libmutter-8 ABI from GNOME 40')
-        vapi_mutter = 'libmutter-8'
-    else
-        dep_mutter = dependency('libmutter-7', version: gnome_minimum_version, required: false)
-        if dep_mutter.found()
-            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_7']
-            message('Using new libmutter-7 ABI from GNOME 3.38')
-            vapi_mutter = 'libmutter-7'
-        else
-            dep_mutter = dependency('libmutter-6', version: gnome_minimum_version)
-            budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_6']
-            if dep_mutter.found()
-	      message('Using new libmutter-6 ABI from GNOME 3.36')
-              vapi_mutter = 'libmutter-6'
-            endif
-        endif
-    endif
 endif
 
 budgie_wm_deps = [
@@ -54,10 +31,6 @@ budgie_wm_deps = [
     dep_gsettings,
     dep_ibus,
 ]
-
-if dep_gsd.version().version_compare('>=3.36.0')
-    budgie_wm_status_vala_args += ['-D', 'HAVE_GSD_SUPPORTED']
-endif
 
 budgie_wm_vala_args =  [
         '--pkg', 'gio-unix-2.0',
@@ -73,7 +46,7 @@ budgie_wm_vala_args =  [
 
 rpath = ''
 
-if dep_mutter.version().version_compare('>=3.36.0')
+if dep_mutter.version().version_compare(gnome_minimum_version)
     rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
     budgie_wm_vala_args += ['--girdir', rpath]
 endif
