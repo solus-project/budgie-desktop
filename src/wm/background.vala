@@ -226,7 +226,10 @@ namespace Budgie {
 			shading_direction = (GDesktop.BackgroundShading)settings.get_enum(COLOR_SHADING_TYPE_KEY);
 			var color_str = settings.get_string(PRIMARY_COLOR_KEY);
 			if (color_str != null && color_str != "") {
-	#if HAVE_MUTTER_6
+	#if HAVE_MUTTER_9
+				primary_color = Clutter.Color();
+				primary_color.from_string(color_str);
+	#elif HAVE_MUTTER_6
 				primary_color = Clutter.Color.from_string(color_str);
 	#else
 				Clutter.Color.from_string(out primary_color, color_str);
@@ -236,7 +239,10 @@ namespace Budgie {
 
 			color_str = settings.get_string(SECONDARY_COLOR_KEY);
 			if (color_str != null && color_str != "") {
-	#if HAVE_MUTTER_6
+	#if HAVE_MUTTER_9
+				secondary_color = Clutter.Color();
+				secondary_color.from_string(color_str);
+	#elif HAVE_MUTTER_6
 				secondary_color = Clutter.Color.from_string(color_str);
 	#else
 				Clutter.Color.from_string(out secondary_color, color_str);

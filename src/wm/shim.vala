@@ -177,7 +177,7 @@ namespace Budgie {
 			foreach (string accelerator in grabs.get_keys()) {
 				if (grabs[accelerator] == action) {
 					var params = new HashTable<string,Variant>(null, null);
-#if HAVE_MUTTER_8
+#if HAVE_MUTTER_8 || HAVE_MUTTER_9
 					params.set("device-name", new Variant.string(dev.get_device_name()));
 #else
 					params.set("device-id", new Variant.uint32(dev.id));
