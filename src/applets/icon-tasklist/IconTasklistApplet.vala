@@ -282,6 +282,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			} else {
 				IconButton button = new IconButton(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, info, true);
 				this.add_icon_button(launcher, button);
+				original_button = button.get_parent() as ButtonWrapper;
 			}
 		} else { // Doesn't start with file://
 			unowned IconButton? button = null;
