@@ -189,13 +189,15 @@ namespace Budgie.Abomination {
 		 */
 		private void remove_app(Wnck.Window window) {
 			AppGroup group = this.get_window_group(window);
-			if (group != null) { // can be the case when we had a "strange app" messing our groups - looking at you LibreOffice Impress
-				group.remove_window(window);
+			if (group == null) {
+				return;
+			}
 
-				if (group.get_windows().length() == 0) { // remove empty group
-					this.running_app_groups.remove(group.get_name());
-					debug("Removed group: %s", group.get_name());
-				}
+			group.remove_window(window);
+
+			if (group.get_windows().length() == 0) { // remove empty group
+				this.running_app_groups.remove(group.get_name());
+				debug("Removed group: %s", group.get_name());
 			}
 
 			ulong id = window.get_xid();
@@ -220,9 +222,10 @@ namespace Budgie.Abomination {
 				this.running_app_groups.insert(new_group_name, group); // add the new group
 			} else { // Enter the strange apps dimension - try our best to fix the mess (so far only LibreOffice Impress)
 				// LibreOffice Impress opens as soffice and gets renamed into libreoffice-impress,
-				// but second instance does the same, resulting in previous group being replaced by new one.
+				// but second instance does the same, resulting in a new group with the exact same name replacing the old one.
 				// This is a different behavior than the one we have with other libreoffice apps, such as libreoffice-writer,
-				// where first app opens as soffice, gets renamed, but second properly opens as libreoffice-writer.
+				// where first app opens as soffice, gets renamed, but second properly opens as libreoffice-writer,
+				// resulting in a single group being created.
 
 				warning("Strange app mode triggered for %s", new_group_name);
 
@@ -232,10 +235,32 @@ namespace Budgie.Abomination {
 
 				// need to destroy our groups before recreating a single merged one
 				existing_group_windows.foreach((window) => this.remove_app(window));
-				new_group_windows.foreach((window) => this.remove_app(window));
 
-				existing_group_windows.foreach((window) => this.add_app(window));
-				new_group_windows.foreach((window) => this.add_app(window));
+				// almost the same thing as remove_app, except that we use the old group name instead (as we previously removed the existing group whose name conflicts)
+				new_group_windows.foreach((window) => {
+					group.remove_window(window);
+
+					if (group.get_windows().length() == 0) { // remove empty group
+						this.running_app_groups.remove(old_group_name);
+						debug("Removed group: %s", old_group_name);
+					}
+
+					ulong id = window.get_xid();
+					RunningApp app = this.running_apps_id.get(id); // Get the running app
+
+					this.running_apps_id.remove(id); // Remove from running_apps_id
+
+					this.track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
+					if (app != null) { // App is defined
+						this.removed_app(old_group_name, app); // Notify that we called remove
+					}
+				});
+
+				Timeout.add(100, () => {
+					existing_group_windows.foreach((window) => this.add_app(window));
+					new_group_windows.foreach((window) => this.add_app(window));
+					return false;
+				});
 			}
 
 			this.running_app_groups.remove(old_group_name); // remove old group
