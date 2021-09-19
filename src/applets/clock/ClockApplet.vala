@@ -146,6 +146,9 @@ public class ClockApplet : Budgie.Applet {
 		this.update_setting(CLOCK_SETTINGS_SCHEMA, "use-custom-timezone");
 		this.update_setting(CLOCK_SETTINGS_SCHEMA, "custom-timezone");
 
+		this.date_label.set_visible(this.clock_show_date);
+		this.seconds_label.set_visible(this.clock_show_seconds);
+
 		Timeout.add_seconds_full(Priority.LOW, 1, update_clock);
 
 		settings.changed.connect((key) => {
@@ -166,7 +169,7 @@ public class ClockApplet : Budgie.Applet {
 		cal_button.clicked.connect(on_cal_activate);
 
 		update_cal();
-		
+
 		add(widget);
 
 		popover.get_child().show_all();
@@ -224,8 +227,13 @@ public class ClockApplet : Budgie.Applet {
 					break;
 				case "use-custom-format":
 					this.clock_use_custom_format = settings.get_boolean(key);
-					this.date_label.set_visible(!this.clock_use_custom_format);
-					this.seconds_label.set_visible(!this.clock_use_custom_format);
+					if (this.clock_use_custom_format) {
+						this.date_label.set_visible(false);
+						this.seconds_label.set_visible(false);
+					} else {
+						this.date_label.set_visible(this.clock_show_date);
+						this.seconds_label.set_visible(this.clock_show_seconds);
+					}
 					break;
 				case "custom-format":
 					this.clock_custom_format = settings.get_string(key);
