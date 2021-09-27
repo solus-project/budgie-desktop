@@ -71,8 +71,17 @@ namespace Budgie.Abomination {
 				this.wm_settings.changed["pause-notifications-on-fullscreen"].connect(this.update_should_pause_notifications);
 			}
 
-			this.screen.window_opened.connect(this.add_app);
 			this.screen.window_closed.connect(this.remove_app);
+			this.screen.window_opened.connect((window) => {
+				// just make sure that "closed" is always sent before "opened" signal.
+				// Otherwise some apps (e.g. Google Chrome with profile manager)
+				// might not properly reuse the pinned icon when grouping is disabled
+				// (second window open before first is closed)
+				Timeout.add(100, () => {
+					this.add_app(window);
+					return false;
+				});
+			});
 
 			this.screen.get_windows().foreach((window) => { // Init all our current running windows
 				this.add_app(window);

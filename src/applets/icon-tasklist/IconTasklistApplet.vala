@@ -375,6 +375,8 @@ public class IconTasklistApplet : Budgie.Applet {
 			if (this.buttons.contains(launcher) && this.buttons.get(launcher).pinned) {
 				first_app_id = launcher;
 			}
+		} else {
+			warning("No app info");
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
