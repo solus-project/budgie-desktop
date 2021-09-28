@@ -380,7 +380,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (this.buttons.contains(first_app_id)) {
+		if (this.buttons.contains(first_app_id) && this.grouping) {
 			IconButton first_button = this.buttons.get(first_app_id);
 			if (!first_button.icon.waiting && first_button.icon.get_realized()) {
 				first_button.icon.waiting = true;
