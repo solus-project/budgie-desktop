@@ -325,10 +325,12 @@ public class IconButton : Gtk.ToggleButton {
 			new_window.name_changed.connect(() => { // When this window is renamed
 				this.popover.rename_window(xid); // Rename its entry in the popover
 			});
+			this.update();
 		});
 
 		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
 			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
+			this.update();
 		});
 
 		this.set_app_for_class_group();
