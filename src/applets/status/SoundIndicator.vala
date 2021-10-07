@@ -104,7 +104,7 @@ public class SoundIndicator : Gtk.Bin {
 		volume_down = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
 		volume_up = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
 
-		Gtk.Button[] b_list = { settings_button, mute_button, volume_down, volume_up }; 
+		Gtk.Button[] b_list = { settings_button, mute_button, volume_down, volume_up };
 		for (var i = 0; i < b_list.length; i++) { // Iterate on all the buttons
 			Gtk.Button button = b_list[i]; // Get the button
 			button.set_can_focus(false); // Don't allow focus
@@ -271,14 +271,12 @@ public class SoundIndicator : Gtk.Bin {
 			mute_button_image.set_from_icon_name(image_name, Gtk.IconSize.BUTTON); // Also update our mute button
 		}
 
-		var vol_max = mixer.get_vol_max_amplified();
-
 		// Each scroll increments by 5%, much better than units..
-		step_size = vol_max / 20;
+		step_size = vol_norm / 20;
 
 		// This usually goes up to about 150% (152.2% on mine though.)
 		var pct = ((float)vol / (float)vol_norm)*100;
-		var ipct = (uint)pct;
+		var ipct = (uint)Math.round(pct);
 		widget.set_tooltip_text(@"$ipct%");
 
 		/* We're ignoring anything beyond our vol_norm.. */
