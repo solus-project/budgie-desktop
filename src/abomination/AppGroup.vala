@@ -24,7 +24,7 @@ namespace Budgie.Abomination {
 		public signal void icon_changed();
 		public signal void added_window(Wnck.Window window);
 		public signal void removed_window(Wnck.Window window);
-		public signal void renamed_group(string new_name, string old_name);
+		public signal void renamed_group(string old_name, string new_name);
 
 		/**
 		 * Create a new group from a window instance
@@ -91,13 +91,11 @@ namespace Budgie.Abomination {
 			}
 
 			string old_name = this.name;
-
 			this.name = get_group_name(window);
 
 			if (this.name != old_name) { // send signal that group was renamed
 				debug("Renamed group %s into %s", old_name, this.name);
-
-				this.renamed_group(this.name, old_name);
+				this.renamed_group(old_name, this.name);
 			}
 		}
 	}

@@ -39,7 +39,7 @@ namespace Budgie.Abomination {
 
 		// Chrome profile launcher doesn't have WM_CLASS, so name is used
 		// instead and is not the same as the group of the window opened afterward.
-		// Unfortunately there will still be a bit of clusterfuck when using Chrome
+		// Unfortunately there will still be a bit of a mess when using Chrome
 		// simultaneously with Chrome Beta or Canary as they have the same WM_NAME: "google chrome"
 		if (name == "google chrome") {
 			name = "google-chrome";

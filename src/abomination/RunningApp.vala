@@ -28,7 +28,7 @@ namespace Budgie.Abomination {
 		 * Signals
 		 */
 		public signal void icon_changed(string icon_name);
-		public signal void name_changed(string name);
+		public signal void renamed_app(string old_name, string new_name);
 		public signal void app_info_changed(DesktopAppInfo? app_info);
 
 		internal RunningApp(Budgie.AppSystem app_system, Wnck.Window window, AppGroup group) {
@@ -117,7 +117,7 @@ namespace Budgie.Abomination {
 
 			if (this.name != old_name) { // Actually changed
 				debug("Renamed app %s into %s", old_name, this.name);
-				this.name_changed(this.name);
+				this.renamed_app(old_name, this.name);
 			}
 		}
 	}

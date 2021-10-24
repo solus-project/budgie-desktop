@@ -215,7 +215,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.launch_context.launch_failed.connect(this.on_launch_failed);
 
 		if (this.first_app != null) {
-			this.first_app.name_changed.connect(() => { // When the name of the app has changed
+			this.first_app.renamed_app.connect(() => { // When the name of the app has changed
 				this.set_tooltip(); // Update our tooltip
 			});
 
@@ -243,17 +243,17 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.popover.added_window.connect(() => { // If we added a window
 			this.window_count++;
-        });
+		});
 
-        this.popover.closed_all.connect(() => { // If we closed all windows
+		this.popover.closed_all.connect(() => { // If we closed all windows
 			this.window_count = 0;
 			this.popover.hide(); // Hide
 			this.became_empty(); // Call our became empty function
-        });
+		});
 
-        this.popover.closed_window.connect(() => { // If we closed a window related to this popover
+		this.popover.closed_window.connect(() => { // If we closed a window related to this popover
 			this.window_count--;
-        });
+		});
 
 		this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
 			this.pinned = new_pinned_state;
@@ -549,7 +549,7 @@ public class IconButton : Gtk.ToggleButton {
 	 */
 	public void set_tooltip() {
 		if (this.window_count != 0) { // If we have valid windows open
-			if (this.window_count == 1 && this.first_app != null) { // Only one window and a valid AbomationRunningApp for it
+			if (this.window_count == 1 && this.first_app != null) { // Only one window and a valid AbominationRunningApp for it
 				this.set_tooltip_text(this.first_app.name);
 			} else if (this.app_info != null) { // Has app info
 				this.set_tooltip_text(this.app_info.get_display_name());
@@ -840,7 +840,7 @@ public class IconButton : Gtk.ToggleButton {
 				if (first_window != null) {
 					this.first_app = this.abomination.get_app_from_window_id(first_window.get_xid());
 
-					this.first_app.name_changed.connect(() => { // When the name of the app has changed
+					this.first_app.renamed_app.connect(() => { // When the name of the app has changed
 						this.set_tooltip(); // Update our tooltip
 					});
 

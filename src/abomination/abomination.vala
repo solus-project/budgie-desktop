@@ -103,7 +103,7 @@ namespace Budgie.Abomination {
 		public bool is_disallowed_window_type(Wnck.Window window) {
 			Wnck.WindowType win_type = window.get_window_type(); // Get the window type
 
-			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Nautilus' Desktop Icons)
+			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Budgie Desktop View)
 				   (win_type == Wnck.WindowType.DIALOG) || // Dialogs
 				   (win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
 				   (win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
@@ -169,8 +169,8 @@ namespace Budgie.Abomination {
 				group = new AppGroup(window);
 				this.running_app_groups.insert(group.get_name(), group);
 
-				group.renamed_group.connect((new_group_name, old_group_name) => {
-					this.rename_group(old_group_name, new_group_name); // Rename the class
+				group.renamed_group.connect((old_group_name, new_group_name) => {
+					this.rename_group(old_group_name, new_group_name); // Rename the group
 				});
 			}
 
@@ -198,15 +198,13 @@ namespace Budgie.Abomination {
 		 */
 		private void remove_app(Wnck.Window window) {
 			AppGroup group = this.get_window_group(window);
-			if (group == null) {
-				return;
-			}
+			if (group != null) {
+				group.remove_window(window);
 
-			group.remove_window(window);
-
-			if (group.get_windows().length() == 0) { // remove empty group
-				this.running_app_groups.remove(group.get_name());
-				debug("Removed group: %s", group.get_name());
+				if (group.get_windows().length() == 0) { // remove empty group
+					this.running_app_groups.remove(group.get_name());
+					debug("Removed group: %s", group.get_name());
+				}
 			}
 
 			ulong id = window.get_xid();
@@ -236,7 +234,7 @@ namespace Budgie.Abomination {
 				// where first app opens as soffice, gets renamed, but second properly opens as libreoffice-writer,
 				// resulting in a single group being created.
 
-				warning("Strange app mode triggered for %s", new_group_name);
+				debug("Strange app mode triggered for %s", new_group_name);
 
 				AppGroup existing_group = this.running_app_groups.get(new_group_name);
 				List<weak Wnck.Window> existing_group_windows = existing_group.get_windows();
