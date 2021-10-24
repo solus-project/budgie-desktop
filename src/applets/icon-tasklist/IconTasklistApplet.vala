@@ -122,30 +122,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	/**
-	 * Our panel has moved somewhere, stash the positions
-	 */
-	public override void panel_position_changed(Budgie.PanelPosition position) {
-		this.desktop_helper.panel_position = position;
-		this.desktop_helper.orientation = this.get_orientation();
-		this.main_layout.set_orientation(this.desktop_helper.orientation);
-
-		this.set_icons_size();
-	}
-
-	/**
-	 * Our panel has changed size, record the new icon sizes
-	 */
-	public override void panel_size_changed(int panel, int icon, int small_icon) {
-		this.desktop_helper.icon_size = small_icon;
-		this.desktop_helper.panel_size = panel;
-		this.set_icons_size();
-	}
-
-	public override void update_popovers(Budgie.PopoverManager? manager) {
-		this.manager = manager;
-	}
-
-	/**
 	 * Add IconButton for pinned apps
 	 */
 	private void startup() {
@@ -470,6 +446,30 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		this.queue_resize();
 		this.queue_draw();
+	}
+
+	/**
+	 * Our panel has moved somewhere, stash the positions
+	 */
+	public override void panel_position_changed(Budgie.PanelPosition position) {
+		this.desktop_helper.panel_position = position;
+		this.desktop_helper.orientation = this.get_orientation();
+		this.main_layout.set_orientation(this.desktop_helper.orientation);
+
+		this.set_icons_size();
+	}
+
+	/**
+	 * Our panel has changed size, record the new icon sizes
+	 */
+	public override void panel_size_changed(int panel, int icon, int small_icon) {
+		this.desktop_helper.icon_size = small_icon;
+		this.desktop_helper.panel_size = panel;
+		this.set_icons_size();
+	}
+
+	public override void update_popovers(Budgie.PopoverManager? manager) {
+		this.manager = manager;
 	}
 
 	/**
