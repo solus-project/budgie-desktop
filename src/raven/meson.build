@@ -6,7 +6,6 @@ gresource = join_paths(meson.current_source_dir(), 'ui', 'budgie-raven.gresource
 libraven_resources = gnome.compile_resources(
     'budgie-raven-resources',
     gresource,
-    'budgie-daemon.gresource.xml',
     source_dir: join_paths(meson.current_source_dir(), 'ui'),
     c_name: 'budgie_raven',
 )
