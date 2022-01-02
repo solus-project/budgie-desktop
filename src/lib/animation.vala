@@ -98,6 +98,10 @@ namespace Budgie {
 		* @param compl A completion callback to execute when this animation completes
 		*/
 		public void start(AnimCompletionFunc? compl) {
+			if (widget.get_frame_clock() == null) { // Unrealized widgets do not have a frame clock.
+				return;
+			}
+
 			if (!no_reset) {
 				start_time = widget.get_frame_clock().get_frame_time();
 			}
