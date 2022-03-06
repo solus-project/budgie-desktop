@@ -1,8 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[budgie-desktop.budgie-desktoppot]
-file_filter = po/<lang>.po
-source_lang = en
-type = PO
-

@@ -1,8 +1,0 @@
-[Plugin]
-Module=showdesktopapplet.so
-Name=Show Desktop Button
-_Description=Show Desktop Button
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2021 Budgie Desktop Developers
-Website=https://budgie-desktop.org
-Icon=user-desktop-symbolic

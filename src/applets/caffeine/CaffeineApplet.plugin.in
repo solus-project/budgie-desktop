@@ -1,8 +1,0 @@
-[Plugin]
-Module=caffeineapplet.so
-Name=Caffeine
-_Description=Caffeine
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2018-2021 Budgie Desktop Developers
-Website=https://budgie-desktop.org/
-Icon=my-caffeine-on-symbolic

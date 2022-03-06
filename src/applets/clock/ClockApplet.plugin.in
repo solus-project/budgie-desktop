@@ -1,8 +1,0 @@
-[Plugin]
-Module=clockapplet.so
-Name=Clock
-_Description=Clock
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2014-2021 Budgie Desktop Developers
-Website=https://budgie-desktop.org
-Icon=clock-applet-symbolic

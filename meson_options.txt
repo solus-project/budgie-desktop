@@ -1,4 +1,0 @@
-option('with-stateless', type: 'boolean', value: false, description: 'Enable stateless XDG paths')
-option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
-option('with-gtk-doc', type: 'boolean', value: true, description: 'Build gtk-doc documentation')
-option('xdg-appdir', type: 'string', description: 'XDG autostart path')

@@ -1,8 +1,0 @@
-[Plugin]
-Module=libplacesindicator.so
-Name=Places
-_Description=Places
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2016-2021 Budgie Desktop Developers
-Website=https://budgie-desktop.org
-Icon=folder-symbolic
